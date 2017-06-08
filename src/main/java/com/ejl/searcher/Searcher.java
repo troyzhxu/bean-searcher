@@ -65,6 +65,24 @@ public interface Searcher {
 	public <T> List<T> searchList(Class<T> beanClass, Map<String, String> paraMap);
 	
 	/**
+	 * 检索满足条件的所有Bean，不支持偏移
+	 * @param beanClass 要检索的 bean 类型
+	 * @param paraMap 检索参数（包括排序分页参数）
+	 * @param prefix 检索参数前缀
+	 * @return Bean 数据列表
+	 * */
+	public <T> List<T> searchAll(Class<T> beanClass, Map<String, String> paraMap, String prefix);
+	
+	/**
+	 * 检索满足条件的所有Bean，不支持偏移
+	 * @param beanClass 要检索的 bean 类型
+	 * @param paraMap 检索参数（包括排序分页参数）
+	 * @return Bean 数据列表
+	 * */
+	public <T> List<T> searchAll(Class<T> beanClass, Map<String, String> paraMap);
+	
+	
+	/**
 	 * @param beanClass 要检索的 bean 类型
 	 * @param paraMap 检索参数（包括排序分页参数）
 	 * @param prefix 检索参数前缀

@@ -47,7 +47,7 @@ public class MainSearcher implements Searcher {
 	
 	@Override
 	public <T> SearchResult<T> search(Class<T> beanClass, Map<String, String> paraMap) {
-		return search(beanClass, paraMap, true, true);
+		return search(beanClass, paraMap, true, true, false);
 	}
 	
 	@Override
@@ -59,7 +59,7 @@ public class MainSearcher implements Searcher {
 	public <T> T searchFirst(Class<T> beanClass, Map<String, String> paraMap) {
 		String maxParamName = searchParamResolver.getMaxParamName();
 		paraMap.put(maxParamName, "1");
-		List<T> list = search(beanClass, paraMap, false, true).getDataList();
+		List<T> list = search(beanClass, paraMap, false, true, false).getDataList();
 		if (list.size() > 0) {
 			return list.get(0);
 		}
@@ -73,7 +73,17 @@ public class MainSearcher implements Searcher {
 
 	@Override
 	public <T> List<T> searchList(Class<T> beanClass, Map<String, String> paraMap) {
-		return search(beanClass, paraMap, false, true).getDataList();
+		return search(beanClass, paraMap, false, true, false).getDataList();
+	}
+	
+	@Override
+	public <T> List<T> searchAll(Class<T> beanClass, Map<String, String> paraMap, String prefix) {
+		return searchAll(beanClass, propcessParaMapWhithPrefix(paraMap, prefix));
+	}
+
+	@Override
+	public <T> List<T> searchAll(Class<T> beanClass, Map<String, String> paraMap) {	
+		return search(beanClass, paraMap, false, true, true).getDataList();
 	}
 	
 	@Override
@@ -83,7 +93,7 @@ public class MainSearcher implements Searcher {
 
 	@Override
 	public <T> Number searchCount(Class<T> beanClass, Map<String, String> paraMap) {
-		return search(beanClass, paraMap, true, false).getTotalCount();
+		return search(beanClass, paraMap, true, false, true).getTotalCount();
 	}
 
 	/// 私有方法
@@ -105,13 +115,18 @@ public class MainSearcher implements Searcher {
 		return newParaMap;
 	}
 
-	private <T> SearchResult<T> search(Class<T> beanClass, Map<String, String> paraMap, boolean shouldQueryTotal, boolean shouldQueryList) {
+	private <T> SearchResult<T> search(Class<T> beanClass, Map<String, String> paraMap, 
+				boolean shouldQueryTotal, boolean shouldQueryList, boolean needNotLimit) {
 		SearchBeanMap searchBeanMap = SearchBeanMapCache.sharedCache().getSearchBeanMap(beanClass);
 		if (searchBeanMap == null) {
-			throw new RuntimeException("该 Bean【" + beanClass.getName() + "】不可以被检索器检索，请检查该Class是否被正确注解 或 检索器是否正确启动！");
+			throw new RuntimeException("该 Bean【" + beanClass.getName() 
+					+ "】不可以被检索器检索，请检查该Class是否被正确注解 或 检索器是否正确启动！");
 		}
 		List<String> fieldList = searchBeanMap.getFieldList();
 		SearchParam searchParam = searchParamResolver.resolve(fieldList, paraMap);
+		if (needNotLimit) {
+			searchParam.setMax(null);
+		}
 		SearchSql searchSql = searchSqlResolver.resolve(searchBeanMap, searchParam);
 		searchSql.setShouldQueryTotal(shouldQueryTotal);
 		searchSql.setShouldQueryList(shouldQueryList);
