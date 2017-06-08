@@ -25,6 +25,11 @@ public class SearchBeanMap {
 	private String joinCond;
 	
 	/**
+	 * 分组字段
+	 * */
+	private String groupBy;
+	
+	/**
 	 * 是否 distinct 结果
 	 * */
 	private boolean distinct;
@@ -55,9 +60,10 @@ public class SearchBeanMap {
 	private Map<String, Class<?>> fieldTypeMap = new HashMap<>();
 	
 	
-	public SearchBeanMap(String talbes, String joinCond, boolean distinct) {
+	public SearchBeanMap(String talbes, String joinCond, String groupBy, boolean distinct) {
 		this.talbes = talbes;
 		this.joinCond = joinCond;
+		this.groupBy = groupBy;
 		this.distinct = distinct;
 	}
 
@@ -90,6 +96,14 @@ public class SearchBeanMap {
 
 	public void setJoinCond(String joinCond) {
 		this.joinCond = joinCond;
+	}
+
+	public String getGroupBy() {
+		return groupBy;
+	}
+
+	public void setGroupBy(String groupBy) {
+		this.groupBy = groupBy;
 	}
 
 	public boolean isDistinct() {

@@ -32,9 +32,15 @@ public @interface SearchBean {
 	String joinCond() default "";	
 	
 	/**
+	 * 分组字段，例如
+	 * u.id,r.name
+	 */
+	String groupBy() default "";
+	
+	/**
 	 * 是否 distinct 结果
 	 * */
 	boolean distinct() default false;
 	
-	
 }
+

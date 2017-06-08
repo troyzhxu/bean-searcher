@@ -82,13 +82,20 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 				searchSql.addCountSqlParam(sqlParam);
 			}
 		}
+		
+		String groupBy = searchBeanMap.getGroupBy();
+		if (groupBy != null && !"".equals(groupBy.trim())) {
+			builder.append(" group by " + groupBy);
+		}
+		
 		String fromWhereSql = builder.toString();
+		
 		searchSql.setCountSqlString("select count(1) " + fromWhereSql);
 		builder = new StringBuilder(selectDbFieldSetSql).append(fromWhereSql);
 
-		String sortDbField = fieldDbMap.get(searchParam.getSort());
-		if (sortDbField != null) {
-			builder.append(" order by ").append(sortDbField);
+		String sortDbAlias = fieldDbAliasMap.get(searchParam.getSort());
+		if (sortDbAlias != null) {
+			builder.append(" order by ").append(sortDbAlias);
 			String order = searchParam.getOrder();
 			if (order != null) {
 				builder.append(" ").append(order);
