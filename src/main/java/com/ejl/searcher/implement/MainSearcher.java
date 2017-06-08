@@ -21,7 +21,7 @@ import com.ejl.searcher.param.SearchParam;
 /***
  * @author Troy.Zhou @ 2017-03-20
  * 
- *         自动检索器 根据 Bean 的 Class 和请求参数，自动检索 Bean
+ * 自动检索器 根据 Bean 的 Class 和请求参数，自动检索 Bean
  * 
  */
 public class MainSearcher implements Searcher {
@@ -39,6 +39,17 @@ public class MainSearcher implements Searcher {
 	 */
 	private int prifexSeparatorLength = 1;
 
+	
+	@Override
+	public <T> SearchResult<T> search(Class<T> beanClass, Map<String, String> paraMap, String prefix) {
+		return search(beanClass, propcessParaMapWhithPrefix(paraMap, prefix));
+	}
+	
+	@Override
+	public <T> SearchResult<T> search(Class<T> beanClass, Map<String, String> paraMap) {
+		return search(beanClass, paraMap, true, true);
+	}
+	
 	@Override
 	public <T> T searchFirst(Class<T> beanClass, Map<String, String> paraMap, String prefix) {
 		return searchFirst(beanClass, propcessParaMapWhithPrefix(paraMap, prefix));
@@ -48,7 +59,7 @@ public class MainSearcher implements Searcher {
 	public <T> T searchFirst(Class<T> beanClass, Map<String, String> paraMap) {
 		String maxParamName = searchParamResolver.getMaxParamName();
 		paraMap.put(maxParamName, "1");
-		List<T> list = search(beanClass, paraMap, false).getDataList();
+		List<T> list = search(beanClass, paraMap, false, true).getDataList();
 		if (list.size() > 0) {
 			return list.get(0);
 		}
@@ -62,19 +73,18 @@ public class MainSearcher implements Searcher {
 
 	@Override
 	public <T> List<T> searchList(Class<T> beanClass, Map<String, String> paraMap) {
-		return search(beanClass, paraMap, false).getDataList();
+		return search(beanClass, paraMap, false, true).getDataList();
 	}
 	
 	@Override
-	public <T> SearchResult<T> search(Class<T> beanClass, Map<String, String> paraMap, String prefix) {
-		return search(beanClass, propcessParaMapWhithPrefix(paraMap, prefix));
-	}
-	
-	@Override
-	public <T> SearchResult<T> search(Class<T> beanClass, Map<String, String> paraMap) {
-		return search(beanClass, paraMap, true);
+	public <T> Number searchCount(Class<T> beanClass, Map<String, String> paraMap, String prefix) {
+		return searchCount(beanClass, propcessParaMapWhithPrefix(paraMap, prefix));
 	}
 
+	@Override
+	public <T> Number searchCount(Class<T> beanClass, Map<String, String> paraMap) {
+		return search(beanClass, paraMap, true, false).getTotalCount();
+	}
 
 	/// 私有方法
 
@@ -95,7 +105,7 @@ public class MainSearcher implements Searcher {
 		return newParaMap;
 	}
 
-	private <T> SearchResult<T> search(Class<T> beanClass, Map<String, String> paraMap, boolean shouldQueryTotal) {
+	private <T> SearchResult<T> search(Class<T> beanClass, Map<String, String> paraMap, boolean shouldQueryTotal, boolean shouldQueryList) {
 		SearchBeanMap searchBeanMap = SearchBeanMapCache.sharedCache().getSearchBeanMap(beanClass);
 		if (searchBeanMap == null) {
 			throw new RuntimeException("该 Bean【" + beanClass.getName() + "】不可以被检索器检索，请检查该Class是否被正确注解 或 检索器是否正确启动！");
@@ -104,6 +114,7 @@ public class MainSearcher implements Searcher {
 		SearchParam searchParam = searchParamResolver.resolve(fieldList, paraMap);
 		SearchSql searchSql = searchSqlResolver.resolve(searchBeanMap, searchParam);
 		searchSql.setShouldQueryTotal(shouldQueryTotal);
+		searchSql.setShouldQueryList(shouldQueryList);
 		SearchTmpResult searchTmpResult = searchSqlExecutor.execute(searchSql);
 		SearchResultConvertInfo<T> convertInfo = new SearchResultConvertInfo<T>(beanClass);
 		convertInfo.setFieldDbAliasEntrySet(searchBeanMap.getFieldDbAliasMap().entrySet());
@@ -111,7 +122,7 @@ public class MainSearcher implements Searcher {
 		convertInfo.setFieldTypeMap(searchBeanMap.getFieldTypeMap());
 		return searchResultResolver.resolve(convertInfo, searchTmpResult);
 	}
-
+	
 	public SearchParamResolver getSearchParamResolver() {
 		return searchParamResolver;
 	}

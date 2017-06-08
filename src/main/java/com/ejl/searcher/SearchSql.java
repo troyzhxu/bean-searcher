@@ -42,6 +42,11 @@ public class SearchSql {
 	 * */
 	private boolean shouldQueryTotal;
 	
+	/**
+	 * 是否应该查询数据列表
+	 * */
+	private boolean shouldQueryList;
+	
 	
 	public SearchSql() {
 	}
@@ -94,6 +99,17 @@ public class SearchSql {
 	public void setShouldQueryTotal(boolean shouldQueryTotal) {
 		this.shouldQueryTotal = shouldQueryTotal;
 	}
+
+
+	public boolean isShouldQueryList() {
+		return shouldQueryList;
+	}
+
+
+	public void setShouldQueryList(boolean shouldQueryList) {
+		this.shouldQueryList = shouldQueryList;
+	}
+	
 	
 	
 }

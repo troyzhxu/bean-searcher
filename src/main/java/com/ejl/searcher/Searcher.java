@@ -15,6 +15,23 @@ import java.util.Map;
 public interface Searcher {
 
 	/**
+	 * 适合需要分页的查询
+	 * @param beanClass 要检索的 bean 类型
+	 * @param paraMap 检索参数
+	 * @param prefix 检索参数前缀
+	 * @return 总条数，Bean 数据列表
+	 * */
+	public <T> SearchResult<T> search(Class<T> beanClass, Map<String, String> paraMap, String prefix);
+	
+	/**
+	 * 适合需要分页的查询
+	 * @param beanClass 要检索的 bean 类型
+	 * @param paraMap 检索参数
+	 * @return 总条数，Bean 数据列表
+	 * */
+	public <T> SearchResult<T> search(Class<T> beanClass, Map<String, String> paraMap);
+	
+	/**
 	 * @param beanClass 要检索的 bean 类型
 	 * @param paraMap 检索参数（包括排序分页参数）
 	 * @param prefix 检索参数前缀
@@ -48,23 +65,19 @@ public interface Searcher {
 	public <T> List<T> searchList(Class<T> beanClass, Map<String, String> paraMap);
 	
 	/**
-	 * 适合需要分页的查询
 	 * @param beanClass 要检索的 bean 类型
-	 * @param paraMap 检索参数
+	 * @param paraMap 检索参数（包括排序分页参数）
 	 * @param prefix 检索参数前缀
-	 * @return 总条数，Bean 数据列表
+	 * @return Bean 数据个数
 	 * */
-	public <T> SearchResult<T> search(Class<T> beanClass, Map<String, String> paraMap, String prefix);
+	public <T> Number searchCount(Class<T> beanClass, Map<String, String> paraMap, String prefix);
 	
 	/**
-	 * 适合需要分页的查询
 	 * @param beanClass 要检索的 bean 类型
-	 * @param paraMap 检索参数
-	 * @return 总条数，Bean 数据列表
+	 * @param paraMap 检索参数（包括排序分页参数）
+	 * @return Bean 数据个数
 	 * */
-	public <T> SearchResult<T> search(Class<T> beanClass, Map<String, String> paraMap);
+	public <T> Number searchCount(Class<T> beanClass, Map<String, String> paraMap);
 	
-	
-
 	
 }
