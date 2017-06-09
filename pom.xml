@@ -15,7 +15,7 @@
 	</properties>
   
   	<build>
-		<finalName>ejl-bean-seacher</finalName>
+		<finalName>bean-seacher</finalName>
 		 <plugins>
             <!-- compiler插件, 设定JDK版本 -->
             <plugin>
