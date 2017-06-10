@@ -2,6 +2,8 @@ package com.ejl.searcher;
 
 import java.util.HashMap;
 
+import com.zhxu.searcher.SearchTmpData;
+
 
 public class MainSearcherTest {
 
