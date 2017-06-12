@@ -20,17 +20,25 @@ import java.util.Set;
 public class MainSearchParamResolver implements SearchParamResolver {
 
 	/**
+	 * 默认最大条数
+	 */
+	private Integer defaultMax = 10;
+	
+	/**
 	 * 排序字段参数名
 	 */
 	private String sortParamName = "sort";
+	
 	/**
 	 * 排序方法字段参数名
 	 */
 	private String orderParamName = "order";
+	
 	/**
 	 * 最大条数字段参数名
 	 */
 	private String maxParamName = "max";
+	
 	/**
 	 * 偏移条数字段参数名
 	 */
@@ -69,7 +77,7 @@ public class MainSearchParamResolver implements SearchParamResolver {
 	 */
 	@Override
 	public SearchParam resolve(List<String> fieldList, Map<String, String> paraMap) {
-		SearchParam searchParam = new SearchParam();
+		SearchParam searchParam = new SearchParam(defaultMax);
 		Set<Entry<String, String>> entrySet = paraMap.entrySet();
 		for (Entry<String, String> entry : entrySet) {
 			String key = entry.getKey();
@@ -185,6 +193,10 @@ public class MainSearchParamResolver implements SearchParamResolver {
 		return should;
 	}
 
+	public void setDefaultMax(Integer defaultMax) {
+		this.defaultMax = defaultMax;
+	}
+	
 	public void setSortParamName(String sortParamName) {
 		this.sortParamName = sortParamName;
 	}

@@ -38,6 +38,16 @@ public class SearchParam {
 	 */
 	private List<FilterParam> filterParamList = new ArrayList<>();
 
+
+	public SearchParam() {
+	}
+	
+	public SearchParam(Integer max) {
+		super();
+		this.max = max;
+	}
+
+	
 	public void removeUselessFilterParam() {
 		int size = filterParamList.size();
 		for (int i = size - 1; i >= 0; i--) {
