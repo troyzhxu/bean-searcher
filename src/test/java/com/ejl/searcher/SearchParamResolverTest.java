@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.zhxu.searcher.implement.MainSearchParamResolver;
-import com.zhxu.searcher.param.SearchParam;
+import com.ejl.searcher.implement.MainSearchParamResolver;
+import com.ejl.searcher.param.SearchParam;
 
 public class SearchParamResolverTest {
 
