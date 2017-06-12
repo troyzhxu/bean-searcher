@@ -14,6 +14,21 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
   
+  
+  	<distributionManagement>
+        <repository>
+            <id>releases</id>
+            <name>Popocloud Release Repository</name>
+            <url>http://172.31.0.204:8081/nexus/content/repositories/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>Popocloud Snapshot Repository</name>
+            <url>http://172.31.0.204:8081/nexus/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+    
+    
   	<build>
 		<finalName>bean-seacher</finalName>
 		 <plugins>
