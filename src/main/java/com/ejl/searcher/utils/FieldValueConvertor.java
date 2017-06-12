@@ -1,9 +1,7 @@
-package com.ejl.searcher.implement;
+package com.ejl.searcher.utils;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-
-import com.ejl.searcher.FieldValueConvertor;
 
 /***
  * @author Troy.Zhou @ 2017-04-07
@@ -11,7 +9,7 @@ import com.ejl.searcher.FieldValueConvertor;
  * 默认数据库字段值转换器
  * 
  */
-public class MainFieldValueConvertor implements FieldValueConvertor {
+public class FieldValueConvertor implements Convertible {
 
 	@Override
 	public Object convert(Object value, Class<?> fieldType) {

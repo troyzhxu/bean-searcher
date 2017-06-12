@@ -1,4 +1,4 @@
-package com.ejl.searcher;
+package com.ejl.searcher.utils;
 
 
 /***
@@ -7,7 +7,7 @@ package com.ejl.searcher;
  * 数据库字段值转换器
  * 
  */
-public interface FieldValueConvertor {
+public interface Convertible {
 
 	
 	/**

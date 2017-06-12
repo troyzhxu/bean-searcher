@@ -1,11 +1,11 @@
 package com.ejl.searcher;
 
 import com.ejl.searcher.dialect.MySqlDialect;
-import com.ejl.searcher.implement.MainFieldValueConvertor;
 import com.ejl.searcher.implement.MainSearchParamResolver;
 import com.ejl.searcher.implement.MainSearchResultResolver;
 import com.ejl.searcher.implement.MainSearchSqlResolver;
 import com.ejl.searcher.implement.MainSearcher;
+import com.ejl.searcher.utils.FieldValueConvertor;
 
 /***
  * @author Troy.Zhou @ 2017-03-20
@@ -78,7 +78,7 @@ public class SearcherBuilder {
 			mainSearcher.setSearchResultResolver(searchResultResolver);
 		} else {
 			MainSearchResultResolver searchResultResolver = new MainSearchResultResolver();
-			searchResultResolver.setFieldValueConvertor(new MainFieldValueConvertor());
+			searchResultResolver.setFieldValueConvertor(new FieldValueConvertor());
 			mainSearcher.setSearchResultResolver(searchResultResolver);
 		}
 		mainSearcher.setPrifexSeparatorLength(prifexSeparatorLength);

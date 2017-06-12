@@ -6,12 +6,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.ejl.searcher.BeanAware;
-import com.ejl.searcher.FieldValueConvertor;
 import com.ejl.searcher.SearchResult;
 import com.ejl.searcher.SearchResultConvertInfo;
 import com.ejl.searcher.SearchResultResolver;
 import com.ejl.searcher.SearchTmpData;
 import com.ejl.searcher.SearchTmpResult;
+import com.ejl.searcher.utils.Convertible;
 
 import java.util.Set;
 
@@ -24,7 +24,7 @@ import java.util.Set;
 public class MainSearchResultResolver implements SearchResultResolver {
 
 	
-	private FieldValueConvertor fieldValueConvertor;
+	private Convertible fieldValueConvertor;
 	
 	@Override
 	public <T> SearchResult<T> resolve(SearchResultConvertInfo<T> convertInfo, SearchTmpResult searchTmpResult) {
@@ -70,7 +70,7 @@ public class MainSearchResultResolver implements SearchResultResolver {
 		return searchResult;
 	}
 
-	public void setFieldValueConvertor(FieldValueConvertor fieldValueConvertor) {
+	public void setFieldValueConvertor(Convertible fieldValueConvertor) {
 		this.fieldValueConvertor = fieldValueConvertor;
 	}
 	
