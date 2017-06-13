@@ -6,9 +6,9 @@ import java.util.List;
 
 
 /***
- * @author Troy.Zhou @ 2017-03-20
- * 
  * 检索结果
+ * 
+ * @author Troy.Zhou @ 2017-03-20
  * 
  * */
 public class SearchResult<T> {

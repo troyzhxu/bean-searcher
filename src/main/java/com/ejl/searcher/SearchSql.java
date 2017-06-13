@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/***
- * @author Troy.Zhou @ 2017-03-20
- * 
+/**
  * 检索的 SQL 信息
+ *  
+ * @author Troy.Zhou @ 2017-03-20
  * 
  * */
 public class SearchSql {

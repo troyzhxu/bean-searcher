@@ -1,11 +1,11 @@
-package com.ejl.searcher.utils;
+package com.ejl.searcher.util;
 
 
 /***
  * @author Troy.Zhou @ 2017-04-07
  * 
- * 数据库字段值转换器
- * 
+ * 数据库字段值转换接口
+ * 用于把 数据库查出的字段值 转换为 用户bean 对用的属性类型
  */
 public interface Convertible {
 

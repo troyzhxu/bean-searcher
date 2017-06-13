@@ -4,17 +4,17 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import com.ejl.searcher.annotation.DbField;
-import com.ejl.searcher.annotation.SearchBean;
+import com.ejl.searcher.bean.DbField;
+import com.ejl.searcher.bean.SearchBean;
 import com.ejl.searcher.beanmap.SearchBeanMap;
 import com.ejl.searcher.beanmap.SearchBeanMapCache;
-import com.ejl.searcher.utils.StrUtils;
-import com.ejl.searcher.utils.clazz.ClassScanner;
+import com.ejl.searcher.util.StrUtils;
+import com.ejl.searcher.util.clazz.ClassScanner;
 
 /***
- * @author Troy.Zhou @ 2017-03-20
+ * 检索启动器 只有再启动之后才能进行检索 一般在应用程序启动时启动检索器
  * 
- *         检索启动器 只有再启动之后才能进行检索 一般在应用程序启动时启动检索器
+ * @author Troy.Zhou @ 2017-03-20        
  * 
  */
 public class SearcherStarter {
@@ -23,14 +23,16 @@ public class SearcherStarter {
 
 	/**
 	 * 获取一个检索启动器
+	 * @return 启动器实例
 	 */
 	public static SearcherStarter starter() {
 		return starter;
 	}
 
+
 	/**
-	 * @param packageName
-	 *            可检索 Bean 所在的 package，可检索 Bean 是被 @SearchBean 注解的 Bean
+	 * @param baseDir package 的顶级路径
+	 * @param packageName 可检索 Bean 所在的 package，可检索 Bean 是被 @SearchBean 注解的 Bean
 	 * @return true if start successfully, else return false
 	 */
 	public boolean start(String baseDir, String packageName) {

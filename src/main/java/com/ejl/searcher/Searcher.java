@@ -4,18 +4,18 @@ import java.util.List;
 import java.util.Map;
 
 
-/***
- * @author Troy.Zhou @ 2017-03-20
- * 
+/**
  * 自动检索器接口
  * 根据 Bean 的 Class 和请求参数，自动检索 Bean
  * 
+ * @author Troy.Zhou @ 2017-03-20
+ * 
  * */
-
 public interface Searcher {
 
 	/**
 	 * 适合需要分页的查询
+	 * @param <T> bean 类型
 	 * @param beanClass 要检索的 bean 类型
 	 * @param paraMap 检索参数
 	 * @param prefix 检索参数前缀
@@ -25,6 +25,7 @@ public interface Searcher {
 	
 	/**
 	 * 适合需要分页的查询
+	 * @param <T> bean 类型
 	 * @param beanClass 要检索的 bean 类型
 	 * @param paraMap 检索参数
 	 * @return 总条数，Bean 数据列表
@@ -32,6 +33,7 @@ public interface Searcher {
 	public <T> SearchResult<T> search(Class<T> beanClass, Map<String, String> paraMap);
 	
 	/**
+	 * @param <T> bean 类型
 	 * @param beanClass 要检索的 bean 类型
 	 * @param paraMap 检索参数（包括排序分页参数）
 	 * @param prefix 检索参数前缀
@@ -40,6 +42,7 @@ public interface Searcher {
 	public <T> T searchFirst(Class<T> beanClass, Map<String, String> paraMap, String prefix);
 	
 	/**
+	 * @param <T> bean 类型
 	 * @param beanClass 要检索的 bean 类型
 	 * @param paraMap 检索参数（包括排序分页参数）
 	 * @return 满足条件的第一个Bean 
@@ -49,6 +52,7 @@ public interface Searcher {
 	
 	/**
 	 * 适合不需要分页的查询
+	 * @param <T> bean 类型
 	 * @param beanClass 要检索的 bean 类型
 	 * @param paraMap 检索参数（包括排序分页参数）
 	 * @param prefix 检索参数前缀
@@ -58,6 +62,7 @@ public interface Searcher {
 	
 	/**
 	 * 适合不需要分页的查询
+	 * @param <T> bean 类型
 	 * @param beanClass 要检索的 bean 类型
 	 * @param paraMap 检索参数（包括排序分页参数）
 	 * @return Bean 数据列表
@@ -66,6 +71,7 @@ public interface Searcher {
 	
 	/**
 	 * 检索满足条件的所有Bean，不支持偏移
+	 * @param <T> bean 类型
 	 * @param beanClass 要检索的 bean 类型
 	 * @param paraMap 检索参数（包括排序分页参数）
 	 * @param prefix 检索参数前缀
@@ -75,6 +81,7 @@ public interface Searcher {
 	
 	/**
 	 * 检索满足条件的所有Bean，不支持偏移
+	 * @param <T> bean 类型
 	 * @param beanClass 要检索的 bean 类型
 	 * @param paraMap 检索参数（包括排序分页参数）
 	 * @return Bean 数据列表
@@ -83,6 +90,7 @@ public interface Searcher {
 	
 	
 	/**
+	 * @param <T> bean 类型
 	 * @param beanClass 要检索的 bean 类型
 	 * @param paraMap 检索参数（包括排序分页参数）
 	 * @param prefix 检索参数前缀
@@ -91,6 +99,7 @@ public interface Searcher {
 	public <T> Number searchCount(Class<T> beanClass, Map<String, String> paraMap, String prefix);
 	
 	/**
+	 * @param <T> bean 类型
 	 * @param beanClass 要检索的 bean 类型
 	 * @param paraMap 检索参数（包括排序分页参数）
 	 * @return Bean 数据个数

@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 用户Bean的属性与数据库表字段的映射信息
+ *  
  * @author Troy.Zhou @ 2017-03-20
- *
- * bean 的属性与数据库表字段的映射信息
  * 
  */
 public class SearchBeanMap {

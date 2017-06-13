@@ -1,10 +1,8 @@
-package com.ejl.searcher.utils;
+package com.ejl.searcher.util;
 
 public class StrUtils {
 
-	/**
-	 * 字符串为 null 或者内部字符全部为 ' ' '\t' '\n' '\r' 这四类字符时返回 true
-	 */
+
 	public static boolean isBlank(String str) {
 		if (str == null) {
 			return true;

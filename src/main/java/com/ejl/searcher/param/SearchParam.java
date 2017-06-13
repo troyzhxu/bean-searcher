@@ -3,7 +3,7 @@ package com.ejl.searcher.param;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ejl.searcher.utils.StrUtils;
+import com.ejl.searcher.util.StrUtils;
 
 /**
  * @author Troy.Zhou @ 2017-03-21

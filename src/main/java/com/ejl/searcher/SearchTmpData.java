@@ -7,9 +7,12 @@ package com.ejl.searcher;
  * */
 public interface SearchTmpData {
 
+
 	/**
 	 * 根据 字段别名 取值
-	 * */
+	 * @param dbAlias 数据库字段别名
+	 * @return 数据库字段值
+	 */
 	public Object get(String dbAlias);
 	
 }

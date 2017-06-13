@@ -5,10 +5,10 @@ import java.util.Map;
 
 
 /**
- * @author Troy.Zhou @ 2017-03-20
- *
  * 用于缓存 @SearchBeanMap
  * 
+ * @author Troy.Zhou @ 2017-03-20
+ *
  */
 public class SearchBeanMapCache {
 

@@ -2,9 +2,10 @@ package com.ejl.searcher.dialect;
 
 
 /**
+ * MySql 方言实现
+ *  
  * @author Troy.Zhou
  * 
- * MySql 方言实现
  * */
 public class MySqlDialect implements Dialect {
 

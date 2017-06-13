@@ -1,4 +1,4 @@
-package com.ejl.searcher.utils.file;
+package com.ejl.searcher.util.file;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -13,6 +13,7 @@ public class FileScanner {
 	 *            查找的文件夹路径
 	 * @param targetFileName
 	 *            需要查找的文件名
+	 * @return 文件列表
 	 */
 	public static List<File> findFiles(String baseDirName, String targetFileName) {
 		/**

@@ -5,12 +5,12 @@ import com.ejl.searcher.implement.MainSearchParamResolver;
 import com.ejl.searcher.implement.MainSearchResultResolver;
 import com.ejl.searcher.implement.MainSearchSqlResolver;
 import com.ejl.searcher.implement.MainSearcher;
-import com.ejl.searcher.utils.FieldValueConvertor;
+import com.ejl.searcher.util.FieldValueConvertor;
 
 /***
- * @author Troy.Zhou @ 2017-03-20
- * 
  * 检索器 Builder
+ * 
+ * @author Troy.Zhou @ 2017-03-20
  * 
  * */
 public class SearcherBuilder {

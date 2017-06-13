@@ -7,10 +7,9 @@ import com.ejl.searcher.param.SearchParam;
 
 
 /***
- * @author Troy.Zhou @ 2017-03-20
- * 
  * 请求参数解析器接口
  * 
+ * @author Troy.Zhou @ 2017-03-20
  * */
 public interface SearchParamResolver {
 
@@ -23,6 +22,7 @@ public interface SearchParamResolver {
 	/**
 	 * @param fieldList 可以参与检索的属性列表
 	 * @param paraMap 用户请求参数映射
+	 * @return SearchParam
 	 * */
 	public SearchParam resolve(List<String> fieldList, Map<String, String> paraMap);
 	

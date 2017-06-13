@@ -12,7 +12,7 @@ import com.ejl.searcher.dialect.Dialect;
 import com.ejl.searcher.param.FilterOperator;
 import com.ejl.searcher.param.FilterParam;
 import com.ejl.searcher.param.SearchParam;
-import com.ejl.searcher.utils.StrUtils;
+import com.ejl.searcher.util.StrUtils;
 
 /***
  * @author Troy.Zhou @ 2017-03-20

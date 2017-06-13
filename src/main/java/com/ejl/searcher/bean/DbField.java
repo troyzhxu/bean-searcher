@@ -1,4 +1,4 @@
-package com.ejl.searcher.annotation;
+package com.ejl.searcher.bean;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
@@ -24,6 +24,7 @@ public @interface DbField {
 	 * 用于指定属性对应数据库的哪张表的哪个字段，例如:
 	 * u.username
 	 * 别名 u 由  @SearchBean 注解的 tables 值指定 
+	 * @return 数据库字段
 	 * */
 	String value();
 

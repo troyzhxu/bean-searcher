@@ -54,27 +54,35 @@ public class MainSearchParamResolver implements SearchParamResolver {
 	 */
 	private String filterOperationParamNameSuffix = "_op";
 	
-	
+	/**
+	 * Boolean true 值参数后缀
+	 */
 	private String booleanTrueParamNameSuffix = "_true";
 	
-	
+	/**
+	 * Boolean false 值参数后缀
+	 */
 	private String booleanFalseParamNameSuffix = "_false";
 	
+	/**
+	 * 双值参数后缀
+	 */
 	private String value2ParamNameSuffix = "_2";
 	
+	/**
+	 * 参数名分割符
+	 */
 	private String paramNameSeparator = "_";
 	
 	
+	/**
+	 * @return 最大条数参数名
+	 */
 	public String getMaxParamName() {
 		return maxParamName;
 	}
 	
-	/***
-	 * url?name=jack&name_ic=false&sort=name&order=asc&max=10&offset=10
-	 * url?name=&name_ic=true&name_op=ny
-	 * url?name=jack&name_ic=true&name_op=sw&age=16&age_op=gt
-	 * url?date=2017-06-01&date_bt=2017-06-05&data_op=bt
-	 */
+
 	@Override
 	public SearchParam resolve(List<String> fieldList, Map<String, String> paraMap) {
 		SearchParam searchParam = new SearchParam(defaultMax);

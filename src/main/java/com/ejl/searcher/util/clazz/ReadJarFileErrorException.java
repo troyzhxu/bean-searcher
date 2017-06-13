@@ -1,4 +1,4 @@
-package com.ejl.searcher.utils.clazz;
+package com.ejl.searcher.util.clazz;
 
 public class ReadJarFileErrorException extends RuntimeException {
 

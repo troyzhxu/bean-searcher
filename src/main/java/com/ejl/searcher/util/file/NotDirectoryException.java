@@ -1,4 +1,4 @@
-package com.ejl.searcher.utils.file;
+package com.ejl.searcher.util.file;
 
 public class NotDirectoryException extends RuntimeException {
 

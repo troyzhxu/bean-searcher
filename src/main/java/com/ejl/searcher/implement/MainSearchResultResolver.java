@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.ejl.searcher.BeanAware;
 import com.ejl.searcher.SearchResult;
 import com.ejl.searcher.SearchResultConvertInfo;
 import com.ejl.searcher.SearchResultResolver;
 import com.ejl.searcher.SearchTmpData;
 import com.ejl.searcher.SearchTmpResult;
-import com.ejl.searcher.utils.Convertible;
+import com.ejl.searcher.bean.BeanAware;
+import com.ejl.searcher.util.Convertible;
 
 import java.util.Set;
 

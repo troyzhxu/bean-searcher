@@ -1,4 +1,4 @@
-package com.ejl.searcher.utils;
+package com.ejl.searcher.util;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

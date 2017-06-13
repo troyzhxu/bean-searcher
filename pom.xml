@@ -2,36 +2,53 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
+	<!-- 引入Sonatype官方的一个通用配置oss-parent，这样做的好处是很多pom.xml的发布配置不需要自己配置了 -->
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
+
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.ejlchina</groupId>
 	<artifactId>bean-searcher</artifactId>
 	<version>1.0.1</version>
 	
 	<name>bean-searcher</name>
+	<description>This project aims to simplify the java code of querying database with various conditions.</description>
+	<url>http://git.oschina.net/zhxu/bean-searcher</url>
 	
-  	<properties>
+	<properties>
 		<java-version>1.8</java-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-  
-  
-  	<distributionManagement>
-        <repository>
-            <id>releases</id>
-            <name>Popocloud Release Repository</name>
-            <url>http://172.31.0.204:8081/nexus/content/repositories/releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>snapshots</id>
-            <name>Popocloud Snapshot Repository</name>
-            <url>http://172.31.0.204:8081/nexus/content/repositories/snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
-    
-    
-  	<build>
+	
+	<licenses>
+		<license>
+			<name>The Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
+	
+	<developers>
+		<developer>
+			<name>zhouxu</name>
+			<email>zhou.xu@ejlchina.com</email>
+			<organization>ejlchina</organization>
+			<organizationUrl>http://www.ejlchina.com</organizationUrl>
+		</developer>
+	</developers>
+	
+	<scm>
+		<connection>scm:git:https://git.oschina.net/zhxu/bean-searcher.git</connection>
+		<developerConnection>scm:git:https://git.oschina.net/zhxu/bean-searcher.git</developerConnection>
+		<url>https://git.oschina.net/zhxu/bean-searcher</url>
+		<tag>v1.0.1</tag>
+	</scm>
+
+	<build>
 		<finalName>bean-seacher</finalName>
-		 <plugins>
+		<plugins>
             <!-- compiler插件, 设定JDK版本 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -44,6 +61,8 @@
                 </configuration>
             </plugin>
         </plugins>
+
 	</build>
+
   
 </project>
