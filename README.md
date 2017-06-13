@@ -1,6 +1,6 @@
-#bean-searcher
+# bean-searcher
 
-####Gradle
+#### Gradle
 
 ```
 
@@ -10,7 +10,7 @@ dependencies {
 
 ```
 
-####Maven
+#### Maven
 
 ```
 
