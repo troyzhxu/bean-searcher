@@ -1,10 +1,10 @@
 package com.ejl.searcher.param;
 
 /**
+ * 过滤运算符
+ * 
  * @author Troy.Zhou @ 2017-03-20
  *
- *         过滤运算符
- * 
  */
 public enum FilterOperator {
 

@@ -1,5 +1,10 @@
 package com.ejl.searcher.util.file;
 
+/**
+ * 不是一个目录异常
+ * @author Troy.Zhou
+ *
+ */
 public class NotDirectoryException extends RuntimeException {
 
 	/**

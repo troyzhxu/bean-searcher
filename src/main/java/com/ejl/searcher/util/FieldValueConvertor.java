@@ -3,10 +3,10 @@ package com.ejl.searcher.util;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-/***
- * @author Troy.Zhou @ 2017-04-07
- * 
+/**
  * 默认数据库字段值转换器
+ *  
+ * @author Troy.Zhou @ 2017-04-07
  * 
  */
 public class FieldValueConvertor implements Convertible {

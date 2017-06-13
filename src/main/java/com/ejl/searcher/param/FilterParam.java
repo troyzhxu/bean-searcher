@@ -1,9 +1,9 @@
 package com.ejl.searcher.param;
 
 /**
- * @author Troy.Zhou @ 2017-03-20
- *
  * 过滤检索参数
+ * 
+ * @author Troy.Zhou @ 2017-03-20
  * 
  */
 public class FilterParam {

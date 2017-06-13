@@ -6,10 +6,9 @@ import java.util.List;
 import com.ejl.searcher.util.StrUtils;
 
 /**
- * @author Troy.Zhou @ 2017-03-21
- *
- *         检索参数
+ * 检索参数
  * 
+ * @author Troy.Zhou @ 2017-03-21
  */
 public class SearchParam {
 

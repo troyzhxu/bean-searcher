@@ -8,11 +8,11 @@ import java.lang.annotation.Target;
 
 
 /**
- * @author Troy.Zhou @ 2017-03-20
- *
  * 用于注解一个可检索 bean 的属性
  * 来指定属性对应数据库的哪张表的哪个字段，与 @SearchBean 配合使用
  * 
+ * @author Troy.Zhou @ 2017-03-20
+ *  
  */
 
 @Inherited

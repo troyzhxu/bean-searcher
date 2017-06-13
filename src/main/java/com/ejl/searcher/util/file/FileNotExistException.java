@@ -1,5 +1,11 @@
 package com.ejl.searcher.util.file;
 
+
+/**
+ * 文件不存在异常
+ * @author Troy.Zhou
+ *
+ */
 public class FileNotExistException extends RuntimeException {
 
 	/**

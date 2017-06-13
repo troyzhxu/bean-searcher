@@ -11,7 +11,11 @@ import java.util.jar.JarFile;
 import com.ejl.searcher.util.file.FileScanner;
 
 
-
+/**
+ * 类 扫描器
+ * @author Troy.Zhou
+ *
+ */
 public class ClassScanner {
 
 	

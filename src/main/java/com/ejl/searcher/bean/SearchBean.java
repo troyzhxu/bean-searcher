@@ -8,12 +8,11 @@ import java.lang.annotation.Target;
 
 
 /**
+ * 用于注解一个可检索 Bean
+ * 
  * @author Troy.Zhou @ 2017-03-20
- *
- * 用于注解一个可检索 bean 的 class
  * 
  */
-
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})

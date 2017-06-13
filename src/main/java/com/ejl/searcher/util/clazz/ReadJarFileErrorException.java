@@ -1,5 +1,10 @@
 package com.ejl.searcher.util.clazz;
 
+/**
+ * Jar包 读取错误异常
+ * @author Troy.Zhou
+ *
+ */
 public class ReadJarFileErrorException extends RuntimeException {
 
 	/**
