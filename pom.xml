@@ -2,7 +2,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-	<!-- 引入Sonatype官方的一个通用配置oss-parent，这样做的好处是很多pom.xml的发布配置不需要自己配置了 -->
+	<!-- 引入Sonatype官方的一个通用发布配置 -->
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
 		<artifactId>oss-parent</artifactId>
@@ -12,7 +12,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.ejlchina</groupId>
 	<artifactId>bean-searcher</artifactId>
-	<version>1.0.1</version>
+	<version>1.1.0</version>
 	
 	<name>bean-searcher</name>
 	<description>This project aims to simplify the java code of querying database with various conditions.</description>
@@ -43,7 +43,7 @@
 		<connection>scm:git:https://git.oschina.net/zhxu/bean-searcher.git</connection>
 		<developerConnection>scm:git:https://git.oschina.net/zhxu/bean-searcher.git</developerConnection>
 		<url>https://git.oschina.net/zhxu/bean-searcher</url>
-		<tag>v1.0.1</tag>
+		<tag>v1.1.0</tag>
 	</scm>
 
 	<build>
