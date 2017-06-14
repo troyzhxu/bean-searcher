@@ -40,9 +40,9 @@
 	</developers>
 	
 	<scm>
-		<connection>scm:git:https://git.oschina.net/zhxu/bean-searcher.git</connection>
-		<developerConnection>scm:git:https://git.oschina.net/zhxu/bean-searcher.git</developerConnection>
-		<url>https://git.oschina.net/zhxu/bean-searcher</url>
+		<connection>scm:git:https://github.com/ejlchina/been-searcher.git</connection>
+		<developerConnection>scm:git:https://github.com/ejlchina/been-searcher.git</developerConnection>
+		<url>https://github.com/ejlchina/been-searcher</url>
 		<tag>v1.1.0</tag>
 	</scm>
 
