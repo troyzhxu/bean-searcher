@@ -9,7 +9,7 @@ import java.math.BigInteger;
  * @author Troy.Zhou @ 2017-04-07
  * 
  */
-public class FieldValueConvertor implements Convertible {
+public class DefaultFieldConvertor implements FieldConvertor {
 
 	@Override
 	public Object convert(Object value, Class<?> fieldType) {

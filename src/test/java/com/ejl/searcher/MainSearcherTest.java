@@ -2,7 +2,7 @@ package com.ejl.searcher;
 
 import java.util.HashMap;
 
-import com.ejl.searcher.SearchTmpData;
+import com.ejl.searcher.temp.SearchTmpData;
 
 
 public class MainSearcherTest {

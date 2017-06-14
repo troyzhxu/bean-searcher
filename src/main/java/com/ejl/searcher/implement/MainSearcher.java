@@ -12,11 +12,11 @@ import com.ejl.searcher.SearchResultResolver;
 import com.ejl.searcher.SearchSql;
 import com.ejl.searcher.SearchSqlExecutor;
 import com.ejl.searcher.SearchSqlResolver;
-import com.ejl.searcher.SearchTmpResult;
 import com.ejl.searcher.Searcher;
 import com.ejl.searcher.beanmap.SearchBeanMap;
 import com.ejl.searcher.beanmap.SearchBeanMapCache;
 import com.ejl.searcher.param.SearchParam;
+import com.ejl.searcher.temp.SearchTmpResult;
 
 /***
  * @author Troy.Zhou @ 2017-03-20

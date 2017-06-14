@@ -1,5 +1,7 @@
 package com.ejl.searcher;
 
+import com.ejl.searcher.temp.SearchTmpResult;
+
 /**
  * 查询结果解析接口
  * 

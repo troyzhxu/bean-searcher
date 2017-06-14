@@ -8,10 +8,10 @@ import java.util.Map.Entry;
 import com.ejl.searcher.SearchResult;
 import com.ejl.searcher.SearchResultConvertInfo;
 import com.ejl.searcher.SearchResultResolver;
-import com.ejl.searcher.SearchTmpData;
-import com.ejl.searcher.SearchTmpResult;
 import com.ejl.searcher.bean.BeanAware;
-import com.ejl.searcher.util.Convertible;
+import com.ejl.searcher.temp.SearchTmpData;
+import com.ejl.searcher.temp.SearchTmpResult;
+import com.ejl.searcher.util.FieldConvertor;
 
 import java.util.Set;
 
@@ -24,7 +24,7 @@ import java.util.Set;
 public class MainSearchResultResolver implements SearchResultResolver {
 
 	
-	private Convertible fieldValueConvertor;
+	private FieldConvertor fieldConvertor;
 	
 	@Override
 	public <T> SearchResult<T> resolve(SearchResultConvertInfo<T> convertInfo, SearchTmpResult searchTmpResult) {
@@ -50,7 +50,7 @@ public class MainSearchResultResolver implements SearchResultResolver {
 				Class<?> fieldType = fieldTypeMap.get(field);
 				Method method = fieldGetMethodMap.get(field);
 				try {
-					value = fieldValueConvertor.convert(value, fieldType);
+					value = fieldConvertor.convert(value, fieldType);
 				} catch (Exception e) {
 					throw new RuntimeException(
 							"可检索Bean【" + beanClass + "】的属性【" + field + "】的类型【" + fieldType + "】与数据库字段类型不兼容！", e);
@@ -70,8 +70,8 @@ public class MainSearchResultResolver implements SearchResultResolver {
 		return searchResult;
 	}
 
-	public void setFieldValueConvertor(Convertible fieldValueConvertor) {
-		this.fieldValueConvertor = fieldValueConvertor;
+	public void setFieldConvertor(FieldConvertor fieldConvertor) {
+		this.fieldConvertor = fieldConvertor;
 	}
 	
 	

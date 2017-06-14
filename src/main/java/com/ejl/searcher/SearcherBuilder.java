@@ -5,7 +5,7 @@ import com.ejl.searcher.implement.MainSearchParamResolver;
 import com.ejl.searcher.implement.MainSearchResultResolver;
 import com.ejl.searcher.implement.MainSearchSqlResolver;
 import com.ejl.searcher.implement.MainSearcher;
-import com.ejl.searcher.util.FieldValueConvertor;
+import com.ejl.searcher.util.DefaultFieldConvertor;
 
 /***
  * 检索器 Builder
@@ -78,7 +78,7 @@ public class SearcherBuilder {
 			mainSearcher.setSearchResultResolver(searchResultResolver);
 		} else {
 			MainSearchResultResolver searchResultResolver = new MainSearchResultResolver();
-			searchResultResolver.setFieldValueConvertor(new FieldValueConvertor());
+			searchResultResolver.setFieldConvertor(new DefaultFieldConvertor());
 			mainSearcher.setSearchResultResolver(searchResultResolver);
 		}
 		mainSearcher.setPrifexSeparatorLength(prifexSeparatorLength);
