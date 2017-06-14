@@ -15,10 +15,10 @@ import com.ejl.searcher.util.FieldConvertor;
 
 import java.util.Set;
 
-/***
- * @author Troy.Zhou @ 2017-03-20
+/**
+ * 默认查询结果解析器
  * 
- *         默认查询结果解析器
+ * @author Troy.Zhou @ 2017-03-20
  * 
  */
 public class MainSearchResultResolver implements SearchResultResolver {
