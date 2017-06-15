@@ -56,7 +56,10 @@ public class SearcherBuilder {
 	
 	
 	public Searcher build() {
-		MainSearcher mainSearcher = new MainSearcher();
+		return build(new MainSearcher());
+	}
+	
+	public Searcher build(MainSearcher mainSearcher) {
 		if (searchParamResolver != null) {
 			mainSearcher.setSearchParamResolver(searchParamResolver);
 		} else {
