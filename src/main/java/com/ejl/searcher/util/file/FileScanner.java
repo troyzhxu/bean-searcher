@@ -28,6 +28,8 @@ public class FileScanner {
 		List<File> classFiles = new ArrayList<>();
 		String tempName = null;
 		// 判断目录是否存在
+		System.out.println("baseDirName = " + baseDirName);
+		
 		File baseDir = new File(baseDirName);
 		if (!baseDir.exists()) {
 			throw new FileNotExistException(baseDirName);

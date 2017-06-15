@@ -13,7 +13,7 @@ import java.util.List;
  * */
 public class SearchResult<T> {
 
-	private Number totalCount;
+	private Number totalCount = 0;
 	
 	private List<T> dataList = new ArrayList<>();
 		

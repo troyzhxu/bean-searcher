@@ -46,6 +46,24 @@
 		<tag>v1.1.1</tag>
 	</scm>
 
+	<dependencies>
+	
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>3.1.2.RELEASE</version>
+			<scope>provided</scope>
+		</dependency>
+	
+		<dependency>
+			<groupId>com.jfinal</groupId>
+			<artifactId>jfinal</artifactId>
+			<version>3.0</version>
+			<scope>provided</scope>
+		</dependency>
+	
+	</dependencies>
+
 	<build>
 		<finalName>bean-seacher</finalName>
 		<plugins>
