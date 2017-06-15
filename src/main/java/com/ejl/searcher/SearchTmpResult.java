@@ -1,7 +1,8 @@
-package com.ejl.searcher.temp;
+package com.ejl.searcher;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 
@@ -15,7 +16,7 @@ public class SearchTmpResult {
 
 	private Number totalCount;
 	
-	private List<SearchTmpData> tmpDataList = new ArrayList<>();
+	private List<Map<String, Object>> tmpDataList = new ArrayList<>();
 		
 	public SearchTmpResult() {
 	}
@@ -25,7 +26,7 @@ public class SearchTmpResult {
 		this.totalCount = totalCount;
 	}
 
-	public SearchTmpResult(Number totalCount, List<SearchTmpData> tmpDataList) {
+	public SearchTmpResult(Number totalCount, List<Map<String, Object>> tmpDataList) {
 		this.totalCount = totalCount;
 		this.tmpDataList = tmpDataList;
 	}
@@ -38,15 +39,15 @@ public class SearchTmpResult {
 		this.totalCount = totalCount;
 	}
 	
-	public List<SearchTmpData> getTmpDataList() {
+	public List<Map<String, Object>> getTmpDataList() {
 		return tmpDataList;
 	}
 
-	public void setTmpDataList(List<SearchTmpData> tmpDataList) {
+	public void setTmpDataList(List<Map<String, Object>> tmpDataList) {
 		this.tmpDataList = tmpDataList;
 	}
 
-	public void addTmpData(SearchTmpData data) {
+	public void addTmpData(Map<String, Object> data) {
 		tmpDataList.add(data);
 	}
 	

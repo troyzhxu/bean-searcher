@@ -1,7 +1,5 @@
 package com.ejl.searcher;
 
-import com.ejl.searcher.temp.SearchTmpResult;
-
 /***
  * @author Troy.Zhou @ 2017-03-20
  * 

@@ -4,16 +4,14 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import com.ejl.searcher.SearchResult;
 import com.ejl.searcher.SearchResultConvertInfo;
 import com.ejl.searcher.SearchResultResolver;
+import com.ejl.searcher.SearchTmpResult;
 import com.ejl.searcher.bean.BeanAware;
-import com.ejl.searcher.temp.SearchTmpData;
-import com.ejl.searcher.temp.SearchTmpResult;
 import com.ejl.searcher.util.FieldConvertor;
-
-import java.util.Set;
 
 /**
  * 默认查询结果解析器
@@ -34,9 +32,9 @@ public class MainSearchResultResolver implements SearchResultResolver {
 		Map<String, Method> fieldGetMethodMap = convertInfo.getFieldGetMethodMap();
 		Map<String, Class<?>> fieldTypeMap = convertInfo.getFieldTypeMap();
 		SearchResult<T> searchResult = new SearchResult<T>(searchTmpResult.getTotalCount());
-		List<SearchTmpData> tmpDataList = searchTmpResult.getTmpDataList();
+		List<Map<String, Object>> tmpDataList = searchTmpResult.getTmpDataList();
 		
-		for (SearchTmpData tmpData : tmpDataList) {
+		for (Map<String, Object> tmpData : tmpDataList) {
 			T bean;
 			try {
 				bean = beanClass.newInstance();
