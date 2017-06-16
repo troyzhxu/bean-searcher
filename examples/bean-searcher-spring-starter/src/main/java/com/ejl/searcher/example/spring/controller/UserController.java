@@ -1,4 +1,4 @@
-package com.ejl.searcher.example.controller;
+package com.ejl.searcher.example.spring.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ejl.searcher.SearchResult;
 import com.ejl.searcher.Searcher;
-import com.ejl.searcher.example.bean.UserBean;
+import com.ejl.searcher.example.spring.bean.UserBean;
 import com.ejl.searcher.util.MapUtils;
 
 

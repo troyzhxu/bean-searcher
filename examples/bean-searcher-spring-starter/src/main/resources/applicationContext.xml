@@ -30,7 +30,7 @@
 	</bean>
 
     <bean name="searcher" class="com.ejl.searcher.support.spring.AutoStartSearcher">
-    	<property name="scanPackage" value="com.ejl.searcher.example.bean" />
+    	<property name="scanPackage" value="com.ejl.searcher.example.spring.bean" />
     	<property name="searchSqlExecutor"> 
     		<bean class="com.ejl.searcher.implement.MainSearchSqlExecutor">
 				<property name="dataSource" ref="dataSource"/>

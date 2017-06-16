@@ -1,4 +1,4 @@
-package com.ejl.searcher.example.bean;
+package com.ejl.searcher.example.spring.bean;
 
 import java.sql.Timestamp;
 
