@@ -50,9 +50,8 @@
 	
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-jdbc</artifactId>
+			<artifactId>spring-beans</artifactId>
 			<version>3.1.2.RELEASE</version>
-			<scope>provided</scope>
 		</dependency>
 	
 		<dependency>

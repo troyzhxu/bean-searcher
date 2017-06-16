@@ -27,6 +27,8 @@ public class DbSearchSqlExecutor implements SearchSqlExecutor {
 			Number totalCount = Db.queryColumn(searchSql.getCountSqlString(), 
 					searchSql.getCountSqlParams().toArray());
 			
+			
+			
 			result.setTotalCount(totalCount);
 		}
 		

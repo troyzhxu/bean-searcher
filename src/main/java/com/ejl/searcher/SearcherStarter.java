@@ -8,6 +8,7 @@ import com.ejl.searcher.bean.DbField;
 import com.ejl.searcher.bean.SearchBean;
 import com.ejl.searcher.beanmap.SearchBeanMap;
 import com.ejl.searcher.beanmap.SearchBeanMapCache;
+import com.ejl.searcher.support.spring.AutoStartSearcher;
 import com.ejl.searcher.util.StrUtils;
 import com.ejl.searcher.util.clazz.ClassScanner;
 
@@ -31,25 +32,27 @@ public class SearcherStarter {
 
 
 	/**
-	 * @param baseDir package 的顶级路径
 	 * @param packageName 可检索 Bean 所在的 package，可检索 Bean 是被 @SearchBean 注解的 Bean
 	 * @return true if start successfully, else return false
 	 */
-	public boolean start(String baseDir, String packageName) {
+	public boolean start(String packageName) {
+		String baseDir = AutoStartSearcher.class.getClassLoader()
+				.getResource("").getPath();
 		List<Class<?>> classList = ClassScanner.scan(baseDir, packageName);
 		return startWithBeanClassList(classList);
 	}
 
 	/**
-	 * @param baseDir
-	 *            存放 jar 的路径
 	 * @param jarName
 	 *            可检索 Bean 所在的 jar 名称
 	 * @param packageName
 	 *            可检索 Bean 所在的 package，可检索 Bean 是被 @SearchBean 注解的 Bean
 	 * @return true if start successfully, else return false
 	 */
-	public boolean start(String baseDir, String jarName, String packageName) {
+	public boolean start(String jarName, String packageName) {
+		String baseDir = AutoStartSearcher.class.getClassLoader()
+				.getResource("").getPath();
+		baseDir = baseDir.substring(0, baseDir.length() - 8) + "lib/";
 		List<Class<?>> classList = ClassScanner.scan(baseDir, jarName, packageName);
 		return startWithBeanClassList(classList);
 	}

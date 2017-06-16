@@ -29,12 +29,10 @@ public class AutoStartSearcher extends MainSearcher implements InitializingBean,
 		if (scanPackage == null) {
 			throw new RuntimeException("SearchPlugin： scanPackage 不能为 空！");
 		}
-		String baseDir = AutoStartSearcher.class.getClassLoader().getResource("").getPath();
 		if (scanJar != null) {
-			baseDir = baseDir.substring(0, baseDir.length() - 8) + "lib/";
-			SearcherStarter.starter().start(baseDir, scanJar, scanPackage);
+			SearcherStarter.starter().start(scanJar, scanPackage);
 		} else {
-			SearcherStarter.starter().start(baseDir, scanPackage);
+			SearcherStarter.starter().start(scanPackage);
 		}
 	}
 
