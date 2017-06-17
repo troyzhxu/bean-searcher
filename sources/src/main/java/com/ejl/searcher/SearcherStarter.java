@@ -8,7 +8,7 @@ import com.ejl.searcher.bean.DbField;
 import com.ejl.searcher.bean.SearchBean;
 import com.ejl.searcher.beanmap.SearchBeanMap;
 import com.ejl.searcher.beanmap.SearchBeanMapCache;
-import com.ejl.searcher.support.spring.AutoStartSearcher;
+import com.ejl.searcher.support.AutoStartSearcher;
 import com.ejl.searcher.util.StrUtils;
 import com.ejl.searcher.util.clazz.ClassScanner;
 

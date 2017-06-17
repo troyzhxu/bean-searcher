@@ -1,4 +1,4 @@
-package com.ejl.searcher.support.jfinal;
+package com.ejl.searcher.support;
 
 import javax.sql.DataSource;
 
@@ -6,12 +6,11 @@ import com.ejl.searcher.Searcher;
 import com.ejl.searcher.SearcherBuilder;
 import com.ejl.searcher.SearcherStarter;
 import com.ejl.searcher.implement.MainSearchSqlExecutor;
-import com.ejl.searcher.util.Ioc;
 import com.jfinal.plugin.IPlugin;
 import com.jfinal.plugin.activerecord.IDataSourceProvider;
 
 /***
- * 自动检索器插件，用于启动与生出检索器实例
+ * 自动检索器插件，用于启动与生成检索器实例
  * 
  * @author Troy.Zhou @ 2017-03-20
  * 

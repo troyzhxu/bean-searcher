@@ -1,4 +1,4 @@
-package com.ejl.searcher.support.spring;
+package com.ejl.searcher.support;
 
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;

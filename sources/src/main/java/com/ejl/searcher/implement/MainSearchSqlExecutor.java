@@ -51,41 +51,39 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 			throw new RuntimeException("请为JdbcSearchSqlExecutor配置dataSource");
 		}
 		SearchTmpResult result = new SearchTmpResult();
-		if (searchSql.isShouldQueryList() || searchSql.isShouldQueryTotal()) {
-			Connection connection = null;
+		Connection connection = null;
+		try {
+			connection = dataSource.getConnection();
+		} catch (SQLException e) {
+			throw new RuntimeException("Can not get Connection from dataSource!", e);
+		}
+		if (connection != null) {
+			PreparedStatement listStatement = null;
+			PreparedStatement countStatement = null;
+			ResultSet listResultSet = null;
+			ResultSet countResultSet = null;
 			try {
-				connection = dataSource.getConnection();
-			} catch (SQLException e) {
-				throw new RuntimeException("Can not get Connection from dataSource!", e);
-			}
-			if (connection != null) {
-				PreparedStatement listStatement = null;
-				PreparedStatement countStatement = null;
-				ResultSet listResultSet = null;
-				ResultSet countResultSet = null;
-				try {
-					if (searchSql.isShouldQueryList()) {
-						listStatement = connection.prepareStatement(searchSql.getListSqlString());
-						fillParamsTntoStatement(listStatement, searchSql.getListSqlParams());
-						listResultSet = listStatement.executeQuery();
-						while (listResultSet.next()) {
-							result.addTmpData(resolveResult(listResultSet, searchSql.getAliasList()));
-						}
+				if (searchSql.isShouldQueryList()) {
+					listStatement = connection.prepareStatement(searchSql.getListSqlString());
+					fillParamsTntoStatement(listStatement, searchSql.getListSqlParams());
+					listResultSet = listStatement.executeQuery();
+					while (listResultSet.next()) {
+						result.addTmpData(resolveResult(listResultSet, searchSql.getAliasList()));
 					}
-					if (searchSql.isShouldQueryTotal()) {
-						countStatement = connection.prepareStatement(searchSql.getCountSqlString());
-						fillParamsTntoStatement(countStatement, searchSql.getCountSqlParams());
-						countResultSet = countStatement.executeQuery();
-						if (countResultSet.next()) {
-							result.setTotalCount((Number) countResultSet.getObject(1));
-						}
-					}
-				} catch (SQLException e) {
-					throw new RuntimeException("A exception throwed when query!", e);
-				} finally {
-					closeConnection(connection, listStatement, countStatement, 
-							listResultSet, countResultSet);
 				}
+				if (searchSql.isShouldQueryTotal()) {
+					countStatement = connection.prepareStatement(searchSql.getCountSqlString());
+					fillParamsTntoStatement(countStatement, searchSql.getCountSqlParams());
+					countResultSet = countStatement.executeQuery();
+					if (countResultSet.next()) {
+						result.setTotalCount((Number) countResultSet.getObject(1));
+					}
+				}
+			} catch (SQLException e) {
+				throw new RuntimeException("A exception throwed when query!", e);
+			} finally {
+				closeConnection(connection, listStatement, countStatement, 
+						listResultSet, countResultSet);
 			}
 		}
 		return result;
