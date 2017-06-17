@@ -29,7 +29,7 @@
 		<property name="maxActive" value="${db.maxActive}"></property>
 	</bean>
 
-    <bean name="searcher" class="com.ejl.searcher.support.spring.AutoStartSearcher">
+    <bean name="searcher" class="com.ejl.searcher.support.AutoStartSearcher">
     	<property name="scanPackage" value="com.ejl.searcher.example.spring.bean" />
     	<property name="searchSqlExecutor"> 
     		<bean class="com.ejl.searcher.implement.MainSearchSqlExecutor">
