@@ -1,7 +1,7 @@
 package com.ejl.searcher.example;
 
 import com.ejl.searcher.example.controller.UserController;
-import com.ejl.searcher.support.jfinal.SearchPlugin;
+import com.ejl.searcher.support.SearchPlugin;
 import com.jfinal.config.Constants;
 import com.jfinal.config.Handlers;
 import com.jfinal.config.Interceptors;

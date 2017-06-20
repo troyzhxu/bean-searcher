@@ -19,7 +19,7 @@ import com.ejl.searcher.util.StrUtils;
  * 默认查询SQL解析器
  * 
  * @author Troy.Zhou @ 2017-03-20
- * 
+ * @since V1.1.1
  */
 public class MainSearchSqlResolver implements SearchSqlResolver {
 

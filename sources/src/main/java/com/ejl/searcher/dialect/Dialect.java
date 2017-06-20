@@ -42,10 +42,16 @@ public interface Dialect {
 	 *            最大条数
 	 * @param offset
 	 *            偏移条数
+	 * @return 分页Sql
 	 */
 	PaginateSql forPaginate(String fieldSelectSql, String fromWhereSql, Integer max, Long offset);
 
 	
+	/**
+	 * 分页Sq
+	 * @author Troy.Zhou
+	 * @since
+	 */
 	public class PaginateSql {
 
 		private String sql;

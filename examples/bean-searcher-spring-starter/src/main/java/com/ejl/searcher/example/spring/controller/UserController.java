@@ -22,8 +22,9 @@ public class UserController {
 	private Searcher searcher;
 	
 
+	@ResponseBody
 	@RequestMapping
-	public @ResponseBody SearchResult<UserBean> index(HttpServletRequest request) {		
+	public SearchResult<UserBean> index(HttpServletRequest request) {		
 		
 		return searcher.search(UserBean.class, MapUtils.flat(request.getParameterMap()));
 		

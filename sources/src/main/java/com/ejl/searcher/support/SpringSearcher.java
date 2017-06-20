@@ -1,4 +1,4 @@
-package com.ejl.searcher.support.spring;
+package com.ejl.searcher.support;
 
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
@@ -8,11 +8,12 @@ import com.ejl.searcher.SearcherStarter;
 import com.ejl.searcher.implement.MainSearcher;
 
 /**
+ * 自动启动的Spring Searcher
  * 
  * @author Troy.Zhou
  *
  */
-public class AutoStartSearcher extends MainSearcher implements InitializingBean, DisposableBean {
+public class SpringSearcher extends MainSearcher implements InitializingBean, DisposableBean {
 
 	private String scanJar;
 	private String scanPackage;
