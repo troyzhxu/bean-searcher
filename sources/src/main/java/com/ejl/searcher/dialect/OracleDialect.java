@@ -4,7 +4,7 @@ package com.ejl.searcher.dialect;
  * Oracle 方言实现
  * 
  * @author Troy.Zhou
- * 
+ * @since V1.1.1
  * */
 public class OracleDialect implements Dialect {
 
@@ -69,9 +69,9 @@ public class OracleDialect implements Dialect {
 				rownumAlias += "_";
 			}
 			
-			builder.append("select * from (select ").append(rowAlias).append(".*, rownum ").append(rownumAlias).append(" from (");
+			builder.append("select * from (select ").append(rowAlias).append(".*, rownum ").append(rownumAlias);
 		
-			builder.append(fieldSelectSql).append(" ").append(fromWhereSql);
+			builder.append(" from (").append(fieldSelectSql).append(" ").append(fromWhereSql);
 			
 			builder.append(") ").append(rowAlias).append(" where rownum <= ?) ").append(tableAlias);
 			
