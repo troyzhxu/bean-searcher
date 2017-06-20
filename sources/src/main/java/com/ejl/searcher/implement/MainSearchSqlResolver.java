@@ -9,28 +9,27 @@ import com.ejl.searcher.SearchSql;
 import com.ejl.searcher.SearchSqlResolver;
 import com.ejl.searcher.beanmap.SearchBeanMap;
 import com.ejl.searcher.dialect.Dialect;
+import com.ejl.searcher.dialect.Dialect.PaginateSql;
 import com.ejl.searcher.param.FilterOperator;
 import com.ejl.searcher.param.FilterParam;
 import com.ejl.searcher.param.SearchParam;
 import com.ejl.searcher.util.StrUtils;
 
-/***
- * @author Troy.Zhou @ 2017-03-20
+/**
+ * 默认查询SQL解析器
  * 
- *         默认查询SQL解析器
+ * @author Troy.Zhou @ 2017-03-20
  * 
  */
 public class MainSearchSqlResolver implements SearchSqlResolver {
 
-	
 	static final Pattern DATE_PATTERN = Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{2}");
 
 	/**
 	 * 数据库方言
-	 * */
+	 */
 	private Dialect dialect;
 
-	
 	@Override
 	public SearchSql resolve(SearchBeanMap searchBeanMap, SearchParam searchParam) {
 		List<String> fieldList = searchBeanMap.getFieldList();
@@ -52,14 +51,14 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 			}
 			searchSql.addAlias(dbAlias);
 		}
-		String selectDbFieldSetSql = builder.toString();
+		String fieldSelectSql = builder.toString();
 
 		builder = new StringBuilder(" from ");
 		builder.append(searchBeanMap.getTalbes());
 		String joinCond = searchBeanMap.getJoinCond();
 		boolean hasJoinCond = joinCond != null && !"".equals(joinCond.trim());
 		List<FilterParam> filterParamList = searchParam.getFilterParamList();
-	
+
 		if (hasJoinCond || filterParamList.size() > 0) {
 			builder.append(" where ");
 			if (hasJoinCond) {
@@ -82,17 +81,19 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 				searchSql.addCountSqlParam(sqlParam);
 			}
 		}
-		
+
 		String groupBy = searchBeanMap.getGroupBy();
 		if (groupBy != null && !"".equals(groupBy.trim())) {
 			builder.append(" group by " + groupBy);
+
 			String fromWhereSql = builder.toString();
-			searchSql.setCountSqlString("select count(1) from (select count(1) " + fromWhereSql + ") searcher_groupby_table_alias");
-			builder = new StringBuilder(selectDbFieldSetSql).append(fromWhereSql);
+			String tableAlias = "gyt";
+			while (fromWhereSql.contains(tableAlias)) {
+				tableAlias += "_";
+			}
+			searchSql.setCountSqlString("select count(1) from (select count(1) " + fromWhereSql + ") " + tableAlias);
 		} else {
-			String fromWhereSql = builder.toString();
-			searchSql.setCountSqlString("select count(1) " + fromWhereSql);
-			builder = new StringBuilder(selectDbFieldSetSql).append(fromWhereSql);
+			searchSql.setCountSqlString("select count(1) " + builder.toString());
 		}
 
 		String sortDbAlias = fieldDbAliasMap.get(searchParam.getSort());
@@ -103,26 +104,22 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 				builder.append(" ").append(order);
 			}
 		}
-		Integer max = searchParam.getMax();
-		Long offset = searchParam.getOffset();
-		if (max != null) {
-			if (offset == null) {
-				builder.append(" limit ?");
-			} else {
-				builder.append(" limit ?, ?");
-				searchSql.addListSqlParam(offset);
-			}
-			searchSql.addListSqlParam(max);
-		}
-		searchSql.setListSqlString(builder.toString());
+		String fromWhereSql = builder.toString();
+
+		PaginateSql paginateSql = dialect.forPaginate(fieldSelectSql, fromWhereSql, searchParam.getMax(),
+				searchParam.getOffset());
+
+		searchSql.setListSqlString(paginateSql.getSql());
+		searchSql.addListSqlParams(paginateSql.getParams());
+
 		return searchSql;
 	}
 
 	/**
 	 * @return 查询参数值
 	 */
-	private List<Object> appendFilterConditionSql(StringBuilder builder, String dbField, 
-			Object value, Object value2, boolean ignoreCase, FilterOperator operator) {
+	private List<Object> appendFilterConditionSql(StringBuilder builder, String dbField, Object value, Object value2,
+			boolean ignoreCase, FilterOperator operator) {
 		if (ignoreCase) {
 			dialect.toUpperCase(builder, dbField);
 			value = value.toString().toUpperCase();
@@ -130,7 +127,7 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 			if (value != null && value instanceof String || (value2 != null && value2 instanceof String)) {
 				String strval = (String) value;
 				String strval2 = (String) value2;
-				if (strval != null && DATE_PATTERN.matcher(strval).matches() 
+				if (strval != null && DATE_PATTERN.matcher(strval).matches()
 						|| strval2 != null && DATE_PATTERN.matcher(strval2).matches()) {
 					dialect.truncateToDateStr(builder, dbField);
 				} else {
@@ -200,6 +197,5 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 	public void setDialect(Dialect dialect) {
 		this.dialect = dialect;
 	}
-	
-	
+
 }

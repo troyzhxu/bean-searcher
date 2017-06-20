@@ -20,6 +20,25 @@ public class MySqlDialect implements Dialect {
 	public void truncateToDateStr(StringBuilder builder, String dbField) {
 		builder.append("date_format(").append(dbField).append(", '%Y-%m-%d')");
 	}
+
+	
+	@Override
+	public PaginateSql forPaginate(String fieldSelectSql, String fromWhereSql, Integer max, Long offset) {
+		PaginateSql paginateSql = new PaginateSql();
+		StringBuilder ret = new StringBuilder();
+		ret.append(fieldSelectSql).append(" ").append(fromWhereSql);
+		if (max != null) {
+			if (offset == null) {
+				ret.append(" limit ?");
+			} else {
+				ret.append(" limit ?, ?");
+				paginateSql.addParam(offset);
+			}
+			paginateSql.addParam(max);
+		}
+		paginateSql.setSql(ret.toString());
+		return paginateSql;
+	}
 	
 
 }

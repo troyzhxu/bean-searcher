@@ -67,6 +67,10 @@ public class SearchSql {
 	public void addListSqlParam(Object listSqlParam) {
 		this.listSqlParams.add(listSqlParam);
 	}
+	
+	public void addListSqlParams(List<Object> listSqlParams) {
+		this.listSqlParams.addAll(listSqlParams);
+	}
 
 	public String getCountSqlString() {
 		return countSqlString;
@@ -83,7 +87,7 @@ public class SearchSql {
 	public void addCountSqlParam(Object countSqlParam) {
 		this.countSqlParams.add(countSqlParam);
 	}
-
+	
 	public void addAlias(String alias) {
 		aliasList.add(alias);
 	}
@@ -109,7 +113,6 @@ public class SearchSql {
 	public void setShouldQueryList(boolean shouldQueryList) {
 		this.shouldQueryList = shouldQueryList;
 	}
-	
 	
 	
 }
