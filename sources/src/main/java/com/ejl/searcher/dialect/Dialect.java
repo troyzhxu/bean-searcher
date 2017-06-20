@@ -31,6 +31,27 @@ public interface Dialect {
 	 */
 	void truncateToDateStr(StringBuilder builder, String dbField);
 
+
+	/**
+	 * 把字段 dbField 截取为 YYYY-MM-DD HH:mm 格式字符串
+	 * 
+	 * @param builder
+	 *            sql builder
+	 * @param dbField
+	 *            数据库字段
+	 */
+	void truncateToDateMinuteStr(StringBuilder builder, String dbField);
+
+	/**
+	 * 把字段 dbField 截取为 YYYY-MM-DD HH:mm:SS 格式字符串
+	 * 
+	 * @param builder
+	 *            sql builder
+	 * @param dbField
+	 *            数据库字段
+	 */
+	void truncateToDateSecondStr(StringBuilder builder, String dbField);
+
 	/**
 	 * 分页
 	 * 

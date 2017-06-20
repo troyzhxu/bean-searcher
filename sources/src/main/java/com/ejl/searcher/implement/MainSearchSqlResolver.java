@@ -1,6 +1,7 @@
 package com.ejl.searcher.implement;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -25,6 +26,10 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 
 	static final Pattern DATE_PATTERN = Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{2}");
 
+	static final Pattern DATE_MINUTE_PATTERN = Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}");
+	
+	static final Pattern DATE_SECOND_PATTERN = Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}");
+
 	/**
 	 * 数据库方言
 	 */
@@ -35,6 +40,8 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 		List<String> fieldList = searchBeanMap.getFieldList();
 		Map<String, String> fieldDbMap = searchBeanMap.getFieldDbMap();
 		Map<String, String> fieldDbAliasMap = searchBeanMap.getFieldDbAliasMap();
+		Map<String, Class<?>> fieldTypeMap = searchBeanMap.getFieldTypeMap();
+		
 		SearchSql searchSql = new SearchSql();
 		StringBuilder builder = new StringBuilder("select ");
 		if (searchBeanMap.isDistinct()) {
@@ -70,12 +77,13 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 				builder.append(" and ");
 			}
 			FilterParam filterParam = filterParamList.get(i);
-			String dbField = fieldDbMap.get(filterParam.getName());
-			Object value = filterParam.getValue();
-			Object value2 = filterParam.getValue2();
-			boolean ignoreCase = filterParam.isIgnoreCase();
-			FilterOperator operator = filterParam.getOperator();
-			List<Object> sqlParams = appendFilterConditionSql(builder, dbField, value, value2, ignoreCase, operator);
+
+			String fieldName = filterParam.getName();
+			
+			List<Object> sqlParams = appendFilterConditionSql(builder, fieldTypeMap.get(fieldName), 
+					fieldDbMap.get(fieldName), filterParam.getValue(), filterParam.getValue2(), 
+					filterParam.isIgnoreCase(), filterParam.getOperator());
+
 			for (Object sqlParam : sqlParams) {
 				searchSql.addListSqlParam(sqlParam);
 				searchSql.addCountSqlParam(sqlParam);
@@ -118,25 +126,32 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 	/**
 	 * @return 查询参数值
 	 */
-	private List<Object> appendFilterConditionSql(StringBuilder builder, String dbField, Object value, Object value2,
-			boolean ignoreCase, FilterOperator operator) {
+	private List<Object> appendFilterConditionSql(StringBuilder builder, Class<?> fieldType, 
+			String dbField, Object value, Object value2, boolean ignoreCase, FilterOperator operator) {
+		
 		if (ignoreCase) {
+			
 			dialect.toUpperCase(builder, dbField);
 			value = value.toString().toUpperCase();
-		} else {
-			if (value != null && value instanceof String || (value2 != null && value2 instanceof String)) {
-				String strval = (String) value;
-				String strval2 = (String) value2;
-				if (strval != null && DATE_PATTERN.matcher(strval).matches()
-						|| strval2 != null && DATE_PATTERN.matcher(strval2).matches()) {
-					dialect.truncateToDateStr(builder, dbField);
-				} else {
-					builder.append(dbField);
-				}
+			
+		} else if (Date.class.isAssignableFrom(fieldType) && ((value != null && value instanceof String) 
+				|| (value2 != null && value2 instanceof String))) {
+			
+			String strVal = value != null ? (String) value : (String) value2;
+			
+			if (DATE_PATTERN.matcher(strVal).matches()) {
+				dialect.truncateToDateStr(builder, dbField);
+			} else if (DATE_MINUTE_PATTERN.matcher(strVal).matches()) {
+				dialect.truncateToDateMinuteStr(builder, dbField);
+			} else if (DATE_SECOND_PATTERN.matcher(strVal).matches()) {
+				dialect.truncateToDateSecondStr(builder, dbField);
 			} else {
 				builder.append(dbField);
 			}
+		} else {
+			builder.append(dbField);
 		}
+		
 		List<Object> params = new ArrayList<>(2);
 		switch (operator) {
 		case Include:

@@ -21,6 +21,15 @@ public class MySqlDialect implements Dialect {
 		builder.append("date_format(").append(dbField).append(", '%Y-%m-%d')");
 	}
 
+	@Override
+	public void truncateToDateMinuteStr(StringBuilder builder, String dbField) {
+		builder.append("date_format(").append(dbField).append(", '%Y-%m-%d %H:%i')");
+	}
+
+	@Override
+	public void truncateToDateSecondStr(StringBuilder builder, String dbField) {
+		builder.append("date_format(").append(dbField).append(", '%Y-%m-%d %H:%i:%s')");
+	}
 	
 	@Override
 	public PaginateSql forPaginate(String fieldSelectSql, String fromWhereSql, Integer max, Long offset) {
@@ -39,6 +48,6 @@ public class MySqlDialect implements Dialect {
 		paginateSql.setSql(ret.toString());
 		return paginateSql;
 	}
-	
+
 
 }
