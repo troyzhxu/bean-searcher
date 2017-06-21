@@ -23,3 +23,10 @@ dependencies {
 </dependencies>
 
 ```
+
+
+#### APIDOC
+
+[V1.1.0](http://116.62.147.255:8080/apidocs/bean-searcher/1.1.0/) 
+
+[V1.1.1](http://116.62.147.255:8080/apidocs/bean-searcher/1.1.0/) 
