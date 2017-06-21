@@ -3,10 +3,10 @@
   
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.ejlchina</groupId>
-	<artifactId>bean-searcher-jfinal-starter</artifactId>
+	<artifactId>jfinal-demo</artifactId>
 	<packaging>war</packaging>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>bean-searcher-jfinal-starter Maven Webapp</name>
+	<name>jfinal-demo Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 
   	<properties>
@@ -63,7 +63,7 @@
   	</dependencies>
   
   	<build>
-		<finalName>bean-searcher-jfinal-starter</finalName>
+		<finalName>jfinal-demo</finalName>
 		 <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>

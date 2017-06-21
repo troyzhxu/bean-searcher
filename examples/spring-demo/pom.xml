@@ -3,7 +3,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.ejlchina</groupId>
-	<artifactId>bean-searcher-spring-starter</artifactId>
+	<artifactId>spring-demo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
   
   	<packaging>war</packaging>
@@ -68,7 +68,7 @@
   	</dependencies>
   
   	<build>
-		<finalName>bean-searcher-spring-starter</finalName>
+		<finalName>spring-demo</finalName>
 		 <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
