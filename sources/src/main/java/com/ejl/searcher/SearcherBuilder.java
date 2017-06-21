@@ -1,6 +1,6 @@
 package com.ejl.searcher;
 
-import com.ejl.searcher.dialect.MysqlDialect;
+import com.ejl.searcher.dialect.MySqlDialect;
 import com.ejl.searcher.implement.MainSearchParamResolver;
 import com.ejl.searcher.implement.MainSearchResultResolver;
 import com.ejl.searcher.implement.MainSearchSqlResolver;
@@ -69,7 +69,7 @@ public class SearcherBuilder {
 			mainSearcher.setSearchSqlResolver(searchSqlResolver);
 		} else {
 			MainSearchSqlResolver searchSqlResolver = new MainSearchSqlResolver();
-			searchSqlResolver.setDialect(new MysqlDialect());
+			searchSqlResolver.setDialect(new MySqlDialect());
 			mainSearcher.setSearchSqlResolver(searchSqlResolver);
 		}
 		if (searchSqlExecutor != null) {

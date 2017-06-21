@@ -7,7 +7,7 @@ package com.ejl.searcher.dialect;
  * @author Troy.Zhou
  * 
  * */
-public class MysqlDialect implements Dialect {
+public class MySqlDialect implements Dialect {
 
 
 	
