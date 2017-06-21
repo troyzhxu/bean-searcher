@@ -2,11 +2,17 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-	<!-- 引入Sonatype官方的一个通用发布配置 -->
+	<!-- 引入Sonatype官方的一个通用发布配置 
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
 		<artifactId>oss-parent</artifactId>
 		<version>7</version>
+	</parent>
+	-->
+	<parent>
+		<groupId>cn.songxinqiang</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>1.0</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
