@@ -5,7 +5,7 @@ import com.ejl.searcher.implement.MainSearchParamResolver;
 import com.ejl.searcher.implement.MainSearchResultResolver;
 import com.ejl.searcher.implement.MainSearchSqlResolver;
 import com.ejl.searcher.implement.MainSearcher;
-import com.ejl.searcher.util.DefaultFieldConvertor;
+import com.ejl.searcher.implement.convert.DefaultFieldConvertor;
 
 /***
  * 检索器 Builder

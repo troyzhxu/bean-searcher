@@ -1,4 +1,4 @@
-package com.ejl.searcher.util;
+package com.ejl.searcher.support;
 
 import java.util.HashMap;
 import java.util.Map;

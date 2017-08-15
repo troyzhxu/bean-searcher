@@ -1,4 +1,4 @@
-package com.ejl.searcher.util.clazz;
+package com.ejl.searcher.util;
 
 /**
  * Jar包 读取错误异常

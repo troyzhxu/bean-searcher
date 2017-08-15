@@ -1,4 +1,4 @@
-package com.ejl.searcher.util.clazz;
+package com.ejl.searcher.util;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,8 +7,6 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-
-import com.ejl.searcher.util.file.FileScanner;
 
 
 /**

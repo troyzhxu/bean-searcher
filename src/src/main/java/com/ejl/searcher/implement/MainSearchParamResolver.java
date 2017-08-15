@@ -3,13 +3,14 @@ package com.ejl.searcher.implement;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import com.ejl.searcher.SearchParamResolver;
+import com.ejl.searcher.implement.pagination.MaxOffsetPaginationResolver;
+import com.ejl.searcher.implement.pagination.PaginationResolver;
 import com.ejl.searcher.param.FilterOperator;
 import com.ejl.searcher.param.FilterParam;
 import com.ejl.searcher.param.SearchParam;
-
-import java.util.Set;
 
 /***
  * @author Troy.Zhou @ 2017-03-20
@@ -34,16 +35,6 @@ public class MainSearchParamResolver implements SearchParamResolver {
 	 */
 	private String orderParamName = "order";
 	
-	/**
-	 * 最大条数字段参数名
-	 */
-	private String maxParamName = "max";
-	
-	/**
-	 * 偏移条数字段参数名
-	 */
-	private String offsetParamName = "offset";
-
 	/**
 	 * 忽略大小写参数名后缀
 	 */
@@ -75,11 +66,14 @@ public class MainSearchParamResolver implements SearchParamResolver {
 	private String paramNameSeparator = "_";
 	
 	
+	private PaginationResolver paginationResolver = new MaxOffsetPaginationResolver();
+	
+	
 	/**
 	 * @return 最大条数参数名
 	 */
 	public String getMaxParamName() {
-		return maxParamName;
+		return paginationResolver.getMaxParamName();
 	}
 	
 
@@ -98,12 +92,7 @@ public class MainSearchParamResolver implements SearchParamResolver {
 				searchParam.setOrder(value);
 				continue;
 			}
-			if (key.equals(maxParamName)) {
-				searchParam.setMax(Integer.valueOf(value));
-				continue;
-			}
-			if (key.equals(offsetParamName)) {
-				searchParam.setOffset(Long.valueOf(value));
+			if (paginationResolver.resolve(searchParam, key, value)) {
 				continue;
 			}
 			if (shouldSkipKey(fieldList, key)) {
@@ -213,14 +202,6 @@ public class MainSearchParamResolver implements SearchParamResolver {
 		this.orderParamName = orderParamName;
 	}
 
-	public void setMaxParamName(String maxParamName) {
-		this.maxParamName = maxParamName;
-	}
-
-	public void setOffsetParamName(String offsetParamName) {
-		this.offsetParamName = offsetParamName;
-	}
-
 	public void setIgnoreCaseParamNameSuffix(String ignoreCaseParamNameSuffix) {
 		this.ignoreCaseParamNameSuffix = ignoreCaseParamNameSuffix;
 	}
@@ -244,5 +225,10 @@ public class MainSearchParamResolver implements SearchParamResolver {
 	public void setBetweenParamNameSuffix(String betweenParamNameSuffix) {
 		this.value2ParamNameSuffix = betweenParamNameSuffix;
 	}
+
+	public void setPaginationResolver(PaginationResolver paginationResolver) {
+		this.paginationResolver = paginationResolver;
+	}
+	
 	
 }

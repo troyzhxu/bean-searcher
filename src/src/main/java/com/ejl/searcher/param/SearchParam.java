@@ -32,6 +32,8 @@ public class SearchParam {
 	 */
 	private Long offset;
 
+	private Long page;
+	
 	/**
 	 * 过滤检索参数列表
 	 */
@@ -99,6 +101,14 @@ public class SearchParam {
 
 	public void setOffset(Long offset) {
 		this.offset = offset;
+	}
+
+	public Long getPage() {
+		return page;
+	}
+
+	public void setPage(Long page) {
+		this.page = page;
 	}
 
 	@Override

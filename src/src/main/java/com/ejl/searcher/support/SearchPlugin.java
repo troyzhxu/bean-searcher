@@ -6,7 +6,6 @@ import com.ejl.searcher.Searcher;
 import com.ejl.searcher.SearcherBuilder;
 import com.ejl.searcher.SearcherStarter;
 import com.ejl.searcher.implement.MainSearchSqlExecutor;
-import com.ejl.searcher.util.Ioc;
 import com.jfinal.plugin.IPlugin;
 import com.jfinal.plugin.activerecord.IDataSourceProvider;
 

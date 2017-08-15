@@ -1,4 +1,4 @@
-package com.ejl.searcher.util.file;
+package com.ejl.searcher.util;
 
 
 /**

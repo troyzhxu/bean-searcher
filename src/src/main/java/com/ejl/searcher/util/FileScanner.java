@@ -1,4 +1,4 @@
-package com.ejl.searcher.util.file;
+package com.ejl.searcher.util;
 
 import java.io.File;
 import java.util.ArrayList;

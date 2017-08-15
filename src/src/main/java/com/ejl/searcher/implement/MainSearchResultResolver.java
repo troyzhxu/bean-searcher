@@ -11,7 +11,7 @@ import com.ejl.searcher.SearchResultConvertInfo;
 import com.ejl.searcher.SearchResultResolver;
 import com.ejl.searcher.SearchTmpResult;
 import com.ejl.searcher.bean.BeanAware;
-import com.ejl.searcher.util.FieldConvertor;
+import com.ejl.searcher.implement.convert.FieldConvertor;
 
 /**
  * 默认查询结果解析器

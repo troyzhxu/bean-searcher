@@ -1,4 +1,4 @@
-package com.ejl.searcher.util.file;
+package com.ejl.searcher.util;
 
 /**
  * 不是一个目录异常
