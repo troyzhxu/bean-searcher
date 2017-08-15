@@ -142,6 +142,9 @@ public class MainSearcher implements Searcher {
 	private <T> SearchResult<T> consummateSearchResult(SearchParam searchParam, SearchResult<T> result) {
 		Integer max = searchParam.getMax();
 		Long offset = searchParam.getOffset();
+		if (offset == null) {
+			offset = 0L;
+		}
 		result.setMax(max);
 		result.setOffset(offset);
 		if (max != null) {
@@ -152,9 +155,10 @@ public class MainSearcher implements Searcher {
 				totalPage = totalPage + 1;
 			}
 			result.setTotalPage(totalPage);
-			if (offset != null) {
-				result.setPage(offset / max);
-			}
+			result.setPage(offset / max);
+		} else {
+			result.setTotalPage(1);
+			result.setPage(0);
 		}
 		return result;
 	}
