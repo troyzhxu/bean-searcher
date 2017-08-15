@@ -1,4 +1,4 @@
-package com.ejl.searcher.implement.convert;
+package com.ejl.searcher.implement.convertor;
 
 
 /***
