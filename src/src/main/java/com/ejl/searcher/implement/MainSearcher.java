@@ -135,7 +135,28 @@ public class MainSearcher implements Searcher {
 		convertInfo.setFieldDbAliasEntrySet(searchBeanMap.getFieldDbAliasMap().entrySet());
 		convertInfo.setFieldGetMethodMap(searchBeanMap.getFieldGetMethodMap());
 		convertInfo.setFieldTypeMap(searchBeanMap.getFieldTypeMap());
-		return searchResultResolver.resolve(convertInfo, searchTmpResult);
+		SearchResult<T> result = searchResultResolver.resolve(convertInfo, searchTmpResult);
+		return consummateSearchResult(searchParam, result);
+	}
+
+	private <T> SearchResult<T> consummateSearchResult(SearchParam searchParam, SearchResult<T> result) {
+		Integer max = searchParam.getMax();
+		Long offset = searchParam.getOffset();
+		result.setMax(max);
+		result.setOffset(offset);
+		if (max != null) {
+			long maxLong = max.longValue();
+			long totalLong = result.getTotalCount().longValue();
+			long totalPage = totalLong / maxLong;
+			if (totalPage * maxLong < totalLong) {
+				totalPage = totalPage + 1;
+			}
+			result.setTotalPage(totalPage);
+			if (offset != null) {
+				result.setPage(offset / max);
+			}
+		}
+		return result;
 	}
 	
 	public SearchParamResolver getSearchParamResolver() {
