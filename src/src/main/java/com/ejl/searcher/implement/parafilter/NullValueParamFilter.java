@@ -34,4 +34,14 @@ public class NullValueParamFilter implements ParamFilter {
 		return map;
 	}
 
+
+	public String[] getNullValues() {
+		return nullValues;
+	}
+
+
+	public void setNullValues(String[] nullValues) {
+		this.nullValues = nullValues;
+	}
+
 }
