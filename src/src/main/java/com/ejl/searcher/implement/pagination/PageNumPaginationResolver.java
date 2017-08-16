@@ -6,6 +6,10 @@ import com.ejl.searcher.param.SearchParam;
 
 public class PageNumPaginationResolver implements PaginationResolver {
 
+	/**
+	 * 开始页
+	 * */
+	private int startPage = 0;
 	
 	/**
 	 * 最大条数字段参数名
@@ -26,7 +30,7 @@ public class PageNumPaginationResolver implements PaginationResolver {
 				searchParam.setMax(max);
 				Long page = searchParam.getPage();
 				if (page != null) {
-					searchParam.setOffset(page * max);
+					searchParam.setOffset((page - startPage) * max);
 				}
 				return true;
 			}
@@ -35,7 +39,7 @@ public class PageNumPaginationResolver implements PaginationResolver {
 				searchParam.setPage(page);
 				Integer max = searchParam.getMax();
 				if (max != null) {
-					searchParam.setOffset(page * max);
+					searchParam.setOffset((page - startPage) * max);
 				}
 				return true;
 			}
@@ -56,6 +60,10 @@ public class PageNumPaginationResolver implements PaginationResolver {
 
 	public void setPageParamName(String pageParamName) {
 		this.pageParamName = pageParamName;
+	}
+
+	public void setStartPage(int startPage) {
+		this.startPage = startPage;
 	}
 
 }

@@ -8,6 +8,7 @@ import java.util.Set;
 import com.ejl.searcher.SearchParamResolver;
 import com.ejl.searcher.implement.pagination.MaxOffsetPaginationResolver;
 import com.ejl.searcher.implement.pagination.PaginationResolver;
+import com.ejl.searcher.implement.parafilter.ParamFilter;
 import com.ejl.searcher.param.FilterOperator;
 import com.ejl.searcher.param.FilterParam;
 import com.ejl.searcher.param.SearchParam;
@@ -68,6 +69,7 @@ public class MainSearchParamResolver implements SearchParamResolver {
 	
 	private PaginationResolver paginationResolver = new MaxOffsetPaginationResolver();
 	
+	private ParamFilter[] paramFilters;
 	
 	/**
 	 * @return 最大条数参数名
@@ -79,6 +81,11 @@ public class MainSearchParamResolver implements SearchParamResolver {
 
 	@Override
 	public SearchParam resolve(List<String> fieldList, Map<String, String> paraMap) {
+		if (paramFilters != null) {
+			for (ParamFilter paramFilter: paramFilters) {
+				paraMap = paramFilter.doFilte(paraMap);
+			}
+		}
 		SearchParam searchParam = new SearchParam(defaultMax);
 		Set<Entry<String, String>> entrySet = paraMap.entrySet();
 		for (Entry<String, String> entry : entrySet) {
@@ -228,6 +235,10 @@ public class MainSearchParamResolver implements SearchParamResolver {
 
 	public void setPaginationResolver(PaginationResolver paginationResolver) {
 		this.paginationResolver = paginationResolver;
+	}
+
+	public void setParamFilters(ParamFilter[] paramFilters) {
+		this.paramFilters = paramFilters;
 	}
 	
 	
