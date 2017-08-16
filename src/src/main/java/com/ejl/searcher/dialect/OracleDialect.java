@@ -33,7 +33,7 @@ public class OracleDialect implements Dialect {
 		PaginateSql paginateSql = new PaginateSql();
 		
 		if (max == null && offset == null) {
-			paginateSql.setSql(fieldSelectSql + " " + fromWhereSql);
+			paginateSql.setSql(fieldSelectSql + fromWhereSql);
 			return paginateSql;
 		}
 		
@@ -52,7 +52,7 @@ public class OracleDialect implements Dialect {
 			
 			builder.append("select * from (");
 
-			builder.append(fieldSelectSql).append(" ").append(fromWhereSql);
+			builder.append(fieldSelectSql).append(fromWhereSql);
 			
 			builder.append(") ").append(rowAlias).append(" where rownum > ?");
 			
@@ -71,7 +71,7 @@ public class OracleDialect implements Dialect {
 			
 			builder.append("select * from (select ").append(rowAlias).append(".*, rownum ").append(rownumAlias);
 		
-			builder.append(" from (").append(fieldSelectSql).append(" ").append(fromWhereSql);
+			builder.append(" from (").append(fieldSelectSql).append(fromWhereSql);
 			
 			builder.append(") ").append(rowAlias).append(" where rownum <= ?) ").append(tableAlias);
 			

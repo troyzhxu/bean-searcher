@@ -18,7 +18,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.ejlchina</groupId>
 	<artifactId>bean-searcher</artifactId>
-	<version>1.1.2</version>
+	<version>1.1.2.1</version>
 	
 	<name>bean-searcher</name>
 	<description>面向结果与条件的数据库检索器</description>
@@ -58,6 +58,7 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-beans</artifactId>
 			<version>3.1.2.RELEASE</version>
+			<scope>provided</scope>
 		</dependency>
 	
 		<dependency>

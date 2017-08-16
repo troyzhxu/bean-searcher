@@ -45,7 +45,7 @@ public class SqlServerDialect implements Dialect {
 		ret.append("(select top ").append(offset + max).append(" tempcolumn=0,");
 		
 		// (?i) 不区分大小写
-		ret.append(fieldSelectSql.replaceFirst("(?i)select", "")).append(" ").append(fromWhereSql);
+		ret.append(fieldSelectSql.replaceFirst("(?i)select", "")).append(fromWhereSql);
 		
 		ret.append(") vip) mvp where temprownumber > ").append(offset);
 

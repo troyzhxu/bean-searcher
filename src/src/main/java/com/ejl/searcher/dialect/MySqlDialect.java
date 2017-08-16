@@ -35,7 +35,7 @@ public class MySqlDialect implements Dialect {
 	public PaginateSql forPaginate(String fieldSelectSql, String fromWhereSql, Integer max, Long offset) {
 		PaginateSql paginateSql = new PaginateSql();
 		StringBuilder ret = new StringBuilder();
-		ret.append(fieldSelectSql).append(" ").append(fromWhereSql);
+		ret.append(fieldSelectSql).append(fromWhereSql);
 		if (max != null) {
 			if (offset == null) {
 				ret.append(" limit ?");

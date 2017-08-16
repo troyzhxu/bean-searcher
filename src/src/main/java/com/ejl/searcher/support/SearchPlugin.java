@@ -20,6 +20,8 @@ public class SearchPlugin implements IPlugin {
 	private String scanJar;
 	private String scanPackage;
 	
+	private boolean showSql;
+	
 	private IDataSourceProvider dataSourceProvider;
 
 	private SearcherStarter starter = SearcherStarter.starter();
@@ -51,8 +53,10 @@ public class SearchPlugin implements IPlugin {
 			throw new RuntimeException("Can not get DataSource from IDataSourceProvider, "
 					+ "please confirm IDataSourceProvider is in front of SearchPlugin");
 		}
+		MainSearchSqlExecutor searchSqlExecutor = new MainSearchSqlExecutor(dataSource);
+		searchSqlExecutor.setShowSql(showSql);
 		Ioc.add(Searcher.class, SearcherBuilder.builder()
-				.configSearchSqlExecutor(new MainSearchSqlExecutor(dataSource))
+				.configSearchSqlExecutor(searchSqlExecutor)
 				.build());
 		if (scanJar != null) {
 			return starter.start(scanJar, scanPackage);
@@ -67,4 +71,8 @@ public class SearchPlugin implements IPlugin {
 		return true;
 	}
 
+	public void setShowSql(boolean showSql) {
+		this.showSql = showSql;
+	}
+	
 }

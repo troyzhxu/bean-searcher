@@ -99,9 +99,9 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 			while (fromWhereSql.contains(tableAlias)) {
 				tableAlias += "_";
 			}
-			searchSql.setCountSqlString("select count(1) from (select count(1) " + fromWhereSql + ") " + tableAlias);
+			searchSql.setCountSqlString("select count(1) from (select count(1)" + fromWhereSql + ") " + tableAlias);
 		} else {
-			searchSql.setCountSqlString("select count(1) " + builder.toString());
+			searchSql.setCountSqlString("select count(1)" + builder.toString());
 		}
 
 		String sortDbAlias = fieldDbAliasMap.get(searchParam.getSort());
