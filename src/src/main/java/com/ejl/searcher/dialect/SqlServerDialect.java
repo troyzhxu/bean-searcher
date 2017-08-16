@@ -1,7 +1,5 @@
 package com.ejl.searcher.dialect;
 
-import com.ejl.searcher.dialect.Dialect.PaginateSql;
-
 /**
  * Sql Server 方言实现
  * 
