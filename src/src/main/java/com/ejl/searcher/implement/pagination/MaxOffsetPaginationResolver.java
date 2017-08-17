@@ -24,7 +24,11 @@ public class MaxOffsetPaginationResolver implements PaginationResolver {
 				return true;
 			}
 			if (offsetParamName.equals(paraName)) {
-				searchParam.setOffset(Long.valueOf(paraValue));
+				Long offset = Long.valueOf(paraValue);
+				if (offset < 0) {
+					offset = 0L;
+				}
+				searchParam.setOffset(offset);
 				return true;
 			}
 		} catch (Exception e) {

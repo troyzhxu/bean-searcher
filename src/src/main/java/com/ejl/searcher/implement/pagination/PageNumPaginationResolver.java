@@ -30,7 +30,11 @@ public class PageNumPaginationResolver implements PaginationResolver {
 				searchParam.setMax(max);
 				Long page = searchParam.getPage();
 				if (page != null) {
-					searchParam.setOffset((page - startPage) * max);
+					long offset = (page - startPage) * max;
+					if (offset < 0) {
+						offset = 0;
+					}
+					searchParam.setOffset(offset);
 				}
 				return true;
 			}
@@ -39,7 +43,11 @@ public class PageNumPaginationResolver implements PaginationResolver {
 				searchParam.setPage(page);
 				Integer max = searchParam.getMax();
 				if (max != null) {
-					searchParam.setOffset((page - startPage) * max);
+					long offset = (page - startPage) * max;
+					if (offset < 0) {
+						offset = 0;
+					}
+					searchParam.setOffset(offset);
 				}
 				return true;
 			}
