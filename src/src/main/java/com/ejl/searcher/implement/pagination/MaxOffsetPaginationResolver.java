@@ -38,6 +38,12 @@ public class MaxOffsetPaginationResolver implements PaginationResolver {
 		return maxParamName;
 	}
 
+
+	@Override
+	public int getStartPage() {
+		return 0;
+	}
+
 	public void setMaxParamName(String maxParamName) {
 		this.maxParamName = maxParamName;
 	}

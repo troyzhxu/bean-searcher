@@ -53,6 +53,11 @@ public class PageNumPaginationResolver implements PaginationResolver {
 	public String getMaxParamName() {
 		return maxParamName;
 	}
+	
+	@Override
+	public int getStartPage() {
+		return startPage;
+	}
 
 	public void setMaxParamName(String maxParamName) {
 		this.maxParamName = maxParamName;
@@ -65,5 +70,6 @@ public class PageNumPaginationResolver implements PaginationResolver {
 	public void setStartPage(int startPage) {
 		this.startPage = startPage;
 	}
+
 
 }

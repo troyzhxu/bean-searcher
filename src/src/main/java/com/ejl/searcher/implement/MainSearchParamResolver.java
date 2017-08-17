@@ -71,14 +71,13 @@ public class MainSearchParamResolver implements SearchParamResolver {
 	
 	private ParamFilter[] paramFilters;
 	
-	/**
-	 * @return 最大条数参数名
-	 */
-	public String getMaxParamName() {
-		return paginationResolver.getMaxParamName();
+
+	@Override
+	public PaginationResolver getPaginationResolver() {
+		return paginationResolver;
 	}
 	
-
+	
 	@Override
 	public SearchParam resolve(List<String> fieldList, Map<String, String> paraMap) {
 		if (paramFilters != null) {
@@ -240,6 +239,5 @@ public class MainSearchParamResolver implements SearchParamResolver {
 	public void setParamFilters(ParamFilter[] paramFilters) {
 		this.paramFilters = paramFilters;
 	}
-	
 	
 }

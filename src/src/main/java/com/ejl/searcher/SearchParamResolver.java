@@ -3,6 +3,7 @@ package com.ejl.searcher;
 import java.util.List;
 import java.util.Map;
 
+import com.ejl.searcher.implement.pagination.PaginationResolver;
 import com.ejl.searcher.param.SearchParam;
 
 
@@ -17,7 +18,9 @@ public interface SearchParamResolver {
 	/**
 	 * @return 最大条数的参数名
 	 * */
-	public String getMaxParamName();
+	public PaginationResolver getPaginationResolver();
+	
+
 	
 	/**
 	 * @param fieldList 可以参与检索的属性列表

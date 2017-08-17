@@ -26,5 +26,10 @@ public interface PaginationResolver {
 	 * */
 	String getMaxParamName();
 	
+	/**
+	 * @return 开始页
+	 */
+	public int getStartPage();
+	
 	
 }
