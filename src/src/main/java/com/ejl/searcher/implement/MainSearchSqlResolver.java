@@ -93,15 +93,34 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 		String groupBy = searchBeanMap.getGroupBy();
 		if (groupBy != null && !"".equals(groupBy.trim())) {
 			builder.append(" group by " + groupBy);
-
 			String fromWhereSql = builder.toString();
-			String tableAlias = "gyt";
-			while (fromWhereSql.contains(tableAlias)) {
-				tableAlias += "_";
+			
+			String tableAlias = generateTableAlias(fromWhereSql);
+			
+			if (searchBeanMap.isDistinct()) {
+				
+				String originalSql = fieldSelectSql + fromWhereSql;
+				
+				searchSql.setCountSqlString("select count(1) from (" + originalSql + ") " + tableAlias);
+				
+			} else {
+				searchSql.setCountSqlString("select count(1) from (select count(1)" + fromWhereSql + ") " + tableAlias);
 			}
-			searchSql.setCountSqlString("select count(1) from (select count(1)" + fromWhereSql + ") " + tableAlias);
+			
 		} else {
-			searchSql.setCountSqlString("select count(1)" + builder.toString());
+			if (searchBeanMap.isDistinct()) {
+				
+				String fromWhereSql = builder.toString();
+				
+				String originalSql = fieldSelectSql + fromWhereSql;
+				
+				String tableAlias = generateTableAlias(fromWhereSql);
+				
+				searchSql.setCountSqlString("select count(1) from (" + originalSql + ") " + tableAlias);
+				
+			} else {
+				searchSql.setCountSqlString("select count(1)" + builder.toString());
+			}
 		}
 
 		String sortDbAlias = fieldDbAliasMap.get(searchParam.getSort());
@@ -121,6 +140,14 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 		searchSql.addListSqlParams(paginateSql.getParams());
 
 		return searchSql;
+	}
+
+	private String generateTableAlias(String originalSql) {
+		String tableAlias = "tbl_a_";
+		while (originalSql.contains(tableAlias)) {
+			tableAlias += "_";
+		}
+		return tableAlias;
 	}
 
 	/**
