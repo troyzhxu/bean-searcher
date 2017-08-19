@@ -6,19 +6,19 @@ import com.ejl.searcher.bean.SearchBean;
 @SearchBean(tables="student_course sc", groupBy="sc.student_id")
 public class StudentCourseBean {
 
-	@DbField("sc.course_id")
-	private Long courseId;
+	@DbField("sc.student_id")
+	private Long studentId;
 
 	@DbField("avg(sc.score)")
 	private double score;
 	
-	
-	public Long getCourseId() {
-		return courseId;
+
+	public Long getStudentId() {
+		return studentId;
 	}
 
-	public void setCourseId(Long courseId) {
-		this.courseId = courseId;
+	public void setStudentId(Long studentId) {
+		this.studentId = studentId;
 	}
 
 	public double getScore() {

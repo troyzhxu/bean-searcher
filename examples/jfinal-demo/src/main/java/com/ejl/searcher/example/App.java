@@ -42,6 +42,7 @@ public class App extends JFinalConfig{
 
 		SearchPlugin searchPlugin = new SearchPlugin(druidPlugin, "com.ejl.searcher.example.bean");
 		
+		searchPlugin.setShowSql(true);
 		
 		me.add(druidPlugin);
 		
