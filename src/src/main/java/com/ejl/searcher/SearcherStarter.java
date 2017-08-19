@@ -8,7 +8,6 @@ import com.ejl.searcher.bean.DbField;
 import com.ejl.searcher.bean.SearchBean;
 import com.ejl.searcher.beanmap.SearchBeanMap;
 import com.ejl.searcher.beanmap.SearchBeanMapCache;
-import com.ejl.searcher.support.SpringSearcher;
 import com.ejl.searcher.util.ClassScanner;
 import com.ejl.searcher.util.StrUtils;
 
@@ -36,7 +35,7 @@ public class SearcherStarter {
 	 * @return true if start successfully, else return false
 	 */
 	public boolean start(String packageName) {
-		String baseDir = SpringSearcher.class.getClassLoader()
+		String baseDir = SearcherStarter.class.getClassLoader()
 				.getResource("").getPath();
 		List<Class<?>> classList = ClassScanner.scan(baseDir, packageName);
 		return startWithBeanClassList(classList);
@@ -50,7 +49,7 @@ public class SearcherStarter {
 	 * @return true if start successfully, else return false
 	 */
 	public boolean start(String jarName, String packageName) {
-		String baseDir = SpringSearcher.class.getClassLoader()
+		String baseDir = SearcherStarter.class.getClassLoader()
 				.getResource("").getPath();
 		baseDir = baseDir.substring(0, baseDir.length() - 8) + "lib/";
 		List<Class<?>> classList = ClassScanner.scan(baseDir, jarName, packageName);
