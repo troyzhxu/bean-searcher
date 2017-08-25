@@ -148,9 +148,10 @@ public class MainSearcher implements Searcher {
 		result.setMax(max);
 		result.setOffset(offset);
 		int startPage = getPaginationResolver().getStartPage();
-		if (max != null) {
+		Number totalCount = result.getTotalCount();
+		if (max != null && totalCount != null) {
 			long maxLong = max.longValue();
-			long totalLong = result.getTotalCount().longValue();
+			long totalLong = totalCount.longValue();
 			long totalPage = totalLong / maxLong;
 			if (totalPage * maxLong < totalLong) {
 				totalPage = totalPage + 1;
