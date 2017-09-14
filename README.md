@@ -5,7 +5,7 @@
 ```
 
 dependencies {
-    compile 'com.ejlchina:bean-searcher:1.1.1'
+    compile 'com.ejlchina:bean-searcher:1.1.2'
 }
 
 ```
@@ -18,7 +18,7 @@ dependencies {
 	<dependency>
 		<groupId>com.ejlchina</groupId>
 		<artifactId>bean-searcher</artifactId>
-		<version>1.1.1</version>
+		<version>1.1.2</version>
 	</dependency>
 </dependencies>
 
@@ -27,6 +27,7 @@ dependencies {
 
 #### APIDOC
 
+* [V1.1.2](http://116.62.147.255:8080/apidocs/bean-searcher/1.1.2/) 
 * [V1.1.1](http://116.62.147.255:8080/apidocs/bean-searcher/1.1.1/) 
 * [V1.1.0](http://116.62.147.255:8080/apidocs/bean-searcher/1.1.0/) 
 
