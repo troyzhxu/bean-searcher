@@ -17,6 +17,20 @@ import com.jfinal.plugin.activerecord.IDataSourceProvider;
  */
 public class SearchPlugin implements IPlugin {
 
+	
+	/**
+	 * Searcher 接收器
+	 * 
+	 * @since 1.1.3
+	 *
+	 */
+	public static interface SearcherReceiver {
+		
+		void receive(Searcher searcher);
+		
+	}
+	
+	
 	private String scanJar;
 	private String scanPackage;
 	
@@ -24,6 +38,10 @@ public class SearchPlugin implements IPlugin {
 	
 	private IDataSourceProvider dataSourceProvider;
 
+	
+	private SearcherReceiver searcherReceiver;
+	
+	
 	private SearcherStarter starter = SearcherStarter.starter();
 	
 	/**
@@ -55,9 +73,10 @@ public class SearchPlugin implements IPlugin {
 		}
 		MainSearchSqlExecutor searchSqlExecutor = new MainSearchSqlExecutor(dataSource);
 		searchSqlExecutor.setShowSql(showSql);
-		Ioc.add(Searcher.class, SearcherBuilder.builder()
+		Searcher searcher = SearcherBuilder.builder()
 				.configSearchSqlExecutor(searchSqlExecutor)
-				.build());
+				.build();
+		searcherReceiver.receive(searcher);
 		if (scanJar != null) {
 			return starter.start(scanJar, scanPackage);
 		} else {
@@ -73,6 +92,10 @@ public class SearchPlugin implements IPlugin {
 
 	public void setShowSql(boolean showSql) {
 		this.showSql = showSql;
+	}
+
+	public void setSearcherReceiver(SearcherReceiver searcherReceiver) {
+		this.searcherReceiver = searcherReceiver;
 	}
 	
 }
