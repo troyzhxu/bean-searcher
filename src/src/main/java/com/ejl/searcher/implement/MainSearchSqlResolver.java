@@ -11,7 +11,7 @@ import com.ejl.searcher.SearchSqlResolver;
 import com.ejl.searcher.beanmap.SearchBeanMap;
 import com.ejl.searcher.dialect.Dialect;
 import com.ejl.searcher.dialect.Dialect.PaginateSql;
-import com.ejl.searcher.param.FilterOperator;
+import com.ejl.searcher.param.Operator;
 import com.ejl.searcher.param.FilterParam;
 import com.ejl.searcher.param.SearchParam;
 import com.ejl.searcher.util.StrUtils;
@@ -81,8 +81,7 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 			String fieldName = filterParam.getName();
 			
 			List<Object> sqlParams = appendFilterConditionSql(builder, fieldTypeMap.get(fieldName), 
-					fieldDbMap.get(fieldName), filterParam.getValue(), filterParam.getValue2(), 
-					filterParam.isIgnoreCase(), filterParam.getOperator());
+					fieldDbMap.get(fieldName), filterParam);
 
 			for (Object sqlParam : sqlParams) {
 				searchSql.addListSqlParam(sqlParam);
@@ -154,51 +153,64 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 	 * @return 查询参数值
 	 */
 	private List<Object> appendFilterConditionSql(StringBuilder builder, Class<?> fieldType, 
-			String dbField, Object value, Object value2, boolean ignoreCase, FilterOperator operator) {
+			String dbField, FilterParam filterParam) {
+		
+		String[] values = filterParam.getValues();
+		boolean ignoreCase = filterParam.isIgnoreCase();
+		Operator operator = filterParam.getOperator();
+		
+		String firstRealValue = filterParam.firstNotNullValue();
 		
 		if (ignoreCase) {
-			
-			dialect.toUpperCase(builder, dbField);
-			value = value.toString().toUpperCase();
-			
-		} else if (Date.class.isAssignableFrom(fieldType) && ((value != null && value instanceof String) 
-				|| (value2 != null && value2 instanceof String))) {
-			
-			String strVal = value != null ? (String) value : (String) value2;
-			
-			if (DATE_PATTERN.matcher(strVal).matches()) {
-				dialect.truncateToDateStr(builder, dbField);
-			} else if (DATE_MINUTE_PATTERN.matcher(strVal).matches()) {
-				dialect.truncateToDateMinuteStr(builder, dbField);
-			} else if (DATE_SECOND_PATTERN.matcher(strVal).matches()) {
-				dialect.truncateToDateSecondStr(builder, dbField);
+			for (int i = 0; i < values.length; i++) {
+				String val = values[i];
+				if (val != null) {
+					values[i] = val.toUpperCase();
+				}
+			}
+			if (firstRealValue != null) {
+				firstRealValue = firstRealValue.toUpperCase();
+			}
+		}
+		
+		if (operator != Operator.MultiValue) {
+			if (ignoreCase) {
+				dialect.toUpperCase(builder, dbField);
+			} else if (Date.class.isAssignableFrom(fieldType) && firstRealValue != null) {
+				if (DATE_PATTERN.matcher(firstRealValue).matches()) {
+					dialect.truncateToDateStr(builder, dbField);
+				} else if (DATE_MINUTE_PATTERN.matcher(firstRealValue).matches()) {
+					dialect.truncateToDateMinuteStr(builder, dbField);
+				} else if (DATE_SECOND_PATTERN.matcher(firstRealValue).matches()) {
+					dialect.truncateToDateSecondStr(builder, dbField);
+				} else {
+					builder.append(dbField);
+				}
 			} else {
 				builder.append(dbField);
-			}
-		} else {
-			builder.append(dbField);
+			}	
 		}
 		
 		List<Object> params = new ArrayList<>(2);
 		switch (operator) {
 		case Include:
-			builder.append(" like '%").append(value).append("%'");
+			builder.append(" like '%").append(firstRealValue).append("%'");
 			break;
 		case Equal:
 			builder.append(" = ?");
-			params.add(value);
+			params.add(firstRealValue);
 			break;
 		case GreaterThan:
 			builder.append(" > ?");
-			params.add(value);
+			params.add(firstRealValue);
 			break;
 		case LessThan:
 			builder.append(" < ?");
-			params.add(value);
+			params.add(firstRealValue);
 			break;
 		case NotEqual:
 			builder.append(" != ?");
-			params.add(value);
+			params.add(firstRealValue);
 			break;
 		case Empty:
 			builder.append(" is null");
@@ -207,31 +219,64 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 			builder.append(" is not null");
 			break;
 		case StartWith:
-			builder.append(" like '").append(value).append("%'");
+			builder.append(" like '").append(firstRealValue).append("%'");
 			break;
 		case EndWith:
-			builder.append(" like '%").append(value).append("'");
+			builder.append(" like '%").append(firstRealValue).append("'");
 			break;
 		case Between:
 			boolean val1Null = false;
 			boolean val2Null = false;
-			if (value == null || StrUtils.isBlank(value.toString())) {
+			if (values[0] == null || StrUtils.isBlank(values[0])) {
 				val1Null = true;
 			}
-			if (value2 == null || StrUtils.isBlank(value2.toString())) {
+			if (values[1] == null || StrUtils.isBlank(values[1])) {
 				val2Null = true;
 			}
 			if (!val1Null && !val2Null) {
 				builder.append(" between ? and ? ");
-				params.add(value);
-				params.add(value2);
+				params.add(values[0]);
+				params.add(values[1]);
 			} else if (val1Null && !val2Null) {
 				builder.append(" <= ? ");
-				params.add(value2);
+				params.add(values[1]);
 			} else if (!val1Null && val2Null) {
 				builder.append(" >= ? ");
-				params.add(value);
+				params.add(values[0]);
 			}
+			break;
+		case MultiValue:
+			builder.append("(");
+			for (int i = 0; i < values.length; i++) {
+				String value = values[i];
+				if (value != null && "NULL".equals(value.toUpperCase())) {
+					builder.append(dbField).append(" is null");
+				} else {
+					if (ignoreCase) {
+						dialect.toUpperCase(builder, dbField);
+						builder.append(" = ?");
+					} else if (Date.class.isAssignableFrom(fieldType)) {
+						if (DATE_PATTERN.matcher(value).matches()) {
+							dialect.truncateToDateStr(builder, dbField);
+						} else if (DATE_MINUTE_PATTERN.matcher(value).matches()) {
+							dialect.truncateToDateMinuteStr(builder, dbField);
+						} else if (DATE_SECOND_PATTERN.matcher(value).matches()) {
+							dialect.truncateToDateSecondStr(builder, dbField);
+						} else {
+							builder.append(dbField);
+						}
+						builder.append(" = ?");
+					} else {
+						builder.append(dbField).append(" = ?");
+					}
+					params.add(value);
+				}
+				if (i < values.length - 1) {
+					builder.append(" or ");
+				}
+			}
+			builder.append(")");
+			break;
 		}
 		return params;
 	}

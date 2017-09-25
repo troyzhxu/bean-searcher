@@ -1,0 +1,51 @@
+package com.ejl.searcher.param;
+
+/**
+ * 过滤运算符
+ * 
+ * @author Troy.Zhou @ 2017-03-20
+ *
+ */
+public enum Operator {
+
+	Include, 
+	Equal, 
+	GreaterThan, 
+	LessThan, 
+	NotEqual, 
+	Empty, 
+	NotEmpty, 
+	StartWith, 
+	EndWith, 
+	Between, 
+	MultiValue; // 多值（或）
+
+	public static Operator from(String op) {
+		switch (op) {
+		case "in":
+			return Include;
+		case "eq":
+			return Equal;
+		case "gt":
+			return GreaterThan;
+		case "lt":
+			return LessThan;
+		case "ne":
+			return NotEqual;
+		case "ey":
+			return Empty;
+		case "ny":
+			return NotEmpty;
+		case "sw":
+			return StartWith;
+		case "ew":
+			return EndWith;
+		case "bt":
+			return Between;
+		case "mv":
+			return MultiValue;
+		}
+		return Equal;
+	}
+
+}

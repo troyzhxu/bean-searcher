@@ -3,8 +3,6 @@ package com.ejl.searcher.param;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ejl.searcher.util.StrUtils;
-
 /**
  * 检索参数
  * 
@@ -53,11 +51,9 @@ public class SearchParam {
 		int size = filterParamList.size();
 		for (int i = size - 1; i >= 0; i--) {
 			FilterParam param = filterParamList.get(i);
-			FilterOperator op = param.getOperator();
-			String value = param.getValue();
-			String value2 = param.getValue2();
-			if (StrUtils.isBlank(value) && StrUtils.isBlank(value2) && op != FilterOperator.Empty
-					&& op != FilterOperator.NotEmpty) {
+			Operator op = param.getOperator();
+			if (param.allValuesEmpty() && op != Operator.Empty
+					&& op != Operator.NotEmpty) {
 				filterParamList.remove(i);
 			}
 		}

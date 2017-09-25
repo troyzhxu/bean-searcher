@@ -1,5 +1,11 @@
 package com.ejl.searcher.param;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
+import com.ejl.searcher.util.StrUtils;
+
 /**
  * 过滤检索参数
  * 
@@ -9,15 +15,14 @@ package com.ejl.searcher.param;
 public class FilterParam {
 
 	private String name;
-	private String value;
-	private String value2;
+	private List<Value> values = new ArrayList<>(2);
 	private boolean ignoreCase;
-	private FilterOperator operator;
+	private Operator operator;
 
 	@Override
 	public String toString() {
-		return "FilterParam [name=" + name + ", value=" + value + ", value2=" + value2 + ", ignoreCase=" + ignoreCase
-				+ ", operator=" + operator + "]";
+		return "FilterParam [name=" + name + ", values=" + values + ", ignoreCase=" + ignoreCase + ", operator="
+				+ operator + "]";
 	}
 
 	public String getName() {
@@ -28,20 +33,22 @@ public class FilterParam {
 		this.name = name;
 	}
 
-	public String getValue() {
-		return value;
+	public void addValue(String value) {
+		values.add(new Value(value, 0));
+	}
+	
+	public void addValue(String value, int index) {
+		values.add(new Value(value, index));
 	}
 
-	public void setValue(String value) {
-		this.value = value;
-	}
-
-	public String getValue2() {
-		return value2;
-	}
-
-	public void setValue2(String value2) {
-		this.value2 = value2;
+	public String[] getValues() {
+		values.sort(new Comparator<Value>() {
+			@Override
+			public int compare(Value v1, Value v2) {
+				return v1.sort - v2.sort;
+			}
+		});
+		return values.toArray(new String[values.size()]);
 	}
 
 	public boolean isIgnoreCase() {
@@ -52,12 +59,83 @@ public class FilterParam {
 		this.ignoreCase = ignoreCase;
 	}
 
-	public FilterOperator getOperator() {
+	public Operator getOperator() {
 		return operator;
 	}
 
-	public void setOperator(FilterOperator operator) {
+	public void setOperator(Operator operator) {
 		this.operator = operator;
+	}
+
+	public boolean allValuesEmpty() {
+		for (Value value : values) {
+			if (!StrUtils.isBlank(value.value)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public String firstNotNullValue() {
+		for (Value value : values) {
+			if (!StrUtils.isBlank(value.value)) {
+				return value.value;
+			}
+		}
+		return null;
+	}
+	
+	
+	public static void main(String[] args) {
+		List<Value> values = new ArrayList<>(2);
+		
+		values.add(new Value("b", 2));
+		values.add(new Value("a", 1));
+		
+		
+		values.sort(new Comparator<Value>() {
+			@Override
+			public int compare(Value v1, Value v2) {
+				return v1.sort - v2.sort;
+			}
+		});
+
+		System.out.println(values);
+
+	}
+
+	public static class Value {
+
+		public Value(String value, int sort) {
+			super();
+			this.value = value;
+			this.sort = sort;
+		}
+
+		private String value;
+		private int sort;
+
+		public String getValue() {
+			return value;
+		}
+
+		public void setValue(String value) {
+			this.value = value;
+		}
+
+		public int getSort() {
+			return sort;
+		}
+
+		public void setSort(int sort) {
+			this.sort = sort;
+		}
+
+		@Override
+		public String toString() {
+			return "Value [value=" + value + ", sort=" + sort + "]";
+		}
+		
 	}
 
 }

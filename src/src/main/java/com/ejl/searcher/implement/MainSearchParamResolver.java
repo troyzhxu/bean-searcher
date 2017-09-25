@@ -5,12 +5,15 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.ejl.searcher.SearchParamResolver;
 import com.ejl.searcher.implement.pagination.MaxOffsetPaginationResolver;
 import com.ejl.searcher.implement.pagination.PaginationResolver;
 import com.ejl.searcher.implement.parafilter.ParamFilter;
-import com.ejl.searcher.param.FilterOperator;
 import com.ejl.searcher.param.FilterParam;
+import com.ejl.searcher.param.Operator;
 import com.ejl.searcher.param.SearchParam;
 
 /***
@@ -21,6 +24,8 @@ import com.ejl.searcher.param.SearchParam;
  */
 public class MainSearchParamResolver implements SearchParamResolver {
 
+	Log log = LogFactory.getLog(MainSearchParamResolver.class);
+	
 	/**
 	 * 默认最大条数
 	 */
@@ -37,34 +42,30 @@ public class MainSearchParamResolver implements SearchParamResolver {
 	private String orderParamName = "order";
 	
 	/**
+	 * 参数名分割符
+	 */
+	private String paramNameSeparator = "_";
+	
+	/**
 	 * 忽略大小写参数名后缀
 	 */
-	private String ignoreCaseParamNameSuffix = "_ic";
+	private String ignoreCaseParamNameSuffix = "ic";
 
 	/**
 	 * 忽略大小写参数名后缀
 	 */
-	private String filterOperationParamNameSuffix = "_op";
+	private String filterOperationParamNameSuffix = "op";
 	
 	/**
 	 * Boolean true 值参数后缀
 	 */
-	private String booleanTrueParamNameSuffix = "_true";
+	private String booleanTrueParamNameSuffix = "true";
 	
 	/**
 	 * Boolean false 值参数后缀
 	 */
-	private String booleanFalseParamNameSuffix = "_false";
-	
-	/**
-	 * 双值参数后缀
-	 */
-	private String value2ParamNameSuffix = "_2";
-	
-	/**
-	 * 参数名分割符
-	 */
-	private String paramNameSeparator = "_";
+	private String booleanFalseParamNameSuffix = "false";
+
 	
 	
 	private PaginationResolver paginationResolver = new MaxOffsetPaginationResolver();
@@ -101,73 +102,46 @@ public class MainSearchParamResolver implements SearchParamResolver {
 			if (paginationResolver.resolve(searchParam, key, value)) {
 				continue;
 			}
-			if (shouldSkipKey(fieldList, key)) {
+			String[] fieldSuffix = findFieldAndSuffix(fieldList, key);
+			if (fieldSuffix == null || fieldSuffix.length == 0) {
 				continue;
 			}
-			if (key.endsWith(booleanTrueParamNameSuffix)) {
-				String field = key.substring(0, key.length() - booleanTrueParamNameSuffix.length());
-				FilterParam filterParam = findFilterParam(searchParam, field);
-				if (filterParam == null) {
-					filterParam = new FilterParam();
-					filterParam.setName(field);
-					searchParam.addFilterParam(filterParam);
+			String field = fieldSuffix[0];
+			String suffix = fieldSuffix.length > 1 ? fieldSuffix[1] : null;
+			if (suffix == null) {
+				FilterParam filterParam = findFilterParam(searchParam, key);
+				filterParam.addValue(value);
+				if (filterParam.getOperator() == null) {
+					filterParam.setOperator(Operator.Equal);
 				}
-				filterParam.setOperator(FilterOperator.Equal);
-				filterParam.setValue("1");
-			} else if (key.endsWith(booleanFalseParamNameSuffix)) {
-				String field = key.substring(0, key.length() - booleanFalseParamNameSuffix.length());
+			} else if (booleanTrueParamNameSuffix.equals(suffix)) {
 				FilterParam filterParam = findFilterParam(searchParam, field);
-				if (filterParam == null) {
-					filterParam = new FilterParam();
-					filterParam.setName(field);
-					searchParam.addFilterParam(filterParam);
-				}
-				filterParam.setOperator(FilterOperator.Equal);
-				filterParam.setValue("0");
-			} else if (key.endsWith(ignoreCaseParamNameSuffix)) {
-				String field = key.substring(0, key.length() - ignoreCaseParamNameSuffix.length());
+				filterParam.setOperator(Operator.Equal);
+				filterParam.addValue("1");
+			} else if (booleanFalseParamNameSuffix.equals(suffix)) {
 				FilterParam filterParam = findFilterParam(searchParam, field);
-				if (filterParam == null) {
-					filterParam = new FilterParam();
-					filterParam.setName(field);
-					searchParam.addFilterParam(filterParam);
-				}
+				filterParam.setOperator(Operator.Equal);
+				filterParam.addValue("0");
+			} else if (ignoreCaseParamNameSuffix.equals(suffix)) {
+				FilterParam filterParam = findFilterParam(searchParam, field);
 				String upVal = value != null ? value.toUpperCase() : value;
 				if ("0".equals(upVal) || "OFF".equals(upVal) || "FALSE".endsWith(upVal) || "N".endsWith(upVal)
-						|| "NO".endsWith(upVal)) {
+						|| "NO".endsWith(upVal) || "F".endsWith(upVal)) {
 					filterParam.setIgnoreCase(false);
 				} else {
 					filterParam.setIgnoreCase(true);
 				}
-			} else if (key.endsWith(filterOperationParamNameSuffix)) {
-				String field = key.substring(0, key.length() - filterOperationParamNameSuffix.length());
+			} else if (filterOperationParamNameSuffix.equals(suffix)) {
 				FilterParam filterParam = findFilterParam(searchParam, field);
-				if (filterParam == null) {
-					filterParam = new FilterParam();
-					filterParam.setName(field);
-					searchParam.addFilterParam(filterParam);
-				}
-				FilterOperator operator = FilterOperator.from(value);
-				filterParam.setOperator(operator);
-			} else if (key.endsWith(value2ParamNameSuffix)) {
-				String field = key.substring(0, key.length() - value2ParamNameSuffix.length());
-				FilterParam filterParam = findFilterParam(searchParam, field);
-				if (filterParam == null) {
-					filterParam = new FilterParam();
-					filterParam.setName(field);
-					searchParam.addFilterParam(filterParam);
-				}
-				filterParam.setValue2(value);
+				filterParam.setOperator(Operator.from(value));
 			} else {
-				FilterParam filterParam = findFilterParam(searchParam, key);
-				if (filterParam == null) {
-					filterParam = new FilterParam();
-					filterParam.setName(key);
-					searchParam.addFilterParam(filterParam);
-				}
-				filterParam.setValue(value);
-				if (filterParam.getOperator() == null) {
-					filterParam.setOperator(FilterOperator.Equal);
+				// 多值解析
+				try {
+					int index = Integer.parseInt(suffix);
+					FilterParam filterParam = findFilterParam(searchParam, field);
+					filterParam.addValue(value, index);
+				} catch (NumberFormatException e) {
+					log.error("不能解析的查询参数名：" + key);
 				}
 			}
 		}
@@ -176,24 +150,32 @@ public class MainSearchParamResolver implements SearchParamResolver {
 	}
 
 	private FilterParam findFilterParam(SearchParam searchParam, String field) {
+		FilterParam filterParam = null;
 		List<FilterParam> list = searchParam.getFilterParamList();
-		for (FilterParam filterParam : list) {
-			if (filterParam.getName().equals(field)) {
-				return filterParam;
-			}
-		}
-		return null;
-	}
-
-	private boolean shouldSkipKey(List<String> fieldList, String key) {
-		boolean should = true;
-		for (String field : fieldList) {
-			if (key.equals(field) || key.startsWith(field + paramNameSeparator)) {
-				should = false;
+		for (FilterParam param : list) {
+			if (param.getName().equals(field)) {
+				filterParam = param;
 				break;
 			}
 		}
-		return should;
+		if (filterParam == null) {
+			filterParam = new FilterParam();
+			filterParam.setName(field);
+			searchParam.addFilterParam(filterParam);
+		}
+		return filterParam;
+	}
+
+	private String[] findFieldAndSuffix(List<String> fieldList, String key) {
+		for (String field : fieldList) {
+			if (key.equals(field)) {
+				return new String[]{field};
+			}	
+			if (key.startsWith(field + paramNameSeparator)) {
+				return new String[]{field, key.substring(field.length() + paramNameSeparator.length())};
+			}
+		}
+		return null;
 	}
 
 	public void setDefaultMax(Integer defaultMax) {
@@ -226,10 +208,6 @@ public class MainSearchParamResolver implements SearchParamResolver {
 
 	public void setParamNameSeparator(String paramNameSeparator) {
 		this.paramNameSeparator = paramNameSeparator;
-	}
-
-	public void setBetweenParamNameSuffix(String betweenParamNameSuffix) {
-		this.value2ParamNameSuffix = betweenParamNameSuffix;
 	}
 
 	public void setPaginationResolver(PaginationResolver paginationResolver) {
