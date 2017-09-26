@@ -9,8 +9,10 @@ package com.ejl.searcher.param;
 public enum Operator {
 
 	Include, 
-	Equal, 
+	Equal,
+	GreaterEqual, 
 	GreaterThan, 
+	LessEqual, 
 	LessThan, 
 	NotEqual, 
 	Empty, 
@@ -26,8 +28,12 @@ public enum Operator {
 			return Include;
 		case "eq":
 			return Equal;
+		case "ge":
+			return GreaterEqual;
 		case "gt":
 			return GreaterThan;
+		case "le":
+			return LessEqual;
 		case "lt":
 			return LessThan;
 		case "ne":
@@ -46,6 +52,37 @@ public enum Operator {
 			return MultiValue;
 		}
 		return Equal;
+	}
+	
+	public String val() {
+		switch (this) {
+		case Include:
+			return "in";
+		case Between:
+			return "bt";
+		case Empty:
+			return "ey";
+		case NotEmpty:
+			return "ny";
+		case GreaterEqual:
+			return "ge";
+		case GreaterThan:
+			return "gt";
+		case LessEqual:
+			return "le";
+		case LessThan:
+			return "lt";
+		case MultiValue:
+			return "mv";
+		case NotEqual:
+			return "ne";
+		case StartWith:
+			return "sw";
+		case EndWith:
+			return "ew";
+		default:
+			return "eq";
+		}
 	}
 
 }

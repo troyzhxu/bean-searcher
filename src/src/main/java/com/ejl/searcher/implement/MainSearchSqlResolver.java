@@ -200,8 +200,16 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 			builder.append(" = ?");
 			params.add(firstRealValue);
 			break;
+		case GreaterEqual:
+			builder.append(" >= ?");
+			params.add(firstRealValue);
+			break;
 		case GreaterThan:
 			builder.append(" > ?");
+			params.add(firstRealValue);
+			break;
+		case LessEqual:
+			builder.append(" <= ?");
 			params.add(firstRealValue);
 			break;
 		case LessThan:
