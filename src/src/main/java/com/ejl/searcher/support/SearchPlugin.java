@@ -86,8 +86,8 @@ public class SearchPlugin implements IPlugin {
 		}
 		MainSearchSqlExecutor searchSqlExecutor = new MainSearchSqlExecutor(dataSource);
 		searchSqlExecutor.setShowSql(showSql);
-		SearcherBuilder builder = SearcherBuilder.builder()
-				.configSearchSqlExecutor(searchSqlExecutor);
+		SearcherBuilder builder = SearcherBuilder.builder();
+		builder.configSearchSqlExecutor(searchSqlExecutor);
 		if (searcherConfiger != null) {
 			searcherConfiger.config(builder);
 		}
