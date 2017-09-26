@@ -48,7 +48,11 @@ public class FilterParam {
 				return v1.sort - v2.sort;
 			}
 		});
-		return values.toArray(new String[values.size()]);
+		String[] vals = new String[values.size()];
+		for (int i = 0; i < values.size(); i++) {
+			vals[i] = values.get(i).value;
+		}
+		return vals;
 	}
 
 	public boolean isIgnoreCase() {
