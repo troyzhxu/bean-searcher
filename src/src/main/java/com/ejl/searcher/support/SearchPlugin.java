@@ -30,6 +30,18 @@ public class SearchPlugin implements IPlugin {
 		
 	}
 	
+	/**
+	 * Searcher 配置器
+	 * 
+	 * @since 1.1.3
+	 *
+	 */
+	public static interface SearcherConfiger {
+		
+		void config(SearcherBuilder builder);
+		
+	}
+	
 	
 	private String scanJar;
 	private String scanPackage;
@@ -41,6 +53,7 @@ public class SearchPlugin implements IPlugin {
 	
 	private SearcherReceiver searcherReceiver;
 	
+	private SearcherConfiger searcherConfiger;
 	
 	private SearcherStarter starter = SearcherStarter.starter();
 	
@@ -73,10 +86,15 @@ public class SearchPlugin implements IPlugin {
 		}
 		MainSearchSqlExecutor searchSqlExecutor = new MainSearchSqlExecutor(dataSource);
 		searchSqlExecutor.setShowSql(showSql);
-		Searcher searcher = SearcherBuilder.builder()
-				.configSearchSqlExecutor(searchSqlExecutor)
-				.build();
-		searcherReceiver.receive(searcher);
+		SearcherBuilder builder = SearcherBuilder.builder()
+				.configSearchSqlExecutor(searchSqlExecutor);
+		if (searcherConfiger != null) {
+			searcherConfiger.config(builder);
+		}
+		if (searcherReceiver == null) {
+			throw new RuntimeException("You must config a SearcherReceiver for SearchPlugin!");
+		}
+		searcherReceiver.receive(builder.build());
 		if (scanJar != null) {
 			return starter.start(scanJar, scanPackage);
 		} else {
@@ -96,6 +114,10 @@ public class SearchPlugin implements IPlugin {
 
 	public void setSearcherReceiver(SearcherReceiver searcherReceiver) {
 		this.searcherReceiver = searcherReceiver;
+	}
+
+	public void setSearcherConfiger(SearcherConfiger searcherConfiger) {
+		this.searcherConfiger = searcherConfiger;
 	}
 	
 }
