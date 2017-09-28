@@ -194,7 +194,8 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 		List<Object> params = new ArrayList<>(2);
 		switch (operator) {
 		case Include:
-			builder.append(" like '%").append(firstRealValue).append("%'");
+			builder.append(" like ?");
+			params.add("%" + firstRealValue + "%");
 			break;
 		case Equal:
 			builder.append(" = ?");
@@ -227,10 +228,12 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 			builder.append(" is not null");
 			break;
 		case StartWith:
-			builder.append(" like '").append(firstRealValue).append("%'");
+			builder.append(" like ?");
+			params.add(firstRealValue + "%");
 			break;
 		case EndWith:
-			builder.append(" like '%").append(firstRealValue).append("'");
+			builder.append(" like ?");
+			params.add("%" + firstRealValue);
 			break;
 		case Between:
 			boolean val1Null = false;
