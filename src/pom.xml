@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.ejlchina</groupId>
 	<artifactId>bean-searcher</artifactId>
-	<version>1.1.2.a</version>
+	<version>1.2.0</version>
 	
 	<name>bean-searcher</name>
 	<description>面向结果与条件的数据库检索器</description>
@@ -37,7 +37,7 @@
 		<connection>scm:git:https://github.com/ejlchina/bean-searcher.git</connection>
 		<developerConnection>scm:git:https://github.com/ejlchina/bean-searcher.git</developerConnection>
 		<url>https://github.com/ejlchina/bean-searcher</url>
-		<tag>v1.1.1</tag>
+		<tag>v1.2.0</tag>
 	</scm>
 
 	<dependencies>
