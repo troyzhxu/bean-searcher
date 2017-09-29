@@ -29,7 +29,7 @@ public class MainSearchParamResolver implements SearchParamResolver {
 	/**
 	 * 默认最大条数
 	 */
-	private Integer defaultMax = 10;
+	private Integer defaultMax = 15;
 	
 	/**
 	 * 排序字段参数名
