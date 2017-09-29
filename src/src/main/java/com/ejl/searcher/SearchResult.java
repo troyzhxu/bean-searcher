@@ -23,14 +23,11 @@ public class SearchResult<T> {
 	private List<T> dataList = new ArrayList<>();
 	
 	
-	public SearchResult() {
-	}
-	
 	public SearchResult(Number totalCount) {
-		super();
 		this.totalCount = totalCount;
 	}
 
+	
 	public Number getTotalCount() {
 		return totalCount;
 	}

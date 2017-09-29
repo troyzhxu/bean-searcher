@@ -34,26 +34,28 @@ public class PageNumPaginationResolver implements PaginationResolver {
 				Integer max = Integer.valueOf(paraValue);
 				searchParam.setMax(max);
 				Long page = searchParam.getPage();
-				if (page != null) {
-					long offset = (page - startPage) * max;
-					if (offset < 0) {
-						offset = 0;
-					}
-					searchParam.setOffset(offset);
+				if (page == null) {
+					return true;
 				}
+				long offset = (page - startPage) * max;
+				if (offset < 0) {
+					offset = 0;
+				}
+				searchParam.setOffset(offset);
 				return true;
 			}
 			if (pageParamName.equals(paraName)) {
 				Long page = Long.valueOf(paraValue);
 				searchParam.setPage(page);
 				Integer max = searchParam.getMax();
-				if (max != null) {
-					long offset = (page - startPage) * max;
-					if (offset < 0) {
-						offset = 0;
-					}
-					searchParam.setOffset(offset);
+				if (max == null) {
+					return true;
 				}
+				long offset = (page - startPage) * max;
+				if (offset < 0) {
+					offset = 0;
+				}
+				searchParam.setOffset(offset);
 				return true;
 			}
 		} catch (Exception e) {

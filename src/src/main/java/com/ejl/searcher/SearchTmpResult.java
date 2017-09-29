@@ -14,23 +14,12 @@ import java.util.Map;
  * */
 public class SearchTmpResult {
 
+	
 	private Number totalCount;
 	
 	private List<Map<String, Object>> tmpDataList = new ArrayList<>();
 		
-	public SearchTmpResult() {
-	}
 	
-	public SearchTmpResult(Number totalCount) {
-		super();
-		this.totalCount = totalCount;
-	}
-
-	public SearchTmpResult(Number totalCount, List<Map<String, Object>> tmpDataList) {
-		this.totalCount = totalCount;
-		this.tmpDataList = tmpDataList;
-	}
-
 	public Number getTotalCount() {
 		return totalCount;
 	}

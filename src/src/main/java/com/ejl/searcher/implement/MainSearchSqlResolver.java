@@ -77,51 +77,35 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 				builder.append(" and ");
 			}
 			FilterParam filterParam = filterParamList.get(i);
-
 			String fieldName = filterParam.getName();
-			
 			List<Object> sqlParams = appendFilterConditionSql(builder, fieldTypeMap.get(fieldName), 
 					fieldDbMap.get(fieldName), filterParam);
-
 			for (Object sqlParam : sqlParams) {
 				searchSql.addListSqlParam(sqlParam);
 				searchSql.addCountSqlParam(sqlParam);
 			}
 		}
-
 		String groupBy = searchBeanMap.getGroupBy();
 		if (groupBy != null && !"".equals(groupBy.trim())) {
 			builder.append(" group by " + groupBy);
 			String fromWhereSql = builder.toString();
-			
 			String tableAlias = generateTableAlias(fromWhereSql);
-			
 			if (searchBeanMap.isDistinct()) {
-				
 				String originalSql = fieldSelectSql + fromWhereSql;
-				
 				searchSql.setCountSqlString("select count(1) from (" + originalSql + ") " + tableAlias);
-				
 			} else {
 				searchSql.setCountSqlString("select count(1) from (select count(1)" + fromWhereSql + ") " + tableAlias);
 			}
-			
 		} else {
 			if (searchBeanMap.isDistinct()) {
-				
 				String fromWhereSql = builder.toString();
-				
 				String originalSql = fieldSelectSql + fromWhereSql;
-				
 				String tableAlias = generateTableAlias(fromWhereSql);
-				
 				searchSql.setCountSqlString("select count(1) from (" + originalSql + ") " + tableAlias);
-				
 			} else {
 				searchSql.setCountSqlString("select count(1)" + builder.toString());
 			}
 		}
-
 		String sortDbAlias = fieldDbAliasMap.get(searchParam.getSort());
 		if (sortDbAlias != null) {
 			builder.append(" order by ").append(sortDbAlias);
@@ -131,13 +115,10 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 			}
 		}
 		String fromWhereSql = builder.toString();
-
 		PaginateSql paginateSql = dialect.forPaginate(fieldSelectSql, fromWhereSql, searchParam.getMax(),
 				searchParam.getOffset());
-
 		searchSql.setListSqlString(paginateSql.getSql());
 		searchSql.addListSqlParams(paginateSql.getParams());
-
 		return searchSql;
 	}
 
@@ -154,13 +135,10 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 	 */
 	private List<Object> appendFilterConditionSql(StringBuilder builder, Class<?> fieldType, 
 			String dbField, FilterParam filterParam) {
-		
 		String[] values = filterParam.getValues();
 		boolean ignoreCase = filterParam.isIgnoreCase();
 		Operator operator = filterParam.getOperator();
-		
 		String firstRealValue = filterParam.firstNotNullValue();
-		
 		if (ignoreCase) {
 			for (int i = 0; i < values.length; i++) {
 				String val = values[i];
@@ -172,25 +150,15 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 				firstRealValue = firstRealValue.toUpperCase();
 			}
 		}
-		
 		if (operator != Operator.MultiValue) {
 			if (ignoreCase) {
 				dialect.toUpperCase(builder, dbField);
 			} else if (Date.class.isAssignableFrom(fieldType) && firstRealValue != null) {
-				if (DATE_PATTERN.matcher(firstRealValue).matches()) {
-					dialect.truncateToDateStr(builder, dbField);
-				} else if (DATE_MINUTE_PATTERN.matcher(firstRealValue).matches()) {
-					dialect.truncateToDateMinuteStr(builder, dbField);
-				} else if (DATE_SECOND_PATTERN.matcher(firstRealValue).matches()) {
-					dialect.truncateToDateSecondStr(builder, dbField);
-				} else {
-					builder.append(dbField);
-				}
+				appendDateFieldWithDialect(builder, dbField, firstRealValue);
 			} else {
 				builder.append(dbField);
-			}	
+			}
 		}
-		
 		List<Object> params = new ArrayList<>(2);
 		switch (operator) {
 		case Include:
@@ -262,24 +230,16 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 				String value = values[i];
 				if (value != null && "NULL".equals(value.toUpperCase())) {
 					builder.append(dbField).append(" is null");
+				} else if (ignoreCase) {
+					dialect.toUpperCase(builder, dbField);
+					builder.append(" = ?");
+					params.add(value);
+				} else if (Date.class.isAssignableFrom(fieldType)) {
+					appendDateFieldWithDialect(builder, dbField, value);
+					builder.append(" = ?");
+					params.add(value);
 				} else {
-					if (ignoreCase) {
-						dialect.toUpperCase(builder, dbField);
-						builder.append(" = ?");
-					} else if (Date.class.isAssignableFrom(fieldType)) {
-						if (DATE_PATTERN.matcher(value).matches()) {
-							dialect.truncateToDateStr(builder, dbField);
-						} else if (DATE_MINUTE_PATTERN.matcher(value).matches()) {
-							dialect.truncateToDateMinuteStr(builder, dbField);
-						} else if (DATE_SECOND_PATTERN.matcher(value).matches()) {
-							dialect.truncateToDateSecondStr(builder, dbField);
-						} else {
-							builder.append(dbField);
-						}
-						builder.append(" = ?");
-					} else {
-						builder.append(dbField).append(" = ?");
-					}
+					builder.append(dbField).append(" = ?");
 					params.add(value);
 				}
 				if (i < values.length - 1) {
@@ -290,6 +250,18 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 			break;
 		}
 		return params;
+	}
+
+	private void appendDateFieldWithDialect(StringBuilder builder, String dbField, String value) {
+		if (DATE_PATTERN.matcher(value).matches()) {
+			dialect.truncateToDateStr(builder, dbField);
+		} else if (DATE_MINUTE_PATTERN.matcher(value).matches()) {
+			dialect.truncateToDateMinuteStr(builder, dbField);
+		} else if (DATE_SECOND_PATTERN.matcher(value).matches()) {
+			dialect.truncateToDateSecondStr(builder, dbField);
+		} else {
+			builder.append(dbField);
+		}
 	}
 
 	public void setDialect(Dialect dialect) {

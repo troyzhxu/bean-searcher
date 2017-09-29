@@ -67,29 +67,31 @@ public class SearcherStarter {
 		SearchBeanMapCache searchBeanMapCache = SearchBeanMapCache.sharedCache();
 		for (Class<?> beanClass : beanClassList) {
 			SearchBean searchBean = beanClass.getAnnotation(SearchBean.class);
-			if (searchBean != null) {
-				SearchBeanMap searchBeanMap = new SearchBeanMap(searchBean.tables(), searchBean.joinCond(),
-						searchBean.groupBy(), searchBean.distinct());
-				for (Field field : beanClass.getDeclaredFields()) {
-					DbField dbField = field.getAnnotation(DbField.class);
-					if (dbField != null) {
-						Method method = null;
-						String fieldName = field.getName();
-						Class<?> fieldType = field.getType();
-						try {
-							method = beanClass.getMethod("set" + StrUtils.firstCharToUpperCase(fieldName), fieldType);
-						} catch (Exception e) {
-							throw new SearcherException(
-									"【" + beanClass.getName() + "：" + fieldName + "】被注解的属性必须要有正确的set方法！", e);
-						}
-						searchBeanMap.addFieldDbMap(fieldName, dbField.value().trim(), method, fieldType);
-					}
-				}
-				if (searchBeanMap.getFieldList().size() == 0) {
-					throw new SearcherException("【" + beanClass.getName() + "】" + "】没有被@DbFile注解的属性！");
-				}
-				searchBeanMapCache.addSearchBeanMap(beanClass, searchBeanMap);
+			if (searchBean == null) {
+				continue;
 			}
+			SearchBeanMap searchBeanMap = new SearchBeanMap(searchBean.tables(), searchBean.joinCond(),
+					searchBean.groupBy(), searchBean.distinct());
+			for (Field field : beanClass.getDeclaredFields()) {
+				DbField dbField = field.getAnnotation(DbField.class);
+				if (dbField == null) {
+					continue;
+				}
+				Method method = null;
+				String fieldName = field.getName();
+				Class<?> fieldType = field.getType();
+				try {
+					method = beanClass.getMethod("set" + StrUtils.firstCharToUpperCase(fieldName), fieldType);
+				} catch (Exception e) {
+					throw new SearcherException(
+							"【" + beanClass.getName() + "：" + fieldName + "】被注解的属性必须要有正确的set方法！", e);
+				}
+				searchBeanMap.addFieldDbMap(fieldName, dbField.value().trim(), method, fieldType);
+			}
+			if (searchBeanMap.getFieldList().size() == 0) {
+				throw new SearcherException("【" + beanClass.getName() + "】" + "】没有被@DbFile注解的属性！");
+			}
+			searchBeanMapCache.addSearchBeanMap(beanClass, searchBeanMap);
 		}
 		return true;
 	}

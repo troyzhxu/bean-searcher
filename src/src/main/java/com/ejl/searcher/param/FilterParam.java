@@ -89,24 +89,6 @@ public class FilterParam {
 		return null;
 	}
 	
-	
-	public static void main(String[] args) {
-		List<Value> values = new ArrayList<>(2);
-		
-		values.add(new Value("b", 2));
-		values.add(new Value("a", 1));
-		
-		
-		values.sort(new Comparator<Value>() {
-			@Override
-			public int compare(Value v1, Value v2) {
-				return v1.sort - v2.sort;
-			}
-		});
-
-		System.out.println(values);
-
-	}
 
 	public static class Value {
 

@@ -11,6 +11,9 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.ejl.searcher.SearchSql;
 import com.ejl.searcher.SearchSqlExecutor;
 import com.ejl.searcher.SearchTmpResult;
@@ -25,11 +28,14 @@ import com.ejl.searcher.SearcherException;
  */
 public class MainSearchSqlExecutor implements SearchSqlExecutor {
 
+	Log log = LogFactory.getLog(MainSearchSqlExecutor.class);
+	
 	private boolean showSql = false;
 
 	private DataSource dataSource;
 
 	public MainSearchSqlExecutor() {
+		super();
 	}
 
 	public MainSearchSqlExecutor(DataSource dataSource) {
@@ -48,55 +54,54 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 
 	@Override
 	public SearchTmpResult execute(SearchSql searchSql) {
-		if (dataSource == null) {
-			throw new SearcherException("请为JdbcSearchSqlExecutor配置dataSource");
-		}
 		SearchTmpResult result = new SearchTmpResult();
-		if (searchSql.isShouldQueryList() || searchSql.isShouldQueryTotal()) {
-			Connection connection = null;
-			try {
-				connection = dataSource.getConnection();
-			} catch (SQLException e) {
-				throw new SearcherException("Can not get Connection from dataSource!", e);
-			}
-			if (connection != null) {
-				PreparedStatement listStatement = null;
-				PreparedStatement countStatement = null;
-				ResultSet listResultSet = null;
-				ResultSet countResultSet = null;
-				try {
-					if (searchSql.isShouldQueryList()) {
-						if (showSql) {
-							System.out.println("bean-searcher - sql ---- " + searchSql.getListSqlString());
-							System.out.println("bean-searcher - params - "
-									+ Arrays.toString(searchSql.getListSqlParams().toArray()));
-						}
-						listStatement = connection.prepareStatement(searchSql.getListSqlString());
-						fillParamsTntoStatement(listStatement, searchSql.getListSqlParams());
-						listResultSet = listStatement.executeQuery();
-						while (listResultSet.next()) {
-							result.addTmpData(resolveResult(listResultSet, searchSql.getAliasList()));
-						}
-					}
-					if (searchSql.isShouldQueryTotal()) {
-						if (showSql) {
-							System.out.println("bean-searcher - sql ---- " + searchSql.getCountSqlString());
-							System.out.println("bean-searcher - params - "
-									+ Arrays.toString(searchSql.getCountSqlParams().toArray()));
-						}
-						countStatement = connection.prepareStatement(searchSql.getCountSqlString());
-						fillParamsTntoStatement(countStatement, searchSql.getCountSqlParams());
-						countResultSet = countStatement.executeQuery();
-						if (countResultSet.next()) {
-							result.setTotalCount((Number) countResultSet.getObject(1));
-						}
-					}
-				} catch (SQLException e) {
-					throw new SearcherException("A exception throwed when query!", e);
-				} finally {
-					closeConnection(connection, listStatement, countStatement, listResultSet, countResultSet);
+		if (!searchSql.isShouldQueryList() && !searchSql.isShouldQueryTotal()) {
+			return result;
+		}
+		if (dataSource == null) {
+			throw new SearcherException("You must config a dataSource for MainSearchSqlExecutor!");
+		}
+		Connection connection = null;
+		try {
+			connection = dataSource.getConnection();
+		} catch (SQLException e) {
+			throw new SearcherException("Can not get Connection from dataSource!", e);
+		}
+		PreparedStatement listStatement = null;
+		PreparedStatement countStatement = null;
+		ResultSet listResultSet = null;
+		ResultSet countResultSet = null;
+		try {
+			if (searchSql.isShouldQueryList()) {
+				if (showSql) {
+					log.info("bean-searcher - sql ---- " + searchSql.getListSqlString());
+					log.info("bean-searcher - params - "
+							+ Arrays.toString(searchSql.getListSqlParams().toArray()));
+				}
+				listStatement = connection.prepareStatement(searchSql.getListSqlString());
+				fillParamsTntoStatement(listStatement, searchSql.getListSqlParams());
+				listResultSet = listStatement.executeQuery();
+				while (listResultSet.next()) {
+					result.addTmpData(resolveResult(listResultSet, searchSql.getAliasList()));
 				}
 			}
+			if (searchSql.isShouldQueryTotal()) {
+				if (showSql) {
+					log.info("bean-searcher - sql ---- " + searchSql.getCountSqlString());
+					log.info("bean-searcher - params - "
+							+ Arrays.toString(searchSql.getCountSqlParams().toArray()));
+				}
+				countStatement = connection.prepareStatement(searchSql.getCountSqlString());
+				fillParamsTntoStatement(countStatement, searchSql.getCountSqlParams());
+				countResultSet = countStatement.executeQuery();
+				if (countResultSet.next()) {
+					result.setTotalCount((Number) countResultSet.getObject(1));
+				}
+			}
+		} catch (SQLException e) {
+			throw new SearcherException("A exception throwed when query!", e);
+		} finally {
+			closeConnection(connection, listStatement, countStatement, listResultSet, countResultSet);
 		}
 		return result;
 	}
