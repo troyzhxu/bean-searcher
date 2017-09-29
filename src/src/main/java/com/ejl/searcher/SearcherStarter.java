@@ -80,7 +80,7 @@ public class SearcherStarter {
 							method = beanClass.getMethod("set" + StrUtils.firstCharToUpperCase(fieldName), fieldType);
 						} catch (Exception e) {
 							throw new SearcherException(
-									"【" + beanClass.getName() + "：" + fieldName + "】被注解的属性必须要有正确的set方法！");
+									"【" + beanClass.getName() + "：" + fieldName + "】被注解的属性必须要有正确的set方法！", e);
 						}
 						searchBeanMap.addFieldDbMap(fieldName, dbField.value().trim(), method, fieldType);
 					}
