@@ -14,6 +14,7 @@ import com.ejl.searcher.SearchSqlExecutor;
 import com.ejl.searcher.SearchSqlResolver;
 import com.ejl.searcher.SearchTmpResult;
 import com.ejl.searcher.Searcher;
+import com.ejl.searcher.SearcherException;
 import com.ejl.searcher.beanmap.SearchBeanMap;
 import com.ejl.searcher.beanmap.SearchBeanMapCache;
 import com.ejl.searcher.implement.pagination.PaginationResolver;
@@ -119,7 +120,7 @@ public class MainSearcher implements Searcher {
 				boolean shouldQueryTotal, boolean shouldQueryList, boolean needNotLimit) {
 		SearchBeanMap searchBeanMap = SearchBeanMapCache.sharedCache().getSearchBeanMap(beanClass);
 		if (searchBeanMap == null) {
-			throw new RuntimeException("该 Bean【" + beanClass.getName() 
+			throw new SearcherException("该 Bean【" + beanClass.getName() 
 					+ "】不可以被检索器检索，请检查该Class是否被正确注解 或 检索器是否正确启动！");
 		}
 		List<String> fieldList = searchBeanMap.getFieldList();

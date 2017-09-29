@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import com.ejl.searcher.SearcherException;
+
 
 /**
  * 类 扫描器
@@ -82,7 +84,7 @@ public class ClassScanner {
 		    }  
 		    jarFile.close();
 		} catch (IOException e) {
-			throw new ReadJarFileErrorException(jarName + ".jar", e);
+			throw new SearcherException("JAR[" + jarName + ".jar]遍历异常：", e);
 		}
     	return classList;
     }

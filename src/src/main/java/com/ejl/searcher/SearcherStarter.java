@@ -79,14 +79,14 @@ public class SearcherStarter {
 						try {
 							method = beanClass.getMethod("set" + StrUtils.firstCharToUpperCase(fieldName), fieldType);
 						} catch (Exception e) {
-							throw new RuntimeException(
+							throw new SearcherException(
 									"【" + beanClass.getName() + "：" + fieldName + "】被注解的属性必须要有正确的set方法！");
 						}
 						searchBeanMap.addFieldDbMap(fieldName, dbField.value().trim(), method, fieldType);
 					}
 				}
 				if (searchBeanMap.getFieldList().size() == 0) {
-					throw new RuntimeException("【" + beanClass.getName() + "】" + "】没有被@DbFile注解的属性！");
+					throw new SearcherException("【" + beanClass.getName() + "】" + "】没有被@DbFile注解的属性！");
 				}
 				searchBeanMapCache.addSearchBeanMap(beanClass, searchBeanMap);
 			}

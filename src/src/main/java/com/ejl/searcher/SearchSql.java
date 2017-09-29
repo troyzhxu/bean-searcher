@@ -47,9 +47,6 @@ public class SearchSql {
 	 * */
 	private boolean shouldQueryList;
 	
-	
-	public SearchSql() {
-	}
 
 	
 	public String getListSqlString() {

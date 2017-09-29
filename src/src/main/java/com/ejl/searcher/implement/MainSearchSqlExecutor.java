@@ -14,6 +14,7 @@ import javax.sql.DataSource;
 import com.ejl.searcher.SearchSql;
 import com.ejl.searcher.SearchSqlExecutor;
 import com.ejl.searcher.SearchTmpResult;
+import com.ejl.searcher.SearcherException;
 
 /**
  * JDBC Search Sql 执行器
@@ -48,7 +49,7 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 	@Override
 	public SearchTmpResult execute(SearchSql searchSql) {
 		if (dataSource == null) {
-			throw new RuntimeException("请为JdbcSearchSqlExecutor配置dataSource");
+			throw new SearcherException("请为JdbcSearchSqlExecutor配置dataSource");
 		}
 		SearchTmpResult result = new SearchTmpResult();
 		if (searchSql.isShouldQueryList() || searchSql.isShouldQueryTotal()) {
@@ -56,7 +57,7 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 			try {
 				connection = dataSource.getConnection();
 			} catch (SQLException e) {
-				throw new RuntimeException("Can not get Connection from dataSource!", e);
+				throw new SearcherException("Can not get Connection from dataSource!", e);
 			}
 			if (connection != null) {
 				PreparedStatement listStatement = null;
@@ -91,7 +92,7 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 						}
 					}
 				} catch (SQLException e) {
-					throw new RuntimeException("A exception throwed when query!", e);
+					throw new SearcherException("A exception throwed when query!", e);
 				} finally {
 					closeConnection(connection, listStatement, countStatement, listResultSet, countResultSet);
 				}
@@ -133,7 +134,7 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 				countResultSet.close();
 			}
 		} catch (SQLException e) {
-			throw new RuntimeException("Can not close connection!", e);
+			throw new SearcherException("Can not close connection!", e);
 		}
 	}
 

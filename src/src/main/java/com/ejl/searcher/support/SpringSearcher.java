@@ -4,6 +4,7 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 
 import com.ejl.searcher.SearcherBuilder;
+import com.ejl.searcher.SearcherException;
 import com.ejl.searcher.SearcherStarter;
 import com.ejl.searcher.implement.MainSearcher;
 
@@ -28,7 +29,7 @@ public class SpringSearcher extends MainSearcher implements InitializingBean, Di
 				.configPrifexSeparatorLength(getPrifexSeparatorLength())
 				.build(this);
 		if (scanPackage == null) {
-			throw new RuntimeException("SearchPlugin： scanPackage 不能为 空！");
+			throw new SearcherException("SearchPlugin： scanPackage 不能为 空！");
 		}
 		if (scanJar != null) {
 			SearcherStarter.starter().start(scanJar, scanPackage);

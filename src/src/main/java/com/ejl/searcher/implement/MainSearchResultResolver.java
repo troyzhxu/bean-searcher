@@ -10,6 +10,7 @@ import com.ejl.searcher.SearchResult;
 import com.ejl.searcher.SearchResultConvertInfo;
 import com.ejl.searcher.SearchResultResolver;
 import com.ejl.searcher.SearchTmpResult;
+import com.ejl.searcher.SearcherException;
 import com.ejl.searcher.bean.BeanAware;
 import com.ejl.searcher.implement.convertor.FieldConvertor;
 
@@ -39,7 +40,7 @@ public class MainSearchResultResolver implements SearchResultResolver {
 			try {
 				bean = beanClass.newInstance();
 			} catch (Exception e) {
-				throw new RuntimeException("为【" + beanClass.getName() + "】创建对象时报错，请检查该类中是否有无参构造方法！", e);
+				throw new SearcherException("为【" + beanClass.getName() + "】创建对象时报错，请检查该类中是否有无参构造方法！", e);
 			}
 			for (Entry<String, String> entry : fieldDbAliasEntrySet) {
 				String field = entry.getKey();
@@ -50,13 +51,13 @@ public class MainSearchResultResolver implements SearchResultResolver {
 				try {
 					value = fieldConvertor.convert(value, fieldType);
 				} catch (Exception e) {
-					throw new RuntimeException(
+					throw new SearcherException(
 							"可检索Bean【" + beanClass + "】的属性【" + field + "】的类型【" + fieldType + "】与数据库字段类型不兼容！", e);
 				}
 				try {
 					method.invoke(bean, value);
 				} catch (Exception e) {
-					throw new IllegalArgumentException(
+					throw new SearcherException(
 							"为【" + beanClass.getName() + "】的【" + field + "】属性赋值时报错，请检查该属性的set方法参数类型是否正确！", e);
 				}
 			}

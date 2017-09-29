@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.ejl.searcher.SearcherException;
+
 /**
  * 用户Bean的属性与数据库表字段的映射信息
  *  
@@ -70,7 +72,7 @@ public class SearchBeanMap {
 	
 	public void addFieldDbMap(String field, String dbField, Method getMethod, Class<?> fieldType) {
 		if (fieldList.contains(field)) {
-			throw new RuntimeException("不可以重复添加字段");
+			throw new SearcherException("不可以重复添加字段");
 		}
         if (dbField.toLowerCase().startsWith("select ")) {
             dbField = "(" + dbField + ")";

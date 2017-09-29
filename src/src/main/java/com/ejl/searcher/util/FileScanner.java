@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ejl.searcher.SearcherException;
+
 /**
  * 文件扫描器
  * @author Troy.Zhou
@@ -13,7 +15,8 @@ public class FileScanner {
 
 	/**
 	 * 递归查找文件
-	 * 
+	 * 算法简述： 从某个给定的需查找的文件夹出发，搜索该文件夹的所有子文件夹及文件，
+	 * 若为文件，则进行匹配，匹配成功则加入结果集，若为子文件夹，则进队列。 队列不空，重复上述操作，队列为空，程序结束，返回结果。
 	 * @param baseDirName
 	 *            查找的文件夹路径
 	 * @param targetFileNamePattern
@@ -21,35 +24,25 @@ public class FileScanner {
 	 * @return 文件列表
 	 */
 	public static List<File> findFiles(String baseDirName, String targetFileNamePattern) {
-		/**
-		 * 算法简述： 从某个给定的需查找的文件夹出发，搜索该文件夹的所有子文件夹及文件，
-		 * 若为文件，则进行匹配，匹配成功则加入结果集，若为子文件夹，则进队列。 队列不空，重复上述操作，队列为空，程序结束，返回结果。
-		 */
 		List<File> classFiles = new ArrayList<>();
-		String tempName = null;
-		// 判断目录是否存在
-		System.out.println("baseDirName = " + baseDirName);
-		
 		File baseDir = new File(baseDirName);
 		if (!baseDir.exists()) {
-			throw new FileNotExistException(baseDirName);
+			throw new SearcherException("文件[" + baseDirName + "]不存在！");
 		}
 		if (!baseDir.isDirectory()) {
-			throw new NotDirectoryException(baseDirName);
+			throw new SearcherException("路径【" + baseDirName + "】不是一个目录");
 		}
 		String[] filelist = baseDir.list();
 		for (int i = 0; i < filelist.length; i++) {
 			File readfile = new File(baseDirName + File.separatorChar + filelist[i]);
 			if (!readfile.isDirectory()) {
-				tempName = readfile.getName();
-				if (FileScanner.wildcardMatch(targetFileNamePattern, tempName)) {
+				if (FileScanner.wildcardMatch(targetFileNamePattern, readfile.getName())) {
 					classFiles.add(readfile.getAbsoluteFile());
 				}
 			} else if (readfile.isDirectory()) {
 				classFiles.addAll(findFiles(baseDirName + File.separatorChar + filelist[i], targetFileNamePattern));
 			}
 		}
-
 		return classFiles;
 	}
 

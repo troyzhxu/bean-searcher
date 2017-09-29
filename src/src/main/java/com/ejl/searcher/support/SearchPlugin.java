@@ -4,6 +4,7 @@ import javax.sql.DataSource;
 
 import com.ejl.searcher.Searcher;
 import com.ejl.searcher.SearcherBuilder;
+import com.ejl.searcher.SearcherException;
 import com.ejl.searcher.SearcherStarter;
 import com.ejl.searcher.implement.MainSearchSqlExecutor;
 import com.jfinal.plugin.IPlugin;
@@ -21,7 +22,7 @@ public class SearchPlugin implements IPlugin {
 	/**
 	 * Searcher 接收器
 	 * 
-	 * @since 1.1.3
+	 * @since 1.2.0
 	 *
 	 */
 	public static interface SearcherReceiver {
@@ -33,7 +34,7 @@ public class SearchPlugin implements IPlugin {
 	/**
 	 * Searcher 配置器
 	 * 
-	 * @since 1.1.3
+	 * @since 1.2.0
 	 *
 	 */
 	public static interface SearcherConfiger {
@@ -77,11 +78,11 @@ public class SearchPlugin implements IPlugin {
 	@Override
 	public boolean start() {
 		if (scanPackage == null) {
-			throw new RuntimeException("SearchPlugin： scanPackage 不能为 空！");
+			throw new SearcherException("SearchPlugin： scanPackage 不能为 空！");
 		}
 		DataSource dataSource = dataSourceProvider.getDataSource();
 		if (dataSource == null) {
-			throw new RuntimeException("Can not get DataSource from IDataSourceProvider, "
+			throw new SearcherException("Can not get DataSource from IDataSourceProvider, "
 					+ "please confirm IDataSourceProvider is in front of SearchPlugin");
 		}
 		MainSearchSqlExecutor searchSqlExecutor = new MainSearchSqlExecutor(dataSource);
@@ -92,7 +93,7 @@ public class SearchPlugin implements IPlugin {
 			searcherConfiger.config(builder);
 		}
 		if (searcherReceiver == null) {
-			throw new RuntimeException("You must config a SearcherReceiver for SearchPlugin!");
+			throw new SearcherException("You must config a SearcherReceiver for SearchPlugin!");
 		}
 		searcherReceiver.receive(builder.build());
 		if (scanJar != null) {

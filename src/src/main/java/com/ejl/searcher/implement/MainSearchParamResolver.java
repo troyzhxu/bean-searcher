@@ -43,8 +43,9 @@ public class MainSearchParamResolver implements SearchParamResolver {
 	
 	/**
 	 * 参数名分割符
+	 * V1.2.0之前默认值是下划线："_"，自V1.2.0之后默认值更新为中划线："-"
 	 */
-	private String paramNameSeparator = "_";
+	private String paramNameSeparator = "-";
 	
 	/**
 	 * 忽略大小写参数名后缀
