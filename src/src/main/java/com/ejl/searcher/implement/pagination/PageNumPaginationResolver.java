@@ -1,11 +1,16 @@
 package com.ejl.searcher.implement.pagination;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.ejl.searcher.param.SearchParam;
 
 
 
 public class PageNumPaginationResolver implements PaginationResolver {
 
+	Log log = LogFactory.getLog(PageNumPaginationResolver.class);
+	
 	/**
 	 * 开始页
 	 * */
@@ -52,6 +57,7 @@ public class PageNumPaginationResolver implements PaginationResolver {
 				return true;
 			}
 		} catch (Exception e) {
+			log.error("解析分页参数异常：", e);
 			return false;
 		}
 		return false;

@@ -1,7 +1,6 @@
 package com.ejl.searcher.util;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -51,10 +50,9 @@ public class ClassScanner {
         for (File classFile : classFileList) {
             String className = className(classFile, "/classes");
             try {
-                Class<?> clazz = Class.forName(className);
-                classList.add(clazz);
+                classList.add(Class.forName(className));
             } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+                throw new SearcherException("加载类失败：", e);
             }
         }
         return classList;
@@ -75,15 +73,11 @@ public class ClassScanner {
 		        String entryName = jarEntry.getName();
 		        if (entryName.startsWith(packageDir) && entryName.endsWith(".class")) {
 		        	String className = entryName.substring(0, entryName.length() - 6).replace("/", ".");
-		        	try {
-		                classList.add(Class.forName(className));
-		            } catch (ClassNotFoundException e) {
-		                e.printStackTrace();
-		            }
-		        } 
+		            classList.add(Class.forName(className));
+		        }
 		    }  
 		    jarFile.close();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			throw new SearcherException("JAR[" + jarName + ".jar]遍历异常：", e);
 		}
     	return classList;

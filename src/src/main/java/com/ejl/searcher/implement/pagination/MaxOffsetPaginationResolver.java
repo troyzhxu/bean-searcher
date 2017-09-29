@@ -1,10 +1,15 @@
 package com.ejl.searcher.implement.pagination;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.ejl.searcher.param.SearchParam;
 
 
 public class MaxOffsetPaginationResolver implements PaginationResolver {
 
+	Log log = LogFactory.getLog(PageNumPaginationResolver.class);
+	
 	/**
 	 * 最大条数字段参数名
 	 */
@@ -32,6 +37,7 @@ public class MaxOffsetPaginationResolver implements PaginationResolver {
 				return true;
 			}
 		} catch (Exception e) {
+			log.error("解析分页参数异常：", e);
 			return false;
 		}
 		return false;
