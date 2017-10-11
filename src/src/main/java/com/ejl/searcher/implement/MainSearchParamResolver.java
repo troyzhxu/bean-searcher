@@ -3,6 +3,7 @@ package com.ejl.searcher.implement;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Pattern;
 import java.util.Set;
 
 import org.apache.commons.logging.Log;
@@ -71,9 +72,10 @@ public class MainSearchParamResolver implements SearchParamResolver {
 	
 	private PaginationResolver paginationResolver = new MaxOffsetPaginationResolver();
 	
+	private final Pattern indexSuffixPattern = Pattern.compile("[0-9]+");
+
 	private ParamFilter[] paramFilters;
 	
-
 	@Override
 	public PaginationResolver getPaginationResolver() {
 		return paginationResolver;
@@ -135,14 +137,13 @@ public class MainSearchParamResolver implements SearchParamResolver {
 			} else if (filterOperationParamNameSuffix.equals(suffix)) {
 				FilterParam filterParam = findFilterParam(searchParam, field);
 				filterParam.setOperator(Operator.from(value));
-			} else {
-				// 多值解析
+			} else {	// 多值解析
 				try {
 					int index = Integer.parseInt(suffix);
 					FilterParam filterParam = findFilterParam(searchParam, field);
 					filterParam.addValue(value, index);
 				} catch (NumberFormatException e) {
-					log.error("不能解析的查询参数名：" + key);
+					log.error("不能解析的查询参数名：" + key, e);
 				}
 			}
 		}
@@ -166,14 +167,19 @@ public class MainSearchParamResolver implements SearchParamResolver {
 		}
 		return filterParam;
 	}
-
+	
 	private String[] findFieldAndSuffix(List<String> fieldList, String key) {
 		for (String field : fieldList) {
 			if (key.equals(field)) {
 				return new String[]{field};
 			}	
 			if (key.startsWith(field + paramNameSeparator)) {
-				return new String[]{field, key.substring(field.length() + paramNameSeparator.length())};
+				String suffix = key.substring(field.length() + paramNameSeparator.length());
+				if (filterOperationParamNameSuffix.equals(suffix) || ignoreCaseParamNameSuffix.equals(suffix) 
+						|| booleanTrueParamNameSuffix.equals(suffix) || booleanFalseParamNameSuffix.equals(suffix)
+						|| indexSuffixPattern.matcher(suffix).matches()) {
+					return new String[]{field, suffix};
+				}
 			}
 		}
 		return null;
