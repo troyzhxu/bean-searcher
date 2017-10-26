@@ -1,7 +1,9 @@
 package com.ejl.searcher.param;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 检索参数
@@ -37,6 +39,11 @@ public class SearchParam {
 	 */
 	private List<FilterParam> filterParamList = new ArrayList<>();
 
+	/**
+	 * 虚拟参数值映射
+	 */
+	private Map<String, String> vertualParamValueMap = new HashMap<>();
+	
 
 	public SearchParam() {
 	}
@@ -65,6 +72,14 @@ public class SearchParam {
 
 	public List<FilterParam> getFilterParamList() {
 		return filterParamList;
+	}
+
+	public Map<String, String> getVertualParamValueMap() {
+		return vertualParamValueMap;
+	}
+
+	public void putVertualParamValue(String paramName, String paramValue) {
+		this.vertualParamValueMap.put(paramName, paramValue);;
 	}
 
 	public String getSort() {
