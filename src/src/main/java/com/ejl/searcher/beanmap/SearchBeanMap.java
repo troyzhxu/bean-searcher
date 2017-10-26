@@ -88,32 +88,16 @@ public class SearchBeanMap {
 		return talbes;
 	}
 
-	public void setTalbes(String talbes) {
-		this.talbes = talbes;
-	}
-
 	public String getJoinCond() {
 		return joinCond;
-	}
-
-	public void setJoinCond(String joinCond) {
-		this.joinCond = joinCond;
 	}
 
 	public String getGroupBy() {
 		return groupBy;
 	}
 
-	public void setGroupBy(String groupBy) {
-		this.groupBy = groupBy;
-	}
-
 	public boolean isDistinct() {
 		return distinct;
-	}
-
-	public void setDistinct(boolean distinct) {
-		this.distinct = distinct;
 	}
 
 	public Map<String, String> getFieldDbMap() {
