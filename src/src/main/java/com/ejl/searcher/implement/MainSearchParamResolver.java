@@ -10,8 +10,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.ejl.searcher.SearchParamResolver;
-import com.ejl.searcher.implement.pagination.MaxOffsetPaginationResolver;
-import com.ejl.searcher.implement.pagination.PaginationResolver;
+import com.ejl.searcher.implement.pagination.MaxOffsetPagination;
+import com.ejl.searcher.implement.pagination.Pagination;
 import com.ejl.searcher.implement.parafilter.ParamFilter;
 import com.ejl.searcher.param.FilterParam;
 import com.ejl.searcher.param.Operator;
@@ -70,15 +70,15 @@ public class MainSearchParamResolver implements SearchParamResolver {
 
 	
 	
-	private PaginationResolver paginationResolver = new MaxOffsetPaginationResolver();
+	private Pagination pagination = new MaxOffsetPagination();
 	
 	private final Pattern indexSuffixPattern = Pattern.compile("[0-9]+");
 
 	private ParamFilter[] paramFilters;
 	
 	@Override
-	public PaginationResolver getPaginationResolver() {
-		return paginationResolver;
+	public Pagination getPagination() {
+		return pagination;
 	}
 	
 	
@@ -102,7 +102,7 @@ public class MainSearchParamResolver implements SearchParamResolver {
 				searchParam.setOrder(value);
 				continue;
 			}
-			if (paginationResolver.resolve(searchParam, key, value)) {
+			if (pagination.paginate(searchParam, key, value)) {
 				continue;
 			}
 			String[] fieldSuffix = findFieldAndSuffix(fieldList, key);
@@ -217,8 +217,8 @@ public class MainSearchParamResolver implements SearchParamResolver {
 		this.paramNameSeparator = paramNameSeparator;
 	}
 
-	public void setPaginationResolver(PaginationResolver paginationResolver) {
-		this.paginationResolver = paginationResolver;
+	public void setPagination(Pagination pagination) {
+		this.pagination = pagination;
 	}
 
 	public void setParamFilters(ParamFilter[] paramFilters) {

@@ -7,9 +7,9 @@ import com.ejl.searcher.param.SearchParam;
 
 
 
-public class PageNumPaginationResolver implements PaginationResolver {
+public class PageNumPagination implements Pagination {
 
-	Log log = LogFactory.getLog(PageNumPaginationResolver.class);
+	Log log = LogFactory.getLog(PageNumPagination.class);
 	
 	/**
 	 * 开始页
@@ -28,7 +28,7 @@ public class PageNumPaginationResolver implements PaginationResolver {
 	
 	
 	@Override
-	public boolean resolve(SearchParam searchParam, String paraName, String paraValue) {
+	public boolean paginate(SearchParam searchParam, String paraName, String paraValue) {
 		try {
 			if (maxParamName.equals(paraName)) {
 				Integer max = Integer.valueOf(paraValue);

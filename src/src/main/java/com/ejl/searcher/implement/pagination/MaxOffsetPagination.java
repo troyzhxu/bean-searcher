@@ -6,9 +6,9 @@ import org.apache.commons.logging.LogFactory;
 import com.ejl.searcher.param.SearchParam;
 
 
-public class MaxOffsetPaginationResolver implements PaginationResolver {
+public class MaxOffsetPagination implements Pagination {
 
-	Log log = LogFactory.getLog(PageNumPaginationResolver.class);
+	Log log = LogFactory.getLog(PageNumPagination.class);
 	
 	/**
 	 * 最大条数字段参数名
@@ -22,7 +22,7 @@ public class MaxOffsetPaginationResolver implements PaginationResolver {
 
 	
 	@Override
-	public boolean resolve(SearchParam searchParam, String paraName, String paraValue) {
+	public boolean paginate(SearchParam searchParam, String paraName, String paraValue) {
 		try {
 			if (maxParamName.equals(paraName)) {
 				searchParam.setMax(Integer.valueOf(paraValue));

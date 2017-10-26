@@ -17,7 +17,7 @@ import com.ejl.searcher.Searcher;
 import com.ejl.searcher.SearcherException;
 import com.ejl.searcher.beanmap.SearchBeanMap;
 import com.ejl.searcher.beanmap.SearchBeanMapCache;
-import com.ejl.searcher.implement.pagination.PaginationResolver;
+import com.ejl.searcher.implement.pagination.Pagination;
 import com.ejl.searcher.param.SearchParam;
 
 /***
@@ -59,7 +59,7 @@ public class MainSearcher implements Searcher {
 
 	@Override
 	public <T> T searchFirst(Class<T> beanClass, Map<String, String> paraMap) {
-		paraMap.put(getPaginationResolver().getMaxParamName(), "1");
+		paraMap.put(getPagination().getMaxParamName(), "1");
 		List<T> list = search(beanClass, paraMap, false, true, false).getDataList();
 		if (list.size() > 0) {
 			return list.get(0);
@@ -148,7 +148,7 @@ public class MainSearcher implements Searcher {
 		}
 		result.setMax(max);
 		result.setOffset(offset);
-		int startPage = getPaginationResolver().getStartPage();
+		int startPage = getPagination().getStartPage();
 		Number totalCount = result.getTotalCount();
 		if (max != null && totalCount != null) {
 			long maxLong = max.longValue();
@@ -166,8 +166,8 @@ public class MainSearcher implements Searcher {
 		return result;
 	}
 
-	private PaginationResolver getPaginationResolver() {
-		return searchParamResolver.getPaginationResolver();
+	private Pagination getPagination() {
+		return searchParamResolver.getPagination();
 	}
 	
 	public SearchParamResolver getSearchParamResolver() {

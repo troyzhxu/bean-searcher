@@ -8,7 +8,7 @@ import com.ejl.searcher.param.SearchParam;
  * @author Troy.Zhou
  *
  */
-public interface PaginationResolver {
+public interface Pagination {
 
 	
 	/**
@@ -16,9 +16,9 @@ public interface PaginationResolver {
 	 * @param searchParam
 	 * @param paraName 参数名
 	 * @param paraValue 参数值
-	 * @return true if resolved else false
+	 * @return true if paginated else false
 	 */
-	boolean resolve(SearchParam searchParam, String paraName, String paraValue);
+	boolean paginate(SearchParam searchParam, String paraName, String paraValue);
 	
 	
 	/**
