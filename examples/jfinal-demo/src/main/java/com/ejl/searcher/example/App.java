@@ -1,7 +1,9 @@
 package com.ejl.searcher.example;
 
+import com.ejl.searcher.Searcher;
 import com.ejl.searcher.example.controller.UserController;
 import com.ejl.searcher.support.SearchPlugin;
+import com.ejl.searcher.support.SearchPlugin.SearcherReceiver;
 import com.jfinal.config.Constants;
 import com.jfinal.config.Handlers;
 import com.jfinal.config.Interceptors;
@@ -11,7 +13,7 @@ import com.jfinal.config.Routes;
 import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.template.Engine;
 
-public class App extends JFinalConfig{
+public class App extends JFinalConfig implements SearcherReceiver{
 
 	
 	@Override
@@ -43,6 +45,7 @@ public class App extends JFinalConfig{
 		SearchPlugin searchPlugin = new SearchPlugin(druidPlugin, "com.ejl.searcher.example.bean");
 		
 		searchPlugin.setShowSql(true);
+		searchPlugin.setSearcherReceiver(this);
 		
 		me.add(druidPlugin);
 		
@@ -51,11 +54,20 @@ public class App extends JFinalConfig{
 
 	
 	@Override
+	public void receive(Searcher searcher) {
+		Ioc.put(Searcher.class, searcher);
+	}
+	
+	
+	@Override
 	public void configInterceptor(Interceptors me) {}
 
 	
 	@Override
 	public void configHandler(Handlers me) {}
+
+
+
 
 	
 }

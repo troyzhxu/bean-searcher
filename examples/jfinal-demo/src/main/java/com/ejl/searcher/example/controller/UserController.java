@@ -4,9 +4,9 @@ import java.util.Map;
 
 import com.ejl.searcher.SearchResult;
 import com.ejl.searcher.Searcher;
+import com.ejl.searcher.example.Ioc;
 import com.ejl.searcher.example.bean.StudentCourseBean;
 import com.ejl.searcher.example.bean.UserBean;
-import com.ejl.searcher.support.Ioc;
 import com.ejl.searcher.util.MapUtils;
 import com.jfinal.core.Controller;
 
