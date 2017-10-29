@@ -54,7 +54,7 @@ public class MainSearchParamResolver implements SearchParamResolver {
 	private String ignoreCaseParamNameSuffix = "ic";
 
 	/**
-	 * 忽略大小写参数名后缀
+	 * 过滤运算符参数名后缀
 	 */
 	private String filterOperationParamNameSuffix = "op";
 	
@@ -105,13 +105,15 @@ public class MainSearchParamResolver implements SearchParamResolver {
 			if (pagination.paginate(searchParam, key, value)) {
 				continue;
 			}
-			String[] fieldSuffix = findFieldAndSuffix(fieldList, key);
-			if (fieldSuffix == null || fieldSuffix.length == 0) {
+			RawParam rawParam = resolveRawParam(fieldList, key);
+			if (rawParam == null) {
 				continue;
 			}
-			String field = fieldSuffix[0];
-			String suffix = fieldSuffix.length > 1 ? fieldSuffix[1] : null;
-			if (suffix == null) {
+			String field = rawParam.field;
+			String suffix = rawParam.suffix;
+			if (rawParam.type == RawParam.VERTUAL) {
+				searchParam.putVertualParamValue(key, value);
+			} else if (rawParam.type == RawParam.FEILD) {
 				FilterParam filterParam = findFilterParam(searchParam, key);
 				filterParam.addValue(value);
 				if (filterParam.getOperator() == null) {
@@ -168,19 +170,20 @@ public class MainSearchParamResolver implements SearchParamResolver {
 		return filterParam;
 	}
 	
-	private String[] findFieldAndSuffix(List<String> fieldList, String key) {
+	private RawParam resolveRawParam(List<String> fieldList, String key) {
 		for (String field : fieldList) {
 			if (key.equals(field)) {
-				return new String[]{field};
+				return new RawParam(RawParam.FEILD, field, null);
 			}	
 			if (key.startsWith(field + paramNameSeparator)) {
 				String suffix = key.substring(field.length() + paramNameSeparator.length());
 				if (filterOperationParamNameSuffix.equals(suffix) || ignoreCaseParamNameSuffix.equals(suffix) 
 						|| booleanTrueParamNameSuffix.equals(suffix) || booleanFalseParamNameSuffix.equals(suffix)
 						|| indexSuffixPattern.matcher(suffix).matches()) {
-					return new String[]{field, suffix};
+					return new RawParam(RawParam.OPERATOR, field, suffix);
 				}
 			}
+			return new RawParam(RawParam.VERTUAL, key, null);
 		}
 		return null;
 	}
@@ -224,5 +227,25 @@ public class MainSearchParamResolver implements SearchParamResolver {
 	public void setParamFilters(ParamFilter[] paramFilters) {
 		this.paramFilters = paramFilters;
 	}
+	
+	class RawParam {
+		
+		static final int FEILD = 1;
+		static final int OPERATOR = 2;
+		static final int VERTUAL = 3;
+		
+		int type;
+		String suffix;
+		String field;
+		
+		
+		public RawParam(int type, String field, String suffix) {
+			this.type = type;
+			this.field = field;
+			this.suffix = suffix;
+		}
+		
+	}
+	
 	
 }
