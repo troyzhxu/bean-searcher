@@ -112,7 +112,7 @@ public class MainSearchParamResolver implements SearchParamResolver {
 			String field = rawParam.field;
 			String suffix = rawParam.suffix;
 			if (rawParam.type == RawParam.VERTUAL) {
-				searchParam.putVertualParamValue(key, value);
+				searchParam.putVirtualParam(key, value);
 			} else if (rawParam.type == RawParam.FEILD) {
 				FilterParam filterParam = findFilterParam(searchParam, key);
 				filterParam.addValue(value);

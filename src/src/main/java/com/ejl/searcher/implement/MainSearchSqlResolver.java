@@ -8,11 +8,12 @@ import java.util.regex.Pattern;
 
 import com.ejl.searcher.SearchSql;
 import com.ejl.searcher.SearchSqlResolver;
+import com.ejl.searcher.SearcherException;
 import com.ejl.searcher.beanmap.SearchBeanMap;
 import com.ejl.searcher.dialect.Dialect;
 import com.ejl.searcher.dialect.Dialect.PaginateSql;
-import com.ejl.searcher.param.Operator;
 import com.ejl.searcher.param.FilterParam;
+import com.ejl.searcher.param.Operator;
 import com.ejl.searcher.param.SearchParam;
 import com.ejl.searcher.util.StrUtils;
 
@@ -35,12 +36,20 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 	 */
 	private Dialect dialect;
 
+	private String virtualParamPrefix = ":";
+	
+	
 	@Override
 	public SearchSql resolve(SearchBeanMap searchBeanMap, SearchParam searchParam) {
+		if (!searchBeanMap.isVirtualResolved()) {
+			resolveVirtualParams(searchBeanMap);
+		}
 		List<String> fieldList = searchBeanMap.getFieldList();
 		Map<String, String> fieldDbMap = searchBeanMap.getFieldDbMap();
 		Map<String, String> fieldDbAliasMap = searchBeanMap.getFieldDbAliasMap();
 		Map<String, Class<?>> fieldTypeMap = searchBeanMap.getFieldTypeMap();
+		
+		Map<String, String> virtualParamMap = searchParam.getVirtualParamMap();
 		
 		SearchSql searchSql = new SearchSql();
 		StringBuilder builder = new StringBuilder("select ");
@@ -56,12 +65,24 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 			if (i < fieldCount - 1) {
 				builder.append(", ");
 			}
+			for (String key: searchBeanMap.getFieldVirtualParams(field)) {
+				String sqlParam = virtualParamMap.get(key);
+				searchSql.addListSqlParam(sqlParam);
+				searchSql.addCountSqlParam(sqlParam);
+			}
 			searchSql.addAlias(dbAlias);
 		}
 		String fieldSelectSql = builder.toString();
 
 		builder = new StringBuilder(" from ");
 		builder.append(searchBeanMap.getTalbes());
+		
+		for (String key: searchBeanMap.getTableVirtualParams()) {
+			String sqlParam = virtualParamMap.get(key);
+			searchSql.addListSqlParam(sqlParam);
+			searchSql.addCountSqlParam(sqlParam);
+		}
+		
 		String joinCond = searchBeanMap.getJoinCond();
 		boolean hasJoinCond = joinCond != null && !"".equals(joinCond.trim());
 		List<FilterParam> filterParamList = searchParam.getFilterParamList();
@@ -70,6 +91,11 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 			builder.append(" where ");
 			if (hasJoinCond) {
 				builder.append("(").append(joinCond).append(")");
+				for (String key: searchBeanMap.getJoinCondVirtualParams()) {
+					String sqlParam = virtualParamMap.get(key);
+					searchSql.addListSqlParam(sqlParam);
+					searchSql.addCountSqlParam(sqlParam);
+				}
 			}
 		}
 		for (int i = 0; i < filterParamList.size(); i++) {
@@ -122,6 +148,102 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 		return searchSql;
 	}
 
+	
+	private void resolveVirtualParams(SearchBeanMap searchBeanMap) {
+		
+		VirtualSolution solution = resolveVirtualParams(searchBeanMap.getTalbes());
+		searchBeanMap.setTalbes(solution.getSqlSnippet());
+		searchBeanMap.setTableVirtualParams(solution.getVirtualParams());
+		
+		solution = resolveVirtualParams(searchBeanMap.getJoinCond());
+		searchBeanMap.setJoinCond(solution.getSqlSnippet());
+		searchBeanMap.setJoinCondVirtualParams(solution.getVirtualParams());
+		
+		Map<String, String> fieldDbMap = searchBeanMap.getFieldDbMap();
+		for (String field : searchBeanMap.getFieldList()) {
+			solution = resolveVirtualParams(fieldDbMap.get(field));
+			fieldDbMap.put(field, solution.getSqlSnippet());
+			searchBeanMap.putFieldVirtualParam(field, solution.getVirtualParams());
+		}
+		
+		searchBeanMap.setVirtualResolved(true);
+	}
+
+
+	private VirtualSolution resolveVirtualParams(String sqlSnippet) {
+		VirtualSolution solution = new VirtualSolution();
+		int index1 = sqlSnippet.indexOf(virtualParamPrefix);
+		while (index1 > 0) {
+			int index2 = sqlSnippet.indexOf(" ", index1);
+			if (index2 < 0) 
+				index2 = sqlSnippet.indexOf("+", index1);
+			if (index2 < 0)
+				index2 = sqlSnippet.indexOf("-", index1);
+			if (index2 < 0)
+				index2 = sqlSnippet.indexOf("*", index1);
+			if (index2 < 0)
+				index2 = sqlSnippet.indexOf("/", index1);
+			if (index2 < 0)
+				index2 = sqlSnippet.indexOf("=", index1);
+			if (index2 < 0)
+				index2 = sqlSnippet.indexOf("!", index1);
+			if (index2 < 0)
+				index2 = sqlSnippet.indexOf(">", index1);
+			if (index2 < 0)
+				index2 = sqlSnippet.indexOf("<", index1);
+			if (index2 < 0)
+				index2 = sqlSnippet.indexOf(",", index1);
+			if (index2 < 0)
+				index2 = sqlSnippet.indexOf(")", index1);
+			String virtualParam = null;
+			if (index2 > 0) {
+				virtualParam = sqlSnippet.substring(index1, index2);
+			} else {
+				virtualParam = sqlSnippet.substring(index1);
+			}
+			if (StrUtils.isBlank(virtualParam) || virtualParam.contains(" ") 
+					|| virtualParam.contains("+") || virtualParam.contains("-") 
+					|| virtualParam.contains("*") || virtualParam.contains("/") 
+					|| virtualParam.contains("=") || virtualParam.contains("!") 
+					|| virtualParam.contains(">") || virtualParam.contains("<") 
+					|| virtualParam.contains(",") || virtualParam.contains(")")) {
+				throw new SearcherException("这里有一个语法错误：" + sqlSnippet);
+			}
+			solution.addVirtualParam(virtualParam);
+			sqlSnippet = sqlSnippet.replace(virtualParam, "?");
+			index1 = sqlSnippet.indexOf(virtualParamPrefix);
+		}
+		solution.setSqlSnippet(sqlSnippet);
+		return solution;
+	}
+	
+	
+	class VirtualSolution {
+		
+		String sqlSnippet;
+		List<String> virtualParams = new ArrayList<>();
+
+		public String getSqlSnippet() {
+			return sqlSnippet;
+		}
+
+		public void setSqlSnippet(String sqlSnippet) {
+			this.sqlSnippet = sqlSnippet;
+		}
+
+		public List<String> getVirtualParams() {
+			return virtualParams;
+		}
+
+		public void addVirtualParam(String virtualParam) {
+			this.virtualParams.add(virtualParam);
+		}
+		
+	}
+	
+	
+	
+	
 	private String generateTableAlias(String originalSql) {
 		String tableAlias = "tbl_a_";
 		while (originalSql.contains(tableAlias)) {
@@ -268,4 +390,8 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 		this.dialect = dialect;
 	}
 
+	public void setVirtualParamPrefix(String virtualParamPrefix) {
+		this.virtualParamPrefix = virtualParamPrefix;
+	}
+	
 }

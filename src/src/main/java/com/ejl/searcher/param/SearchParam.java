@@ -42,7 +42,7 @@ public class SearchParam {
 	/**
 	 * 虚拟参数值映射
 	 */
-	private Map<String, String> vertualParamValueMap = new HashMap<>();
+	private Map<String, String> virtualParamMap = new HashMap<>();
 	
 
 	public SearchParam() {
@@ -74,12 +74,12 @@ public class SearchParam {
 		return filterParamList;
 	}
 
-	public Map<String, String> getVertualParamValueMap() {
-		return vertualParamValueMap;
+	public Map<String, String> getVirtualParamMap() {
+		return virtualParamMap;
 	}
 
-	public void putVertualParamValue(String paramName, String paramValue) {
-		this.vertualParamValueMap.put(paramName, paramValue);;
+	public void putVirtualParam(String name, String value) {
+		this.virtualParamMap.put(name, value);;
 	}
 
 	public String getSort() {
