@@ -21,7 +21,7 @@ public interface Searcher {
 	 * @param prefix 检索参数前缀
 	 * @return 总条数，Bean 数据列表
 	 * */
-	public <T> SearchResult<T> search(Class<T> beanClass, Map<String, String> paraMap, String prefix);
+	<T> SearchResult<T> search(Class<T> beanClass, Map<String, String> paraMap, String prefix);
 	
 	/**
 	 * 适合需要分页的查询
@@ -30,7 +30,7 @@ public interface Searcher {
 	 * @param paraMap 检索参数
 	 * @return 总条数，Bean 数据列表
 	 * */
-	public <T> SearchResult<T> search(Class<T> beanClass, Map<String, String> paraMap);
+	<T> SearchResult<T> search(Class<T> beanClass, Map<String, String> paraMap);
 	
 	/**
 	 * @param <T> bean 类型
@@ -39,7 +39,7 @@ public interface Searcher {
 	 * @param prefix 检索参数前缀
 	 * @return 满足条件的第一个Bean 
 	 * */
-	public <T> T searchFirst(Class<T> beanClass, Map<String, String> paraMap, String prefix);
+	<T> T searchFirst(Class<T> beanClass, Map<String, String> paraMap, String prefix);
 	
 	/**
 	 * @param <T> bean 类型
@@ -47,7 +47,7 @@ public interface Searcher {
 	 * @param paraMap 检索参数（包括排序分页参数）
 	 * @return 满足条件的第一个Bean 
 	 * */
-	public <T> T searchFirst(Class<T> beanClass, Map<String, String> paraMap);
+	<T> T searchFirst(Class<T> beanClass, Map<String, String> paraMap);
 	
 	
 	/**
@@ -58,7 +58,7 @@ public interface Searcher {
 	 * @param prefix 检索参数前缀
 	 * @return Bean 数据列表
 	 * */
-	public <T> List<T> searchList(Class<T> beanClass, Map<String, String> paraMap, String prefix);
+	<T> List<T> searchList(Class<T> beanClass, Map<String, String> paraMap, String prefix);
 	
 	/**
 	 * 适合不需要分页的查询
@@ -67,7 +67,7 @@ public interface Searcher {
 	 * @param paraMap 检索参数（包括排序分页参数）
 	 * @return Bean 数据列表
 	 * */
-	public <T> List<T> searchList(Class<T> beanClass, Map<String, String> paraMap);
+	<T> List<T> searchList(Class<T> beanClass, Map<String, String> paraMap);
 	
 	/**
 	 * 检索满足条件的所有Bean，不支持偏移
@@ -77,7 +77,7 @@ public interface Searcher {
 	 * @param prefix 检索参数前缀
 	 * @return Bean 数据列表
 	 * */
-	public <T> List<T> searchAll(Class<T> beanClass, Map<String, String> paraMap, String prefix);
+	<T> List<T> searchAll(Class<T> beanClass, Map<String, String> paraMap, String prefix);
 	
 	/**
 	 * 检索满足条件的所有Bean，不支持偏移
@@ -86,7 +86,7 @@ public interface Searcher {
 	 * @param paraMap 检索参数（包括排序分页参数）
 	 * @return Bean 数据列表
 	 * */
-	public <T> List<T> searchAll(Class<T> beanClass, Map<String, String> paraMap);
+	<T> List<T> searchAll(Class<T> beanClass, Map<String, String> paraMap);
 	
 	
 	/**
@@ -96,7 +96,7 @@ public interface Searcher {
 	 * @param prefix 检索参数前缀
 	 * @return Bean 数据个数
 	 * */
-	public <T> Number searchCount(Class<T> beanClass, Map<String, String> paraMap, String prefix);
+	<T> Number searchCount(Class<T> beanClass, Map<String, String> paraMap, String prefix);
 	
 	/**
 	 * @param <T> bean 类型
@@ -104,7 +104,7 @@ public interface Searcher {
 	 * @param paraMap 检索参数（包括排序分页参数）
 	 * @return Bean 数据个数
 	 * */
-	public <T> Number searchCount(Class<T> beanClass, Map<String, String> paraMap);
+	<T> Number searchCount(Class<T> beanClass, Map<String, String> paraMap);
 	
 	
 }
