@@ -51,6 +51,8 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 		
 		Map<String, String> virtualParamMap = searchParam.getVirtualParamMap();
 		
+		
+		
 		SearchSql searchSql = new SearchSql();
 		StringBuilder builder = new StringBuilder("select ");
 		if (searchBeanMap.isDistinct()) {
@@ -68,7 +70,9 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 			for (String key: searchBeanMap.getFieldVirtualParams(field)) {
 				String sqlParam = virtualParamMap.get(key);
 				searchSql.addListSqlParam(sqlParam);
-				searchSql.addCountSqlParam(sqlParam);
+				if (searchBeanMap.isDistinct()) {
+					searchSql.addCountSqlParam(sqlParam);
+				}
 			}
 			searchSql.addAlias(dbAlias);
 		}
@@ -112,7 +116,16 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 			}
 		}
 		String groupBy = searchBeanMap.getGroupBy();
-		if (groupBy != null && !"".equals(groupBy.trim())) {
+		if (StrUtils.isBlank(groupBy)) {
+			if (searchBeanMap.isDistinct()) {
+				String fromWhereSql = builder.toString();
+				String originalSql = fieldSelectSql + fromWhereSql;
+				String tableAlias = generateTableAlias(fromWhereSql);
+				searchSql.setCountSqlString("select count(1) from (" + originalSql + ") " + tableAlias);
+			} else {
+				searchSql.setCountSqlString("select count(1)" + builder.toString());
+			}
+		} else {
 			builder.append(" group by " + groupBy);
 			String fromWhereSql = builder.toString();
 			String tableAlias = generateTableAlias(fromWhereSql);
@@ -121,15 +134,6 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 				searchSql.setCountSqlString("select count(1) from (" + originalSql + ") " + tableAlias);
 			} else {
 				searchSql.setCountSqlString("select count(1) from (select count(1)" + fromWhereSql + ") " + tableAlias);
-			}
-		} else {
-			if (searchBeanMap.isDistinct()) {
-				String fromWhereSql = builder.toString();
-				String originalSql = fieldSelectSql + fromWhereSql;
-				String tableAlias = generateTableAlias(fromWhereSql);
-				searchSql.setCountSqlString("select count(1) from (" + originalSql + ") " + tableAlias);
-			} else {
-				searchSql.setCountSqlString("select count(1)" + builder.toString());
 			}
 		}
 		String sortDbAlias = fieldDbAliasMap.get(searchParam.getSort());
