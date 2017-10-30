@@ -201,16 +201,16 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 			} else {
 				virtualParam = sqlSnippet.substring(index1);
 			}
-			if (StrUtils.isBlank(virtualParam) || virtualParam.contains(" ") 
-					|| virtualParam.contains("+") || virtualParam.contains("-") 
-					|| virtualParam.contains("*") || virtualParam.contains("/") 
-					|| virtualParam.contains("=") || virtualParam.contains("!") 
-					|| virtualParam.contains(">") || virtualParam.contains("<") 
+			if (StrUtils.isBlank(virtualParam) || virtualParam.length() < 2 || virtualParam.contains(" ") 
+					|| virtualParam.contains("+") || virtualParam.contains("-")
+					|| virtualParam.contains("*") || virtualParam.contains("/")
+					|| virtualParam.contains("=") || virtualParam.contains("!")
+					|| virtualParam.contains(">") || virtualParam.contains("<")
 					|| virtualParam.contains(",") || virtualParam.contains(")")) {
 				throw new SearcherException("这里有一个语法错误：" + sqlSnippet);
 			}
-			solution.addVirtualParam(virtualParam);
 			sqlSnippet = sqlSnippet.replace(virtualParam, "?");
+			solution.addVirtualParam(virtualParam.substring(1));
 			index1 = sqlSnippet.indexOf(virtualParamPrefix);
 		}
 		solution.setSqlSnippet(sqlSnippet);
