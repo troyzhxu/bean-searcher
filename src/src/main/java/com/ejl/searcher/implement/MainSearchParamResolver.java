@@ -106,11 +106,6 @@ public class MainSearchParamResolver implements SearchParamResolver {
 				continue;
 			}
 			RawParam rawParam = resolveRawParam(fieldList, key);
-			if (rawParam == null) {
-				continue;
-			}
-			String field = rawParam.field;
-			String suffix = rawParam.suffix;
 			if (rawParam.type == RawParam.VERTUAL) {
 				searchParam.putVirtualParam(key, value);
 			} else if (rawParam.type == RawParam.FEILD) {
@@ -119,16 +114,16 @@ public class MainSearchParamResolver implements SearchParamResolver {
 				if (filterParam.getOperator() == null) {
 					filterParam.setOperator(Operator.Equal);
 				}
-			} else if (booleanTrueParamNameSuffix.equals(suffix)) {
-				FilterParam filterParam = findFilterParam(searchParam, field);
+			} else if (booleanTrueParamNameSuffix.equals(rawParam.suffix)) {
+				FilterParam filterParam = findFilterParam(searchParam, rawParam.field);
 				filterParam.setOperator(Operator.Equal);
 				filterParam.addValue("1");
-			} else if (booleanFalseParamNameSuffix.equals(suffix)) {
-				FilterParam filterParam = findFilterParam(searchParam, field);
+			} else if (booleanFalseParamNameSuffix.equals(rawParam.suffix)) {
+				FilterParam filterParam = findFilterParam(searchParam, rawParam.field);
 				filterParam.setOperator(Operator.Equal);
 				filterParam.addValue("0");
-			} else if (ignoreCaseParamNameSuffix.equals(suffix)) {
-				FilterParam filterParam = findFilterParam(searchParam, field);
+			} else if (ignoreCaseParamNameSuffix.equals(rawParam.suffix)) {
+				FilterParam filterParam = findFilterParam(searchParam, rawParam.field);
 				String upVal = value != null ? value.toUpperCase() : value;
 				if ("0".equals(upVal) || "OFF".equals(upVal) || "FALSE".endsWith(upVal) || "N".endsWith(upVal)
 						|| "NO".endsWith(upVal) || "F".endsWith(upVal)) {
@@ -136,13 +131,13 @@ public class MainSearchParamResolver implements SearchParamResolver {
 				} else {
 					filterParam.setIgnoreCase(true);
 				}
-			} else if (filterOperationParamNameSuffix.equals(suffix)) {
-				FilterParam filterParam = findFilterParam(searchParam, field);
+			} else if (filterOperationParamNameSuffix.equals(rawParam.suffix)) {
+				FilterParam filterParam = findFilterParam(searchParam, rawParam.field);
 				filterParam.setOperator(Operator.from(value));
 			} else {	// 多值解析
 				try {
-					int index = Integer.parseInt(suffix);
-					FilterParam filterParam = findFilterParam(searchParam, field);
+					int index = Integer.parseInt(rawParam.suffix);
+					FilterParam filterParam = findFilterParam(searchParam, rawParam.field);
 					filterParam.addValue(value, index);
 				} catch (NumberFormatException e) {
 					log.error("不能解析的查询参数名：" + key, e);
