@@ -183,9 +183,8 @@ public class MainSearchParamResolver implements SearchParamResolver {
 					return new RawParam(RawParam.OPERATOR, field, suffix);
 				}
 			}
-			return new RawParam(RawParam.VERTUAL, key, null);
 		}
-		return null;
+		return new RawParam(RawParam.VERTUAL, key, null);
 	}
 
 	public void setDefaultMax(Integer defaultMax) {
