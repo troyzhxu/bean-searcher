@@ -9,7 +9,7 @@
 	
 	<name>bean-searcher</name>
 	<description>面向结果与条件的数据库检索器</description>
-	<url>https://github.com/ejlchina/bean-searcher</url>
+	<url>https://gitee.com/ejl/bean-searcher</url>
 	
 	<properties>
 		<java-version>1.7</java-version>
@@ -34,10 +34,10 @@
 	</developers>
 	
 	<scm>
-		<connection>scm:git:https://github.com/ejlchina/bean-searcher.git</connection>
-		<developerConnection>scm:git:https://github.com/ejlchina/bean-searcher.git</developerConnection>
-		<url>https://github.com/ejlchina/bean-searcher</url>
-		<tag>v1.2.0</tag>
+		<connection>scm:git:https://gitee.com/ejl/bean-searcher.git</connection>
+		<developerConnection>scm:git:https://gitee.com/ejl/bean-searcher.git</developerConnection>
+		<url>https://gitee.com/ejl/bean-searcher</url>
+		<tag>v1.3.0</tag>
 	</scm>
 
 	<dependencies>
