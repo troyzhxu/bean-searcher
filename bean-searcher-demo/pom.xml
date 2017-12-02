@@ -3,7 +3,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.ejlchina</groupId>
-	<artifactId>spring-demo</artifactId>
+	<artifactId>bean-searcher-demo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
   
   	<packaging>war</packaging>
