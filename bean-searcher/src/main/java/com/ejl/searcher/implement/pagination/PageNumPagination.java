@@ -27,11 +27,20 @@ public class PageNumPagination implements Pagination {
 	private String pageParamName = "page";
 	
 	
+	/**
+	 * 最大允许查询条数
+	 */
+	private int maxAllowedSize = 100;
+	
+	
 	@Override
 	public boolean paginate(SearchParam searchParam, String paraName, String paraValue) {
 		try {
 			if (maxParamName.equals(paraName)) {
 				Integer max = Integer.valueOf(paraValue);
+				if (max > maxAllowedSize) {
+					max = maxAllowedSize;
+				}
 				searchParam.setMax(max);
 				Long page = searchParam.getPage();
 				if (page == null) {
@@ -87,5 +96,8 @@ public class PageNumPagination implements Pagination {
 		this.startPage = startPage;
 	}
 
+	public void setMaxAllowedSize(int maxAllowedSize) {
+		this.maxAllowedSize = maxAllowedSize;
+	}
 
 }

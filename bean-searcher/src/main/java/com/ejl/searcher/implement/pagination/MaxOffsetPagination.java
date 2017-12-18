@@ -21,11 +21,21 @@ public class MaxOffsetPagination implements Pagination {
 	private String offsetParamName = "offset";
 
 	
+	/**
+	 * 最大允许查询条数
+	 */
+	private int maxAllowedSize = 100;
+	
+	
 	@Override
 	public boolean paginate(SearchParam searchParam, String paraName, String paraValue) {
 		try {
 			if (maxParamName.equals(paraName)) {
-				searchParam.setMax(Integer.valueOf(paraValue));
+				Integer max = Integer.valueOf(paraValue);
+				if (max > maxAllowedSize) {
+					max = maxAllowedSize;
+				}
+				searchParam.setMax(max);
 				return true;
 			}
 			if (offsetParamName.equals(paraName)) {
@@ -60,6 +70,10 @@ public class MaxOffsetPagination implements Pagination {
 
 	public void setOffsetParamName(String offsetParamName) {
 		this.offsetParamName = offsetParamName;
+	}
+
+	public void setMaxAllowedSize(int maxAllowedSize) {
+		this.maxAllowedSize = maxAllowedSize;
 	}
 
 }
