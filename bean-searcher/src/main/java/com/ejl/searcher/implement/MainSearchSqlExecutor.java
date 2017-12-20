@@ -28,9 +28,10 @@ import com.ejl.searcher.SearcherException;
  */
 public class MainSearchSqlExecutor implements SearchSqlExecutor {
 
-	Log log = LogFactory.getLog(MainSearchSqlExecutor.class);
+	protected Log log = LogFactory.getLog(MainSearchSqlExecutor.class);
 	
 	private boolean showSql = false;
+	private boolean logInConsole = true;
 
 	private DataSource dataSource;
 
@@ -74,8 +75,8 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 		try {
 			if (searchSql.isShouldQueryList()) {
 				if (showSql) {
-					log.info("bean-searcher - sql ---- " + searchSql.getListSqlString());
-					log.info("bean-searcher - params - "
+					doLog("sql ---- " + searchSql.getListSqlString());
+					doLog("params - "
 							+ Arrays.toString(searchSql.getListSqlParams().toArray()));
 				}
 				listStatement = connection.prepareStatement(searchSql.getListSqlString());
@@ -87,8 +88,8 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 			}
 			if (searchSql.isShouldQueryTotal()) {
 				if (showSql) {
-					log.info("bean-searcher - sql ---- " + searchSql.getCountSqlString());
-					log.info("bean-searcher - params - "
+					doLog("sql ---- " + searchSql.getCountSqlString());
+					doLog("params - "
 							+ Arrays.toString(searchSql.getCountSqlParams().toArray()));
 				}
 				countStatement = connection.prepareStatement(searchSql.getCountSqlString());
@@ -147,4 +148,21 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 		this.showSql = showSql;
 	}
 
+	public void setLogInConsole(boolean logInConsole) {
+		this.logInConsole = logInConsole;
+	}
+
+	protected void doLog(String content) {
+		content = "bean-searcher - " + content;
+		if (logInConsole) {
+			System.out.println(content);
+		} else {
+			log.info(content);
+		}
+	}
+
+	public void setLog(Log log) {
+		this.log = log;
+	}
+	
 }
