@@ -19,6 +19,8 @@ public class SpringSearcher extends MainSearcher implements InitializingBean, Di
 	private String scanJar;
 	private String scanPackage;
 
+	private SearcherStarter searcherStarter;
+	
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		SearcherBuilder.builder()
@@ -31,16 +33,19 @@ public class SpringSearcher extends MainSearcher implements InitializingBean, Di
 		if (scanPackage == null) {
 			throw new SearcherException("SearchPlugin： scanPackage 不能为 空！");
 		}
+		if (searcherStarter == null) {
+			searcherStarter = new SearcherStarter();
+		}
 		if (scanJar != null) {
-			SearcherStarter.starter().start(scanJar, scanPackage);
+			searcherStarter.start(scanJar, scanPackage);
 		} else {
-			SearcherStarter.starter().start(scanPackage);
+			searcherStarter.start(scanPackage);
 		}
 	}
 
 	@Override
 	public void destroy() throws Exception {
-		SearcherStarter.starter().shutdown();
+		searcherStarter.shutdown();
 	}
 
 	public void setScanJar(String scanJar) {
@@ -49,6 +54,10 @@ public class SpringSearcher extends MainSearcher implements InitializingBean, Di
 
 	public void setScanPackage(String scanPackage) {
 		this.scanPackage = scanPackage;
+	}
+
+	public void setSearcherStarter(SearcherStarter searcherStarter) {
+		this.searcherStarter = searcherStarter;
 	}
 	
 }

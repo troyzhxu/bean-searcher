@@ -51,12 +51,11 @@ public class SearchPlugin implements IPlugin {
 	
 	private IDataSourceProvider dataSourceProvider;
 
-	
 	private SearcherReceiver searcherReceiver;
 	
 	private SearcherConfiger searcherConfiger;
 	
-	private SearcherStarter starter = SearcherStarter.starter();
+	private SearcherStarter searcherStarter;
 	
 	/**
 	 * @param scanPackage 存放bean的package
@@ -96,16 +95,19 @@ public class SearchPlugin implements IPlugin {
 			throw new SearcherException("You must config a SearcherReceiver for SearchPlugin!");
 		}
 		searcherReceiver.receive(builder.build());
+		if (searcherStarter == null) {
+			searcherStarter = new SearcherStarter();
+		}
 		if (scanJar != null) {
-			return starter.start(scanJar, scanPackage);
+			return searcherStarter.start(scanJar, scanPackage);
 		} else {
-			return starter.start(scanPackage);
+			return searcherStarter.start(scanPackage);
 		}
 	}
 
 	@Override
 	public boolean stop() {
-		starter.shutdown();
+		searcherStarter.shutdown();
 		return true;
 	}
 
@@ -119,6 +121,10 @@ public class SearchPlugin implements IPlugin {
 
 	public void setSearcherConfiger(SearcherConfiger searcherConfiger) {
 		this.searcherConfiger = searcherConfiger;
+	}
+
+	public void setSearcherStarter(SearcherStarter searcherStarter) {
+		this.searcherStarter = searcherStarter;
 	}
 	
 }

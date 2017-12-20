@@ -19,24 +19,32 @@ import com.ejl.searcher.util.StrUtils;
  */
 public class SearcherStarter {
 
-	private static SearcherStarter starter = new SearcherStarter();
-
-	/**
-	 * 获取一个检索启动器
-	 * @return 启动器实例
-	 */
-	public static SearcherStarter starter() {
-		return starter;
+	
+	interface RootClassPathProvider {
+		
+		/**
+		 * 获取存放classes的根路径
+		 * @return
+		 */
+		String getRootClassPath();
+		
 	}
+	
+	private RootClassPathProvider rootClassPathProvider = new RootClassPathProvider() {
 
-
+		@Override
+		public String getRootClassPath() {
+			return SearcherStarter.class.getClassLoader().getResource("").getPath();
+		}
+		
+	};
+	
 	/**
 	 * @param packageName 可检索 Bean 所在的 package，可检索 Bean 是被 @SearchBean 注解的 Bean
 	 * @return true if start successfully, else return false
 	 */
 	public boolean start(String packageName) {
-		String baseDir = SearcherStarter.class.getClassLoader()
-				.getResource("").getPath();
+		String baseDir = rootClassPathProvider.getRootClassPath();
 		List<Class<?>> classList = ClassScanner.scan(baseDir, packageName);
 		return startWithBeanClassList(classList);
 	}
@@ -49,8 +57,7 @@ public class SearcherStarter {
 	 * @return true if start successfully, else return false
 	 */
 	public boolean start(String jarName, String packageName) {
-		String baseDir = SearcherStarter.class.getClassLoader()
-				.getResource("").getPath();
+		String baseDir = rootClassPathProvider.getRootClassPath();
 		baseDir = baseDir.substring(0, baseDir.length() - 8) + "lib/";
 		List<Class<?>> classList = ClassScanner.scan(baseDir, jarName, packageName);
 		return startWithBeanClassList(classList);
@@ -62,8 +69,9 @@ public class SearcherStarter {
 	public void shutdown() {
 		SearchBeanMapCache.sharedCache().clear();
 	}
-
-	private boolean startWithBeanClassList(List<Class<?>> beanClassList) {
+	
+	
+	protected boolean startWithBeanClassList(List<Class<?>> beanClassList) {
 		SearchBeanMapCache searchBeanMapCache = SearchBeanMapCache.sharedCache();
 		for (Class<?> beanClass : beanClassList) {
 			SearchBean searchBean = beanClass.getAnnotation(SearchBean.class);
@@ -96,4 +104,9 @@ public class SearcherStarter {
 		return true;
 	}
 
+	
+	public void setRootClassPathProvider(RootClassPathProvider rootClassPathProvider) {
+		this.rootClassPathProvider = rootClassPathProvider;
+	}
+	
 }
