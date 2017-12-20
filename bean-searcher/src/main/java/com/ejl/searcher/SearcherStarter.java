@@ -20,20 +20,20 @@ import com.ejl.searcher.util.StrUtils;
 public class SearcherStarter {
 
 	
-	public static interface RootClassPathProvider {
+	public static interface ClassPathProvider {
 		
 		/**
 		 * 获取存放classes的根路径
 		 * @return
 		 */
-		String getRootClassPath();
+		String getClassPath();
 		
 	}
 	
-	private RootClassPathProvider rootClassPathProvider = new RootClassPathProvider() {
+	private ClassPathProvider classPathProvider = new ClassPathProvider() {
 
 		@Override
-		public String getRootClassPath() {
+		public String getClassPath() {
 			return SearcherStarter.class.getClassLoader().getResource("").getPath();
 		}
 		
@@ -44,7 +44,7 @@ public class SearcherStarter {
 	 * @return true if start successfully, else return false
 	 */
 	public boolean start(String packageName) {
-		String baseDir = rootClassPathProvider.getRootClassPath();
+		String baseDir = classPathProvider.getClassPath();
 		List<Class<?>> classList = ClassScanner.scan(baseDir, packageName);
 		return startWithBeanClassList(classList);
 	}
@@ -57,7 +57,7 @@ public class SearcherStarter {
 	 * @return true if start successfully, else return false
 	 */
 	public boolean start(String jarName, String packageName) {
-		String baseDir = rootClassPathProvider.getRootClassPath();
+		String baseDir = classPathProvider.getClassPath();
 		baseDir = baseDir.substring(0, baseDir.length() - 8) + "lib/";
 		List<Class<?>> classList = ClassScanner.scan(baseDir, jarName, packageName);
 		return startWithBeanClassList(classList);
@@ -105,8 +105,8 @@ public class SearcherStarter {
 	}
 
 	
-	public void setRootClassPathProvider(RootClassPathProvider rootClassPathProvider) {
-		this.rootClassPathProvider = rootClassPathProvider;
+	public void setClassPathProvider(ClassPathProvider classPathProvider) {
+		this.classPathProvider = classPathProvider;
 	}
 	
 }
