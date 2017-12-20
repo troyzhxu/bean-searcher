@@ -48,7 +48,7 @@ public class ClassScanner {
         List<Class<?>> classList = new ArrayList<>();
         List<File> classFileList = FileScanner.findFiles(fullPath, "*.class");
         for (File classFile : classFileList) {
-            String className = className(classFile, "/classes");
+            String className = className(classFile, baseDir);
             try {
                 classList.add(Class.forName(className));
             } catch (ClassNotFoundException e) {
@@ -84,11 +84,9 @@ public class ClassScanner {
     }
     
 	 
-    private static String className(File classFile, String pre) {
-        String objStr = classFile.toString().replaceAll("\\\\", "/");
-        String className;
-        className = objStr.substring(objStr.indexOf(pre) + pre.length(),
-                objStr.indexOf(".class"));
+    private static String className(File classFile, String classRootPath) {
+        String filePath = classFile.getPath().replaceAll("\\\\", "/");
+        String className = filePath.substring(classRootPath.length() - 1, filePath.indexOf(".class"));
         if (className.startsWith("/")) {
             className = className.substring(className.indexOf("/") + 1);
         }
