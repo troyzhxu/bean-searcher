@@ -20,7 +20,7 @@ import com.ejl.searcher.util.StrUtils;
 public class SearcherStarter {
 
 	
-	interface RootClassPathProvider {
+	public static interface RootClassPathProvider {
 		
 		/**
 		 * 获取存放classes的根路径
