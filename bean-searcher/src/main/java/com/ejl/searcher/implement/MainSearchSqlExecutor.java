@@ -31,7 +31,7 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 	protected Log log = LogFactory.getLog(MainSearchSqlExecutor.class);
 	
 	private boolean showSql = false;
-	private boolean logInConsole = true;
+	private boolean logInConsole = false;
 
 	private DataSource dataSource;
 
