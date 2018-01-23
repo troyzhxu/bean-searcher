@@ -32,14 +32,14 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 	protected Logger log = LoggerFactory.getLogger(MainSearchSqlExecutor.class);
 	
 	
-	private boolean showSql = false;
-
 	private DataSource dataSource;
 
+	
 	public MainSearchSqlExecutor() {
 		super();
 	}
 
+	
 	public MainSearchSqlExecutor(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
@@ -75,11 +75,8 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 		ResultSet countResultSet = null;
 		try {
 			if (searchSql.isShouldQueryList()) {
-				if (showSql) {
-					doLog("sql ---- " + searchSql.getListSqlString());
-					doLog("params - "
-							+ Arrays.toString(searchSql.getListSqlParams().toArray()));
-				}
+				doLog("sql ---- " + searchSql.getListSqlString());
+				doLog("params - " + Arrays.toString(searchSql.getListSqlParams().toArray()));
 				listStatement = connection.prepareStatement(searchSql.getListSqlString());
 				fillParamsTntoStatement(listStatement, searchSql.getListSqlParams());
 				listResultSet = listStatement.executeQuery();
@@ -88,11 +85,8 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 				}
 			}
 			if (searchSql.isShouldQueryTotal()) {
-				if (showSql) {
-					doLog("sql ---- " + searchSql.getCountSqlString());
-					doLog("params - "
-							+ Arrays.toString(searchSql.getCountSqlParams().toArray()));
-				}
+				doLog("sql ---- " + searchSql.getCountSqlString());
+				doLog("params - " + Arrays.toString(searchSql.getCountSqlParams().toArray()));
 				countStatement = connection.prepareStatement(searchSql.getCountSqlString());
 				fillParamsTntoStatement(countStatement, searchSql.getCountSqlParams());
 				countResultSet = countStatement.executeQuery();
@@ -145,13 +139,8 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 		}
 	}
 
-	public void setShowSql(boolean showSql) {
-		this.showSql = showSql;
-	}
-
 	protected void doLog(String content) {
-		content = "bean-searcher - " + content;
-		log.info(content);
+		log.info("bean-searcher - " + content);
 	}
 	
 }

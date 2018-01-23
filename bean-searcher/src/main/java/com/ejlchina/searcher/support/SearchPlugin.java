@@ -46,8 +46,6 @@ public class SearchPlugin implements IPlugin {
 	
 	private String[] scanPackages;
 	
-	private boolean showSql;
-	
 	private IDataSourceProvider dataSourceProvider;
 
 	private SearcherReceiver searcherReceiver;
@@ -76,10 +74,8 @@ public class SearchPlugin implements IPlugin {
 			throw new SearcherException("Can not get DataSource from IDataSourceProvider, "
 					+ "please confirm IDataSourceProvider is in front of SearchPlugin");
 		}
-		MainSearchSqlExecutor searchSqlExecutor = new MainSearchSqlExecutor(dataSource);
-		searchSqlExecutor.setShowSql(showSql);
 		SearcherBuilder builder = SearcherBuilder.builder();
-		builder.configSearchSqlExecutor(searchSqlExecutor);
+		builder.configSearchSqlExecutor(new MainSearchSqlExecutor(dataSource));
 		if (searcherConfiger != null) {
 			searcherConfiger.config(builder);
 		}
@@ -97,10 +93,6 @@ public class SearchPlugin implements IPlugin {
 	public boolean stop() {
 		searcherStarter.shutdown();
 		return true;
-	}
-
-	public void setShowSql(boolean showSql) {
-		this.showSql = showSql;
 	}
 
 	public void setSearcherReceiver(SearcherReceiver searcherReceiver) {
