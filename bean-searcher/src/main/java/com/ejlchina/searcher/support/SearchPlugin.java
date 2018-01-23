@@ -44,8 +44,7 @@ public class SearchPlugin implements IPlugin {
 	}
 	
 	
-	private String scanJar;
-	private String scanPackage;
+	private String[] scanPackages;
 	
 	private boolean showSql;
 	
@@ -57,27 +56,21 @@ public class SearchPlugin implements IPlugin {
 	
 	private SearcherStarter searcherStarter;
 	
-	/**
-	 * @param scanPackage 存放bean的package
-	 */
-	public SearchPlugin(IDataSourceProvider dataSourceProvider, String scanPackage) {
-		this(dataSourceProvider, null, scanPackage);
-	}
 
 	/**
 	 * @param scanJar bean所在的jar名称
 	 * @param scanPackage 存放bean的package
 	 */
-	public SearchPlugin(IDataSourceProvider dataSourceProvider, String scanJar, String scanPackage) {
-		this.scanJar = scanJar;
-		this.scanPackage = scanPackage;
+	public SearchPlugin(IDataSourceProvider dataSourceProvider, String... scanPackage) {
+		this.scanPackages = scanPackage;
 		this.dataSourceProvider = dataSourceProvider;
 	}
 
+	
 	@Override
 	public boolean start() {
-		if (scanPackage == null) {
-			throw new SearcherException("SearchPlugin： scanPackage 不能为 空！");
+		if (scanPackages == null || scanPackages.length == 0) {
+			throw new SearcherException("SearchPlugin： scanPackages 不能为 空！");
 		}
 		DataSource dataSource = dataSourceProvider.getDataSource();
 		if (dataSource == null) {
@@ -98,11 +91,7 @@ public class SearchPlugin implements IPlugin {
 		if (searcherStarter == null) {
 			searcherStarter = new SearcherStarter();
 		}
-		if (scanJar != null) {
-			return searcherStarter.start(scanJar, scanPackage);
-		} else {
-			return searcherStarter.start(scanPackage);
-		}
+		return searcherStarter.start(scanPackages);
 	}
 
 	@Override

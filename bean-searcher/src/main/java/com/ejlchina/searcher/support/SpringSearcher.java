@@ -16,8 +16,8 @@ import com.ejlchina.searcher.implement.MainSearcher;
  */
 public class SpringSearcher extends MainSearcher implements InitializingBean, DisposableBean {
 
-	private String scanJar;
-	private String scanPackage;
+
+	private String[] scanPackages;
 
 	private SearcherStarter searcherStarter;
 	
@@ -30,30 +30,23 @@ public class SpringSearcher extends MainSearcher implements InitializingBean, Di
 				.configSearchSqlResolver(getSearchSqlResolver())
 				.configPrifexSeparatorLength(getPrifexSeparatorLength())
 				.build(this);
-		if (scanPackage == null) {
-			throw new SearcherException("SearchPlugin： scanPackage 不能为 空！");
+		if (scanPackages == null || scanPackages.length == 0) {
+			throw new SearcherException("SpringSearcher： scanPackage 不能为 空！");
 		}
 		if (searcherStarter == null) {
 			searcherStarter = new SearcherStarter();
 		}
-		if (scanJar != null) {
-			searcherStarter.start(scanJar, scanPackage);
-		} else {
-			searcherStarter.start(scanPackage);
-		}
+		searcherStarter.start(scanPackages);
 	}
 
 	@Override
 	public void destroy() throws Exception {
 		searcherStarter.shutdown();
 	}
+	
 
-	public void setScanJar(String scanJar) {
-		this.scanJar = scanJar;
-	}
-
-	public void setScanPackage(String scanPackage) {
-		this.scanPackage = scanPackage;
+	public void setScanPackages(String[] scanPackages) {
+		this.scanPackages = scanPackages;
 	}
 
 	public void setSearcherStarter(SearcherStarter searcherStarter) {
