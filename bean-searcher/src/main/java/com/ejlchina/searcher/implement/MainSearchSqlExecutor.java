@@ -11,8 +11,8 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.ejlchina.searcher.SearchSql;
 import com.ejlchina.searcher.SearchSqlExecutor;
@@ -28,10 +28,11 @@ import com.ejlchina.searcher.SearcherException;
  */
 public class MainSearchSqlExecutor implements SearchSqlExecutor {
 
-	protected Log log = LogFactory.getLog(MainSearchSqlExecutor.class);
+
+	protected Logger log = LoggerFactory.getLogger(MainSearchSqlExecutor.class);
+	
 	
 	private boolean showSql = false;
-	private boolean logInConsole = false;
 
 	private DataSource dataSource;
 
@@ -148,21 +149,9 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 		this.showSql = showSql;
 	}
 
-	public void setLogInConsole(boolean logInConsole) {
-		this.logInConsole = logInConsole;
-	}
-
 	protected void doLog(String content) {
 		content = "bean-searcher - " + content;
-		if (logInConsole) {
-			System.out.println(content);
-		} else {
-			log.info(content);
-		}
-	}
-
-	public void setLog(Log log) {
-		this.log = log;
+		log.info(content);
 	}
 	
 }

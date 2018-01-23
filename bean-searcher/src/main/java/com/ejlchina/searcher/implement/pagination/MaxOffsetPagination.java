@@ -1,14 +1,16 @@
 package com.ejlchina.searcher.implement.pagination;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.ejlchina.searcher.param.SearchParam;
 
 
 public class MaxOffsetPagination implements Pagination {
 
-	Log log = LogFactory.getLog(PageNumPagination.class);
+
+	protected Logger log = LoggerFactory.getLogger(MaxOffsetPagination.class);
 	
 	/**
 	 * 最大条数字段参数名

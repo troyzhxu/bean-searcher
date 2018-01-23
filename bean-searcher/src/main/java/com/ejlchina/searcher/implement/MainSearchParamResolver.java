@@ -3,11 +3,11 @@ package com.ejlchina.searcher.implement;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.regex.Pattern;
 import java.util.Set;
+import java.util.regex.Pattern;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.ejlchina.searcher.SearchParamResolver;
 import com.ejlchina.searcher.implement.pagination.MaxOffsetPagination;
@@ -25,7 +25,9 @@ import com.ejlchina.searcher.param.SearchParam;
  */
 public class MainSearchParamResolver implements SearchParamResolver {
 
-	Log log = LogFactory.getLog(MainSearchParamResolver.class);
+
+	protected Logger log = LoggerFactory.getLogger(MainSearchParamResolver.class);
+	
 	
 	/**
 	 * 默认最大条数

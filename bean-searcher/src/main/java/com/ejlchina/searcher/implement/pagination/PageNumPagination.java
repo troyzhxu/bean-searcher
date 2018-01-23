@@ -1,7 +1,7 @@
 package com.ejlchina.searcher.implement.pagination;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.ejlchina.searcher.param.SearchParam;
 
@@ -9,7 +9,9 @@ import com.ejlchina.searcher.param.SearchParam;
 
 public class PageNumPagination implements Pagination {
 
-	Log log = LogFactory.getLog(PageNumPagination.class);
+	
+	protected Logger log = LoggerFactory.getLogger(PageNumPagination.class);
+	
 	
 	/**
 	 * 开始页
