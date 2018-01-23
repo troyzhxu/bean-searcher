@@ -15,7 +15,7 @@ import com.ejlchina.searcher.dialect.Dialect.PaginateSql;
 import com.ejlchina.searcher.param.FilterParam;
 import com.ejlchina.searcher.param.Operator;
 import com.ejlchina.searcher.param.SearchParam;
-import com.ejlchina.searcher.util.StrUtils;
+import com.ejlchina.searcher.util.StringUtils;
 
 /**
  * 默认查询SQL解析器
@@ -116,7 +116,7 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 			}
 		}
 		String groupBy = searchBeanMap.getGroupBy();
-		if (StrUtils.isBlank(groupBy)) {
+		if (StringUtils.isBlank(groupBy)) {
 			if (searchBeanMap.isDistinct()) {
 				String fromWhereSql = builder.toString();
 				String originalSql = fieldSelectSql + fromWhereSql;
@@ -205,7 +205,7 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 			} else {
 				virtualParam = sqlSnippet.substring(index1);
 			}
-			if (StrUtils.isBlank(virtualParam) || virtualParam.length() < 2 || virtualParam.contains(" ") 
+			if (StringUtils.isBlank(virtualParam) || virtualParam.length() < 2 || virtualParam.contains(" ") 
 					|| virtualParam.contains("+") || virtualParam.contains("-")
 					|| virtualParam.contains("*") || virtualParam.contains("/")
 					|| virtualParam.contains("=") || virtualParam.contains("!")
@@ -332,10 +332,10 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 		case Between:
 			boolean val1Null = false;
 			boolean val2Null = false;
-			if (values[0] == null || StrUtils.isBlank(values[0])) {
+			if (values[0] == null || StringUtils.isBlank(values[0])) {
 				val1Null = true;
 			}
-			if (values[1] == null || StrUtils.isBlank(values[1])) {
+			if (values[1] == null || StringUtils.isBlank(values[1])) {
 				val2Null = true;
 			}
 			if (!val1Null && !val2Null) {

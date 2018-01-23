@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import com.ejlchina.searcher.util.StrUtils;
+import com.ejlchina.searcher.util.StringUtils;
 
 /**
  * 过滤检索参数
@@ -73,7 +73,7 @@ public class FilterParam {
 
 	public boolean allValuesEmpty() {
 		for (Value value : values) {
-			if (!StrUtils.isBlank(value.value)) {
+			if (!StringUtils.isBlank(value.value)) {
 				return false;
 			}
 		}
@@ -82,7 +82,7 @@ public class FilterParam {
 
 	public String firstNotNullValue() {
 		for (Value value : values) {
-			if (!StrUtils.isBlank(value.value)) {
+			if (!StringUtils.isBlank(value.value)) {
 				return value.value;
 			}
 		}
