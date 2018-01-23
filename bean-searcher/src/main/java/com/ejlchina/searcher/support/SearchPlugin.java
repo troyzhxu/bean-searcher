@@ -58,11 +58,10 @@ public class SearchPlugin implements IPlugin {
 	
 
 	/**
-	 * @param scanJar bean所在的jar名称
-	 * @param scanPackage 存放bean的package
+	 * @param scanPackages 存放bean的package
 	 */
-	public SearchPlugin(IDataSourceProvider dataSourceProvider, String... scanPackage) {
-		this.scanPackages = scanPackage;
+	public SearchPlugin(IDataSourceProvider dataSourceProvider, String... scanPackages) {
+		this.scanPackages = scanPackages;
 		this.dataSourceProvider = dataSourceProvider;
 	}
 
