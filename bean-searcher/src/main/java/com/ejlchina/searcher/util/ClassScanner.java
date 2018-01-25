@@ -16,6 +16,8 @@ import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.core.type.filter.TypeFilter;
 import org.springframework.util.SystemPropertyUtils;
 
+import com.ejlchina.searcher.SearcherException;
+
 
 public class ClassScanner {
   
@@ -57,29 +59,29 @@ public class ClassScanner {
                     + org.springframework.util.ClassUtils  
                             .convertClassNameToResourcePath(SystemPropertyUtils  
                                     .resolvePlaceholders(basePackage))  
-                    + "/**/*.class";  
+                    + "/**/*.class";
             Resource[] resources = this.resourcePatternResolver  
                     .getResources(packageSearchPath);  
   
             for (int i = 0; i < resources.length; i++) {  
                 Resource resource = resources[i];  
                 if (resource.isReadable()) {  
-                    MetadataReader metadataReader = this.metadataReaderFactory  
-                            .getMetadataReader(resource);  
+                    MetadataReader metadataReader = this.metadataReaderFactory
+                    		.getMetadataReader(resource);  
                     if (includeFilters == null || matches(includeFilters, metadataReader)) {
+                    	String className = metadataReader.getClassMetadata().getClassName();
                         try {
-                            classes.add(Class.forName(metadataReader  
-                                    .getClassMetadata().getClassName()));  
-                        } catch (ClassNotFoundException e) {  
-                            e.printStackTrace();  
+							classes.add(Class.forName(className));  
+                        } catch (ClassNotFoundException e) {
+                            throw new SearcherException("加载类【" + className + "】失败：", e);
                         }
-                    }  
-                }  
-            }  
+                    }
+                }
+            }
         } catch (IOException ex) {  
             throw new BeanDefinitionStoreException(  
                     "I/O failure during classpath scanning", ex);  
-        }  
+        }
         return classes;  
     }  
   
