@@ -1,19 +1,19 @@
-# bean-searcher
+# Bean Searcher
 
-#### Gradle
+### Install 
+
+##### Gradle
 
 ```
-
 dependencies {
     compile 'com.ejlchina:bean-searcher:1.3.1'
 }
 
 ```
 
-#### Maven
+##### Maven
 
 ```
-
 <dependencies>
 	<dependency>
 		<groupId>com.ejlchina</groupId>
@@ -21,7 +21,6 @@ dependencies {
 		<version>1.3.1</version>
 	</dependency>
 </dependencies>
-
 ```
 
 
