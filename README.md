@@ -131,23 +131,18 @@ public class UserController {
 			<td>参数类型
 			<td>默认值
 			<td>功能含义
-		</tr>
-	<thead>
 	<tbody>
 		<tr>
 			<td>id
 			<td>Long
 			<td>
 			<td>按ID查询
-		</tr>
 		<tr>
 			<td>id-op
 			<td>String
 			<td>eq
 			<td>ID的检索运算符，可以是等于、大于、小于，等等
-		</tr>
-	</tbody>
-</table>
+
 
 
 
