@@ -95,5 +95,31 @@ public class UserBean {
 </bean>
 ```
 
+## 开始检索
+
+##### With Spring
+
+```
+@RestController
+@RequestMapping("/users")
+public class UserController {
+
+
+	@Autowired
+	private Searcher searcher;
+
+
+	@RequestMapping("/index")
+	public SearchResult index(HttpServletRequest request) {
+		
+		// 检索检索参数
+		Map<String, String> params = MapUtils.flat(request.getParameterMap());
+		
+		// 调用检索器检索数据
+		return searcher.search(UserBean.class, params)
+	}
+
+}
+```
 
 
