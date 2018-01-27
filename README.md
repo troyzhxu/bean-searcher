@@ -35,9 +35,6 @@ public class UserBean {
 	@DbField("u.type")
 	private String username;
 
-	@DbField("u.phone")
-	private String phone;
-
 	@DbField("u.date_created")
 	private Date dateCreated;
 
@@ -55,14 +52,6 @@ public class UserBean {
 
 	public void setUsername(String username) {
 		this.username = username;
-	}
-
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
 	}
 
 	public Date getDateCreated() {
@@ -142,10 +131,21 @@ public class UserController {
 			<td>String
 			<td>eq
 			<td>ID的检索运算符，可以是等于、大于、小于，等等
-
-
-
-
+		<tr>
+			<td>username
+			<td>String
+			<td>
+			<td>按用户名查询
+		<tr>
+			<td>username-op
+			<td>String
+			<td>eq
+			<td>用户名的检索运算符，可以是等于、包含、以开头、已结尾，等等
+		<tr>
+			<td>username-ic
+			<td>Boolean
+			<td>false
+			<td>按用户名检索时，是否忽略大小写
 
 
 
