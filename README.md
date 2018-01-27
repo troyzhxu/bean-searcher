@@ -122,7 +122,7 @@ public class UserController {
 
 ## 检索功能
 
-通过以上步骤，实际上写发出了一个API接口（/users/index），那么这个接口将接收那些参数，返回哪些数据呢？
+通过以上步骤，实际上写发出了一个API接口（/users/index），那么这个接口可以接收哪些参数，返回哪些数据呢？
 
 <table>
 	<thead>
@@ -130,7 +130,6 @@ public class UserController {
 			<td>参数名<td>
 			<td>参数类型<td>
 			<td>默认值<td>
-			<td>可选值<td>
 			<td>功能含义<td>
 		</tr>
 	<thead>
@@ -139,15 +138,13 @@ public class UserController {
 			<td>id<td>
 			<td>Long<td>
 			<td><td>
-			<td><td>
 			<td>按ID查询<td>
 		</tr>
 		<tr>
 			<td>id-op<td>
 			<td>String<td>
 			<td>eq<td>
-			<td>eq、gt、lt、ge、le<td>
-			<td>ID的检索运算符<td>
+			<td>ID的检索运算符，可以是等于、大于、小于，等等<td>
 		</tr>
 	</tbody>
 </table>
