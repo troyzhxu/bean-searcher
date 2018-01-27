@@ -95,7 +95,7 @@ public class UserBean {
 </bean>
 ```
 
-## 开始检索
+## 调用检索器
 
 ##### With Spring
 
@@ -104,15 +104,13 @@ public class UserBean {
 @RequestMapping("/users")
 public class UserController {
 
-
 	@Autowired
 	private Searcher searcher;
-
 
 	@RequestMapping("/index")
 	public SearchResult index(HttpServletRequest request) {
 		
-		// 检索检索参数
+		// 检索参数
 		Map<String, String> params = MapUtils.flat(request.getParameterMap());
 		
 		// 调用检索器检索数据
@@ -121,5 +119,47 @@ public class UserController {
 
 }
 ```
+
+## 检索功能
+
+通过以上步骤，实际上写发出了一个API接口（/users/index），那么这个接口将接收那些参数，返回哪些数据呢？
+
+<table>
+	<thead>
+		<tr>
+			<td>参数名<td>
+			<td>参数类型<td>
+			<td>默认值<td>
+			<td>可选值<td>
+			<td>功能含义<td>
+		</tr>
+	<thead>
+	<tbody>
+		<tr>
+			<td>id<td>
+			<td>Long<td>
+			<td><td>
+			<td><td>
+			<td>按ID查询<td>
+		</tr>
+		<tr>
+			<td>id-op<td>
+			<td>String<td>
+			<td>eq<td>
+			<td>eq、gt、lt、ge、le<td>
+			<td>ID的检索运算符<td>
+		</tr>
+	</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
 
 
