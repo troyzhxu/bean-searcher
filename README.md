@@ -1,6 +1,6 @@
 # Bean Searcher
 
-### Install 
+## Install 
 
 ##### Gradle
 
@@ -23,4 +23,18 @@ dependencies {
 </dependencies>
 ```
 
+## Configuration
+
+##### With Spring
+
+```
+<bean name="searcher" class="com.ejlchina.searcher.support.SpringSearcher">
+	<property name="scanPackage" value="${packageToBeanClass}" />
+	<property name="searchSqlExecutor">
+		<bean class="com.ejlchina.searcher.implement.MainSearchSqlExecutor">
+			<property name="dataSource" ref="dataSource"/>
+		</bean>
+	</property>
+</bean>
+```
 
