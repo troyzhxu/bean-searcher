@@ -84,7 +84,7 @@ public class UserBean {
 <bean name="searcher" class="com.ejlchina.searcher.support.SpringSearcher">
 	<property name="scanPackages">
 		<list>  
-	        <value>${检索Bean所在的包名}</value>  
+	        <value>${Search Bean所在的包名}</value>  
     	</list>
 	</property>
 	<property name="searchSqlExecutor">
