@@ -1,6 +1,6 @@
 # Bean Searcher
 
-## Install 
+## 安装 
 
 ##### Gradle
 
@@ -23,13 +23,70 @@ dependencies {
 </dependencies>
 ```
 
-## Configuration
+## 创建 Search Bean
+
+```
+@SearchBean(tables = "users u")
+public class UserBean {
+
+	@DbField("u.id")
+	private Long id;
+
+	@DbField("u.type")
+	private String username;
+
+	@DbField("u.phone")
+	private String phone;
+
+	@DbField("u.date_created")
+	private Date dateCreated;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public Date getDateCreated() {
+		return dateCreated;
+	}
+
+	public void setDateCreated(Date dateCreated) {
+		this.dateCreated = dateCreated;
+	}
+}
+
+```
+
+## 配置
 
 ##### With Spring
 
 ```
 <bean name="searcher" class="com.ejlchina.searcher.support.SpringSearcher">
-	<property name="scanPackage" value="${packageToBeanClass}" />
+	<property name="scanPackages">
+		<list>  
+	        <value>${检索Bean所在的包名}</value>  
+    	</list>
+	</property>
 	<property name="searchSqlExecutor">
 		<bean class="com.ejlchina.searcher.implement.MainSearchSqlExecutor">
 			<property name="dataSource" ref="dataSource"/>
@@ -37,4 +94,6 @@ dependencies {
 	</property>
 </bean>
 ```
+
+
 
