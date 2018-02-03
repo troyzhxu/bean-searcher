@@ -25,6 +25,7 @@ import com.ejlchina.searcher.util.StringUtils;
  */
 public class MainSearchSqlResolver implements SearchSqlResolver {
 
+	
 	static final Pattern DATE_PATTERN = Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{2}");
 
 	static final Pattern DATE_MINUTE_PATTERN = Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}");
@@ -50,8 +51,6 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 		Map<String, Class<?>> fieldTypeMap = searchBeanMap.getFieldTypeMap();
 		
 		Map<String, String> virtualParamMap = searchParam.getVirtualParamMap();
-		
-		
 		
 		SearchSql searchSql = new SearchSql();
 		StringBuilder builder = new StringBuilder("select ");
@@ -213,40 +212,15 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 					|| virtualParam.contains(",") || virtualParam.contains(")")) {
 				throw new SearcherException("这里有一个语法错误：" + sqlSnippet);
 			}
-			sqlSnippet = sqlSnippet.replace(virtualParam, "?");
+			sqlSnippet = sqlSnippet.replaceFirst(virtualParam, "?");
+			
 			solution.addVirtualParam(virtualParam.substring(1));
 			index1 = sqlSnippet.indexOf(virtualParamPrefix);
 		}
 		solution.setSqlSnippet(sqlSnippet);
 		return solution;
 	}
-	
-	
-	class VirtualSolution {
-		
-		String sqlSnippet;
-		List<String> virtualParams = new ArrayList<>();
 
-		public String getSqlSnippet() {
-			return sqlSnippet;
-		}
-
-		public void setSqlSnippet(String sqlSnippet) {
-			this.sqlSnippet = sqlSnippet;
-		}
-
-		public List<String> getVirtualParams() {
-			return virtualParams;
-		}
-
-		public void addVirtualParam(String virtualParam) {
-			this.virtualParams.add(virtualParam);
-		}
-		
-	}
-	
-	
-	
 	
 	private String generateTableAlias(String originalSql) {
 		String tableAlias = "tbl_a_";
@@ -397,5 +371,30 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 	public void setVirtualParamPrefix(String virtualParamPrefix) {
 		this.virtualParamPrefix = virtualParamPrefix;
 	}
+	
+	
+	class VirtualSolution {
+		
+		String sqlSnippet;
+		List<String> virtualParams = new ArrayList<>();
+
+		public String getSqlSnippet() {
+			return sqlSnippet;
+		}
+
+		public void setSqlSnippet(String sqlSnippet) {
+			this.sqlSnippet = sqlSnippet;
+		}
+
+		public List<String> getVirtualParams() {
+			return virtualParams;
+		}
+
+		public void addVirtualParam(String virtualParam) {
+			this.virtualParams.add(virtualParam);
+		}
+		
+	}
+	
 	
 }
