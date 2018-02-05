@@ -37,7 +37,7 @@
 		<connection>scm:git:https://github.com/ejlchina/bean-searcher.git</connection>
 		<developerConnection>scm:git:https://github.com/ejlchina/bean-searcher.git</developerConnection>
 		<url>https://github.com/ejlchina/bean-searcher</url>
-		<tag>v1.2.0</tag>
+		<tag>v1.3.2</tag>
 	</scm>
 
 	<dependencies>
@@ -100,28 +100,6 @@
 	<build>
 	
 		<plugins>
-		
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-enforcer-plugin</artifactId>
-				<version>1.0</version>
-				<executions>
-					<execution>
-						<id>enforce-maven</id>
-						<goals>
-							<goal>enforce</goal>
-						</goals>
-						<configuration>
-							<rules>
-								<requireMavenVersion>
-									<version>(,2.1.0),(2.1.0,2.2.0),(2.2.0,)</version>
-									<message>Maven 2.1.0 and 2.2.0 produce incorrect GPG signatures and checksums respectively.</message>
-								</requireMavenVersion>
-							</rules>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 		
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
