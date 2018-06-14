@@ -70,10 +70,10 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 				String sqlParam = virtualParamMap.get(key);
 				searchSql.addListSqlParam(sqlParam);
 				if (searchBeanMap.isDistinct()) {
-					searchSql.addCountSqlParam(sqlParam);
+					searchSql.addClusterSqlParam(sqlParam);
 				}
 			}
-			searchSql.addAlias(dbAlias);
+			searchSql.addListAlias(dbAlias);
 		}
 		String fieldSelectSql = builder.toString();
 
@@ -83,7 +83,7 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 		for (String key: searchBeanMap.getTableVirtualParams()) {
 			String sqlParam = virtualParamMap.get(key);
 			searchSql.addListSqlParam(sqlParam);
-			searchSql.addCountSqlParam(sqlParam);
+			searchSql.addClusterSqlParam(sqlParam);
 		}
 		
 		String joinCond = searchBeanMap.getJoinCond();
@@ -97,7 +97,7 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 				for (String key: searchBeanMap.getJoinCondVirtualParams()) {
 					String sqlParam = virtualParamMap.get(key);
 					searchSql.addListSqlParam(sqlParam);
-					searchSql.addCountSqlParam(sqlParam);
+					searchSql.addClusterSqlParam(sqlParam);
 				}
 			}
 		}
@@ -111,7 +111,7 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 					fieldDbMap.get(fieldName), filterParam);
 			for (Object sqlParam : sqlParams) {
 				searchSql.addListSqlParam(sqlParam);
-				searchSql.addCountSqlParam(sqlParam);
+				searchSql.addClusterSqlParam(sqlParam);
 			}
 		}
 		String groupBy = searchBeanMap.getGroupBy();
@@ -120,9 +120,9 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 				String fromWhereSql = builder.toString();
 				String originalSql = fieldSelectSql + fromWhereSql;
 				String tableAlias = generateTableAlias(fromWhereSql);
-				searchSql.setCountSqlString("select count(1) from (" + originalSql + ") " + tableAlias);
+				searchSql.setClusterSqlString("select count(1) from (" + originalSql + ") " + tableAlias);
 			} else {
-				searchSql.setCountSqlString("select count(1)" + builder.toString());
+				searchSql.setClusterSqlString("select count(1)" + builder.toString());
 			}
 		} else {
 			builder.append(" group by " + groupBy);
@@ -130,9 +130,9 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 			String tableAlias = generateTableAlias(fromWhereSql);
 			if (searchBeanMap.isDistinct()) {
 				String originalSql = fieldSelectSql + fromWhereSql;
-				searchSql.setCountSqlString("select count(1) from (" + originalSql + ") " + tableAlias);
+				searchSql.setClusterSqlString("select count(1) from (" + originalSql + ") " + tableAlias);
 			} else {
-				searchSql.setCountSqlString("select count(1) from (select count(1)" + fromWhereSql + ") " + tableAlias);
+				searchSql.setClusterSqlString("select count(1) from (select count(1)" + fromWhereSql + ") " + tableAlias);
 			}
 		}
 		String sortDbAlias = fieldDbAliasMap.get(searchParam.getSort());

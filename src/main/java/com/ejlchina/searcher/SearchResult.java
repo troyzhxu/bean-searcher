@@ -22,9 +22,12 @@ public class SearchResult<T> {
 	
 	private List<T> dataList = new ArrayList<>();
 	
+	private Number[] summaries;
 	
-	public SearchResult(Number totalCount) {
+	
+	public SearchResult(Number totalCount, Number[] summaries) {
 		this.totalCount = totalCount;
+		this.summaries = summaries;
 	}
 
 	
@@ -75,6 +78,17 @@ public class SearchResult<T> {
 	public void setTotalPage(Number totalPage) {
 		this.totalPage = totalPage;
 	}
+
+	
+	public Number[] getSummaries() {
+		return summaries;
+	}
+
+
+	public void setSummaries(Number[] summaries) {
+		this.summaries = summaries;
+	}
+
 
 	public String toString() {
 		String str = "totalCount = " + totalCount + "\n";

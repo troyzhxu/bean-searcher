@@ -19,6 +19,7 @@ import com.ejlchina.searcher.beanmap.SearchBeanMap;
 import com.ejlchina.searcher.beanmap.SearchBeanMapCache;
 import com.ejlchina.searcher.implement.pagination.Pagination;
 import com.ejlchina.searcher.param.SearchParam;
+import com.ejlchina.searcher.util.StringUtils;
 
 /***
  * @author Troy.Zhou @ 2017-03-20
@@ -49,7 +50,7 @@ public class MainSearcher implements Searcher {
 	
 	@Override
 	public <T> SearchResult<T> search(Class<T> beanClass, Map<String, String> paraMap) {
-		return search(beanClass, paraMap, true, true, false);
+		return search(beanClass, paraMap, null, true, true, false);
 	}
 	
 	@Override
@@ -60,7 +61,7 @@ public class MainSearcher implements Searcher {
 	@Override
 	public <T> T searchFirst(Class<T> beanClass, Map<String, String> paraMap) {
 		paraMap.put(getPagination().getMaxParamName(), "1");
-		List<T> list = search(beanClass, paraMap, false, true, false).getDataList();
+		List<T> list = search(beanClass, paraMap, null, false, true, false).getDataList();
 		if (list.size() > 0) {
 			return list.get(0);
 		}
@@ -74,7 +75,7 @@ public class MainSearcher implements Searcher {
 
 	@Override
 	public <T> List<T> searchList(Class<T> beanClass, Map<String, String> paraMap) {
-		return search(beanClass, paraMap, false, true, false).getDataList();
+		return search(beanClass, paraMap, null, false, true, false).getDataList();
 	}
 	
 	@Override
@@ -84,7 +85,7 @@ public class MainSearcher implements Searcher {
 
 	@Override
 	public <T> List<T> searchAll(Class<T> beanClass, Map<String, String> paraMap) {	
-		return search(beanClass, paraMap, false, true, true).getDataList();
+		return search(beanClass, paraMap, null, false, true, true).getDataList();
 	}
 	
 	@Override
@@ -94,14 +95,44 @@ public class MainSearcher implements Searcher {
 
 	@Override
 	public <T> Number searchCount(Class<T> beanClass, Map<String, String> paraMap) {
-		return search(beanClass, paraMap, true, false, true).getTotalCount();
+		return search(beanClass, paraMap, null, true, false, true).getTotalCount();
 	}
 
+	
+	@Override
+	public <T> Number searchSum(Class<T> beanClass, Map<String, String> paraMap, String field, String prefix) {
+		return searchSum(beanClass, propcessParaMapWhithPrefix(paraMap, prefix), field);
+	}
+
+	@Override
+	public <T> Number searchSum(Class<T> beanClass, Map<String, String> paraMap, String field) {
+		Number[] results = searchSum(beanClass, paraMap, new String[] { field });
+		if (results != null && results.length > 0) {
+			return results[0];
+		}
+		return null;
+	}
+
+	
+	@Override
+	public <T> Number[] searchSum(Class<T> beanClass, Map<String, String> paraMap, String[] fields, String prefix) {
+		return searchSum(beanClass, propcessParaMapWhithPrefix(paraMap, prefix), fields);
+	}
+
+	@Override
+	public <T> Number[] searchSum(Class<T> beanClass, Map<String, String> paraMap, String[] fields) {
+		if (fields == null || fields.length == 0) {
+			throw new SearcherException("检索该 Bean【" + beanClass.getName() 
+			+ "】的统计信息时，必须要指定需要统计的属性！");
+		}
+		return search(beanClass, paraMap, fields, false, false, true).getSummaries();
+	}
+	
 	/// 私有方法
 
 	private Map<String, String> propcessParaMapWhithPrefix(Map<String, String> paraMap, String prefix) {
 		Map<String, String> newParaMap = null;
-		if (prefix != null) {
+		if (!StringUtils.isBlank(prefix)) {
 			newParaMap = new HashMap<>();
 			for (Entry<String, String> entry : paraMap.entrySet()) {
 				String key = entry.getKey();
@@ -116,7 +147,7 @@ public class MainSearcher implements Searcher {
 		return newParaMap;
 	}
 
-	private <T> SearchResult<T> search(Class<T> beanClass, Map<String, String> paraMap, 
+	private <T> SearchResult<T> search(Class<T> beanClass, Map<String, String> paraMap, String[] sumFields,
 				boolean shouldQueryTotal, boolean shouldQueryList, boolean needNotLimit) {
 		SearchBeanMap searchBeanMap = SearchBeanMapCache.sharedCache().getSearchBeanMap(beanClass);
 		if (searchBeanMap == null) {
@@ -129,7 +160,7 @@ public class MainSearcher implements Searcher {
 			searchParam.setMax(null);
 		}
 		SearchSql searchSql = searchSqlResolver.resolve(searchBeanMap, searchParam);
-		searchSql.setShouldQueryTotal(shouldQueryTotal);
+		searchSql.setShouldQueryCluster(shouldQueryTotal || (sumFields != null && sumFields.length > 0));
 		searchSql.setShouldQueryList(shouldQueryList);
 		SearchTmpResult searchTmpResult = searchSqlExecutor.execute(searchSql);
 		SearchResultConvertInfo<T> convertInfo = new SearchResultConvertInfo<T>(beanClass);

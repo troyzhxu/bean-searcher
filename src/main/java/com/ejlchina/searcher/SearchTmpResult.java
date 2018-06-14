@@ -18,7 +18,9 @@ public class SearchTmpResult {
 	private Number totalCount;
 	
 	private List<Map<String, Object>> tmpDataList = new ArrayList<>();
-		
+
+	private Number[] summaries;
+	
 	
 	public Number getTotalCount() {
 		return totalCount;
@@ -38,6 +40,14 @@ public class SearchTmpResult {
 
 	public void addTmpData(Map<String, Object> data) {
 		tmpDataList.add(data);
+	}
+	
+	public Number[] getSummaries() {
+		return summaries;
+	}
+
+	public void setSummaries(Number[] summaries) {
+		this.summaries = summaries;
 	}
 	
 }

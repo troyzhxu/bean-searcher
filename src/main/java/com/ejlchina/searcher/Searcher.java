@@ -49,7 +49,6 @@ public interface Searcher {
 	 * */
 	<T> T searchFirst(Class<T> beanClass, Map<String, String> paraMap);
 	
-	
 	/**
 	 * 适合不需要分页的查询
 	 * @param <T> bean 类型
@@ -88,7 +87,6 @@ public interface Searcher {
 	 * */
 	<T> List<T> searchAll(Class<T> beanClass, Map<String, String> paraMap);
 	
-	
 	/**
 	 * @param <T> bean 类型
 	 * @param beanClass 要检索的 bean 类型
@@ -106,5 +104,42 @@ public interface Searcher {
 	 * */
 	<T> Number searchCount(Class<T> beanClass, Map<String, String> paraMap);
 	
+	/**
+	 * @param <T> bean 类型
+	 * @param beanClass 要检索的 bean 类型
+	 * @param paraMap 检索参数（包括排序分页参数）
+	 * @param field 参与求和的字段
+	 * @param prefix 检索参数前缀
+	 * @return Bean 字段求和
+	 * */
+	<T> Number searchSum(Class<T> beanClass, Map<String, String> paraMap, String field, String prefix);
+	
+	/**
+	 * @param <T> bean 类型
+	 * @param beanClass 要检索的 bean 类型
+	 * @param field 参与求和的字段
+	 * @param paraMap 检索参数（包括排序分页参数）
+	 * @return Bean 字段求和
+	 * */
+	<T> Number searchSum(Class<T> beanClass, Map<String, String> paraMap, String field);
+	
+	/**
+	 * @param <T> bean 类型
+	 * @param beanClass 要检索的 bean 类型
+	 * @param paraMap 检索参数（包括排序分页参数）
+	 * @param fields 参与求和的字段数组
+	 * @param prefix 检索参数前缀
+	 * @return Bean 字段求和数组
+	 * */
+	<T> Number[] searchSum(Class<T> beanClass, Map<String, String> paraMap, String[] fields, String prefix);
+	
+	/**
+	 * @param <T> bean 类型
+	 * @param beanClass 要检索的 bean 类型
+	 * @param fields 参与求和的字段数组
+	 * @param paraMap 检索参数（包括排序分页参数）
+	 * @return Bean 字段求和
+	 * */
+	<T> Number[] searchSum(Class<T> beanClass, Map<String, String> paraMap, String[] fields);
 	
 }

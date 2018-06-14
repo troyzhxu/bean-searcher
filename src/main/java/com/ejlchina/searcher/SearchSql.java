@@ -18,9 +18,9 @@ public class SearchSql {
 	private String listSqlString;
 	
 	/**
-	 * 查询数据总数的SQL
+	 * 查询聚族信息的SQL
 	 * */
-	private String countSqlString;
+	private String clusterSqlString;
 	
 	/**
 	 * 查询数据列表的参数
@@ -28,88 +28,111 @@ public class SearchSql {
 	private List<Object> listSqlParams = new ArrayList<>();
 	
 	/**
-	 * 查询数据总数的参数
+	 * 聚族查询的参数
 	 * */
-	private List<Object> countSqlParams = new ArrayList<>();
+	private List<Object> clusterSqlParams = new ArrayList<>();
 	
 	/**
-	 * 别名列表
+	 * 数据别名列表
 	 * */
-	private List<String> aliasList = new ArrayList<>();
+	private List<String> listAliases = new ArrayList<>();
+	
+	/**
+	 * 总条数别名
+	 */
+	private String countAlias;
+	
+	/**
+	 * 求和字段别名
+	 */
+	private List<String> summaryAliases = new ArrayList<>();
+
 	
 	/**
 	 * 是否应该查询总条数
 	 * */
-	private boolean shouldQueryTotal;
+	private boolean shouldQueryCluster;
 	
 	/**
 	 * 是否应该查询数据列表
 	 * */
 	private boolean shouldQueryList;
 	
-
 	
 	public String getListSqlString() {
 		return listSqlString;
 	}
 
-	public void setListSqlString(String listSqlString) {
-		this.listSqlString = listSqlString;
+	public void setListSqlString(String sqlString) {
+		this.listSqlString = sqlString;
 	}
 
 	public List<Object> getListSqlParams() {
 		return listSqlParams;
 	}
 
-	public void addListSqlParam(Object listSqlParam) {
-		this.listSqlParams.add(listSqlParam);
+	public void addListSqlParam(Object sqlParam) {
+		this.listSqlParams.add(sqlParam);
 	}
 	
-	public void addListSqlParams(List<Object> listSqlParams) {
-		this.listSqlParams.addAll(listSqlParams);
+	public void addListSqlParams(List<Object> sqlParams) {
+		this.listSqlParams.addAll(sqlParams);
 	}
 
-	public String getCountSqlString() {
-		return countSqlString;
+	public String getClusterSqlString() {
+		return clusterSqlString;
 	}
 
-	public void setCountSqlString(String countSqlString) {
-		this.countSqlString = countSqlString;
+	public void setClusterSqlString(String sqlString) {
+		this.clusterSqlString = sqlString;
 	}
 
-	public List<Object> getCountSqlParams() {
-		return countSqlParams;
+	public List<Object> getClusterSqlParams() {
+		return clusterSqlParams;
 	}
 
-	public void addCountSqlParam(Object countSqlParam) {
-		this.countSqlParams.add(countSqlParam);
+	public void addClusterSqlParam(Object sqlParam) {
+		this.clusterSqlParams.add(sqlParam);
 	}
 	
-	public void addAlias(String alias) {
-		aliasList.add(alias);
+	public void addListAlias(String alias) {
+		listAliases.add(alias);
 	}
 	
-	public List<String> getAliasList() {
-		return aliasList;
+	public List<String> getListAliases() {
+		return listAliases;
+	}
+	
+	public String getCountAlias() {
+		return countAlias;
 	}
 
-	public boolean isShouldQueryTotal() {
-		return shouldQueryTotal;
+	public void setCountAlias(String countAlias) {
+		this.countAlias = countAlias;
 	}
 
-	public void setShouldQueryTotal(boolean shouldQueryTotal) {
-		this.shouldQueryTotal = shouldQueryTotal;
+	public void addSummaryAlias(String alias) {
+		summaryAliases.add(alias);
+	}
+	
+	public List<String> getSummaryAliases() {
+		return summaryAliases;
 	}
 
+	public boolean isShouldQueryCluster() {
+		return shouldQueryCluster;
+	}
+
+	public void setShouldQueryCluster(boolean shouldQueryCluster) {
+		this.shouldQueryCluster = shouldQueryCluster;
+	}
 
 	public boolean isShouldQueryList() {
 		return shouldQueryList;
 	}
 
-
 	public void setShouldQueryList(boolean shouldQueryList) {
 		this.shouldQueryList = shouldQueryList;
 	}
-	
 	
 }

@@ -33,7 +33,8 @@ public class MainSearchResultResolver implements SearchResultResolver {
 		Set<Entry<String, String>> fieldDbAliasEntrySet = convertInfo.getFieldDbAliasEntrySet();
 		Map<String, Method> fieldGetMethodMap = convertInfo.getFieldGetMethodMap();
 		Map<String, Class<?>> fieldTypeMap = convertInfo.getFieldTypeMap();
-		SearchResult<T> searchResult = new SearchResult<T>(searchTmpResult.getTotalCount());
+		SearchResult<T> searchResult = new SearchResult<T>(searchTmpResult.getTotalCount(), 
+				searchTmpResult.getSummaries());
 		List<Map<String, Object>> tmpDataList = searchTmpResult.getTmpDataList();
 		
 		for (Map<String, Object> tmpData : tmpDataList) {

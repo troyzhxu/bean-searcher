@@ -57,7 +57,7 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 	@Override
 	public SearchTmpResult execute(SearchSql searchSql) {
 		SearchTmpResult result = new SearchTmpResult();
-		if (!searchSql.isShouldQueryList() && !searchSql.isShouldQueryTotal()) {
+		if (!searchSql.isShouldQueryList() && !searchSql.isShouldQueryCluster()) {
 			return result;
 		}
 		if (dataSource == null) {
@@ -78,20 +78,20 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 				doLog("sql ---- " + searchSql.getListSqlString());
 				doLog("params - " + Arrays.toString(searchSql.getListSqlParams().toArray()));
 				listStatement = connection.prepareStatement(searchSql.getListSqlString());
-				fillParamsTntoStatement(listStatement, searchSql.getListSqlParams());
+				putParamsTntoStatement(listStatement, searchSql.getListSqlParams());
 				listResultSet = listStatement.executeQuery();
 				while (listResultSet.next()) {
-					result.addTmpData(resolveResult(listResultSet, searchSql.getAliasList()));
+					result.addTmpData(resolveDataResult(listResultSet, searchSql.getListAliases()));
 				}
 			}
-			if (searchSql.isShouldQueryTotal()) {
-				doLog("sql ---- " + searchSql.getCountSqlString());
-				doLog("params - " + Arrays.toString(searchSql.getCountSqlParams().toArray()));
-				countStatement = connection.prepareStatement(searchSql.getCountSqlString());
-				fillParamsTntoStatement(countStatement, searchSql.getCountSqlParams());
+			if (searchSql.isShouldQueryCluster()) {
+				doLog("sql ---- " + searchSql.getClusterSqlString());
+				doLog("params - " + Arrays.toString(searchSql.getClusterSqlParams().toArray()));
+				countStatement = connection.prepareStatement(searchSql.getClusterSqlString());
+				putParamsTntoStatement(countStatement, searchSql.getClusterSqlParams());
 				countResultSet = countStatement.executeQuery();
 				if (countResultSet.next()) {
-					result.setTotalCount((Number) countResultSet.getObject(1));
+					resolveClusterResult(searchSql, result, countResultSet);
 				}
 			}
 		} catch (SQLException e) {
@@ -102,13 +102,29 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 		return result;
 	}
 
-	private void fillParamsTntoStatement(PreparedStatement statement, List<Object> params) throws SQLException {
+
+	private void resolveClusterResult(SearchSql searchSql, SearchTmpResult result, ResultSet countResultSet)
+			throws SQLException {
+		String countAlias = searchSql.getCountAlias();
+		if (countAlias != null) {
+			result.setTotalCount((Number) countResultSet.getObject(countAlias));
+		}
+		List<String> summaryAliases = searchSql.getSummaryAliases();
+		Number[] summaries = new Number[summaryAliases.size()];
+		for (int i = 0; i < summaries.length; i++) {
+			String summaryAlias = summaryAliases.get(i);
+			summaries[i] = (Number) countResultSet.getObject(summaryAlias);
+		}
+		result.setSummaries(summaries);
+	}
+
+	private void putParamsTntoStatement(PreparedStatement statement, List<Object> params) throws SQLException {
 		for (int i = 0; i < params.size(); i++) {
 			statement.setObject(i + 1, params.get(i));
 		}
 	}
 
-	private Map<String, Object> resolveResult(ResultSet resultSet, List<String> aliasList) throws SQLException {
+	private Map<String, Object> resolveDataResult(ResultSet resultSet, List<String> aliasList) throws SQLException {
 		Map<String, Object> result = new HashMap<>();
 		for (String alias : aliasList) {
 			result.put(alias, resultSet.getObject(alias));
