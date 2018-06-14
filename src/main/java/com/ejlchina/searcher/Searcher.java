@@ -32,6 +32,30 @@ public interface Searcher {
 	 * */
 	<T> SearchResult<T> search(Class<T> beanClass, Map<String, String> paraMap);
 	
+	
+	/**
+	 * 适合需要分页的查询
+	 * @param <T> bean 类型
+	 * @param beanClass 要检索的 bean 类型
+	 * @param paraMap 检索参数
+	 * @param summaryFields 统计字段
+	 * @param prefix 检索参数前缀
+	 * @return 总条数，Bean 数据列表
+	 * */
+	<T> SearchResult<T> search(Class<T> beanClass, Map<String, String> paraMap, String[] summaryFields, String prefix);
+	
+	/**
+	 * 适合需要分页的查询
+	 * @param <T> bean 类型
+	 * @param beanClass 要检索的 bean 类型
+	 * @param paraMap 检索参数
+	 * @param summaryFields 统计字段
+	 * @return 总条数，Bean 数据列表
+	 * */
+	<T> SearchResult<T> search(Class<T> beanClass, Map<String, String> paraMap, String[] summaryFields);
+	
+	
+	
 	/**
 	 * @param <T> bean 类型
 	 * @param beanClass 要检索的 bean 类型

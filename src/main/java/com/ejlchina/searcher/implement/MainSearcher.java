@@ -54,6 +54,17 @@ public class MainSearcher implements Searcher {
 	}
 	
 	@Override
+	public <T> SearchResult<T> search(Class<T> beanClass, Map<String, String> paraMap, String[] summaryFields,
+			String prefix) {
+		return search(beanClass, propcessParaMapWhithPrefix(paraMap, prefix), summaryFields);
+	}
+
+	@Override
+	public <T> SearchResult<T> search(Class<T> beanClass, Map<String, String> paraMap, String[] summaryFields) {
+		return search(beanClass, paraMap, summaryFields, true, true, false);
+	}
+	
+	@Override
 	public <T> T searchFirst(Class<T> beanClass, Map<String, String> paraMap, String prefix) {
 		return searchFirst(beanClass, propcessParaMapWhithPrefix(paraMap, prefix));
 	}
