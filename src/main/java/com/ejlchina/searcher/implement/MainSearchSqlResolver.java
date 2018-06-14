@@ -120,13 +120,13 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 		if (StringUtils.isBlank(groupBy)) {
 			if (searchBeanMap.isDistinct()) {
 				String originalSql = fieldSelectSql + builder.toString();
-				String clusterSelectSql = resolveClusterSelectSql(fieldDbMap, fieldDbAliasMap, searchSql, 
+				String clusterSelectSql = resolveClusterSelectSql(fieldDbMap, searchSql, 
 						summaryFields, shouldQueryTotal, originalSql);
 				String tableAlias = generateTableAlias(originalSql);
 				searchSql.setClusterSqlString(clusterSelectSql + " from (" + originalSql + ") " + tableAlias);
 			} else {
 				String fromWhereSql = builder.toString();
-				String clusterSelectSql = resolveClusterSelectSql(fieldDbMap, fieldDbAliasMap, searchSql, 
+				String clusterSelectSql = resolveClusterSelectSql(fieldDbMap, searchSql, 
 						summaryFields, shouldQueryTotal, fromWhereSql);
 				searchSql.setClusterSqlString(clusterSelectSql + fromWhereSql);
 			}
@@ -135,12 +135,12 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 			String fromWhereSql = builder.toString();
 			if (searchBeanMap.isDistinct()) {
 				String originalSql = fieldSelectSql + fromWhereSql;
-				String clusterSelectSql = resolveClusterSelectSql(fieldDbMap, fieldDbAliasMap, searchSql, 
+				String clusterSelectSql = resolveClusterSelectSql(fieldDbMap, searchSql, 
 						summaryFields, shouldQueryTotal, originalSql);
 				String tableAlias = generateTableAlias(originalSql);
 				searchSql.setClusterSqlString(clusterSelectSql + " from (" + originalSql + ") " + tableAlias);
 			} else {
-				String clusterSelectSql = resolveClusterSelectSql(fieldDbMap, fieldDbAliasMap, searchSql, 
+				String clusterSelectSql = resolveClusterSelectSql(fieldDbMap, searchSql, 
 						summaryFields, shouldQueryTotal, fromWhereSql);
 				String tableAlias = generateTableAlias(fromWhereSql);
 				searchSql.setClusterSqlString(clusterSelectSql + " from (select count(1) " + fromWhereSql + ") " + tableAlias);
@@ -163,23 +163,27 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 	}
 
 
-	private String resolveClusterSelectSql(Map<String, String> fieldDbMap, Map<String, String> fieldDbAliasMap, 
+	private String resolveClusterSelectSql(Map<String, String> fieldDbMap, 
 			SearchSql searchSql, String[] summaryFields, boolean shouldQueryTotal, String originalSql) {
 		StringBuilder clusterSelectSqlBuilder = new StringBuilder("select ");
 		if (shouldQueryTotal) {
-			String countAlias = generateColumnAlias(originalSql);
+			String countAlias = generateColumnAlias("count", originalSql);
 			clusterSelectSqlBuilder.append("count(1) ").append(countAlias);
 			searchSql.setCountAlias(countAlias);
 		}
 		if (summaryFields != null) {
-			for (String summaryField: summaryFields) {
-				String summaryAlias = generateColumnAlias(originalSql);
+			for (int i = 0; i < summaryFields.length; i++) {
+				String summaryField = summaryFields[i];
+				String summaryAlias = generateColumnAlias(summaryField, originalSql);
 				String dbField = fieldDbMap.get(summaryField);
 				if (dbField == null) {
 					throw new SearcherException("求和属性【" + summaryField + "】没有和数据库字段做映射，请检查该属性是否被@DbField正确注解！");
 				}
-				clusterSelectSqlBuilder.append(" sum(").append(fieldDbAliasMap.get(dbField))
+				clusterSelectSqlBuilder.append(" sum(").append(dbField)
 					.append(") ").append(summaryAlias);
+				if (i < summaryFields.length - 1) {
+					clusterSelectSqlBuilder.append(", ");
+				}
 				searchSql.addSummaryAlias(summaryAlias);
 			}
 		}
@@ -262,8 +266,8 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 		return generateAlias("tbl_", originalSql);
 	}
 
-	private String generateColumnAlias(String originalSql) {
-		return generateAlias("col_", originalSql);
+	private String generateColumnAlias(String seed, String originalSql) {
+		return generateAlias("col_" + seed, originalSql);
 	}
 	
 	private String generateAlias(String seed, String originalSql) {
