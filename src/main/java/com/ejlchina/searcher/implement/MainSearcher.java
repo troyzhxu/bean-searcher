@@ -147,7 +147,7 @@ public class MainSearcher implements Searcher {
 		return newParaMap;
 	}
 
-	private <T> SearchResult<T> search(Class<T> beanClass, Map<String, String> paraMap, String[] sumFields,
+	private <T> SearchResult<T> search(Class<T> beanClass, Map<String, String> paraMap, String[] summaryFields,
 				boolean shouldQueryTotal, boolean shouldQueryList, boolean needNotLimit) {
 		SearchBeanMap searchBeanMap = SearchBeanMapCache.sharedCache().getSearchBeanMap(beanClass);
 		if (searchBeanMap == null) {
@@ -156,11 +156,14 @@ public class MainSearcher implements Searcher {
 		}
 		List<String> fieldList = searchBeanMap.getFieldList();
 		SearchParam searchParam = searchParamResolver.resolve(fieldList, paraMap);
+		searchParam.setSummaryFields(summaryFields);
+		searchParam.setShouldQueryTotal(shouldQueryTotal);
+		searchParam.setShouldQueryList(shouldQueryList);
 		if (needNotLimit) {
 			searchParam.setMax(null);
 		}
 		SearchSql searchSql = searchSqlResolver.resolve(searchBeanMap, searchParam);
-		searchSql.setShouldQueryCluster(shouldQueryTotal || (sumFields != null && sumFields.length > 0));
+		searchSql.setShouldQueryCluster(shouldQueryTotal || (summaryFields != null && summaryFields.length > 0));
 		searchSql.setShouldQueryList(shouldQueryList);
 		SearchTmpResult searchTmpResult = searchSqlExecutor.execute(searchSql);
 		SearchResultConvertInfo<T> convertInfo = new SearchResultConvertInfo<T>(beanClass);

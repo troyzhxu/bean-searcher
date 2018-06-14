@@ -44,6 +44,21 @@ public class SearchParam {
 	 */
 	private Map<String, String> virtualParamMap = new HashMap<>();
 	
+	/**
+	 * 需要求和的字段
+	 */
+	private String[] summaryFields;
+	
+	/**
+	 * 需要查询总数
+	 */
+	private boolean shouldQueryTotal;
+	
+	/**
+	 * 需要查询列表
+	 */
+	private boolean shouldQueryList;
+	
 
 	public SearchParam() {
 	}
@@ -120,6 +135,30 @@ public class SearchParam {
 
 	public void setPage(Long page) {
 		this.page = page;
+	}
+
+	public String[] getSummaryFields() {
+		return summaryFields;
+	}
+
+	public void setSummaryFields(String[] summaryFields) {
+		this.summaryFields = summaryFields;
+	}
+
+	public boolean isShouldQueryTotal() {
+		return shouldQueryTotal;
+	}
+
+	public void setShouldQueryTotal(boolean shouldQueryTotal) {
+		this.shouldQueryTotal = shouldQueryTotal;
+	}
+
+	public boolean isShouldQueryList() {
+		return shouldQueryList;
+	}
+
+	public void setShouldQueryList(boolean shouldQueryList) {
+		this.shouldQueryList = shouldQueryList;
 	}
 
 	@Override

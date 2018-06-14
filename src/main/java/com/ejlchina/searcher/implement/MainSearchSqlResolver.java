@@ -115,24 +115,35 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 			}
 		}
 		String groupBy = searchBeanMap.getGroupBy();
+		String[] summaryFields = searchParam.getSummaryFields();
+		boolean shouldQueryTotal = searchParam.isShouldQueryTotal();
 		if (StringUtils.isBlank(groupBy)) {
 			if (searchBeanMap.isDistinct()) {
-				String fromWhereSql = builder.toString();
-				String originalSql = fieldSelectSql + fromWhereSql;
-				String tableAlias = generateTableAlias(fromWhereSql);
-				searchSql.setClusterSqlString("select count(1) from (" + originalSql + ") " + tableAlias);
+				String originalSql = fieldSelectSql + builder.toString();
+				String clusterSelectSql = resolveClusterSelectSql(fieldDbMap, fieldDbAliasMap, searchSql, 
+						summaryFields, shouldQueryTotal, originalSql);
+				String tableAlias = generateTableAlias(originalSql);
+				searchSql.setClusterSqlString(clusterSelectSql + " from (" + originalSql + ") " + tableAlias);
 			} else {
-				searchSql.setClusterSqlString("select count(1)" + builder.toString());
+				String fromWhereSql = builder.toString();
+				String clusterSelectSql = resolveClusterSelectSql(fieldDbMap, fieldDbAliasMap, searchSql, 
+						summaryFields, shouldQueryTotal, fromWhereSql);
+				searchSql.setClusterSqlString(clusterSelectSql + fromWhereSql);
 			}
 		} else {
 			builder.append(" group by " + groupBy);
 			String fromWhereSql = builder.toString();
-			String tableAlias = generateTableAlias(fromWhereSql);
 			if (searchBeanMap.isDistinct()) {
 				String originalSql = fieldSelectSql + fromWhereSql;
-				searchSql.setClusterSqlString("select count(1) from (" + originalSql + ") " + tableAlias);
+				String clusterSelectSql = resolveClusterSelectSql(fieldDbMap, fieldDbAliasMap, searchSql, 
+						summaryFields, shouldQueryTotal, originalSql);
+				String tableAlias = generateTableAlias(originalSql);
+				searchSql.setClusterSqlString(clusterSelectSql + " from (" + originalSql + ") " + tableAlias);
 			} else {
-				searchSql.setClusterSqlString("select count(1) from (select count(1)" + fromWhereSql + ") " + tableAlias);
+				String clusterSelectSql = resolveClusterSelectSql(fieldDbMap, fieldDbAliasMap, searchSql, 
+						summaryFields, shouldQueryTotal, fromWhereSql);
+				String tableAlias = generateTableAlias(fromWhereSql);
+				searchSql.setClusterSqlString(clusterSelectSql + " from (select count(1) " + fromWhereSql + ") " + tableAlias);
 			}
 		}
 		String sortDbAlias = fieldDbAliasMap.get(searchParam.getSort());
@@ -149,6 +160,31 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 		searchSql.setListSqlString(paginateSql.getSql());
 		searchSql.addListSqlParams(paginateSql.getParams());
 		return searchSql;
+	}
+
+
+	private String resolveClusterSelectSql(Map<String, String> fieldDbMap, Map<String, String> fieldDbAliasMap, 
+			SearchSql searchSql, String[] summaryFields, boolean shouldQueryTotal, String originalSql) {
+		StringBuilder clusterSelectSqlBuilder = new StringBuilder("select ");
+		if (shouldQueryTotal) {
+			String countAlias = generateColumnAlias(originalSql);
+			clusterSelectSqlBuilder.append("count(1) ").append(countAlias);
+			searchSql.setCountAlias(countAlias);
+		}
+		if (summaryFields != null) {
+			for (String summaryField: summaryFields) {
+				String summaryAlias = generateColumnAlias(originalSql);
+				String dbField = fieldDbMap.get(summaryField);
+				if (dbField == null) {
+					throw new SearcherException("求和属性【" + summaryField + "】没有和数据库字段做映射，请检查该属性是否被@DbField正确注解！");
+				}
+				clusterSelectSqlBuilder.append(" sum(").append(fieldDbAliasMap.get(dbField))
+					.append(") ").append(summaryAlias);
+				searchSql.addSummaryAlias(summaryAlias);
+			}
+		}
+		clusterSelectSqlBuilder.append(" ");
+		return clusterSelectSqlBuilder.toString();
 	}
 
 	
@@ -223,13 +259,23 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 
 	
 	private String generateTableAlias(String originalSql) {
-		String tableAlias = "tbl_a_";
+		return generateAlias("tbl_", originalSql);
+	}
+
+	private String generateColumnAlias(String originalSql) {
+		return generateAlias("col_", originalSql);
+	}
+	
+	private String generateAlias(String seed, String originalSql) {
+		int index = 0;
+		String tableAlias = seed;
 		while (originalSql.contains(tableAlias)) {
-			tableAlias += "_";
+			tableAlias = seed + index++;
 		}
 		return tableAlias;
 	}
-
+	
+	
 	/**
 	 * @return 查询参数值
 	 */
