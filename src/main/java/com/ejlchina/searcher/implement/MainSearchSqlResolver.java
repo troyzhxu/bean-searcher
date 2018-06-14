@@ -172,6 +172,9 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 			searchSql.setCountAlias(countAlias);
 		}
 		if (summaryFields != null) {
+			if (shouldQueryTotal && summaryFields.length > 0) {
+				clusterSelectSqlBuilder.append(", ");
+			}
 			for (int i = 0; i < summaryFields.length; i++) {
 				String summaryField = summaryFields[i];
 				String summaryAlias = generateColumnAlias(summaryField, originalSql);
@@ -179,7 +182,7 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 				if (dbField == null) {
 					throw new SearcherException("求和属性【" + summaryField + "】没有和数据库字段做映射，请检查该属性是否被@DbField正确注解！");
 				}
-				clusterSelectSqlBuilder.append(" sum(").append(dbField)
+				clusterSelectSqlBuilder.append("sum(").append(dbField)
 					.append(") ").append(summaryAlias);
 				if (i < summaryFields.length - 1) {
 					clusterSelectSqlBuilder.append(", ");

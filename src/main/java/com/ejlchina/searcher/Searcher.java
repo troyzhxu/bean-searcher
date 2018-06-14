@@ -32,7 +32,6 @@ public interface Searcher {
 	 * */
 	<T> SearchResult<T> search(Class<T> beanClass, Map<String, String> paraMap);
 	
-	
 	/**
 	 * 适合需要分页的查询
 	 * @param <T> bean 类型
@@ -53,8 +52,6 @@ public interface Searcher {
 	 * @return 总条数，Bean 数据列表
 	 * */
 	<T> SearchResult<T> search(Class<T> beanClass, Map<String, String> paraMap, String[] summaryFields);
-	
-	
 	
 	/**
 	 * @param <T> bean 类型

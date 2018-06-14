@@ -108,7 +108,6 @@ public class MainSearcher implements Searcher {
 	public <T> Number searchCount(Class<T> beanClass, Map<String, String> paraMap) {
 		return search(beanClass, paraMap, null, true, false, true).getTotalCount();
 	}
-
 	
 	@Override
 	public <T> Number searchSum(Class<T> beanClass, Map<String, String> paraMap, String field, String prefix) {
@@ -123,7 +122,6 @@ public class MainSearcher implements Searcher {
 		}
 		return null;
 	}
-
 	
 	@Override
 	public <T> Number[] searchSum(Class<T> beanClass, Map<String, String> paraMap, String[] fields, String prefix) {
