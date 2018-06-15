@@ -206,6 +206,14 @@ public class MainSearcher implements Searcher {
 			result.setTotalPage(1);
 			result.setPage(startPage);
 		}
+		Number[] summaries = result.getSummaries();
+		if (summaries != null) {
+			for (int i = 0; i < summaries.length; i++) {
+				if (summaries[i] == null) {
+					summaries[i] = 0;
+				}
+			}
+		}
 		return result;
 	}
 
