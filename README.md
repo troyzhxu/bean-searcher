@@ -6,7 +6,7 @@
 
 ```
 dependencies {
-    compile 'com.ejlchina:bean-searcher:1.3.2'
+    compile 'com.ejlchina:bean-searcher:1.4.1'
 }
 
 ```
@@ -18,7 +18,7 @@ dependencies {
 	<dependency>
 		<groupId>com.ejlchina</groupId>
 		<artifactId>bean-searcher</artifactId>
-		<version>1.3.2</version>
+		<version>1.4.1</version>
 	</dependency>
 </dependencies>
 ```
