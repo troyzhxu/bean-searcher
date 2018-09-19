@@ -32,6 +32,8 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 	
 	static final Pattern DATE_SECOND_PATTERN = Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}");
 
+	static final String[] VERTUAL_PARAM_END_FLAGS = new String[] {" ", "\t", "\n", "\r", "+", "-", "*","/", "=", "!", ">", "<", ",", ")"};
+	
 	/**
 	 * 数据库方言
 	 */
@@ -215,44 +217,33 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 		searchBeanMap.setVirtualResolved(true);
 	}
 
-
+	
+	private int findVitualParamEndIndex(String sqlSnippet, int fromIndex) {
+		int index = -1;
+		for (String flag : VERTUAL_PARAM_END_FLAGS) {
+			int index0 = sqlSnippet.indexOf(flag, fromIndex);
+			if (index < 0) {
+				index = index0;
+			} else if (index0 > 0) {
+				index = Math.min(index, index0);
+			}
+		}
+		return index;
+	}
+	
+	
 	private VirtualSolution resolveVirtualParams(String sqlSnippet) {
 		VirtualSolution solution = new VirtualSolution();
 		int index1 = sqlSnippet.indexOf(virtualParamPrefix);
-		while (index1 > 0) {
-			int index2 = sqlSnippet.indexOf(" ", index1);
-			if (index2 < 0) 
-				index2 = sqlSnippet.indexOf("+", index1);
-			if (index2 < 0)
-				index2 = sqlSnippet.indexOf("-", index1);
-			if (index2 < 0)
-				index2 = sqlSnippet.indexOf("*", index1);
-			if (index2 < 0)
-				index2 = sqlSnippet.indexOf("/", index1);
-			if (index2 < 0)
-				index2 = sqlSnippet.indexOf("=", index1);
-			if (index2 < 0)
-				index2 = sqlSnippet.indexOf("!", index1);
-			if (index2 < 0)
-				index2 = sqlSnippet.indexOf(">", index1);
-			if (index2 < 0)
-				index2 = sqlSnippet.indexOf("<", index1);
-			if (index2 < 0)
-				index2 = sqlSnippet.indexOf(",", index1);
-			if (index2 < 0)
-				index2 = sqlSnippet.indexOf(")", index1);
+		while (index1 >= 0) {
+			int index2 = findVitualParamEndIndex(sqlSnippet, index1);
 			String virtualParam = null;
 			if (index2 > 0) {
 				virtualParam = sqlSnippet.substring(index1, index2);
 			} else {
 				virtualParam = sqlSnippet.substring(index1);
 			}
-			if (StringUtils.isBlank(virtualParam) || virtualParam.length() < 2 || virtualParam.contains(" ") 
-					|| virtualParam.contains("+") || virtualParam.contains("-")
-					|| virtualParam.contains("*") || virtualParam.contains("/")
-					|| virtualParam.contains("=") || virtualParam.contains("!")
-					|| virtualParam.contains(">") || virtualParam.contains("<")
-					|| virtualParam.contains(",") || virtualParam.contains(")")) {
+			if (StringUtils.isBlank(virtualParam) || virtualParam.length() < 2) {
 				throw new SearcherException("这里有一个语法错误：" + sqlSnippet);
 			}
 			sqlSnippet = sqlSnippet.replaceFirst(virtualParam, "?");
