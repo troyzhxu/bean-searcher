@@ -32,14 +32,15 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 	
 	static final Pattern DATE_SECOND_PATTERN = Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}");
 
-	static final String[] VERTUAL_PARAM_END_FLAGS = new String[] {" ", "\t", "\n", "\r", "+", "-", "*","/", "=", "!", ">", "<", ",", ")"};
-	
+
 	/**
 	 * 数据库方言
 	 */
 	private Dialect dialect;
 
 	private String virtualParamPrefix = ":";
+	
+	private String[] vertualParamEndFlags = new String[] {" ", "\t", "\n", "\r", "+", "-", "*", "/", "=", "!", ">", "<", ",", ")", "'", "%"};
 	
 	
 	@Override
@@ -220,7 +221,7 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 	
 	private int findVitualParamEndIndex(String sqlSnippet, int fromIndex) {
 		int index = -1;
-		for (String flag : VERTUAL_PARAM_END_FLAGS) {
+		for (String flag : vertualParamEndFlags) {
 			int index0 = sqlSnippet.indexOf(flag, fromIndex);
 			if (index < 0) {
 				index = index0;
@@ -416,7 +417,11 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 		this.virtualParamPrefix = virtualParamPrefix;
 	}
 	
-	
+	public void setVertualParamEndFlags(String[] vertualParamEndFlags) {
+		this.vertualParamEndFlags = vertualParamEndFlags;
+	}
+
+
 	class VirtualSolution {
 		
 		String sqlSnippet;
