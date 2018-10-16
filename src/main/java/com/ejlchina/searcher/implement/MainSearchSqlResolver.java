@@ -65,7 +65,7 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 				String sqlParam = virtualParamMap.get(virtualParam.getName());
 				if (virtualParam.isParameterized()) {
 					searchSql.addListSqlParam(sqlParam);
-					// TODO ???
+					// 只有在 distinct 条件，聚族查询 SQL 里才会出现 字段查询 语句，才需要将 虚拟参数放到 聚族参数里 
 					if (searchBeanMap.isDistinct()) {
 						searchSql.addClusterSqlParam(sqlParam);
 					}
