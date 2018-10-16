@@ -61,16 +61,19 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 			String dbField = fieldDbMap.get(field);
 			String dbAlias = fieldDbAliasMap.get(field);
 			
-			for (VirtualParam virtualParam: searchBeanMap.getFieldVirtualParams(field)) {
-				String sqlParam = virtualParamMap.get(virtualParam.getName());
-				if (virtualParam.isParameterized()) {
-					searchSql.addListSqlParam(sqlParam);
-					// 只有在 distinct 条件，聚族查询 SQL 里才会出现 字段查询 语句，才需要将 虚拟参数放到 聚族参数里 
-					if (searchBeanMap.isDistinct()) {
-						searchSql.addClusterSqlParam(sqlParam);
+			List<VirtualParam> fieldVirtualParams = searchBeanMap.getFieldVirtualParams(field);
+			if (fieldVirtualParams != null) {
+				for (VirtualParam virtualParam: fieldVirtualParams) {
+					String sqlParam = virtualParamMap.get(virtualParam.getName());
+					if (virtualParam.isParameterized()) {
+						searchSql.addListSqlParam(sqlParam);
+						// 只有在 distinct 条件，聚族查询 SQL 里才会出现 字段查询 语句，才需要将 虚拟参数放到 聚族参数里 
+						if (searchBeanMap.isDistinct()) {
+							searchSql.addClusterSqlParam(sqlParam);
+						}
+					} else {
+						dbField = dbField.replace(virtualParam.getSqlName(), sqlParam);
 					}
-				} else {
-					dbField = dbField.replace(virtualParam.getSqlName(), sqlParam);
 				}
 			}
 			
@@ -86,13 +89,16 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 		builder = new StringBuilder(" from ");
 		String talbes = searchBeanMap.getTalbes();
 		
-		for (VirtualParam virtualParam: searchBeanMap.getTableVirtualParams()) {
-			String sqlParam = virtualParamMap.get(virtualParam.getName());
-			if (virtualParam.isParameterized()) {
-				searchSql.addListSqlParam(sqlParam);
-				searchSql.addClusterSqlParam(sqlParam);
-			} else {
-				talbes = talbes.replace(virtualParam.getSqlName(), sqlParam);
+		List<VirtualParam> tableVirtualParams = searchBeanMap.getTableVirtualParams();
+		if (tableVirtualParams != null) {
+			for (VirtualParam virtualParam: tableVirtualParams) {
+				String sqlParam = virtualParamMap.get(virtualParam.getName());
+				if (virtualParam.isParameterized()) {
+					searchSql.addListSqlParam(sqlParam);
+					searchSql.addClusterSqlParam(sqlParam);
+				} else {
+					talbes = talbes.replace(virtualParam.getSqlName(), sqlParam);
+				}
 			}
 		}
 		builder.append(talbes);
@@ -105,13 +111,16 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 			builder.append(" where ");
 			if (hasJoinCond) {
 				builder.append("(");
-				for (VirtualParam virtualParam: searchBeanMap.getJoinCondVirtualParams()) {
-					String sqlParam = virtualParamMap.get(virtualParam.getName());
-					if (virtualParam.isParameterized()) {
-						searchSql.addListSqlParam(sqlParam);
-						searchSql.addClusterSqlParam(sqlParam);
-					} else {
-						joinCond = joinCond.replace(virtualParam.getSqlName(), sqlParam);
+				List<VirtualParam> joinCondVirtualParams = searchBeanMap.getJoinCondVirtualParams();
+				if (joinCondVirtualParams != null) {
+					for (VirtualParam virtualParam: joinCondVirtualParams) {
+						String sqlParam = virtualParamMap.get(virtualParam.getName());
+						if (virtualParam.isParameterized()) {
+							searchSql.addListSqlParam(sqlParam);
+							searchSql.addClusterSqlParam(sqlParam);
+						} else {
+							joinCond = joinCond.replace(virtualParam.getSqlName(), sqlParam);
+						}
 					}
 				}
 				builder.append(joinCond).append(")");
