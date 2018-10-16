@@ -73,8 +73,8 @@ public class DefaultVirtualParamProcessor implements VirtualParamProcessor {
 			
 			int quotationCount1 = StringUtils.containCount(sqlSnippet, 0, index1, quotations);
 			int quotationCount2 = StringUtils.containCount(sqlSnippet, Math.max(index1, index2), sqlSnippet.length(), quotations);
-			if (quotationCount1 + quotationCount2 % 2 != 0) {
-				throw new SearcherException("这里有一个语法错误（引号不匹配）：" + sqlSnippet + ",  quotationCount1 = " + quotationCount1 + ", quotationCount2 = " + quotationCount2);
+			if ((quotationCount1 + quotationCount2) % 2 != 0) {
+				throw new SearcherException("这里有一个语法错误（引号不匹配）：" + sqlSnippet);
 			}
 			// 判断虚拟参数是否在引号内部
 			if (quotationCount1 % 2 == 0) {
