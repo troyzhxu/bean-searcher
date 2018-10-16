@@ -6,6 +6,8 @@ import com.ejlchina.searcher.implement.MainSearchResultResolver;
 import com.ejlchina.searcher.implement.MainSearchSqlResolver;
 import com.ejlchina.searcher.implement.MainSearcher;
 import com.ejlchina.searcher.implement.convertor.DefaultFieldConvertor;
+import com.ejlchina.searcher.virtual.DefaultVirtualParamProcessor;
+import com.ejlchina.searcher.virtual.VirtualParamProcessor;
 
 /***
  * 检索器 Builder
@@ -23,7 +25,10 @@ public class SearcherBuilder {
 	
 	private SearchResultResolver searchResultResolver;
 	
+	private VirtualParamProcessor virtualParamProcessor;
+	
 	private int prifexSeparatorLength = 1;
+	
 	
 	public static SearcherBuilder builder() {
 		return new SearcherBuilder();
@@ -49,11 +54,15 @@ public class SearcherBuilder {
 		return this;
 	}
 	
+	public SearcherBuilder configVirtualParamProcessor(VirtualParamProcessor virtualParamProcessor) {
+		this.virtualParamProcessor = virtualParamProcessor;
+		return this;
+	} 
+	
 	public SearcherBuilder configPrifexSeparatorLength(int length) {
 		this.prifexSeparatorLength = length;
 		return this;
 	}
-	
 	
 	public Searcher build() {
 		return build(new MainSearcher());
@@ -83,6 +92,11 @@ public class SearcherBuilder {
 			MainSearchResultResolver searchResultResolver = new MainSearchResultResolver();
 			searchResultResolver.setFieldConvertor(new DefaultFieldConvertor());
 			mainSearcher.setSearchResultResolver(searchResultResolver);
+		}
+		if (virtualParamProcessor != null) {
+			mainSearcher.setVirtualParamProcessor(virtualParamProcessor);
+		} else {
+			mainSearcher.setVirtualParamProcessor(new DefaultVirtualParamProcessor());
 		}
 		mainSearcher.setPrifexSeparatorLength(prifexSeparatorLength);
 		return mainSearcher;

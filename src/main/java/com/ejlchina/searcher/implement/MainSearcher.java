@@ -20,6 +20,7 @@ import com.ejlchina.searcher.beanmap.SearchBeanMapCache;
 import com.ejlchina.searcher.implement.pagination.Pagination;
 import com.ejlchina.searcher.param.SearchParam;
 import com.ejlchina.searcher.util.StringUtils;
+import com.ejlchina.searcher.virtual.VirtualParamProcessor;
 
 /***
  * @author Troy.Zhou @ 2017-03-20
@@ -29,6 +30,7 @@ import com.ejlchina.searcher.util.StringUtils;
  */
 public class MainSearcher implements Searcher {
 
+	
 	private SearchParamResolver searchParamResolver;
 
 	private SearchSqlResolver searchSqlResolver;
@@ -37,6 +39,9 @@ public class MainSearcher implements Searcher {
 
 	private SearchResultResolver searchResultResolver;
 
+	private VirtualParamProcessor virtualParamProcessor;
+	
+	
 	/**
 	 * 前缀分隔符长度
 	 */
@@ -171,6 +176,7 @@ public class MainSearcher implements Searcher {
 		if (needNotLimit) {
 			searchParam.setMax(null);
 		}
+		searchBeanMap = virtualParamProcessor.process(searchBeanMap);
 		SearchSql searchSql = searchSqlResolver.resolve(searchBeanMap, searchParam);
 		searchSql.setShouldQueryCluster(shouldQueryTotal || (summaryFields != null && summaryFields.length > 0));
 		searchSql.setShouldQueryList(shouldQueryList);
@@ -251,6 +257,14 @@ public class MainSearcher implements Searcher {
 
 	public void setSearchResultResolver(SearchResultResolver searchResultResolver) {
 		this.searchResultResolver = searchResultResolver;
+	}
+
+	public VirtualParamProcessor getVirtualParamProcessor() {
+		return virtualParamProcessor;
+	}
+
+	public void setVirtualParamProcessor(VirtualParamProcessor virtualParamProcessor) {
+		this.virtualParamProcessor = virtualParamProcessor;
 	}
 
 	public int getPrifexSeparatorLength() {

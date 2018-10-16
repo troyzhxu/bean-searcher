@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.ejlchina.searcher.SearcherException;
+import com.ejlchina.searcher.virtual.VirtualParam;
 
 /**
  * 用户Bean的属性与数据库表字段的映射信息
@@ -62,24 +63,19 @@ public class SearchBeanMap {
 	private Map<String, Class<?>> fieldTypeMap = new HashMap<>();
 	
 	/**
-	 * 虚拟参数是否被解析
-	 */
-	private boolean virtualResolved = false;
-	
-	/**
 	 * table 虚拟参数
 	 */
-	private List<String> tableVirtualParams;
+	private List<VirtualParam> tableVirtualParams;
 	
 	/**
 	 * 连接条件 虚拟参数
 	 */
-	private List<String> joinCondVirtualParams;
+	private List<VirtualParam> joinCondVirtualParams;
 	
 	/**
 	 * 映射：属性 -> 虚拟参数 
 	 */
-	private Map<String, List<String>> fieldVirtualParamsMap = new HashMap<>();
+	private Map<String, List<VirtualParam>> fieldVirtualParamsMap = new HashMap<>();
 	
 	
 	public SearchBeanMap(String talbes, String joinCond, String groupBy, boolean distinct) {
@@ -147,38 +143,29 @@ public class SearchBeanMap {
 	public Map<String, Class<?>> getFieldTypeMap() {
 		return fieldTypeMap;
 	}
-
-	public boolean isVirtualResolved() {
-		return virtualResolved;
-	}
-
-	public void setVirtualResolved(boolean virtualResolved) {
-		this.virtualResolved = virtualResolved;
-	}
 	
-	public List<String> getTableVirtualParams() {
+	public List<VirtualParam> getTableVirtualParams() {
 		return tableVirtualParams;
 	}
 
-	public void setTableVirtualParams(List<String> tableVirtualParams) {
+	public void setTableVirtualParams(List<VirtualParam> tableVirtualParams) {
 		this.tableVirtualParams = tableVirtualParams;
 	}
 
-	public List<String> getJoinCondVirtualParams() {
+	public List<VirtualParam> getJoinCondVirtualParams() {
 		return joinCondVirtualParams;
 	}
 
-	public void setJoinCondVirtualParams(List<String> joinCondVirtualParams) {
+	public void setJoinCondVirtualParams(List<VirtualParam> joinCondVirtualParams) {
 		this.joinCondVirtualParams = joinCondVirtualParams;
 	}
 
-	public List<String> getFieldVirtualParams(String field) {
+	public List<VirtualParam> getFieldVirtualParams(String field) {
 		return fieldVirtualParamsMap.get(field);
 	}
 
-	public void putFieldVirtualParam(String field, List<String> virtualParams) {
+	public void putFieldVirtualParam(String field, List<VirtualParam> virtualParams) {
 		fieldVirtualParamsMap.put(field, virtualParams);
 	}
 
 }
-

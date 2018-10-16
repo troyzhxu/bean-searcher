@@ -16,6 +16,7 @@ import com.ejlchina.searcher.param.FilterParam;
 import com.ejlchina.searcher.param.Operator;
 import com.ejlchina.searcher.param.SearchParam;
 import com.ejlchina.searcher.util.StringUtils;
+import com.ejlchina.searcher.virtual.VirtualParam;
 
 /**
  * 默认查询SQL解析器
@@ -38,16 +39,10 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 	 */
 	private Dialect dialect;
 
-	private String virtualParamPrefix = ":";
-	
-	private String[] vertualParamEndFlags = new String[] {" ", "\t", "\n", "\r", "+", "-", "*", "/", "=", "!", ">", "<", ",", ")", "'", "%"};
-	
 	
 	@Override
 	public SearchSql resolve(SearchBeanMap searchBeanMap, SearchParam searchParam) {
-		if (!searchBeanMap.isVirtualResolved()) {
-			resolveVirtualParams(searchBeanMap);
-		}
+		
 		List<String> fieldList = searchBeanMap.getFieldList();
 		Map<String, String> fieldDbMap = searchBeanMap.getFieldDbMap();
 		Map<String, String> fieldDbAliasMap = searchBeanMap.getFieldDbAliasMap();
@@ -65,29 +60,42 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 			String field = fieldList.get(i);
 			String dbField = fieldDbMap.get(field);
 			String dbAlias = fieldDbAliasMap.get(field);
+			
+			for (VirtualParam virtualParam: searchBeanMap.getFieldVirtualParams(field)) {
+				String sqlParam = virtualParamMap.get(virtualParam.getName());
+				if (virtualParam.isParameterized()) {
+					searchSql.addListSqlParam(sqlParam);
+					// TODO ???
+					if (searchBeanMap.isDistinct()) {
+						searchSql.addClusterSqlParam(sqlParam);
+					}
+				} else {
+					dbField = dbField.replace(virtualParam.getSqlName(), sqlParam);
+				}
+			}
+			
 			builder.append(dbField).append(" ").append(dbAlias);
 			if (i < fieldCount - 1) {
 				builder.append(", ");
 			}
-			for (String key: searchBeanMap.getFieldVirtualParams(field)) {
-				String sqlParam = virtualParamMap.get(key);
-				searchSql.addListSqlParam(sqlParam);
-				if (searchBeanMap.isDistinct()) {
-					searchSql.addClusterSqlParam(sqlParam);
-				}
-			}
+			
 			searchSql.addListAlias(dbAlias);
 		}
 		String fieldSelectSql = builder.toString();
 
 		builder = new StringBuilder(" from ");
-		builder.append(searchBeanMap.getTalbes());
+		String talbes = searchBeanMap.getTalbes();
 		
-		for (String key: searchBeanMap.getTableVirtualParams()) {
-			String sqlParam = virtualParamMap.get(key);
-			searchSql.addListSqlParam(sqlParam);
-			searchSql.addClusterSqlParam(sqlParam);
+		for (VirtualParam virtualParam: searchBeanMap.getTableVirtualParams()) {
+			String sqlParam = virtualParamMap.get(virtualParam.getName());
+			if (virtualParam.isParameterized()) {
+				searchSql.addListSqlParam(sqlParam);
+				searchSql.addClusterSqlParam(sqlParam);
+			} else {
+				talbes = talbes.replace(virtualParam.getSqlName(), sqlParam);
+			}
 		}
+		builder.append(talbes);
 		
 		String joinCond = searchBeanMap.getJoinCond();
 		boolean hasJoinCond = joinCond != null && !"".equals(joinCond.trim());
@@ -96,12 +104,17 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 		if (hasJoinCond || filterParamList.size() > 0) {
 			builder.append(" where ");
 			if (hasJoinCond) {
-				builder.append("(").append(joinCond).append(")");
-				for (String key: searchBeanMap.getJoinCondVirtualParams()) {
-					String sqlParam = virtualParamMap.get(key);
-					searchSql.addListSqlParam(sqlParam);
-					searchSql.addClusterSqlParam(sqlParam);
+				builder.append("(");
+				for (VirtualParam virtualParam: searchBeanMap.getJoinCondVirtualParams()) {
+					String sqlParam = virtualParamMap.get(virtualParam.getName());
+					if (virtualParam.isParameterized()) {
+						searchSql.addListSqlParam(sqlParam);
+						searchSql.addClusterSqlParam(sqlParam);
+					} else {
+						joinCond = joinCond.replace(virtualParam.getSqlName(), sqlParam);
+					}
 				}
+				builder.append(joinCond).append(")");
 			}
 		}
 		for (int i = 0; i < filterParamList.size(); i++) {
@@ -196,67 +209,8 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 		clusterSelectSqlBuilder.append(" ");
 		return clusterSelectSqlBuilder.toString();
 	}
+	
 
-	
-	private void resolveVirtualParams(SearchBeanMap searchBeanMap) {
-		
-		VirtualSolution solution = resolveVirtualParams(searchBeanMap.getTalbes());
-		searchBeanMap.setTalbes(solution.getSqlSnippet());
-		searchBeanMap.setTableVirtualParams(solution.getVirtualParams());
-		
-		solution = resolveVirtualParams(searchBeanMap.getJoinCond());
-		searchBeanMap.setJoinCond(solution.getSqlSnippet());
-		searchBeanMap.setJoinCondVirtualParams(solution.getVirtualParams());
-		
-		Map<String, String> fieldDbMap = searchBeanMap.getFieldDbMap();
-		for (String field : searchBeanMap.getFieldList()) {
-			solution = resolveVirtualParams(fieldDbMap.get(field));
-			fieldDbMap.put(field, solution.getSqlSnippet());
-			searchBeanMap.putFieldVirtualParam(field, solution.getVirtualParams());
-		}
-		
-		searchBeanMap.setVirtualResolved(true);
-	}
-
-	
-	private int findVitualParamEndIndex(String sqlSnippet, int fromIndex) {
-		int index = -1;
-		for (String flag : vertualParamEndFlags) {
-			int index0 = sqlSnippet.indexOf(flag, fromIndex);
-			if (index < 0) {
-				index = index0;
-			} else if (index0 > 0) {
-				index = Math.min(index, index0);
-			}
-		}
-		return index;
-	}
-	
-	
-	private VirtualSolution resolveVirtualParams(String sqlSnippet) {
-		VirtualSolution solution = new VirtualSolution();
-		int index1 = sqlSnippet.indexOf(virtualParamPrefix);
-		while (index1 >= 0) {
-			int index2 = findVitualParamEndIndex(sqlSnippet, index1);
-			String virtualParam = null;
-			if (index2 > 0) {
-				virtualParam = sqlSnippet.substring(index1, index2);
-			} else {
-				virtualParam = sqlSnippet.substring(index1);
-			}
-			if (StringUtils.isBlank(virtualParam) || virtualParam.length() < 2) {
-				throw new SearcherException("这里有一个语法错误：" + sqlSnippet);
-			}
-			sqlSnippet = sqlSnippet.replaceFirst(virtualParam, "?");
-			
-			solution.addVirtualParam(virtualParam.substring(1));
-			index1 = sqlSnippet.indexOf(virtualParamPrefix);
-		}
-		solution.setSqlSnippet(sqlSnippet);
-		return solution;
-	}
-
-	
 	private String generateTableAlias(String originalSql) {
 		return generateAlias("tbl_", originalSql);
 	}
@@ -413,37 +367,4 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 		this.dialect = dialect;
 	}
 
-	public void setVirtualParamPrefix(String virtualParamPrefix) {
-		this.virtualParamPrefix = virtualParamPrefix;
-	}
-	
-	public void setVertualParamEndFlags(String[] vertualParamEndFlags) {
-		this.vertualParamEndFlags = vertualParamEndFlags;
-	}
-
-
-	class VirtualSolution {
-		
-		String sqlSnippet;
-		List<String> virtualParams = new ArrayList<>();
-
-		public String getSqlSnippet() {
-			return sqlSnippet;
-		}
-
-		public void setSqlSnippet(String sqlSnippet) {
-			this.sqlSnippet = sqlSnippet;
-		}
-
-		public List<String> getVirtualParams() {
-			return virtualParams;
-		}
-
-		public void addVirtualParam(String virtualParam) {
-			this.virtualParams.add(virtualParam);
-		}
-		
-	}
-	
-	
 }
