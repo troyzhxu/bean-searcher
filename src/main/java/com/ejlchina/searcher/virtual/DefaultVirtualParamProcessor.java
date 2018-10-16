@@ -82,7 +82,7 @@ public class DefaultVirtualParamProcessor implements VirtualParamProcessor {
 				sqlSnippet = sqlSnippet.replaceFirst(paramName, "?");
 			}
 			solution.addVirtualParam(virtualParam);
-			index1 = sqlSnippet.indexOf(virtualParamPrefix);
+			index1 = sqlSnippet.indexOf(virtualParamPrefix, index1 + 1);
 		}
 		solution.setSqlSnippet(sqlSnippet);
 		return solution;
