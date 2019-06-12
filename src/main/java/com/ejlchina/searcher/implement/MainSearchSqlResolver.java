@@ -168,7 +168,7 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 				String clusterSelectSql = resolveClusterSelectSql(fieldDbMap, searchSql, 
 						summaryFields, shouldQueryTotal, fromWhereSql);
 				String tableAlias = generateTableAlias(fromWhereSql);
-				searchSql.setClusterSqlString(clusterSelectSql + " from (select count(1) " + fromWhereSql + ") " + tableAlias);
+				searchSql.setClusterSqlString(clusterSelectSql + " from (select count(*) " + fromWhereSql + ") " + tableAlias);
 			}
 		}
 		String sortDbAlias = fieldDbAliasMap.get(searchParam.getSort());
@@ -193,7 +193,7 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 		StringBuilder clusterSelectSqlBuilder = new StringBuilder("select ");
 		if (shouldQueryTotal) {
 			String countAlias = generateColumnAlias("count", originalSql);
-			clusterSelectSqlBuilder.append("count(1) ").append(countAlias);
+			clusterSelectSqlBuilder.append("count(*) ").append(countAlias);
 			searchSql.setCountAlias(countAlias);
 		}
 		if (summaryFields != null) {
