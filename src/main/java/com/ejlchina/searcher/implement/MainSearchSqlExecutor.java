@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -36,7 +37,6 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 
 	
 	public MainSearchSqlExecutor() {
-		super();
 	}
 
 	
@@ -54,6 +54,7 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 		this.dataSource = dataSource;
 	}
 
+	
 	@Override
 	public SearchTmpResult execute(SearchSql searchSql) {
 		SearchTmpResult result = new SearchTmpResult();
@@ -69,10 +70,6 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 		} catch (SQLException e) {
 			throw new SearcherException("Can not get Connection from dataSource!", e);
 		}
-		PreparedStatement listStatement = null;
-		PreparedStatement countStatement = null;
-		ResultSet listResultSet = null;
-		ResultSet countResultSet = null;
 		try {
 			if (searchSql.isShouldQueryList()) {
 				doLog("sql ---- " + searchSql.getListSqlString());
@@ -96,29 +93,59 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 		} catch (SQLException e) {
 			throw new SearcherException("A exception throwed when query!", e);
 		} finally {
-			closeConnection(connection, listStatement, countStatement, listResultSet, countResultSet);
+			closeConnection(connection);
 		}
 		return result;
 	}
 
-	
+	/**
+	 * 执行列表查询并收集结果
+	 * @param connection
+	 * @param sql
+	 * @param params
+	 * @param listAliases
+	 * @param result
+	 * @throws SQLException
+	 */
 	protected void executeListSqlAndCollectResult(Connection connection, String sql, List<Object> params, 
 			List<String> listAliases, SearchTmpResult result) throws SQLException {
-		PreparedStatement listStatement = connection.prepareStatement(sql);
-		putParamsTntoStatement(listStatement, params);
-		ResultSet listResultSet = listStatement.executeQuery();
-		while (listResultSet.next()) {
-			result.addTmpData(resolveDataResult(listResultSet, listAliases));
+		PreparedStatement statement = null;
+		ResultSet resultSet = null;
+		try {
+			statement = connection.prepareStatement(sql);
+			putParamsTntoStatement(statement, params);
+			resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				result.addTmpData(resolveDataResult(resultSet, listAliases));
+			}
+		} finally {
+			closeStatementAndResultSet(statement, resultSet);
 		}
 	}
 	
+	/**
+	 * 执行聚合查询并收集结果
+	 * @param connection
+	 * @param sqlString
+	 * @param sqlParams
+	 * @param countAlias
+	 * @param summaryAliases
+	 * @param result
+	 * @throws SQLException
+	 */
 	protected void executeClusterSqlAndCollectResult(Connection connection, String sqlString, List<Object> sqlParams, 
 			String countAlias, List<String> summaryAliases, SearchTmpResult result) throws SQLException {
-		PreparedStatement countStatement = connection.prepareStatement(sqlString);
-		putParamsTntoStatement(countStatement, sqlParams);
-		ResultSet countResultSet = countStatement.executeQuery();
-		if (countResultSet.next()) {
-			collectClusterResult(countAlias, summaryAliases, result, countResultSet);
+		PreparedStatement statement = null;
+		ResultSet resultSet = null;
+		try {
+			statement = connection.prepareStatement(sqlString);
+			putParamsTntoStatement(statement, sqlParams);
+			resultSet = statement.executeQuery();
+			if (resultSet.next()) {
+				collectClusterResult(countAlias, summaryAliases, result, resultSet);
+			}
+		} finally {
+			closeStatementAndResultSet(statement, resultSet);
 		}
 	}
 	
@@ -151,29 +178,30 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 		return result;
 	}
 
-	protected void closeConnection(Connection connection, PreparedStatement listStatement,
-			PreparedStatement countStatement, ResultSet listResultSet, ResultSet countResultSet) {
+	protected void closeConnection(Connection connection) {
 		try {
-			if (countStatement != null) {
-				countStatement.close();
-			}
-			if (listStatement != null) {
-				listStatement.close();
-			}
 			if (connection != null) {
 				connection.close();
-			}
-			if (listResultSet != null) {
-				listResultSet.close();
-			}
-			if (countResultSet != null) {
-				countResultSet.close();
 			}
 		} catch (SQLException e) {
 			throw new SearcherException("Can not close connection!", e);
 		}
 	}
 
+	protected void closeStatementAndResultSet(Statement statement, ResultSet resultSet) {
+		try {
+			if (statement != null) {
+				statement.close();
+			}
+			if (resultSet != null) {
+				resultSet.close();
+			}
+		} catch (SQLException e) {
+			throw new SearcherException("Can not close statement or resultSet!", e);
+		}
+	}
+	
+	
 	protected void doLog(String content) {
 		log.info("bean-searcher - " + content);
 	}
