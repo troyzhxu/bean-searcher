@@ -25,30 +25,43 @@ public enum Operator {
 	public static Operator from(String op) {
 		switch (op) {
 		case "in":
+		case "Include":
 			return Include;
 		case "eq":
+		case "Equal":
 			return Equal;
 		case "ge":
+		case "GreaterEqual":
 			return GreaterEqual;
 		case "gt":
+		case "GreaterThan":
 			return GreaterThan;
 		case "le":
+		case "LessEqual":
 			return LessEqual;
 		case "lt":
+		case "LessThan":
 			return LessThan;
 		case "ne":
+		case "NotEqual":
 			return NotEqual;
 		case "ey":
+		case "Empty":
 			return Empty;
 		case "ny":
+		case "NotEmpty":
 			return NotEmpty;
 		case "sw":
+		case "StartWith":
 			return StartWith;
 		case "ew":
+		case "EndWith":
 			return EndWith;
 		case "bt":
+		case "Between":
 			return Between;
 		case "mv":
+		case "MultiValue":
 			return MultiValue;
 		}
 		return Equal;

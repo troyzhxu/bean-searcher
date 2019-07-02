@@ -52,6 +52,7 @@ public class MainSearchParamResolver implements SearchParamResolver {
 	
 	/**
 	 * 忽略大小写参数名后缀
+	 * 带上该参数会导致字段索引不被使用，查询速度降低，在大数据量下建议使用数据库本身的字符集实现忽略大小写功能。
 	 */
 	private String ignoreCaseParamNameSuffix = "ic";
 
@@ -85,23 +86,23 @@ public class MainSearchParamResolver implements SearchParamResolver {
 	
 	
 	@Override
-	public SearchParam resolve(List<String> fieldList, Map<String, String> paraMap) {
+	public SearchParam resolve(List<String> fieldList, Map<String, Object> paraMap) {
 		if (paramFilters != null) {
 			for (ParamFilter paramFilter: paramFilters) {
 				paraMap = paramFilter.doFilte(paraMap);
 			}
 		}
 		SearchParam searchParam = new SearchParam(defaultMax);
-		Set<Entry<String, String>> entrySet = paraMap.entrySet();
-		for (Entry<String, String> entry : entrySet) {
+		Set<Entry<String, Object>> entrySet = paraMap.entrySet();
+		for (Entry<String, Object> entry : entrySet) {
 			String key = entry.getKey();
-			String value = entry.getValue();
-			if (key.equals(sortParamName)) {
-				searchParam.setSort(value);
+			Object value = entry.getValue();
+			if (key.equals(sortParamName) && value instanceof String) {
+				searchParam.setSort((String) value);
 				continue;
 			}
-			if (key.equals(orderParamName)) {
-				searchParam.setOrder(value);
+			if (key.equals(orderParamName) && value instanceof String) {
+				searchParam.setOrder((String) value);
 				continue;
 			}
 			if (pagination.paginate(searchParam, key, value)) {
@@ -126,16 +127,24 @@ public class MainSearchParamResolver implements SearchParamResolver {
 				filterParam.addValue("0");
 			} else if (ignoreCaseParamNameSuffix.equals(rawParam.suffix)) {
 				FilterParam filterParam = findFilterParam(searchParam, rawParam.field);
-				String upVal = value != null ? value.toUpperCase() : value;
-				if ("0".equals(upVal) || "OFF".equals(upVal) || "FALSE".endsWith(upVal) || "N".endsWith(upVal)
-						|| "NO".endsWith(upVal) || "F".endsWith(upVal)) {
-					filterParam.setIgnoreCase(false);
-				} else {
-					filterParam.setIgnoreCase(true);
+				if (value != null) {
+					if (value instanceof Boolean) { 
+						filterParam.setIgnoreCase((Boolean) value);
+					} else
+					if (value instanceof String) {
+						String upcase = ((String) value).toUpperCase();
+						filterParam.setIgnoreCase(!("0".equals(upcase) || "OFF".equals(upcase) || "FALSE".endsWith(upcase) || "N".endsWith(upcase)
+								|| "NO".endsWith(upcase) || "F".endsWith(upcase)));
+					}
 				}
 			} else if (filterOperationParamNameSuffix.equals(rawParam.suffix)) {
 				FilterParam filterParam = findFilterParam(searchParam, rawParam.field);
-				filterParam.setOperator(Operator.from(value));
+				if (value instanceof Operator) {
+					filterParam.setOperator((Operator) value);
+				} else
+				if (value instanceof String) {
+					filterParam.setOperator(Operator.from((String) value));
+				}
 			} else {	// 多值解析
 				try {
 					int index = Integer.parseInt(rawParam.suffix);

@@ -33,22 +33,22 @@ public class FilterParam {
 		this.name = name;
 	}
 
-	public void addValue(String value) {
+	public void addValue(Object value) {
 		values.add(new Value(value, 0));
 	}
 	
-	public void addValue(String value, int index) {
+	public void addValue(Object value, int index) {
 		values.add(new Value(value, index));
 	}
 
-	public String[] getValues() {
+	public Object[] getValues() {
 		values.sort(new Comparator<Value>() {
 			@Override
 			public int compare(Value v1, Value v2) {
 				return v1.sort - v2.sort;
 			}
 		});
-		String[] vals = new String[values.size()];
+		Object[] vals = new String[values.size()];
 		for (int i = 0; i < values.size(); i++) {
 			vals[i] = values.get(i).value;
 		}
@@ -73,16 +73,16 @@ public class FilterParam {
 
 	public boolean allValuesEmpty() {
 		for (Value value : values) {
-			if (!StringUtils.isBlank(value.value)) {
+			if (!value.isEmptyValue()) {
 				return false;
 			}
 		}
 		return true;
 	}
 
-	public String firstNotNullValue() {
+	public Object firstNotNullValue() {
 		for (Value value : values) {
-			if (!StringUtils.isBlank(value.value)) {
+			if (!value.isEmptyValue()) {
 				return value.value;
 			}
 		}
@@ -92,23 +92,29 @@ public class FilterParam {
 
 	public static class Value {
 
-		public Value(String value, int sort) {
+		public Value(Object value, int sort) {
 			super();
 			this.value = value;
 			this.sort = sort;
 		}
 
-		private String value;
+		private Object value;
 		private int sort;
 
-		public String getValue() {
+		
+		public boolean isEmptyValue() {
+			return value == null || (value instanceof String && StringUtils.isBlank((String) value));
+		}
+		
+		
+		public Object getValue() {
 			return value;
 		}
 
-		public void setValue(String value) {
+		public void setValue(Object value) {
 			this.value = value;
 		}
-
+		
 		public int getSort() {
 			return sort;
 		}

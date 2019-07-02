@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ejlchina.searcher.param.SearchParam;
+import com.ejlchina.searcher.util.ObjectUtils;
 
 
 
@@ -36,42 +37,43 @@ public class PageNumPagination implements Pagination {
 	
 	
 	@Override
-	public boolean paginate(SearchParam searchParam, String paraName, String paraValue) {
-		try {
-			if (maxParamName.equals(paraName)) {
-				Integer max = Integer.valueOf(paraValue);
-				if (max > maxAllowedSize) {
-					max = maxAllowedSize;
-				}
-				searchParam.setMax(max);
-				Long page = searchParam.getPage();
-				if (page == null) {
-					return true;
-				}
-				long offset = (page - startPage) * max;
-				if (offset < 0) {
-					offset = 0;
-				}
-				searchParam.setOffset(offset);
+	public boolean paginate(SearchParam searchParam, String paraName, Object paraValue) {
+		if (maxParamName.equals(paraName)) {
+			Integer max = ObjectUtils.toInt(paraValue);
+			if (max == null) {
+				return false;
+			}
+			if (max > maxAllowedSize) {
+				max = maxAllowedSize;
+			}
+			searchParam.setMax(max);
+			Long page = searchParam.getPage();
+			if (page == null) {
 				return true;
 			}
-			if (pageParamName.equals(paraName)) {
-				Long page = Long.valueOf(paraValue);
-				searchParam.setPage(page);
-				Integer max = searchParam.getMax();
-				if (max == null) {
-					return true;
-				}
-				long offset = (page - startPage) * max;
-				if (offset < 0) {
-					offset = 0;
-				}
-				searchParam.setOffset(offset);
+			long offset = (page - startPage) * max;
+			if (offset < 0) {
+				offset = 0;
+			}
+			searchParam.setOffset(offset);
+			return true;
+		}
+		if (pageParamName.equals(paraName)) {
+			Long page = ObjectUtils.toLong(paraValue);
+			if (page == null) {
+				return false;
+			}
+			searchParam.setPage(page);
+			Integer max = searchParam.getMax();
+			if (max == null) {
 				return true;
 			}
-		} catch (Exception e) {
-			log.error("解析分页参数异常：", e);
-			return false;
+			long offset = (page - startPage) * max;
+			if (offset < 0) {
+				offset = 0;
+			}
+			searchParam.setOffset(offset);
+			return true;
 		}
 		return false;
 	}

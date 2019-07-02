@@ -27,7 +27,7 @@ public interface SearchParamResolver {
 	 * @param paraMap 用户请求参数映射
 	 * @return SearchParam
 	 * */
-	public SearchParam resolve(List<String> fieldList, Map<String, String> paraMap);
+	public SearchParam resolve(List<String> fieldList, Map<String, Object> paraMap);
 	
 	
 }

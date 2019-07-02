@@ -42,7 +42,7 @@ public class SearchParam {
 	/**
 	 * 虚拟参数值映射
 	 */
-	private Map<String, String> virtualParamMap = new HashMap<>();
+	private Map<String, Object> virtualParamMap = new HashMap<>();
 	
 	/**
 	 * 需要求和的字段
@@ -89,11 +89,11 @@ public class SearchParam {
 		return filterParamList;
 	}
 
-	public Map<String, String> getVirtualParamMap() {
+	public Map<String, Object> getVirtualParamMap() {
 		return virtualParamMap;
 	}
 
-	public void putVirtualParam(String name, String value) {
+	public void putVirtualParam(String name, Object value) {
 		this.virtualParamMap.put(name, value);;
 	}
 

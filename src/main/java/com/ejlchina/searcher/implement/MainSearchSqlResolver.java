@@ -29,6 +29,8 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 	
 	static final Pattern DATE_PATTERN = Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{2}");
 
+	static final Pattern DATE_HOUR_PATTERN = Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}");
+	
 	static final Pattern DATE_MINUTE_PATTERN = Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}");
 	
 	static final Pattern DATE_SECOND_PATTERN = Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}");
@@ -48,7 +50,7 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 		Map<String, String> fieldDbAliasMap = searchBeanMap.getFieldDbAliasMap();
 		Map<String, Class<?>> fieldTypeMap = searchBeanMap.getFieldTypeMap();
 		
-		Map<String, String> virtualParamMap = searchParam.getVirtualParamMap();
+		Map<String, Object> virtualParamMap = searchParam.getVirtualParamMap();
 		
 		SearchSql searchSql = new SearchSql();
 		StringBuilder builder = new StringBuilder("select ");
@@ -64,7 +66,7 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 			List<VirtualParam> fieldVirtualParams = searchBeanMap.getFieldVirtualParams(field);
 			if (fieldVirtualParams != null) {
 				for (VirtualParam virtualParam: fieldVirtualParams) {
-					String sqlParam = virtualParamMap.get(virtualParam.getName());
+					Object sqlParam = virtualParamMap.get(virtualParam.getName());
 					if (virtualParam.isParameterized()) {
 						searchSql.addListSqlParam(sqlParam);
 						// 只有在 distinct 条件，聚族查询 SQL 里才会出现 字段查询 语句，才需要将 虚拟参数放到 聚族参数里 
@@ -72,7 +74,8 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 							searchSql.addClusterSqlParam(sqlParam);
 						}
 					} else {
-						dbField = dbField.replace(virtualParam.getSqlName(), sqlParam);
+						String strParam = sqlParam != null ? sqlParam.toString() : "null";
+						dbField = dbField.replace(virtualParam.getSqlName(), strParam);
 					}
 				}
 			}
@@ -92,12 +95,13 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 		List<VirtualParam> tableVirtualParams = searchBeanMap.getTableVirtualParams();
 		if (tableVirtualParams != null) {
 			for (VirtualParam virtualParam: tableVirtualParams) {
-				String sqlParam = virtualParamMap.get(virtualParam.getName());
+				Object sqlParam = virtualParamMap.get(virtualParam.getName());
 				if (virtualParam.isParameterized()) {
 					searchSql.addListSqlParam(sqlParam);
 					searchSql.addClusterSqlParam(sqlParam);
 				} else {
-					talbes = talbes.replace(virtualParam.getSqlName(), sqlParam);
+					String strParam = sqlParam != null ? sqlParam.toString() : "null";
+					talbes = talbes.replace(virtualParam.getSqlName(), strParam);
 				}
 			}
 		}
@@ -114,12 +118,13 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 				List<VirtualParam> joinCondVirtualParams = searchBeanMap.getJoinCondVirtualParams();
 				if (joinCondVirtualParams != null) {
 					for (VirtualParam virtualParam: joinCondVirtualParams) {
-						String sqlParam = virtualParamMap.get(virtualParam.getName());
+						Object sqlParam = virtualParamMap.get(virtualParam.getName());
 						if (virtualParam.isParameterized()) {
 							searchSql.addListSqlParam(sqlParam);
 							searchSql.addClusterSqlParam(sqlParam);
 						} else {
-							joinCond = joinCond.replace(virtualParam.getSqlName(), sqlParam);
+							String strParam = sqlParam != null ? sqlParam.toString() : "null";
+							joinCond = joinCond.replace(virtualParam.getSqlName(), strParam);
 						}
 					}
 				}
@@ -243,27 +248,32 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 	 */
 	private List<Object> appendFilterConditionSql(StringBuilder builder, Class<?> fieldType, 
 			String dbField, FilterParam filterParam) {
-		String[] values = filterParam.getValues();
+		Object[] values = filterParam.getValues();
 		boolean ignoreCase = filterParam.isIgnoreCase();
 		Operator operator = filterParam.getOperator();
-		String firstRealValue = filterParam.firstNotNullValue();
+		Object firstRealValue = filterParam.firstNotNullValue();
 		if (ignoreCase) {
 			for (int i = 0; i < values.length; i++) {
-				String val = values[i];
+				Object val = values[i];
 				if (val != null) {
-					values[i] = val.toUpperCase();
+					if (val instanceof String) {
+						values[i] = ((String) val).toUpperCase();
+					} else {
+						values[i] = val;
+					}
 				}
 			}
-			if (firstRealValue != null) {
-				firstRealValue = firstRealValue.toUpperCase();
+			if (firstRealValue != null && firstRealValue instanceof String) {
+				firstRealValue = ((String) firstRealValue).toUpperCase();
 			}
 		}
 		if (operator != Operator.MultiValue) {
 			if (ignoreCase) {
 				dialect.toUpperCase(builder, dbField);
-			} else if (Date.class.isAssignableFrom(fieldType) && firstRealValue != null) {
-				appendDateFieldWithDialect(builder, dbField, firstRealValue);
 			} else {
+				if (Date.class.isAssignableFrom(fieldType)) {
+					firstRealValue = dateValue(firstRealValue);
+				}
 				builder.append(dbField);
 			}
 		}
@@ -314,38 +324,39 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 		case Between:
 			boolean val1Null = false;
 			boolean val2Null = false;
-			if (values[0] == null || StringUtils.isBlank(values[0])) {
+			Object value0 = values[0];
+			Object value1 = values[1];
+			if (value0 == null || (value0 instanceof String && StringUtils.isBlank((String) value0))) {
 				val1Null = true;
 			}
-			if (values[1] == null || StringUtils.isBlank(values[1])) {
+			if (value1 == null || (value1 instanceof String && StringUtils.isBlank((String) value1))) {
 				val2Null = true;
 			}
 			if (!val1Null && !val2Null) {
 				builder.append(" between ? and ? ");
-				params.add(values[0]);
-				params.add(values[1]);
+				params.add(value0);
+				params.add(value1);
 			} else if (val1Null && !val2Null) {
 				builder.append(" <= ? ");
-				params.add(values[1]);
+				params.add(value1);
 			} else if (!val1Null && val2Null) {
 				builder.append(" >= ? ");
-				params.add(values[0]);
+				params.add(value0);
 			}
 			break;
 		case MultiValue:
 			builder.append("(");
 			for (int i = 0; i < values.length; i++) {
-				String value = values[i];
-				if (value != null && "NULL".equals(value.toUpperCase())) {
+				Object value = values[i];
+				if (value == null) {
 					builder.append(dbField).append(" is null");
 				} else if (ignoreCase) {
 					dialect.toUpperCase(builder, dbField);
 					builder.append(" = ?");
 					params.add(value);
 				} else if (Date.class.isAssignableFrom(fieldType)) {
-					appendDateFieldWithDialect(builder, dbField, value);
-					builder.append(" = ?");
-					params.add(value);
+					builder.append(dbField).append(" = ?");
+					params.add(dateValue(value));
 				} else {
 					builder.append(dbField).append(" = ?");
 					params.add(value);
@@ -360,16 +371,18 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 		return params;
 	}
 
-	private void appendDateFieldWithDialect(StringBuilder builder, String dbField, String value) {
-		if (DATE_PATTERN.matcher(value).matches()) {
-			dialect.truncateToDateStr(builder, dbField);
-		} else if (DATE_MINUTE_PATTERN.matcher(value).matches()) {
-			dialect.truncateToDateMinuteStr(builder, dbField);
-		} else if (DATE_SECOND_PATTERN.matcher(value).matches()) {
-			dialect.truncateToDateSecondStr(builder, dbField);
-		} else {
-			builder.append(dbField);
+	private Object dateValue(Object value) {
+		if (value != null && value instanceof String) {
+			String strValue = (String) value;
+			if (DATE_PATTERN.matcher(strValue).matches()) {
+				return strValue + " 00:00:00";
+			} else if (DATE_HOUR_PATTERN.matcher(strValue).matches()) {
+				return strValue + ":00:00";
+			} else if (DATE_MINUTE_PATTERN.matcher(strValue).matches()) {
+				return strValue + ":00";
+			}
 		}
+		return value;
 	}
 
 	public void setDialect(Dialect dialect) {

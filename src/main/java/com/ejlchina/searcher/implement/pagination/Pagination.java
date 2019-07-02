@@ -18,7 +18,7 @@ public interface Pagination {
 	 * @param paraValue 参数值
 	 * @return true if paginated else false
 	 */
-	boolean paginate(SearchParam searchParam, String paraName, String paraValue);
+	boolean paginate(SearchParam searchParam, String paraName, Object paraValue);
 	
 	
 	/**

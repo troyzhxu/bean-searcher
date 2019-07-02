@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ejlchina.searcher.param.SearchParam;
+import com.ejlchina.searcher.util.ObjectUtils;
 
 
 public class MaxOffsetPagination implements Pagination {
@@ -30,27 +31,28 @@ public class MaxOffsetPagination implements Pagination {
 	
 	
 	@Override
-	public boolean paginate(SearchParam searchParam, String paraName, String paraValue) {
-		try {
-			if (maxParamName.equals(paraName)) {
-				Integer max = Integer.valueOf(paraValue);
-				if (max > maxAllowedSize) {
-					max = maxAllowedSize;
-				}
-				searchParam.setMax(max);
-				return true;
+	public boolean paginate(SearchParam searchParam, String paraName, Object paraValue) {
+		if (maxParamName.equals(paraName)) {
+			Integer max = ObjectUtils.toInt(paraValue);
+			if (max == null) {
+				return false;
 			}
-			if (offsetParamName.equals(paraName)) {
-				Long offset = Long.valueOf(paraValue);
-				if (offset < 0) {
-					offset = 0L;
-				}
-				searchParam.setOffset(offset);
-				return true;
+			if (max > maxAllowedSize) {
+				max = maxAllowedSize;
 			}
-		} catch (Exception e) {
-			log.error("解析分页参数异常：", e);
-			return false;
+			searchParam.setMax(max);
+			return true;
+		}
+		if (offsetParamName.equals(paraName)) {
+			Long offset = ObjectUtils.toLong(paraValue);
+			if (offset == null) {
+				return false;
+			}
+			if (offset < 0) {
+				offset = 0L;
+			}
+			searchParam.setOffset(offset);
+			return true;
 		}
 		return false;
 	}
