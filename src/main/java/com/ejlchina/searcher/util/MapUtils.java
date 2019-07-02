@@ -7,8 +7,8 @@ import java.util.Map.Entry;
 public class MapUtils {
 
 	
-	public static Map<String, String> flat(Map<String, String[]> map) {
-		Map<String, String> newMap = new HashMap<String, String>();
+	public static Map<String, Object> flat(Map<String, String[]> map) {
+		Map<String, Object> newMap = new HashMap<>();
 		for (Entry<String, String[]> entry: map.entrySet()) {
 			String[] values =entry.getValue();
 			if (values.length > 0) {
@@ -17,6 +17,5 @@ public class MapUtils {
 		}
 		return newMap;
 	}
-	
 	
 }
