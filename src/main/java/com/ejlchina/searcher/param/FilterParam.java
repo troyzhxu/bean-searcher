@@ -48,7 +48,7 @@ public class FilterParam {
 				return v1.sort - v2.sort;
 			}
 		});
-		Object[] vals = new String[values.size()];
+		Object[] vals = new Object[values.size()];
 		for (int i = 0; i < values.size(); i++) {
 			vals[i] = values.get(i).value;
 		}

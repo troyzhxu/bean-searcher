@@ -149,6 +149,9 @@ public class MainSearchParamResolver implements SearchParamResolver {
 				try {
 					int index = Integer.parseInt(rawParam.suffix);
 					FilterParam filterParam = findFilterParam(searchParam, rawParam.field);
+					if (filterParam.getOperator() == null) {
+						filterParam.setOperator(Operator.Equal);
+					}
 					filterParam.addValue(value, index);
 				} catch (NumberFormatException e) {
 					log.error("不能解析的查询参数名：" + key, e);

@@ -220,7 +220,6 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 				searchSql.addSummaryAlias(summaryAlias);
 			}
 		}
-		clusterSelectSqlBuilder.append(" ");
 		return clusterSelectSqlBuilder.toString();
 	}
 	
@@ -252,6 +251,14 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 		boolean ignoreCase = filterParam.isIgnoreCase();
 		Operator operator = filterParam.getOperator();
 		Object firstRealValue = filterParam.firstNotNullValue();
+		
+		if (Date.class.isAssignableFrom(fieldType)) {
+			for (int i = 0; i < values.length; i++) {
+				values[i] = dateValue(values[i]);
+			}
+			firstRealValue = dateValue(firstRealValue);
+		}
+		
 		if (ignoreCase) {
 			for (int i = 0; i < values.length; i++) {
 				Object val = values[i];
@@ -271,9 +278,6 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 			if (ignoreCase) {
 				dialect.toUpperCase(builder, dbField);
 			} else {
-				if (Date.class.isAssignableFrom(fieldType)) {
-					firstRealValue = dateValue(firstRealValue);
-				}
 				builder.append(dbField);
 			}
 		}
@@ -324,8 +328,8 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 		case Between:
 			boolean val1Null = false;
 			boolean val2Null = false;
-			Object value0 = values[0];
-			Object value1 = values[1];
+			Object value0 = values.length > 0 ? values[0] : null;
+			Object value1 = values.length > 1 ? values[1] : null;
 			if (value0 == null || (value0 instanceof String && StringUtils.isBlank((String) value0))) {
 				val1Null = true;
 			}
@@ -356,7 +360,7 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 					params.add(value);
 				} else if (Date.class.isAssignableFrom(fieldType)) {
 					builder.append(dbField).append(" = ?");
-					params.add(dateValue(value));
+					params.add(value);
 				} else {
 					builder.append(dbField).append(" = ?");
 					params.add(value);

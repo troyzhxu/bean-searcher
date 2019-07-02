@@ -22,6 +22,14 @@ public class SearchTmpResult {
 	private Number[] summaries;
 	
 	
+	public SearchTmpResult() {
+	}
+
+	public SearchTmpResult(Number totalCount) {
+		super();
+		this.totalCount = totalCount;
+	}
+
 	public Number getTotalCount() {
 		return totalCount;
 	}
