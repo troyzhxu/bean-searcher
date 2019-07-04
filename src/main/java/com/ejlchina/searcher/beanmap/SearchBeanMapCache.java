@@ -14,7 +14,7 @@ public class SearchBeanMapCache {
 
 	private static SearchBeanMapCache instance = new SearchBeanMapCache();
 	
-	private Map<Class<?>, SearchBeanMap> cache = new HashMap<>();
+	private Map<String, SearchBeanMap> cache = new HashMap<>();
 	
 	
 	public static SearchBeanMapCache sharedCache() {
@@ -23,12 +23,12 @@ public class SearchBeanMapCache {
 	
 	
 	public void addSearchBeanMap(Class<?> beanClass, SearchBeanMap dbMap) {
-		cache.put(beanClass, dbMap);
+		cache.put(beanClass.getName(), dbMap);
 	}
 	
 	
 	public SearchBeanMap getSearchBeanMap(Class<?> beanClass) {
-		return cache.get(beanClass);
+		return cache.get(beanClass.getName());
 	}
 	
 	
