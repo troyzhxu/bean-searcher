@@ -3,6 +3,8 @@ package com.ejlchina.searcher.beanmap;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.ejlchina.searcher.SearchResultConvertInfo;
+
 
 /**
  * 用于缓存 @SearchBeanMap
@@ -22,8 +24,13 @@ public class SearchBeanMapCache {
 	}
 	
 	
-	public void addSearchBeanMap(Class<?> beanClass, SearchBeanMap dbMap) {
-		cache.put(beanClass.getName(), dbMap);
+	public <T> void addSearchBeanMap(Class<T> beanClass, SearchBeanMap searchBeanMap) {
+		SearchResultConvertInfo<T> convertInfo = new SearchResultConvertInfo<T>(beanClass);
+		convertInfo.setFieldDbAliasEntrySet(searchBeanMap.getFieldDbAliasMap().entrySet());
+		convertInfo.setFieldGetMethodMap(searchBeanMap.getFieldGetMethodMap());
+		convertInfo.setFieldTypeMap(searchBeanMap.getFieldTypeMap());
+		searchBeanMap.setConvertInfo(convertInfo);
+		cache.put(beanClass.getName(), searchBeanMap);
 	}
 	
 	

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.ejlchina.searcher.SearchResultConvertInfo;
 import com.ejlchina.searcher.SearcherException;
 import com.ejlchina.searcher.virtual.VirtualParam;
 
@@ -76,6 +77,9 @@ public class SearchBeanMap {
 	 * 映射：属性 -> 虚拟参数 
 	 */
 	private Map<String, List<VirtualParam>> fieldVirtualParamsMap = new HashMap<>();
+	
+	
+	private SearchResultConvertInfo<?> convertInfo;
 	
 	
 	public SearchBeanMap(String talbes, String joinCond, String groupBy, boolean distinct) {
@@ -168,4 +172,14 @@ public class SearchBeanMap {
 		fieldVirtualParamsMap.put(field, virtualParams);
 	}
 
+
+	public SearchResultConvertInfo<?> getConvertInfo() {
+		return convertInfo;
+	}
+
+
+	public void setConvertInfo(SearchResultConvertInfo<?> convertInfo) {
+		this.convertInfo = convertInfo;
+	}
+	
 }

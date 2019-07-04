@@ -181,10 +181,12 @@ public class MainSearcher implements Searcher {
 		searchSql.setShouldQueryCluster(shouldQueryTotal || (summaryFields != null && summaryFields.length > 0));
 		searchSql.setShouldQueryList(shouldQueryList);
 		SearchTmpResult searchTmpResult = searchSqlExecutor.execute(searchSql);
-		SearchResultConvertInfo<T> convertInfo = new SearchResultConvertInfo<T>(beanClass);
-		convertInfo.setFieldDbAliasEntrySet(searchBeanMap.getFieldDbAliasMap().entrySet());
-		convertInfo.setFieldGetMethodMap(searchBeanMap.getFieldGetMethodMap());
-		convertInfo.setFieldTypeMap(searchBeanMap.getFieldTypeMap());
+//		SearchResultConvertInfo<T> convertInfo = new SearchResultConvertInfo<T>(beanClass);
+//		convertInfo.setFieldDbAliasEntrySet(searchBeanMap.getFieldDbAliasMap().entrySet());
+//		convertInfo.setFieldGetMethodMap(searchBeanMap.getFieldGetMethodMap());
+//		convertInfo.setFieldTypeMap(searchBeanMap.getFieldTypeMap());
+		@SuppressWarnings("unchecked")
+		SearchResultConvertInfo<T> convertInfo = (SearchResultConvertInfo<T>) searchBeanMap.getConvertInfo();
 		SearchResult<T> result = searchResultResolver.resolve(convertInfo, searchTmpResult);
 		return consummateSearchResult(searchParam, result);
 	}
