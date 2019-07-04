@@ -3,6 +3,8 @@ package com.ejlchina.searcher.support.boot;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,12 +40,13 @@ import com.ejlchina.searcher.util.StringUtils;
 
 
 @Configuration
+@ConditionalOnBean(DataSource.class)
 @EnableConfigurationProperties(BeanSearcherProperties.class)
 public class BeanSearcherAutoConfiguration {
 
-	
-	
+
 	@Bean
+	@ConditionalOnMissingBean(Pagination.class)
 	public Pagination pagination(BeanSearcherProperties config) {
 		PaginationPorps conf = config.getParams().getPagination();
 		String type = conf.getType();
@@ -68,6 +71,7 @@ public class BeanSearcherAutoConfiguration {
 	
 	
 	@Bean
+	@ConditionalOnMissingBean(SearchParamResolver.class)
 	public SearchParamResolver searchParamResolver(Pagination pagination, BeanSearcherProperties config, 
 			ObjectProvider<ParamFilter[]> paramFilterProvider) {
 		MainSearchParamResolver searchParamResolver = new MainSearchParamResolver();
@@ -88,8 +92,13 @@ public class BeanSearcherAutoConfiguration {
 	
 	
 	@Bean
+	@ConditionalOnMissingBean(Dialect.class)
 	public Dialect dialect(BeanSearcherProperties config) {
-		switch (config.getSql().getDialect()) {
+		String dialect = config.getSql().getDialect();
+		if (dialect == null) {
+			throw new SearcherException("配置项【spring.bean-searcher.sql.dialect】不能为空");
+		}
+		switch (dialect.toLowerCase()) {
 		case SqlProps.DIALECT_MYSQL:
 			return new MySqlDialect();
 		case SqlProps.DIALECT_ORACLE:
@@ -104,16 +113,21 @@ public class BeanSearcherAutoConfiguration {
 	
 	
 	@Bean
+	@ConditionalOnMissingBean(SearchSqlResolver.class)
 	public SearchSqlResolver searchSqlResolver(Dialect dialect) {
 		return new MainSearchSqlResolver(dialect);
 	}
 	
+	
 	@Bean
+	@ConditionalOnMissingBean(SearchSqlExecutor.class)
 	public SearchSqlExecutor searchSqlExecutor(DataSource dataSource) {
 		return new MainSearchSqlExecutor(dataSource);
 	}
 	
+	
 	@Bean
+	@ConditionalOnMissingBean(FieldConvertor.class)
 	public FieldConvertor fieldConvertor(BeanSearcherProperties config) {
 		DefaultFieldConvertor convertor = new DefaultFieldConvertor();
 		FieldConvertorProps conf = config.getFieldConvertor();
@@ -130,12 +144,14 @@ public class BeanSearcherAutoConfiguration {
 	
 	
 	@Bean
+	@ConditionalOnMissingBean(SearchResultResolver.class)
 	public SearchResultResolver searchResultResolver(FieldConvertor fieldConvertor) {
 		return new MainSearchResultResolver(fieldConvertor);
 	}
 	
 	
 	@Bean
+	@ConditionalOnMissingBean(Searcher.class)
 	public Searcher beanSearcher(SearchParamResolver searchParamResolver, 
 				SearchSqlResolver searchSqlResolver, 
 				SearchSqlExecutor searchSqlExecutor, 
