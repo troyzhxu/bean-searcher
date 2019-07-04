@@ -26,6 +26,17 @@ public class MainSearchResultResolver implements SearchResultResolver {
 	
 	private FieldConvertor fieldConvertor;
 	
+	
+	
+	public MainSearchResultResolver() {
+	}
+	
+	
+	public MainSearchResultResolver(FieldConvertor fieldConvertor) {
+		this.fieldConvertor = fieldConvertor;
+	}
+
+	
 	@Override
 	public <T> SearchResult<T> resolve(SearchResultConvertInfo<T> convertInfo, SearchTmpResult searchTmpResult) {
 		

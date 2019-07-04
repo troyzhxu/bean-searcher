@@ -45,21 +45,35 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-beans</artifactId>
-			<version>3.1.2.RELEASE</version>
-			<scope>provided</scope>
+			<version>4.3.16.RELEASE</version>
 		</dependency>
 	
+		<dependency>
+		  <groupId>org.springframework</groupId>
+		  <artifactId>spring-core</artifactId>
+		  <version>4.3.16.RELEASE</version>
+		</dependency>
+		
+		<dependency>
+		  <groupId>org.springframework.boot</groupId>
+		  <artifactId>spring-boot</artifactId>
+		  <version>1.5.21.RELEASE</version>
+		  <scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+		  <groupId>org.springframework</groupId>
+		  <artifactId>spring-context</artifactId>
+		  <version>4.3.16.RELEASE</version>
+		  <scope>provided</scope>
+		</dependency>
+		
+		
 		<dependency>
 			<groupId>com.jfinal</groupId>
 			<artifactId>jfinal</artifactId>
 			<version>3.0</version>
 			<scope>provided</scope>
-		</dependency>
-		
-		<dependency>
-		  <groupId>org.springframework</groupId>
-		  <artifactId>spring-core</artifactId>
-		  <version>3.1.2.RELEASE</version>
 		</dependency>
 		
 		<dependency>

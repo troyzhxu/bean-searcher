@@ -13,6 +13,12 @@ public class MaxOffsetPagination implements Pagination {
 
 	protected Logger log = LoggerFactory.getLogger(MaxOffsetPagination.class);
 	
+	
+	/**
+	 * 开始偏移
+	 * */
+	private int startOffset = 0;
+	
 	/**
 	 * 最大条数字段参数名
 	 */
@@ -51,7 +57,7 @@ public class MaxOffsetPagination implements Pagination {
 			if (offset < 0) {
 				offset = 0L;
 			}
-			searchParam.setOffset(offset);
+			searchParam.setOffset(offset - startOffset);
 			return true;
 		}
 		return false;
@@ -65,7 +71,7 @@ public class MaxOffsetPagination implements Pagination {
 
 	@Override
 	public int getStartPage() {
-		return 0;
+		return startOffset;
 	}
 
 	public void setMaxParamName(String maxParamName) {
@@ -78,6 +84,14 @@ public class MaxOffsetPagination implements Pagination {
 
 	public void setMaxAllowedSize(int maxAllowedSize) {
 		this.maxAllowedSize = maxAllowedSize;
+	}
+
+	public int getStartOffset() {
+		return startOffset;
+	}
+
+	public void setStartOffset(int startOffset) {
+		this.startOffset = startOffset;
 	}
 
 }

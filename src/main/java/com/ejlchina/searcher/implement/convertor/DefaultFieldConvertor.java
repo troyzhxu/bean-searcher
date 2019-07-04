@@ -13,6 +13,15 @@ import com.ejlchina.searcher.SearcherException;
  */
 public class DefaultFieldConvertor implements FieldConvertor {
 
+	public static final String[] DEFAULT_TRUES = {  "1", "TRUE", "Y", "T", "YES", "ON" };
+	public static final String[] DEFAULT_FALSES = { "0", "FALSE", "N", "F", "NO", "OFF" };
+	
+	
+	private String[] trues = DEFAULT_TRUES;
+	
+	private String[] falses = DEFAULT_FALSES;
+	
+	
 	@Override
 	public Object convert(Object value, Class<?> fieldType) {
 		if (value == null) {
@@ -42,13 +51,15 @@ public class DefaultFieldConvertor implements FieldConvertor {
 		}
 		if (fieldType == boolean.class || fieldType == Boolean.class) {
 			strValue = strValue.toUpperCase();
-			if ("0".equals(strValue) || "FALSE".equals(strValue) || "N".equals(strValue) || "F".equals(strValue)
-					|| "NO".equals(strValue)) {
-				return Boolean.FALSE;
+			for (String t: trues) {
+				if (t.equals(strValue)) {
+					return Boolean.TRUE;
+				}
 			}
-			if ("1".equals(strValue) || "TRUE".equals(strValue) || "Y".equals(strValue) || "T".equals(strValue)
-					|| "YES".equals(strValue)) {
-				return Boolean.TRUE;
+			for (String f: falses) {
+				if (f.equals(strValue)) {
+					return Boolean.FALSE;
+				}
 			}
 			throw new SearcherException("不能把【" + value.getClass() + "】转换为boolean值！");
 		}
@@ -61,4 +72,24 @@ public class DefaultFieldConvertor implements FieldConvertor {
 		throw new SearcherException("不能把【" + value.getClass() + "】转换为【" + fieldType + "】类型！");
 	}
 
+
+	public String[] getFalses() {
+		return falses;
+	}
+
+
+	public void setFalses(String[] falses) {
+		this.falses = falses;
+	}
+
+
+	public String[] getTrues() {
+		return trues;
+	}
+
+
+	public void setTrues(String[] trues) {
+		this.trues = trues;
+	}
+	
 }

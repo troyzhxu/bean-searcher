@@ -42,6 +42,15 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 	private Dialect dialect;
 
 	
+	
+	public MainSearchSqlResolver() {
+	}
+	
+	public MainSearchSqlResolver(Dialect dialect) {
+		this.dialect = dialect;
+	}
+
+
 	@Override
 	public SearchSql resolve(SearchBeanMap searchBeanMap, SearchParam searchParam) {
 		
