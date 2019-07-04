@@ -76,6 +76,13 @@
 		</dependency>
 		
 		<dependency>
+		  <groupId>org.springframework.boot</groupId>
+		  <artifactId>spring-boot-configuration-processor</artifactId>
+		  <version>1.5.21.RELEASE</version>
+		  <optional>true</optional>
+		</dependency>
+		
+		<dependency>
 			<groupId>com.jfinal</groupId>
 			<artifactId>jfinal</artifactId>
 			<version>3.0</version>

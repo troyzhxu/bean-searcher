@@ -33,7 +33,7 @@ import com.ejlchina.searcher.implement.pagination.PageNumPagination;
 import com.ejlchina.searcher.implement.pagination.Pagination;
 import com.ejlchina.searcher.implement.parafilter.ParamFilter;
 import com.ejlchina.searcher.support.boot.BeanSearcherProperties.FieldConvertorProps;
-import com.ejlchina.searcher.support.boot.BeanSearcherProperties.PaginationPorps;
+
 import com.ejlchina.searcher.support.boot.BeanSearcherProperties.ParamsPorps;
 import com.ejlchina.searcher.support.boot.BeanSearcherProperties.SqlProps;
 import com.ejlchina.searcher.support.spring.SpringSearcher;
@@ -51,9 +51,9 @@ public class BeanSearcherAutoConfiguration {
 	@Bean
 	@ConditionalOnMissingBean(Pagination.class)
 	public Pagination pagination(BeanSearcherProperties config) {
-		PaginationPorps conf = config.getParams().getPagination();
+		ParamsPorps.PaginationPorps conf = config.getParams().getPagination();
 		String type = conf.getType();
-		if (PaginationPorps.TYPE_PAGE.equals(type)) {
+		if (ParamsPorps.PaginationPorps.TYPE_PAGE.equals(type)) {
 			PageNumPagination p = new PageNumPagination();
 			p.setMaxAllowedSize(conf.getMaxAllowedSize());
 			p.setMaxParamName(conf.getSize());
@@ -61,7 +61,7 @@ public class BeanSearcherAutoConfiguration {
 			p.setStartPage(conf.getStart());
 			return p;
 		} 
-		if (PaginationPorps.TYPE_OFFSET.equals(type)) {
+		if (ParamsPorps.PaginationPorps.TYPE_OFFSET.equals(type)) {
 			MaxOffsetPagination p = new MaxOffsetPagination();
 			p.setMaxAllowedSize(conf.getMaxAllowedSize());
 			p.setMaxParamName(conf.getMax());
