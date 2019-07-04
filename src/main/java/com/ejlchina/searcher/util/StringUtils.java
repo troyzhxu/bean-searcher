@@ -69,4 +69,13 @@ public class StringUtils {
 	}
 	
 	
+	public static String[] toUpperCase(String[] ts) {
+		for (int i = 0; i < ts.length; i++) {
+			if (ts[i] != null) {
+				ts[i] = ts[i].toUpperCase();
+			}
+		}
+		return ts;
+	}
+	
 }

@@ -16,6 +16,7 @@ public class DefaultFieldConvertor implements FieldConvertor {
 	public static final String[] DEFAULT_TRUES = {  "1", "TRUE", "Y", "T", "YES", "ON" };
 	public static final String[] DEFAULT_FALSES = { "0", "FALSE", "N", "F", "NO", "OFF" };
 	
+	private boolean ignoreCase = true;
 	
 	private String[] trues = DEFAULT_TRUES;
 	
@@ -50,7 +51,9 @@ public class DefaultFieldConvertor implements FieldConvertor {
 			throw new SearcherException("不能把【" + value.getClass() + "】转换为【" + fieldType + "】类型！", e);
 		}
 		if (fieldType == boolean.class || fieldType == Boolean.class) {
-			strValue = strValue.toUpperCase();
+			if (ignoreCase) {
+				strValue = strValue.toUpperCase();
+			}
 			for (String t: trues) {
 				if (t.equals(strValue)) {
 					return Boolean.TRUE;
@@ -90,6 +93,15 @@ public class DefaultFieldConvertor implements FieldConvertor {
 
 	public void setTrues(String[] trues) {
 		this.trues = trues;
+	}
+
+
+	public boolean isIgnoreCase() {
+		return ignoreCase;
+	}
+
+	public void setIgnoreCase(boolean ignoreCase) {
+		this.ignoreCase = ignoreCase;
 	}
 	
 }

@@ -257,6 +257,7 @@ public class BeanSearcherProperties {
 		
 		private String[] falses = DefaultFieldConvertor.DEFAULT_FALSES;
 
+		private boolean ignoreCase = true;
 		
 		public String[] getTrues() {
 			return trues;
@@ -272,6 +273,14 @@ public class BeanSearcherProperties {
 
 		public void setFalses(String[] falses) {
 			this.falses = falses;
+		}
+
+		public boolean isIgnoreCase() {
+			return ignoreCase;
+		}
+
+		public void setIgnoreCase(boolean ignoreCase) {
+			this.ignoreCase = ignoreCase;
 		}
 		
 	}

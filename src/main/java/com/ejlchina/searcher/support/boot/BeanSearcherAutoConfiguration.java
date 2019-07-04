@@ -33,6 +33,7 @@ import com.ejlchina.searcher.support.boot.BeanSearcherProperties.PaginationPorps
 import com.ejlchina.searcher.support.boot.BeanSearcherProperties.ParamsPorps;
 import com.ejlchina.searcher.support.boot.BeanSearcherProperties.SqlProps;
 import com.ejlchina.searcher.support.spring.SpringSearcher;
+import com.ejlchina.searcher.util.StringUtils;
 
 
 
@@ -116,8 +117,14 @@ public class BeanSearcherAutoConfiguration {
 	public FieldConvertor fieldConvertor(BeanSearcherProperties config) {
 		DefaultFieldConvertor convertor = new DefaultFieldConvertor();
 		FieldConvertorProps conf = config.getFieldConvertor();
-		convertor.setTrues(conf.getTrues());
-		convertor.setFalses(conf.getFalses());
+		convertor.setIgnoreCase(conf.isIgnoreCase());
+		if (conf.isIgnoreCase()) {
+			convertor.setTrues(StringUtils.toUpperCase(conf.getTrues()));
+			convertor.setFalses(StringUtils.toUpperCase(conf.getFalses()));
+		} else {
+			convertor.setTrues(conf.getTrues());
+			convertor.setFalses(conf.getFalses());
+		}
 		return convertor;
 	}
 	
