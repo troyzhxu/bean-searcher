@@ -32,6 +32,8 @@ import com.ejlchina.searcher.implement.pagination.MaxOffsetPagination;
 import com.ejlchina.searcher.implement.pagination.PageNumPagination;
 import com.ejlchina.searcher.implement.pagination.Pagination;
 import com.ejlchina.searcher.implement.parafilter.ParamFilter;
+import com.ejlchina.searcher.implement.processor.DefaultParamProcessor;
+import com.ejlchina.searcher.implement.processor.ParamProcessor;
 import com.ejlchina.searcher.support.boot.BeanSearcherProperties.FieldConvertorProps;
 
 import com.ejlchina.searcher.support.boot.BeanSearcherProperties.ParamsPorps;
@@ -116,9 +118,16 @@ public class BeanSearcherAutoConfiguration {
 	
 	
 	@Bean
+	@ConditionalOnMissingBean(ParamProcessor.class)
+	public ParamProcessor paramProcessor() {
+		return new DefaultParamProcessor();
+	}
+	
+	
+	@Bean
 	@ConditionalOnMissingBean(SearchSqlResolver.class)
-	public SearchSqlResolver searchSqlResolver(Dialect dialect) {
-		return new MainSearchSqlResolver(dialect);
+	public SearchSqlResolver searchSqlResolver(Dialect dialect, ParamProcessor paramProcessor) {
+		return new MainSearchSqlResolver(dialect, paramProcessor);
 	}
 	
 	

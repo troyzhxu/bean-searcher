@@ -6,6 +6,7 @@ import com.ejlchina.searcher.implement.MainSearchResultResolver;
 import com.ejlchina.searcher.implement.MainSearchSqlResolver;
 import com.ejlchina.searcher.implement.MainSearcher;
 import com.ejlchina.searcher.implement.convertor.DefaultFieldConvertor;
+import com.ejlchina.searcher.implement.processor.DefaultParamProcessor;
 import com.ejlchina.searcher.virtual.DefaultVirtualParamProcessor;
 import com.ejlchina.searcher.virtual.VirtualParamProcessor;
 
@@ -79,6 +80,7 @@ public class SearcherBuilder {
 		} else {
 			MainSearchSqlResolver searchSqlResolver = new MainSearchSqlResolver();
 			searchSqlResolver.setDialect(new MySqlDialect());
+			searchSqlResolver.setParamProcessor(new DefaultParamProcessor());
 			mainSearcher.setSearchSqlResolver(searchSqlResolver);
 		}
 		if (searchSqlExecutor != null) {

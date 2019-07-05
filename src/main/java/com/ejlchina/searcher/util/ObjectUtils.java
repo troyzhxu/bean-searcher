@@ -27,5 +27,14 @@ public class ObjectUtils {
 		return null;
 	}
 
+	
+	public static Object firstNotNull(Object[] values) {
+		for (Object value: values) {
+			if (value != null) {
+				return value;
+			}
+		}
+		return null;
+	}
 
 }

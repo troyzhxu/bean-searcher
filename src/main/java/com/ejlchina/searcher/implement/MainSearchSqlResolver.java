@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 import com.ejlchina.searcher.SearchSql;
 import com.ejlchina.searcher.SearchSqlResolver;
@@ -12,9 +11,11 @@ import com.ejlchina.searcher.SearcherException;
 import com.ejlchina.searcher.beanmap.SearchBeanMap;
 import com.ejlchina.searcher.dialect.Dialect;
 import com.ejlchina.searcher.dialect.Dialect.PaginateSql;
+import com.ejlchina.searcher.implement.processor.ParamProcessor;
 import com.ejlchina.searcher.param.FilterParam;
 import com.ejlchina.searcher.param.Operator;
 import com.ejlchina.searcher.param.SearchParam;
+import com.ejlchina.searcher.util.ObjectUtils;
 import com.ejlchina.searcher.util.StringUtils;
 import com.ejlchina.searcher.virtual.VirtualParam;
 
@@ -27,27 +28,23 @@ import com.ejlchina.searcher.virtual.VirtualParam;
 public class MainSearchSqlResolver implements SearchSqlResolver {
 
 	
-	static final Pattern DATE_PATTERN = Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{2}");
-
-	static final Pattern DATE_HOUR_PATTERN = Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}");
-	
-	static final Pattern DATE_MINUTE_PATTERN = Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}");
-	
-	static final Pattern DATE_SECOND_PATTERN = Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}");
-
-
 	/**
 	 * 数据库方言
 	 */
 	private Dialect dialect;
 
+	/**
+	 * 参数处理器
+	 */
+	private ParamProcessor paramProcessor;
 	
 	
 	public MainSearchSqlResolver() {
 	}
-	
-	public MainSearchSqlResolver(Dialect dialect) {
+
+	public MainSearchSqlResolver(Dialect dialect, ParamProcessor paramProcessor) {
 		this.dialect = dialect;
+		this.paramProcessor = paramProcessor;
 	}
 
 
@@ -88,12 +85,10 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 					}
 				}
 			}
-			
 			builder.append(dbField).append(" ").append(dbAlias);
 			if (i < fieldCount - 1) {
 				builder.append(", ");
 			}
-			
 			searchSql.addListAlias(dbAlias);
 		}
 		String fieldSelectSql = builder.toString();
@@ -259,30 +254,15 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 		Object[] values = filterParam.getValues();
 		boolean ignoreCase = filterParam.isIgnoreCase();
 		Operator operator = filterParam.getOperator();
-		Object firstRealValue = filterParam.firstNotNullValue();
 		
 		if (Date.class.isAssignableFrom(fieldType)) {
-			for (int i = 0; i < values.length; i++) {
-				values[i] = dateValue(values[i]);
-			}
-			firstRealValue = dateValue(firstRealValue);
+			values = paramProcessor.dateParams(values, operator);
 		}
-		
 		if (ignoreCase) {
-			for (int i = 0; i < values.length; i++) {
-				Object val = values[i];
-				if (val != null) {
-					if (val instanceof String) {
-						values[i] = ((String) val).toUpperCase();
-					} else {
-						values[i] = val;
-					}
-				}
-			}
-			if (firstRealValue != null && firstRealValue instanceof String) {
-				firstRealValue = ((String) firstRealValue).toUpperCase();
-			}
+			values = paramProcessor.upperCase(values);
 		}
+		Object firstRealValue = ObjectUtils.firstNotNull(values);
+		
 		if (operator != Operator.MultiValue) {
 			if (ignoreCase) {
 				dialect.toUpperCase(builder, dbField);
@@ -384,22 +364,21 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 		return params;
 	}
 
-	private Object dateValue(Object value) {
-		if (value != null && value instanceof String) {
-			String strValue = (String) value;
-			if (DATE_PATTERN.matcher(strValue).matches()) {
-				return strValue + " 00:00:00";
-			} else if (DATE_HOUR_PATTERN.matcher(strValue).matches()) {
-				return strValue + ":00:00";
-			} else if (DATE_MINUTE_PATTERN.matcher(strValue).matches()) {
-				return strValue + ":00";
-			}
-		}
-		return value;
+	
+	public Dialect getDialect() {
+		return dialect;
 	}
-
+	
 	public void setDialect(Dialect dialect) {
 		this.dialect = dialect;
+	}
+
+	public ParamProcessor getParamProcessor() {
+		return paramProcessor;
+	}
+
+	public void setParamProcessor(ParamProcessor paramProcessor) {
+		this.paramProcessor = paramProcessor;
 	}
 
 }

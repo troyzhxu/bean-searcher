@@ -79,15 +79,6 @@ public class FilterParam {
 		}
 		return true;
 	}
-
-	public Object firstNotNullValue() {
-		for (Value value : values) {
-			if (!value.isEmptyValue()) {
-				return value.value;
-			}
-		}
-		return null;
-	}
 	
 
 	public static class Value {
