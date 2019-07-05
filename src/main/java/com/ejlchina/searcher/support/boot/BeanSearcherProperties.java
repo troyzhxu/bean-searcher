@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import com.ejlchina.searcher.implement.convertor.DefaultFieldConvertor;
 
 
-@ConfigurationProperties(prefix = "spring.bean-searcher")
+@ConfigurationProperties(prefix = "bean-searcher")
 public class BeanSearcherProperties {
 
 	/**
@@ -325,7 +325,5 @@ public class BeanSearcherProperties {
 		}
 		
 	}
-	
-	
 	
 }

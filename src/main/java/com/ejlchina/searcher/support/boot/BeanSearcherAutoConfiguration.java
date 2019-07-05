@@ -69,7 +69,7 @@ public class BeanSearcherAutoConfiguration {
 			p.setStartOffset(conf.getStart());
 			return p;
 		}
-		throw new SearcherException("配置项【spring.bean-searcher.params.pagination.type】只能为 page 或  offset！");
+		throw new SearcherException("配置项【bean-searcher.params.pagination.type】只能为 page 或  offset！");
 	}
 	
 	
@@ -99,7 +99,7 @@ public class BeanSearcherAutoConfiguration {
 	public Dialect dialect(BeanSearcherProperties config) {
 		String dialect = config.getSql().getDialect();
 		if (dialect == null) {
-			throw new SearcherException("配置项【spring.bean-searcher.sql.dialect】不能为空");
+			throw new SearcherException("配置项【bean-searcher.sql.dialect】不能为空");
 		}
 		switch (dialect.toLowerCase()) {
 		case SqlProps.DIALECT_MYSQL:
@@ -111,7 +111,7 @@ public class BeanSearcherAutoConfiguration {
 		case SqlProps.DIALECT_SQL_SERVER:
 			return new SqlServerDialect();
 		}
-		throw new SearcherException("配置项【spring.bean-searcher.sql.dialect】只能为  MySql|Oracle|PostgreSql|SqlServer 中的一个 ！");
+		throw new SearcherException("配置项【bean-searcher.sql.dialect】只能为  MySql|Oracle|PostgreSql|SqlServer 中的一个 ！");
 	}
 	
 	
@@ -160,14 +160,18 @@ public class BeanSearcherAutoConfiguration {
 				SearchSqlExecutor searchSqlExecutor, 
 				SearchResultResolver searchResultResolver,
 				BeanSearcherProperties config) {
-		 SpringSearcher searcher = new SpringSearcher();
-		 searcher.setScanPackages(config.getPackages());
-		 searcher.setPrifexSeparatorLength(config.getPrifexSeparatorLength());
-		 searcher.setSearchParamResolver(searchParamResolver);
-		 searcher.setSearchSqlResolver(searchSqlResolver);
-		 searcher.setSearchSqlExecutor(searchSqlExecutor);
-		 searcher.setSearchResultResolver(searchResultResolver);
-		 return searcher;
+		String[] packages = config.getPackages();
+		if (packages == null || packages.length == 0) {
+			throw new SearcherException("配置项【bean-searcher.packages】不能为空 ！");
+		}
+		SpringSearcher searcher = new SpringSearcher();
+		searcher.setScanPackages(packages);
+		searcher.setPrifexSeparatorLength(config.getPrifexSeparatorLength());
+		searcher.setSearchParamResolver(searchParamResolver);
+		searcher.setSearchSqlResolver(searchSqlResolver);
+		searcher.setSearchSqlExecutor(searchSqlExecutor);
+		searcher.setSearchResultResolver(searchResultResolver);
+		return searcher;
 	}
 	
 	
