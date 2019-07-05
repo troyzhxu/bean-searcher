@@ -56,6 +56,7 @@ public class SearchPlugin implements IPlugin {
 	
 
 	/**
+	 * @param dataSourceProvider dataSourceProvider
 	 * @param scanPackages 存放bean的package
 	 */
 	public SearchPlugin(IDataSourceProvider dataSourceProvider, String... scanPackages) {
@@ -86,7 +87,8 @@ public class SearchPlugin implements IPlugin {
 		if (searcherStarter == null) {
 			searcherStarter = new SearcherStarter();
 		}
-		return searcherStarter.start(scanPackages);
+		searcherStarter.start(scanPackages);
+		return true;
 	}
 
 	@Override

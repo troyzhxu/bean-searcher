@@ -2,6 +2,7 @@ package com.ejlchina.searcher;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -26,15 +27,20 @@ public class SearcherStarter {
 
 	/**
 	 * @param basePackages 可检索 Bean 所在的 package，可检索 Bean 是被 @SearchBean 注解的 Bean
-	 * @return true if start successfully, else return false
+	 * @return the count of bean scanned
 	 */
-	public boolean start(String... basePackages) {
+	public int start(String... basePackages) {
 		log.info("Bean Searcher Starting...");
 		ClassScanner classScanner = new ClassScanner();
 		Set<Class<?>> classes = classScanner.scan(basePackages);
-		boolean result = startWithBeanClassList(classes);
-		log.info("Bean Searcher Start completed");
-		return result;
+		int count = startWithBeanClassList(classes);
+		if (count < 1) {
+			log.warn("Bean Searcher had scanned " + count + " beans");
+		} else {
+			log.info("Bean Searcher had scanned " + count + " beans");
+		}
+		log.info("Bean Searcher Start completed with packages: " + Arrays.toString(basePackages));
+		return count;
 	}
 
 
@@ -47,8 +53,9 @@ public class SearcherStarter {
 	}
 	
 	
-	protected boolean startWithBeanClassList(Set<Class<?>> beanClassSet) {
+	protected int startWithBeanClassList(Set<Class<?>> beanClassSet) {
 		SearchBeanMapCache searchBeanMapCache = SearchBeanMapCache.sharedCache();
+		int beanCount = 0;
 		for (Class<?> beanClass : beanClassSet) {
 			SearchBean searchBean = beanClass.getAnnotation(SearchBean.class);
 			if (searchBean == null) {
@@ -76,8 +83,9 @@ public class SearcherStarter {
 				throw new SearcherException("【" + beanClass.getName() + "】" + "】没有被@DbFile注解的属性！");
 			}
 			searchBeanMapCache.addSearchBeanMap(beanClass, searchBeanMap);
+			beanCount++;
 		}
-		return true;
+		return beanCount;
 	}
 
 	

@@ -12,8 +12,7 @@ public interface Pagination {
 
 	
 	/**
-	 * 
-	 * @param searchParam
+	 * @param searchParam 检索参数
 	 * @param paraName 参数名
 	 * @param paraValue 参数值
 	 * @return true if paginated else false

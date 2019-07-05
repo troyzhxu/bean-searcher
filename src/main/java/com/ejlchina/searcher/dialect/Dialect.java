@@ -71,7 +71,6 @@ public interface Dialect {
 	/**
 	 * 分页Sq
 	 * @author Troy.Zhou
-	 * @since
 	 */
 	public class PaginateSql {
 

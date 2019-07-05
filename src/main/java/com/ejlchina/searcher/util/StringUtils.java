@@ -39,12 +39,12 @@ public class StringUtils {
     
 	
 	/**
-	 * 判断 src 里包含几个 target
-	 * @param src
+	 * 查找 src 里包含几个 target
+	 * @param src 源字符串
 	 * @param from 开始计数下标（包含）
 	 * @param to 结束计数下标（不包含）
-	 * @param targets
-	 * @return
+	 * @param targets 目标字符
+	 * @return 个数
 	 */
 	public static int containCount(String src, int from, int to, char[] targets) {
 		int count = 0;

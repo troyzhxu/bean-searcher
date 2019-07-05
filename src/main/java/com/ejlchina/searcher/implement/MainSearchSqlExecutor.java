@@ -98,15 +98,7 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 		return result;
 	}
 
-	/**
-	 * 执行列表查询并收集结果
-	 * @param connection
-	 * @param sql
-	 * @param params
-	 * @param listAliases
-	 * @param result
-	 * @throws SQLException
-	 */
+	
 	protected void executeListSqlAndCollectResult(Connection connection, String sql, List<Object> params, 
 			List<String> listAliases, SearchTmpResult result) throws SQLException {
 		PreparedStatement statement = null;
@@ -123,16 +115,7 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 		}
 	}
 	
-	/**
-	 * 执行聚合查询并收集结果
-	 * @param connection
-	 * @param sqlString
-	 * @param sqlParams
-	 * @param countAlias
-	 * @param summaryAliases
-	 * @param result
-	 * @throws SQLException
-	 */
+
 	protected void executeClusterSqlAndCollectResult(Connection connection, String sqlString, List<Object> sqlParams, 
 			String countAlias, List<String> summaryAliases, SearchTmpResult result) throws SQLException {
 		PreparedStatement statement = null;
