@@ -71,7 +71,7 @@ public class DefaultParamProcessor implements ParamProcessor {
 				if (roundDown) {
 					return strValue + " 00:00:00";
 				} else {
-					return strValue + " 59:59:59";
+					return strValue + " 23:59:59";
 				}
 			} else if (DATE_HOUR_PATTERN.matcher(strValue).matches()) {
 				if (roundDown) {
