@@ -4,6 +4,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.ejlchina.searcher.bean.DbField;
 import com.ejlchina.searcher.bean.SearchBean;
 import com.ejlchina.searcher.beanmap.SearchBeanMap;
@@ -19,16 +22,19 @@ import com.ejlchina.searcher.util.StringUtils;
  */
 public class SearcherStarter {
 
-	
+	private Logger log = LoggerFactory.getLogger(SearcherStarter.class);
 
 	/**
 	 * @param basePackages 可检索 Bean 所在的 package，可检索 Bean 是被 @SearchBean 注解的 Bean
 	 * @return true if start successfully, else return false
 	 */
 	public boolean start(String... basePackages) {
+		log.info("Bean Searcher Starting...");
 		ClassScanner classScanner = new ClassScanner();
 		Set<Class<?>> classes = classScanner.scan(basePackages);
-		return startWithBeanClassList(classes);
+		boolean result = startWithBeanClassList(classes);
+		log.info("Bean Searcher Start completed");
+		return result;
 	}
 
 
@@ -37,6 +43,7 @@ public class SearcherStarter {
 	 */
 	public void shutdown() {
 		SearchBeanMapCache.sharedCache().clear();
+		log.info("Bean Searcher shutdown!");
 	}
 	
 	

@@ -21,6 +21,7 @@ public class SpringSearcher extends MainSearcher implements InitializingBean, Di
 
 	private SearcherStarter searcherStarter;
 	
+	
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		SearcherBuilder.builder()
