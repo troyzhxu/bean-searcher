@@ -1,25 +1,28 @@
-# bean-searcher
+# Bean Searcher
 
-#### Gradle
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.ejlchina/bean-searcher/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.ejlchina/bean-searcher/)
+[![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
-```
+Introduction
+---
 
-dependencies {
-    compile 'com.ejlchina:bean-searcher:1.1.0'
-}
+- git clone https://gitee.com/ejlchina-zhxu/bean-searcher.git
+- cd bean-searcher && mvn install
+- have fun.
 
-```
+Documentation
+---
 
-#### Maven
+- 中文 https://gitee.com/ejlchina-zhxu/bean-searcher/wikis/Home
 
-```
 
-<dependencies>
-	<dependency>
-		<groupId>com.ejlchina</groupId>
-		<artifactId>bean-searcher</artifactId>
-		<version>1.1.0</version>
-	</dependency>
-</dependencies>
+Examples
+---
 
-```
+- https://gitee.com/ejlchina-zhxu/bean-searcher-demo
+
+
+
+
+
+
