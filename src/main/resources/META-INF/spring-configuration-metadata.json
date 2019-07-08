@@ -1,0 +1,166 @@
+{
+  "hints": [],
+  "groups": [
+    {
+      "sourceType": "com.ejlchina.searcher.support.boot.BeanSearcherProperties",
+      "name": "bean-searcher",
+      "type": "com.ejlchina.searcher.support.boot.BeanSearcherProperties"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.support.boot.BeanSearcherProperties",
+      "name": "bean-searcher.field-convertor",
+      "sourceMethod": "getFieldConvertor()",
+      "type": "com.ejlchina.searcher.support.boot.BeanSearcherProperties$FieldConvertorProps"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.support.boot.BeanSearcherProperties",
+      "name": "bean-searcher.params",
+      "sourceMethod": "getParams()",
+      "type": "com.ejlchina.searcher.support.boot.BeanSearcherProperties$ParamsPorps"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.support.boot.BeanSearcherProperties$ParamsPorps",
+      "name": "bean-searcher.params.pagination",
+      "sourceMethod": "getPagination()",
+      "type": "com.ejlchina.searcher.support.boot.BeanSearcherProperties$ParamsPorps$PaginationPorps"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.support.boot.BeanSearcherProperties",
+      "name": "bean-searcher.sql",
+      "sourceMethod": "getSql()",
+      "type": "com.ejlchina.searcher.support.boot.BeanSearcherProperties$SqlProps"
+    }
+  ],
+  "properties": [
+    {
+      "sourceType": "com.ejlchina.searcher.support.boot.BeanSearcherProperties$FieldConvertorProps",
+      "name": "bean-searcher.field-convertor.falses",
+      "description": "字段假值（False）映射字符，可配多个",
+      "type": "java.lang.String[]"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.support.boot.BeanSearcherProperties$FieldConvertorProps",
+      "defaultValue": true,
+      "name": "bean-searcher.field-convertor.ignore-case",
+      "description": "匹配映射字符时，是否忽略大小写",
+      "type": "java.lang.Boolean"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.support.boot.BeanSearcherProperties$FieldConvertorProps",
+      "name": "bean-searcher.field-convertor.trues",
+      "description": "字段真值（True）映射字符，可配多个",
+      "type": "java.lang.String[]"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.support.boot.BeanSearcherProperties",
+      "name": "bean-searcher.packages",
+      "description": "Bean Searcher 需要扫描的包，可多个",
+      "type": "java.lang.String[]"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.support.boot.BeanSearcherProperties$ParamsPorps",
+      "defaultValue": "ic",
+      "name": "bean-searcher.params.ignore-case-key",
+      "description": "是否忽略大小写字段参数名后缀",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.support.boot.BeanSearcherProperties$ParamsPorps",
+      "defaultValue": "op",
+      "name": "bean-searcher.params.operator-key",
+      "description": "检索运算符参数名后缀",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.support.boot.BeanSearcherProperties$ParamsPorps",
+      "defaultValue": "order",
+      "name": "bean-searcher.params.order",
+      "description": "排序方法参数名",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.support.boot.BeanSearcherProperties$ParamsPorps$PaginationPorps",
+      "defaultValue": 15,
+      "name": "bean-searcher.params.pagination.default-size",
+      "description": "默认分页大小",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.support.boot.BeanSearcherProperties$ParamsPorps$PaginationPorps",
+      "defaultValue": "max",
+      "name": "bean-searcher.params.pagination.max",
+      "description": "分页大小参数名 在 type = offset 时有效",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.support.boot.BeanSearcherProperties$ParamsPorps$PaginationPorps",
+      "defaultValue": 100,
+      "name": "bean-searcher.params.pagination.max-allowed-size",
+      "description": "最大允许每页大小",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.support.boot.BeanSearcherProperties$ParamsPorps$PaginationPorps",
+      "defaultValue": "offset",
+      "name": "bean-searcher.params.pagination.offset",
+      "description": "偏移分页参数名 在 type = offset 时有效",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.support.boot.BeanSearcherProperties$ParamsPorps$PaginationPorps",
+      "defaultValue": "page",
+      "name": "bean-searcher.params.pagination.page",
+      "description": "页数参数名 在 type = page 时有效",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.support.boot.BeanSearcherProperties$ParamsPorps$PaginationPorps",
+      "defaultValue": "size",
+      "name": "bean-searcher.params.pagination.size",
+      "description": "默认分页大小参数名 在 type = page 时有效",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.support.boot.BeanSearcherProperties$ParamsPorps$PaginationPorps",
+      "defaultValue": 0,
+      "name": "bean-searcher.params.pagination.start",
+      "description": "起始页码或起始偏移量",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.support.boot.BeanSearcherProperties$ParamsPorps$PaginationPorps",
+      "defaultValue": "page",
+      "name": "bean-searcher.params.pagination.type",
+      "description": "分页类型:page 和  offset",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.support.boot.BeanSearcherProperties$ParamsPorps",
+      "defaultValue": "-",
+      "name": "bean-searcher.params.separator",
+      "description": "字段参数名分隔符",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.support.boot.BeanSearcherProperties$ParamsPorps",
+      "defaultValue": "sort",
+      "name": "bean-searcher.params.sort",
+      "description": "排序字段参数名",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.support.boot.BeanSearcherProperties",
+      "defaultValue": 1,
+      "name": "bean-searcher.prifex-separator-length",
+      "description": "前缀分隔符长度",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.support.boot.BeanSearcherProperties$SqlProps",
+      "defaultValue": "mysql",
+      "name": "bean-searcher.sql.dialect",
+      "description": "数据库方言，默认MySQL，可选：Oracle、PostgreSql、SqlServer",
+      "type": "java.lang.String"
+    }
+  ]
+}
