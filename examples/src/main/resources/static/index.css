@@ -1,0 +1,12 @@
+.data-table {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.filter-container {
+    margin: 20px 0;
+}
+.filter-container .el-row {
+    margin-bottom: 8px;
+}
+

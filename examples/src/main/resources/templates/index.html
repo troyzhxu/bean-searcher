@@ -1,0 +1,105 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <title>Demo</title>
+        <link rel="stylesheet" href="http://unpkg.zhimg.com/element-ui@2.9.1/lib/theme-chalk/index.css">
+        <link rel="stylesheet" href="../static/index.css">
+    </head>
+    <body>
+        <div id="app">
+            <h3>员工管理</h3>
+            <hr/>
+            <div class="filter-container">
+                <el-row>
+                    <el-col :span="3">姓名</el-col>
+                    <el-col :span="3">
+                        <el-select v-model="params['name-op']" style="width: 95%" size="small">
+                            <el-option v-for="item in strOps" :key="item.key" :label="item.label" :value="item.key" />
+                        </el-select>
+                    </el-col>
+                    <el-col :span="5">
+                        <el-input v-model="params.name" style="width: 95%" size="small"></el-input>
+                    </el-col>
+                    <el-col :span="5">
+                        <el-checkbox v-model="params['name-ic']">忽略大小写</el-checkbox>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="3">年龄</el-col>
+                    <el-col :span="3">
+                        <el-select v-model="params['age-op']" style="width: 95%" size="small">
+                            <el-option v-for="item in numOps" :key="item.key" :label="item.label" :value="item.key" />
+                        </el-select>
+                    </el-col>
+                    <el-col :span="5">
+                        <el-input v-model.number="params['age-0']" style="width: 95%" size="small"></el-input>
+                    </el-col>
+                    <el-col v-show="params['age-op'] === 'bt'" :span="5">
+                        <el-input v-model.number="params['age-1']" style="width: 95%" size="small"></el-input>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="3">部门</el-col>
+                    <el-col :span="3">
+                        <el-select v-model="params['department-op']" style="width: 95%" size="small">
+                            <el-option v-for="item in strOps" :key="item.key" :label="item.label" :value="item.key" />
+                        </el-select>
+                    </el-col>
+                    <el-col :span="5">
+                        <el-input v-model="params.department" style="width: 95%" size="small"></el-input>
+                    </el-col>
+                    <el-col :span="5">
+                        <el-checkbox v-model="params['department-ic']">忽略大小写</el-checkbox>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="3">入职时间</el-col>
+                    <el-col :span="3">
+                        <el-select v-model="params['entryDate-op']" style="width: 95%" size="small">
+                            <el-option v-for="item in timeOps" :key="item.key" :label="item.label" :value="item.key" />
+                        </el-select>
+                    </el-col>
+                    <el-col :span="5">
+                        <el-date-picker v-model="params['entryDate-0']" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 95%" size="small"></el-date-picker>
+                    </el-col>
+                    <el-col v-show="params['entryDate-op'] === 'bt'" :span="5">
+                        <el-date-picker v-model="params['entryDate-1']" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 95%" size="small"></el-date-picker>
+                    </el-col>
+                </el-row>
+            </div>
+            <el-button type="primary" icon="el-icon-search" size="small" @click="handleFilter">检索</el-button>
+
+            <el-table class="data-table"
+                    v-loading="loading"
+                    :data="list"
+                    border
+                    highlight-current-row
+                    @sort-change="sortChange"
+            >
+                <el-table-column sortable="custom" label="ID" prop="id" min-width="80px;"></el-table-column>
+                <el-table-column sortable="custom" label="姓名" prop="name" min-width="100px;"></el-table-column>
+                <el-table-column sortable="custom" label="年龄" prop="age"  min-width="80px;"></el-table-column>
+                <el-table-column sortable="custom" label="部门" prop="department"  min-width="80px;"></el-table-column>
+                <el-table-column sortable="custom" label="入职时间" prop="entryDate" min-width="120px;"></el-table-column>
+            </el-table>
+
+            <el-pagination
+                    :current-page.sync="params.page"
+                    :page-size.sync="params.size"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :page-sizes="[5, 10, 15]"
+                    :total="total"
+                    @size-change="loadData"
+                    @current-change="loadData"
+                    >
+            </el-pagination>
+
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+        <script src="http://unpkg.zhimg.com/element-ui@2.9.1/lib/index.js"></script>
+        <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script src="../static/index.js"></script>
+    </body>
+</html>
