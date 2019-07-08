@@ -28,7 +28,9 @@ public class EmployeeController {
 
 	@RequestMapping("/index")
 	public Object index(HttpServletRequest request) {
+		// 使用 bean-searcher 提供的工具栏MapUtils 收集页面请求参数
 		Map<String, Object> params = MapUtils.flat(request.getParameterMap());
+		// 调用 bean-searcher 提供的 searcher 接口检索数据并返回
 		return searcher.search(Employee.class, params);
 	}
 	
