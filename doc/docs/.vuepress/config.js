@@ -1,9 +1,9 @@
 module.exports = {
-  title: 'IOTCP-2.0 SDK',
+  title: 'Bean Searcher',
   locales: {
     '/': {
       lang: 'zh-CN',
-      description: '新一代物联网协议',
+      description: 'Bean Searcher - 轻量级 WEB 条件检索引擎',
     }
   },
   head: [
@@ -21,16 +21,10 @@ module.exports = {
               { text: 'v2.x', link: '/v2/' }
             ]
           },
-          { 
-            text: '下载',
-            ariaLabel: '资料下载',
-            items: [
-              { text: 'SDK 下载', link: '/v2/#sdk-下载' },
-              { text: '协议文档', link: '/v2/#协议文档' }
-            ]
-          },
+
           { text: 'OkHttps', link: 'http://okhttps.ejlchina.com' },
-          { text: 'Grails 中文', link: 'http://grails.ejlchina.com' }
+          { text: 'Grails 中文', link: 'http://grails.ejlchina.com' },
+          { text: '码云', link: 'https://gitee.com/ejlchina-zhxu/bean-searcher' }
         ],
         sidebar: {
           '/v2/': [
