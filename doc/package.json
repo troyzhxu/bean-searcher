@@ -1,0 +1,15 @@
+{
+  "scripts": {
+    "dev": "vuepress dev docs",
+    "build": "vuepress build docs"
+  },
+  "devDependencies": {
+    "@vuepress/plugin-back-to-top": "^1.5.0",
+    "@vuepress/plugin-medium-zoom": "^1.5.0",
+    "vuepress": "^1.5.0",
+    "vuepress-plugin-baidu-autopush": "^1.0.1",
+    "vuepress-plugin-baidu-tongji": "^1.0.1",
+    "vuepress-plugin-seo": "^0.1.2"
+  },
+  "dependencies": {}
+}
