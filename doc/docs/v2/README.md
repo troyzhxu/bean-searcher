@@ -8,6 +8,10 @@ description: Bean Searcher
 
 Bean Searcher 是一个轻量级 WEB 条件检索引擎，它的作用是从已有的数据库表中检索数据，它的目的是为了减少后端模板代码的开发，极大提高开发效率，节省开发时间，使得一行代码完成一个列表查询接口成为可能！
 
+* 不依赖具体的 Web 框架（即可以在任意的 Java Web 框架内使用）
+
+* 不依赖具体的 ORM 框架（即可以与任意的 ORM 框架配合使用，没有 ORM 也可单独使用）
+
 ### 与 ORM、全文搜索引擎 的区别
 
 首先，Bean Searcher 并不是一个`ORM`框架，也不是`全文搜索引擎`，它存在的目的不是为了替换他们，而是为了弥补他们在`精确的列表检索领域`的不足。
@@ -23,7 +27,6 @@ Bean Searcher 是一个轻量级 WEB 条件检索引擎，它的作用是从已�
 可以执行 SQL update? | 不可以 | 可以 | 不可以
 可以执行 SQL select? | 可以 | 可以 | 不可以
 
-
 从上表可以看出，似乎 Bean Searcher 能做的事，Hibernate、MyBatis 都可以做，而且还可以做的更多，事实确实是这样。
 
 但是，如果你用了 Bean Searcher，在做列表查询的时候，别人写一百行代码，而你只需要写一行！
@@ -36,9 +39,9 @@ Bean Searcher 是一个轻量级 WEB 条件检索引擎，它的作用是从已�
 
 * 可与任意框架集成：Spring Boot、Grails、Jfinal 等等
 
-### 小 Demo 快速体验
+### 小 DEMO 快速体验
 
-#### 项目地址
+#### 仓库地址
 
 [https://gitee.com/ejlchina-zhxu/bean-searcher-demo](https://gitee.com/ejlchina-zhxu/bean-searcher-demo)
 
@@ -59,3 +62,8 @@ Bean Searcher 是一个轻量级 WEB 条件检索引擎，它的作用是从已�
 
 访问 [http://localhost:8080/](http://localhost:8080/) 既可查看运行效果
 
+## 版本迭代
+
+### v2.0 的新特性
+
+1. 实现 Spring Boot Starter 化
