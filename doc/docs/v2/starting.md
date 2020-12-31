@@ -105,8 +105,7 @@ public class App extends JFinalConfig implements SearcherReceiver, SearcherConfi
 				getProperty("db.username"), 
 				getProperty("db.password"),
 				getProperty("db.dirverClass"));
-		dp.setMaxActive(getPropertyToInt("db.maxActive", 50));
-		dp.setMinIdle(getPropertyToInt("db.minIdle", 10));
+        // 省略 DruidPlugin 相关的配置
 		
         // Bean Searcher 插件，第一个参数接收 IDataSourceProvider 实例
         // 第二个参数为 Search Bean 实体类的包名路径，可配多个
@@ -117,11 +116,13 @@ public class App extends JFinalConfig implements SearcherReceiver, SearcherConfi
         
 		me.add(dp);
 		me.add(sp);
+
+        // 省略其它配置
 	}
 
 	@Override
 	public void receive(Searcher searcher) {
-        // 接收到 searcher 实例，可以用一个容器接收，留待使用
+        // 接收到 searcher 实例，可以用一个容器接收，留待后续使用
 		Ioc.add(Searcher.class, searcher);
 	}
 	
