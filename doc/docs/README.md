@@ -15,6 +15,27 @@ features:
 footer: Apache Licensed | Copyright © 2020-present ejlchina.com
 ---
 
+
+### <center> 如艺术一般优雅，像 1、2、3 一样简单 </center>
+
+```java
+@RestController
+@RequestMapping("/user")
+public class UserController {
+
+    @Autowired
+    private Searcher searcher;
+
+    @GetMapping("/index")
+    public Object index(HttpServletRequest request) {
+        // 只需一行代码，完成包含分页、过滤、排序的复杂列表检索功能
+        // 调用 bean-searcher 提供的 searcher 接口检索数据并返回
+        return searcher.search(User.class, MapUtils.flat(request.getParameterMap()));
+    }
+	
+}
+```
+
 ### [<center> 了解更多 </center>](/v2/)
 
 <br/>
