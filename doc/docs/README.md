@@ -15,7 +15,6 @@ features:
 footer: Apache Licensed | Copyright © 2020-present ejlchina.com
 ---
 
-
 ### <center> 如艺术一般优雅，像 1、2、3 一样简单 </center>
 
 ```java
