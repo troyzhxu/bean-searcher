@@ -29,11 +29,7 @@ module.exports = {
         sidebar: {
           '/v2/': [
             '',
-            'integration',
-            'initialization',
-            'sdk-apis',
-            'up-reboot',
-            'gateway'
+            'starting'
           ]
         },
         lastUpdated: '上次更新',
