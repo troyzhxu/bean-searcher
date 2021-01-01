@@ -14,13 +14,13 @@ Introduction
 Documentation
 ---
 
-- 中文 https://gitee.com/ejlchina-zhxu/bean-searcher/wikis/Home
+### https://searcher.ejlchina.com/
 
 
 Examples
 ---
 
-- https://gitee.com/ejlchina-zhxu/bean-searcher-demo
+### https://gitee.com/ejlchina-zhxu/bean-searcher-demo
 
 
 
