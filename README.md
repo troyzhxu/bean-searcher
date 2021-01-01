@@ -56,6 +56,8 @@ public class UserController {
 
 更多请参见文档：https://searcher.ejlchina.com/
 
+案例快速体验：https://gitee.com/ejlchina-zhxu/bean-searcher-demo
+
 ### 🚀 快速开发
 
 使用 Bean Searcher 可以极大节省后端的复杂列表检索接口的开发时间
