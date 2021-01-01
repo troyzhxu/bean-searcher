@@ -24,7 +24,7 @@ Introduction
 
 **什么？.... 好吧! 代码凌乱都是被产品逼的！**
 
-* 但是，产品放大招了：
+* 但是，你的产品放大招了：
 
 ![输入图片说明](https://gitee.com/saodiyang/layui-soul-table/raw/master/img/tableFilter.gif "屏幕截图.png")
 
