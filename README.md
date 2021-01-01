@@ -4,13 +4,10 @@
 [![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 [![Troy.Zhou](https://img.shields.io/badge/%E4%BD%9C%E8%80%85-ejlchina-orange.svg)](https://github.com/ejlchina)
 
-Introduction
----
-
 * 文档：https://searcher.ejlchina.com/
 * 案例：https://gitee.com/ejlchina-zhxu/bean-searcher-demo
 
-#### ❓ 为什么用
+### ❓ 为什么用
 
 * 产品画了一个图，后台接口怎么破？
 
@@ -30,7 +27,7 @@ Introduction
 
 **我去，这后台代码该怎么写 ！！！**
 
-#### 💥 超轻量级 Web 条件检索引擎，使一行代码实现复杂列表检索成为可能！
+### 💥 超轻量级 Web 条件检索引擎，使一行代码实现复杂列表检索成为可能！
 
 ```java
 @RestController
@@ -50,17 +47,18 @@ public class UserController {
 }
 ```
 
-#### 🚀 快速开发
+### 🚀 快速开发
 
 使用 Bean Searcher 可以极大节省后端的复杂列表检索接口的开发时间
 
-#### 🌱 集成简单
+### 🌱 集成简单
 
 可以和任意 Java Web 框架集成，如：SpringBoot、Grails、Jfinal 等
 
-#### 🔨 扩展性强
+### 🔨 扩展性强
 
 面向接口设计，用户可自定义扩展 Bean Searcher 中的任何组件
+
 
 Documentation
 ---
