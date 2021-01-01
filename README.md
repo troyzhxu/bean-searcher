@@ -12,11 +12,23 @@ Introduction
 
 #### ❓ 为什么用
 
-产品画了一个图，回台接口怎么破？
+* 产品画了一个图，后台接口怎么破？
 
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0101/172143_62355c4e_1393412.png "屏幕截图.png")
 
+**嗯？嗯。这个简单！**
 
+* 产品又画了一个图，后台接口又怎么破？
 
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0101/172608_d622bcd3_1393412.png "屏幕截图.png")
+
+**什么？.... 好吧! 代码凌乱都是被产品逼的！**
+
+* 但是，产品放大招了：
+
+![输入图片说明](https://gitee.com/saodiyang/layui-soul-table/raw/master/img/tableFilter.gif "屏幕截图.png")
+
+**我去，这后台代码该怎么写 ！！！**
 
 #### 💥 超轻量级 Web 条件检索引擎，使一行代码实现复杂列表检索成为可能！
 
