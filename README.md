@@ -47,7 +47,9 @@ public class UserController {
 }
 ```
 
-* 分页
+这一行代码可实现：
+
+* 分页搜索
 * 组合过滤
 * 任意字段排序
 * 字段统计
