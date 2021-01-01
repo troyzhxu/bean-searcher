@@ -56,9 +56,7 @@ public class UserController {
 * 任意字段排序
 * 字段统计
 
-你若不信，可快速体验：https://gitee.com/ejlchina-zhxu/bean-searcher-demo
-
-更多请参见文档：https://searcher.ejlchina.com/
+马上体验一下：https://gitee.com/ejlchina-zhxu/bean-searcher-demo
 
 
 ### 🚀 快速开发
