@@ -13,7 +13,7 @@ public interface BeanAware {
 	/**
 	 * 装配之后
 	 * */
-	public void afterAssembly();
+	void afterAssembly();
 	
 	
 }

@@ -16,9 +16,9 @@ public interface SearchParamResolver {
 
 	
 	/**
-	 * @return 最大条数的参数名
+	 * @return 分页解析器
 	 * */
-	public Pagination getPagination();
+	Pagination getPagination();
 	
 
 	
@@ -27,7 +27,7 @@ public interface SearchParamResolver {
 	 * @param paraMap 用户请求参数映射
 	 * @return SearchParam
 	 * */
-	public SearchParam resolve(List<String> fieldList, Map<String, Object> paraMap);
+	SearchParam resolve(List<String> fieldList, Map<String, Object> paraMap);
 	
 	
 }

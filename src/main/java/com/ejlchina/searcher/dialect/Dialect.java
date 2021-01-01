@@ -69,10 +69,10 @@ public interface Dialect {
 
 	
 	/**
-	 * 分页Sq
+	 * 分页 SQL
 	 * @author Troy.Zhou
 	 */
-	public class PaginateSql {
+	class PaginateSql {
 
 		private String sql;
 		private List<Object> params = new ArrayList<>(2);

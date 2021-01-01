@@ -12,7 +12,7 @@ import com.ejlchina.searcher.param.SearchParam;
 public interface SearchSqlResolver {
 
 
-	public SearchSql resolve(SearchBeanMap searchBeanMap, SearchParam searchParam);
+	SearchSql resolve(SearchBeanMap searchBeanMap, SearchParam searchParam);
 	
 	
 }

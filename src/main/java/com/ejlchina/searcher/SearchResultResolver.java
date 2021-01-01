@@ -15,6 +15,6 @@ public interface SearchResultResolver {
 	 * @param searchTmpResult 检索中间结果
 	 * @return 检索结果
 	 */
-	public <T> SearchResult<T> resolve(SearchResultConvertInfo<T> convertInfo, SearchTmpResult searchTmpResult);
+	<T> SearchResult<T> resolve(SearchResultConvertInfo<T> convertInfo, SearchTmpResult searchTmpResult);
 
 }

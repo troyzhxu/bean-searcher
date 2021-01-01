@@ -16,7 +16,7 @@ public interface FieldConvertor {
 	 * @param fieldType 转换目标类型
 	 * @return 转换目标值
 	 * */
-	public Object convert(Object value, Class<?> fieldType);
+	Object convert(Object value, Class<?> fieldType);
 
 	
 }

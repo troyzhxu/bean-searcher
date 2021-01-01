@@ -28,7 +28,7 @@ public interface Pagination {
 	/**
 	 * @return 开始页
 	 */
-	public int getStartPage();
+	int getStartPage();
 	
 	
 }
