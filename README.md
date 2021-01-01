@@ -10,7 +10,7 @@ Introduction
 * 文档：https://searcher.ejlchina.com/
 * 案例：https://gitee.com/ejlchina-zhxu/bean-searcher-demo
 
-#### 超轻量级 Web 条件检索引擎，为弥补传统ORM框架在复杂条件列表检索时的不便而生，使一行代码实现复杂列表检索成为可能！
+#### 超轻量级 Web 条件检索引擎，为弥补传统 ORM 在复杂条件列表检索时的不便而生，使一行代码实现复杂列表检索成为可能！
 
 ```java
 @RestController
