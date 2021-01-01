@@ -62,15 +62,15 @@ public class UserController {
 
 ### 🚀 快速开发
 
-使用 Bean Searcher 可以极大节省后端的复杂列表检索接口的开发时间
+使用 Bean Searcher 可以极大地节省后端的复杂列表检索接口的开发时间！
 
 ### 🌱 集成简单
 
-可以和任意 Java Web 框架集成，如：SpringBoot、Grails、Jfinal 等
+可以和任意 Java Web 框架集成，如：SpringBoot、Spring MVC、Grails、Jfinal、纯 Servlet 等等。
 
 ### 🔨 扩展性强
 
-面向接口设计，用户可自定义扩展 Bean Searcher 中的任何组件
+面向接口设计，用户可自定义扩展 Bean Searcher 中的任何组件！
 
 ### 友情链接
 
