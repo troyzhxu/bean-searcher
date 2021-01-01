@@ -7,7 +7,7 @@ actionText: 极速上手 →
 actionLink: /v2/
 features:
 - title: 快速开发
-  details: 使用 Bean Searcher 可以大大降低后端的复杂列表检索接口的开发时间
+  details: 使用 Bean Searcher 可以极大节省后端的复杂列表检索接口的开发时间
 - title: 集成简单
   details: 可以和任何 Java Web 框架集成，如：SpringBoot、Grails、Jfinal 等 
 - title: 扩展性强
@@ -27,8 +27,8 @@ public class UserController {
 
     @GetMapping("/index")
     public Object index(HttpServletRequest request) {
-        // 只需一行代码，完成包含分页、过滤、排序的复杂列表检索功能
-        // 调用 bean-searcher 提供的 searcher 接口检索数据并返回
+        // 只需一行代码，完成包含分页、过滤、排序、甚至统计的复杂列表检索功能
+        // 调用 Bean Searcher 提供的 searcher 接口检索数据并返回
         return searcher.search(User.class, MapUtils.flat(request.getParameterMap()));
     }
 	

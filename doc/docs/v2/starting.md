@@ -24,17 +24,11 @@ implementation 'com.ejlchina:bean-searcher:2.0.0'
 
 ## 集成
 
-通常情况下，我们都是在一个后端的 Java Web 项目中使用 Bean Searcher，它可以在任意的 Web 框架中使用，以下介绍与三种 Web 框架的集成方法：
+通常情况下，我们都是在一个后端的 Java Web 项目中使用 Bean Searcher，它可以在任意的 Web 框架中使用，以下介绍在四类的 Web 框架的集成方法：
 
 ### Spring Boot
 
-由于 Bean Searcher 自 v2.0 起就已实现了 Spring Boot Starter 化，所以在 Spring Boot Web 项目中集成 Bean Searcher 最为简单。
-
-#### 第一步：添加依赖
-
-详见 [安装](/v2/starting.html#安装) 章节。
-
-#### 第二步：配置 Search Bean 实体类的包名路径
+由于 Bean Searcher 自 v2.0 起就已实现了 Spring Boot Starter 化，所以在 Spring Boot Web 项目中集成 Bean Searcher 最为简单，只需要在 `application` 配置文件内配置 Search Bean 实体类的包名路径即可：
 
 在 `src/main/resources/application.properties` 文件中：
 
@@ -49,21 +43,28 @@ bean-searcher:
   packages: com.example.sbean
 ```
 
-其中`com.example.sbean`为 Search Bean 实体类的包名路径，可配置多个。
+其中 `com.example.sbean` 为 Search Bean 实体类的包名路径，可配多个。
 
-以上两步便完成了在 Spring Boot 框架下的集成。
+### Spring MVC
+
+在传统的 Spring MVC 项目中集成 Bean Searcher 需要在项目的 xml 文件内配置以下两个 Bean：
+
+```xml
+<bean id="searchSqlExecutor" 
+		class="com.ejlchina.searcher.implement.MainSearchSqlExecutor" 
+		p:dataSource-ref="dataSource" />
+
+<bean id="searcher" 
+		class="com.ejlchina.searcher.support.spring.SpringSearcher"
+		p:searchSqlExecutor-ref="searchSqlExecutor"
+		p:scanPackages="{'com.example.sbean'}" />
+```
+
+其中`com.example.sbean`为 Search Bean 实体类的包名路径，可配多个。
 
 ### Grails
 
-在 Grails 项目中集成 Bean Searcher 同样只需要两步：
-
-#### 第一步：添加依赖
-
-详见 [安装](/v2/starting.html#安装) 章节。
-
-#### 第二步：配置 SpringSearcher
-
-在 `grails-app/conf/spring/resources.groovy` 文件内配置一个 Bean
+在 Grails 项目中集成 Bean Searcher，只需要在 `grails-app/conf/spring/resources.groovy` 文件内配置一个 Bean 即可：
 
 ```groovy
 searcher(SpringSearcher) {
@@ -76,21 +77,11 @@ searcher(SpringSearcher) {
 }
 ```
 
-其中`com.example.sbean`为 Search Bean 实体类的包名路径，可配置多个。
-
-以上两步便完成了在 Grails 框架下的集成。
+其中`com.example.sbean`为 Search Bean 实体类的包名路径，可配多个。
 
 ### Jfinal
 
-在 Jfinal 项目中集成 Bean Searcher 同样只需要两步：
-
-#### 第一步：添加依赖
-
-详见 [安装](/v2/starting.html#安装) 章节。
-
-#### 第二步：配置 SearchPlugin
-
-在配置插件的地方配置 SearchPlugin，例如：
+在 Jfinal 项目中集成 Bean Searcher，需要在配置插件的地方配置 SearchPlugin，例如：
 
 ```java
 public class App extends JFinalConfig implements SearcherReceiver, SearcherConfiger {
@@ -139,4 +130,5 @@ public class App extends JFinalConfig implements SearcherReceiver, SearcherConfi
 
 其中`com.example.sbean`为 Search Bean 实体类的包名路径，可配置多个。
 
-以上两步便完成了在 Jfinal 框架下的集成。
+
+

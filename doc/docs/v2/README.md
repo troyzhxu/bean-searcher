@@ -27,9 +27,7 @@ Bean Searcher 是一个轻量级 WEB 条件检索引擎，它的作用是从已�
 可以执行 SQL update? | 不可以 | 可以 | 不可以
 可以执行 SQL select? | 可以 | 可以 | 不可以
 
-从上表可以看出，似乎 Bean Searcher 能做的事，Hibernate、MyBatis 都可以做，而且还可以做的更多，事实确实是这样。
-
-但是，如果你用了 Bean Searcher，在做列表查询的时候，别人写一百行代码，而你只需要写一行！
+从上表可以看出，似乎 Bean Searcher 能做的事，Hibernate、MyBatis 都可以做，而且还可以做的更多，确是如此，所以 Bean Searcher 可以为我们做的就是我们日常在用传统 ROM 再做的一部分事，只不过在它所擅长的方面，比起使用传统 ORM， 它可以让我们的代码 **以一当十** 甚至 **以一当百**，这便是它的作用 ！
 
 ### 哪些项目可以使用
 
@@ -60,7 +58,9 @@ Bean Searcher 是一个轻量级 WEB 条件检索引擎，它的作用是从已�
 
 #### 第三步：效果
 
-访问 [http://localhost:8080/](http://localhost:8080/) 既可查看运行效果
+访问 [http://localhost:8080/](http://localhost:8080/) 既可查看运行效果。
+
+此例的更多信息，可参阅：[DEMO 详细介绍](https://gitee.com/ejlchina-zhxu/bean-searcher-demo)。
 
 ## 版本迭代
 
