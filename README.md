@@ -7,7 +7,7 @@
 * 文档：https://searcher.ejlchina.com/
 * 案例：https://gitee.com/ejlchina-zhxu/bean-searcher-demo
 
-### ❓ 为什么用
+### ⁉️ 为什么用
 
 * 产品画了一个图，后台接口怎么破？
 
