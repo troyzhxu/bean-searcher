@@ -8,19 +8,74 @@ package com.ejlchina.searcher.param;
  */
 public enum Operator {
 
-	Include, 
+	/**
+	 * 包含
+	 * like '%xxx%'
+	 */
+	Include,
+	
+	/**
+	 * 等于
+	 */
 	Equal,
+	
+	/**
+	 * 大于等于
+	 */
 	GreaterEqual, 
+	
+	/**
+	 * 大于
+	 */
 	GreaterThan, 
+	
+	/**
+	 * 小于等于
+	 */
 	LessEqual, 
+	
+	/**
+	 * 小于
+	 */
 	LessThan, 
+	
+	/**
+	 * 不等于
+	 */
 	NotEqual, 
+	
+	/**
+	 * 为空
+	 */
 	Empty, 
-	NotEmpty, 
+	
+	/**
+	 * 不为空
+	 */
+	NotEmpty,
+	
+	/**
+	 * 以 .. 开始
+	 * like 'xxx%'
+	 */
 	StartWith, 
+	
+	/**
+	 * 以 .. 结束
+	 * like '%xxx'
+	 */
 	EndWith, 
+	
+	/**
+	 * 在 .. 和 .. 之间
+	 */
 	Between, 
-	MultiValue; // 多值（或）
+	
+	/**
+	 * 多值
+	 * or
+	 */
+	MultiValue;
 
 	public static Operator from(String op) {
 		switch (op) {
