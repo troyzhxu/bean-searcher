@@ -24,7 +24,7 @@ implementation 'com.ejlchina:bean-searcher:2.0.0'
 
 ## 集成
 
-通常情况下，我们都是在一个后端的 Java Web 项目中使用 Bean Searcher，它可以在任意的 Web 框架中使用，以下介绍在四类的 Web 框架的集成方法：
+通常情况下，我们都是在一个后端的 Java Web 项目中使用 Bean Searcher，它可以在任意的 Web 框架中使用，以下介绍在常见的机种 Web 框架的集成方法：
 
 ### Spring Boot
 
@@ -130,5 +130,36 @@ public class App extends JFinalConfig implements SearcherReceiver, SearcherConfi
 
 其中`com.example.sbean`为 Search Bean 实体类的包名路径，可配置多个。
 
+### Others
 
+在其它任意的 Java 项目中，都可以使用如下方法使用 Bean Searcher : 
 
+#### 1、启动 Bean Searcher
+
+```java
+SearcherStarter starter = new SearcherStarter();
+// 传入 Search Bean 实体类的包名（可传多个），并启动
+starter.start("com.example.sbean");
+```
+
+#### 2、构建 Searcher 实例
+
+```java
+// 获取配置好的数据源
+DataSource dataSource = getDataSource();
+// 构建 Searcher 实例
+Searcher searcher = SearcherBuilder.builder()
+		.configSearchSqlExecutor(new MainSearchSqlExecutor(dataSource))
+		.build();
+```
+
+得到 `Searcher` 实例后，便可以在项目中使用它了。
+
+#### 3、停止 Bean Searcher
+
+当项目停止时，可调用 `SearcherStarter` 对象的 `shutdown` 方法优雅关闭：
+
+```java
+// 关闭检索器
+starter.shutdown();
+```
