@@ -63,7 +63,7 @@ public class UserController {
 
 ### 友情链接
 
-[**[ OkHttps ]** 前后端通用轻量却强大的 HTTP 客户端（同时支持 WebSocket 与 Stomp）](https://gitee.com/ejlchina-zhxu/okhttps)
+[**[ OkHttps ]** 轻量却强大的 HTTP 客户端，前后端通用，同时支持 WebSocket 与 Stomp 协议](https://gitee.com/ejlchina-zhxu/okhttps)
 
 ### 参与贡献
 
