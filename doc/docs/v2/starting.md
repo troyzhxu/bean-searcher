@@ -163,3 +163,7 @@ Searcher searcher = SearcherBuilder.builder()
 // 关闭检索器
 starter.shutdown();
 ```
+
+## 使用
+
+文档完善中 。。。

@@ -13,7 +13,7 @@ description: Bean Searcher
 * 检索结果可以按任意字段排序
 * 页面展示某些字段的按条件统计信息
 
-这时候，后台接口该怎么写？？？使用 Bean Searcher 只 **一行代码** 便可实现上述要求！！！
+这时候，后台接口该怎么写？？？而使用 Bean Searcher，只需 **一行代码** 便可实现上述要求！！！
 
 ## Bean Searcher
 

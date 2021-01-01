@@ -9,7 +9,7 @@ features:
 - title: 快速开发
   details: 使用 Bean Searcher 可以极大节省后端的复杂列表检索接口的开发时间
 - title: 集成简单
-  details: 可以和任何 Java Web 框架集成，如：SpringBoot、Grails、Jfinal 等 
+  details: 可以和任意 Java Web 框架集成，如：SpringBoot、Grails、Jfinal 等 
 - title: 扩展性强
   details: 面向接口设计，用户可自定义扩展 Bean Searcher 中的任何组件
 footer: Apache Licensed | Copyright © 2020-present ejlchina.com
