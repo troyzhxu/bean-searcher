@@ -23,7 +23,7 @@ public class SpringSearcher extends MainSearcher implements InitializingBean, Di
 	
 	
 	@Override
-	public void afterPropertiesSet() throws Exception {
+	public void afterPropertiesSet() {
 		SearcherBuilder.builder()
 				.configSearchParamResolver(getSearchParamResolver())
 				.configSearchResultResolver(getSearchResultResolver())
@@ -42,7 +42,7 @@ public class SpringSearcher extends MainSearcher implements InitializingBean, Di
 	}
 
 	@Override
-	public void destroy() throws Exception {
+	public void destroy() {
 		searcherStarter.shutdown();
 	}
 	

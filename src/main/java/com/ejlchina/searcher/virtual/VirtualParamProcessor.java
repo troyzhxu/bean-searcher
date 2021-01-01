@@ -12,7 +12,7 @@ public interface VirtualParamProcessor {
 
 	
 	
-	public SearchBeanMap process(SearchBeanMap searchBeanMap);
+	SearchBeanMap process(SearchBeanMap searchBeanMap);
 	
 	
 }
