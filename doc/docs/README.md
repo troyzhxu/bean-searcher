@@ -27,9 +27,7 @@ public class UserController {
 
     @GetMapping("/index")
     public Object index(HttpServletRequest request) {
-        // 只需一行代码，完成包含分页、过滤、排序、甚至统计的复杂列表检索功能
-        // 调用 Bean Searcher 提供的 searcher 接口检索数据并返回
-        // 一行代码，实现包含 分页、组合过滤、任意字段排序、甚至统计 的复杂检索功能
+        // 只一行代码，实现包含 分页、组合过滤、任意字段排序、甚至统计 的复杂检索功能
         // 调用 Bean Searcher 提供的 Searcher 接口检索数据并返回
         return searcher.search(User.class, MapUtils.flat(request.getParameterMap()));
     }
