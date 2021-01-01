@@ -66,7 +66,7 @@ public class UserController {
 
 ### 🌱 集成简单
 
-可以和任意 Java Web 框架集成，如：SpringBoot、Spring MVC、Grails、Jfinal、纯 Servlet 等等。
+可以和任意 Java Web 框架集成，如：SpringBoot、Spring MVC、Grails、Jfinal 等等。
 
 ### 🔨 扩展性强
 
