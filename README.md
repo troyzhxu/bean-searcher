@@ -73,13 +73,21 @@ public class UserController {
 
 面向接口设计，用户可自定义扩展 Bean Searcher 中的任何组件！
 
-### 友情链接
+### 📚 详细文档
+
+请参阅：
+
+https://searcher.ejlchina.com/
+
+文档持续完善中...
+
+### 🤝 友情接链
 
 [**[ OkHttps ]** 轻量却强大的 HTTP 客户端，前后端通用，支持 WebSocket 与 Stomp 协议](https://gitee.com/ejlchina-zhxu/okhttps)
 
-### 参与贡献
+### ❤️ 参与贡献
 
-1.  Fork 本仓库
+1.  Star and Fork 本仓库
 2.  新建 Feat_xxx 分支
 3.  提交代码
 4.  新建 Pull Request
