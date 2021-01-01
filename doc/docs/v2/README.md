@@ -14,7 +14,7 @@ description: Bean Searcher
 * 可以按任意字段排序
 * 按检索条件统计某些字段值
 
-这时候，后台接口该怎么写？？？而使用 Bean Searcher，只需 **一行代码** 便可实现上述要求！！！
+这时候，后台接口该怎么写？？？使用 Mybatis 或 Hibernate 写 100 行代码是不是还打不住？而使用 Bean Searcher，只需 **一行代码** 便可实现上述要求！！！
 
 ## Bean Searcher
 
