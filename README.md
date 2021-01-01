@@ -29,6 +29,8 @@
 
 ### 💥 只一行代码实现以上功能
 
+无论简单还是复杂，Bean Searcher 只需一行代码：
+
 ```java
 @RestController
 @RequestMapping("/user")
