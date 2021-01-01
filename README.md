@@ -56,7 +56,7 @@ public class UserController {
 
 更多请参见文档：https://searcher.ejlchina.com/
 
-案例快速体验：https://gitee.com/ejlchina-zhxu/bean-searcher-demo
+快速体验：https://gitee.com/ejlchina-zhxu/bean-searcher-demo
 
 ### 🚀 快速开发
 
