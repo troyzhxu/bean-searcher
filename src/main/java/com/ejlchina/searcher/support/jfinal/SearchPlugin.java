@@ -25,7 +25,7 @@ public class SearchPlugin implements IPlugin {
 	 * @since 1.2.0
 	 *
 	 */
-	public static interface SearcherReceiver {
+	public interface SearcherReceiver {
 		
 		void receive(Searcher searcher);
 		
@@ -37,7 +37,7 @@ public class SearchPlugin implements IPlugin {
 	 * @since 1.2.0
 	 *
 	 */
-	public static interface SearcherConfiger {
+	public interface SearcherConfiger {
 		
 		void config(SearcherBuilder builder);
 		
