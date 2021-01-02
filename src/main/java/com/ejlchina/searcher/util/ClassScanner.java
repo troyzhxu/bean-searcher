@@ -5,7 +5,6 @@ import java.lang.annotation.Annotation;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.springframework.beans.factory.BeanDefinitionStoreException;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
@@ -79,8 +78,7 @@ public class ClassScanner {
                 }
             }
         } catch (IOException ex) {  
-            throw new BeanDefinitionStoreException(  
-                    "I/O failure during classpath scanning", ex);  
+            throw new SearcherException("I/O failure during classpath scanning", ex);
         }
         return classes;  
     }  

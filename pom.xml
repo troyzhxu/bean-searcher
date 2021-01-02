@@ -41,13 +41,7 @@
 	</scm>
 
 	<dependencies>
-	
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-beans</artifactId>
-			<version>4.3.16.RELEASE</version>
-		</dependency>
-	
+
 		<dependency>
 		  <groupId>org.springframework</groupId>
 		  <artifactId>spring-core</artifactId>
@@ -85,14 +79,14 @@
 		<dependency>
 			<groupId>com.jfinal</groupId>
 			<artifactId>jfinal</artifactId>
-			<version>3.0</version>
+			<version>4.9.06</version>
 			<scope>provided</scope>
 		</dependency>
 		
 		<dependency>
 		    <groupId>org.slf4j</groupId>
 		    <artifactId>slf4j-api</artifactId>
-		    <version>1.7.25</version>
+		    <version>1.7.30</version>
 		</dependency>
 	
 	</dependencies>
