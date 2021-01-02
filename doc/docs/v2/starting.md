@@ -90,25 +90,21 @@ public class App extends JFinalConfig implements SearcherReceiver, SearcherConfi
 
 	@Override
 	public void configPlugin(Plugins me) {
-		loadPropertyFile("application.properties");
-		// 数据库连接池插件 DruidPlugin 实现了 IDataSourceProvider 接口
-		DruidPlugin dp = new DruidPlugin(getProperty("db.url"), 
-				getProperty("db.username"), 
-				getProperty("db.password"),
-				getProperty("db.dirverClass"));
-        // 省略 DruidPlugin 相关的配置
+		// 首先获得一个 IDataSourceProvider 实例，比如 DruidPlugin 插件
+		DruidPlugin dp = new DruidPlugin(...);
+		// 省略 DruidPlugin 相关的配置
 		
-        // Bean Searcher 插件，第一个参数接收 IDataSourceProvider 实例
-        // 第二个参数为 Search Bean 实体类的包名路径，可配多个
-        SearchPlugin sp = new SearchPlugin(dp, "com.example.sbean");
-        sp.setSearcherReceiver(this);
-        sp.setSearcherConfiger(this);
-        sp.setShowSql(true);
+		// Bean Searcher 插件，第一个参数接收 IDataSourceProvider 实例
+		// 第二个参数为 Search Bean 实体类的包名路径，可配多个
+		SearchPlugin sp = new SearchPlugin(dp, "com.example.sbean");
+		sp.setSearcherReceiver(this);
+		sp.setSearcherConfiger(this);
+		sp.setShowSql(true);
         
 		me.add(dp);
 		me.add(sp);
 
-        // 省略其它配置
+		// 省略其它配置
 	}
 
 	@Override
