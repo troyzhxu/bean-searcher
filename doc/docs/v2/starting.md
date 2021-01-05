@@ -167,19 +167,19 @@ starter.shutdown();
 )
 public class Employee {
 
-    @DbField("e.id")
-    private Long id;
+    @DbField("e.id")                        // 关联 员工表 的 ID 字段
+    private Long id;                
 
-    @DbField("e.name")
+    @DbField("e.name")                      // 关联 员工表 的 NAME 字段
     private String name;
     
-    @DbField("e.age")
+    @DbField("e.age")                       // 关联 员工表 的 AGE 字段
     private Integer age;
 
-    @DbField("d.name")
+    @DbField("d.name")                      // 关联 部门表 的 ID 字段
     private String department;
 
-    @DbField("e.entry_date")
+    @DbField("e.entry_date")                // 关联 员工表的 ENTRY_DATE 字段
     private Date entryDate;
 
     // Getter and Setter ...
