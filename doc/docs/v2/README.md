@@ -49,7 +49,7 @@ Bean Searcher 是一个轻量级 WEB 条件检索引擎，它的作用是从已�
 
 * 可与任意框架集成：Spring Boot、Grails、Jfinal 等等
 
-### 小 DEMO 快速体验
+### DEMO 快速体验
 
 #### 仓库地址
 
