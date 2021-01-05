@@ -28,22 +28,14 @@ implementation 'com.ejlchina:bean-searcher:2.0.0'
 
 ### Spring Boot
 
-由于 Bean Searcher 自 v2.0 起就已实现了 Spring Boot Starter 化，所以在 Spring Boot Web 项目中集成 Bean Searcher 最为简单，只需要在 `application` 配置文件内配置 Search Bean 实体类的包名路径即可：
-
-在 `src/main/resources/application.properties` 文件中：
+由于 Bean Searcher 自 v2.0 起就已实现了 Spring Boot Starter 化，所以在 Spring Boot Web 项目中集成 Bean Searcher 最为简单，只需要在应用的配置文件内配置 Search Bean 实体类的包名路径即可，例如在 `src/main/resources/application.properties` 文件中：
 
 ```properties
 bean-searcher.packages = com.example.sbean
 ```
 
-或 `src/main/resources/application.yml` 文件中：
+其中 `com.example.sbean` 为 Search Bean 实体类所在的包名路径，可配多个。
 
-```properties
-bean-searcher:
-  packages: com.example.sbean
-```
-
-其中 `com.example.sbean` 为 Search Bean 实体类的包名路径，可配多个。
 
 ### Spring MVC
 
@@ -51,13 +43,13 @@ bean-searcher:
 
 ```xml
 <bean id="searchSqlExecutor" 
-		class="com.ejlchina.searcher.implement.MainSearchSqlExecutor" 
-		p:dataSource-ref="dataSource" />
+        class="com.ejlchina.searcher.implement.MainSearchSqlExecutor" 
+        p:dataSource-ref="dataSource" />
 
 <bean id="searcher" 
-		class="com.ejlchina.searcher.support.spring.SpringSearcher"
-		p:searchSqlExecutor-ref="searchSqlExecutor"
-		p:scanPackages="{'com.example.sbean'}" />
+        class="com.ejlchina.searcher.support.spring.SpringSearcher"
+        p:searchSqlExecutor-ref="searchSqlExecutor"
+        p:scanPackages="{'com.example.sbean'}" />
 ```
 
 其中`com.example.sbean`为 Search Bean 实体类的包名路径，可配多个。
@@ -86,40 +78,40 @@ searcher(SpringSearcher) {
 ```java
 public class App extends JFinalConfig implements SearcherReceiver, SearcherConfiger {
 
-	// 省略 Jfinal 的其它配置
+    // 省略 Jfinal 的其它配置
 
-	@Override
-	public void configPlugin(Plugins me) {
-		// 首先获得一个 IDataSourceProvider 实例，比如 DruidPlugin 插件
-		DruidPlugin dp = new DruidPlugin(...);
-		// 省略 DruidPlugin 相关的配置
-		
-		// Bean Searcher 插件，第一个参数接收 IDataSourceProvider 实例
-		// 第二个参数为 Search Bean 实体类的包名路径，可配多个
-		SearchPlugin sp = new SearchPlugin(dp, "com.example.sbean");
-		sp.setSearcherReceiver(this);
-		sp.setSearcherConfiger(this);
-		sp.setShowSql(true);
+    @Override
+    public void configPlugin(Plugins me) {
+        // 首先获得一个 IDataSourceProvider 实例，比如 DruidPlugin 插件
+        DruidPlugin dp = new DruidPlugin(...);
+        // 省略 DruidPlugin 相关的配置
         
-		me.add(dp);
-		me.add(sp);
+        // Bean Searcher 插件，第一个参数接收 IDataSourceProvider 实例
+        // 第二个参数为 Search Bean 实体类的包名路径，可配多个
+        SearchPlugin sp = new SearchPlugin(dp, "com.example.sbean");
+        sp.setSearcherReceiver(this);
+        sp.setSearcherConfiger(this);
+        sp.setShowSql(true);
+        
+        me.add(dp);
+        me.add(sp);
 
-		// 省略其它配置
-	}
+        // 省略其它配置
+    }
 
-	@Override
-	public void receive(Searcher searcher) {
+    @Override
+    public void receive(Searcher searcher) {
         // 接收到 searcher 实例，可以用一个容器接收，留待后续使用
-		Ioc.add(Searcher.class, searcher);
-	}
-	
-	@Override
-	public void config(SearcherBuilder builder) {
-		// 这里可以对 Bean Searcher 做一些自定义配置
+        Ioc.add(Searcher.class, searcher);
+    }
+    
+    @Override
+    public void config(SearcherBuilder builder) {
+        // 这里可以对 Bean Searcher 做一些自定义配置
 
-	}
+    }
 
-	// 省略 Jfinal 的其它配置
+    // 省略 Jfinal 的其它配置
 
 }
 ```
@@ -145,8 +137,8 @@ starter.start("com.example.sbean");
 DataSource dataSource = getDataSource();
 // 构建 Searcher 实例
 Searcher searcher = SearcherBuilder.builder()
-		.configSearchSqlExecutor(new MainSearchSqlExecutor(dataSource))
-		.build();
+        .configSearchSqlExecutor(new MainSearchSqlExecutor(dataSource))
+        .build();
 ```
 
 得到 `Searcher` 实例后，便可以在项目中使用它了。
@@ -161,5 +153,40 @@ starter.shutdown();
 ```
 
 ## 使用
+
+当在项目中成功集成后，剩下的工作便是定义 `SearchBean` 实体类了。
+
+### SearchBean
+
+所谓的 `SearchBean`，即是列表检索中单个列表项所组成的 `POJO`。它指定了列表中的某个数据列与数据库表字段之间的映射关系。例如：
+
+```java
+@SearchBean(
+    tables = "employee e, department d",    // 关联 员工表 与 部门表
+    joinCond = "e.department_id = d.id"     // 静态关联条件
+)
+public class Employee {
+
+    @DbField("e.id")
+    private Long id;
+
+    @DbField("e.name")
+    private String name;
+    
+    @DbField("e.age")
+    private Integer age;
+
+    @DbField("d.name")
+    private String department;
+
+    @DbField("e.entry_date")
+    private Date entryDate;
+
+    // Getter and Setter ...
+}
+
+```
+
+
 
 文档完善中 。。。
