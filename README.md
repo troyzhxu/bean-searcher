@@ -83,6 +83,8 @@ https://searcher.ejlchina.com/
 
 [**[ OkHttps ]** 轻量却强大的 HTTP 客户端，前后端通用，支持 WebSocket 与 Stomp 协议](https://gitee.com/ejlchina-zhxu/okhttps)
 
+[**[ JsonKit ]** 超轻量级 JSON 门面工具，用法简单，不依赖具体实现，让业务代码与 Jackson、Gson、Fastjson 等解耦！](https://gitee.com/ejlchina-zhxu/jsonkit)
+
 ### ❤️ 参与贡献
 
 1.  Star and Fork 本仓库
