@@ -34,7 +34,9 @@ public class SearchResultConvertInfo<T> {
 	 */
 	private Map<String, Class<?>> fieldTypeMap;
 
-	
+	public SearchResultConvertInfo() {
+	}
+
 	public SearchResultConvertInfo(Class<T> beanClass) {
 		this.beanClass = beanClass;
 	}
@@ -69,6 +71,14 @@ public class SearchResultConvertInfo<T> {
 
 	public void setFieldTypeMap(Map<String, Class<?>> fieldTypeMap) {
 		this.fieldTypeMap = fieldTypeMap;
+	}
+
+	public SearchResultConvertInfo<T> with(Class<T> clazz) {
+		SearchResultConvertInfo<T> instance = new SearchResultConvertInfo<>(clazz);
+		instance.setFieldTypeMap(fieldTypeMap);
+		instance.setFieldDbAliasEntrySet(fieldDbAliasEntrySet);
+		instance.setFieldGetMethodMap(fieldGetMethodMap);
+		return instance;
 	}
 
 }

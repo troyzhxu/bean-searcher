@@ -145,7 +145,7 @@ public class MainSearcher implements Searcher {
 	/// 私有方法
 
 	private Map<String, Object> propcessParaMapWhithPrefix(Map<String, Object> paraMap, String prefix) {
-		Map<String, Object> newParaMap = null;
+		Map<String, Object> newParaMap;
 		if (!StringUtils.isBlank(prefix)) {
 			newParaMap = new HashMap<>();
 			for (Entry<String, Object> entry : paraMap.entrySet()) {
@@ -183,7 +183,7 @@ public class MainSearcher implements Searcher {
 		SearchTmpResult searchTmpResult = searchSqlExecutor.execute(searchSql);
 		@SuppressWarnings("unchecked")
 		SearchResultConvertInfo<T> convertInfo = (SearchResultConvertInfo<T>) searchBeanMap.getConvertInfo();
-		SearchResult<T> result = searchResultResolver.resolve(convertInfo, searchTmpResult);
+		SearchResult<T> result = searchResultResolver.resolve(convertInfo.with(beanClass), searchTmpResult);
 		return consummateSearchResult(searchParam, result);
 	}
 

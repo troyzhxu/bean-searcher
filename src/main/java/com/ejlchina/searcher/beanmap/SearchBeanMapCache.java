@@ -25,7 +25,7 @@ public class SearchBeanMapCache {
 	
 	
 	public <T> void addSearchBeanMap(Class<T> beanClass, SearchBeanMap searchBeanMap) {
-		SearchResultConvertInfo<T> convertInfo = new SearchResultConvertInfo<T>(beanClass);
+		SearchResultConvertInfo<T> convertInfo = new SearchResultConvertInfo<>();
 		convertInfo.setFieldDbAliasEntrySet(searchBeanMap.getFieldDbAliasMap().entrySet());
 		convertInfo.setFieldGetMethodMap(searchBeanMap.getFieldGetMethodMap());
 		convertInfo.setFieldTypeMap(searchBeanMap.getFieldTypeMap());
