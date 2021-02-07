@@ -12,14 +12,14 @@ description: IOT 物联网 IOTCP 协议 SDK 集成
 <dependency>
     <groupId>com.ejlchina</groupId>
     <artifactId>bean-searcher</artifactId>
-    <version>2.0.0</version>
+    <version>2.0.1</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```groovy
-implementation 'com.ejlchina:bean-searcher:2.0.0'
+implementation 'com.ejlchina:bean-searcher:2.0.1'
 ```
 
 ## 集成
