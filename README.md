@@ -19,13 +19,7 @@
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0101/172608_d622bcd3_1393412.png "屏幕截图.png")
 
-**什么？.... 好吧! 代码凌乱都是被产品逼的！**
-
-* 但是，你的产品放大招了：
-
-![输入图片说明](https://gitee.com/saodiyang/layui-soul-table/raw/master/img/tableFilter.gif "屏幕截图.png")
-
-**我去，这后台接口的代码该怎么写 ！！！**
+**什么？.... 这后台代码岂不要上百行？？？**
 
 ### 💥 只一行代码实现以上功能
 
