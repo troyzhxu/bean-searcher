@@ -5,6 +5,9 @@
 [![Troy.Zhou](https://img.shields.io/badge/%E4%BD%9C%E8%80%85-ejlchina-orange.svg)](https://github.com/ejlchina)
 
 * 文档：https://searcher.ejlchina.com/
+ 
+ 若以上地址不可用，请访问：http://searcher.ejlchina-app.com/
+
 * 案例：https://gitee.com/ejlchina-zhxu/bean-searcher-demo
 
 ### ⁉️ 为什么用
