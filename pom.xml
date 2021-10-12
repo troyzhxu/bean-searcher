@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.ejlchina</groupId>
 	<artifactId>bean-searcher</artifactId>
-	<version>2.0.1</version>
+	<version>2.1.0</version>
 	
 	<name>bean-searcher</name>
 	<description>面向结果与条件的数据库检索器</description>
