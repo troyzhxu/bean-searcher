@@ -21,9 +21,9 @@ import com.ejlchina.searcher.SearcherException;
 public class ClassScanner {
   
 	
-    private ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();  
+    private final ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
   
-    private MetadataReaderFactory metadataReaderFactory = new CachingMetadataReaderFactory(this.resourcePatternResolver);  
+    private final MetadataReaderFactory metadataReaderFactory = new CachingMetadataReaderFactory(this.resourcePatternResolver);
   
 
     public Set<Class<?>> scan(String basePackage) {  
@@ -60,17 +60,16 @@ public class ClassScanner {
                                     .resolvePlaceholders(basePackage))  
                     + "/**/*.class";
             Resource[] resources = this.resourcePatternResolver  
-                    .getResources(packageSearchPath);  
-  
-            for (int i = 0; i < resources.length; i++) {  
-                Resource resource = resources[i];  
-                if (resource.isReadable()) {  
+                    .getResources(packageSearchPath);
+
+            for (Resource resource : resources) {
+                if (resource.isReadable()) {
                     MetadataReader metadataReader = this.metadataReaderFactory
-                    		.getMetadataReader(resource);  
+                            .getMetadataReader(resource);
                     if (includeFilters == null || matches(includeFilters, metadataReader)) {
-                    	String className = metadataReader.getClassMetadata().getClassName();
+                        String className = metadataReader.getClassMetadata().getClassName();
                         try {
-							classes.add(Class.forName(className));  
+                            classes.add(Class.forName(className));
                         } catch (ClassNotFoundException e) {
                             throw new SearcherException("加载类【" + className + "】失败：", e);
                         }

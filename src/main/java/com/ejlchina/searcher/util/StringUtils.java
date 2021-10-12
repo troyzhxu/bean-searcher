@@ -34,7 +34,7 @@ public class StringUtils {
 		if (string.length() == 1) {
 			return String.valueOf(first);
 		}
-		return String.valueOf(first) + string.substring(1);
+		return first + string.substring(1);
 	}
     
 	
