@@ -8,16 +8,19 @@ public class VirtualParam {
 	private String name;
 	
 	/**
-	 * 在Sql里的参数名
+	 * 在 Sql 里的参数名
 	 */
 	private String sqlName;
 	
 	/**
-	 * 是否可作为JDBC的参数
+	 * 是否可作为 JDBC 的参数
 	 */
 	private boolean parameterized = false;
 
-	
+	public VirtualParam(String sqlName) {
+		this.sqlName = sqlName;
+	}
+
 	public String getName() {
 		return name;
 	}

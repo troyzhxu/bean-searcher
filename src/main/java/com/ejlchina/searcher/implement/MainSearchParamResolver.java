@@ -236,7 +236,7 @@ public class MainSearchParamResolver implements SearchParamResolver {
 		this.paramFilters = paramFilters;
 	}
 	
-	class RawParam {
+	static class RawParam {
 		
 		static final int FEILD = 1;
 		static final int OPERATOR = 2;

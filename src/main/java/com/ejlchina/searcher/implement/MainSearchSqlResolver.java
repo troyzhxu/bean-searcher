@@ -153,7 +153,7 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 		boolean shouldQueryTotal = searchParam.isShouldQueryTotal();
 		if (StringUtils.isBlank(groupBy)) {
 			if (searchBeanMap.isDistinct()) {
-				String originalSql = fieldSelectSql + builder.toString();
+				String originalSql = fieldSelectSql + builder;
 				String clusterSelectSql = resolveClusterSelectSql(fieldDbMap, searchSql, 
 						summaryFields, shouldQueryTotal, originalSql);
 				String tableAlias = generateTableAlias(originalSql);
@@ -165,7 +165,7 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 				searchSql.setClusterSqlString(clusterSelectSql + fromWhereSql);
 			}
 		} else {
-			builder.append(" group by " + groupBy);
+			builder.append(" group by ").append(groupBy);
 			String fromWhereSql = builder.toString();
 			if (searchBeanMap.isDistinct()) {
 				String originalSql = fieldSelectSql + fromWhereSql;

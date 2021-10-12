@@ -56,7 +56,7 @@ public class DefaultVirtualParamProcessor implements VirtualParamProcessor {
 		int index1 = sqlSnippet.indexOf(virtualParamPrefix);
 		while (index1 >= 0) {
 			int index2 = findVitualParamEndIndex(sqlSnippet, index1);
-			String paramName = null;
+			String paramName;
 			if (index2 > 0) {
 				paramName = sqlSnippet.substring(index1, index2);
 			} else {
@@ -65,18 +65,20 @@ public class DefaultVirtualParamProcessor implements VirtualParamProcessor {
 			if (StringUtils.isBlank(paramName) || paramName.length() < 2) {
 				throw new SearcherException("这里有一个语法错误（虚拟参数名）：" + sqlSnippet);
 			}
-			VirtualParam virtualParam = new VirtualParam();
-			
-			virtualParam.setName(paramName.substring(1));
-			virtualParam.setSqlName(paramName);
-			
+			VirtualParam virtualParam = new VirtualParam(paramName);
+			boolean endWithPrefix = paramName.endsWith(virtualParamPrefix);
+			if (endWithPrefix) {
+				virtualParam.setName(paramName.substring(1, paramName.length() - virtualParamPrefix.length()));
+			} else {
+				virtualParam.setName(paramName.substring(1));
+			}
 			int quotationCount1 = StringUtils.containCount(sqlSnippet, 0, index1, quotations);
 			int quotationCount2 = StringUtils.containCount(sqlSnippet, Math.max(index1, index2), sqlSnippet.length(), quotations);
 			if ((quotationCount1 + quotationCount2) % 2 != 0) {
 				throw new SearcherException("这里有一个语法错误（引号不匹配）：" + sqlSnippet);
 			}
-			// 判断虚拟参数是否在引号内部
-			if (quotationCount1 % 2 == 0) {
+			// 判断虚拟参数是否不在引号内部，并且不是以 :name: 的形式
+			if (quotationCount1 % 2 == 0 && !endWithPrefix) {
 				virtualParam.setParameterized(true);
 				sqlSnippet = sqlSnippet.replaceFirst(paramName, "?");
 			}
