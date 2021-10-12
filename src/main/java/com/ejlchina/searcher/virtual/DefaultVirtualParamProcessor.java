@@ -1,12 +1,11 @@
 package com.ejlchina.searcher.virtual;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.ejlchina.searcher.SearcherException;
 import com.ejlchina.searcher.beanmap.SearchBeanMap;
 import com.ejlchina.searcher.util.StringUtils;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 public class DefaultVirtualParamProcessor implements VirtualParamProcessor {
@@ -16,9 +15,9 @@ public class DefaultVirtualParamProcessor implements VirtualParamProcessor {
 	
 	private String[] vertualParamEndFlags = new String[] {" ", "\t", "\n", "\r", "+", "-", "*", "/", "=", "!", ">", "<", ",", ")", "'", "%"};
 	
-	private char[] quotations = new char[] {'\'', '"'};
+	private final char[] quotations = new char[] {'\'', '"'};
 	
-	private Map<SearchBeanMap, Object> processed = new HashMap<>(); 
+	private final Map<SearchBeanMap, Object> processed = new ConcurrentHashMap<>();
 	
 	
 	@Override
