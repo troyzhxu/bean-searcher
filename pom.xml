@@ -37,7 +37,7 @@
 		<connection>scm:git:https://github.com/ejlchina/bean-searcher.git</connection>
 		<developerConnection>scm:git:https://github.com/ejlchina/bean-searcher.git</developerConnection>
 		<url>https://github.com/ejlchina/bean-searcher</url>
-		<tag>v2.0.0</tag>
+		<tag>v2.1.0</tag>
 	</scm>
 
 	<dependencies>
@@ -45,48 +45,48 @@
 		<dependency>
 		  <groupId>org.springframework</groupId>
 		  <artifactId>spring-core</artifactId>
-		  <version>4.3.16.RELEASE</version>
+		  <version>5.3.10</version>
 		</dependency>
 				
 		<dependency>
 		  <groupId>org.springframework</groupId>
 		  <artifactId>spring-context</artifactId>
-		  <version>4.3.16.RELEASE</version>
+		  <version>5.3.10</version>
 		  <scope>provided</scope>
 		</dependency>
 		
 		<dependency>
 		  <groupId>org.springframework.boot</groupId>
 		  <artifactId>spring-boot</artifactId>
-		  <version>1.5.21.RELEASE</version>
+		  <version>2.5.5</version>
 		  <scope>provided</scope>
 		</dependency>
 
 		<dependency>
 		  <groupId>org.springframework.boot</groupId>
 		  <artifactId>spring-boot-autoconfigure</artifactId>
-		  <version>1.5.21.RELEASE</version>
+		  <version>2.5.5</version>
 		  <scope>provided</scope>
 		</dependency>
 		
 		<dependency>
 		  <groupId>org.springframework.boot</groupId>
 		  <artifactId>spring-boot-configuration-processor</artifactId>
-		  <version>1.5.21.RELEASE</version>
+		  <version>2.5.5</version>
 		  <optional>true</optional>
 		</dependency>
 		
 		<dependency>
 			<groupId>com.jfinal</groupId>
 			<artifactId>jfinal</artifactId>
-			<version>4.9.06</version>
+			<version>4.9.17</version>
 			<scope>provided</scope>
 		</dependency>
 		
 		<dependency>
 		    <groupId>org.slf4j</groupId>
 		    <artifactId>slf4j-api</artifactId>
-		    <version>1.7.30</version>
+		    <version>1.7.32</version>
 		</dependency>
 	
 	</dependencies>
@@ -136,6 +136,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
 				<configuration>
                     <source>${java-version}</source>
                     <target>${java-version}</target>
