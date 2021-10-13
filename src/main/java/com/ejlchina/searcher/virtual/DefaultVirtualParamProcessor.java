@@ -77,7 +77,7 @@ public class DefaultVirtualParamProcessor implements VirtualParamProcessor {
 			if ((quotationCount1 + quotationCount2) % 2 != 0) {
 				throw new SearcherException("这里有一个语法错误（引号不匹配）：" + sqlSnippet);
 			}
-			int nextIndex = Math.max(index1, index2) + 1;
+			int nextIndex = Math.max(index1, index2);
 			// 判断虚拟参数是否不在引号内部，并且不是以 :name: 的形式
 			if (quotationCount1 % 2 == 0 && !endWithPrefix) {
 				virtualParam.setParameterized(true);
