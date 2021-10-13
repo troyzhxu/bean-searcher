@@ -77,13 +77,16 @@ public class DefaultVirtualParamProcessor implements VirtualParamProcessor {
 			if ((quotationCount1 + quotationCount2) % 2 != 0) {
 				throw new SearcherException("这里有一个语法错误（引号不匹配）：" + sqlSnippet);
 			}
+			int nextIndex = Math.max(index1, index2) + 1;
 			// 判断虚拟参数是否不在引号内部，并且不是以 :name: 的形式
 			if (quotationCount1 % 2 == 0 && !endWithPrefix) {
 				virtualParam.setParameterized(true);
 				sqlSnippet = sqlSnippet.replaceFirst(paramName, "?");
+				// sqlSnippet 长度变短，寻找下标也该相应提前
+				nextIndex = nextIndex - paramName.length() + 1;
 			}
 			solution.addVirtualParam(virtualParam);
-			index1 = sqlSnippet.indexOf(virtualParamPrefix, Math.max(index1, index2) + 1);
+			index1 = sqlSnippet.indexOf(virtualParamPrefix, nextIndex);
 		}
 		solution.setSqlSnippet(sqlSnippet);
 		return solution;
