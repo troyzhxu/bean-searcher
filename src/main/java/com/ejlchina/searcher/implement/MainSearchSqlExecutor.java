@@ -186,7 +186,7 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 	
 	
 	protected void doLog(String content) {
-		log.info("bean-searcher - " + content);
+		log.debug("bean-searcher - " + content);
 	}
 	
 }
