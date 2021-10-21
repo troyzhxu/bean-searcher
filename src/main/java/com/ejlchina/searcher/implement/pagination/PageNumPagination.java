@@ -1,19 +1,11 @@
 package com.ejlchina.searcher.implement.pagination;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.ejlchina.searcher.param.SearchParam;
 import com.ejlchina.searcher.util.ObjectUtils;
 
 
-
 public class PageNumPagination implements Pagination {
 
-	
-	protected Logger log = LoggerFactory.getLogger(PageNumPagination.class);
-	
-	
 	/**
 	 * 开始页
 	 * */
@@ -28,8 +20,7 @@ public class PageNumPagination implements Pagination {
 	 * 偏移条数字段参数名
 	 */
 	private String pageParamName = "page";
-	
-	
+
 	/**
 	 * 最大允许查询条数
 	 */

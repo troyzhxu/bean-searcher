@@ -1,19 +1,11 @@
 package com.ejlchina.searcher.implement.pagination;
 
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.ejlchina.searcher.param.SearchParam;
 import com.ejlchina.searcher.util.ObjectUtils;
 
 
 public class MaxOffsetPagination implements Pagination {
 
-
-	protected Logger log = LoggerFactory.getLogger(MaxOffsetPagination.class);
-	
-	
 	/**
 	 * 开始偏移
 	 * */
@@ -29,7 +21,6 @@ public class MaxOffsetPagination implements Pagination {
 	 */
 	private String offsetParamName = "offset";
 
-	
 	/**
 	 * 最大允许查询条数
 	 */
