@@ -15,7 +15,7 @@ import com.ejlchina.searcher.util.StringUtils;
 public class FilterParam {
 
 	private String name;
-	private List<Value> values = new ArrayList<>(2);
+	private final List<Value> values = new ArrayList<>(2);
 	private boolean ignoreCase;
 	private Operator operator;
 
@@ -42,12 +42,7 @@ public class FilterParam {
 	}
 
 	public Object[] getValues() {
-		values.sort(new Comparator<Value>() {
-			@Override
-			public int compare(Value v1, Value v2) {
-				return v1.sort - v2.sort;
-			}
-		});
+		values.sort(Comparator.comparingInt(v -> v.sort));
 		Object[] vals = new Object[values.size()];
 		for (int i = 0; i < values.size(); i++) {
 			vals[i] = values.get(i).value;
