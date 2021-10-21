@@ -57,9 +57,8 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 	
 	@Override
 	public SearchTmpResult execute(SearchSql searchSql) {
-		SearchTmpResult result = new SearchTmpResult();
 		if (!searchSql.isShouldQueryList() && !searchSql.isShouldQueryCluster()) {
-			return result;
+			return new SearchTmpResult();
 		}
 		if (dataSource == null) {
 			throw new SearcherException("You must config a dataSource for MainSearchSqlExecutor!");
@@ -71,6 +70,7 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 			throw new SearcherException("Can not get Connection from dataSource!", e);
 		}
 		try {
+			SearchTmpResult result = new SearchTmpResult();
 			if (searchSql.isShouldQueryList()) {
 				doLog("sql ---- " + searchSql.getListSqlString());
 				doLog("params - " + Arrays.toString(searchSql.getListSqlParams().toArray()));
@@ -90,12 +90,12 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 						searchSql.getSummaryAliases(), 
 						result);
 			}
+			return result;
 		} catch (SQLException e) {
-			throw new SearcherException("A exception throwed when query!", e);
+			throw new SearcherException("A exception occurred when query!", e);
 		} finally {
 			closeConnection(connection);
 		}
-		return result;
 	}
 
 	
