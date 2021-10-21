@@ -64,7 +64,7 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 		if (dataSource == null) {
 			throw new SearcherException("You must config a dataSource for MainSearchSqlExecutor!");
 		}
-		Connection connection = null;
+		Connection connection;
 		try {
 			connection = dataSource.getConnection();
 		} catch (SQLException e) {
