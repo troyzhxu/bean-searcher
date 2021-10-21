@@ -332,7 +332,7 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 			} else if (val1Null && !val2Null) {
 				builder.append(" <= ? ");
 				params.add(value1);
-			} else if (!val1Null && val2Null) {
+			} else if (!val1Null) {
 				builder.append(" >= ? ");
 				params.add(value0);
 			}
