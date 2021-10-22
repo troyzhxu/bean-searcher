@@ -70,11 +70,9 @@ public class UserController {
 
 ### 📚 详细文档
 
-请参阅：
+参阅：https://searcher.ejlchina.com/
 
-https://searcher.ejlchina.com/
-
-文档持续完善中...
+文档已完善！
 
 ### 🤝 友情接链
 
