@@ -17,7 +17,6 @@ import com.jfinal.plugin.activerecord.IDataSourceProvider;
  * 
  */
 public class SearchPlugin implements IPlugin {
-
 	
 	/**
 	 * Searcher 接收器
@@ -43,10 +42,9 @@ public class SearchPlugin implements IPlugin {
 		
 	}
 	
+	private final String[] scanPackages;
 	
-	private String[] scanPackages;
-	
-	private IDataSourceProvider dataSourceProvider;
+	private final IDataSourceProvider dataSourceProvider;
 
 	private SearcherReceiver searcherReceiver;
 	
