@@ -20,7 +20,7 @@ public class SearchResult<T> {
 	private Number page;
 	private Number totalPage;
 	
-	private List<T> dataList = new ArrayList<>();
+	private final List<T> dataList = new ArrayList<>();
 	
 	private Number[] summaries;
 	
