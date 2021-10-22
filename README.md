@@ -78,6 +78,8 @@ https://searcher.ejlchina.com/
 
 ### 🤝 友情接链
 
+[**[ Sa-Token ]** 一个 JavaWeb 轻量级权限认证框架，功能全面，上手简单](https://github.com/dromara/Sa-Token)
+
 [**[ OkHttps ]** 轻量却强大的 HTTP 客户端，前后端通用，支持 WebSocket 与 Stomp 协议](https://gitee.com/ejlchina-zhxu/okhttps)
 
 [**[ JsonKit ]** 超轻量级 JSON 门面工具，用法简单，不依赖具体实现，让业务代码与 Jackson、Gson、Fastjson 等解耦！](https://gitee.com/ejlchina-zhxu/jsonkit)
