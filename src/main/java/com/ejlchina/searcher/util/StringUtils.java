@@ -30,14 +30,31 @@ public class StringUtils {
 			return string;
 		}
 		char first = string.charAt(0);
-		first = (char) (first - 32);
-		if (string.length() == 1) {
-			return String.valueOf(first);
+		if (first >= 'a' && first <= 'z') {
+			first = (char) (first - 32);
+			if (string.length() == 1) {
+				return String.valueOf(first);
+			}
+			return first + string.substring(1);
 		}
-		return first + string.substring(1);
+		return string;
 	}
-    
-	
+
+	public static String firstCharToLoweCase(String string) {
+		if (string == null || string.length() == 0) {
+			return string;
+		}
+		char first = string.charAt(0);
+		if (first >= 'A' && first <= 'Z') {
+			first = (char) (first + 32);
+			if (string.length() == 1) {
+				return String.valueOf(first);
+			}
+			return first + string.substring(1);
+		}
+		return string;
+	}
+
 	/**
 	 * 查找 src 里包含几个 target
 	 * @param src 源字符串
