@@ -50,7 +50,7 @@ public class MainSearcher implements Searcher {
 	
 	@Override
 	public <T> SearchResult<T> search(Class<T> beanClass, Map<String, Object> paraMap, String prefix) {
-		return search(beanClass, propcessParaMapWhithPrefix(paraMap, prefix));
+		return search(beanClass, processWithPrefix(paraMap, prefix));
 	}
 	
 	@Override
@@ -61,7 +61,7 @@ public class MainSearcher implements Searcher {
 	@Override
 	public <T> SearchResult<T> search(Class<T> beanClass, Map<String, Object> paraMap, String[] summaryFields,
 			String prefix) {
-		return search(beanClass, propcessParaMapWhithPrefix(paraMap, prefix), summaryFields);
+		return search(beanClass, processWithPrefix(paraMap, prefix), summaryFields);
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class MainSearcher implements Searcher {
 	
 	@Override
 	public <T> T searchFirst(Class<T> beanClass, Map<String, Object> paraMap, String prefix) {
-		return searchFirst(beanClass, propcessParaMapWhithPrefix(paraMap, prefix));
+		return searchFirst(beanClass, processWithPrefix(paraMap, prefix));
 	}
 
 	@Override
@@ -86,7 +86,7 @@ public class MainSearcher implements Searcher {
 
 	@Override
 	public <T> List<T> searchList(Class<T> beanClass, Map<String, Object> paraMap, String prefix) {
-		return searchList(beanClass, propcessParaMapWhithPrefix(paraMap, prefix));
+		return searchList(beanClass, processWithPrefix(paraMap, prefix));
 	}
 
 	@Override
@@ -96,7 +96,7 @@ public class MainSearcher implements Searcher {
 	
 	@Override
 	public <T> List<T> searchAll(Class<T> beanClass, Map<String, Object> paraMap, String prefix) {
-		return searchAll(beanClass, propcessParaMapWhithPrefix(paraMap, prefix));
+		return searchAll(beanClass, processWithPrefix(paraMap, prefix));
 	}
 
 	@Override
@@ -106,7 +106,7 @@ public class MainSearcher implements Searcher {
 	
 	@Override
 	public <T> Number searchCount(Class<T> beanClass, Map<String, Object> paraMap, String prefix) {
-		return searchCount(beanClass, propcessParaMapWhithPrefix(paraMap, prefix));
+		return searchCount(beanClass, processWithPrefix(paraMap, prefix));
 	}
 
 	@Override
@@ -116,7 +116,7 @@ public class MainSearcher implements Searcher {
 	
 	@Override
 	public <T> Number searchSum(Class<T> beanClass, Map<String, Object> paraMap, String field, String prefix) {
-		return searchSum(beanClass, propcessParaMapWhithPrefix(paraMap, prefix), field);
+		return searchSum(beanClass, processWithPrefix(paraMap, prefix), field);
 	}
 
 	@Override
@@ -130,7 +130,7 @@ public class MainSearcher implements Searcher {
 	
 	@Override
 	public <T> Number[] searchSum(Class<T> beanClass, Map<String, Object> paraMap, String[] fields, String prefix) {
-		return searchSum(beanClass, propcessParaMapWhithPrefix(paraMap, prefix), fields);
+		return searchSum(beanClass, processWithPrefix(paraMap, prefix), fields);
 	}
 
 	@Override
@@ -144,7 +144,7 @@ public class MainSearcher implements Searcher {
 	
 	/// 私有方法
 
-	private Map<String, Object> propcessParaMapWhithPrefix(Map<String, Object> paraMap, String prefix) {
+	private Map<String, Object> processWithPrefix(Map<String, Object> paraMap, String prefix) {
 		Map<String, Object> newParaMap;
 		if (!StringUtils.isBlank(prefix)) {
 			newParaMap = new HashMap<>();
