@@ -20,19 +20,21 @@ public class MapBuilder {
      */
     private static String operationSuffix = "op";
 
+
+    @FunctionalInterface
+    public interface FieldFunction<T, R> extends Function<T, R>, Serializable {  }
+
+
     private final Map<String, Object> map;
 
     public MapBuilder(Map<String, Object> map) {
         this.map = map;
     }
 
-    public static void init(String paramSeparator, String operationSuffix) {
+    public static void config(String paramSeparator, String operationSuffix) {
         MapBuilder.paramSeparator = paramSeparator;
         MapBuilder.operationSuffix = operationSuffix;
     }
-
-    @FunctionalInterface
-    public interface FieldFunction<T, R> extends Function<T, R>, Serializable {  }
 
     public MapBuilder put(String key, Object value) {
         map.put(key, value);

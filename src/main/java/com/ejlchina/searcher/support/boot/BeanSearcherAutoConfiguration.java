@@ -2,6 +2,7 @@ package com.ejlchina.searcher.support.boot;
 
 import javax.sql.DataSource;
 
+import com.ejlchina.searcher.util.MapBuilder;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -92,6 +93,7 @@ public class BeanSearcherAutoConfiguration {
 		if (paramFilters != null) {
 			searchParamResolver.setParamFilters(paramFilters);
 		}
+		MapBuilder.config(conf.getSeparator(), conf.getOperatorKey());
 		return searchParamResolver;
 	}
 	
