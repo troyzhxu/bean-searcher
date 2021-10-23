@@ -10,19 +10,11 @@
 
 * 案例：https://gitee.com/ejlchina-zhxu/bean-searcher-demo
 
-### ⁉️ 为什么用
+### ⁉️为什么用
 
-* 产品画了一个图，后台接口怎么破？
-
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0101/172143_62355c4e_1393412.png "屏幕截图.png")
-
-**嗯？嗯。这个简单！**
-
-* 产品又来了个图，后台接口又该怎么破？
+* 产品如下一个需求，后端接口怎写多少行？
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0101/172608_d622bcd3_1393412.png "屏幕截图.png")
-
-**什么？.... 这后台代码岂不要上百行？？？**
 
 ### 💥 只一行代码实现以上功能
 
