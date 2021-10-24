@@ -31,6 +31,8 @@ public class MapBuilder {
 
     private final Map<String, Object> map;
 
+    private String lastField = null;
+
     public MapBuilder(Map<String, Object> map) {
         this.map = map;
     }
@@ -58,30 +60,46 @@ public class MapBuilder {
         for (int index = 0; index < values.length; index++) {
             map.put(fieldName + separator + index, values[index]);
         }
+        lastField = fieldName;
         return this;
     }
 
-    public <T> MapBuilder op(FieldFunction<T, ?> fieldFn, Operator operator) {
-        map.put(toFieldName(fieldFn) + config(SEPARATOR) + config(OP_SUFFIX), operator);
+    public <T> MapBuilder op(Operator operator) {
+        if (lastField == null) {
+            throw new IllegalStateException("the method [ op(Operator operator) ] must go after [ val(FieldFunction<T, ?> fieldFn, Object... values) ]");
+        }
+        map.put(lastField + config(SEPARATOR) + config(OP_SUFFIX), operator);
         return this;
     }
 
-    public <T> MapBuilder op(FieldFunction<T, ?> fieldFn, String operator) {
-        map.put(toFieldName(fieldFn) + config(SEPARATOR) + config(OP_SUFFIX), operator);
+    public <T> MapBuilder op(String operator) {
+        if (lastField == null) {
+            throw new IllegalStateException("the method [ op(Operator operator) ] must go after [ val(FieldFunction<T, ?> fieldFn, Object... values) ]");
+        }
+        map.put(lastField + config(SEPARATOR) + config(OP_SUFFIX), operator);
         return this;
     }
 
-    public <T> MapBuilder ic(FieldFunction<T, ?> fieldFn) {
-        return ic(fieldFn, true);
+    public <T> MapBuilder ic() {
+        if (lastField == null) {
+            throw new IllegalStateException("the method [ ic() ] must go after [ val(FieldFunction<T, ?> fieldFn, Object... values) ]");
+        }
+        return ic(true);
     }
 
-    public <T> MapBuilder ic(FieldFunction<T, ?> fieldFn, boolean ignoreCase) {
-        map.put(toFieldName(fieldFn) + config(SEPARATOR) + config(IC_SUFFIX), ignoreCase);
+    public <T> MapBuilder ic(boolean ignoreCase) {
+        if (lastField == null) {
+            throw new IllegalStateException("the method [ ic(boolean ignoreCase) ] must go after [ val(FieldFunction<T, ?> fieldFn, Object... values) ]");
+        }
+        map.put(lastField + config(SEPARATOR) + config(IC_SUFFIX), ignoreCase);
         return this;
     }
 
-    public <T> MapBuilder ic(FieldFunction<T, ?> fieldFn, String ignoreCase) {
-        map.put(toFieldName(fieldFn) + config(SEPARATOR) + config(IC_SUFFIX), ignoreCase);
+    public <T> MapBuilder ic(String ignoreCase) {
+        if (lastField == null) {
+            throw new IllegalStateException("the method [ ic(String ignoreCase) ] must go after [ val(FieldFunction<T, ?> fieldFn, Object... values) ]");
+        }
+        map.put(lastField + config(SEPARATOR) + config(IC_SUFFIX), ignoreCase);
         return this;
     }
 
