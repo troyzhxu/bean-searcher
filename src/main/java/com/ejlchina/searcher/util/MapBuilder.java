@@ -54,11 +54,11 @@ public class MapBuilder {
         return this;
     }
 
-    public <T> MapBuilder val(FieldFunction<T, ?> fieldFn, Object... values) {
-        return val(toFieldName(fieldFn), values);
+    public <T> MapBuilder field(FieldFunction<T, ?> fieldFn, Object... values) {
+        return field(toFieldName(fieldFn), values);
     }
 
-    public <T> MapBuilder val(String fieldName, Object... values) {
+    public <T> MapBuilder field(String fieldName, Object... values) {
         String separator = config(SEPARATOR);
         for (int index = 0; index < values.length; index++) {
             map.put(fieldName + separator + index, values[index]);
