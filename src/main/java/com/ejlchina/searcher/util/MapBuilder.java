@@ -66,6 +66,11 @@ public class MapBuilder {
         return this;
     }
 
+    public <T> MapBuilder op(FieldFunction<T, ?> fieldFn, String operator) {
+        map.put(toFieldName(fieldFn) + config(SEPARATOR) + config(OP_SUFFIX), operator);
+        return this;
+    }
+
     public <T> MapBuilder ic(FieldFunction<T, ?> fieldFn) {
         return ic(fieldFn, true);
     }
@@ -75,13 +80,22 @@ public class MapBuilder {
         return this;
     }
 
+    public <T> MapBuilder ic(FieldFunction<T, ?> fieldFn, String ignoreCase) {
+        map.put(toFieldName(fieldFn) + config(SEPARATOR) + config(IC_SUFFIX), ignoreCase);
+        return this;
+    }
+
     public <T> MapBuilder orderBy(FieldFunction<T, ?> fieldFn) {
         return orderBy(fieldFn, true);
     }
 
     public <T> MapBuilder orderBy(FieldFunction<T, ?> fieldFn, boolean isAsc) {
+        return orderBy(fieldFn, isAsc ? "asc" : "desc");
+    }
+
+    public <T> MapBuilder orderBy(FieldFunction<T, ?> fieldFn, String order) {
         map.put(config(SORT), toFieldName(fieldFn));
-        map.put(config(ORDER), isAsc ? "asc" : "desc");
+        map.put(config(ORDER), order);
         return this;
     }
 
