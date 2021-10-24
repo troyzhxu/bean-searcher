@@ -1,6 +1,7 @@
 package com.ejlchina.searcher.implement.pagination;
 
 import com.ejlchina.searcher.param.SearchParam;
+import com.ejlchina.searcher.util.MapBuilder;
 import com.ejlchina.searcher.util.ObjectUtils;
 
 
@@ -80,10 +81,12 @@ public class PageNumPagination implements Pagination {
 	}
 
 	public void setMaxParamName(String maxParamName) {
+		MapBuilder.config(MapBuilder.SIZE, maxParamName);
 		this.maxParamName = maxParamName;
 	}
 
 	public void setPageParamName(String pageParamName) {
+		MapBuilder.config(MapBuilder.PAGE, pageParamName);
 		this.pageParamName = pageParamName;
 	}
 

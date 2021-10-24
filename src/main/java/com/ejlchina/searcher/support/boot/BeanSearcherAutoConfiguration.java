@@ -1,28 +1,7 @@
 package com.ejlchina.searcher.support.boot;
 
-import javax.sql.DataSource;
-
-import com.ejlchina.searcher.util.MapBuilder;
-import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
-import com.ejlchina.searcher.SearchParamResolver;
-import com.ejlchina.searcher.SearchResultResolver;
-import com.ejlchina.searcher.SearchSqlExecutor;
-import com.ejlchina.searcher.SearchSqlResolver;
-import com.ejlchina.searcher.Searcher;
-import com.ejlchina.searcher.SearcherException;
-import com.ejlchina.searcher.dialect.Dialect;
-import com.ejlchina.searcher.dialect.MySqlDialect;
-import com.ejlchina.searcher.dialect.OracleDialect;
-import com.ejlchina.searcher.dialect.PostgreSqlDialect;
-import com.ejlchina.searcher.dialect.SqlServerDialect;
+import com.ejlchina.searcher.*;
+import com.ejlchina.searcher.dialect.*;
 import com.ejlchina.searcher.implement.MainSearchParamResolver;
 import com.ejlchina.searcher.implement.MainSearchResultResolver;
 import com.ejlchina.searcher.implement.MainSearchSqlExecutor;
@@ -36,11 +15,20 @@ import com.ejlchina.searcher.implement.parafilter.ParamFilter;
 import com.ejlchina.searcher.implement.processor.DefaultParamProcessor;
 import com.ejlchina.searcher.implement.processor.ParamProcessor;
 import com.ejlchina.searcher.support.boot.BeanSearcherProperties.FieldConvertorProps;
-
 import com.ejlchina.searcher.support.boot.BeanSearcherProperties.ParamsPorps;
 import com.ejlchina.searcher.support.boot.BeanSearcherProperties.SqlProps;
 import com.ejlchina.searcher.support.spring.SpringSearcher;
 import com.ejlchina.searcher.util.StringUtils;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import javax.sql.DataSource;
 
 
 
@@ -93,7 +81,6 @@ public class BeanSearcherAutoConfiguration {
 		if (paramFilters != null) {
 			searchParamResolver.setParamFilters(paramFilters);
 		}
-		MapBuilder.config(conf.getSeparator(), conf.getOperatorKey());
 		return searchParamResolver;
 	}
 	

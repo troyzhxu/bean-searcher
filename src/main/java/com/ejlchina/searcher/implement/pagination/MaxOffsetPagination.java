@@ -1,6 +1,7 @@
 package com.ejlchina.searcher.implement.pagination;
 
 import com.ejlchina.searcher.param.SearchParam;
+import com.ejlchina.searcher.util.MapBuilder;
 import com.ejlchina.searcher.util.ObjectUtils;
 
 
@@ -66,10 +67,12 @@ public class MaxOffsetPagination implements Pagination {
 	}
 
 	public void setMaxParamName(String maxParamName) {
+		MapBuilder.config(MapBuilder.MAX, maxParamName);
 		this.maxParamName = maxParamName;
 	}
 
 	public void setOffsetParamName(String offsetParamName) {
+		MapBuilder.config(MapBuilder.OFFSET, offsetParamName);
 		this.offsetParamName = offsetParamName;
 	}
 

@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import com.ejlchina.searcher.util.MapBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -201,18 +202,22 @@ public class MainSearchParamResolver implements SearchParamResolver {
 	}
 	
 	public void setSortParamName(String sortParamName) {
+		MapBuilder.config(MapBuilder.SORT, sortParamName);
 		this.sortParamName = sortParamName;
 	}
 
 	public void setOrderParamName(String orderParamName) {
+		MapBuilder.config(MapBuilder.ORDER, orderParamName);
 		this.orderParamName = orderParamName;
 	}
 
 	public void setIgnoreCaseParamNameSuffix(String ignoreCaseParamNameSuffix) {
+		MapBuilder.config(MapBuilder.IC_SUFFIX, ignoreCaseParamNameSuffix);
 		this.ignoreCaseParamNameSuffix = ignoreCaseParamNameSuffix;
 	}
 
 	public void setFilterOperationParamNameSuffix(String filterOperationParamNameSuffix) {
+		MapBuilder.config(MapBuilder.OP_SUFFIX, filterOperationParamNameSuffix);
 		this.filterOperationParamNameSuffix = filterOperationParamNameSuffix;
 	}
 
@@ -225,6 +230,7 @@ public class MainSearchParamResolver implements SearchParamResolver {
 	}
 
 	public void setParamNameSeparator(String paramNameSeparator) {
+		MapBuilder.config(MapBuilder.SEPARATOR, paramNameSeparator);
 		this.paramNameSeparator = paramNameSeparator;
 	}
 
