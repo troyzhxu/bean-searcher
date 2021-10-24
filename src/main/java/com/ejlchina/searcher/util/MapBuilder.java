@@ -55,7 +55,10 @@ public class MapBuilder {
     }
 
     public <T> MapBuilder val(FieldFunction<T, ?> fieldFn, Object... values) {
-        String fieldName = toFieldName(fieldFn);
+        return val(toFieldName(fieldFn), values);
+    }
+
+    public <T> MapBuilder val(String fieldName, Object... values) {
         String separator = config(SEPARATOR);
         for (int index = 0; index < values.length; index++) {
             map.put(fieldName + separator + index, values[index]);
@@ -103,16 +106,12 @@ public class MapBuilder {
         return this;
     }
 
-    public <T> MapBuilder orderBy(FieldFunction<T, ?> fieldFn) {
-        return orderBy(fieldFn, true);
-    }
-
-    public <T> MapBuilder orderBy(FieldFunction<T, ?> fieldFn, boolean isAsc) {
-        return orderBy(fieldFn, isAsc ? "asc" : "desc");
-    }
-
     public <T> MapBuilder orderBy(FieldFunction<T, ?> fieldFn, String order) {
-        map.put(config(SORT), toFieldName(fieldFn));
+        return orderBy(toFieldName(fieldFn), order);
+    }
+
+    public <T> MapBuilder orderBy(String fieldName, String order) {
+        map.put(config(SORT), fieldName);
         map.put(config(ORDER), order);
         return this;
     }
