@@ -25,9 +25,9 @@ public class MapBuilder {
     private static final Map<String, String> CONFIGS = new HashMap<>();
 
     @FunctionalInterface
-    public interface FieldFunction<T, R> extends Function<T, R>, Serializable {  }
+    public interface FieldFn<T, R> extends Function<T, R>, Serializable {  }
 
-    private final Map<FieldFunction<?, ?>, String> cache = new ConcurrentHashMap<>();
+    private final Map<FieldFn<?, ?>, String> cache = new ConcurrentHashMap<>();
 
     private final Map<String, Object> map;
 
@@ -54,7 +54,7 @@ public class MapBuilder {
         return this;
     }
 
-    public <T> MapBuilder field(FieldFunction<T, ?> fieldFn, Object... values) {
+    public <T> MapBuilder field(FieldFn<T, ?> fieldFn, Object... values) {
         return field(toFieldName(fieldFn), values);
     }
 
@@ -106,7 +106,7 @@ public class MapBuilder {
         return this;
     }
 
-    public <T> MapBuilder orderBy(FieldFunction<T, ?> fieldFn, String order) {
+    public <T> MapBuilder orderBy(FieldFn<T, ?> fieldFn, String order) {
         return orderBy(toFieldName(fieldFn), order);
     }
 
@@ -128,7 +128,7 @@ public class MapBuilder {
         return this;
     }
 
-    private String toFieldName(FieldFunction<?, ?> fieldFn) {
+    private String toFieldName(FieldFn<?, ?> fieldFn) {
         String fieldName = cache.get(fieldFn);
         if (fieldName != null) {
             return fieldName;
