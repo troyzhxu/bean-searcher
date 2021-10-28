@@ -26,12 +26,11 @@
 public class UserController {
 
     @Autowired
-    private Searcher searcher;
+    private Searcher searcher;                          // 注入 Bean Searcher 的检索器
 
     @GetMapping("/index")
     public Object index(HttpServletRequest request) {
-        // 只一行代码，实现包含分页、组合过滤、任意字段排序、甚至统计的复杂检索功能
-        // 调用 Bean Searcher 提供的 Searcher 接口检索数据并返回
+        // 只一行代码，实现包含 分页、组合过滤、任意字段排序、甚至统计、多表联查的 复杂检索功能
         return searcher.search(User.class, MapUtils.flat(request.getParameterMap()));
     }
 	
@@ -46,7 +45,22 @@ public class UserController {
 * **任意字段排序**
 * **字段统计**
 
-马上体验一下：https://gitee.com/ejlchina-zhxu/bean-searcher-demo
+### 独创动态字段运算符，检索方式随心所欲
+
+```java
+Map<String, Object> params = MapUtils.builder()
+        .field(User::getName, "张").op("sw")            // 条件：姓名以"张"开头
+        .field(User::getAge, 20, 30).op("bt")           // 条件：年龄在 20 与 30 之间
+        .field(User::getNickname, "Jack").ic()          // 条件：昵称等于 Jack, 忽略大小写
+        .orderBy(User::getAge, "asc")                   // 排序：年龄，从小到大
+        .page(0, 15)                                    // 分页：第 0 页, 每页 15 条
+        .build();
+SearchResult<User> result = searcher.search(User.class, params);
+```
+
+小 EMO 快速体验一下：
+
+https://gitee.com/ejlchina-zhxu/bean-searcher-demo
 
 
 ### 🚀 快速开发
