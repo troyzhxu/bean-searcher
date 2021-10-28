@@ -26,7 +26,7 @@
 public class UserController {
 
     @Autowired
-    private Searcher searcher;                          // 注入 Bean Searcher 的检索器
+    private Searcher searcher;                      // 注入 Bean Searcher 的检索器
 
     @GetMapping("/index")
     public Object index(HttpServletRequest request) {
@@ -49,11 +49,11 @@ public class UserController {
 
 ```java
 Map<String, Object> params = MapUtils.builder()
-        .field(User::getName, "张").op("sw")            // 条件：姓名以"张"开头
-        .field(User::getAge, 20, 30).op("bt")           // 条件：年龄在 20 与 30 之间
-        .field(User::getNickname, "Jack").ic()          // 条件：昵称等于 Jack, 忽略大小写
-        .orderBy(User::getAge, "asc")                   // 排序：年龄，从小到大
-        .page(0, 15)                                    // 分页：第 0 页, 每页 15 条
+        .field(User::getName, "张").op("sw")        // 条件：姓名以"张"开头
+        .field(User::getAge, 20, 30).op("bt")       // 条件：年龄在 20 与 30 之间
+        .field(User::getNickname, "Jack").ic()      // 条件：昵称等于 Jack, 忽略大小写
+        .orderBy(User::getAge, "asc")               // 排序：年龄，从小到大
+        .page(0, 15)                                // 分页：第 0 页, 每页 15 条
         .build();
 SearchResult<User> result = searcher.search(User.class, params);
 ```
