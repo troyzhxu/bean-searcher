@@ -45,7 +45,7 @@ public class UserController {
 * **任意字段排序**
 * **字段统计**
 
-### 独创动态字段运算符，检索方式随心所欲
+### ✨ 独创动态字段运算符，检索方式随心所欲
 
 ```java
 Map<String, Object> params = MapUtils.builder()
