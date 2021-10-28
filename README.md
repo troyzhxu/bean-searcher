@@ -40,6 +40,7 @@ public class UserController {
 
 这一行代码可实现：
 
+* 多表联查
 * 分页搜索
 * 组合过滤
 * 任意字段排序
