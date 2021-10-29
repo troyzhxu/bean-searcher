@@ -12,7 +12,7 @@ public class Application {
 	
 	public static void main(String[] args) {
 
-		Searcher searcher = SearcherBuilder.builder()
+		BeanSearcher searcher = (BeanSearcher) SearcherBuilder.builder()
 				.configSearchSqlExecutor(searchSql -> {
 					System.out.println();
 					System.out.println("LIST 	SQL 	::: " +  searchSql.getListSqlString());
@@ -37,7 +37,7 @@ public class Application {
 		
 		SearchResult<User> result = searcher.search(User.class, params);
 		
-		System.out.println("SEARCH RESULT	::: " + result);
+//		System.out.println("SEARCH RESULT	::: " + result);
 
 	}
 	

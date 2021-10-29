@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * 自动检索器 根据 Bean 的 Class 和请求参数，自动检索 Bean
  * 
  */
-public class MainSearcher implements Searcher {
+public class MainSearcher implements BeanSearcher {
 
 	
 	private SearchParamResolver searchParamResolver;
