@@ -6,7 +6,7 @@
 
 	<name>Bean Searcher</name>
 	<artifactId>bean-searcher-demos</artifactId>
-	<packaging>jar</packaging>
+	<packaging>pom</packaging>
 
 	<parent>
 		<groupId>com.ejlchina</groupId>
@@ -14,43 +14,9 @@
 		<version>3.0.0</version>
 	</parent>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.7.32</version>
-		</dependency>
-		<dependency>
-		  <groupId>org.springframework</groupId>
-		  <artifactId>spring-context</artifactId>
-		  <version>5.3.11</version>
-		  <scope>provided</scope>
-		</dependency>
-		<dependency>
-		  <groupId>org.springframework.boot</groupId>
-		  <artifactId>spring-boot</artifactId>
-		  <version>2.5.5</version>
-		  <scope>provided</scope>
-		</dependency>
-		<dependency>
-		  <groupId>org.springframework.boot</groupId>
-		  <artifactId>spring-boot-autoconfigure</artifactId>
-		  <version>2.5.5</version>
-		  <scope>provided</scope>
-		</dependency>
-		<dependency>
-		  <groupId>org.springframework.boot</groupId>
-		  <artifactId>spring-boot-configuration-processor</artifactId>
-		  <version>2.5.5</version>
-		  <optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>com.jfinal</groupId>
-			<artifactId>jfinal</artifactId>
-			<version>4.9.17</version>
-			<scope>provided</scope>
-		</dependency>
-	</dependencies>
+	<modules>
+		<module>spring-boot-demo</module>
+	</modules>
 
 	<build>
 		<finalName>bean-searcher-examples</finalName>
