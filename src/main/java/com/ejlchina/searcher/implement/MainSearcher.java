@@ -33,7 +33,7 @@ public class MainSearcher implements Searcher {
 
 	private VirtualParamProcessor virtualParamProcessor;
 
-	private final Map<String, SearchBeanMap> cache = new ConcurrentHashMap<>();
+	private final Map<Class<?>, SearchBeanMap> cache = new ConcurrentHashMap<>();
 
 	@Override
 	public <T> SearchResult<T> search(Class<T> beanClass, Map<String, Object> paraMap) {
@@ -147,7 +147,7 @@ public class MainSearcher implements Searcher {
 
 
 	protected SearchBeanMap resolveSearchBeanMap(Class<?> beanClass) {
-		SearchBeanMap beanMap = cache.get(beanClass.getName());
+		SearchBeanMap beanMap = cache.get(beanClass);
 		if (beanMap != null) {
 			return beanMap;
 		}
@@ -188,7 +188,7 @@ public class MainSearcher implements Searcher {
 		convertInfo.setFieldGetMethodMap(searchBeanMap.getFieldGetMethodMap());
 		convertInfo.setFieldTypeMap(searchBeanMap.getFieldTypeMap());
 		searchBeanMap.setConvertInfo(convertInfo);
-		cache.put(beanClass.getName(), searchBeanMap);
+		cache.put(beanClass, searchBeanMap);
 	}
 
 	private Pagination getPagination() {
