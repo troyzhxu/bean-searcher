@@ -1,4 +1,4 @@
-package com.ejlchina.searcher.support.boot;
+package com.ejlchina.searcher.boot;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

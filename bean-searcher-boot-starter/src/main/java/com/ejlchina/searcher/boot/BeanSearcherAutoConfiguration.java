@@ -1,4 +1,4 @@
-package com.ejlchina.searcher.support.boot;
+package com.ejlchina.searcher.boot;
 
 import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.dialect.*;
@@ -11,9 +11,9 @@ import com.ejlchina.searcher.implement.pagination.Pagination;
 import com.ejlchina.searcher.implement.parafilter.ParamFilter;
 import com.ejlchina.searcher.implement.processor.DefaultParamProcessor;
 import com.ejlchina.searcher.implement.processor.ParamProcessor;
-import com.ejlchina.searcher.support.boot.BeanSearcherProperties.FieldConvertorProps;
-import com.ejlchina.searcher.support.boot.BeanSearcherProperties.ParamsPorps;
-import com.ejlchina.searcher.support.boot.BeanSearcherProperties.SqlProps;
+import com.ejlchina.searcher.boot.BeanSearcherProperties.FieldConvertorProps;
+import com.ejlchina.searcher.boot.BeanSearcherProperties.ParamsPorps;
+import com.ejlchina.searcher.boot.BeanSearcherProperties.SqlProps;
 import com.ejlchina.searcher.util.StringUtils;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
