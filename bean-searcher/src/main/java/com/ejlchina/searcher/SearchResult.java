@@ -29,7 +29,6 @@ public class SearchResult<T> {
 		this.totalCount = totalCount;
 		this.summaries = summaries;
 	}
-
 	
 	public Number getTotalCount() {
 		return totalCount;
