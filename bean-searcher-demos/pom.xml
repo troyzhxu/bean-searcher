@@ -1,0 +1,69 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<name>Bean Searcher</name>
+	<artifactId>bean-searcher-demos</artifactId>
+	<packaging>jar</packaging>
+
+	<parent>
+		<groupId>com.ejlchina</groupId>
+		<artifactId>bean-searcher-parent</artifactId>
+		<version>3.0.0</version>
+	</parent>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.32</version>
+		</dependency>
+		<dependency>
+		  <groupId>org.springframework</groupId>
+		  <artifactId>spring-context</artifactId>
+		  <version>5.3.11</version>
+		  <scope>provided</scope>
+		</dependency>
+		<dependency>
+		  <groupId>org.springframework.boot</groupId>
+		  <artifactId>spring-boot</artifactId>
+		  <version>2.5.5</version>
+		  <scope>provided</scope>
+		</dependency>
+		<dependency>
+		  <groupId>org.springframework.boot</groupId>
+		  <artifactId>spring-boot-autoconfigure</artifactId>
+		  <version>2.5.5</version>
+		  <scope>provided</scope>
+		</dependency>
+		<dependency>
+		  <groupId>org.springframework.boot</groupId>
+		  <artifactId>spring-boot-configuration-processor</artifactId>
+		  <version>2.5.5</version>
+		  <optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>com.jfinal</groupId>
+			<artifactId>jfinal</artifactId>
+			<version>4.9.17</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<finalName>bean-searcher-examples</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>2.8.2</version>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	
+</project>
