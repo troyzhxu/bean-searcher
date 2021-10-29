@@ -47,7 +47,7 @@ public class MainSearchResultResolver implements SearchResultResolver {
 		for (Map<String, Object> tmpData : tmpDataList) {
 			T bean;
 			try {
-				bean = beanClass.newInstance();
+				bean = beanClass.getDeclaredConstructor().newInstance();
 			} catch (Exception e) {
 				throw new SearcherException("为【" + beanClass.getName() + "】创建对象时报错，请检查该类中是否有无参构造方法！", e);
 			}
