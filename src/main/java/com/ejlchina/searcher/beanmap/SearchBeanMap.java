@@ -31,37 +31,37 @@ public class SearchBeanMap {
 	/**
 	 * 分组字段
 	 * */
-	private String groupBy;
+	private final String groupBy;
 	
 	/**
 	 * 是否 distinct 结果
 	 * */
-	private boolean distinct;
+	private final boolean distinct;
 	
 	/**
 	 * 参与检索的Bean属性列表
 	 * */
-	private List<String> fieldList = new ArrayList<>();
+	private final List<String> fieldList = new ArrayList<>();
 	
 	/**
 	 * 映射: Bean属性-> DB字段
 	 * */
-	private Map<String, String> fieldDbMap = new HashMap<>();
+	private final Map<String, String> fieldDbMap = new HashMap<>();
 	
 	/**
 	 * 映射: Bean属性 -> DB字段别名
 	 * */
-	private Map<String, String> fieldDbAliasMap = new HashMap<>();
+	private final Map<String, String> fieldDbAliasMap = new HashMap<>();
 	
 	/**
 	 * 映射: Bean属性 -> 属性GET方法
 	 * */
-	private Map<String, Method> fieldGetMethodMap = new HashMap<>();
+	private final Map<String, Method> fieldGetMethodMap = new HashMap<>();
 	
 	/**
 	 * 映射: Bean属性 -> 属性类型
 	 * */
-	private Map<String, Class<?>> fieldTypeMap = new HashMap<>();
+	private final Map<String, Class<?>> fieldTypeMap = new HashMap<>();
 	
 	/**
 	 * table 虚拟参数
@@ -76,7 +76,7 @@ public class SearchBeanMap {
 	/**
 	 * 映射：属性 -> 虚拟参数 
 	 */
-	private Map<String, List<VirtualParam>> fieldVirtualParamsMap = new HashMap<>();
+	private final Map<String, List<VirtualParam>> fieldVirtualParamsMap = new HashMap<>();
 	
 	
 	private SearchResultConvertInfo<?> convertInfo;

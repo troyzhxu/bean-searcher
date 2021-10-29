@@ -1,14 +1,13 @@
 package com.ejlchina.searcher.support.jfinal;
 
-import javax.sql.DataSource;
-
 import com.ejlchina.searcher.Searcher;
 import com.ejlchina.searcher.SearcherBuilder;
 import com.ejlchina.searcher.SearcherException;
-import com.ejlchina.searcher.SearcherStarter;
 import com.ejlchina.searcher.implement.MainSearchSqlExecutor;
 import com.jfinal.plugin.IPlugin;
 import com.jfinal.plugin.activerecord.IDataSourceProvider;
+
+import javax.sql.DataSource;
 
 /***
  * 自动检索器Jfinal插件，用于启动与生出检索器实例
@@ -49,9 +48,7 @@ public class SearchPlugin implements IPlugin {
 	private SearcherReceiver searcherReceiver;
 	
 	private SearcherConfiger searcherConfiger;
-	
-	private SearcherStarter searcherStarter;
-	
+
 
 	/**
 	 * @param dataSourceProvider dataSourceProvider
@@ -82,16 +79,11 @@ public class SearchPlugin implements IPlugin {
 			throw new SearcherException("You must config a SearcherReceiver for SearchPlugin!");
 		}
 		searcherReceiver.receive(builder.build());
-		if (searcherStarter == null) {
-			searcherStarter = new SearcherStarter();
-		}
-		searcherStarter.start(scanPackages);
 		return true;
 	}
 
 	@Override
 	public boolean stop() {
-		searcherStarter.shutdown();
 		return true;
 	}
 
@@ -103,8 +95,4 @@ public class SearchPlugin implements IPlugin {
 		this.searcherConfiger = searcherConfiger;
 	}
 
-	public void setSearcherStarter(SearcherStarter searcherStarter) {
-		this.searcherStarter = searcherStarter;
-	}
-	
 }

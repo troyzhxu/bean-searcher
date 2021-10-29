@@ -11,25 +11,18 @@ public class Application {
 	
 	
 	public static void main(String[] args) {
-		
-		SearcherStarter starter = new SearcherStarter();
-		starter.start("com.ejlchina.searcher.bean");
-		
+
 		Searcher searcher = SearcherBuilder.builder()
-				.configSearchSqlExecutor(new SearchSqlExecutor() {
-			
-			@Override
-			public SearchTmpResult execute(SearchSql searchSql) {
-				System.out.println();
-				System.out.println("LIST 	SQL 	::: " +  searchSql.getListSqlString());
-				System.out.println("LIST 	PARAMS	::: " +  searchSql.getListSqlParams());
-				System.out.println();
-				System.out.println("CLUSTER	SQL 	::: " +  searchSql.getClusterSqlString());
-				System.out.println("CLUSTER	PARAMS	::: " +  searchSql.getClusterSqlParams());
-				System.out.println();
-				return new SearchTmpResult(0);
-			}
-		}).build();
+				.configSearchSqlExecutor(searchSql -> {
+					System.out.println();
+					System.out.println("LIST 	SQL 	::: " +  searchSql.getListSqlString());
+					System.out.println("LIST 	PARAMS	::: " +  searchSql.getListSqlParams());
+					System.out.println();
+					System.out.println("CLUSTER	SQL 	::: " +  searchSql.getClusterSqlString());
+					System.out.println("CLUSTER	PARAMS	::: " +  searchSql.getClusterSqlParams());
+					System.out.println();
+					return new SearchTmpResult(0);
+				}).build();
 		
 		Map<String, Object> params = new HashMap<>();
 		params.put("name", "张");
@@ -45,8 +38,7 @@ public class Application {
 		SearchResult<User> result = searcher.search(User.class, params);
 		
 		System.out.println("SEARCH RESULT	::: " + result);
-		
-		starter.shutdown();
+
 	}
 	
 

@@ -163,12 +163,9 @@ public class MainSearcher implements Searcher {
 
 	private <T> SearchResult<T> search(Class<T> beanClass, Map<String, Object> paraMap, String[] summaryFields,
 				boolean shouldQueryTotal, boolean shouldQueryList, boolean needNotLimit) {
-		SearchBeanMap searchBeanMap = SearchBeanCache.getSearchBeanMap(beanClass);
-		if (searchBeanMap == null) {
-			throw new SearcherException("该 Bean【" + beanClass.getName() 
-					+ "】不可以被检索器检索，请检查该Class是否被正确注解 或 检索器是否正确启动！");
-		}
-		List<String> fieldList = searchBeanMap.getFieldList();
+		SearchBeanMap beanMap = SearchBeanCache.getSearchBeanMap(beanClass);
+
+		List<String> fieldList = beanMap.getFieldList();
 		SearchParam searchParam = searchParamResolver.resolve(fieldList, paraMap);
 		searchParam.setSummaryFields(summaryFields);
 		searchParam.setShouldQueryTotal(shouldQueryTotal);
@@ -176,13 +173,13 @@ public class MainSearcher implements Searcher {
 		if (needNotLimit) {
 			searchParam.setMax(null);
 		}
-		searchBeanMap = virtualParamProcessor.process(searchBeanMap);
-		SearchSql searchSql = searchSqlResolver.resolve(searchBeanMap, searchParam);
+		beanMap = virtualParamProcessor.process(beanMap);
+		SearchSql searchSql = searchSqlResolver.resolve(beanMap, searchParam);
 		searchSql.setShouldQueryCluster(shouldQueryTotal || (summaryFields != null && summaryFields.length > 0));
 		searchSql.setShouldQueryList(shouldQueryList);
 		SearchTmpResult searchTmpResult = searchSqlExecutor.execute(searchSql);
 		@SuppressWarnings("unchecked")
-		SearchResultConvertInfo<T> convertInfo = (SearchResultConvertInfo<T>) searchBeanMap.getConvertInfo();
+		SearchResultConvertInfo<T> convertInfo = (SearchResultConvertInfo<T>) beanMap.getConvertInfo();
 		SearchResult<T> result = searchResultResolver.resolve(convertInfo.with(beanClass), searchTmpResult);
 		return consummateSearchResult(searchParam, result);
 	}

@@ -1,12 +1,9 @@
 package com.ejlchina.searcher.support.spring;
 
-import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.InitializingBean;
-
 import com.ejlchina.searcher.SearcherBuilder;
 import com.ejlchina.searcher.SearcherException;
-import com.ejlchina.searcher.SearcherStarter;
 import com.ejlchina.searcher.implement.MainSearcher;
+import org.springframework.beans.factory.InitializingBean;
 
 /**
  * 自动启动的Spring Searcher
@@ -14,13 +11,10 @@ import com.ejlchina.searcher.implement.MainSearcher;
  * @author Troy.Zhou
  *
  */
-public class SpringSearcher extends MainSearcher implements InitializingBean, DisposableBean {
+public class SpringSearcher extends MainSearcher implements InitializingBean {
 
 
 	private String[] scanPackages;
-
-	private SearcherStarter searcherStarter;
-	
 	
 	@Override
 	public void afterPropertiesSet() {
@@ -35,24 +29,11 @@ public class SpringSearcher extends MainSearcher implements InitializingBean, Di
 		if (scanPackages == null || scanPackages.length == 0) {
 			throw new SearcherException("SpringSearcher： scanPackage 不能为 空！");
 		}
-		if (searcherStarter == null) {
-			searcherStarter = new SearcherStarter();
-		}
-		searcherStarter.start(scanPackages);
-	}
 
-	@Override
-	public void destroy() {
-		searcherStarter.shutdown();
 	}
-	
 
 	public void setScanPackages(String[] scanPackages) {
 		this.scanPackages = scanPackages;
-	}
-
-	public void setSearcherStarter(SearcherStarter searcherStarter) {
-		this.searcherStarter = searcherStarter;
 	}
 	
 }
