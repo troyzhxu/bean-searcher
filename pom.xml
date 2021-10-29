@@ -16,7 +16,6 @@
 	<modules>
 		<module>bean-searcher</module>
 		<module>bean-searcher-boot-starter</module>
-		<module>bean-searcher-demos</module>
 	</modules>
 
 	<properties>
