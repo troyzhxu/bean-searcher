@@ -12,5 +12,4 @@ class EmployeeController {
         render searcher.search(EmployeeBean, params) as JSON
     }
 
-
 }
