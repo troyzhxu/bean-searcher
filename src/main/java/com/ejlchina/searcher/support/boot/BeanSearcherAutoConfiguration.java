@@ -14,7 +14,6 @@ import com.ejlchina.searcher.implement.processor.ParamProcessor;
 import com.ejlchina.searcher.support.boot.BeanSearcherProperties.FieldConvertorProps;
 import com.ejlchina.searcher.support.boot.BeanSearcherProperties.ParamsPorps;
 import com.ejlchina.searcher.support.boot.BeanSearcherProperties.SqlProps;
-import com.ejlchina.searcher.support.spring.SpringSearcher;
 import com.ejlchina.searcher.util.StringUtils;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -26,7 +25,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
-
 
 
 @Configuration
