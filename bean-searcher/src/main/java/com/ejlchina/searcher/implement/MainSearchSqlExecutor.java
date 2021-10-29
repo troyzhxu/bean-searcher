@@ -12,13 +12,9 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import com.ejlchina.searcher.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.ejlchina.searcher.SearchSql;
-import com.ejlchina.searcher.SearchSqlExecutor;
-import com.ejlchina.searcher.SearchMapResult;
-import com.ejlchina.searcher.SearcherException;
 
 /**
  * JDBC Search Sql 执行器
@@ -56,9 +52,9 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 
 	
 	@Override
-	public SearchMapResult execute(SearchSql searchSql) {
+	public SearchResult<Map<String, Object>> execute(SearchSql searchSql) {
 		if (!searchSql.isShouldQueryList() && !searchSql.isShouldQueryCluster()) {
-			return new SearchMapResult();
+			return new SearchResult<>();
 		}
 		if (dataSource == null) {
 			throw new SearcherException("You must config a dataSource for MainSearchSqlExecutor!");
@@ -70,7 +66,7 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 			throw new SearcherException("Can not get Connection from dataSource!", e);
 		}
 		try {
-			SearchMapResult result = new SearchMapResult();
+			SearchResult<Map<String, Object>> result = new SearchResult<>();
 			if (searchSql.isShouldQueryList()) {
 				doLog("sql ---- " + searchSql.getListSqlString());
 				doLog("params - " + Arrays.toString(searchSql.getListSqlParams().toArray()));
@@ -100,7 +96,7 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 
 	
 	protected void executeListSqlAndCollectResult(Connection connection, String sql, List<Object> params, 
-			List<String> listAliases, SearchMapResult result) throws SQLException {
+			List<String> listAliases, SearchResult<Map<String, Object>> result) throws SQLException {
 		PreparedStatement statement = null;
 		ResultSet resultSet = null;
 		try {
@@ -117,7 +113,7 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 	
 
 	protected void executeClusterSqlAndCollectResult(Connection connection, String sqlString, List<Object> sqlParams, 
-			String countAlias, List<String> summaryAliases, SearchMapResult result) throws SQLException {
+			String countAlias, List<String> summaryAliases, SearchResult<Map<String, Object>> result) throws SQLException {
 		PreparedStatement statement = null;
 		ResultSet resultSet = null;
 		try {
@@ -133,7 +129,7 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 	}
 	
 	protected void collectClusterResult(String countAlias, List<String> summaryAliases,
-										SearchMapResult result, ResultSet countResultSet)
+										SearchResult<Map<String, Object>> result, ResultSet countResultSet)
 			throws SQLException {
 		if (countAlias != null) {
 			result.setTotalCount((Number) countResultSet.getObject(countAlias));

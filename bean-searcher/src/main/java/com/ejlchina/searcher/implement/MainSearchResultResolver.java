@@ -1,18 +1,16 @@
 package com.ejlchina.searcher.implement;
 
-import java.lang.reflect.Method;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import com.ejlchina.searcher.SearchResult;
 import com.ejlchina.searcher.SearchResultConvertInfo;
 import com.ejlchina.searcher.SearchResultResolver;
-import com.ejlchina.searcher.SearchMapResult;
 import com.ejlchina.searcher.SearcherException;
 import com.ejlchina.searcher.bean.BeanAware;
 import com.ejlchina.searcher.implement.convertor.FieldConvertor;
 
+import java.lang.reflect.Method;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 /**
@@ -25,8 +23,7 @@ public class MainSearchResultResolver implements SearchResultResolver {
 
 	
 	private FieldConvertor fieldConvertor;
-	
-	
+
 	
 	public MainSearchResultResolver() {
 	}
@@ -38,8 +35,7 @@ public class MainSearchResultResolver implements SearchResultResolver {
 
 	
 	@Override
-	public <T> SearchResult<T> resolve(SearchResultConvertInfo<T> convertInfo, SearchMapResult searchMapResult) {
-		
+	public <T> SearchResult<T> resolve(SearchResultConvertInfo<T> convertInfo, SearchResult<Map<String, Object>> searchMapResult) {
 		Class<T> beanClass = convertInfo.getBeanClass();
 		Set<Entry<String, String>> fieldDbAliasEntrySet = convertInfo.getFieldDbAliasEntrySet();
 		Map<String, Method> fieldGetMethodMap = convertInfo.getFieldGetMethodMap();

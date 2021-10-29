@@ -3,8 +3,6 @@ package com.ejlchina.searcher;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
 /***
  * 检索结果
  * 
@@ -18,7 +16,14 @@ public class SearchResult<T> {
 	private final List<T> dataList = new ArrayList<>();
 	
 	private Number[] summaries;
-	
+
+	public SearchResult() {
+		this(0, new Number[]{});
+	}
+
+	public SearchResult(Number totalCount) {
+		this(totalCount, new Number[]{});
+	}
 	
 	public SearchResult(Number totalCount, Number[] summaries) {
 		this.totalCount = totalCount;
@@ -47,9 +52,17 @@ public class SearchResult<T> {
 	}
 
 	public void setSummaries(Number[] summaries) {
-		this.summaries = summaries;
+		if (summaries != null) {
+			for (int i = 0; i < summaries.length; i++) {
+				if (summaries[i] == null) {
+					summaries[i] = 0;
+				}
+			}
+			this.summaries = summaries;
+		} else {
+			this.summaries = new Number[] {};
+		}
 	}
-
 
 	public String toString() {
 		StringBuilder str = new StringBuilder("totalCount = " + totalCount + "\n");
