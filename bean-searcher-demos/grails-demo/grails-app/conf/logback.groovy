@@ -34,4 +34,7 @@ if (Environment.isDevelopmentMode() && targetDir != null) {
     }
     logger("StackTrace", ERROR, ['FULL_STACKTRACE'], false)
 }
+
+logger("com.ejlchina.searcher.implement.MainSearchSqlExecutor", DEBUG, ['STDOUT'], false)
+
 root(ERROR, ['STDOUT'])
