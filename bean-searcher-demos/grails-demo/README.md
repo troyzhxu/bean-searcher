@@ -22,8 +22,8 @@
 
 ### 运行效果
 
-##### 1. 访问接口 http://localhost:8080/employee?max=3
-查寻 3 条员工，输出：
+##### 1. 访问接口 http://localhost:8080/employee?size=3
+查询 3 条员工，输出：
 
 ```json
 {
@@ -61,7 +61,7 @@
 
 ##### 2. 访问接口 http://localhost:8080/employee?name=Jack
 
-查寻 name=Jack 的员工，输出：
+查询 name=Jack 的员工，输出：
 
 ```json
 {
@@ -83,31 +83,21 @@
 }
 ```
 
-##### 3. 访问接口 http://localhost:8080/employee?department=Finance&age=24
+本例还支持非常多的检索条件，例如：
 
-查寻 Finance 部门 年龄为 24 的员工，输出：
+* http://localhost:8080/employee?size=5&page=1
+  - 分页，每页 5 条，第 2 页（第一页 page = 0）
+* http://localhost:8080/employee?name=s&name-op=in&name-ic=true
+  - 查询姓名包含字符串 "s" 的员工，并且忽略大小写
+* http://localhost:8080/employee?department=Finance&age=24
+  - 查询 Finance 部门 年龄为 24 的员工
+* http://localhost:8080/employee?age-0=20&age-1=25&age-op=bt
+  - 查询年龄在 20 - 25 之间的员工
+* 等等
 
-```json
-{
-  "dataList":[
-    {
-      "age":24,
-      "department":"Finance",
-      "entryDate":"2019-06-28T04:01:01Z",
-      "id":7,
-      "name":"Tang"
-    }
-  ],
-  "max":15,
-  "offset":0,
-  "page":0,
-  "summaries":[],
-  "totalCount":1,
-  "totalPage":1
-}
-```
+以上不同条件之间可以相互组合
 
-##### 3. 如上图，本示例展示了一个简单的员工列表页面，实现了如下功能：
+##### 3. 本示例展示了一个简单的员工列表页面，实现了如下功能：
 
 * 各种复杂条件组合过滤
 
