@@ -13,7 +13,7 @@ import java.util.List;
  * */
 public class SearchResult<T> {
 
-	private Number totalCount = 0;
+	private Number totalCount;
 	
 	private Number max;
 	private Number offset;

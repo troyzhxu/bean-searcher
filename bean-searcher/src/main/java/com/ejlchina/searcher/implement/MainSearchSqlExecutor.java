@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import com.ejlchina.searcher.SearchSql;
 import com.ejlchina.searcher.SearchSqlExecutor;
-import com.ejlchina.searcher.SearchTmpResult;
+import com.ejlchina.searcher.SearchMapResult;
 import com.ejlchina.searcher.SearcherException;
 
 /**
@@ -56,9 +56,9 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 
 	
 	@Override
-	public SearchTmpResult execute(SearchSql searchSql) {
+	public SearchMapResult execute(SearchSql searchSql) {
 		if (!searchSql.isShouldQueryList() && !searchSql.isShouldQueryCluster()) {
-			return new SearchTmpResult();
+			return new SearchMapResult();
 		}
 		if (dataSource == null) {
 			throw new SearcherException("You must config a dataSource for MainSearchSqlExecutor!");
@@ -70,7 +70,7 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 			throw new SearcherException("Can not get Connection from dataSource!", e);
 		}
 		try {
-			SearchTmpResult result = new SearchTmpResult();
+			SearchMapResult result = new SearchMapResult();
 			if (searchSql.isShouldQueryList()) {
 				doLog("sql ---- " + searchSql.getListSqlString());
 				doLog("params - " + Arrays.toString(searchSql.getListSqlParams().toArray()));
@@ -100,7 +100,7 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 
 	
 	protected void executeListSqlAndCollectResult(Connection connection, String sql, List<Object> params, 
-			List<String> listAliases, SearchTmpResult result) throws SQLException {
+			List<String> listAliases, SearchMapResult result) throws SQLException {
 		PreparedStatement statement = null;
 		ResultSet resultSet = null;
 		try {
@@ -108,7 +108,7 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 			putParamsTntoStatement(statement, params);
 			resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				result.addTmpData(resolveDataResult(resultSet, listAliases));
+				result.addData(resolveDataResult(resultSet, listAliases));
 			}
 		} finally {
 			closeStatementAndResultSet(statement, resultSet);
@@ -117,7 +117,7 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 	
 
 	protected void executeClusterSqlAndCollectResult(Connection connection, String sqlString, List<Object> sqlParams, 
-			String countAlias, List<String> summaryAliases, SearchTmpResult result) throws SQLException {
+			String countAlias, List<String> summaryAliases, SearchMapResult result) throws SQLException {
 		PreparedStatement statement = null;
 		ResultSet resultSet = null;
 		try {
@@ -132,8 +132,8 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 		}
 	}
 	
-	protected void collectClusterResult(String countAlias, List<String> summaryAliases, 
-			SearchTmpResult result, ResultSet countResultSet)
+	protected void collectClusterResult(String countAlias, List<String> summaryAliases,
+										SearchMapResult result, ResultSet countResultSet)
 			throws SQLException {
 		if (countAlias != null) {
 			result.setTotalCount((Number) countResultSet.getObject(countAlias));

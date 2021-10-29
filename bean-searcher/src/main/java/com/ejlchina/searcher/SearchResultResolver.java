@@ -12,9 +12,9 @@ public interface SearchResultResolver {
 	/**
 	 * @param <T> bean 类型
 	 * @param convertInfo 转换信息
-	 * @param searchTmpResult 检索中间结果
+	 * @param searchMapResult 检索中间结果
 	 * @return 检索结果
 	 */
-	<T> SearchResult<T> resolve(SearchResultConvertInfo<T> convertInfo, SearchTmpResult searchTmpResult);
+	<T> SearchResult<T> resolve(SearchResultConvertInfo<T> convertInfo, SearchMapResult searchMapResult);
 
 }

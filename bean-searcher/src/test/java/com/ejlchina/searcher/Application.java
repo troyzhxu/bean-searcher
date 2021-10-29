@@ -21,7 +21,7 @@ public class Application {
 					System.out.println("CLUSTER	SQL 	::: " +  searchSql.getClusterSqlString());
 					System.out.println("CLUSTER	PARAMS	::: " +  searchSql.getClusterSqlParams());
 					System.out.println();
-					return new SearchTmpResult(0);
+					return new SearchMapResult(0);
 				}).build();
 		
 		Map<String, Object> params = new HashMap<>();

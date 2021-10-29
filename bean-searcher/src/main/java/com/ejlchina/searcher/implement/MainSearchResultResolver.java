@@ -8,7 +8,7 @@ import java.util.Map.Entry;
 import com.ejlchina.searcher.SearchResult;
 import com.ejlchina.searcher.SearchResultConvertInfo;
 import com.ejlchina.searcher.SearchResultResolver;
-import com.ejlchina.searcher.SearchTmpResult;
+import com.ejlchina.searcher.SearchMapResult;
 import com.ejlchina.searcher.SearcherException;
 import com.ejlchina.searcher.bean.BeanAware;
 import com.ejlchina.searcher.implement.convertor.FieldConvertor;
@@ -38,15 +38,15 @@ public class MainSearchResultResolver implements SearchResultResolver {
 
 	
 	@Override
-	public <T> SearchResult<T> resolve(SearchResultConvertInfo<T> convertInfo, SearchTmpResult searchTmpResult) {
+	public <T> SearchResult<T> resolve(SearchResultConvertInfo<T> convertInfo, SearchMapResult searchMapResult) {
 		
 		Class<T> beanClass = convertInfo.getBeanClass();
 		Set<Entry<String, String>> fieldDbAliasEntrySet = convertInfo.getFieldDbAliasEntrySet();
 		Map<String, Method> fieldGetMethodMap = convertInfo.getFieldGetMethodMap();
 		Map<String, Class<?>> fieldTypeMap = convertInfo.getFieldTypeMap();
-		SearchResult<T> searchResult = new SearchResult<T>(searchTmpResult.getTotalCount(), 
-				searchTmpResult.getSummaries());
-		List<Map<String, Object>> tmpDataList = searchTmpResult.getTmpDataList();
+		SearchResult<T> searchResult = new SearchResult<T>(searchMapResult.getTotalCount(),
+				searchMapResult.getSummaries());
+		List<Map<String, Object>> tmpDataList = searchMapResult.getDataList();
 		
 		for (Map<String, Object> tmpData : tmpDataList) {
 			T bean;

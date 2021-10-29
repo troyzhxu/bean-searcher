@@ -12,20 +12,20 @@ import java.util.Map;
  * 检索中间结果
  * 
  * */
-public class SearchTmpResult {
+public class SearchMapResult {
 
 	
 	private Number totalCount;
 	
-	private final List<Map<String, Object>> tmpDataList = new ArrayList<>();
+	private final List<Map<String, Object>> dataList = new ArrayList<>();
 
 	private Number[] summaries;
 	
 	
-	public SearchTmpResult() {
+	public SearchMapResult() {
 	}
 
-	public SearchTmpResult(Number totalCount) {
+	public SearchMapResult(Number totalCount) {
 		this.totalCount = totalCount;
 	}
 
@@ -37,12 +37,12 @@ public class SearchTmpResult {
 		this.totalCount = totalCount;
 	}
 	
-	public List<Map<String, Object>> getTmpDataList() {
-		return tmpDataList;
+	public List<Map<String, Object>> getDataList() {
+		return dataList;
 	}
 
-	public void addTmpData(Map<String, Object> data) {
-		tmpDataList.add(data);
+	public void addData(Map<String, Object> data) {
+		dataList.add(data);
 	}
 	
 	public Number[] getSummaries() {
