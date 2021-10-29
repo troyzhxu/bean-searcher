@@ -17,7 +17,7 @@ public class SearchResultConvertInfo<T> {
 	/**
 	 * 用户 Bean Class
 	 */
-	private Class<T> beanClass;
+	private final Class<T> beanClass;
 	
 	/**
 	 * 用户 Bean 属性 到 数据库字段别名 的 Entry 集合
@@ -34,8 +34,6 @@ public class SearchResultConvertInfo<T> {
 	 */
 	private Map<String, Class<?>> fieldTypeMap;
 
-	public SearchResultConvertInfo() {
-	}
 
 	public SearchResultConvertInfo(Class<T> beanClass) {
 		this.beanClass = beanClass;
@@ -43,10 +41,6 @@ public class SearchResultConvertInfo<T> {
 
 	public Class<T> getBeanClass() {
 		return beanClass;
-	}
-
-	public void setBeanClass(Class<T> beanClass) {
-		this.beanClass = beanClass;
 	}
 
 	public Set<Entry<String, String>> getFieldDbAliasEntrySet() {
@@ -71,14 +65,6 @@ public class SearchResultConvertInfo<T> {
 
 	public void setFieldTypeMap(Map<String, Class<?>> fieldTypeMap) {
 		this.fieldTypeMap = fieldTypeMap;
-	}
-
-	public SearchResultConvertInfo<T> with(Class<T> clazz) {
-		SearchResultConvertInfo<T> instance = new SearchResultConvertInfo<>(clazz);
-		instance.setFieldTypeMap(fieldTypeMap);
-		instance.setFieldDbAliasEntrySet(fieldDbAliasEntrySet);
-		instance.setFieldGetMethodMap(fieldGetMethodMap);
-		return instance;
 	}
 
 }

@@ -12,8 +12,8 @@ public class Application {
 	
 	public static void main(String[] args) {
 
-		BeanSearcher searcher = (BeanSearcher) SearcherBuilder.builder()
-				.configSearchSqlExecutor(searchSql -> {
+		BeanSearcher searcher = SearcherBuilder.beanSearcher()
+				.searchSqlExecutor(searchSql -> {
 					System.out.println();
 					System.out.println("LIST 	SQL 	::: " +  searchSql.getListSqlString());
 					System.out.println("LIST 	PARAMS	::: " +  searchSql.getListSqlParams());
@@ -22,22 +22,23 @@ public class Application {
 					System.out.println("CLUSTER	PARAMS	::: " +  searchSql.getClusterSqlParams());
 					System.out.println();
 					return new SearchResult<>(0);
-				}).build();
-		
+				})
+				.build();
+
 		Map<String, Object> params = new HashMap<>();
 		params.put("name", "张");
 		params.put("name-op", Operator.StartWith);
-		
+
 		params.put("age", 13);
 		params.put("age-op", Operator.LessEqual);
-		
+
 		params.put("dateCreated-0", "2019-07-02");
 		params.put("dateCreated-1", "2019-07-02 23:59");
 		params.put("dateCreated-op", Operator.MultiValue);
-		
+
 		SearchResult<User> result = searcher.search(User.class, params);
 		
-//		System.out.println("SEARCH RESULT	::: " + result);
+		System.out.println("SEARCH RESULT	::: " + result);
 
 	}
 	
