@@ -10,8 +10,6 @@ import com.ejlchina.searcher.implement.processor.DefaultParamProcessor;
 import com.ejlchina.searcher.virtual.DefaultVirtualParamProcessor;
 import com.ejlchina.searcher.virtual.VirtualParamProcessor;
 
-import java.util.Objects;
-
 /***
  * 检索器 Builder
  * 
