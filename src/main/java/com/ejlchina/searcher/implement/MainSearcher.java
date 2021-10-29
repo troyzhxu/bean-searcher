@@ -40,38 +40,16 @@ public class MainSearcher implements Searcher {
 	private SearchResultResolver searchResultResolver;
 
 	private VirtualParamProcessor virtualParamProcessor;
-	
-	
-	/**
-	 * 前缀分隔符长度
-	 */
-	private int prifexSeparatorLength = 1;
 
-	
-	@Override
-	public <T> SearchResult<T> search(Class<T> beanClass, Map<String, Object> paraMap, String prefix) {
-		return search(beanClass, processWithPrefix(paraMap, prefix));
-	}
-	
+
 	@Override
 	public <T> SearchResult<T> search(Class<T> beanClass, Map<String, Object> paraMap) {
 		return search(beanClass, paraMap, null, true, true, false);
-	}
-	
-	@Override
-	public <T> SearchResult<T> search(Class<T> beanClass, Map<String, Object> paraMap, String[] summaryFields,
-			String prefix) {
-		return search(beanClass, processWithPrefix(paraMap, prefix), summaryFields);
 	}
 
 	@Override
 	public <T> SearchResult<T> search(Class<T> beanClass, Map<String, Object> paraMap, String[] summaryFields) {
 		return search(beanClass, paraMap, summaryFields, true, true, false);
-	}
-	
-	@Override
-	public <T> T searchFirst(Class<T> beanClass, Map<String, Object> paraMap, String prefix) {
-		return searchFirst(beanClass, processWithPrefix(paraMap, prefix));
 	}
 
 	@Override
@@ -85,38 +63,18 @@ public class MainSearcher implements Searcher {
 	}
 
 	@Override
-	public <T> List<T> searchList(Class<T> beanClass, Map<String, Object> paraMap, String prefix) {
-		return searchList(beanClass, processWithPrefix(paraMap, prefix));
-	}
-
-	@Override
 	public <T> List<T> searchList(Class<T> beanClass, Map<String, Object> paraMap) {
 		return search(beanClass, paraMap, null, false, true, false).getDataList();
-	}
-	
-	@Override
-	public <T> List<T> searchAll(Class<T> beanClass, Map<String, Object> paraMap, String prefix) {
-		return searchAll(beanClass, processWithPrefix(paraMap, prefix));
 	}
 
 	@Override
 	public <T> List<T> searchAll(Class<T> beanClass, Map<String, Object> paraMap) {	
 		return search(beanClass, paraMap, null, false, true, true).getDataList();
 	}
-	
-	@Override
-	public <T> Number searchCount(Class<T> beanClass, Map<String, Object> paraMap, String prefix) {
-		return searchCount(beanClass, processWithPrefix(paraMap, prefix));
-	}
 
 	@Override
 	public <T> Number searchCount(Class<T> beanClass, Map<String, Object> paraMap) {
 		return search(beanClass, paraMap, null, true, false, true).getTotalCount();
-	}
-	
-	@Override
-	public <T> Number searchSum(Class<T> beanClass, Map<String, Object> paraMap, String field, String prefix) {
-		return searchSum(beanClass, processWithPrefix(paraMap, prefix), field);
 	}
 
 	@Override
@@ -126,11 +84,6 @@ public class MainSearcher implements Searcher {
 			return results[0];
 		}
 		return null;
-	}
-	
-	@Override
-	public <T> Number[] searchSum(Class<T> beanClass, Map<String, Object> paraMap, String[] fields, String prefix) {
-		return searchSum(beanClass, processWithPrefix(paraMap, prefix), fields);
 	}
 
 	@Override
@@ -143,23 +96,6 @@ public class MainSearcher implements Searcher {
 	}
 	
 	/// 私有方法
-
-	private Map<String, Object> processWithPrefix(Map<String, Object> paraMap, String prefix) {
-		Map<String, Object> newParaMap;
-		if (!StringUtils.isBlank(prefix)) {
-			newParaMap = new HashMap<>();
-			for (Entry<String, Object> entry : paraMap.entrySet()) {
-				String key = entry.getKey();
-				if (key != null && key.length() > prefix.length() + prifexSeparatorLength 
-						&& key.startsWith(prefix)) {
-					newParaMap.put(key.substring(prefix.length() + prifexSeparatorLength), entry.getValue());
-				}
-			}
-		} else {
-			newParaMap = paraMap;
-		}
-		return newParaMap;
-	}
 
 	private <T> SearchResult<T> search(Class<T> beanClass, Map<String, Object> paraMap, String[] summaryFields,
 				boolean shouldQueryTotal, boolean shouldQueryList, boolean needNotLimit) {
@@ -260,14 +196,6 @@ public class MainSearcher implements Searcher {
 
 	public void setVirtualParamProcessor(VirtualParamProcessor virtualParamProcessor) {
 		this.virtualParamProcessor = virtualParamProcessor;
-	}
-
-	public int getPrifexSeparatorLength() {
-		return prifexSeparatorLength;
-	}
-
-	public void setPrifexSeparatorLength(int prifexSeparatorLength) {
-		this.prifexSeparatorLength = prifexSeparatorLength;
 	}
 
 }
