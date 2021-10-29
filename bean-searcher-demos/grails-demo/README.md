@@ -50,12 +50,8 @@
       "name":"Alice"
     }
   ],
-  "max":3,
-  "offset":0,
-  "page":0,
   "summaries":[],
   "totalCount":20,
-  "totalPage":7
 }
 ```
 
@@ -74,12 +70,8 @@
             "name":"Jack"
         }
     ],
-    "max":15,
-    "offset":0,
-    "page":0,
     "summaries":[],
     "totalCount":1,
-    "totalPage":1
 }
 ```
 
