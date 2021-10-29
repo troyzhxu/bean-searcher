@@ -12,19 +12,13 @@ import com.ejlchina.searcher.SearchResultConvertInfo;
  * @author Troy.Zhou @ 2017-03-20
  *
  */
-public class SearchBeanMapCache {
+public class SearchBeanCache {
 
-	private static SearchBeanMapCache instance = new SearchBeanMapCache();
+
+	private static final Map<String, SearchBeanMap> cache = new HashMap<>();
 	
-	private Map<String, SearchBeanMap> cache = new HashMap<>();
-	
-	
-	public static SearchBeanMapCache sharedCache() {
-		return instance;
-	}
-	
-	
-	public <T> void addSearchBeanMap(Class<T> beanClass, SearchBeanMap searchBeanMap) {
+
+	public static <T> void addSearchBeanMap(Class<T> beanClass, SearchBeanMap searchBeanMap) {
 		SearchResultConvertInfo<T> convertInfo = new SearchResultConvertInfo<>();
 		convertInfo.setFieldDbAliasEntrySet(searchBeanMap.getFieldDbAliasMap().entrySet());
 		convertInfo.setFieldGetMethodMap(searchBeanMap.getFieldGetMethodMap());
@@ -34,12 +28,12 @@ public class SearchBeanMapCache {
 	}
 	
 	
-	public SearchBeanMap getSearchBeanMap(Class<?> beanClass) {
+	public static SearchBeanMap getSearchBeanMap(Class<?> beanClass) {
 		return cache.get(beanClass.getName());
 	}
 	
 	
-	public void clear() {
+	public static void clear() {
 		cache.clear();
 	}
 	

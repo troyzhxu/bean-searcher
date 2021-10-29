@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import com.ejlchina.searcher.bean.DbField;
 import com.ejlchina.searcher.bean.SearchBean;
 import com.ejlchina.searcher.beanmap.SearchBeanMap;
-import com.ejlchina.searcher.beanmap.SearchBeanMapCache;
+import com.ejlchina.searcher.beanmap.SearchBeanCache;
 import com.ejlchina.searcher.util.ClassScanner;
 import com.ejlchina.searcher.util.StringUtils;
 
@@ -23,7 +23,7 @@ import com.ejlchina.searcher.util.StringUtils;
  */
 public class SearcherStarter {
 
-	private Logger log = LoggerFactory.getLogger(SearcherStarter.class);
+	private final Logger log = LoggerFactory.getLogger(SearcherStarter.class);
 
 	/**
 	 * @param basePackages 可检索 Bean 所在的 package，可检索 Bean 是被 @SearchBean 注解的 Bean
@@ -48,13 +48,12 @@ public class SearcherStarter {
 	 * 关闭搜索器，释放资源
 	 */
 	public void shutdown() {
-		SearchBeanMapCache.sharedCache().clear();
+		SearchBeanCache.clear();
 		log.info("Bean Searcher shutdown!");
 	}
 	
 	
 	protected int startWithBeanClassList(Set<Class<?>> beanClassSet) {
-		SearchBeanMapCache searchBeanMapCache = SearchBeanMapCache.sharedCache();
 		int beanCount = 0;
 		for (Class<?> beanClass : beanClassSet) {
 			SearchBean searchBean = beanClass.getAnnotation(SearchBean.class);
@@ -82,7 +81,7 @@ public class SearcherStarter {
 			if (searchBeanMap.getFieldList().size() == 0) {
 				throw new SearcherException("【" + beanClass.getName() + "】" + "】没有被@DbFile注解的属性！");
 			}
-			searchBeanMapCache.addSearchBeanMap(beanClass, searchBeanMap);
+			SearchBeanCache.addSearchBeanMap(beanClass, searchBeanMap);
 			beanCount++;
 		}
 		return beanCount;
