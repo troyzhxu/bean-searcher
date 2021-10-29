@@ -1,6 +1,6 @@
 package com.ejlchina.searcher;
 
-import com.ejlchina.searcher.beanmap.SearchBeanMap;
+import com.ejlchina.searcher.implement.SearchBeanMap;
 import com.ejlchina.searcher.param.SearchParam;
 
 /***

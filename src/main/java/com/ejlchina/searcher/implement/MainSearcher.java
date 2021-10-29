@@ -1,26 +1,12 @@
 package com.ejlchina.searcher.implement;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import com.ejlchina.searcher.SearchParamResolver;
-import com.ejlchina.searcher.SearchResult;
-import com.ejlchina.searcher.SearchResultConvertInfo;
-import com.ejlchina.searcher.SearchResultResolver;
-import com.ejlchina.searcher.SearchSql;
-import com.ejlchina.searcher.SearchSqlExecutor;
-import com.ejlchina.searcher.SearchSqlResolver;
-import com.ejlchina.searcher.SearchTmpResult;
-import com.ejlchina.searcher.Searcher;
-import com.ejlchina.searcher.SearcherException;
-import com.ejlchina.searcher.beanmap.SearchBeanMap;
-import com.ejlchina.searcher.beanmap.SearchBeanCache;
+import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.implement.pagination.Pagination;
 import com.ejlchina.searcher.param.SearchParam;
-import com.ejlchina.searcher.util.StringUtils;
 import com.ejlchina.searcher.virtual.VirtualParamProcessor;
+
+import java.util.List;
+import java.util.Map;
 
 /***
  * @author Troy.Zhou @ 2017-03-20

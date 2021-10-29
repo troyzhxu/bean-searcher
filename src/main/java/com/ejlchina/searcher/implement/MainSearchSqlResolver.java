@@ -8,7 +8,6 @@ import java.util.Map;
 import com.ejlchina.searcher.SearchSql;
 import com.ejlchina.searcher.SearchSqlResolver;
 import com.ejlchina.searcher.SearcherException;
-import com.ejlchina.searcher.beanmap.SearchBeanMap;
 import com.ejlchina.searcher.dialect.Dialect;
 import com.ejlchina.searcher.dialect.Dialect.PaginateSql;
 import com.ejlchina.searcher.implement.processor.ParamProcessor;

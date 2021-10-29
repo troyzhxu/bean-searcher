@@ -1,6 +1,6 @@
 package com.ejlchina.searcher.virtual;
 
-import com.ejlchina.searcher.beanmap.SearchBeanMap;
+import com.ejlchina.searcher.implement.SearchBeanMap;
 
 
 /**

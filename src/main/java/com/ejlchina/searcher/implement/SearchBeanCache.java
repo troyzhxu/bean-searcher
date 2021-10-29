@@ -1,4 +1,4 @@
-package com.ejlchina.searcher.beanmap;
+package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.SearchResultConvertInfo;
 import com.ejlchina.searcher.SearcherException;
