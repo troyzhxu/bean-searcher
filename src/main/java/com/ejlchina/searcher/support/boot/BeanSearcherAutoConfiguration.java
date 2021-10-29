@@ -2,10 +2,7 @@ package com.ejlchina.searcher.support.boot;
 
 import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.dialect.*;
-import com.ejlchina.searcher.implement.MainSearchParamResolver;
-import com.ejlchina.searcher.implement.MainSearchResultResolver;
-import com.ejlchina.searcher.implement.MainSearchSqlExecutor;
-import com.ejlchina.searcher.implement.MainSearchSqlResolver;
+import com.ejlchina.searcher.implement.*;
 import com.ejlchina.searcher.implement.convertor.DefaultFieldConvertor;
 import com.ejlchina.searcher.implement.convertor.FieldConvertor;
 import com.ejlchina.searcher.implement.pagination.MaxOffsetPagination;
@@ -38,7 +35,6 @@ import javax.sql.DataSource;
 @EnableConfigurationProperties(BeanSearcherProperties.class)
 public class BeanSearcherAutoConfiguration {
 
-
 	@Bean
 	@ConditionalOnMissingBean(Pagination.class)
 	public Pagination pagination(BeanSearcherProperties config) {
@@ -62,8 +58,7 @@ public class BeanSearcherAutoConfiguration {
 		}
 		throw new SearcherException("配置项【bean-searcher.params.pagination.type】只能为 page 或  offset！");
 	}
-	
-	
+
 	@Bean
 	@ConditionalOnMissingBean(SearchParamResolver.class)
 	public SearchParamResolver searchParamResolver(Pagination pagination, BeanSearcherProperties config, 
@@ -83,8 +78,7 @@ public class BeanSearcherAutoConfiguration {
 		}
 		return searchParamResolver;
 	}
-	
-	
+
 	@Bean
 	@ConditionalOnMissingBean(Dialect.class)
 	public Dialect dialect(BeanSearcherProperties config) {
@@ -105,28 +99,24 @@ public class BeanSearcherAutoConfiguration {
 		throw new SearcherException("配置项【bean-searcher.sql.dialect】只能为  MySql|Oracle|PostgreSql|SqlServer 中的一个 ！");
 	}
 	
-	
 	@Bean
 	@ConditionalOnMissingBean(ParamProcessor.class)
 	public ParamProcessor paramProcessor() {
 		return new DefaultParamProcessor();
 	}
-	
-	
+
 	@Bean
 	@ConditionalOnMissingBean(SearchSqlResolver.class)
 	public SearchSqlResolver searchSqlResolver(Dialect dialect, ParamProcessor paramProcessor) {
 		return new MainSearchSqlResolver(dialect, paramProcessor);
 	}
-	
-	
+
 	@Bean
 	@ConditionalOnMissingBean(SearchSqlExecutor.class)
 	public SearchSqlExecutor searchSqlExecutor(DataSource dataSource) {
 		return new MainSearchSqlExecutor(dataSource);
 	}
-	
-	
+
 	@Bean
 	@ConditionalOnMissingBean(FieldConvertor.class)
 	public FieldConvertor fieldConvertor(BeanSearcherProperties config) {
@@ -143,14 +133,12 @@ public class BeanSearcherAutoConfiguration {
 		return convertor;
 	}
 	
-	
 	@Bean
 	@ConditionalOnMissingBean(SearchResultResolver.class)
 	public SearchResultResolver searchResultResolver(FieldConvertor fieldConvertor) {
 		return new MainSearchResultResolver(fieldConvertor);
 	}
-	
-	
+
 	@Bean
 	@ConditionalOnMissingBean(Searcher.class)
 	public Searcher beanSearcher(SearchParamResolver searchParamResolver, 
@@ -158,12 +146,7 @@ public class BeanSearcherAutoConfiguration {
 				SearchSqlExecutor searchSqlExecutor, 
 				SearchResultResolver searchResultResolver,
 				BeanSearcherProperties config) {
-		String[] packages = config.getPackages();
-		if (packages == null || packages.length == 0) {
-			throw new SearcherException("配置项【bean-searcher.packages】不能为空 ！");
-		}
-		SpringSearcher searcher = new SpringSearcher();
-		searcher.setScanPackages(packages);
+		MainSearcher searcher = new MainSearcher();
 		searcher.setPrifexSeparatorLength(config.getPrifexSeparatorLength());
 		searcher.setSearchParamResolver(searchParamResolver);
 		searcher.setSearchSqlResolver(searchSqlResolver);
@@ -171,6 +154,5 @@ public class BeanSearcherAutoConfiguration {
 		searcher.setSearchResultResolver(searchResultResolver);
 		return searcher;
 	}
-	
 	
 }

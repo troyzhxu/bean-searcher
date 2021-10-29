@@ -9,11 +9,6 @@ import com.ejlchina.searcher.implement.convertor.DefaultFieldConvertor;
 public class BeanSearcherProperties {
 
 	/**
-	 * Bean Searcher 需要扫描的包，可多个
-	 */
-	private String[] packages;
-
-	/**
 	 * 前缀分隔符长度
 	 */
 	private int prifexSeparatorLength = 1;
@@ -33,14 +28,6 @@ public class BeanSearcherProperties {
 	 */
 	private final FieldConvertorProps fieldConvertor = new FieldConvertorProps();
 
-
-	public String[] getPackages() {
-		return packages;
-	}
-
-	public void setPackages(String[] packages) {
-		this.packages = packages;
-	}
 
 	public int getPrifexSeparatorLength() {
 		return prifexSeparatorLength;
