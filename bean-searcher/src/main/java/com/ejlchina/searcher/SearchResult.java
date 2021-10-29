@@ -15,11 +15,6 @@ public class SearchResult<T> {
 
 	private Number totalCount;
 	
-	private Number max;
-	private Number offset;
-	private Number page;
-	private Number totalPage;
-	
 	private final List<T> dataList = new ArrayList<>();
 	
 	private Number[] summaries;
@@ -47,43 +42,9 @@ public class SearchResult<T> {
 		dataList.add(data);
 	}
 	
-	public Number getMax() {
-		return max;
-	}
-
-	public void setMax(Number max) {
-		this.max = max;
-	}
-
-	public Number getOffset() {
-		return offset;
-	}
-
-	public void setOffset(Number offset) {
-		this.offset = offset;
-	}
-
-	public Number getPage() {
-		return page;
-	}
-
-	public void setPage(Number page) {
-		this.page = page;
-	}
-
-	public Number getTotalPage() {
-		return totalPage;
-	}
-
-	public void setTotalPage(Number totalPage) {
-		this.totalPage = totalPage;
-	}
-
-	
 	public Number[] getSummaries() {
 		return summaries;
 	}
-
 
 	public void setSummaries(Number[] summaries) {
 		this.summaries = summaries;
@@ -91,11 +52,11 @@ public class SearchResult<T> {
 
 
 	public String toString() {
-		String str = "totalCount = " + totalCount + "\n";
+		StringBuilder str = new StringBuilder("totalCount = " + totalCount + "\n");
 		for (T data: dataList) {
-			str += "\t" + data.toString();
+			str.append("\t").append(data.toString());
 		}
-		return str;
+		return str.toString();
 	}
 	
 }

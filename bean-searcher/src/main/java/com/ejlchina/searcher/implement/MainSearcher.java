@@ -107,44 +107,8 @@ public class MainSearcher implements Searcher {
 		SearchMapResult searchMapResult = searchSqlExecutor.execute(searchSql);
 		@SuppressWarnings("unchecked")
 		SearchResultConvertInfo<T> convertInfo = (SearchResultConvertInfo<T>) beanMap.getConvertInfo();
-		SearchResult<T> result = searchResultResolver.resolve(convertInfo.with(beanClass), searchMapResult);
-		return consummateSearchResult(searchParam, result);
+		return searchResultResolver.resolve(convertInfo.with(beanClass), searchMapResult);
 	}
-
-	private <T> SearchResult<T> consummateSearchResult(SearchParam searchParam, SearchResult<T> result) {
-		Integer max = searchParam.getMax();
-		Long offset = searchParam.getOffset();
-		if (offset == null) {
-			offset = 0L;
-		}
-		result.setMax(max);
-		result.setOffset(offset);
-		int startPage = getPagination().getStartPage();
-		Number totalCount = result.getTotalCount();
-		if (max != null && totalCount != null && max > 0) {
-			long maxLong = max.longValue();
-			long totalLong = totalCount.longValue();
-			long totalPage = totalLong / maxLong;
-			if (totalPage * maxLong < totalLong) {
-				totalPage = totalPage + 1;
-			}
-			result.setTotalPage(totalPage);
-			result.setPage(startPage + offset / maxLong);
-		} else {
-			result.setTotalPage(1);
-			result.setPage(startPage);
-		}
-		Number[] summaries = result.getSummaries();
-		if (summaries != null) {
-			for (int i = 0; i < summaries.length; i++) {
-				if (summaries[i] == null) {
-					summaries[i] = 0;
-				}
-			}
-		}
-		return result;
-	}
-
 
 	protected SearchBeanMap resolveSearchBeanMap(Class<?> beanClass) {
 		SearchBeanMap beanMap = cache.get(beanClass);

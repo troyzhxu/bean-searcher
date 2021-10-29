@@ -50,7 +50,16 @@ public class SearchMapResult {
 	}
 
 	public void setSummaries(Number[] summaries) {
-		this.summaries = summaries;
+		if (summaries != null) {
+			for (int i = 0; i < summaries.length; i++) {
+				if (summaries[i] == null) {
+					summaries[i] = 0;
+				}
+			}
+			this.summaries = summaries;
+		} else {
+			this.summaries = new Number[] {};
+		}
 	}
 	
 }
