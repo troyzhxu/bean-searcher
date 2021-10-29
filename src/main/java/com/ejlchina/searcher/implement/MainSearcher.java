@@ -92,8 +92,7 @@ public class MainSearcher implements Searcher {
 
 	private <T> SearchResult<T> search(Class<T> beanClass, Map<String, Object> paraMap, String[] summaryFields,
 				boolean shouldQueryTotal, boolean shouldQueryList, boolean needNotLimit) {
-		SearchBeanMap beanMap = getSearchBeanMap(beanClass);
-
+		SearchBeanMap beanMap = resolveSearchBeanMap(beanClass);
 		List<String> fieldList = beanMap.getFieldList();
 		SearchParam searchParam = searchParamResolver.resolve(fieldList, paraMap);
 		searchParam.setSummaryFields(summaryFields);
@@ -102,7 +101,6 @@ public class MainSearcher implements Searcher {
 		if (needNotLimit) {
 			searchParam.setMax(null);
 		}
-		beanMap = virtualParamProcessor.process(beanMap);
 		SearchSql searchSql = searchSqlResolver.resolve(beanMap, searchParam);
 		searchSql.setShouldQueryCluster(shouldQueryTotal || (summaryFields != null && summaryFields.length > 0));
 		searchSql.setShouldQueryList(shouldQueryList);
@@ -148,7 +146,7 @@ public class MainSearcher implements Searcher {
 	}
 
 
-	protected SearchBeanMap getSearchBeanMap(Class<?> beanClass) {
+	protected SearchBeanMap resolveSearchBeanMap(Class<?> beanClass) {
 		SearchBeanMap beanMap = cache.get(beanClass.getName());
 		if (beanMap != null) {
 			return beanMap;
@@ -178,8 +176,9 @@ public class MainSearcher implements Searcher {
 			if (searchBeanMap.getFieldList().size() == 0) {
 				throw new SearcherException("[" + beanClass.getName() + "] is annotated by @SearchBean, but there is none field annotated by @DbFile.");
 			}
-			addSearchBeanMap(beanClass, searchBeanMap);
-			return searchBeanMap;
+			SearchBeanMap newBeanMap = virtualParamProcessor.process(searchBeanMap);
+			addSearchBeanMap(beanClass, newBeanMap);
+			return newBeanMap;
 		}
 	}
 

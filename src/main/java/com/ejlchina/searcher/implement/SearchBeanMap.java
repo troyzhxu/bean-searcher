@@ -11,7 +11,7 @@ import com.ejlchina.searcher.SearcherException;
 import com.ejlchina.searcher.virtual.VirtualParam;
 
 /**
- * 用户Bean的属性与数据库表字段的映射信息
+ * SearchBean 的属性与数据库表字段的映射信息
  *  
  * @author Troy.Zhou @ 2017-03-20
  * 

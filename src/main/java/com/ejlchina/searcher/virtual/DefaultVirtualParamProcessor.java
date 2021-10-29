@@ -5,7 +5,6 @@ import com.ejlchina.searcher.implement.SearchBeanMap;
 import com.ejlchina.searcher.util.StringUtils;
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 
 public class DefaultVirtualParamProcessor implements VirtualParamProcessor {
@@ -13,25 +12,13 @@ public class DefaultVirtualParamProcessor implements VirtualParamProcessor {
 	
 	private String virtualParamPrefix = ":";
 	
-	private String[] vertualParamEndFlags = new String[] {" ", "\t", "\n", "\r", "+", "-", "*", "/", "=", "!", ">", "<", ",", ")", "'", "%"};
+	private String[] virtualParamEndFlags = new String[] {" ", "\t", "\n", "\r", "+", "-", "*", "/", "=", "!", ">", "<", ",", ")", "'", "%"};
 	
 	private final char[] quotations = new char[] {'\'', '"'};
-	
-	private final Map<SearchBeanMap, Object> processed = new ConcurrentHashMap<>();
-	
+
 	
 	@Override
 	public SearchBeanMap process(SearchBeanMap searchBeanMap) {
-		if (processed.get(searchBeanMap) != null) {
-			return searchBeanMap;
-		}
-		processed.put(searchBeanMap, new Object());
-		return doProcess(searchBeanMap);
-	}
-	
-	
-	private SearchBeanMap doProcess(SearchBeanMap searchBeanMap) {
-		
 		VirtualSolution solution = resolveVirtualParams(searchBeanMap.getTalbes());
 		searchBeanMap.setTalbes(solution.getSqlSnippet());
 		searchBeanMap.setTableVirtualParams(solution.getVirtualParams());
@@ -46,7 +33,6 @@ public class DefaultVirtualParamProcessor implements VirtualParamProcessor {
 			fieldDbMap.put(field, solution.getSqlSnippet());
 			searchBeanMap.putFieldVirtualParam(field, solution.getVirtualParams());
 		}
-		
 		return searchBeanMap;
 	}
 	
@@ -95,7 +81,7 @@ public class DefaultVirtualParamProcessor implements VirtualParamProcessor {
 
 	private int findVitualParamEndIndex(String sqlSnippet, int fromIndex) {
 		int index = -1;
-		for (String flag : vertualParamEndFlags) {
+		for (String flag : virtualParamEndFlags) {
 			int index0 = sqlSnippet.indexOf(flag, fromIndex);
 			if (index < 0) {
 				index = index0;
@@ -117,13 +103,13 @@ public class DefaultVirtualParamProcessor implements VirtualParamProcessor {
 	}
 
 
-	public String[] getVertualParamEndFlags() {
-		return vertualParamEndFlags;
+	public String[] getVirtualParamEndFlags() {
+		return virtualParamEndFlags;
 	}
 
 
-	public void setVertualParamEndFlags(String[] vertualParamEndFlags) {
-		this.vertualParamEndFlags = vertualParamEndFlags;
+	public void setVirtualParamEndFlags(String[] virtualParamEndFlags) {
+		this.virtualParamEndFlags = virtualParamEndFlags;
 	}
 	
 }
