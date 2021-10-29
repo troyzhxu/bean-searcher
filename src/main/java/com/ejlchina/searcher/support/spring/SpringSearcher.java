@@ -17,7 +17,6 @@ public class SpringSearcher extends MainSearcher implements InitializingBean {
 				.configSearchSqlExecutor(getSearchSqlExecutor())
 				.configSearchSqlResolver(getSearchSqlResolver())
 				.configVirtualParamProcessor(getVirtualParamProcessor())
-				.configPrifexSeparatorLength(getPrifexSeparatorLength())
 				.build(this);
 	}
 

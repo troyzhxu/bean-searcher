@@ -9,11 +9,6 @@ import com.ejlchina.searcher.implement.convertor.DefaultFieldConvertor;
 public class BeanSearcherProperties {
 
 	/**
-	 * 前缀分隔符长度
-	 */
-	private int prifexSeparatorLength = 1;
-
-	/**
 	 * 参数配置
 	 */
 	private final ParamsPorps params = new ParamsPorps();
@@ -29,14 +24,6 @@ public class BeanSearcherProperties {
 	private final FieldConvertorProps fieldConvertor = new FieldConvertorProps();
 
 
-	public int getPrifexSeparatorLength() {
-		return prifexSeparatorLength;
-	}
-
-	public void setPrifexSeparatorLength(int prifexSeparatorLength) {
-		this.prifexSeparatorLength = prifexSeparatorLength;
-	}
-	
 	public ParamsPorps getParams() {
 		return params;
 	}

@@ -10,6 +10,8 @@ import com.ejlchina.searcher.implement.processor.DefaultParamProcessor;
 import com.ejlchina.searcher.virtual.DefaultVirtualParamProcessor;
 import com.ejlchina.searcher.virtual.VirtualParamProcessor;
 
+import java.util.Objects;
+
 /***
  * 检索器 Builder
  * 
@@ -27,9 +29,7 @@ public class SearcherBuilder {
 	private SearchResultResolver searchResultResolver;
 	
 	private VirtualParamProcessor virtualParamProcessor;
-	
-	private int prifexSeparatorLength = 1;
-	
+
 	
 	public static SearcherBuilder builder() {
 		return new SearcherBuilder();
@@ -58,11 +58,6 @@ public class SearcherBuilder {
 	public SearcherBuilder configVirtualParamProcessor(VirtualParamProcessor virtualParamProcessor) {
 		this.virtualParamProcessor = virtualParamProcessor;
 		return this;
-	} 
-	
-	public SearcherBuilder configPrifexSeparatorLength(int length) {
-		this.prifexSeparatorLength = length;
-		return this;
 	}
 	
 	public Searcher build() {
@@ -70,11 +65,7 @@ public class SearcherBuilder {
 	}
 	
 	public Searcher build(MainSearcher mainSearcher) {
-		if (searchParamResolver != null) {
-			mainSearcher.setSearchParamResolver(searchParamResolver);
-		} else {
-			mainSearcher.setSearchParamResolver(new MainSearchParamResolver());
-		}
+		mainSearcher.setSearchParamResolver(Objects.requireNonNullElseGet(searchParamResolver, MainSearchParamResolver::new));
 		if (searchSqlResolver != null) {
 			mainSearcher.setSearchSqlResolver(searchSqlResolver);
 		} else {
@@ -95,15 +86,9 @@ public class SearcherBuilder {
 			searchResultResolver.setFieldConvertor(new DefaultFieldConvertor());
 			mainSearcher.setSearchResultResolver(searchResultResolver);
 		}
-		if (virtualParamProcessor != null) {
-			mainSearcher.setVirtualParamProcessor(virtualParamProcessor);
-		} else {
-			mainSearcher.setVirtualParamProcessor(new DefaultVirtualParamProcessor());
-		}
-		mainSearcher.setPrifexSeparatorLength(prifexSeparatorLength);
+		mainSearcher.setVirtualParamProcessor(Objects.requireNonNullElseGet(virtualParamProcessor, DefaultVirtualParamProcessor::new));
 		return mainSearcher;
 	}
-	
 	
 	
 }

@@ -142,10 +142,8 @@ public class BeanSearcherAutoConfiguration {
 	public Searcher beanSearcher(SearchParamResolver searchParamResolver, 
 				SearchSqlResolver searchSqlResolver, 
 				SearchSqlExecutor searchSqlExecutor, 
-				SearchResultResolver searchResultResolver,
-				BeanSearcherProperties config) {
+				SearchResultResolver searchResultResolver) {
 		MainSearcher searcher = new MainSearcher();
-		searcher.setPrifexSeparatorLength(config.getPrifexSeparatorLength());
 		searcher.setSearchParamResolver(searchParamResolver);
 		searcher.setSearchSqlResolver(searchSqlResolver);
 		searcher.setSearchSqlExecutor(searchSqlExecutor);
