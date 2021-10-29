@@ -29,7 +29,7 @@ public class UserController {
     private Searcher searcher;                      // 注入 Bean Searcher 的检索器
 
     @GetMapping("/index")
-    public Object index(HttpServletRequest request) {
+    public SearchResult<User> index(HttpServletRequest request) {
         // 只一行代码，实现包含 分页、组合过滤、任意字段排序、甚至统计、多表联查的 复杂检索功能
         return searcher.search(User.class, MapUtils.flat(request.getParameterMap()));
     }
