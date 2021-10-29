@@ -138,17 +138,29 @@ public class BeanSearcherAutoConfiguration {
 	}
 
 	@Bean
-	@ConditionalOnMissingBean(Searcher.class)
-	public Searcher beanSearcher(SearchParamResolver searchParamResolver, 
+	@ConditionalOnMissingBean(BeanSearcher.class)
+	public BeanSearcher beanSearcher(SearchParamResolver searchParamResolver,
 				SearchSqlResolver searchSqlResolver, 
 				SearchSqlExecutor searchSqlExecutor, 
 				SearchResultResolver searchResultResolver) {
-		MainSearcher searcher = new MainSearcher();
+		DefaultBeanSearcher searcher = new DefaultBeanSearcher();
 		searcher.setSearchParamResolver(searchParamResolver);
 		searcher.setSearchSqlResolver(searchSqlResolver);
 		searcher.setSearchSqlExecutor(searchSqlExecutor);
 		searcher.setSearchResultResolver(searchResultResolver);
 		return searcher;
 	}
-	
+
+	@Bean
+	@ConditionalOnMissingBean(MapSearcher.class)
+	public MapSearcher mapSearcher(SearchParamResolver searchParamResolver,
+									 SearchSqlResolver searchSqlResolver,
+									 SearchSqlExecutor searchSqlExecutor) {
+		DefaultMapSearcher searcher = new DefaultMapSearcher();
+		searcher.setSearchParamResolver(searchParamResolver);
+		searcher.setSearchSqlResolver(searchSqlResolver);
+		searcher.setSearchSqlExecutor(searchSqlExecutor);
+		return searcher;
+	}
+
 }
