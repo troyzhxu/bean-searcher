@@ -58,7 +58,7 @@ Map<String, Object> params = MapUtils.builder()
 SearchResult<User> result = searcher.search(User.class, params);
 ```
 
-小 EMO 快速体验一下：
+小 **DEMO 快速体验** 一下：
 
 https://gitee.com/ejlchina-zhxu/bean-searcher-demo
 
