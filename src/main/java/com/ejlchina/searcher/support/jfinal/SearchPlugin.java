@@ -10,7 +10,7 @@ import com.jfinal.plugin.activerecord.IDataSourceProvider;
 import javax.sql.DataSource;
 
 /***
- * 自动检索器Jfinal插件，用于启动与生出检索器实例
+ * 自动检索器 Jfinal 插件，用于启动与生出检索器实例
  * 
  * @author Troy.Zhou @ 2017-03-20
  * 
@@ -40,8 +40,7 @@ public class SearchPlugin implements IPlugin {
 		void config(SearcherBuilder builder);
 		
 	}
-	
-	private final String[] scanPackages;
+
 	
 	private final IDataSourceProvider dataSourceProvider;
 
@@ -52,19 +51,23 @@ public class SearchPlugin implements IPlugin {
 
 	/**
 	 * @param dataSourceProvider dataSourceProvider
-	 * @param scanPackages 存放bean的package
 	 */
-	public SearchPlugin(IDataSourceProvider dataSourceProvider, String... scanPackages) {
-		this.scanPackages = scanPackages;
+	public SearchPlugin(IDataSourceProvider dataSourceProvider) {
 		this.dataSourceProvider = dataSourceProvider;
+	}
+
+	/**
+	 * @param dataSourceProvider dataSourceProvider
+	 * @param scanPackages 存放 bean的 package
+	 */
+	@Deprecated
+	public SearchPlugin(IDataSourceProvider dataSourceProvider, String... scanPackages) {
+		this(dataSourceProvider);
 	}
 
 	
 	@Override
 	public boolean start() {
-		if (scanPackages == null || scanPackages.length == 0) {
-			throw new SearcherException("SearchPlugin： scanPackages 不能为 空！");
-		}
 		DataSource dataSource = dataSourceProvider.getDataSource();
 		if (dataSource == null) {
 			throw new SearcherException("Can not get DataSource from IDataSourceProvider, "
