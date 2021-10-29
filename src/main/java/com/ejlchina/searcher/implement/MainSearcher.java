@@ -1,12 +1,18 @@
 package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.*;
+import com.ejlchina.searcher.bean.DbField;
+import com.ejlchina.searcher.bean.SearchBean;
 import com.ejlchina.searcher.implement.pagination.Pagination;
 import com.ejlchina.searcher.param.SearchParam;
+import com.ejlchina.searcher.util.StringUtils;
 import com.ejlchina.searcher.virtual.VirtualParamProcessor;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /***
  * @author Troy.Zhou @ 2017-03-20
@@ -27,6 +33,7 @@ public class MainSearcher implements Searcher {
 
 	private VirtualParamProcessor virtualParamProcessor;
 
+	private final Map<String, SearchBeanMap> cache = new ConcurrentHashMap<>();
 
 	@Override
 	public <T> SearchResult<T> search(Class<T> beanClass, Map<String, Object> paraMap) {
@@ -85,7 +92,7 @@ public class MainSearcher implements Searcher {
 
 	private <T> SearchResult<T> search(Class<T> beanClass, Map<String, Object> paraMap, String[] summaryFields,
 				boolean shouldQueryTotal, boolean shouldQueryList, boolean needNotLimit) {
-		SearchBeanMap beanMap = SearchBeanCache.getSearchBeanMap(beanClass);
+		SearchBeanMap beanMap = getSearchBeanMap(beanClass);
 
 		List<String> fieldList = beanMap.getFieldList();
 		SearchParam searchParam = searchParamResolver.resolve(fieldList, paraMap);
@@ -138,6 +145,51 @@ public class MainSearcher implements Searcher {
 			}
 		}
 		return result;
+	}
+
+
+	protected SearchBeanMap getSearchBeanMap(Class<?> beanClass) {
+		SearchBeanMap beanMap = cache.get(beanClass.getName());
+		if (beanMap != null) {
+			return beanMap;
+		}
+		SearchBean searchBean = beanClass.getAnnotation(SearchBean.class);
+		if (searchBean == null) {
+			throw new SearcherException("The class [" + beanClass.getName()
+					+ "] is not a valid SearchBean, please check whether the class is annotated correctly by @SearchBean");
+		}
+		synchronized (cache) {
+			SearchBeanMap searchBeanMap = new SearchBeanMap(searchBean.tables(), searchBean.joinCond(),
+					searchBean.groupBy(), searchBean.distinct());
+			for (Field field : beanClass.getDeclaredFields()) {
+				DbField dbField = field.getAnnotation(DbField.class);
+				if (dbField == null) {
+					continue;
+				}
+				String fieldName = field.getName();
+				Class<?> fieldType = field.getType();
+				try {
+					Method method = beanClass.getMethod("set" + StringUtils.firstCharToUpperCase(fieldName), fieldType);
+					searchBeanMap.addFieldDbMap(fieldName, dbField.value().trim(), method, fieldType);
+				} catch (Exception e) {
+					throw new SearcherException("[" + beanClass.getName() + ": " + fieldName + "] is annotated by @DbField, but there is none correctly setter for it.", e);
+				}
+			}
+			if (searchBeanMap.getFieldList().size() == 0) {
+				throw new SearcherException("[" + beanClass.getName() + "] is annotated by @SearchBean, but there is none field annotated by @DbFile.");
+			}
+			addSearchBeanMap(beanClass, searchBeanMap);
+			return searchBeanMap;
+		}
+	}
+
+	protected <T> void addSearchBeanMap(Class<T> beanClass, SearchBeanMap searchBeanMap) {
+		SearchResultConvertInfo<T> convertInfo = new SearchResultConvertInfo<>();
+		convertInfo.setFieldDbAliasEntrySet(searchBeanMap.getFieldDbAliasMap().entrySet());
+		convertInfo.setFieldGetMethodMap(searchBeanMap.getFieldGetMethodMap());
+		convertInfo.setFieldTypeMap(searchBeanMap.getFieldTypeMap());
+		searchBeanMap.setConvertInfo(convertInfo);
+		cache.put(beanClass.getName(), searchBeanMap);
 	}
 
 	private Pagination getPagination() {
