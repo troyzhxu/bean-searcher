@@ -22,6 +22,7 @@ apply plugin:"org.grails.grails-gsp"
 apply plugin:"com.bertramlabs.asset-pipeline"
 
 repositories {
+    mavenLocal()
     maven { url "https://repo.grails.org/grails/core" }
 }
 
@@ -57,6 +58,9 @@ dependencies {
     implementation "org.hibernate:hibernate-core:5.5.7.Final"
     implementation "org.grails.plugins:events"
     implementation "org.grails.plugins:gsp"
+
+    implementation "com.ejlchina:bean-searcher:3.0.0"
+
     profile "org.grails.profiles:web"
     runtimeOnly "org.glassfish.web:el-impl:2.2.1-b05"
     runtimeOnly "com.h2database:h2"
