@@ -65,7 +65,11 @@ public class SearcherBuilder {
 	}
 	
 	public Searcher build(MainSearcher mainSearcher) {
-		mainSearcher.setSearchParamResolver(Objects.requireNonNullElseGet(searchParamResolver, MainSearchParamResolver::new));
+		if (searchParamResolver != null) {
+			mainSearcher.setSearchParamResolver(searchParamResolver);
+		} else {
+			mainSearcher.setSearchParamResolver(new MainSearchParamResolver());
+		}
 		if (searchSqlResolver != null) {
 			mainSearcher.setSearchSqlResolver(searchSqlResolver);
 		} else {
@@ -86,7 +90,11 @@ public class SearcherBuilder {
 			searchResultResolver.setFieldConvertor(new DefaultFieldConvertor());
 			mainSearcher.setSearchResultResolver(searchResultResolver);
 		}
-		mainSearcher.setVirtualParamProcessor(Objects.requireNonNullElseGet(virtualParamProcessor, DefaultVirtualParamProcessor::new));
+		if (virtualParamProcessor != null) {
+			mainSearcher.setVirtualParamProcessor(virtualParamProcessor);
+		} else {
+			mainSearcher.setVirtualParamProcessor(new DefaultVirtualParamProcessor());
+		}
 		return mainSearcher;
 	}
 	
