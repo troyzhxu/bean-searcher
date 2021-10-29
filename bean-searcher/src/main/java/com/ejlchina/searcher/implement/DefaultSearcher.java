@@ -20,8 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * 自动检索器 根据 Bean 的 Class 和请求参数，自动检索 Bean
  * 
  */
-public class MainSearcher implements BeanSearcher {
-
+public class DefaultSearcher implements Searcher {
 	
 	private SearchParamResolver searchParamResolver;
 
@@ -29,26 +28,24 @@ public class MainSearcher implements BeanSearcher {
 
 	private SearchSqlExecutor searchSqlExecutor;
 
-	private SearchResultResolver searchResultResolver;
-
 	private VirtualParamProcessor virtualParamProcessor;
 
 	private final Map<Class<?>, SearchBeanMap> cache = new ConcurrentHashMap<>();
 
 	@Override
-	public <T> SearchResult<T> search(Class<T> beanClass, Map<String, Object> paraMap) {
+	public <T> SearchResult<?> search(Class<T> beanClass, Map<String, Object> paraMap) {
 		return search(beanClass, paraMap, null, true, true, false);
 	}
 
 	@Override
-	public <T> SearchResult<T> search(Class<T> beanClass, Map<String, Object> paraMap, String[] summaryFields) {
+	public <T> SearchResult<?> search(Class<T> beanClass, Map<String, Object> paraMap, String[] summaryFields) {
 		return search(beanClass, paraMap, summaryFields, true, true, false);
 	}
 
 	@Override
-	public <T> T searchFirst(Class<T> beanClass, Map<String, Object> paraMap) {
+	public <T> Object searchFirst(Class<T> beanClass, Map<String, Object> paraMap) {
 		paraMap.put(getPagination().getMaxParamName(), "1");
-		List<T> list = search(beanClass, paraMap, null, false, true, false).getDataList();
+		List<?> list = search(beanClass, paraMap, null, false, true, false).getDataList();
 		if (list.size() > 0) {
 			return list.get(0);
 		}
@@ -56,12 +53,12 @@ public class MainSearcher implements BeanSearcher {
 	}
 
 	@Override
-	public <T> List<T> searchList(Class<T> beanClass, Map<String, Object> paraMap) {
+	public <T> List<?> searchList(Class<T> beanClass, Map<String, Object> paraMap) {
 		return search(beanClass, paraMap, null, false, true, false).getDataList();
 	}
 
 	@Override
-	public <T> List<T> searchAll(Class<T> beanClass, Map<String, Object> paraMap) {	
+	public <T> List<?> searchAll(Class<T> beanClass, Map<String, Object> paraMap) {
 		return search(beanClass, paraMap, null, false, true, true).getDataList();
 	}
 
@@ -90,7 +87,7 @@ public class MainSearcher implements BeanSearcher {
 	
 	/// 私有方法
 
-	private <T> SearchResult<T> search(Class<T> beanClass, Map<String, Object> paraMap, String[] summaryFields,
+	protected <T> SearchResult<?> search(Class<T> beanClass, Map<String, Object> paraMap, String[] summaryFields,
 				boolean shouldQueryTotal, boolean shouldQueryList, boolean needNotLimit) {
 		SearchBeanMap beanMap = resolveSearchBeanMap(beanClass);
 		List<String> fieldList = beanMap.getFieldList();
@@ -104,10 +101,7 @@ public class MainSearcher implements BeanSearcher {
 		SearchSql searchSql = searchSqlResolver.resolve(beanMap, searchParam);
 		searchSql.setShouldQueryCluster(shouldQueryTotal || (summaryFields != null && summaryFields.length > 0));
 		searchSql.setShouldQueryList(shouldQueryList);
-		SearchResult<Map<String, Object>> searchMapResult = searchSqlExecutor.execute(searchSql);
-		@SuppressWarnings("unchecked")
-		SearchResultConvertInfo<T> convertInfo = (SearchResultConvertInfo<T>) beanMap.getConvertInfo();
-		return searchResultResolver.resolve(convertInfo.with(beanClass), searchMapResult);
+		return searchSqlExecutor.execute(searchSql);
 	}
 
 	protected SearchBeanMap resolveSearchBeanMap(Class<?> beanClass) {
@@ -147,7 +141,7 @@ public class MainSearcher implements BeanSearcher {
 	}
 
 	protected <T> void addSearchBeanMap(Class<T> beanClass, SearchBeanMap searchBeanMap) {
-		SearchResultConvertInfo<T> convertInfo = new SearchResultConvertInfo<>();
+		SearchResultConvertInfo<T> convertInfo = new SearchResultConvertInfo<>(beanClass);
 		convertInfo.setFieldDbAliasEntrySet(searchBeanMap.getFieldDbAliasMap().entrySet());
 		convertInfo.setFieldGetMethodMap(searchBeanMap.getFieldGetMethodMap());
 		convertInfo.setFieldTypeMap(searchBeanMap.getFieldTypeMap());
@@ -155,7 +149,7 @@ public class MainSearcher implements BeanSearcher {
 		cache.put(beanClass, searchBeanMap);
 	}
 
-	private Pagination getPagination() {
+	public Pagination getPagination() {
 		return searchParamResolver.getPagination();
 	}
 	
@@ -181,14 +175,6 @@ public class MainSearcher implements BeanSearcher {
 
 	public void setSearchSqlExecutor(SearchSqlExecutor searchSqlExecutor) {
 		this.searchSqlExecutor = searchSqlExecutor;
-	}
-
-	public SearchResultResolver getSearchResultResolver() {
-		return searchResultResolver;
-	}
-
-	public void setSearchResultResolver(SearchResultResolver searchResultResolver) {
-		this.searchResultResolver = searchResultResolver;
 	}
 
 	public VirtualParamProcessor getVirtualParamProcessor() {
