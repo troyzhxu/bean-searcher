@@ -43,11 +43,11 @@
 	<dependencies>
 
 		<dependency>
-		  <groupId>org.springframework</groupId>
-		  <artifactId>spring-core</artifactId>
-		  <version>5.3.11</version>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.32</version>
 		</dependency>
-				
+
 		<dependency>
 		  <groupId>org.springframework</groupId>
 		  <artifactId>spring-context</artifactId>
@@ -81,12 +81,6 @@
 			<artifactId>jfinal</artifactId>
 			<version>4.9.17</version>
 			<scope>provided</scope>
-		</dependency>
-		
-		<dependency>
-		    <groupId>org.slf4j</groupId>
-		    <artifactId>slf4j-api</artifactId>
-		    <version>1.7.32</version>
 		</dependency>
 	
 	</dependencies>
