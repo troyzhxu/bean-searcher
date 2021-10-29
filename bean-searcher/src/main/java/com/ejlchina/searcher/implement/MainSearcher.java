@@ -121,7 +121,7 @@ public class MainSearcher implements Searcher {
 		result.setOffset(offset);
 		int startPage = getPagination().getStartPage();
 		Number totalCount = result.getTotalCount();
-		if (max != null && totalCount != null) {
+		if (max != null && totalCount != null && max > 0) {
 			long maxLong = max.longValue();
 			long totalLong = totalCount.longValue();
 			long totalPage = totalLong / maxLong;
@@ -129,7 +129,7 @@ public class MainSearcher implements Searcher {
 				totalPage = totalPage + 1;
 			}
 			result.setTotalPage(totalPage);
-			result.setPage(startPage + offset / max);
+			result.setPage(startPage + offset / maxLong);
 		} else {
 			result.setTotalPage(1);
 			result.setPage(startPage);
