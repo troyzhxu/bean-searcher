@@ -17,7 +17,7 @@ import com.ejlchina.searcher.param.Operator;
 import com.ejlchina.searcher.param.SearchParam;
 import com.ejlchina.searcher.util.ObjectUtils;
 import com.ejlchina.searcher.util.StringUtils;
-import com.ejlchina.searcher.virtual.EmbedParam;
+import com.ejlchina.searcher.EmbedParam;
 
 /**
  * 默认查询SQL解析器

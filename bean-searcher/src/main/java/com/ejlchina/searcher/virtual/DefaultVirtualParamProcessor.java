@@ -1,5 +1,7 @@
 package com.ejlchina.searcher.virtual;
 
+import com.ejlchina.searcher.EmbedParam;
+import com.ejlchina.searcher.EmbedSolution;
 import com.ejlchina.searcher.SearcherException;
 import com.ejlchina.searcher.Metadata;
 import com.ejlchina.searcher.util.StringUtils;
@@ -71,7 +73,7 @@ public class DefaultVirtualParamProcessor implements VirtualParamProcessor {
 				// sqlSnippet 长度变短，寻找下标也该相应提前
 				nextIndex = nextIndex - paramName.length() + 1;
 			}
-			solution.addVirtualParam(embedParam);
+			solution.addEmbedParam(embedParam);
 			index1 = sqlSnippet.indexOf(virtualParamPrefix, nextIndex);
 		}
 		solution.setSqlSnippet(sqlSnippet);

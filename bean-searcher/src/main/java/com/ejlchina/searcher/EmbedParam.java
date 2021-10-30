@@ -1,4 +1,4 @@
-package com.ejlchina.searcher.virtual;
+package com.ejlchina.searcher;
 
 /**
  * 内嵌参数

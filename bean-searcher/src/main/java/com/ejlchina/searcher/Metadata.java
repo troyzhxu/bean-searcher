@@ -1,7 +1,5 @@
 package com.ejlchina.searcher;
 
-import com.ejlchina.searcher.virtual.EmbedParam;
-
 import java.lang.reflect.Method;
 import java.util.*;
 
