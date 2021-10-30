@@ -52,12 +52,16 @@ public class DefaultMetadataResolver implements MetadataResolver {
             if (dbField == null) {
                 continue;
             }
-            EmbedSolution dbFieldSolution = embedParamResolver.resolve(dbField.value().trim());
+            EmbedSolution solution = embedParamResolver.resolve(dbField.value().trim());
+            String snippet = solution.getSqlSnippet();
+            if (snippet.toLowerCase().startsWith("select ")) {
+                solution.setSqlSnippet("(" + snippet + ")");
+            }
             String fieldName = field.getName();
             Class<?> fieldType = field.getType();
             try {
                 Method method = beanClass.getMethod("set" + StringUtils.firstCharToUpperCase(fieldName), fieldType);
-                metadata.addFieldDbMap(dbFieldSolution, fieldName, method, fieldType);
+                metadata.addFieldDbMap(fieldName, solution, method, fieldType);
             } catch (Exception e) {
                 throw new SearcherException("[" + beanClass.getName() + ": " + fieldName + "] is annotated by @DbField, but there is none correctly setter for it.", e);
             }

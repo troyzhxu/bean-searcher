@@ -35,12 +35,12 @@ public class Metadata {
 	 * 参与检索的Bean属性列表
 	 * */
 	private final List<String> fieldList = new ArrayList<>();
-	
+
 	/**
 	 * 映射: Bean属性-> DB字段
 	 * */
-	private final Map<String, String> fieldDbMap = new HashMap<>();
-	
+	private final Map<String, EmbedSolution> fieldDbSolutionMap = new HashMap<>();
+
 	/**
 	 * 映射: Bean属性 -> DB字段别名
 	 * */
@@ -56,15 +56,10 @@ public class Metadata {
 	 * */
 	private final Map<String, Class<?>> fieldTypeMap = new HashMap<>();
 	
-	/**
-	 * 映射：属性 -> 嵌入参数
-	 */
-	private final Map<String, List<EmbedParam>> fieldEmbedParamsMap = new HashMap<>();
-	
 	
 	private SearchResultConvertInfo<?> convertInfo;
-	
-	
+
+
 	public Metadata(EmbedSolution tableSolution, EmbedSolution joinCondSolution, EmbedSolution groupBySolution, boolean distinct) {
 		this.tableSolution = tableSolution;
 		this.joinCondSolution = joinCondSolution;
@@ -73,20 +68,19 @@ public class Metadata {
 	}
 
 	
-	public void addFieldDbMap(EmbedSolution dbFieldSolution, String field, Method getMethod, Class<?> fieldType) {
-		String dbField = dbFieldSolution.getSqlSnippet();
+	public void addFieldDbMap(String field, EmbedSolution dbFieldSolution, Method getMethod, Class<?> fieldType) {
 		if (fieldList.contains(field)) {
 			throw new SearcherException("不可以重复添加字段");
 		}
+		String dbField = dbFieldSolution.getSqlSnippet();
         if (dbField.toLowerCase().startsWith("select ")) {
-            dbField = "(" + dbField + ")";
+			dbFieldSolution.setSqlSnippet("(" + dbField + ")");
         }
 		fieldList.add(field);
-		fieldDbMap.put(field, dbField);
 		fieldDbAliasMap.put(field, "d_" + fieldList.size());
 		fieldGetMethodMap.put(field, getMethod);
 		fieldTypeMap.put(field, fieldType);
-		fieldEmbedParamsMap.put(field, dbFieldSolution.getParams());
+		fieldDbSolutionMap.put(field, dbFieldSolution);
 	}
 	
 	public String getTalbes() {
@@ -117,8 +111,9 @@ public class Metadata {
 		return distinct;
 	}
 
-	public Map<String, String> getFieldDbMap() {
-		return fieldDbMap;
+	public String getDbField(String field) {
+		EmbedSolution solution = fieldDbSolutionMap.get(field);
+		return solution != null ? solution.getSqlSnippet() : null;
 	}
 
 	public Map<String, String> getFieldDbAliasMap() {
@@ -142,7 +137,8 @@ public class Metadata {
 	}
 
 	public List<EmbedParam> getFieldEmbedParams(String field) {
-		return fieldEmbedParamsMap.get(field);
+		EmbedSolution solution = fieldDbSolutionMap.get(field);
+		return solution != null ? solution.getParams() : Collections.emptyList();
 	}
 
 	@SuppressWarnings("unchecked")

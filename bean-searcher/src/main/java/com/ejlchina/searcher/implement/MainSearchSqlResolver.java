@@ -50,9 +50,8 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 
 	@Override
 	public SearchSql resolve(Metadata metadata, SearchParam searchParam) {
-		
+
 		List<String> fieldList = metadata.getFieldList();
-		Map<String, String> fieldDbMap = metadata.getFieldDbMap();
 		Map<String, String> fieldDbAliasMap = metadata.getFieldDbAliasMap();
 		Map<String, Class<?>> fieldTypeMap = metadata.getFieldTypeMap();
 		
@@ -66,7 +65,8 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 		int fieldCount = fieldList.size();
 		for (int i = 0; i < fieldCount; i++) {
 			String field = fieldList.get(i);
-			String dbField = fieldDbMap.get(field);
+
+			String dbField = metadata.getDbField(field);
 			String dbAlias = fieldDbAliasMap.get(field);
 			
 			List<EmbedParam> fieldEmbedParams = metadata.getFieldEmbedParams(field);
@@ -141,8 +141,8 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 			}
 			FilterParam filterParam = filterParamList.get(i);
 			String fieldName = filterParam.getName();
-			List<Object> sqlParams = appendFilterConditionSql(builder, fieldTypeMap.get(fieldName), 
-					fieldDbMap.get(fieldName), filterParam);
+			List<Object> sqlParams = appendFilterConditionSql(builder, fieldTypeMap.get(fieldName),
+					metadata.getDbField(fieldName), filterParam);
 			for (Object sqlParam : sqlParams) {
 				searchSql.addListSqlParam(sqlParam);
 				searchSql.addClusterSqlParam(sqlParam);
@@ -154,14 +154,12 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 		if (StringUtils.isBlank(groupBy)) {
 			if (metadata.isDistinct()) {
 				String originalSql = fieldSelectSql + builder;
-				String clusterSelectSql = resolveClusterSelectSql(fieldDbMap, searchSql, 
-						summaryFields, shouldQueryTotal, originalSql);
+				String clusterSelectSql = resolveClusterSelectSql(metadata, searchSql, summaryFields, shouldQueryTotal, originalSql);
 				String tableAlias = generateTableAlias(originalSql);
 				searchSql.setClusterSqlString(clusterSelectSql + " from (" + originalSql + ") " + tableAlias);
 			} else {
 				String fromWhereSql = builder.toString();
-				String clusterSelectSql = resolveClusterSelectSql(fieldDbMap, searchSql, 
-						summaryFields, shouldQueryTotal, fromWhereSql);
+				String clusterSelectSql = resolveClusterSelectSql(metadata, searchSql, summaryFields, shouldQueryTotal, fromWhereSql);
 				searchSql.setClusterSqlString(clusterSelectSql + fromWhereSql);
 			}
 		} else {
@@ -182,13 +180,11 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 			String fromWhereSql = builder.toString();
 			if (metadata.isDistinct()) {
 				String originalSql = fieldSelectSql + fromWhereSql;
-				String clusterSelectSql = resolveClusterSelectSql(fieldDbMap, searchSql, 
-						summaryFields, shouldQueryTotal, originalSql);
+				String clusterSelectSql = resolveClusterSelectSql(metadata, searchSql, summaryFields, shouldQueryTotal, originalSql);
 				String tableAlias = generateTableAlias(originalSql);
 				searchSql.setClusterSqlString(clusterSelectSql + " from (" + originalSql + ") " + tableAlias);
 			} else {
-				String clusterSelectSql = resolveClusterSelectSql(fieldDbMap, searchSql, 
-						summaryFields, shouldQueryTotal, fromWhereSql);
+				String clusterSelectSql = resolveClusterSelectSql(metadata, searchSql, summaryFields, shouldQueryTotal, fromWhereSql);
 				String tableAlias = generateTableAlias(fromWhereSql);
 				searchSql.setClusterSqlString(clusterSelectSql + " from (select count(*) " + fromWhereSql + ") " + tableAlias);
 			}
@@ -210,8 +206,8 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 	}
 
 
-	private String resolveClusterSelectSql(Map<String, String> fieldDbMap, 
-			SearchSql searchSql, String[] summaryFields, boolean shouldQueryTotal, String originalSql) {
+	private String resolveClusterSelectSql(Metadata metadata, SearchSql searchSql, String[] summaryFields,
+				boolean shouldQueryTotal, String originalSql) {
 		StringBuilder clusterSelectSqlBuilder = new StringBuilder("select ");
 		if (shouldQueryTotal) {
 			String countAlias = generateColumnAlias("count", originalSql);
@@ -225,9 +221,9 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 			for (int i = 0; i < summaryFields.length; i++) {
 				String summaryField = summaryFields[i];
 				String summaryAlias = generateColumnAlias(summaryField, originalSql);
-				String dbField = fieldDbMap.get(summaryField);
+				String dbField = metadata.getDbField(summaryField);
 				if (dbField == null) {
-					throw new SearcherException("求和属性【" + summaryField + "】没有和数据库字段做映射，请检查该属性是否被@DbField正确注解！");
+					throw new SearcherException("求和属性【" + summaryField + "】没有和数据库字段做映射，请检查该属性是否被 @DbField 正确注解！");
 				}
 				clusterSelectSqlBuilder.append("sum(").append(dbField)
 					.append(") ").append(summaryAlias);
