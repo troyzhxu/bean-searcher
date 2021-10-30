@@ -14,9 +14,9 @@ import com.ejlchina.searcher.SearchParamResolver;
 import com.ejlchina.searcher.implement.pagination.MaxOffsetPagination;
 import com.ejlchina.searcher.implement.pagination.Pagination;
 import com.ejlchina.searcher.implement.parafilter.ParamFilter;
-import com.ejlchina.searcher.param.FilterParam;
+import com.ejlchina.searcher.FilterParam;
 import com.ejlchina.searcher.param.Operator;
-import com.ejlchina.searcher.param.SearchParam;
+import com.ejlchina.searcher.SearchParam;
 
 /***
  * @author Troy.Zhou @ 2017-03-20

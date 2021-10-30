@@ -1,4 +1,6 @@
-package com.ejlchina.searcher.param;
+package com.ejlchina.searcher;
+
+import com.ejlchina.searcher.param.Operator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,12 +39,12 @@ public class SearchParam {
 	/**
 	 * 过滤检索参数列表
 	 */
-	private List<FilterParam> filterParamList = new ArrayList<>();
+	private final List<FilterParam> filterParamList = new ArrayList<>();
 
 	/**
 	 * 虚拟参数值映射
 	 */
-	private Map<String, Object> virtualParamMap = new HashMap<>();
+	private final Map<String, Object> virtualParamMap = new HashMap<>();
 	
 	/**
 	 * 需要求和的字段

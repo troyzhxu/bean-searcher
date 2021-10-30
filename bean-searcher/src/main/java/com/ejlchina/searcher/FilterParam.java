@@ -1,9 +1,10 @@
-package com.ejlchina.searcher.param;
+package com.ejlchina.searcher;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import com.ejlchina.searcher.param.Operator;
 import com.ejlchina.searcher.util.StringUtils;
 
 /**

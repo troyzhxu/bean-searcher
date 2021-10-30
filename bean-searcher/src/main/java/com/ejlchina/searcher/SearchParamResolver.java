@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.ejlchina.searcher.implement.pagination.Pagination;
-import com.ejlchina.searcher.param.SearchParam;
 
 
 /***
@@ -21,7 +20,6 @@ public interface SearchParamResolver {
 	Pagination getPagination();
 	
 
-	
 	/**
 	 * @param fieldList 可以参与检索的属性列表
 	 * @param paraMap 用户请求参数映射
