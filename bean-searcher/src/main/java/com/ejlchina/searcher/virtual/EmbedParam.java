@@ -1,17 +1,17 @@
 package com.ejlchina.searcher.virtual;
 
 /**
- * 嵌入参数
+ * 内嵌参数
  */
 public class EmbedParam {
 
 	/**
-	 * 虚拟参数名
+	 * 内嵌参数名
 	 */
 	private String name;
 	
 	/**
-	 * 在 Sql 里的参数名
+	 * 在 Sql 里的参数名（待前后缀）
 	 */
 	private String sqlName;
 	
