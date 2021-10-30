@@ -80,7 +80,7 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 							searchSql.addClusterSqlParam(sqlParam);
 						}
 					} else {
-						String strParam = sqlParam != null ? sqlParam.toString() : "null";
+						String strParam = sqlParam != null ? sqlParam.toString() : "";
 						dbField = dbField.replace(embedParam.getSqlName(), strParam);
 					}
 				}
@@ -104,7 +104,7 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 					searchSql.addListSqlParam(sqlParam);
 					searchSql.addClusterSqlParam(sqlParam);
 				} else {
-					String strParam = sqlParam != null ? sqlParam.toString() : "null";
+					String strParam = sqlParam != null ? sqlParam.toString() : "";
 					talbes = talbes.replace(embedParam.getSqlName(), strParam);
 				}
 			}
@@ -127,7 +127,7 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 							searchSql.addListSqlParam(sqlParam);
 							searchSql.addClusterSqlParam(sqlParam);
 						} else {
-							String strParam = sqlParam != null ? sqlParam.toString() : "null";
+							String strParam = sqlParam != null ? sqlParam.toString() : "";
 							joinCond = joinCond.replace(embedParam.getSqlName(), strParam);
 						}
 					}
@@ -165,6 +165,19 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 				searchSql.setClusterSqlString(clusterSelectSql + fromWhereSql);
 			}
 		} else {
+			List<EmbedParam> groupEmbedParams = metadata.getGroupByEmbedParams();
+			if (groupEmbedParams != null) {
+				for (EmbedParam embedParam : groupEmbedParams) {
+					Object sqlParam = virtualParamMap.get(embedParam.getName());
+					if (embedParam.isParameterized()) {
+						searchSql.addListSqlParam(sqlParam);
+						searchSql.addClusterSqlParam(sqlParam);
+					} else {
+						String strParam = sqlParam != null ? sqlParam.toString() : "";
+						groupBy = groupBy.replace(embedParam.getSqlName(), strParam);
+					}
+				}
+			}
 			builder.append(" group by ").append(groupBy);
 			String fromWhereSql = builder.toString();
 			if (metadata.isDistinct()) {
