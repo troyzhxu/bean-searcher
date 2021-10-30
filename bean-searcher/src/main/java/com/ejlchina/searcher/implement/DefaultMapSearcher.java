@@ -14,7 +14,7 @@ import java.util.Set;
  * 自动检索器 根据 SearcherBean 的 Class 和 请求参数，自动检索，数据以 Map<String, Object> 对象呈现
  * 
  */
-public class DefaultMapSearcher extends DefaultSearcher implements MapSearcher {
+public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher {
 
 	@Override
 	public <T> SearchResult<Map<String, Object>> search(Class<T> beanClass, Map<String, Object> paraMap) {

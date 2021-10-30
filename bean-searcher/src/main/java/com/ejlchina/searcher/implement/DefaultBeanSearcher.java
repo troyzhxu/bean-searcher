@@ -13,7 +13,7 @@ import java.util.Map;
  * 自动检索器 根据 SearcherBean 的 Class 和 请求参数，自动检索，数据以 Map<String, Object> 对象呈现
  * 
  */
-public class DefaultBeanSearcher extends DefaultSearcher implements BeanSearcher {
+public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearcher {
 
 	private SearchResultResolver searchResultResolver;
 

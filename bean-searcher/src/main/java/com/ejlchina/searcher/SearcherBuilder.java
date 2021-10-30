@@ -60,7 +60,7 @@ public class SearcherBuilder {
 			return (Builder) this;
 		}
 
-		protected void buildInternal(DefaultSearcher mainSearcher) {
+		protected void buildInternal(AbstractSearcher mainSearcher) {
 			if (searchParamResolver != null) {
 				mainSearcher.setSearchParamResolver(searchParamResolver);
 			} else {
