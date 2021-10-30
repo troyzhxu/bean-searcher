@@ -15,7 +15,7 @@ import java.util.Map;
  */
 public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearcher {
 
-	private SearchResultResolver searchResultResolver;
+	private BeanReflector beanReflector;
 
 	@Override
 	public <T> SearchResult<T> search(Class<T> beanClass, Map<String, Object> paraMap) {
@@ -57,7 +57,7 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 			SearchResult<T> result;
 			if (dataListResult != null) {
 				Metadata<T> metadata = sqlResult.getSearchSql().getMetadata();
-				List<T> beanList = searchResultResolver.resolve(metadata, dataListResult);
+				List<T> beanList = beanReflector.reflect(metadata, dataListResult);
 				result = new SearchResult<>(beanList);
 			} else {
 				result = new SearchResult<>();
@@ -77,12 +77,12 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 	}
 
 
-	public SearchResultResolver getSearchResultResolver() {
-		return searchResultResolver;
+	public BeanReflector getSearchResultResolver() {
+		return beanReflector;
 	}
 
-	public void setSearchResultResolver(SearchResultResolver searchResultResolver) {
-		this.searchResultResolver = searchResultResolver;
+	public void setSearchResultResolver(BeanReflector beanReflector) {
+		this.beanReflector = beanReflector;
 	}
 
 }

@@ -17,23 +17,23 @@ import java.util.Map.Entry;
  * @author Troy.Zhou @ 2017-03-20
  * 
  */
-public class MainSearchResultResolver implements SearchResultResolver {
+public class MainBeanReflector implements BeanReflector {
 
 	
 	private FieldConvertor fieldConvertor = new DefaultFieldConvertor();
 
 	
-	public MainSearchResultResolver() {
+	public MainBeanReflector() {
 	}
 	
 	
-	public MainSearchResultResolver(FieldConvertor fieldConvertor) {
+	public MainBeanReflector(FieldConvertor fieldConvertor) {
 		this.fieldConvertor = fieldConvertor;
 	}
 
 	
 	@Override
-	public <T> List<T> resolve(Metadata<T> metadata, ResultSet dataListResult) throws SQLException {
+	public <T> List<T> reflect(Metadata<T> metadata, ResultSet dataListResult) throws SQLException {
 		Class<T> beanClass = metadata.getBeanClass();
 		Set<Entry<String, String>> fieldDbAliasEntrySet = metadata.getFieldDbAliasEntrySet();
 		Map<String, Method> fieldGetMethodMap = metadata.getFieldGetMethodMap();

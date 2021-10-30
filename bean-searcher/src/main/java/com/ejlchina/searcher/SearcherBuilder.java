@@ -85,10 +85,10 @@ public class SearcherBuilder {
 
 	public static class BeanSearcherBuilder extends DefaultSearcherBuilder<BeanSearcherBuilder> {
 
-		private SearchResultResolver searchResultResolver;
+		private BeanReflector beanReflector;
 
-		public BeanSearcherBuilder searchResultResolver(SearchResultResolver searchResultResolver) {
-			this.searchResultResolver = searchResultResolver;
+		public BeanSearcherBuilder searchResultResolver(BeanReflector beanReflector) {
+			this.beanReflector = beanReflector;
 			return this;
 		}
 
@@ -98,10 +98,10 @@ public class SearcherBuilder {
 
 		public BeanSearcher build(DefaultBeanSearcher beanSearcher) {
 			buildInternal(beanSearcher);
-			if (searchResultResolver != null) {
-				beanSearcher.setSearchResultResolver(searchResultResolver);
+			if (beanReflector != null) {
+				beanSearcher.setSearchResultResolver(beanReflector);
 			} else {
-				MainSearchResultResolver searchResultResolver = new MainSearchResultResolver();
+				MainBeanReflector searchResultResolver = new MainBeanReflector();
 				searchResultResolver.setFieldConvertor(new DefaultFieldConvertor());
 				beanSearcher.setSearchResultResolver(searchResultResolver);
 			}

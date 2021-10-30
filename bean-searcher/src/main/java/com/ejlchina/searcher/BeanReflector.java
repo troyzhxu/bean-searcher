@@ -5,12 +5,12 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
- * 查询结果解析接口
+ * Bean 反射器
  * 
  * @author Troy.Zhou @ 2017-03-20
  * 
  * */
-public interface SearchResultResolver {
+public interface BeanReflector {
 
 	/**
 	 * @param <T> bean 类型
@@ -18,6 +18,6 @@ public interface SearchResultResolver {
 	 * @param dataListResult 数据集
 	 * @return 检索结果
 	 */
-	<T> List<T> resolve(Metadata<T> metadata, ResultSet dataListResult) throws SQLException;
+	<T> List<T> reflect(Metadata<T> metadata, ResultSet dataListResult) throws SQLException;
 
 }
