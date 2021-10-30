@@ -1,7 +1,7 @@
 package com.ejlchina.searcher.virtual;
 
 import com.ejlchina.searcher.SearcherException;
-import com.ejlchina.searcher.implement.SearchBeanMap;
+import com.ejlchina.searcher.BeanMetadata;
 import com.ejlchina.searcher.util.StringUtils;
 
 import java.util.Map;
@@ -18,22 +18,22 @@ public class DefaultVirtualParamProcessor implements VirtualParamProcessor {
 
 	
 	@Override
-	public SearchBeanMap process(SearchBeanMap searchBeanMap) {
-		VirtualSolution solution = resolveVirtualParams(searchBeanMap.getTalbes());
-		searchBeanMap.setTalbes(solution.getSqlSnippet());
-		searchBeanMap.setTableVirtualParams(solution.getVirtualParams());
+	public BeanMetadata process(BeanMetadata beanMetadata) {
+		VirtualSolution solution = resolveVirtualParams(beanMetadata.getTalbes());
+		beanMetadata.setTalbes(solution.getSqlSnippet());
+		beanMetadata.setTableVirtualParams(solution.getVirtualParams());
 		
-		solution = resolveVirtualParams(searchBeanMap.getJoinCond());
-		searchBeanMap.setJoinCond(solution.getSqlSnippet());
-		searchBeanMap.setJoinCondVirtualParams(solution.getVirtualParams());
+		solution = resolveVirtualParams(beanMetadata.getJoinCond());
+		beanMetadata.setJoinCond(solution.getSqlSnippet());
+		beanMetadata.setJoinCondVirtualParams(solution.getVirtualParams());
 		
-		Map<String, String> fieldDbMap = searchBeanMap.getFieldDbMap();
-		for (String field : searchBeanMap.getFieldList()) {
+		Map<String, String> fieldDbMap = beanMetadata.getFieldDbMap();
+		for (String field : beanMetadata.getFieldList()) {
 			solution = resolveVirtualParams(fieldDbMap.get(field));
 			fieldDbMap.put(field, solution.getSqlSnippet());
-			searchBeanMap.putFieldVirtualParam(field, solution.getVirtualParams());
+			beanMetadata.putFieldVirtualParam(field, solution.getVirtualParams());
 		}
-		return searchBeanMap;
+		return beanMetadata;
 	}
 	
 	

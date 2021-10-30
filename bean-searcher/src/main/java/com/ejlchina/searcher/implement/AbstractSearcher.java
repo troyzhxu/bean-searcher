@@ -32,7 +32,7 @@ public abstract class AbstractSearcher implements Searcher {
 
 	private VirtualParamProcessor virtualParamProcessor;
 
-	private final Map<Class<?>, SearchBeanMap> cache = new ConcurrentHashMap<>();
+	private final Map<Class<?>, BeanMetadata> cache = new ConcurrentHashMap<>();
 
 	@Override
 	public <T> Number searchCount(Class<T> beanClass, Map<String, Object> paraMap) {
@@ -88,7 +88,7 @@ public abstract class AbstractSearcher implements Searcher {
 
 	protected <T> SqlResult doSearch(Class<T> beanClass, Map<String, Object> paraMap, String[] summaryFields,
 								   boolean shouldQueryTotal, boolean shouldQueryList, boolean needNotLimit) {
-		SearchBeanMap beanMap = resolveSearchBeanMap(beanClass);
+		BeanMetadata beanMap = resolveSearchBeanMap(beanClass);
 		List<String> fieldList = beanMap.getFieldList();
 		SearchParam searchParam = searchParamResolver.resolve(fieldList, paraMap);
 		searchParam.setSummaryFields(summaryFields);
@@ -103,8 +103,8 @@ public abstract class AbstractSearcher implements Searcher {
 		return searchSqlExecutor.execute(searchSql);
 	}
 
-	protected SearchBeanMap resolveSearchBeanMap(Class<?> beanClass) {
-		SearchBeanMap beanMap = cache.get(beanClass);
+	protected BeanMetadata resolveSearchBeanMap(Class<?> beanClass) {
+		BeanMetadata beanMap = cache.get(beanClass);
 		if (beanMap != null) {
 			return beanMap;
 		}
@@ -113,7 +113,7 @@ public abstract class AbstractSearcher implements Searcher {
 			throw new SearcherException("The class [" + beanClass.getName()
 					+ "] is not a valid SearchBean, please check whether the class is annotated correctly by @SearchBean");
 		}
-		SearchBeanMap searchBeanMap = new SearchBeanMap(searchBean.tables(), searchBean.joinCond(),
+		BeanMetadata beanMetadata = new BeanMetadata(searchBean.tables(), searchBean.joinCond(),
 				searchBean.groupBy(), searchBean.distinct());
 		for (Field field : beanClass.getDeclaredFields()) {
 			DbField dbField = field.getAnnotation(DbField.class);
@@ -124,26 +124,26 @@ public abstract class AbstractSearcher implements Searcher {
 			Class<?> fieldType = field.getType();
 			try {
 				Method method = beanClass.getMethod("set" + StringUtils.firstCharToUpperCase(fieldName), fieldType);
-				searchBeanMap.addFieldDbMap(fieldName, dbField.value().trim(), method, fieldType);
+				beanMetadata.addFieldDbMap(fieldName, dbField.value().trim(), method, fieldType);
 			} catch (Exception e) {
 				throw new SearcherException("[" + beanClass.getName() + ": " + fieldName + "] is annotated by @DbField, but there is none correctly setter for it.", e);
 			}
 		}
-		if (searchBeanMap.getFieldList().size() == 0) {
+		if (beanMetadata.getFieldList().size() == 0) {
 			throw new SearcherException("[" + beanClass.getName() + "] is annotated by @SearchBean, but there is none field annotated by @DbFile.");
 		}
-		SearchBeanMap newBeanMap = virtualParamProcessor.process(searchBeanMap);
+		BeanMetadata newBeanMap = virtualParamProcessor.process(beanMetadata);
 		addSearchBeanMap(beanClass, newBeanMap);
 		return newBeanMap;
 	}
 
-	protected <T> void addSearchBeanMap(Class<T> beanClass, SearchBeanMap searchBeanMap) {
+	protected <T> void addSearchBeanMap(Class<T> beanClass, BeanMetadata beanMetadata) {
 		SearchResultConvertInfo<T> convertInfo = new SearchResultConvertInfo<>(beanClass);
-		convertInfo.setFieldDbAliasEntrySet(searchBeanMap.getFieldDbAliasMap().entrySet());
-		convertInfo.setFieldGetMethodMap(searchBeanMap.getFieldGetMethodMap());
-		convertInfo.setFieldTypeMap(searchBeanMap.getFieldTypeMap());
-		searchBeanMap.setConvertInfo(convertInfo);
-		cache.put(beanClass, searchBeanMap);
+		convertInfo.setFieldDbAliasEntrySet(beanMetadata.getFieldDbAliasMap().entrySet());
+		convertInfo.setFieldGetMethodMap(beanMetadata.getFieldGetMethodMap());
+		convertInfo.setFieldTypeMap(beanMetadata.getFieldTypeMap());
+		beanMetadata.setConvertInfo(convertInfo);
+		cache.put(beanClass, beanMetadata);
 	}
 
 	public Pagination getPagination() {

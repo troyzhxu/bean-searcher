@@ -1,4 +1,4 @@
-package com.ejlchina.searcher.implement;
+package com.ejlchina.searcher;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import com.ejlchina.searcher.virtual.VirtualParam;
  * @author Troy.Zhou @ 2017-03-20
  * 
  */
-public class SearchBeanMap {
+public class BeanMetadata {
 
 	/**
 	 * 需要查询的数据表
@@ -82,7 +82,7 @@ public class SearchBeanMap {
 	private SearchResultConvertInfo<?> convertInfo;
 	
 	
-	public SearchBeanMap(String talbes, String joinCond, String groupBy, boolean distinct) {
+	public BeanMetadata(String talbes, String joinCond, String groupBy, boolean distinct) {
 		this.talbes = talbes;
 		this.joinCond = joinCond;
 		this.groupBy = groupBy;

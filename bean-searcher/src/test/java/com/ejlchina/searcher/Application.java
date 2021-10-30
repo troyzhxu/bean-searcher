@@ -21,7 +21,7 @@ public class Application {
 					System.out.println("CLUSTER	SQL 	::: " +  searchSql.getClusterSqlString());
 					System.out.println("CLUSTER	PARAMS	::: " +  searchSql.getClusterSqlParams());
 					System.out.println();
-					return new SearchResult<>(0);
+					return new SqlResult(searchSql);
 				})
 				.build();
 

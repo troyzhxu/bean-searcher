@@ -1,6 +1,6 @@
 package com.ejlchina.searcher.virtual;
 
-import com.ejlchina.searcher.implement.SearchBeanMap;
+import com.ejlchina.searcher.BeanMetadata;
 
 
 /**
@@ -12,7 +12,7 @@ public interface VirtualParamProcessor {
 
 	
 	
-	SearchBeanMap process(SearchBeanMap searchBeanMap);
+	BeanMetadata process(BeanMetadata beanMetadata);
 	
 	
 }
