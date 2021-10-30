@@ -23,10 +23,10 @@ import com.ejlchina.searcher.param.SearchParam;
  * 
  * 默认查询参数解析器
  */
-public class MainSearchParamResolver implements SearchParamResolver {
+public class DefaultSearchParamResolver implements SearchParamResolver {
 
 
-	protected Logger log = LoggerFactory.getLogger(MainSearchParamResolver.class);
+	protected Logger log = LoggerFactory.getLogger(DefaultSearchParamResolver.class);
 	
 	
 	/**

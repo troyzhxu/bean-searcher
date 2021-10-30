@@ -65,7 +65,7 @@ public class SearcherBuilder {
 			if (searchSqlResolver != null) {
 				mainSearcher.setSearchSqlResolver(searchSqlResolver);
 			} else {
-				MainSearchSqlResolver searchSqlResolver = new MainSearchSqlResolver();
+				DefaultSearchSqlResolver searchSqlResolver = new DefaultSearchSqlResolver();
 				searchSqlResolver.setDialect(new MySqlDialect());
 				searchSqlResolver.setParamProcessor(new DefaultParamProcessor());
 				mainSearcher.setSearchSqlResolver(searchSqlResolver);
@@ -101,7 +101,7 @@ public class SearcherBuilder {
 			if (beanReflector != null) {
 				beanSearcher.setSearchResultResolver(beanReflector);
 			} else {
-				MainBeanReflector searchResultResolver = new MainBeanReflector();
+				DefaultBeanReflector searchResultResolver = new DefaultBeanReflector();
 				searchResultResolver.setFieldConvertor(new DefaultFieldConvertor());
 				beanSearcher.setSearchResultResolver(searchResultResolver);
 			}

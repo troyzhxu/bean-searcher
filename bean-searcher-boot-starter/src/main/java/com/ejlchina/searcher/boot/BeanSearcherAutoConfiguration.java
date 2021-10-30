@@ -61,7 +61,7 @@ public class BeanSearcherAutoConfiguration {
 	@ConditionalOnMissingBean(SearchParamResolver.class)
 	public SearchParamResolver searchParamResolver(Pagination pagination, BeanSearcherProperties config, 
 			ObjectProvider<ParamFilter[]> paramFilterProvider) {
-		MainSearchParamResolver searchParamResolver = new MainSearchParamResolver();
+		DefaultSearchParamResolver searchParamResolver = new DefaultSearchParamResolver();
 		searchParamResolver.setPagination(pagination);
 		ParamsPorps conf = config.getParams();
 		searchParamResolver.setDefaultMax(conf.getPagination().getDefaultSize());
@@ -106,13 +106,13 @@ public class BeanSearcherAutoConfiguration {
 	@Bean
 	@ConditionalOnMissingBean(SearchSqlResolver.class)
 	public SearchSqlResolver searchSqlResolver(Dialect dialect, ParamProcessor paramProcessor) {
-		return new MainSearchSqlResolver(dialect, paramProcessor);
+		return new DefaultSearchSqlResolver(dialect, paramProcessor);
 	}
 
 	@Bean
 	@ConditionalOnMissingBean(SearchSqlExecutor.class)
 	public SearchSqlExecutor searchSqlExecutor(DataSource dataSource) {
-		return new MainSearchSqlExecutor(dataSource);
+		return new DefaultSearchSqlExecutor(dataSource);
 	}
 
 	@Bean
@@ -134,7 +134,7 @@ public class BeanSearcherAutoConfiguration {
 	@Bean
 	@ConditionalOnMissingBean(BeanReflector.class)
 	public BeanReflector searchResultResolver(FieldConvertor fieldConvertor) {
-		return new MainBeanReflector(fieldConvertor);
+		return new DefaultBeanReflector(fieldConvertor);
 	}
 
 	@Bean

@@ -20,9 +20,9 @@ public abstract class AbstractSearcher implements Searcher {
 
 	private SearchSqlExecutor searchSqlExecutor;
 
-	private SearchParamResolver searchParamResolver = new MainSearchParamResolver();
+	private SearchParamResolver searchParamResolver = new DefaultSearchParamResolver();
 
-	private SearchSqlResolver searchSqlResolver = new MainSearchSqlResolver();
+	private SearchSqlResolver searchSqlResolver = new DefaultSearchSqlResolver();
 
 	private MetadataResolver metadataResolver = new DefaultMetadataResolver();
 

@@ -25,7 +25,7 @@ import com.ejlchina.searcher.EmbedParam;
  * @author Troy.Zhou @ 2017-03-20
  * @since V1.1.1
  */
-public class MainSearchSqlResolver implements SearchSqlResolver {
+public class DefaultSearchSqlResolver implements SearchSqlResolver {
 
 	
 	/**
@@ -39,10 +39,10 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 	private ParamProcessor paramProcessor;
 	
 	
-	public MainSearchSqlResolver() {
+	public DefaultSearchSqlResolver() {
 	}
 
-	public MainSearchSqlResolver(Dialect dialect, ParamProcessor paramProcessor) {
+	public DefaultSearchSqlResolver(Dialect dialect, ParamProcessor paramProcessor) {
 		this.dialect = dialect;
 		this.paramProcessor = paramProcessor;
 	}

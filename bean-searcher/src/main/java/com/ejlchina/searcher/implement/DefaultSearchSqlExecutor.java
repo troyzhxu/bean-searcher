@@ -18,10 +18,10 @@ import java.util.List;
  * @since 1.1.1
  * 
  */
-public class MainSearchSqlExecutor implements SearchSqlExecutor {
+public class DefaultSearchSqlExecutor implements SearchSqlExecutor {
 
 
-	protected Logger log = LoggerFactory.getLogger(MainSearchSqlExecutor.class);
+	protected Logger log = LoggerFactory.getLogger(DefaultSearchSqlExecutor.class);
 	
 	
 	private DataSource dataSource;
@@ -31,10 +31,10 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 	 */
 	private boolean transactional = false;
 	
-	public MainSearchSqlExecutor() {
+	public DefaultSearchSqlExecutor() {
 	}
 	
-	public MainSearchSqlExecutor(DataSource dataSource) {
+	public DefaultSearchSqlExecutor(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
 

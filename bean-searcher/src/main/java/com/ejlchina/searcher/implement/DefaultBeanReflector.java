@@ -17,34 +17,34 @@ import java.util.Map.Entry;
  * @author Troy.Zhou @ 2017-03-20
  * 
  */
-public class MainBeanReflector implements BeanReflector {
+public class DefaultBeanReflector implements BeanReflector {
 
 	
 	private FieldConvertor fieldConvertor = new DefaultFieldConvertor();
 
 	
-	public MainBeanReflector() {
+	public DefaultBeanReflector() {
 	}
 	
 	
-	public MainBeanReflector(FieldConvertor fieldConvertor) {
+	public DefaultBeanReflector(FieldConvertor fieldConvertor) {
 		this.fieldConvertor = fieldConvertor;
 	}
 
 	
 	@Override
-	public <T> List<T> reflect(Metadata<T> metadata, ResultSet dataListResult) throws SQLException {
+	public <T> List<T> reflect(Metadata<T> metadata, ResultSet listResult) throws SQLException {
 		Class<T> beanClass = metadata.getBeanClass();
 		Set<Entry<String, String>> fieldDbAliasEntrySet = metadata.getFieldDbAliasEntrySet();
 		Map<String, Method> fieldGetMethodMap = metadata.getFieldGetMethodMap();
 		Map<String, Class<?>> fieldTypeMap = metadata.getFieldTypeMap();
 		List<T> dataList = new ArrayList<>();
-		while (dataListResult.next()) {
+		while (listResult.next()) {
 			T bean = newInstance(beanClass);
 			for (Entry<String, String> entry : fieldDbAliasEntrySet) {
 				String field = entry.getKey();
 				String dbAlias = entry.getValue();
-				Object value = dataListResult.getObject(dbAlias);
+				Object value = listResult.getObject(dbAlias);
 				Class<?> fieldType = fieldTypeMap.get(field);
 				try {
 					value = fieldConvertor.convert(value, fieldType);

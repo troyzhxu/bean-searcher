@@ -15,9 +15,9 @@ public interface BeanReflector {
 	/**
 	 * @param <T> bean 类型
 	 * @param metadata 元信息
-	 * @param dataListResult 数据集
+	 * @param listResult 数据集
 	 * @return 检索结果
 	 */
-	<T> List<T> reflect(Metadata<T> metadata, ResultSet dataListResult) throws SQLException;
+	<T> List<T> reflect(Metadata<T> metadata, ResultSet listResult) throws SQLException;
 
 }
