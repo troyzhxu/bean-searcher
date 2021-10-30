@@ -1,10 +1,9 @@
 package com.ejlchina.searcher;
 
 /***
- * @author Troy.Zhou @ 2021-10-30
- *
  * Bean 的元信息 解析接口
- *
+ * @author Troy.Zhou @ 2021-10-30
+ * @since v3.0.0
  * */
 public interface MetadataResolver {
 
