@@ -60,9 +60,7 @@ public class Metadata<T> {
 	 * 映射: Bean属性 -> 属性类型
 	 * */
 	private final Map<String, Class<?>> fieldTypeMap = new HashMap<>();
-	
-	
-	private SearchResultConvertInfo<?> convertInfo;
+
 
 
 	public Metadata(Class<T> beanClass, EmbedSolution tableSolution, EmbedSolution joinCondSolution, EmbedSolution groupBySolution, boolean distinct) {
@@ -149,16 +147,6 @@ public class Metadata<T> {
 	public List<EmbedParam> getFieldEmbedParams(String field) {
 		EmbedSolution solution = fieldDbSolutionMap.get(field);
 		return solution != null ? solution.getParams() : Collections.emptyList();
-	}
-
-	@SuppressWarnings("unchecked")
-	public <T> SearchResultConvertInfo<T> getConvertInfo() {
-		return (SearchResultConvertInfo<T>) convertInfo;
-	}
-
-
-	public void setConvertInfo(SearchResultConvertInfo<?> convertInfo) {
-		this.convertInfo = convertInfo;
 	}
 	
 }

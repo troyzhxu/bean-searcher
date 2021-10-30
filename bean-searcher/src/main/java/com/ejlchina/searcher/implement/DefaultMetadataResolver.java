@@ -73,15 +73,6 @@ public class DefaultMetadataResolver implements MetadataResolver {
         return metadata;
     }
 
-    protected <T> void addSearchBeanMap(Class<T> beanClass, Metadata metadata) {
-        SearchResultConvertInfo<T> convertInfo = new SearchResultConvertInfo<>(beanClass);
-        convertInfo.setFieldDbAliasEntrySet(metadata.getFieldDbAliasMap().entrySet());
-        convertInfo.setFieldGetMethodMap(metadata.getFieldGetMethodMap());
-        convertInfo.setFieldTypeMap(metadata.getFieldTypeMap());
-        metadata.setConvertInfo(convertInfo);
-        cache.put(beanClass, metadata);
-    }
-
     public EmbedParamResolver getEmbedParamResolver() {
         return embedParamResolver;
     }

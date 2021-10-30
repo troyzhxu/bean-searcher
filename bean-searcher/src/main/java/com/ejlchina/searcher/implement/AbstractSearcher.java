@@ -83,7 +83,7 @@ public abstract class AbstractSearcher implements Searcher {
 		if (searchSqlExecutor == null) {
 			throw new SearcherException("you must set a searchSqlExecutor before search.");
 		}
-		Metadata<T> metadata = getMetadata(beanClass);
+		Metadata<T> metadata = metadataResolver.resolve(beanClass);
 		List<String> fieldList = metadata.getFieldList();
 		SearchParam searchParam = searchParamResolver.resolve(fieldList, paraMap);
 		searchParam.setSummaryFields(summaryFields);
@@ -96,10 +96,6 @@ public abstract class AbstractSearcher implements Searcher {
 		searchSql.setShouldQueryCluster(shouldQueryTotal || (summaryFields != null && summaryFields.length > 0));
 		searchSql.setShouldQueryList(shouldQueryList);
 		return searchSqlExecutor.execute(searchSql);
-	}
-
-	public <T> Metadata<T> getMetadata(Class<T> beanClass) {
-		return metadataResolver.resolve(beanClass);
 	}
 
 	public Pagination getPagination() {

@@ -14,10 +14,10 @@ public interface SearchResultResolver {
 
 	/**
 	 * @param <T> bean 类型
-	 * @param convertInfo 转换信息
+	 * @param metadata 元信息
 	 * @param dataListResult 数据集
 	 * @return 检索结果
 	 */
-	<T> List<T> resolve(SearchResultConvertInfo<T> convertInfo, ResultSet dataListResult) throws SQLException;
+	<T> List<T> resolve(Metadata<T> metadata, ResultSet dataListResult) throws SQLException;
 
 }

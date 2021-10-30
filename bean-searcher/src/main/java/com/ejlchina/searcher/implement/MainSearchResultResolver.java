@@ -1,20 +1,15 @@
 package com.ejlchina.searcher.implement;
 
-import com.ejlchina.searcher.SearchResult;
-import com.ejlchina.searcher.SearchResultConvertInfo;
-import com.ejlchina.searcher.SearchResultResolver;
-import com.ejlchina.searcher.SearcherException;
+import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.bean.BeanAware;
+import com.ejlchina.searcher.implement.convertor.DefaultFieldConvertor;
 import com.ejlchina.searcher.implement.convertor.FieldConvertor;
 
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 
 /**
  * 默认查询结果解析器
@@ -25,7 +20,7 @@ import java.util.Set;
 public class MainSearchResultResolver implements SearchResultResolver {
 
 	
-	private FieldConvertor fieldConvertor;
+	private FieldConvertor fieldConvertor = new DefaultFieldConvertor();
 
 	
 	public MainSearchResultResolver() {
@@ -38,11 +33,11 @@ public class MainSearchResultResolver implements SearchResultResolver {
 
 	
 	@Override
-	public <T> List<T> resolve(SearchResultConvertInfo<T> convertInfo, ResultSet dataListResult) throws SQLException {
-		Class<T> beanClass = convertInfo.getBeanClass();
-		Set<Entry<String, String>> fieldDbAliasEntrySet = convertInfo.getFieldDbAliasEntrySet();
-		Map<String, Method> fieldGetMethodMap = convertInfo.getFieldGetMethodMap();
-		Map<String, Class<?>> fieldTypeMap = convertInfo.getFieldTypeMap();
+	public <T> List<T> resolve(Metadata<T> metadata, ResultSet dataListResult) throws SQLException {
+		Class<T> beanClass = metadata.getBeanClass();
+		Set<Entry<String, String>> fieldDbAliasEntrySet = metadata.getFieldDbAliasEntrySet();
+		Map<String, Method> fieldGetMethodMap = metadata.getFieldGetMethodMap();
+		Map<String, Class<?>> fieldTypeMap = metadata.getFieldTypeMap();
 		List<T> dataList = new ArrayList<>();
 		while (dataListResult.next()) {
 			T bean = newInstance(beanClass);
@@ -86,8 +81,7 @@ public class MainSearchResultResolver implements SearchResultResolver {
 	}
 
 	public void setFieldConvertor(FieldConvertor fieldConvertor) {
-		this.fieldConvertor = fieldConvertor;
+		this.fieldConvertor = Objects.requireNonNull(fieldConvertor);
 	}
-	
 	
 }
