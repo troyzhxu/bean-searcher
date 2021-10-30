@@ -1,11 +1,10 @@
 package com.ejlchina.searcher.implement;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.regex.Pattern;
 
+import com.ejlchina.searcher.Metadata;
 import com.ejlchina.searcher.util.MapBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import com.ejlchina.searcher.ParamResolver;
 import com.ejlchina.searcher.implement.pagination.MaxOffsetPagination;
 import com.ejlchina.searcher.implement.pagination.Pagination;
-import com.ejlchina.searcher.implement.parafilter.ParamFilter;
+import com.ejlchina.searcher.ParamFilter;
 import com.ejlchina.searcher.FilterParam;
 import com.ejlchina.searcher.param.Operator;
 import com.ejlchina.searcher.SearchParam;
@@ -27,81 +26,86 @@ public class DefaultParamResolver implements ParamResolver {
 
 
 	protected Logger log = LoggerFactory.getLogger(DefaultParamResolver.class);
-	
-	
+
 	/**
 	 * 默认最大条数
 	 */
-	private Integer defaultMax = 15;
+	private Integer defaultSize = 15;
 	
 	/**
 	 * 排序字段参数名
 	 */
-	private String sortParamName = "sort";
+	private String sortName = "sort";
 	
 	/**
 	 * 排序方法字段参数名
 	 */
-	private String orderParamName = "order";
+	private String orderName = "order";
 	
 	/**
 	 * 参数名分割符
-	 * V1.2.0之前默认值是下划线："_"，自V1.2.0之后默认值更新为中划线："-"
+	 * v1.2.0之前默认值是下划线："_"，自 v1.2.0之后默认值更新为中划线："-"
 	 */
-	private String paramNameSeparator = "-";
+	private String separator = "-";
 	
 	/**
 	 * 忽略大小写参数名后缀
 	 * 带上该参数会导致字段索引不被使用，查询速度降低，在大数据量下建议使用数据库本身的字符集实现忽略大小写功能。
 	 */
-	private String ignoreCaseParamNameSuffix = "ic";
+	private String ignoreCaseSuffix = "ic";
 
 	/**
 	 * 过滤运算符参数名后缀
 	 */
-	private String filterOperationParamNameSuffix = "op";
+	private String operatorSuffix = "op";
 	
 	/**
 	 * Boolean true 值参数后缀
 	 */
-	private String booleanTrueParamNameSuffix = "true";
+	private String trueSuffix = "true";
 	
 	/**
 	 * Boolean false 值参数后缀
 	 */
-	private String booleanFalseParamNameSuffix = "false";
+	private String falseSuffix = "false";
 
-	
-	
+
 	private Pagination pagination = new MaxOffsetPagination();
 	
 	private final Pattern indexSuffixPattern = Pattern.compile("[0-9]+");
 
-	private ParamFilter[] paramFilters;
+	private ParamFilter[] filters = new ParamFilter[] { };
 	
 	@Override
 	public Pagination getPagination() {
 		return pagination;
 	}
 	
-	
 	@Override
-	public SearchParam resolve(List<String> fieldList, Map<String, Object> paraMap) {
-		if (paramFilters != null) {
-			for (ParamFilter paramFilter: paramFilters) {
-				paraMap = paramFilter.doFilte(paraMap);
+	public <T> SearchParam resolve(Metadata<T> metadata, Map<String, Object> paraMap) {
+		for (ParamFilter paramFilter: filters) {
+			if (paraMap == null) {
+				break;
 			}
+			paraMap = paramFilter.doFilter(metadata, paraMap);
 		}
-		SearchParam searchParam = new SearchParam(defaultMax);
-		Set<Entry<String, Object>> entrySet = paraMap.entrySet();
-		for (Entry<String, Object> entry : entrySet) {
+		if (paraMap == null) {
+			return doResolve(metadata, new HashMap<>());
+		}
+		return doResolve(metadata, paraMap);
+	}
+
+	private <T> SearchParam doResolve(Metadata<T> metadata, Map<String, Object> paraMap) {
+		List<String> fieldList = metadata.getFieldList();
+		SearchParam searchParam = new SearchParam(paraMap, defaultSize);
+		for (Entry<String, Object> entry : paraMap.entrySet()) {
 			String key = entry.getKey();
 			Object value = entry.getValue();
-			if (key.equals(sortParamName) && value instanceof String) {
+			if (key.equals(sortName) && value instanceof String) {
 				searchParam.setSort((String) value);
 				continue;
 			}
-			if (key.equals(orderParamName) && value instanceof String) {
+			if (key.equals(orderName) && value instanceof String) {
 				searchParam.setOrder((String) value);
 				continue;
 			}
@@ -117,18 +121,18 @@ public class DefaultParamResolver implements ParamResolver {
 				if (filterParam.getOperator() == null) {
 					filterParam.setOperator(Operator.Equal);
 				}
-			} else if (booleanTrueParamNameSuffix.equals(rawParam.suffix)) {
+			} else if (trueSuffix.equals(rawParam.suffix)) {
 				FilterParam filterParam = findFilterParam(searchParam, rawParam.field);
 				filterParam.setOperator(Operator.Equal);
 				filterParam.addValue("1");
-			} else if (booleanFalseParamNameSuffix.equals(rawParam.suffix)) {
+			} else if (falseSuffix.equals(rawParam.suffix)) {
 				FilterParam filterParam = findFilterParam(searchParam, rawParam.field);
 				filterParam.setOperator(Operator.Equal);
 				filterParam.addValue("0");
-			} else if (ignoreCaseParamNameSuffix.equals(rawParam.suffix)) {
+			} else if (ignoreCaseSuffix.equals(rawParam.suffix)) {
 				FilterParam filterParam = findFilterParam(searchParam, rawParam.field);
 				if (value != null) {
-					if (value instanceof Boolean) { 
+					if (value instanceof Boolean) {
 						filterParam.setIgnoreCase((Boolean) value);
 					} else
 					if (value instanceof String) {
@@ -137,7 +141,7 @@ public class DefaultParamResolver implements ParamResolver {
 								|| "NO".endsWith(upcase) || "F".endsWith(upcase)));
 					}
 				}
-			} else if (filterOperationParamNameSuffix.equals(rawParam.suffix)) {
+			} else if (operatorSuffix.equals(rawParam.suffix)) {
 				FilterParam filterParam = findFilterParam(searchParam, rawParam.field);
 				if (value instanceof Operator) {
 					filterParam.setOperator((Operator) value);
@@ -184,10 +188,10 @@ public class DefaultParamResolver implements ParamResolver {
 			if (key.equals(field)) {
 				return new RawParam(RawParam.FEILD, field, null);
 			}	
-			if (key.startsWith(field + paramNameSeparator)) {
-				String suffix = key.substring(field.length() + paramNameSeparator.length());
-				if (filterOperationParamNameSuffix.equals(suffix) || ignoreCaseParamNameSuffix.equals(suffix) 
-						|| booleanTrueParamNameSuffix.equals(suffix) || booleanFalseParamNameSuffix.equals(suffix)
+			if (key.startsWith(field + separator)) {
+				String suffix = key.substring(field.length() + separator.length());
+				if (operatorSuffix.equals(suffix) || ignoreCaseSuffix.equals(suffix)
+						|| trueSuffix.equals(suffix) || falseSuffix.equals(suffix)
 						|| indexSuffixPattern.matcher(suffix).matches()) {
 					return new RawParam(RawParam.OPERATOR, field, suffix);
 				}
@@ -196,51 +200,59 @@ public class DefaultParamResolver implements ParamResolver {
 		return new RawParam(RawParam.VERTUAL, key, null);
 	}
 
-	public void setDefaultMax(Integer defaultMax) {
-		this.defaultMax = defaultMax;
+	public void setDefaultSize(Integer defaultSize) {
+		this.defaultSize = defaultSize;
 	}
 	
-	public void setSortParamName(String sortParamName) {
-		MapBuilder.config(MapBuilder.SORT, sortParamName);
-		this.sortParamName = sortParamName;
+	public void setSortName(String sortName) {
+		MapBuilder.config(MapBuilder.SORT, sortName);
+		this.sortName = sortName;
 	}
 
-	public void setOrderParamName(String orderParamName) {
-		MapBuilder.config(MapBuilder.ORDER, orderParamName);
-		this.orderParamName = orderParamName;
+	public void setOrderName(String orderName) {
+		MapBuilder.config(MapBuilder.ORDER, orderName);
+		this.orderName = orderName;
 	}
 
-	public void setIgnoreCaseParamNameSuffix(String ignoreCaseParamNameSuffix) {
-		MapBuilder.config(MapBuilder.IC_SUFFIX, ignoreCaseParamNameSuffix);
-		this.ignoreCaseParamNameSuffix = ignoreCaseParamNameSuffix;
+	public void setIgnoreCaseSuffix(String ignoreCaseSuffix) {
+		MapBuilder.config(MapBuilder.IC_SUFFIX, ignoreCaseSuffix);
+		this.ignoreCaseSuffix = ignoreCaseSuffix;
 	}
 
-	public void setFilterOperationParamNameSuffix(String filterOperationParamNameSuffix) {
-		MapBuilder.config(MapBuilder.OP_SUFFIX, filterOperationParamNameSuffix);
-		this.filterOperationParamNameSuffix = filterOperationParamNameSuffix;
+	public void setOperatorSuffix(String operatorSuffix) {
+		MapBuilder.config(MapBuilder.OP_SUFFIX, operatorSuffix);
+		this.operatorSuffix = operatorSuffix;
 	}
 
-	public void setBooleanTrueParamNameSuffix(String booleanTrueParamNameSuffix) {
-		this.booleanTrueParamNameSuffix = booleanTrueParamNameSuffix;
+	public void setTrueSuffix(String trueSuffix) {
+		this.trueSuffix = trueSuffix;
 	}
 
-	public void setBooleanFalseParamNameSuffix(String booleanFalseParamNameSuffix) {
-		this.booleanFalseParamNameSuffix = booleanFalseParamNameSuffix;
+	public void setFalseSuffix(String falseSuffix) {
+		this.falseSuffix = falseSuffix;
 	}
 
-	public void setParamNameSeparator(String paramNameSeparator) {
-		MapBuilder.config(MapBuilder.SEPARATOR, paramNameSeparator);
-		this.paramNameSeparator = paramNameSeparator;
+	public void setSeparator(String separator) {
+		MapBuilder.config(MapBuilder.SEPARATOR, separator);
+		this.separator = Objects.requireNonNull(separator);
+	}
+
+	public String getSeparator() {
+		return separator;
 	}
 
 	public void setPagination(Pagination pagination) {
-		this.pagination = pagination;
+		this.pagination = Objects.requireNonNull(pagination);
 	}
 
-	public void setParamFilters(ParamFilter[] paramFilters) {
-		this.paramFilters = paramFilters;
+	public void setFilters(ParamFilter[] filters) {
+		this.filters = Objects.requireNonNull(filters);
 	}
-	
+
+	public ParamFilter[] getFilters() {
+		return filters;
+	}
+
 	static class RawParam {
 		
 		static final int FEILD = 1;

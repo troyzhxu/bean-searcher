@@ -8,7 +8,7 @@ import com.ejlchina.searcher.implement.convertor.FieldConvertor;
 import com.ejlchina.searcher.implement.pagination.MaxOffsetPagination;
 import com.ejlchina.searcher.implement.pagination.PageNumPagination;
 import com.ejlchina.searcher.implement.pagination.Pagination;
-import com.ejlchina.searcher.implement.parafilter.ParamFilter;
+import com.ejlchina.searcher.ParamFilter;
 import com.ejlchina.searcher.implement.processor.DefaultParamProcessor;
 import com.ejlchina.searcher.implement.processor.ParamProcessor;
 import com.ejlchina.searcher.boot.BeanSearcherProperties.FieldConvertorProps;
@@ -64,15 +64,15 @@ public class BeanSearcherAutoConfiguration {
 		DefaultParamResolver searchParamResolver = new DefaultParamResolver();
 		searchParamResolver.setPagination(pagination);
 		ParamsPorps conf = config.getParams();
-		searchParamResolver.setDefaultMax(conf.getPagination().getDefaultSize());
-		searchParamResolver.setFilterOperationParamNameSuffix(conf.getOperatorKey());
-		searchParamResolver.setIgnoreCaseParamNameSuffix(conf.getIgnoreCaseKey());
-		searchParamResolver.setOrderParamName(conf.getOrder());
-		searchParamResolver.setSortParamName(conf.getSort());
-		searchParamResolver.setParamNameSeparator(conf.getSeparator());
+		searchParamResolver.setDefaultSize(conf.getPagination().getDefaultSize());
+		searchParamResolver.setOperatorSuffix(conf.getOperatorKey());
+		searchParamResolver.setIgnoreCaseSuffix(conf.getIgnoreCaseKey());
+		searchParamResolver.setOrderName(conf.getOrder());
+		searchParamResolver.setSortName(conf.getSort());
+		searchParamResolver.setSeparator(conf.getSeparator());
 		ParamFilter[] paramFilters = paramFilterProvider.getIfAvailable();
 		if (paramFilters != null) {
-			searchParamResolver.setParamFilters(paramFilters);
+			searchParamResolver.setFilters(paramFilters);
 		}
 		return searchParamResolver;
 	}

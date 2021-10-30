@@ -11,10 +11,8 @@ import java.util.Map;
 import java.util.Objects;
 
 /***
- * @author Troy.Zhou @ 2017-03-20
- * 
  * 自动检索器 根据 Bean 的 Class 和请求参数，自动检索 Bean
- * 
+ * @author Troy.Zhou @ 2017-03-20
  */
 public abstract class AbstractSearcher implements Searcher {
 
@@ -84,8 +82,7 @@ public abstract class AbstractSearcher implements Searcher {
 			throw new SearcherException("you must set a searchSqlExecutor before search.");
 		}
 		Metadata<T> metadata = metadataResolver.resolve(beanClass);
-		List<String> fieldList = metadata.getFieldList();
-		SearchParam searchParam = paramResolver.resolve(fieldList, paraMap);
+		SearchParam searchParam = paramResolver.resolve(metadata, paraMap);
 		searchParam.setSummaryFields(summaryFields);
 		searchParam.setShouldQueryTotal(shouldQueryTotal);
 		searchParam.setShouldQueryList(shouldQueryList);

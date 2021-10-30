@@ -15,6 +15,11 @@ import java.util.Map;
 public class SearchParam {
 
 	/**
+	 * 原始检索参数
+	 */
+	private final Map<String, Object> paraMap;
+
+	/**
 	 * 排序字段（用于排序）
 	 */
 	private String sort;
@@ -62,11 +67,8 @@ public class SearchParam {
 	private boolean shouldQueryList;
 	
 
-	public SearchParam() {
-	}
-	
-	public SearchParam(Integer max) {
-		super();
+	public SearchParam(Map<String, Object> paraMap, Integer max) {
+		this.paraMap = paraMap;
 		this.max = max;
 	}
 
