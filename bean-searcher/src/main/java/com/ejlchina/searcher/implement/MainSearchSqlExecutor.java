@@ -26,6 +26,10 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 	
 	private DataSource dataSource;
 
+	/**
+	 * 是否使用只读事务
+	 */
+	private boolean transactional = false;
 	
 	public MainSearchSqlExecutor() {
 	}
@@ -43,13 +47,13 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 		if (dataSource == null) {
 			throw new SearcherException("You must config a dataSource for MainSearchSqlExecutor!");
 		}
-		Connection connection;
+		Connection connection = null;
 		try {
 			connection = dataSource.getConnection();
-		} catch (SQLException e) {
-			throw new SearcherException("Can not get Connection from dataSource!", e);
-		}
-		try {
+			if (transactional) {
+				connection.setAutoCommit(false);
+				connection.setReadOnly(true);
+			}
 			SqlResult result = new SqlResult(searchSql);
 			if (searchSql.isShouldQueryList()) {
 				String sql = searchSql.getListSqlString();
@@ -62,6 +66,10 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 				List<Object> params = searchSql.getClusterSqlParams();
 				writeLog(sql, params);
 				executeClusterSqlAndCollectResult(connection, sql, params, result);
+			}
+			if (transactional) {
+				connection.commit();
+				connection.setReadOnly(false);
 			}
 			return result;
 		} catch (SQLException e) {
@@ -140,6 +148,17 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 
 	public DataSource getDataSource() {
 		return dataSource;
+	}
+
+	public boolean isTransactional() {
+		return transactional;
+	}
+
+	/**
+	 * 设置是否使用只读事务
+	 */
+	public void setTransactional(boolean transactional) {
+		this.transactional = transactional;
 	}
 
 }
