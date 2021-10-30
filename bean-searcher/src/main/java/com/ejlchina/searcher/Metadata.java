@@ -3,10 +3,7 @@ package com.ejlchina.searcher;
 import com.ejlchina.searcher.virtual.VirtualParam;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * SearchBean 的属性与数据库表字段的映射信息
@@ -133,7 +130,11 @@ public class Metadata {
 	public Map<String, String> getFieldDbAliasMap() {
 		return fieldDbAliasMap;
 	}
-	
+
+	public Set<Map.Entry<String, String>> getFieldDbAliasEntrySet() {
+		return fieldDbAliasMap.entrySet();
+	}
+
 	public List<String> getFieldList() {
 		return fieldList;
 	}

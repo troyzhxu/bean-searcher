@@ -21,8 +21,7 @@ import com.ejlchina.searcher.param.SearchParam;
 /***
  * @author Troy.Zhou @ 2017-03-20
  * 
- *         默认查询参数解析器
- * 
+ * 默认查询参数解析器
  */
 public class MainSearchParamResolver implements SearchParamResolver {
 

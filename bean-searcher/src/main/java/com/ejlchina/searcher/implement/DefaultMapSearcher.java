@@ -55,7 +55,7 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 		try {
 			SearchResult<Map<String, Object>> result = new SearchResult<>();
 			if (dataListResult != null) {
-				Set<Map.Entry<String, String>> fieldDbAliasEntrySet = resolveSearchBeanMap(beanClass).getFieldDbAliasMap().entrySet();
+				Set<Map.Entry<String, String>> fieldDbAliasEntrySet = getMetadata(beanClass).getFieldDbAliasEntrySet();
 				while (dataListResult.next()) {
 					Map<String, Object> dataMap = new HashMap<>();
 					for (Map.Entry<String, String> entry : fieldDbAliasEntrySet) {

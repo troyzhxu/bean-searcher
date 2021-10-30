@@ -56,7 +56,7 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 		try {
 			SearchResult<T> result;
 			if (dataListResult != null) {
-				SearchResultConvertInfo<T> convertInfo = resolveSearchBeanMap(beanClass).getConvertInfo();
+				SearchResultConvertInfo<T> convertInfo = getMetadata(beanClass).getConvertInfo();
 				List<T> beanList = searchResultResolver.resolve(convertInfo, dataListResult);
 				result = new SearchResult<>(beanList);
 			} else {
