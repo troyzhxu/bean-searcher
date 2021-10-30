@@ -1,4 +1,6 @@
-package com.ejlchina.searcher.bean;
+package com.ejlchina.searcher;
+
+import com.ejlchina.searcher.virtual.VirtualParam;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -6,17 +8,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.ejlchina.searcher.SearchResultConvertInfo;
-import com.ejlchina.searcher.SearcherException;
-import com.ejlchina.searcher.virtual.VirtualParam;
-
 /**
  * SearchBean 的属性与数据库表字段的映射信息
  *  
  * @author Troy.Zhou @ 2017-03-20
  * 
  */
-public class BeanMetadata {
+public class Metadata {
 
 	/**
 	 * 需要查询的数据表
@@ -82,7 +80,7 @@ public class BeanMetadata {
 	private SearchResultConvertInfo<?> convertInfo;
 	
 	
-	public BeanMetadata(String talbes, String joinCond, String groupBy, boolean distinct) {
+	public Metadata(String talbes, String joinCond, String groupBy, boolean distinct) {
 		this.talbes = talbes;
 		this.joinCond = joinCond;
 		this.groupBy = groupBy;

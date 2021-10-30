@@ -1,12 +1,13 @@
 package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.*;
-import com.ejlchina.searcher.bean.BeanMetadata;
+import com.ejlchina.searcher.Metadata;
 import com.ejlchina.searcher.bean.DbField;
 import com.ejlchina.searcher.bean.SearchBean;
 import com.ejlchina.searcher.implement.pagination.Pagination;
 import com.ejlchina.searcher.param.SearchParam;
 import com.ejlchina.searcher.util.StringUtils;
+import com.ejlchina.searcher.virtual.DefaultVirtualParamProcessor;
 import com.ejlchina.searcher.virtual.VirtualParamProcessor;
 
 import java.lang.reflect.Field;
@@ -24,16 +25,16 @@ import java.util.concurrent.ConcurrentHashMap;
  * 
  */
 public abstract class AbstractSearcher implements Searcher {
-	
-	private SearchParamResolver searchParamResolver;
-
-	private SearchSqlResolver searchSqlResolver;
 
 	private SearchSqlExecutor searchSqlExecutor;
 
-	private VirtualParamProcessor virtualParamProcessor;
+	private SearchParamResolver searchParamResolver = new MainSearchParamResolver();
 
-	private final Map<Class<?>, BeanMetadata> cache = new ConcurrentHashMap<>();
+	private SearchSqlResolver searchSqlResolver = new MainSearchSqlResolver();
+
+	private VirtualParamProcessor virtualParamProcessor = new DefaultVirtualParamProcessor();
+
+	private final Map<Class<?>, Metadata> cache = new ConcurrentHashMap<>();
 
 	@Override
 	public <T> Number searchCount(Class<T> beanClass, Map<String, Object> paraMap) {
@@ -89,7 +90,7 @@ public abstract class AbstractSearcher implements Searcher {
 
 	protected <T> SqlResult doSearch(Class<T> beanClass, Map<String, Object> paraMap, String[] summaryFields,
 								   boolean shouldQueryTotal, boolean shouldQueryList, boolean needNotLimit) {
-		BeanMetadata beanMap = resolveSearchBeanMap(beanClass);
+		Metadata beanMap = resolveSearchBeanMap(beanClass);
 		List<String> fieldList = beanMap.getFieldList();
 		SearchParam searchParam = searchParamResolver.resolve(fieldList, paraMap);
 		searchParam.setSummaryFields(summaryFields);
@@ -104,8 +105,8 @@ public abstract class AbstractSearcher implements Searcher {
 		return searchSqlExecutor.execute(searchSql);
 	}
 
-	protected BeanMetadata resolveSearchBeanMap(Class<?> beanClass) {
-		BeanMetadata beanMap = cache.get(beanClass);
+	protected Metadata resolveSearchBeanMap(Class<?> beanClass) {
+		Metadata beanMap = cache.get(beanClass);
 		if (beanMap != null) {
 			return beanMap;
 		}
@@ -114,7 +115,7 @@ public abstract class AbstractSearcher implements Searcher {
 			throw new SearcherException("The class [" + beanClass.getName()
 					+ "] is not a valid SearchBean, please check whether the class is annotated correctly by @SearchBean");
 		}
-		BeanMetadata beanMetadata = new BeanMetadata(searchBean.tables(), searchBean.joinCond(),
+		Metadata metadata = new Metadata(searchBean.tables(), searchBean.joinCond(),
 				searchBean.groupBy(), searchBean.distinct());
 		for (Field field : beanClass.getDeclaredFields()) {
 			DbField dbField = field.getAnnotation(DbField.class);
@@ -125,26 +126,26 @@ public abstract class AbstractSearcher implements Searcher {
 			Class<?> fieldType = field.getType();
 			try {
 				Method method = beanClass.getMethod("set" + StringUtils.firstCharToUpperCase(fieldName), fieldType);
-				beanMetadata.addFieldDbMap(fieldName, dbField.value().trim(), method, fieldType);
+				metadata.addFieldDbMap(fieldName, dbField.value().trim(), method, fieldType);
 			} catch (Exception e) {
 				throw new SearcherException("[" + beanClass.getName() + ": " + fieldName + "] is annotated by @DbField, but there is none correctly setter for it.", e);
 			}
 		}
-		if (beanMetadata.getFieldList().size() == 0) {
+		if (metadata.getFieldList().size() == 0) {
 			throw new SearcherException("[" + beanClass.getName() + "] is annotated by @SearchBean, but there is none field annotated by @DbFile.");
 		}
-		BeanMetadata newBeanMap = virtualParamProcessor.process(beanMetadata);
+		Metadata newBeanMap = virtualParamProcessor.process(metadata);
 		addSearchBeanMap(beanClass, newBeanMap);
 		return newBeanMap;
 	}
 
-	protected <T> void addSearchBeanMap(Class<T> beanClass, BeanMetadata beanMetadata) {
+	protected <T> void addSearchBeanMap(Class<T> beanClass, Metadata metadata) {
 		SearchResultConvertInfo<T> convertInfo = new SearchResultConvertInfo<>(beanClass);
-		convertInfo.setFieldDbAliasEntrySet(beanMetadata.getFieldDbAliasMap().entrySet());
-		convertInfo.setFieldGetMethodMap(beanMetadata.getFieldGetMethodMap());
-		convertInfo.setFieldTypeMap(beanMetadata.getFieldTypeMap());
-		beanMetadata.setConvertInfo(convertInfo);
-		cache.put(beanClass, beanMetadata);
+		convertInfo.setFieldDbAliasEntrySet(metadata.getFieldDbAliasMap().entrySet());
+		convertInfo.setFieldGetMethodMap(metadata.getFieldGetMethodMap());
+		convertInfo.setFieldTypeMap(metadata.getFieldTypeMap());
+		metadata.setConvertInfo(convertInfo);
+		cache.put(beanClass, metadata);
 	}
 
 	public Pagination getPagination() {

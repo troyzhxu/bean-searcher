@@ -1,7 +1,7 @@
 package com.ejlchina.searcher.virtual;
 
 import com.ejlchina.searcher.SearcherException;
-import com.ejlchina.searcher.bean.BeanMetadata;
+import com.ejlchina.searcher.Metadata;
 import com.ejlchina.searcher.util.StringUtils;
 
 import java.util.Map;
@@ -18,22 +18,22 @@ public class DefaultVirtualParamProcessor implements VirtualParamProcessor {
 
 	
 	@Override
-	public BeanMetadata process(BeanMetadata beanMetadata) {
-		VirtualSolution solution = resolveVirtualParams(beanMetadata.getTalbes());
-		beanMetadata.setTalbes(solution.getSqlSnippet());
-		beanMetadata.setTableVirtualParams(solution.getVirtualParams());
+	public Metadata process(Metadata metadata) {
+		VirtualSolution solution = resolveVirtualParams(metadata.getTalbes());
+		metadata.setTalbes(solution.getSqlSnippet());
+		metadata.setTableVirtualParams(solution.getVirtualParams());
 		
-		solution = resolveVirtualParams(beanMetadata.getJoinCond());
-		beanMetadata.setJoinCond(solution.getSqlSnippet());
-		beanMetadata.setJoinCondVirtualParams(solution.getVirtualParams());
+		solution = resolveVirtualParams(metadata.getJoinCond());
+		metadata.setJoinCond(solution.getSqlSnippet());
+		metadata.setJoinCondVirtualParams(solution.getVirtualParams());
 		
-		Map<String, String> fieldDbMap = beanMetadata.getFieldDbMap();
-		for (String field : beanMetadata.getFieldList()) {
+		Map<String, String> fieldDbMap = metadata.getFieldDbMap();
+		for (String field : metadata.getFieldList()) {
 			solution = resolveVirtualParams(fieldDbMap.get(field));
 			fieldDbMap.put(field, solution.getSqlSnippet());
-			beanMetadata.putFieldVirtualParam(field, solution.getVirtualParams());
+			metadata.putFieldVirtualParam(field, solution.getVirtualParams());
 		}
-		return beanMetadata;
+		return metadata;
 	}
 	
 	

@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.ejlchina.searcher.bean.BeanMetadata;
+import com.ejlchina.searcher.Metadata;
 import com.ejlchina.searcher.SearchSql;
 import com.ejlchina.searcher.SearchSqlResolver;
 import com.ejlchina.searcher.SearcherException;
@@ -49,18 +49,18 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 
 
 	@Override
-	public SearchSql resolve(BeanMetadata beanMetadata, SearchParam searchParam) {
+	public SearchSql resolve(Metadata metadata, SearchParam searchParam) {
 		
-		List<String> fieldList = beanMetadata.getFieldList();
-		Map<String, String> fieldDbMap = beanMetadata.getFieldDbMap();
-		Map<String, String> fieldDbAliasMap = beanMetadata.getFieldDbAliasMap();
-		Map<String, Class<?>> fieldTypeMap = beanMetadata.getFieldTypeMap();
+		List<String> fieldList = metadata.getFieldList();
+		Map<String, String> fieldDbMap = metadata.getFieldDbMap();
+		Map<String, String> fieldDbAliasMap = metadata.getFieldDbAliasMap();
+		Map<String, Class<?>> fieldTypeMap = metadata.getFieldTypeMap();
 		
 		Map<String, Object> virtualParamMap = searchParam.getVirtualParamMap();
 		
 		SearchSql searchSql = new SearchSql();
 		StringBuilder builder = new StringBuilder("select ");
-		if (beanMetadata.isDistinct()) {
+		if (metadata.isDistinct()) {
 			builder.append("distinct ");
 		}
 		int fieldCount = fieldList.size();
@@ -69,14 +69,14 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 			String dbField = fieldDbMap.get(field);
 			String dbAlias = fieldDbAliasMap.get(field);
 			
-			List<VirtualParam> fieldVirtualParams = beanMetadata.getFieldVirtualParams(field);
+			List<VirtualParam> fieldVirtualParams = metadata.getFieldVirtualParams(field);
 			if (fieldVirtualParams != null) {
 				for (VirtualParam virtualParam: fieldVirtualParams) {
 					Object sqlParam = virtualParamMap.get(virtualParam.getName());
 					if (virtualParam.isParameterized()) {
 						searchSql.addListSqlParam(sqlParam);
 						// 只有在 distinct 条件，聚族查询 SQL 里才会出现 字段查询 语句，才需要将 虚拟参数放到 聚族参数里 
-						if (beanMetadata.isDistinct()) {
+						if (metadata.isDistinct()) {
 							searchSql.addClusterSqlParam(sqlParam);
 						}
 					} else {
@@ -94,9 +94,9 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 		String fieldSelectSql = builder.toString();
 
 		builder = new StringBuilder(" from ");
-		String talbes = beanMetadata.getTalbes();
+		String talbes = metadata.getTalbes();
 		
-		List<VirtualParam> tableVirtualParams = beanMetadata.getTableVirtualParams();
+		List<VirtualParam> tableVirtualParams = metadata.getTableVirtualParams();
 		if (tableVirtualParams != null) {
 			for (VirtualParam virtualParam: tableVirtualParams) {
 				Object sqlParam = virtualParamMap.get(virtualParam.getName());
@@ -111,7 +111,7 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 		}
 		builder.append(talbes);
 		
-		String joinCond = beanMetadata.getJoinCond();
+		String joinCond = metadata.getJoinCond();
 		boolean hasJoinCond = joinCond != null && !"".equals(joinCond.trim());
 		List<FilterParam> filterParamList = searchParam.getFilterParamList();
 
@@ -119,7 +119,7 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 			builder.append(" where ");
 			if (hasJoinCond) {
 				builder.append("(");
-				List<VirtualParam> joinCondVirtualParams = beanMetadata.getJoinCondVirtualParams();
+				List<VirtualParam> joinCondVirtualParams = metadata.getJoinCondVirtualParams();
 				if (joinCondVirtualParams != null) {
 					for (VirtualParam virtualParam: joinCondVirtualParams) {
 						Object sqlParam = virtualParamMap.get(virtualParam.getName());
@@ -148,11 +148,11 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 				searchSql.addClusterSqlParam(sqlParam);
 			}
 		}
-		String groupBy = beanMetadata.getGroupBy();
+		String groupBy = metadata.getGroupBy();
 		String[] summaryFields = searchParam.getSummaryFields();
 		boolean shouldQueryTotal = searchParam.isShouldQueryTotal();
 		if (StringUtils.isBlank(groupBy)) {
-			if (beanMetadata.isDistinct()) {
+			if (metadata.isDistinct()) {
 				String originalSql = fieldSelectSql + builder;
 				String clusterSelectSql = resolveClusterSelectSql(fieldDbMap, searchSql, 
 						summaryFields, shouldQueryTotal, originalSql);
@@ -167,7 +167,7 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 		} else {
 			builder.append(" group by ").append(groupBy);
 			String fromWhereSql = builder.toString();
-			if (beanMetadata.isDistinct()) {
+			if (metadata.isDistinct()) {
 				String originalSql = fieldSelectSql + fromWhereSql;
 				String clusterSelectSql = resolveClusterSelectSql(fieldDbMap, searchSql, 
 						summaryFields, shouldQueryTotal, originalSql);

@@ -1,6 +1,5 @@
 package com.ejlchina.searcher;
 
-import com.ejlchina.searcher.bean.BeanMetadata;
 import com.ejlchina.searcher.param.SearchParam;
 
 /***
@@ -12,7 +11,7 @@ import com.ejlchina.searcher.param.SearchParam;
 public interface SearchSqlResolver {
 
 
-	SearchSql resolve(BeanMetadata beanMetadata, SearchParam searchParam);
+	SearchSql resolve(Metadata metadata, SearchParam searchParam);
 	
 	
 }

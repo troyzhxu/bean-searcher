@@ -1,6 +1,6 @@
 package com.ejlchina.searcher.virtual;
 
-import com.ejlchina.searcher.bean.BeanMetadata;
+import com.ejlchina.searcher.Metadata;
 
 
 /**
@@ -12,7 +12,7 @@ public interface VirtualParamProcessor {
 
 	
 	
-	BeanMetadata process(BeanMetadata beanMetadata);
+	Metadata process(Metadata metadata);
 	
 	
 }
