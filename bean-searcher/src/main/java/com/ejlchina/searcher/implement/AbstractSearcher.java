@@ -18,11 +18,11 @@ import java.util.Objects;
  */
 public abstract class AbstractSearcher implements Searcher {
 
-	private SearchSqlExecutor searchSqlExecutor;
+	private SqlExecutor sqlExecutor;
 
 	private SearchParamResolver searchParamResolver = new DefaultSearchParamResolver();
 
-	private SearchSqlResolver searchSqlResolver = new DefaultSearchSqlResolver();
+	private SqlResolver sqlResolver = new DefaultSqlResolver();
 
 	private MetadataResolver metadataResolver = new DefaultMetadataResolver();
 
@@ -80,7 +80,7 @@ public abstract class AbstractSearcher implements Searcher {
 
 	protected <T> SqlResult<T> doSearch(Class<T> beanClass, Map<String, Object> paraMap, String[] summaryFields,
 								   boolean shouldQueryTotal, boolean shouldQueryList, boolean needNotLimit) {
-		if (searchSqlExecutor == null) {
+		if (sqlExecutor == null) {
 			throw new SearcherException("you must set a searchSqlExecutor before search.");
 		}
 		Metadata<T> metadata = metadataResolver.resolve(beanClass);
@@ -92,10 +92,10 @@ public abstract class AbstractSearcher implements Searcher {
 		if (needNotLimit) {
 			searchParam.setMax(null);
 		}
-		SearchSql<T> searchSql = searchSqlResolver.resolve(metadata, searchParam);
+		SearchSql<T> searchSql = sqlResolver.resolve(metadata, searchParam);
 		searchSql.setShouldQueryCluster(shouldQueryTotal || (summaryFields != null && summaryFields.length > 0));
 		searchSql.setShouldQueryList(shouldQueryList);
-		return searchSqlExecutor.execute(searchSql);
+		return sqlExecutor.execute(searchSql);
 	}
 
 	public Pagination getPagination() {
@@ -110,20 +110,20 @@ public abstract class AbstractSearcher implements Searcher {
 		this.searchParamResolver = Objects.requireNonNull(searchParamResolver);
 	}
 
-	public SearchSqlResolver getSearchSqlResolver() {
-		return searchSqlResolver;
+	public SqlResolver getSearchSqlResolver() {
+		return sqlResolver;
 	}
 
-	public void setSearchSqlResolver(SearchSqlResolver searchSqlResolver) {
-		this.searchSqlResolver = Objects.requireNonNull(searchSqlResolver);
+	public void setSearchSqlResolver(SqlResolver sqlResolver) {
+		this.sqlResolver = Objects.requireNonNull(sqlResolver);
 	}
 
-	public SearchSqlExecutor getSearchSqlExecutor() {
-		return searchSqlExecutor;
+	public SqlExecutor getSearchSqlExecutor() {
+		return sqlExecutor;
 	}
 
-	public void setSearchSqlExecutor(SearchSqlExecutor searchSqlExecutor) {
-		this.searchSqlExecutor = Objects.requireNonNull(searchSqlExecutor);
+	public void setSearchSqlExecutor(SqlExecutor sqlExecutor) {
+		this.sqlExecutor = Objects.requireNonNull(sqlExecutor);
 	}
 
 	public MetadataResolver getMetadataResolver() {

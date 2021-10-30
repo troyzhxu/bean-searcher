@@ -6,7 +6,7 @@ package com.ejlchina.searcher;
  * 检索SQL解析接口
  * 
  * */
-public interface SearchSqlResolver {
+public interface SqlResolver {
 
 
 	<T> SearchSql<T> resolve(Metadata<T> metadata, SearchParam searchParam);

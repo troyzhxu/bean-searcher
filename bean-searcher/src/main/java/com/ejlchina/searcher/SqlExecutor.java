@@ -6,7 +6,7 @@ package com.ejlchina.searcher;
  * 检索 SQL 执行接口
  * 
  * */
-public interface SearchSqlExecutor {
+public interface SqlExecutor {
 
 	/**
 	 * 

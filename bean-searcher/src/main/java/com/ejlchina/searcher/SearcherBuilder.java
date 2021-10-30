@@ -32,9 +32,9 @@ public class SearcherBuilder {
 
 		private SearchParamResolver searchParamResolver;
 
-		private SearchSqlResolver searchSqlResolver;
+		private SqlResolver sqlResolver;
 
-		private SearchSqlExecutor searchSqlExecutor;
+		private SqlExecutor sqlExecutor;
 
 		private MetadataResolver metadataResolver;
 
@@ -43,13 +43,13 @@ public class SearcherBuilder {
 			return (Builder) this;
 		}
 
-		public Builder searchSqlResolver(SearchSqlResolver searchSqlResolver) {
-			this.searchSqlResolver = searchSqlResolver;
+		public Builder searchSqlResolver(SqlResolver sqlResolver) {
+			this.sqlResolver = sqlResolver;
 			return (Builder) this;
 		}
 
-		public Builder searchSqlExecutor(SearchSqlExecutor searchSqlExecutor) {
-			this.searchSqlExecutor = searchSqlExecutor;
+		public Builder searchSqlExecutor(SqlExecutor sqlExecutor) {
+			this.sqlExecutor = sqlExecutor;
 			return (Builder) this;
 		}
 
@@ -62,16 +62,16 @@ public class SearcherBuilder {
 			if (searchParamResolver != null) {
 				mainSearcher.setSearchParamResolver(searchParamResolver);
 			}
-			if (searchSqlResolver != null) {
-				mainSearcher.setSearchSqlResolver(searchSqlResolver);
+			if (sqlResolver != null) {
+				mainSearcher.setSearchSqlResolver(sqlResolver);
 			} else {
-				DefaultSearchSqlResolver searchSqlResolver = new DefaultSearchSqlResolver();
+				DefaultSqlResolver searchSqlResolver = new DefaultSqlResolver();
 				searchSqlResolver.setDialect(new MySqlDialect());
 				searchSqlResolver.setParamProcessor(new DefaultParamProcessor());
 				mainSearcher.setSearchSqlResolver(searchSqlResolver);
 			}
-			if (searchSqlExecutor != null) {
-				mainSearcher.setSearchSqlExecutor(searchSqlExecutor);
+			if (sqlExecutor != null) {
+				mainSearcher.setSearchSqlExecutor(sqlExecutor);
 			} else {
 				throw new SearcherException("你必须配置一个 searchSqlExecutor，才能建立一个检索器！ ");
 			}

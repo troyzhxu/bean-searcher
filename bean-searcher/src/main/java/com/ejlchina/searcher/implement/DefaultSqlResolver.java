@@ -7,7 +7,7 @@ import java.util.Map;
 
 import com.ejlchina.searcher.Metadata;
 import com.ejlchina.searcher.SearchSql;
-import com.ejlchina.searcher.SearchSqlResolver;
+import com.ejlchina.searcher.SqlResolver;
 import com.ejlchina.searcher.SearcherException;
 import com.ejlchina.searcher.dialect.Dialect;
 import com.ejlchina.searcher.dialect.Dialect.PaginateSql;
@@ -25,7 +25,7 @@ import com.ejlchina.searcher.EmbedParam;
  * @author Troy.Zhou @ 2017-03-20
  * @since V1.1.1
  */
-public class DefaultSearchSqlResolver implements SearchSqlResolver {
+public class DefaultSqlResolver implements SqlResolver {
 
 	
 	/**
@@ -39,10 +39,10 @@ public class DefaultSearchSqlResolver implements SearchSqlResolver {
 	private ParamProcessor paramProcessor;
 	
 	
-	public DefaultSearchSqlResolver() {
+	public DefaultSqlResolver() {
 	}
 
-	public DefaultSearchSqlResolver(Dialect dialect, ParamProcessor paramProcessor) {
+	public DefaultSqlResolver(Dialect dialect, ParamProcessor paramProcessor) {
 		this.dialect = dialect;
 		this.paramProcessor = paramProcessor;
 	}

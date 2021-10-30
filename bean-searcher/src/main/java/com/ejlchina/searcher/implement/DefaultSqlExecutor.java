@@ -1,7 +1,7 @@
 package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.SearchSql;
-import com.ejlchina.searcher.SearchSqlExecutor;
+import com.ejlchina.searcher.SqlExecutor;
 import com.ejlchina.searcher.SearcherException;
 import com.ejlchina.searcher.SqlResult;
 import org.slf4j.Logger;
@@ -18,10 +18,10 @@ import java.util.List;
  * @since 1.1.1
  * 
  */
-public class DefaultSearchSqlExecutor implements SearchSqlExecutor {
+public class DefaultSqlExecutor implements SqlExecutor {
 
 
-	protected Logger log = LoggerFactory.getLogger(DefaultSearchSqlExecutor.class);
+	protected Logger log = LoggerFactory.getLogger(DefaultSqlExecutor.class);
 	
 	
 	private DataSource dataSource;
@@ -31,10 +31,10 @@ public class DefaultSearchSqlExecutor implements SearchSqlExecutor {
 	 */
 	private boolean transactional = false;
 	
-	public DefaultSearchSqlExecutor() {
+	public DefaultSqlExecutor() {
 	}
 	
-	public DefaultSearchSqlExecutor(DataSource dataSource) {
+	public DefaultSqlExecutor(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
 
