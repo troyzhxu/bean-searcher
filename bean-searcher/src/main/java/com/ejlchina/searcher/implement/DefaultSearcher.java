@@ -10,6 +10,8 @@ import com.ejlchina.searcher.virtual.VirtualParamProcessor;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * 自动检索器 根据 Bean 的 Class 和请求参数，自动检索 Bean
  * 
  */
-public class DefaultSearcher implements Searcher {
+public abstract class DefaultSearcher implements Searcher {
 	
 	private SearchParamResolver searchParamResolver;
 
@@ -33,38 +35,15 @@ public class DefaultSearcher implements Searcher {
 	private final Map<Class<?>, SearchBeanMap> cache = new ConcurrentHashMap<>();
 
 	@Override
-	public <T> SearchResult<?> search(Class<T> beanClass, Map<String, Object> paraMap) {
-		return search(beanClass, paraMap, null, true, true, false);
-	}
-
-	@Override
-	public <T> SearchResult<?> search(Class<T> beanClass, Map<String, Object> paraMap, String[] summaryFields) {
-		return search(beanClass, paraMap, summaryFields, true, true, false);
-	}
-
-	@Override
-	public <T> Object searchFirst(Class<T> beanClass, Map<String, Object> paraMap) {
-		paraMap.put(getPagination().getMaxParamName(), "1");
-		List<?> list = search(beanClass, paraMap, null, false, true, false).getDataList();
-		if (list.size() > 0) {
-			return list.get(0);
-		}
-		return null;
-	}
-
-	@Override
-	public <T> List<?> searchList(Class<T> beanClass, Map<String, Object> paraMap) {
-		return search(beanClass, paraMap, null, false, true, false).getDataList();
-	}
-
-	@Override
-	public <T> List<?> searchAll(Class<T> beanClass, Map<String, Object> paraMap) {
-		return search(beanClass, paraMap, null, false, true, true).getDataList();
-	}
-
-	@Override
 	public <T> Number searchCount(Class<T> beanClass, Map<String, Object> paraMap) {
-		return search(beanClass, paraMap, null, true, false, true).getTotalCount();
+		SqlResult sqlResult = doSearch(beanClass, paraMap, null, true, false, true);
+		try {
+			return getCountFromSqlResult(sqlResult);
+		} catch (SQLException e) {
+			throw new SearcherException("A exception occurred when collect sql result!", e);
+		} finally {
+			sqlResult.closeResultSet();
+		}
 	}
 
 	@Override
@@ -82,13 +61,33 @@ public class DefaultSearcher implements Searcher {
 			throw new SearcherException("检索该 Bean【" + beanClass.getName() 
 			+ "】的统计信息时，必须要指定需要统计的属性！");
 		}
-		return search(beanClass, paraMap, fields, false, false, true).getSummaries();
+		SqlResult sqlResult = doSearch(beanClass, paraMap, fields, false, false, true);
+		try {
+			return getSummaryFromSqlResult(sqlResult);
+		} catch (SQLException e) {
+			throw new SearcherException("A exception occurred when collect sql result!", e);
+		} finally {
+			sqlResult.closeResultSet();
+		}
 	}
-	
-	/// 私有方法
 
-	protected <T> SearchResult<?> search(Class<T> beanClass, Map<String, Object> paraMap, String[] summaryFields,
-				boolean shouldQueryTotal, boolean shouldQueryList, boolean needNotLimit) {
+	protected Number getCountFromSqlResult(SqlResult sqlResult) throws SQLException {
+		return (Number) sqlResult.getClusterResult().getObject(sqlResult.getSearchSql().getCountAlias());
+	}
+
+	protected Number[] getSummaryFromSqlResult(SqlResult sqlResult) throws SQLException {
+		List<String> summaryAliases = sqlResult.getSearchSql().getSummaryAliases();
+		ResultSet countResultSet = sqlResult.getClusterResult();
+		Number[] summaries = new Number[summaryAliases.size()];
+		for (int i = 0; i < summaries.length; i++) {
+			String summaryAlias = summaryAliases.get(i);
+			summaries[i] = (Number) countResultSet.getObject(summaryAlias);
+		}
+		return summaries;
+	}
+
+	protected <T> SqlResult doSearch(Class<T> beanClass, Map<String, Object> paraMap, String[] summaryFields,
+								   boolean shouldQueryTotal, boolean shouldQueryList, boolean needNotLimit) {
 		SearchBeanMap beanMap = resolveSearchBeanMap(beanClass);
 		List<String> fieldList = beanMap.getFieldList();
 		SearchParam searchParam = searchParamResolver.resolve(fieldList, paraMap);
@@ -114,30 +113,28 @@ public class DefaultSearcher implements Searcher {
 			throw new SearcherException("The class [" + beanClass.getName()
 					+ "] is not a valid SearchBean, please check whether the class is annotated correctly by @SearchBean");
 		}
-		synchronized (cache) {
-			SearchBeanMap searchBeanMap = new SearchBeanMap(searchBean.tables(), searchBean.joinCond(),
-					searchBean.groupBy(), searchBean.distinct());
-			for (Field field : beanClass.getDeclaredFields()) {
-				DbField dbField = field.getAnnotation(DbField.class);
-				if (dbField == null) {
-					continue;
-				}
-				String fieldName = field.getName();
-				Class<?> fieldType = field.getType();
-				try {
-					Method method = beanClass.getMethod("set" + StringUtils.firstCharToUpperCase(fieldName), fieldType);
-					searchBeanMap.addFieldDbMap(fieldName, dbField.value().trim(), method, fieldType);
-				} catch (Exception e) {
-					throw new SearcherException("[" + beanClass.getName() + ": " + fieldName + "] is annotated by @DbField, but there is none correctly setter for it.", e);
-				}
+		SearchBeanMap searchBeanMap = new SearchBeanMap(searchBean.tables(), searchBean.joinCond(),
+				searchBean.groupBy(), searchBean.distinct());
+		for (Field field : beanClass.getDeclaredFields()) {
+			DbField dbField = field.getAnnotation(DbField.class);
+			if (dbField == null) {
+				continue;
 			}
-			if (searchBeanMap.getFieldList().size() == 0) {
-				throw new SearcherException("[" + beanClass.getName() + "] is annotated by @SearchBean, but there is none field annotated by @DbFile.");
+			String fieldName = field.getName();
+			Class<?> fieldType = field.getType();
+			try {
+				Method method = beanClass.getMethod("set" + StringUtils.firstCharToUpperCase(fieldName), fieldType);
+				searchBeanMap.addFieldDbMap(fieldName, dbField.value().trim(), method, fieldType);
+			} catch (Exception e) {
+				throw new SearcherException("[" + beanClass.getName() + ": " + fieldName + "] is annotated by @DbField, but there is none correctly setter for it.", e);
 			}
-			SearchBeanMap newBeanMap = virtualParamProcessor.process(searchBeanMap);
-			addSearchBeanMap(beanClass, newBeanMap);
-			return newBeanMap;
 		}
+		if (searchBeanMap.getFieldList().size() == 0) {
+			throw new SearcherException("[" + beanClass.getName() + "] is annotated by @SearchBean, but there is none field annotated by @DbFile.");
+		}
+		SearchBeanMap newBeanMap = virtualParamProcessor.process(searchBeanMap);
+		addSearchBeanMap(beanClass, newBeanMap);
+		return newBeanMap;
 	}
 
 	protected <T> void addSearchBeanMap(Class<T> beanClass, SearchBeanMap searchBeanMap) {

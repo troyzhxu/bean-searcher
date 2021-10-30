@@ -12,9 +12,9 @@ public interface SearchSqlExecutor {
 
 	/**
 	 * 
-	 * @param searchSql 检索SQL
-	 * @return 检索临时结果
+	 * @param searchSql 检索 SQL
+	 * @return 执行结果
 	 */
-	SearchResult<Map<String, Object>> execute(SearchSql searchSql);
+	SqlResult execute(SearchSql searchSql);
 	
 }

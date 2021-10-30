@@ -172,9 +172,9 @@ public class SearchBeanMap {
 		fieldVirtualParamsMap.put(field, virtualParams);
 	}
 
-
-	public SearchResultConvertInfo<?> getConvertInfo() {
-		return convertInfo;
+	@SuppressWarnings("unchecked")
+	public <T> SearchResultConvertInfo<T> getConvertInfo() {
+		return (SearchResultConvertInfo<T>) convertInfo;
 	}
 
 

@@ -1,5 +1,8 @@
 package com.ejlchina.searcher;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,6 +19,6 @@ public interface SearchResultResolver {
 	 * @param searchMapResult 检索中间结果
 	 * @return 检索结果
 	 */
-	<T> SearchResult<T> resolve(SearchResultConvertInfo<T> convertInfo, SearchResult<Map<String, Object>> searchMapResult);
+	<T> List<T> resolve(SearchResultConvertInfo<T> convertInfo, ResultSet dataListResult) throws SQLException;
 
 }

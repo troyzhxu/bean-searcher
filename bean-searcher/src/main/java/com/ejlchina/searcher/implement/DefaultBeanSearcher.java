@@ -1,8 +1,9 @@
 package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.*;
-import com.ejlchina.searcher.param.SearchParam;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -27,9 +28,13 @@ public class DefaultBeanSearcher extends DefaultSearcher implements BeanSearcher
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public <T> T searchFirst(Class<T> beanClass, Map<String, Object> paraMap) {
-		return (T) super.searchFirst(beanClass, paraMap);
+		paraMap.put(getPagination().getMaxParamName(), "1");
+		List<T> list = search(beanClass, paraMap, null, false, true, false).getDataList();
+		if (list.size() > 0) {
+			return list.get(0);
+		}
+		return null;
 	}
 
 	@Override
@@ -42,15 +47,35 @@ public class DefaultBeanSearcher extends DefaultSearcher implements BeanSearcher
 		return search(beanClass, paraMap, null, false, true, true).getDataList();
 	}
 
+
 	protected <T> SearchResult<T> search(Class<T> beanClass, Map<String, Object> paraMap, String[] summaryFields,
-														   boolean shouldQueryTotal, boolean shouldQueryList, boolean needNotLimit) {
-		@SuppressWarnings("unchecked")
-		SearchResult<Map<String, Object>> result = (SearchResult<Map<String, Object>>) super.search(beanClass, paraMap, summaryFields,
-				shouldQueryTotal, shouldQueryList, needNotLimit);
-		@SuppressWarnings("unchecked")
-		SearchResultConvertInfo<T> convertInfo = (SearchResultConvertInfo<T>) resolveSearchBeanMap(beanClass).getConvertInfo();
-		return searchResultResolver.resolve(convertInfo, result);
+								   boolean shouldQueryTotal, boolean shouldQueryList, boolean needNotLimit) {
+		SqlResult sqlResult = doSearch(beanClass, paraMap, summaryFields, shouldQueryTotal, shouldQueryList, needNotLimit);
+		ResultSet dataListResult = sqlResult.getDataListResult();
+		ResultSet clusterResult = sqlResult.getClusterResult();
+		try {
+			SearchResult<T> result;
+			if (dataListResult != null) {
+				SearchResultConvertInfo<T> convertInfo = resolveSearchBeanMap(beanClass).getConvertInfo();
+				List<T> beanList = searchResultResolver.resolve(convertInfo, dataListResult);
+				result = new SearchResult<>(beanList);
+			} else {
+				result = new SearchResult<>();
+			}
+			if (clusterResult != null) {
+				if (clusterResult.next()) {
+					result.setTotalCount(getCountFromSqlResult(sqlResult));
+					result.setSummaries(getSummaryFromSqlResult(sqlResult));
+				}
+			}
+			return result;
+		} catch (SQLException e) {
+			throw new SearcherException("A exception occurred when collect sql result!", e);
+		} finally {
+			sqlResult.closeResultSet();
+		}
 	}
+
 
 	public SearchResultResolver getSearchResultResolver() {
 		return searchResultResolver;

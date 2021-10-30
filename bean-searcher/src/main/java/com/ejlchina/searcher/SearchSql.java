@@ -3,7 +3,6 @@ package com.ejlchina.searcher;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * 检索的 SQL 信息
  *  
@@ -47,7 +46,6 @@ public class SearchSql {
 	 */
 	private final List<String> summaryAliases = new ArrayList<>();
 
-	
 	/**
 	 * 是否应该查询总条数
 	 * */
@@ -57,8 +55,8 @@ public class SearchSql {
 	 * 是否应该查询数据列表
 	 * */
 	private boolean shouldQueryList;
-	
-	
+
+
 	public String getListSqlString() {
 		return listSqlString;
 	}
@@ -94,11 +92,11 @@ public class SearchSql {
 	public void addClusterSqlParam(Object sqlParam) {
 		this.clusterSqlParams.add(sqlParam);
 	}
-	
+
 	public void addListAlias(String alias) {
 		listAliases.add(alias);
 	}
-	
+
 	public List<String> getListAliases() {
 		return listAliases;
 	}

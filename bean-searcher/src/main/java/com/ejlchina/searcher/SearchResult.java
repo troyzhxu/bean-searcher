@@ -13,7 +13,7 @@ public class SearchResult<T> {
 
 	private Number totalCount;
 	
-	private final List<T> dataList = new ArrayList<>();
+	private final List<T> dataList;
 	
 	private Number[] summaries;
 
@@ -26,10 +26,15 @@ public class SearchResult<T> {
 	}
 	
 	public SearchResult(Number totalCount, Number[] summaries) {
+		this(new ArrayList<>());
 		this.totalCount = totalCount;
 		this.summaries = summaries;
 	}
-	
+
+	public SearchResult(List<T> dataList) {
+		this.dataList = dataList;
+	}
+
 	public Number getTotalCount() {
 		return totalCount;
 	}
