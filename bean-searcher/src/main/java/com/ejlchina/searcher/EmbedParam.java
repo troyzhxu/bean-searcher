@@ -2,6 +2,8 @@ package com.ejlchina.searcher;
 
 /**
  * 内嵌参数
+ * @author Troy.Zhou @ 2021-10-30
+ * @since v3.0.0
  */
 public class EmbedParam {
 

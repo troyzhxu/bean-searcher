@@ -12,9 +12,9 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /***
- * @author Troy.Zhou @ 2021-10-30
- *
  * 默认元信息解析器
+ * @author Troy.Zhou @ 2021-10-30
+ * @since v3.0.0
  */
 public class DefaultMetadataResolver implements MetadataResolver {
 

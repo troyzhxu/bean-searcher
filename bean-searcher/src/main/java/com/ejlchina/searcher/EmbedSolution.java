@@ -6,6 +6,8 @@ import java.util.List;
 
 /**
  * 内嵌参数解析结果
+ * @author Troy.Zhou @ 2021-10-30
+ * @since v3.0.0
  */
 public class EmbedSolution {
 
