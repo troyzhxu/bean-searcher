@@ -25,17 +25,17 @@ public class SearchSql {
 	/**
 	 * 查询数据列表的参数
 	 * */
-	private List<Object> listSqlParams = new ArrayList<>();
+	private final List<Object> listSqlParams = new ArrayList<>();
 	
 	/**
 	 * 聚族查询的参数
 	 * */
-	private List<Object> clusterSqlParams = new ArrayList<>();
+	private final List<Object> clusterSqlParams = new ArrayList<>();
 	
 	/**
 	 * 数据别名列表
 	 * */
-	private List<String> listAliases = new ArrayList<>();
+	private final List<String> listAliases = new ArrayList<>();
 	
 	/**
 	 * 总条数别名
@@ -45,7 +45,7 @@ public class SearchSql {
 	/**
 	 * 求和字段别名
 	 */
-	private List<String> summaryAliases = new ArrayList<>();
+	private final List<String> summaryAliases = new ArrayList<>();
 
 	
 	/**
