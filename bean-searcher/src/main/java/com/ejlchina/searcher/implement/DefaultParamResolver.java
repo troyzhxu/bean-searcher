@@ -10,7 +10,7 @@ import com.ejlchina.searcher.util.MapBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ejlchina.searcher.SearchParamResolver;
+import com.ejlchina.searcher.ParamResolver;
 import com.ejlchina.searcher.implement.pagination.MaxOffsetPagination;
 import com.ejlchina.searcher.implement.pagination.Pagination;
 import com.ejlchina.searcher.implement.parafilter.ParamFilter;
@@ -23,10 +23,10 @@ import com.ejlchina.searcher.SearchParam;
  * 
  * 默认查询参数解析器
  */
-public class DefaultSearchParamResolver implements SearchParamResolver {
+public class DefaultParamResolver implements ParamResolver {
 
 
-	protected Logger log = LoggerFactory.getLogger(DefaultSearchParamResolver.class);
+	protected Logger log = LoggerFactory.getLogger(DefaultParamResolver.class);
 	
 	
 	/**

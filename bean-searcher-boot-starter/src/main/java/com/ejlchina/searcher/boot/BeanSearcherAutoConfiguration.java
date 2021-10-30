@@ -58,10 +58,10 @@ public class BeanSearcherAutoConfiguration {
 	}
 
 	@Bean
-	@ConditionalOnMissingBean(SearchParamResolver.class)
-	public SearchParamResolver searchParamResolver(Pagination pagination, BeanSearcherProperties config,
-												   ObjectProvider<ParamFilter[]> paramFilterProvider) {
-		DefaultSearchParamResolver searchParamResolver = new DefaultSearchParamResolver();
+	@ConditionalOnMissingBean(ParamResolver.class)
+	public ParamResolver searchParamResolver(Pagination pagination, BeanSearcherProperties config,
+											 ObjectProvider<ParamFilter[]> paramFilterProvider) {
+		DefaultParamResolver searchParamResolver = new DefaultParamResolver();
 		searchParamResolver.setPagination(pagination);
 		ParamsPorps conf = config.getParams();
 		searchParamResolver.setDefaultMax(conf.getPagination().getDefaultSize());
@@ -139,12 +139,12 @@ public class BeanSearcherAutoConfiguration {
 
 	@Bean
 	@ConditionalOnMissingBean(BeanSearcher.class)
-	public BeanSearcher beanSearcher(SearchParamResolver searchParamResolver,
+	public BeanSearcher beanSearcher(ParamResolver paramResolver,
 									 SqlResolver sqlResolver,
 									 SqlExecutor sqlExecutor,
 									 BeanReflector beanReflector) {
 		DefaultBeanSearcher searcher = new DefaultBeanSearcher();
-		searcher.setSearchParamResolver(searchParamResolver);
+		searcher.setSearchParamResolver(paramResolver);
 		searcher.setSearchSqlResolver(sqlResolver);
 		searcher.setSearchSqlExecutor(sqlExecutor);
 		searcher.setSearchResultResolver(beanReflector);
@@ -153,11 +153,11 @@ public class BeanSearcherAutoConfiguration {
 
 	@Bean
 	@ConditionalOnMissingBean(MapSearcher.class)
-	public MapSearcher mapSearcher(SearchParamResolver searchParamResolver,
+	public MapSearcher mapSearcher(ParamResolver paramResolver,
 								   SqlResolver sqlResolver,
 								   SqlExecutor sqlExecutor) {
 		DefaultMapSearcher searcher = new DefaultMapSearcher();
-		searcher.setSearchParamResolver(searchParamResolver);
+		searcher.setSearchParamResolver(paramResolver);
 		searcher.setSearchSqlResolver(sqlResolver);
 		searcher.setSearchSqlExecutor(sqlExecutor);
 		return searcher;

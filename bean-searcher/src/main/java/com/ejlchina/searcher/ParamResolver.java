@@ -11,7 +11,7 @@ import com.ejlchina.searcher.implement.pagination.Pagination;
  * 
  * @author Troy.Zhou @ 2017-03-20
  * */
-public interface SearchParamResolver {
+public interface ParamResolver {
 
 	
 	/**

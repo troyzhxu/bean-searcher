@@ -20,7 +20,7 @@ public abstract class AbstractSearcher implements Searcher {
 
 	private SqlExecutor sqlExecutor;
 
-	private SearchParamResolver searchParamResolver = new DefaultSearchParamResolver();
+	private ParamResolver paramResolver = new DefaultParamResolver();
 
 	private SqlResolver sqlResolver = new DefaultSqlResolver();
 
@@ -85,7 +85,7 @@ public abstract class AbstractSearcher implements Searcher {
 		}
 		Metadata<T> metadata = metadataResolver.resolve(beanClass);
 		List<String> fieldList = metadata.getFieldList();
-		SearchParam searchParam = searchParamResolver.resolve(fieldList, paraMap);
+		SearchParam searchParam = paramResolver.resolve(fieldList, paraMap);
 		searchParam.setSummaryFields(summaryFields);
 		searchParam.setShouldQueryTotal(shouldQueryTotal);
 		searchParam.setShouldQueryList(shouldQueryList);
@@ -99,15 +99,15 @@ public abstract class AbstractSearcher implements Searcher {
 	}
 
 	public Pagination getPagination() {
-		return searchParamResolver.getPagination();
+		return paramResolver.getPagination();
 	}
 	
-	public SearchParamResolver getSearchParamResolver() {
-		return searchParamResolver;
+	public ParamResolver getSearchParamResolver() {
+		return paramResolver;
 	}
 
-	public void setSearchParamResolver(SearchParamResolver searchParamResolver) {
-		this.searchParamResolver = Objects.requireNonNull(searchParamResolver);
+	public void setSearchParamResolver(ParamResolver paramResolver) {
+		this.paramResolver = Objects.requireNonNull(paramResolver);
 	}
 
 	public SqlResolver getSearchSqlResolver() {

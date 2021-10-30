@@ -30,7 +30,7 @@ public class SearcherBuilder {
 	@SuppressWarnings("unchecked")
 	static class DefaultSearcherBuilder<Builder extends DefaultSearcherBuilder<?>> {
 
-		private SearchParamResolver searchParamResolver;
+		private ParamResolver paramResolver;
 
 		private SqlResolver sqlResolver;
 
@@ -38,8 +38,8 @@ public class SearcherBuilder {
 
 		private MetadataResolver metadataResolver;
 
-		public Builder searchParamResolver(SearchParamResolver searchParamResolver) {
-			this.searchParamResolver = searchParamResolver;
+		public Builder searchParamResolver(ParamResolver paramResolver) {
+			this.paramResolver = paramResolver;
 			return (Builder) this;
 		}
 
@@ -59,8 +59,8 @@ public class SearcherBuilder {
 		}
 
 		protected void buildInternal(AbstractSearcher mainSearcher) {
-			if (searchParamResolver != null) {
-				mainSearcher.setSearchParamResolver(searchParamResolver);
+			if (paramResolver != null) {
+				mainSearcher.setSearchParamResolver(paramResolver);
 			}
 			if (sqlResolver != null) {
 				mainSearcher.setSearchSqlResolver(sqlResolver);
