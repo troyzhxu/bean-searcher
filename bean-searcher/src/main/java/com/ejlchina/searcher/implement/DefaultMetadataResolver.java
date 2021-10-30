@@ -1,18 +1,14 @@
 package com.ejlchina.searcher.implement;
 
-import com.ejlchina.searcher.Metadata;
-import com.ejlchina.searcher.MetadataResolver;
-import com.ejlchina.searcher.SearchResultConvertInfo;
-import com.ejlchina.searcher.SearcherException;
+import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.bean.DbField;
 import com.ejlchina.searcher.bean.SearchBean;
 import com.ejlchina.searcher.util.StringUtils;
-import com.ejlchina.searcher.virtual.DefaultVirtualParamProcessor;
-import com.ejlchina.searcher.virtual.VirtualParamProcessor;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /***
@@ -24,7 +20,7 @@ public class DefaultMetadataResolver implements MetadataResolver {
 
     private final Map<Class<?>, Metadata> cache = new ConcurrentHashMap<>();
 
-    private VirtualParamProcessor virtualParamProcessor = new DefaultVirtualParamProcessor();
+    private EmbedParamResolver embedParamResolver = new DefaultEmbedParamResolver();
 
     @Override
     public Metadata resolve(Class<?> beanClass) {
@@ -45,18 +41,23 @@ public class DefaultMetadataResolver implements MetadataResolver {
             throw new SearcherException("The class [" + beanClass.getName()
                     + "] is not a valid SearchBean, please check whether the class is annotated correctly by @SearchBean");
         }
-        Metadata metadata = new Metadata(searchBean.tables(), searchBean.joinCond(),
-                searchBean.groupBy(), searchBean.distinct());
+        EmbedSolution tableSolution = embedParamResolver.resolve(searchBean.tables());
+        EmbedSolution joinCondSolution = embedParamResolver.resolve(searchBean.joinCond());
+        EmbedSolution groupBySolution = embedParamResolver.resolve(searchBean.groupBy());
+
+        Metadata metadata = new Metadata(tableSolution, joinCondSolution, groupBySolution, searchBean.distinct());
+
         for (Field field : beanClass.getDeclaredFields()) {
             DbField dbField = field.getAnnotation(DbField.class);
             if (dbField == null) {
                 continue;
             }
+            EmbedSolution dbFieldSolution = embedParamResolver.resolve(dbField.value().trim());
             String fieldName = field.getName();
             Class<?> fieldType = field.getType();
             try {
                 Method method = beanClass.getMethod("set" + StringUtils.firstCharToUpperCase(fieldName), fieldType);
-                metadata.addFieldDbMap(fieldName, dbField.value().trim(), method, fieldType);
+                metadata.addFieldDbMap(dbFieldSolution, fieldName, method, fieldType);
             } catch (Exception e) {
                 throw new SearcherException("[" + beanClass.getName() + ": " + fieldName + "] is annotated by @DbField, but there is none correctly setter for it.", e);
             }
@@ -64,7 +65,7 @@ public class DefaultMetadataResolver implements MetadataResolver {
         if (metadata.getFieldList().size() == 0) {
             throw new SearcherException("[" + beanClass.getName() + "] is annotated by @SearchBean, but there is none field annotated by @DbFile.");
         }
-        return virtualParamProcessor.process(metadata);
+        return metadata;
     }
 
     protected <T> void addSearchBeanMap(Class<T> beanClass, Metadata metadata) {
@@ -76,12 +77,12 @@ public class DefaultMetadataResolver implements MetadataResolver {
         cache.put(beanClass, metadata);
     }
 
-    public VirtualParamProcessor getVirtualParamProcessor() {
-        return virtualParamProcessor;
+    public EmbedParamResolver getEmbedParamResolver() {
+        return embedParamResolver;
     }
 
-    public void setVirtualParamProcessor(VirtualParamProcessor virtualParamProcessor) {
-        this.virtualParamProcessor = virtualParamProcessor;
+    public void setEmbedParamResolver(EmbedParamResolver embedParamResolver) {
+        this.embedParamResolver = Objects.requireNonNull(embedParamResolver);
     }
 
 }

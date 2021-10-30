@@ -14,17 +14,17 @@ public class Metadata {
 	/**
 	 * 需要查询的数据表
 	 * */
-	private String talbes;
-	
+	private final EmbedSolution tableSolution;
+
 	/**
 	 * 连表条件
 	 * */
-	private String joinCond;
+	private final EmbedSolution joinCondSolution;
 	
 	/**
 	 * 分组字段
 	 * */
-	private final String groupBy;
+	private final EmbedSolution groupBySolution;
 	
 	/**
 	 * 是否 distinct 结果
@@ -57,16 +57,6 @@ public class Metadata {
 	private final Map<String, Class<?>> fieldTypeMap = new HashMap<>();
 	
 	/**
-	 * table 嵌入参数
-	 */
-	private List<EmbedParam> tableEmbedParams;
-	
-	/**
-	 * 连接条件 嵌入参数
-	 */
-	private List<EmbedParam> joinCondEmbedParams;
-	
-	/**
 	 * 映射：属性 -> 嵌入参数
 	 */
 	private final Map<String, List<EmbedParam>> fieldEmbedParamsMap = new HashMap<>();
@@ -75,15 +65,16 @@ public class Metadata {
 	private SearchResultConvertInfo<?> convertInfo;
 	
 	
-	public Metadata(String talbes, String joinCond, String groupBy, boolean distinct) {
-		this.talbes = talbes;
-		this.joinCond = joinCond;
-		this.groupBy = groupBy;
+	public Metadata(EmbedSolution tableSolution, EmbedSolution joinCondSolution, EmbedSolution groupBySolution, boolean distinct) {
+		this.tableSolution = tableSolution;
+		this.joinCondSolution = joinCondSolution;
+		this.groupBySolution = groupBySolution;
 		this.distinct = distinct;
 	}
 
 	
-	public void addFieldDbMap(String field, String dbField, Method getMethod, Class<?> fieldType) {
+	public void addFieldDbMap(EmbedSolution dbFieldSolution, String field, Method getMethod, Class<?> fieldType) {
+		String dbField = dbFieldSolution.getSqlSnippet();
 		if (fieldList.contains(field)) {
 			throw new SearcherException("不可以重复添加字段");
 		}
@@ -95,26 +86,31 @@ public class Metadata {
 		fieldDbAliasMap.put(field, "d_" + fieldList.size());
 		fieldGetMethodMap.put(field, getMethod);
 		fieldTypeMap.put(field, fieldType);
+		fieldEmbedParamsMap.put(field, dbFieldSolution.getParams());
 	}
 	
 	public String getTalbes() {
-		return talbes;
+		return tableSolution.getSqlSnippet();
 	}
 
-	public void setTalbes(String talbes) {
-		this.talbes = talbes;
+	public List<EmbedParam> getTableEmbedParams() {
+		return tableSolution.getParams();
 	}
 
 	public String getJoinCond() {
-		return joinCond;
+		return joinCondSolution.getSqlSnippet();
 	}
-	
-	public void setJoinCond(String joinCond) {
-		this.joinCond = joinCond;
+
+	public List<EmbedParam> getJoinCondEmbedParams() {
+		return joinCondSolution.getParams();
 	}
 
 	public String getGroupBy() {
-		return groupBy;
+		return groupBySolution.getSqlSnippet();
+	}
+
+	public List<EmbedParam> getGroupByEmbedParams() {
+		return groupBySolution.getParams();
 	}
 
 	public boolean isDistinct() {
@@ -144,29 +140,9 @@ public class Metadata {
 	public Map<String, Class<?>> getFieldTypeMap() {
 		return fieldTypeMap;
 	}
-	
-	public List<EmbedParam> getTableEmbedParams() {
-		return tableEmbedParams;
-	}
-
-	public void setTableEmbedParams(List<EmbedParam> tableEmbedParams) {
-		this.tableEmbedParams = tableEmbedParams;
-	}
-
-	public List<EmbedParam> getJoinCondEmbedParams() {
-		return joinCondEmbedParams;
-	}
-
-	public void setJoinCondEmbedParams(List<EmbedParam> joinCondEmbedParams) {
-		this.joinCondEmbedParams = joinCondEmbedParams;
-	}
 
 	public List<EmbedParam> getFieldEmbedParams(String field) {
 		return fieldEmbedParamsMap.get(field);
-	}
-
-	public void putFieldEmbedParams(String field, List<EmbedParam> embedParams) {
-		fieldEmbedParamsMap.put(field, embedParams);
 	}
 
 	@SuppressWarnings("unchecked")

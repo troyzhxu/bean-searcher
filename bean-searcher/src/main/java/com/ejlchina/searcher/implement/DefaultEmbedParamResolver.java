@@ -24,7 +24,7 @@ public class DefaultEmbedParamResolver implements EmbedParamResolver {
         EmbedSolution solution = new EmbedSolution();
         int index1 = sqlSnippet.indexOf(paramPrefix);
         while (index1 >= 0) {
-            int index2 = findVitualParamEndIndex(sqlSnippet, index1);
+            int index2 = findParamEndIndex(sqlSnippet, index1);
             String sqlName = getSqlName(sqlSnippet, index1, index2);
             if (StringUtils.isBlank(sqlName) || sqlName.length() < 2) {
                 throw new SearcherException("There is a syntax error about embed param: " + sqlSnippet);
@@ -64,7 +64,7 @@ public class DefaultEmbedParamResolver implements EmbedParamResolver {
         }
     }
 
-    private int findVitualParamEndIndex(String sqlSnippet, int fromIndex) {
+    private int findParamEndIndex(String sqlSnippet, int fromIndex) {
         int index = -1;
         for (String flag : paramEndFlags) {
             int index0 = sqlSnippet.indexOf(flag, fromIndex);
