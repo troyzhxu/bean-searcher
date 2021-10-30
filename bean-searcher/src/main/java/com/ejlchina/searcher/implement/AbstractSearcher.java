@@ -1,6 +1,7 @@
 package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.*;
+import com.ejlchina.searcher.bean.BeanMetadata;
 import com.ejlchina.searcher.bean.DbField;
 import com.ejlchina.searcher.bean.SearchBean;
 import com.ejlchina.searcher.implement.pagination.Pagination;

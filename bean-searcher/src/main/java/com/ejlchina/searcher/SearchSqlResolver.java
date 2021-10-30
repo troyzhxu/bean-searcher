@@ -1,5 +1,6 @@
 package com.ejlchina.searcher;
 
+import com.ejlchina.searcher.bean.BeanMetadata;
 import com.ejlchina.searcher.param.SearchParam;
 
 /***

@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.ejlchina.searcher.BeanMetadata;
+import com.ejlchina.searcher.bean.BeanMetadata;
 import com.ejlchina.searcher.SearchSql;
 import com.ejlchina.searcher.SearchSqlResolver;
 import com.ejlchina.searcher.SearcherException;

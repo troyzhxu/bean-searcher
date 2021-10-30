@@ -1,6 +1,6 @@
 package com.ejlchina.searcher.virtual;
 
-import com.ejlchina.searcher.BeanMetadata;
+import com.ejlchina.searcher.bean.BeanMetadata;
 
 
 /**

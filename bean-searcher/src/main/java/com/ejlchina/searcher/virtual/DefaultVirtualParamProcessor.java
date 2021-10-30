@@ -1,7 +1,7 @@
 package com.ejlchina.searcher.virtual;
 
 import com.ejlchina.searcher.SearcherException;
-import com.ejlchina.searcher.BeanMetadata;
+import com.ejlchina.searcher.bean.BeanMetadata;
 import com.ejlchina.searcher.util.StringUtils;
 
 import java.util.Map;
