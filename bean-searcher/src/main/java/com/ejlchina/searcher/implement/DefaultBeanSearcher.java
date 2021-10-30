@@ -50,13 +50,13 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 
 	protected <T> SearchResult<T> search(Class<T> beanClass, Map<String, Object> paraMap, String[] summaryFields,
 								   boolean shouldQueryTotal, boolean shouldQueryList, boolean needNotLimit) {
-		SqlResult sqlResult = doSearch(beanClass, paraMap, summaryFields, shouldQueryTotal, shouldQueryList, needNotLimit);
+		SqlResult<T> sqlResult = doSearch(beanClass, paraMap, summaryFields, shouldQueryTotal, shouldQueryList, needNotLimit);
 		ResultSet dataListResult = sqlResult.getDataListResult();
 		ResultSet clusterResult = sqlResult.getClusterResult();
 		try {
 			SearchResult<T> result;
 			if (dataListResult != null) {
-				SearchResultConvertInfo<T> convertInfo = getMetadata(beanClass).getConvertInfo();
+				SearchResultConvertInfo<T> convertInfo = sqlResult.getSearchSql().getMetadata().getConvertInfo();
 				List<T> beanList = searchResultResolver.resolve(convertInfo, dataListResult);
 				result = new SearchResult<>(beanList);
 			} else {

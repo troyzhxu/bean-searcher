@@ -18,24 +18,25 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class DefaultMetadataResolver implements MetadataResolver {
 
-    private final Map<Class<?>, Metadata> cache = new ConcurrentHashMap<>();
+    private final Map<Class<?>, Metadata<?>> cache = new ConcurrentHashMap<>();
 
     private EmbedParamResolver embedParamResolver = new DefaultEmbedParamResolver();
 
     @Override
-    public Metadata resolve(Class<?> beanClass) {
-        Metadata metadata = cache.get(beanClass);
+    public <T> Metadata<T> resolve(Class<T> beanClass) {
+        @SuppressWarnings("unchecked")
+        Metadata<T> metadata = (Metadata<T>) cache.get(beanClass);
         if (metadata != null) {
             return metadata;
         }
         synchronized (cache) {
             metadata = resolveMetadata(beanClass);
-            addSearchBeanMap(beanClass, metadata);
+            cache.put(beanClass, metadata);
             return metadata;
         }
     }
 
-    private Metadata resolveMetadata(Class<?> beanClass) {
+    private <T> Metadata<T> resolveMetadata(Class<T> beanClass) {
         SearchBean searchBean = beanClass.getAnnotation(SearchBean.class);
         if (searchBean == null) {
             throw new SearcherException("The class [" + beanClass.getName()
@@ -45,7 +46,7 @@ public class DefaultMetadataResolver implements MetadataResolver {
         EmbedSolution joinCondSolution = embedParamResolver.resolve(searchBean.joinCond());
         EmbedSolution groupBySolution = embedParamResolver.resolve(searchBean.groupBy());
 
-        Metadata metadata = new Metadata(tableSolution, joinCondSolution, groupBySolution, searchBean.distinct());
+        Metadata<T> metadata = new Metadata<>(beanClass, tableSolution, joinCondSolution, groupBySolution, searchBean.distinct());
 
         for (Field field : beanClass.getDeclaredFields()) {
             DbField dbField = field.getAnnotation(DbField.class);

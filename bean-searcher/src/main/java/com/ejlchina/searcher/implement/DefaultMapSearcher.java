@@ -49,13 +49,13 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 
 	protected <T> SearchResult<Map<String, Object>> search(Class<T> beanClass, Map<String, Object> paraMap, String[] summaryFields,
 										 boolean shouldQueryTotal, boolean shouldQueryList, boolean needNotLimit) {
-		SqlResult sqlResult = doSearch(beanClass, paraMap, summaryFields, shouldQueryTotal, shouldQueryList, needNotLimit);
+		SqlResult<T> sqlResult = doSearch(beanClass, paraMap, summaryFields, shouldQueryTotal, shouldQueryList, needNotLimit);
 		ResultSet dataListResult = sqlResult.getDataListResult();
 		ResultSet clusterResult = sqlResult.getClusterResult();
 		try {
 			SearchResult<Map<String, Object>> result = new SearchResult<>();
 			if (dataListResult != null) {
-				Set<Map.Entry<String, String>> fieldDbAliasEntrySet = getMetadata(beanClass).getFieldDbAliasEntrySet();
+				Set<Map.Entry<String, String>> fieldDbAliasEntrySet = sqlResult.getSearchSql().getMetadata().getFieldDbAliasEntrySet();
 				while (dataListResult.next()) {
 					Map<String, Object> dataMap = new HashMap<>();
 					for (Map.Entry<String, String> entry : fieldDbAliasEntrySet) {

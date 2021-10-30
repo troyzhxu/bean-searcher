@@ -28,7 +28,7 @@ public abstract class AbstractSearcher implements Searcher {
 
 	@Override
 	public <T> Number searchCount(Class<T> beanClass, Map<String, Object> paraMap) {
-		SqlResult sqlResult = doSearch(beanClass, paraMap, null, true, false, true);
+		SqlResult<T> sqlResult = doSearch(beanClass, paraMap, null, true, false, true);
 		try {
 			return getCountFromSqlResult(sqlResult);
 		} catch (SQLException e) {
@@ -53,7 +53,7 @@ public abstract class AbstractSearcher implements Searcher {
 			throw new SearcherException("检索该 Bean【" + beanClass.getName() 
 			+ "】的统计信息时，必须要指定需要统计的属性！");
 		}
-		SqlResult sqlResult = doSearch(beanClass, paraMap, fields, false, false, true);
+		SqlResult<T> sqlResult = doSearch(beanClass, paraMap, fields, false, false, true);
 		try {
 			return getSummaryFromSqlResult(sqlResult);
 		} catch (SQLException e) {
@@ -63,11 +63,11 @@ public abstract class AbstractSearcher implements Searcher {
 		}
 	}
 
-	protected Number getCountFromSqlResult(SqlResult sqlResult) throws SQLException {
+	protected Number getCountFromSqlResult(SqlResult<?> sqlResult) throws SQLException {
 		return (Number) sqlResult.getClusterResult().getObject(sqlResult.getSearchSql().getCountAlias());
 	}
 
-	protected Number[] getSummaryFromSqlResult(SqlResult sqlResult) throws SQLException {
+	protected Number[] getSummaryFromSqlResult(SqlResult<?> sqlResult) throws SQLException {
 		List<String> summaryAliases = sqlResult.getSearchSql().getSummaryAliases();
 		ResultSet countResultSet = sqlResult.getClusterResult();
 		Number[] summaries = new Number[summaryAliases.size()];
@@ -78,12 +78,12 @@ public abstract class AbstractSearcher implements Searcher {
 		return summaries;
 	}
 
-	protected <T> SqlResult doSearch(Class<T> beanClass, Map<String, Object> paraMap, String[] summaryFields,
+	protected <T> SqlResult<T> doSearch(Class<T> beanClass, Map<String, Object> paraMap, String[] summaryFields,
 								   boolean shouldQueryTotal, boolean shouldQueryList, boolean needNotLimit) {
 		if (searchSqlExecutor == null) {
 			throw new SearcherException("you must set a searchSqlExecutor before search.");
 		}
-		Metadata metadata = getMetadata(beanClass);
+		Metadata<T> metadata = getMetadata(beanClass);
 		List<String> fieldList = metadata.getFieldList();
 		SearchParam searchParam = searchParamResolver.resolve(fieldList, paraMap);
 		searchParam.setSummaryFields(summaryFields);
@@ -92,13 +92,13 @@ public abstract class AbstractSearcher implements Searcher {
 		if (needNotLimit) {
 			searchParam.setMax(null);
 		}
-		SearchSql searchSql = searchSqlResolver.resolve(metadata, searchParam);
+		SearchSql<T> searchSql = searchSqlResolver.resolve(metadata, searchParam);
 		searchSql.setShouldQueryCluster(shouldQueryTotal || (summaryFields != null && summaryFields.length > 0));
 		searchSql.setShouldQueryList(shouldQueryList);
 		return searchSqlExecutor.execute(searchSql);
 	}
 
-	public Metadata getMetadata(Class<?> beanClass) {
+	public <T> Metadata<T> getMetadata(Class<T> beanClass) {
 		return metadataResolver.resolve(beanClass);
 	}
 

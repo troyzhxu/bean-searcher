@@ -9,7 +9,12 @@ import java.util.List;
  * @author Troy.Zhou @ 2017-03-20
  * 
  * */
-public class SearchSql {
+public class SearchSql<T> {
+
+	/**
+	 * 待检索数据的元信息
+	 */
+	private final Metadata<T> metadata;
 
 	/**
 	 * 查询数据列表的SQL
@@ -56,6 +61,14 @@ public class SearchSql {
 	 * */
 	private boolean shouldQueryList;
 
+
+	public SearchSql(Metadata<T> metadata) {
+		this.metadata = metadata;
+	}
+
+	public Metadata<T> getMetadata() {
+		return metadata;
+	}
 
 	public String getListSqlString() {
 		return listSqlString;

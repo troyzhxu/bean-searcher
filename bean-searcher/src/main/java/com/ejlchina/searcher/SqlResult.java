@@ -6,12 +6,12 @@ import java.sql.SQLException;
 /**
  * SQL 执行结果
  */
-public class SqlResult {
+public class SqlResult<T> {
 
     /**
      * 检索 SQL 信息
      */
-    private final SearchSql searchSql;
+    private final SearchSql<T> searchSql;
 
     /**
      * 列表查询结果集
@@ -24,7 +24,7 @@ public class SqlResult {
     private ResultSet clusterResult;
 
 
-    public SqlResult(SearchSql searchSql) {
+    public SqlResult(SearchSql<T> searchSql) {
         this.searchSql = searchSql;
     }
 
@@ -44,7 +44,7 @@ public class SqlResult {
         }
     }
 
-    public SearchSql getSearchSql() {
+    public SearchSql<T> getSearchSql() {
         return searchSql;
     }
 

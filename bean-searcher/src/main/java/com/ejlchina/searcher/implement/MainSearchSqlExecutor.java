@@ -40,9 +40,9 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 
 	
 	@Override
-	public SqlResult execute(SearchSql searchSql) {
+	public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
 		if (!searchSql.isShouldQueryList() && !searchSql.isShouldQueryCluster()) {
-			return new SqlResult(searchSql);
+			return new SqlResult<>(searchSql);
 		}
 		if (dataSource == null) {
 			throw new SearcherException("You must config a dataSource for MainSearchSqlExecutor!");
@@ -54,7 +54,7 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 				connection.setAutoCommit(false);
 				connection.setReadOnly(true);
 			}
-			SqlResult result = new SqlResult(searchSql);
+			SqlResult<T> result = new SqlResult<>(searchSql);
 			if (searchSql.isShouldQueryList()) {
 				String sql = searchSql.getListSqlString();
 				List<Object> params = searchSql.getListSqlParams();
@@ -85,7 +85,7 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 	}
 
 	protected void executeListSqlAndCollectResult(Connection connection, String sql, List<Object> params,
-												  SqlResult sqlResult) throws SQLException {
+												  SqlResult<?> sqlResult) throws SQLException {
 		PreparedStatement statement = null;
 		try {
 			statement = connection.prepareStatement(sql);
@@ -98,7 +98,7 @@ public class MainSearchSqlExecutor implements SearchSqlExecutor {
 	}
 
 	protected void executeClusterSqlAndCollectResult(Connection connection, String sqlString, List<Object> sqlParams,
-													 SqlResult sqlResult) throws SQLException {
+													 SqlResult<?> sqlResult) throws SQLException {
 		PreparedStatement statement = null;
 		try {
 			statement = connection.prepareStatement(sqlString);

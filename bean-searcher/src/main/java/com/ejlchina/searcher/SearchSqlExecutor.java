@@ -13,6 +13,6 @@ public interface SearchSqlExecutor {
 	 * @param searchSql 检索 SQL
 	 * @return 执行结果
 	 */
-	SqlResult execute(SearchSql searchSql);
+	<T> SqlResult<T> execute(SearchSql<T> searchSql);
 	
 }

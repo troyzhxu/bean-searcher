@@ -9,7 +9,12 @@ import java.util.*;
  * @author Troy.Zhou @ 2017-03-20
  * 
  */
-public class Metadata {
+public class Metadata<T> {
+
+	/**
+	 * 用户 Bean Class
+	 */
+	private final Class<T> beanClass;
 
 	/**
 	 * 需要查询的数据表
@@ -60,7 +65,8 @@ public class Metadata {
 	private SearchResultConvertInfo<?> convertInfo;
 
 
-	public Metadata(EmbedSolution tableSolution, EmbedSolution joinCondSolution, EmbedSolution groupBySolution, boolean distinct) {
+	public Metadata(Class<T> beanClass, EmbedSolution tableSolution, EmbedSolution joinCondSolution, EmbedSolution groupBySolution, boolean distinct) {
+		this.beanClass = beanClass;
 		this.tableSolution = tableSolution;
 		this.joinCondSolution = joinCondSolution;
 		this.groupBySolution = groupBySolution;
@@ -82,7 +88,11 @@ public class Metadata {
 		fieldTypeMap.put(field, fieldType);
 		fieldDbSolutionMap.put(field, dbFieldSolution);
 	}
-	
+
+	public Class<T> getBeanClass() {
+		return beanClass;
+	}
+
 	public String getTalbes() {
 		return tableSolution.getSqlSnippet();
 	}

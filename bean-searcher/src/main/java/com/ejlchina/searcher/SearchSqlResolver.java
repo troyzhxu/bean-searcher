@@ -11,7 +11,7 @@ import com.ejlchina.searcher.param.SearchParam;
 public interface SearchSqlResolver {
 
 
-	SearchSql resolve(Metadata metadata, SearchParam searchParam);
+	<T> SearchSql<T> resolve(Metadata<T> metadata, SearchParam searchParam);
 	
 	
 }
