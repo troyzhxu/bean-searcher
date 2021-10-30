@@ -19,26 +19,26 @@ public class DefaultVirtualParamProcessor implements VirtualParamProcessor {
 	
 	@Override
 	public Metadata process(Metadata metadata) {
-		VirtualSolution solution = resolveVirtualParams(metadata.getTalbes());
+		EmbedSolution solution = resolveVirtualParams(metadata.getTalbes());
 		metadata.setTalbes(solution.getSqlSnippet());
-		metadata.setTableVirtualParams(solution.getParams());
+		metadata.setTableEmbedParams(solution.getParams());
 		
 		solution = resolveVirtualParams(metadata.getJoinCond());
 		metadata.setJoinCond(solution.getSqlSnippet());
-		metadata.setJoinCondVirtualParams(solution.getParams());
+		metadata.setJoinCondEmbedParams(solution.getParams());
 		
 		Map<String, String> fieldDbMap = metadata.getFieldDbMap();
 		for (String field : metadata.getFieldList()) {
 			solution = resolveVirtualParams(fieldDbMap.get(field));
 			fieldDbMap.put(field, solution.getSqlSnippet());
-			metadata.putFieldVirtualParam(field, solution.getParams());
+			metadata.putFieldEmbedParams(field, solution.getParams());
 		}
 		return metadata;
 	}
 	
 	
-	private VirtualSolution resolveVirtualParams(String sqlSnippet) {
-		VirtualSolution solution = new VirtualSolution();
+	private EmbedSolution resolveVirtualParams(String sqlSnippet) {
+		EmbedSolution solution = new EmbedSolution();
 		int index1 = sqlSnippet.indexOf(virtualParamPrefix);
 		while (index1 >= 0) {
 			int index2 = findVitualParamEndIndex(sqlSnippet, index1);

@@ -4,8 +4,6 @@ import com.ejlchina.searcher.dialect.MySqlDialect;
 import com.ejlchina.searcher.implement.*;
 import com.ejlchina.searcher.implement.convertor.DefaultFieldConvertor;
 import com.ejlchina.searcher.implement.processor.DefaultParamProcessor;
-import com.ejlchina.searcher.virtual.DefaultVirtualParamProcessor;
-import com.ejlchina.searcher.virtual.VirtualParamProcessor;
 
 /***
  * 检索器 Builder
@@ -38,7 +36,7 @@ public class SearcherBuilder {
 
 		private SearchSqlExecutor searchSqlExecutor;
 
-		private VirtualParamProcessor virtualParamProcessor;
+		private MetadataResolver metadataResolver;
 
 		public Builder searchParamResolver(SearchParamResolver searchParamResolver) {
 			this.searchParamResolver = searchParamResolver;
@@ -55,16 +53,14 @@ public class SearcherBuilder {
 			return (Builder) this;
 		}
 
-		public Builder virtualParamProcessor(VirtualParamProcessor virtualParamProcessor) {
-			this.virtualParamProcessor = virtualParamProcessor;
+		public Builder metadataResolver(MetadataResolver metadataResolver) {
+			this.metadataResolver = metadataResolver;
 			return (Builder) this;
 		}
 
 		protected void buildInternal(AbstractSearcher mainSearcher) {
 			if (searchParamResolver != null) {
 				mainSearcher.setSearchParamResolver(searchParamResolver);
-			} else {
-				mainSearcher.setSearchParamResolver(new MainSearchParamResolver());
 			}
 			if (searchSqlResolver != null) {
 				mainSearcher.setSearchSqlResolver(searchSqlResolver);
@@ -79,10 +75,8 @@ public class SearcherBuilder {
 			} else {
 				throw new SearcherException("你必须配置一个 searchSqlExecutor，才能建立一个检索器！ ");
 			}
-			if (virtualParamProcessor != null) {
-				mainSearcher.setVirtualParamProcessor(virtualParamProcessor);
-			} else {
-				mainSearcher.setVirtualParamProcessor(new DefaultVirtualParamProcessor());
+			if (metadataResolver != null) {
+				mainSearcher.setMetadataResolver(metadataResolver);
 			}
 		}
 

@@ -1,5 +1,8 @@
 package com.ejlchina.searcher.virtual;
 
+/**
+ * 嵌入参数
+ */
 public class EmbedParam {
 
 	/**

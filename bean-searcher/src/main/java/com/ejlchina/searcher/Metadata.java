@@ -59,19 +59,19 @@ public class Metadata {
 	private final Map<String, Class<?>> fieldTypeMap = new HashMap<>();
 	
 	/**
-	 * table 虚拟参数
+	 * table 嵌入参数
 	 */
 	private List<EmbedParam> tableEmbedParams;
 	
 	/**
-	 * 连接条件 虚拟参数
+	 * 连接条件 嵌入参数
 	 */
 	private List<EmbedParam> joinCondEmbedParams;
 	
 	/**
-	 * 映射：属性 -> 虚拟参数 
+	 * 映射：属性 -> 嵌入参数
 	 */
-	private final Map<String, List<EmbedParam>> fieldVirtualParamsMap = new HashMap<>();
+	private final Map<String, List<EmbedParam>> fieldEmbedParamsMap = new HashMap<>();
 	
 	
 	private SearchResultConvertInfo<?> convertInfo;
@@ -147,28 +147,28 @@ public class Metadata {
 		return fieldTypeMap;
 	}
 	
-	public List<EmbedParam> getTableVirtualParams() {
+	public List<EmbedParam> getTableEmbedParams() {
 		return tableEmbedParams;
 	}
 
-	public void setTableVirtualParams(List<EmbedParam> tableEmbedParams) {
+	public void setTableEmbedParams(List<EmbedParam> tableEmbedParams) {
 		this.tableEmbedParams = tableEmbedParams;
 	}
 
-	public List<EmbedParam> getJoinCondVirtualParams() {
+	public List<EmbedParam> getJoinCondEmbedParams() {
 		return joinCondEmbedParams;
 	}
 
-	public void setJoinCondVirtualParams(List<EmbedParam> joinCondEmbedParams) {
+	public void setJoinCondEmbedParams(List<EmbedParam> joinCondEmbedParams) {
 		this.joinCondEmbedParams = joinCondEmbedParams;
 	}
 
-	public List<EmbedParam> getFieldVirtualParams(String field) {
-		return fieldVirtualParamsMap.get(field);
+	public List<EmbedParam> getFieldEmbedParams(String field) {
+		return fieldEmbedParamsMap.get(field);
 	}
 
-	public void putFieldVirtualParam(String field, List<EmbedParam> embedParams) {
-		fieldVirtualParamsMap.put(field, embedParams);
+	public void putFieldEmbedParams(String field, List<EmbedParam> embedParams) {
+		fieldEmbedParamsMap.put(field, embedParams);
 	}
 
 	@SuppressWarnings("unchecked")

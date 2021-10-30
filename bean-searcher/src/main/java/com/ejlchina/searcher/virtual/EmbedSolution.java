@@ -3,7 +3,7 @@ package com.ejlchina.searcher.virtual;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VirtualSolution {
+public class EmbedSolution {
 
 	
 	String sqlSnippet;

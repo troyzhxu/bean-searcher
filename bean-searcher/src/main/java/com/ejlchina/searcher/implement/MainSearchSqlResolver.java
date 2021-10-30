@@ -69,7 +69,7 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 			String dbField = fieldDbMap.get(field);
 			String dbAlias = fieldDbAliasMap.get(field);
 			
-			List<EmbedParam> fieldEmbedParams = metadata.getFieldVirtualParams(field);
+			List<EmbedParam> fieldEmbedParams = metadata.getFieldEmbedParams(field);
 			if (fieldEmbedParams != null) {
 				for (EmbedParam embedParam : fieldEmbedParams) {
 					Object sqlParam = virtualParamMap.get(embedParam.getName());
@@ -96,7 +96,7 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 		builder = new StringBuilder(" from ");
 		String talbes = metadata.getTalbes();
 		
-		List<EmbedParam> tableEmbedParams = metadata.getTableVirtualParams();
+		List<EmbedParam> tableEmbedParams = metadata.getTableEmbedParams();
 		if (tableEmbedParams != null) {
 			for (EmbedParam embedParam : tableEmbedParams) {
 				Object sqlParam = virtualParamMap.get(embedParam.getName());
@@ -119,7 +119,7 @@ public class MainSearchSqlResolver implements SearchSqlResolver {
 			builder.append(" where ");
 			if (hasJoinCond) {
 				builder.append("(");
-				List<EmbedParam> joinCondEmbedParams = metadata.getJoinCondVirtualParams();
+				List<EmbedParam> joinCondEmbedParams = metadata.getJoinCondEmbedParams();
 				if (joinCondEmbedParams != null) {
 					for (EmbedParam embedParam : joinCondEmbedParams) {
 						Object sqlParam = virtualParamMap.get(embedParam.getName());
