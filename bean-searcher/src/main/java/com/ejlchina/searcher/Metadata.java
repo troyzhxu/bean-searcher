@@ -1,6 +1,6 @@
 package com.ejlchina.searcher;
 
-import com.ejlchina.searcher.virtual.VirtualParam;
+import com.ejlchina.searcher.virtual.EmbedParam;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -61,17 +61,17 @@ public class Metadata {
 	/**
 	 * table 虚拟参数
 	 */
-	private List<VirtualParam> tableVirtualParams;
+	private List<EmbedParam> tableEmbedParams;
 	
 	/**
 	 * 连接条件 虚拟参数
 	 */
-	private List<VirtualParam> joinCondVirtualParams;
+	private List<EmbedParam> joinCondEmbedParams;
 	
 	/**
 	 * 映射：属性 -> 虚拟参数 
 	 */
-	private final Map<String, List<VirtualParam>> fieldVirtualParamsMap = new HashMap<>();
+	private final Map<String, List<EmbedParam>> fieldVirtualParamsMap = new HashMap<>();
 	
 	
 	private SearchResultConvertInfo<?> convertInfo;
@@ -147,28 +147,28 @@ public class Metadata {
 		return fieldTypeMap;
 	}
 	
-	public List<VirtualParam> getTableVirtualParams() {
-		return tableVirtualParams;
+	public List<EmbedParam> getTableVirtualParams() {
+		return tableEmbedParams;
 	}
 
-	public void setTableVirtualParams(List<VirtualParam> tableVirtualParams) {
-		this.tableVirtualParams = tableVirtualParams;
+	public void setTableVirtualParams(List<EmbedParam> tableEmbedParams) {
+		this.tableEmbedParams = tableEmbedParams;
 	}
 
-	public List<VirtualParam> getJoinCondVirtualParams() {
-		return joinCondVirtualParams;
+	public List<EmbedParam> getJoinCondVirtualParams() {
+		return joinCondEmbedParams;
 	}
 
-	public void setJoinCondVirtualParams(List<VirtualParam> joinCondVirtualParams) {
-		this.joinCondVirtualParams = joinCondVirtualParams;
+	public void setJoinCondVirtualParams(List<EmbedParam> joinCondEmbedParams) {
+		this.joinCondEmbedParams = joinCondEmbedParams;
 	}
 
-	public List<VirtualParam> getFieldVirtualParams(String field) {
+	public List<EmbedParam> getFieldVirtualParams(String field) {
 		return fieldVirtualParamsMap.get(field);
 	}
 
-	public void putFieldVirtualParam(String field, List<VirtualParam> virtualParams) {
-		fieldVirtualParamsMap.put(field, virtualParams);
+	public void putFieldVirtualParam(String field, List<EmbedParam> embedParams) {
+		fieldVirtualParamsMap.put(field, embedParams);
 	}
 
 	@SuppressWarnings("unchecked")

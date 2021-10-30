@@ -21,17 +21,17 @@ public class DefaultVirtualParamProcessor implements VirtualParamProcessor {
 	public Metadata process(Metadata metadata) {
 		VirtualSolution solution = resolveVirtualParams(metadata.getTalbes());
 		metadata.setTalbes(solution.getSqlSnippet());
-		metadata.setTableVirtualParams(solution.getVirtualParams());
+		metadata.setTableVirtualParams(solution.getParams());
 		
 		solution = resolveVirtualParams(metadata.getJoinCond());
 		metadata.setJoinCond(solution.getSqlSnippet());
-		metadata.setJoinCondVirtualParams(solution.getVirtualParams());
+		metadata.setJoinCondVirtualParams(solution.getParams());
 		
 		Map<String, String> fieldDbMap = metadata.getFieldDbMap();
 		for (String field : metadata.getFieldList()) {
 			solution = resolveVirtualParams(fieldDbMap.get(field));
 			fieldDbMap.put(field, solution.getSqlSnippet());
-			metadata.putFieldVirtualParam(field, solution.getVirtualParams());
+			metadata.putFieldVirtualParam(field, solution.getParams());
 		}
 		return metadata;
 	}
@@ -51,12 +51,12 @@ public class DefaultVirtualParamProcessor implements VirtualParamProcessor {
 			if (StringUtils.isBlank(paramName) || paramName.length() < 2) {
 				throw new SearcherException("这里有一个语法错误（虚拟参数名）：" + sqlSnippet);
 			}
-			VirtualParam virtualParam = new VirtualParam(paramName);
+			EmbedParam embedParam = new EmbedParam(paramName);
 			boolean endWithPrefix = paramName.endsWith(virtualParamPrefix);
 			if (endWithPrefix) {
-				virtualParam.setName(paramName.substring(1, paramName.length() - virtualParamPrefix.length()));
+				embedParam.setName(paramName.substring(1, paramName.length() - virtualParamPrefix.length()));
 			} else {
-				virtualParam.setName(paramName.substring(1));
+				embedParam.setName(paramName.substring(1));
 			}
 			int quotationCount1 = StringUtils.containCount(sqlSnippet, 0, index1, quotations);
 			int quotationCount2 = StringUtils.containCount(sqlSnippet, Math.max(index1, index2), sqlSnippet.length(), quotations);
@@ -66,12 +66,12 @@ public class DefaultVirtualParamProcessor implements VirtualParamProcessor {
 			int nextIndex = index1 + paramName.length();
 			// 判断虚拟参数是否不在引号内部，并且不是以 :name: 的形式
 			if (quotationCount1 % 2 == 0 && !endWithPrefix) {
-				virtualParam.setParameterized(true);
+				embedParam.setParameterized(true);
 				sqlSnippet = sqlSnippet.replaceFirst(paramName, "?");
 				// sqlSnippet 长度变短，寻找下标也该相应提前
 				nextIndex = nextIndex - paramName.length() + 1;
 			}
-			solution.addVirtualParam(virtualParam);
+			solution.addVirtualParam(embedParam);
 			index1 = sqlSnippet.indexOf(virtualParamPrefix, nextIndex);
 		}
 		solution.setSqlSnippet(sqlSnippet);

@@ -8,7 +8,7 @@ public class VirtualSolution {
 	
 	String sqlSnippet;
 	
-	List<VirtualParam> virtualParams = new ArrayList<>();
+	List<EmbedParam> params = new ArrayList<>();
 
 	
 	public String getSqlSnippet() {
@@ -19,12 +19,12 @@ public class VirtualSolution {
 		this.sqlSnippet = sqlSnippet;
 	}
 
-	public List<VirtualParam> getVirtualParams() {
-		return virtualParams;
+	public List<EmbedParam> getParams() {
+		return params;
 	}
 
-	public void addVirtualParam(VirtualParam virtualParam) {
-		this.virtualParams.add(virtualParam);
+	public void addVirtualParam(EmbedParam embedParam) {
+		this.params.add(embedParam);
 	}
 	
 }

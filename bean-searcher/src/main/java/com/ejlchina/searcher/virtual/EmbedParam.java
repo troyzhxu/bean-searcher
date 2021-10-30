@@ -1,6 +1,6 @@
 package com.ejlchina.searcher.virtual;
 
-public class VirtualParam {
+public class EmbedParam {
 
 	/**
 	 * 虚拟参数名
@@ -17,7 +17,7 @@ public class VirtualParam {
 	 */
 	private boolean parameterized = false;
 
-	public VirtualParam(String sqlName) {
+	public EmbedParam(String sqlName) {
 		this.sqlName = sqlName;
 	}
 
