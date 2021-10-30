@@ -1,22 +1,14 @@
 package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.*;
-import com.ejlchina.searcher.Metadata;
-import com.ejlchina.searcher.bean.DbField;
-import com.ejlchina.searcher.bean.SearchBean;
 import com.ejlchina.searcher.implement.pagination.Pagination;
 import com.ejlchina.searcher.param.SearchParam;
-import com.ejlchina.searcher.util.StringUtils;
-import com.ejlchina.searcher.virtual.DefaultVirtualParamProcessor;
-import com.ejlchina.searcher.virtual.VirtualParamProcessor;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Objects;
 
 /***
  * @author Troy.Zhou @ 2017-03-20
@@ -33,10 +25,6 @@ public abstract class AbstractSearcher implements Searcher {
 	private SearchSqlResolver searchSqlResolver = new MainSearchSqlResolver();
 
 	private MetadataResolver metadataResolver = new DefaultMetadataResolver();
-
-	private VirtualParamProcessor virtualParamProcessor = new DefaultVirtualParamProcessor();
-
-	private final Map<Class<?>, Metadata> cache = new ConcurrentHashMap<>();
 
 	@Override
 	public <T> Number searchCount(Class<T> beanClass, Map<String, Object> paraMap) {
@@ -92,6 +80,9 @@ public abstract class AbstractSearcher implements Searcher {
 
 	protected <T> SqlResult doSearch(Class<T> beanClass, Map<String, Object> paraMap, String[] summaryFields,
 								   boolean shouldQueryTotal, boolean shouldQueryList, boolean needNotLimit) {
+		if (searchSqlExecutor == null) {
+			throw new SearcherException("you must set a searchSqlExecutor before search.");
+		}
 		Metadata metadata = getMetadata(beanClass);
 		List<String> fieldList = metadata.getFieldList();
 		SearchParam searchParam = searchParamResolver.resolve(fieldList, paraMap);
@@ -120,7 +111,7 @@ public abstract class AbstractSearcher implements Searcher {
 	}
 
 	public void setSearchParamResolver(SearchParamResolver searchParamResolver) {
-		this.searchParamResolver = searchParamResolver;
+		this.searchParamResolver = Objects.requireNonNull(searchParamResolver);
 	}
 
 	public SearchSqlResolver getSearchSqlResolver() {
@@ -128,7 +119,7 @@ public abstract class AbstractSearcher implements Searcher {
 	}
 
 	public void setSearchSqlResolver(SearchSqlResolver searchSqlResolver) {
-		this.searchSqlResolver = searchSqlResolver;
+		this.searchSqlResolver = Objects.requireNonNull(searchSqlResolver);
 	}
 
 	public SearchSqlExecutor getSearchSqlExecutor() {
@@ -136,15 +127,15 @@ public abstract class AbstractSearcher implements Searcher {
 	}
 
 	public void setSearchSqlExecutor(SearchSqlExecutor searchSqlExecutor) {
-		this.searchSqlExecutor = searchSqlExecutor;
+		this.searchSqlExecutor = Objects.requireNonNull(searchSqlExecutor);
 	}
 
-	public VirtualParamProcessor getVirtualParamProcessor() {
-		return virtualParamProcessor;
+	public MetadataResolver getMetadataResolver() {
+		return metadataResolver;
 	}
 
-	public void setVirtualParamProcessor(VirtualParamProcessor virtualParamProcessor) {
-		this.virtualParamProcessor = virtualParamProcessor;
+	public void setMetadataResolver(MetadataResolver metadataResolver) {
+		this.metadataResolver = Objects.requireNonNull(metadataResolver);
 	}
 
 }
