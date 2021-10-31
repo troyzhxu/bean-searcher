@@ -81,6 +81,9 @@ public abstract class AbstractSearcher implements Searcher {
 		if (sqlExecutor == null) {
 			throw new SearchException("you must set a searchSqlExecutor before search.");
 		}
+		if (summaryFields == null) {
+			summaryFields = new String[] { };
+		}
 		Metadata<T> metadata = metadataResolver.resolve(beanClass);
 		SearchParam searchParam = paramResolver.resolve(metadata, paraMap);
 		searchParam.setSummaryFields(summaryFields);
@@ -90,7 +93,7 @@ public abstract class AbstractSearcher implements Searcher {
 			searchParam.setMax(null);
 		}
 		SearchSql<T> searchSql = sqlResolver.resolve(metadata, searchParam);
-		searchSql.setShouldQueryCluster(shouldQueryTotal || (summaryFields != null && summaryFields.length > 0));
+		searchSql.setShouldQueryCluster(shouldQueryTotal || summaryFields.length > 0);
 		searchSql.setShouldQueryList(shouldQueryList);
 		return sqlExecutor.execute(searchSql);
 	}

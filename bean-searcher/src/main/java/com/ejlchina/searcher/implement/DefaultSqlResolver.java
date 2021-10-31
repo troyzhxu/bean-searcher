@@ -142,15 +142,17 @@ public class DefaultSqlResolver implements SqlResolver {
 		String[] summaryFields = searchParam.getSummaryFields();
 		boolean shouldQueryTotal = searchParam.isShouldQueryTotal();
 		if (StringUtils.isBlank(groupBy)) {
-			if (metadata.isDistinct()) {
-				String originalSql = fieldSelectSql + builder;
-				String clusterSelectSql = resolveClusterSelectSql(searchSql, summaryFields, shouldQueryTotal, originalSql);
-				String tableAlias = generateTableAlias(originalSql);
-				searchSql.setClusterSqlString(clusterSelectSql + " from (" + originalSql + ") " + tableAlias);
-			} else {
-				String fromWhereSql = builder.toString();
-				String clusterSelectSql = resolveClusterSelectSql(searchSql, summaryFields, shouldQueryTotal, fromWhereSql);
-				searchSql.setClusterSqlString(clusterSelectSql + fromWhereSql);
+			if (shouldQueryTotal || summaryFields.length > 0) {
+				if (metadata.isDistinct()) {
+					String originalSql = fieldSelectSql + builder;
+					String clusterSelectSql = resolveClusterSelectSql(searchSql, summaryFields, shouldQueryTotal, originalSql);
+					String tableAlias = generateTableAlias(originalSql);
+					searchSql.setClusterSqlString(clusterSelectSql + " from (" + originalSql + ") " + tableAlias);
+				} else {
+					String fromWhereSql = builder.toString();
+					String clusterSelectSql = resolveClusterSelectSql(searchSql, summaryFields, shouldQueryTotal, fromWhereSql);
+					searchSql.setClusterSqlString(clusterSelectSql + fromWhereSql);
+				}
 			}
 		} else {
 			List<SqlSnippet.Param> groupParams = metadata.getGroupByEmbedParams();
@@ -167,31 +169,35 @@ public class DefaultSqlResolver implements SqlResolver {
 				}
 			}
 			builder.append(" group by ").append(groupBy);
+			if (shouldQueryTotal || summaryFields.length > 0) {
+				String fromWhereSql = builder.toString();
+				if (metadata.isDistinct()) {
+					String originalSql = fieldSelectSql + fromWhereSql;
+					String clusterSelectSql = resolveClusterSelectSql(searchSql, summaryFields, shouldQueryTotal, originalSql);
+					String tableAlias = generateTableAlias(originalSql);
+					searchSql.setClusterSqlString(clusterSelectSql + " from (" + originalSql + ") " + tableAlias);
+				} else {
+					String clusterSelectSql = resolveClusterSelectSql(searchSql, summaryFields, shouldQueryTotal, fromWhereSql);
+					String tableAlias = generateTableAlias(fromWhereSql);
+					searchSql.setClusterSqlString(clusterSelectSql + " from (select count(*) " + fromWhereSql + ") " + tableAlias);
+				}
+			}
+		}
+		if (searchParam.isShouldQueryList()) {
+			String sortDbAlias = fieldDbAliasMap.get(searchParam.getSort());
+			if (sortDbAlias != null) {
+				builder.append(" order by ").append(sortDbAlias);
+				String order = searchParam.getOrder();
+				if (order != null) {
+					builder.append(" ").append(order);
+				}
+			}
 			String fromWhereSql = builder.toString();
-			if (metadata.isDistinct()) {
-				String originalSql = fieldSelectSql + fromWhereSql;
-				String clusterSelectSql = resolveClusterSelectSql(searchSql, summaryFields, shouldQueryTotal, originalSql);
-				String tableAlias = generateTableAlias(originalSql);
-				searchSql.setClusterSqlString(clusterSelectSql + " from (" + originalSql + ") " + tableAlias);
-			} else {
-				String clusterSelectSql = resolveClusterSelectSql(searchSql, summaryFields, shouldQueryTotal, fromWhereSql);
-				String tableAlias = generateTableAlias(fromWhereSql);
-				searchSql.setClusterSqlString(clusterSelectSql + " from (select count(*) " + fromWhereSql + ") " + tableAlias);
-			}
+			PaginateSql paginateSql = dialect.forPaginate(fieldSelectSql, fromWhereSql, searchParam.getMax(),
+					searchParam.getOffset());
+			searchSql.setListSqlString(paginateSql.getSql());
+			searchSql.addListSqlParams(paginateSql.getParams());
 		}
-		String sortDbAlias = fieldDbAliasMap.get(searchParam.getSort());
-		if (sortDbAlias != null) {
-			builder.append(" order by ").append(sortDbAlias);
-			String order = searchParam.getOrder();
-			if (order != null) {
-				builder.append(" ").append(order);
-			}
-		}
-		String fromWhereSql = builder.toString();
-		PaginateSql paginateSql = dialect.forPaginate(fieldSelectSql, fromWhereSql, searchParam.getMax(),
-				searchParam.getOffset());
-		searchSql.setListSqlString(paginateSql.getSql());
-		searchSql.addListSqlParams(paginateSql.getParams());
 		return searchSql;
 	}
 

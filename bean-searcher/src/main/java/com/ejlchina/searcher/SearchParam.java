@@ -20,6 +20,11 @@ public class SearchParam {
 	private final Map<String, Object> paraMap;
 
 	/**
+	 * 过滤检索参数列表
+	 */
+	private final List<FilterParam> filterParamList = new ArrayList<>();
+
+	/**
 	 * 排序字段（用于排序）
 	 */
 	private String sort;
@@ -39,13 +44,9 @@ public class SearchParam {
 	 */
 	private Long offset;
 
+
 	private Long page;
-	
-	/**
-	 * 过滤检索参数列表
-	 */
-	private final List<FilterParam> filterParamList = new ArrayList<>();
-	
+
 	/**
 	 * 需要求和的字段
 	 */
@@ -163,16 +164,6 @@ public class SearchParam {
 
 	public void setShouldQueryList(boolean shouldQueryList) {
 		this.shouldQueryList = shouldQueryList;
-	}
-
-	@Override
-	public String toString() {
-		String str = "SearchParam: \n\tsort = " + sort + "\n\torder=" + order + "\n\tmax=" + max + "\n\toffset="
-				+ offset + "\n\tfilterParamList:";
-		for (FilterParam param : filterParamList) {
-			str += "\n\t\t" + param.toString();
-		}
-		return str;
 	}
 
 }
