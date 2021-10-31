@@ -7,6 +7,8 @@ import com.ejlchina.searcher.util.StringUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -42,27 +44,23 @@ public class DefaultMetadataResolver implements MetadataResolver {
             throw new SearchException("The class [" + beanClass.getName()
                     + "] is not a valid SearchBean, please check whether the class is annotated correctly by @SearchBean");
         }
-        SqlSnippet tableSolution = snippetResolver.resolve(searchBean.tables());
-        SqlSnippet joinCondSolution = snippetResolver.resolve(searchBean.joinCond());
-        SqlSnippet groupBySolution = snippetResolver.resolve(searchBean.groupBy());
+        SqlSnippet tableSnippet = snippetResolver.resolve(searchBean.tables());
+        SqlSnippet joinCondSnippet = snippetResolver.resolve(searchBean.joinCond());
+        SqlSnippet groupBySnippet = snippetResolver.resolve(searchBean.groupBy());
 
-        Metadata<T> metadata = new Metadata<>(beanClass, tableSolution, joinCondSolution, groupBySolution, searchBean.distinct());
+        Metadata<T> metadata = new Metadata<>(beanClass, tableSnippet, joinCondSnippet, groupBySnippet, searchBean.distinct());
 
         for (Field field : beanClass.getDeclaredFields()) {
             DbField dbField = field.getAnnotation(DbField.class);
             if (dbField == null) {
                 continue;
             }
-            SqlSnippet solution = snippetResolver.resolve(dbField.value().trim());
-            String snippet = solution.getSnippet();
-            if (snippet.toLowerCase().startsWith("select ")) {
-                solution.setSnippet("(" + snippet + ")");
-            }
+            SqlSnippet fieldSnippet = snippetResolver.resolve(dbField.value().trim());
             String fieldName = field.getName();
             Class<?> fieldType = field.getType();
             try {
                 Method method = beanClass.getMethod("set" + StringUtils.firstCharToUpperCase(fieldName), fieldType);
-                metadata.addFieldDbMap(fieldName, solution, method, fieldType);
+                metadata.addFieldDbMap(fieldName, fieldSnippet, method, fieldType);
             } catch (Exception e) {
                 throw new SearchException("[" + beanClass.getName() + ": " + fieldName + "] is annotated by @DbField, but there is none correctly setter for it.", e);
             }
@@ -70,6 +68,8 @@ public class DefaultMetadataResolver implements MetadataResolver {
         if (metadata.getFieldList().size() == 0) {
             throw new SearchException("[" + beanClass.getName() + "] is annotated by @SearchBean, but there is none field annotated by @DbFile.");
         }
+        // 对字段进行排序
+        metadata.getFieldList().sort(String::compareTo);
         return metadata;
     }
 

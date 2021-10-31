@@ -1,21 +1,20 @@
 package com.ejlchina.searcher.implement;
 
-import java.util.*;
-import java.util.Map.Entry;
-import java.util.regex.Pattern;
-
 import com.ejlchina.searcher.Metadata;
-import com.ejlchina.searcher.param.*;
-import com.ejlchina.searcher.util.MapBuilder;
-import com.ejlchina.searcher.util.ObjectUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import com.ejlchina.searcher.ParamFilter;
 import com.ejlchina.searcher.ParamResolver;
+import com.ejlchina.searcher.SearchParam;
 import com.ejlchina.searcher.implement.pagination.MaxOffsetPagination;
 import com.ejlchina.searcher.implement.pagination.Pagination;
-import com.ejlchina.searcher.ParamFilter;
-import com.ejlchina.searcher.SearchParam;
+import com.ejlchina.searcher.param.FetchInfo;
+import com.ejlchina.searcher.param.FieldParam;
+import com.ejlchina.searcher.param.Operator;
+import com.ejlchina.searcher.param.OrderParam;
+import com.ejlchina.searcher.util.MapBuilder;
+import com.ejlchina.searcher.util.ObjectUtils;
+
+import java.util.*;
+import java.util.regex.Pattern;
 
 /***
  * @author Troy.Zhou @ 2017-03-20
@@ -24,7 +23,7 @@ import com.ejlchina.searcher.SearchParam;
  */
 public class DefaultParamResolver implements ParamResolver {
 
-	protected Logger log = LoggerFactory.getLogger(DefaultParamResolver.class);
+	public final Pattern INDEX_PATTERN = Pattern.compile("[0-9]+");
 
 	/**
 	 * 排序字段参数名
@@ -52,23 +51,10 @@ public class DefaultParamResolver implements ParamResolver {
 	 * 过滤运算符参数名后缀
 	 */
 	private String operatorSuffix = "op";
-	
-	/**
-	 * Boolean true 值参数后缀
-	 */
-	private String trueSuffix = "true";
-	
-	/**
-	 * Boolean false 值参数后缀
-	 */
-	private String falseSuffix = "false";
-
 
 	private Pagination pagination = new MaxOffsetPagination();
-	
-	private final Pattern indexSuffixPattern = Pattern.compile("[0-9]+");
 
-	private ParamFilter[] filters = new ParamFilter[] { };
+	private ParamFilter[] filters = new ParamFilter[] { new BoolValueFilter() };
 	
 	@Override
 	public Pagination getPagination() {
@@ -86,74 +72,72 @@ public class DefaultParamResolver implements ParamResolver {
 		if (paraMap == null) {
 			paraMap = new HashMap<>();
 		}
-		return doResolve(metadata, fetchInfo, paraMap);
+		return doResolve(metadata.getFieldList(), fetchInfo, paraMap);
 	}
 
-
-	private <T> SearchParam doResolve(Metadata<T> metadata, FetchInfo fetchInfo, Map<String, Object> paraMap) {
-		SearchParam searchParam = new SearchParam(paraMap, fetchInfo);
+	protected <T> SearchParam doResolve(List<String> fieldList, FetchInfo fetchInfo, Map<String, Object> paraMap) {
+		List<FieldParam> fieldParams = resolveFieldParams(fieldList, paraMap);
+		SearchParam searchParam = new SearchParam(paraMap, fetchInfo, fieldParams);
 		if (!fetchInfo.isFetchAll()) {
 			searchParam.setPageParam(pagination.paginate(paraMap));
 		}
 		searchParam.setOrderParam(resolveOrderParam(paraMap));
+		return searchParam;
+	}
 
-		List<String> fieldList = metadata.getFieldList();
-		for (Entry<String, Object> entry : paraMap.entrySet()) {
-			String key = entry.getKey();
-			Object value = entry.getValue();
-			RawParam rawParam = resolveRawParam(fieldList, key);
-			if (rawParam == null) {
-				continue;
+	protected List<FieldParam> resolveFieldParams(List<String> fieldList, Map<String, Object> paraMap) {
+		Map<String, List<Integer>> fieldIndicesMap = new HashMap<>();
+		for (String key : paraMap.keySet()) {
+			int index = key.lastIndexOf(separator);
+			if (index > 0 && key.length() > index + 1) {
+				String suffix = key.substring(index + 1);
+				if (INDEX_PATTERN.matcher(suffix).matches()) {
+					String field = key.substring(0, index);
+					mapFieldIndex(fieldIndicesMap, field, Integer.parseInt(suffix));
+				}
 			}
-			if (rawParam.type == RawParam.FIELD) {
-				FieldParam fieldParam = findFilterParam(searchParam, key);
-				fieldParam.addValue(value);
-				if (fieldParam.getOperator() == null) {
-					fieldParam.setOperator(Operator.Equal);
-				}
-			} else if (trueSuffix.equals(rawParam.suffix)) {
-				FieldParam fieldParam = findFilterParam(searchParam, rawParam.field);
-				fieldParam.setOperator(Operator.Equal);
-				fieldParam.addValue("1");
-			} else if (falseSuffix.equals(rawParam.suffix)) {
-				FieldParam fieldParam = findFilterParam(searchParam, rawParam.field);
-				fieldParam.setOperator(Operator.Equal);
-				fieldParam.addValue("0");
-			} else if (ignoreCaseSuffix.equals(rawParam.suffix)) {
-				FieldParam fieldParam = findFilterParam(searchParam, rawParam.field);
-				if (value != null) {
-					if (value instanceof Boolean) {
-						fieldParam.setIgnoreCase((Boolean) value);
-					} else
-					if (value instanceof String) {
-						String upcase = ((String) value).toUpperCase();
-						fieldParam.setIgnoreCase(!("0".equals(upcase) || "OFF".equals(upcase) || "FALSE".endsWith(upcase) || "N".endsWith(upcase)
-								|| "NO".endsWith(upcase) || "F".endsWith(upcase)));
-					}
-				}
-			} else if (operatorSuffix.equals(rawParam.suffix)) {
-				FieldParam fieldParam = findFilterParam(searchParam, rawParam.field);
-				if (value instanceof Operator) {
-					fieldParam.setOperator((Operator) value);
-				} else
-				if (value instanceof String) {
-					fieldParam.setOperator(Operator.from((String) value));
-				}
-			} else {	// 多值解析
-				try {
-					int index = Integer.parseInt(rawParam.suffix);
-					FieldParam fieldParam = findFilterParam(searchParam, rawParam.field);
-					if (fieldParam.getOperator() == null) {
-						fieldParam.setOperator(Operator.Equal);
-					}
-					fieldParam.addValue(value, index);
-				} catch (NumberFormatException e) {
-					log.error("不能解析的查询参数名：" + key, e);
-				}
+			mapFieldIndex(fieldIndicesMap, key, 0);
+		}
+		List<FieldParam> fieldParams = new ArrayList<>();
+		for (String field : fieldList) {
+			List<Integer> indices = fieldIndicesMap.get(field);
+			FieldParam param = toFieldParam(field, indices, paraMap);
+			if (param != null) {
+				fieldParams.add(param);
 			}
 		}
-		searchParam.removeUselessFilterParam();
-		return searchParam;
+		return fieldParams;
+	}
+
+	protected void mapFieldIndex(Map<String, List<Integer>> fieldIndicesKeysMap, String field, int index) {
+		fieldIndicesKeysMap.computeIfAbsent(field, k -> new ArrayList<>(2)).add(index);
+	}
+
+	protected FieldParam toFieldParam(String field, List<Integer> indices, Map<String, Object> paraMap) {
+		Operator operator = toOperator(paraMap.get(field + separator + operatorSuffix));
+		if (operator == Operator.Empty || operator == Operator.NotEmpty) {
+			return new FieldParam(field, operator);
+		}
+		if (indices != null && indices.size() > 0) {
+			FieldParam param = new FieldParam(field, operator);
+			param.setIgnoreCase(ObjectUtils.toBoolean(paraMap.get(field + separator + ignoreCaseSuffix)));
+			for (int index : indices) {
+				Object value = paraMap.get(field + separator + index);
+				param.addValue(value, index);
+			}
+			return param;
+		}
+		return null;
+	}
+
+	protected Operator toOperator(Object value) {
+		if (value instanceof Operator) {
+			return (Operator) value;
+		}
+		if (value instanceof String) {
+			return Operator.from((String) value);
+		}
+		return Operator.Equal;
 	}
 
 	private OrderParam resolveOrderParam(Map<String, Object> paraMap) {
@@ -161,40 +145,6 @@ public class DefaultParamResolver implements ParamResolver {
 		String order = ObjectUtils.string(paraMap.get(orderName));
 		if (sort != null) {
 			return new OrderParam(sort, order);
-		}
-		return null;
-	}
-
-	private FieldParam findFilterParam(SearchParam searchParam, String field) {
-		FieldParam fieldParam = null;
-		List<FieldParam> list = searchParam.getFieldParams();
-		for (FieldParam param : list) {
-			if (param.getName().equals(field)) {
-				fieldParam = param;
-				break;
-			}
-		}
-		if (fieldParam == null) {
-			fieldParam = new FieldParam();
-			fieldParam.setName(field);
-			searchParam.addFieldParam(fieldParam);
-		}
-		return fieldParam;
-	}
-	
-	private RawParam resolveRawParam(List<String> fieldList, String key) {
-		for (String field : fieldList) {
-			if (key.equals(field)) {
-				return new RawParam(RawParam.FIELD, field, null);
-			}	
-			if (key.startsWith(field + separator)) {
-				String suffix = key.substring(field.length() + separator.length());
-				if (operatorSuffix.equals(suffix) || ignoreCaseSuffix.equals(suffix)
-						|| trueSuffix.equals(suffix) || falseSuffix.equals(suffix)
-						|| indexSuffixPattern.matcher(suffix).matches()) {
-					return new RawParam(RawParam.OPERATOR, field, suffix);
-				}
-			}
 		}
 		return null;
 	}
@@ -219,14 +169,6 @@ public class DefaultParamResolver implements ParamResolver {
 		this.operatorSuffix = operatorSuffix;
 	}
 
-	public void setTrueSuffix(String trueSuffix) {
-		this.trueSuffix = trueSuffix;
-	}
-
-	public void setFalseSuffix(String falseSuffix) {
-		this.falseSuffix = falseSuffix;
-	}
-
 	public void setSeparator(String separator) {
 		MapBuilder.config(MapBuilder.SEPARATOR, separator);
 		this.separator = Objects.requireNonNull(separator);
@@ -248,23 +190,4 @@ public class DefaultParamResolver implements ParamResolver {
 		return filters;
 	}
 
-	static class RawParam {
-		
-		static final int FIELD = 1;
-		static final int OPERATOR = 2;
-		
-		int type;
-		String suffix;
-		String field;
-		
-		
-		public RawParam(int type, String field, String suffix) {
-			this.type = type;
-			this.field = field;
-			this.suffix = suffix;
-		}
-		
-	}
-	
-	
 }

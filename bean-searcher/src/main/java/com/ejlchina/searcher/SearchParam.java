@@ -1,8 +1,10 @@
 package com.ejlchina.searcher;
 
-import com.ejlchina.searcher.param.*;
+import com.ejlchina.searcher.param.FetchInfo;
+import com.ejlchina.searcher.param.FieldParam;
+import com.ejlchina.searcher.param.OrderParam;
+import com.ejlchina.searcher.param.PageParam;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +28,7 @@ public class SearchParam {
 	/**
 	 * 过滤检索参数列表
 	 */
-	private final List<FieldParam> fieldParams = new ArrayList<>();
+	private final List<FieldParam> fieldParams;
 
 	/**
 	 * 分页参数
@@ -39,9 +41,10 @@ public class SearchParam {
 	private OrderParam orderParam;
 
 
-	public SearchParam(Map<String, Object> paraMap, FetchInfo fetchInfo) {
+	public SearchParam(Map<String, Object> paraMap, FetchInfo fetchInfo, List<FieldParam> fieldParams) {
 		this.paraMap = paraMap;
 		this.fetchInfo = fetchInfo;
+		this.fieldParams = fieldParams;
 	}
 
 	/**
@@ -56,22 +59,6 @@ public class SearchParam {
 	 */
 	public Object getPara(String key) {
 		return paraMap.get(key);
-	}
-	
-	public void removeUselessFilterParam() {
-		int size = fieldParams.size();
-		for (int i = size - 1; i >= 0; i--) {
-			FieldParam param = fieldParams.get(i);
-			Operator op = param.getOperator();
-			if (param.allValuesEmpty() && op != Operator.Empty
-					&& op != Operator.NotEmpty) {
-				fieldParams.remove(i);
-			}
-		}
-	}
-
-	public void addFieldParam(FieldParam fieldParam) {
-		fieldParams.add(fieldParam);
 	}
 
 	public List<FieldParam> getFieldParams() {

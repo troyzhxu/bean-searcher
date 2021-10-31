@@ -37,7 +37,7 @@ public class Metadata<T> {
 	private final boolean distinct;
 	
 	/**
-	 * 参与检索的Bean属性列表
+	 * Bean 的属性列表（已排好序）
 	 * */
 	private final List<String> fieldList = new ArrayList<>();
 
@@ -72,19 +72,19 @@ public class Metadata<T> {
 	}
 
 	
-	public void addFieldDbMap(String field, SqlSnippet dbFieldSolution, Method getMethod, Class<?> fieldType) {
+	public void addFieldDbMap(String field, SqlSnippet fieldSnippet, Method getMethod, Class<?> fieldType) {
 		if (fieldList.contains(field)) {
 			throw new SearchException("不可以重复添加字段");
 		}
-		String dbField = dbFieldSolution.getSnippet();
+		String dbField = fieldSnippet.getSnippet();
         if (dbField.toLowerCase().startsWith("select ")) {
-			dbFieldSolution.setSnippet("(" + dbField + ")");
+			fieldSnippet.setSnippet("(" + dbField + ")");
         }
 		fieldList.add(field);
 		fieldDbAliasMap.put(field, "d_" + fieldList.size());
 		fieldGetMethodMap.put(field, getMethod);
 		fieldTypeMap.put(field, fieldType);
-		fieldDbSnippetMap.put(field, dbFieldSolution);
+		fieldDbSnippetMap.put(field, fieldSnippet);
 	}
 
 	public Class<T> getBeanClass() {

@@ -1,11 +1,10 @@
 package com.ejlchina.searcher.param;
 
+import com.ejlchina.searcher.util.StringUtils;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-
-import com.ejlchina.searcher.param.Operator;
-import com.ejlchina.searcher.util.StringUtils;
 
 /**
  * 字段参数
@@ -16,7 +15,12 @@ public class FieldParam {
 	/**
 	 * 字段名
 	 */
-	private String name;
+	private final String name;
+
+	/**
+	 * 字段运算符
+	 */
+	private final Operator operator;
 
 	/**
 	 * 参数值
@@ -27,11 +31,6 @@ public class FieldParam {
 	 * 是否忽略大小写
 	 */
 	private boolean ignoreCase;
-
-	/**
-	 * 字段运算符
-	 */
-	private Operator operator;
 
 	/**
 	 * 字段参数值
@@ -56,16 +55,13 @@ public class FieldParam {
 
 	}
 
+	public FieldParam(String name, Operator operator) {
+		this.name = name;
+		this.operator = operator;
+	}
+
 	public String getName() {
 		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public void addValue(Object value) {
-		values.add(new Value(value, 0));
 	}
 	
 	public void addValue(Object value, int index) {
@@ -74,11 +70,11 @@ public class FieldParam {
 
 	public Object[] getValues() {
 		values.sort(Comparator.comparingInt(v -> v.index));
-		Object[] vals = new Object[values.size()];
+		Object[] objects = new Object[values.size()];
 		for (int i = 0; i < values.size(); i++) {
-			vals[i] = values.get(i).value;
+			objects[i] = values.get(i).value;
 		}
-		return vals;
+		return objects;
 	}
 
 	public boolean isIgnoreCase() {
@@ -91,10 +87,6 @@ public class FieldParam {
 
 	public Operator getOperator() {
 		return operator;
-	}
-
-	public void setOperator(Operator operator) {
-		this.operator = operator;
 	}
 
 	public boolean allValuesEmpty() {

@@ -14,9 +14,7 @@ import java.util.Objects;
  * */
 public class NullValueFilter implements ParamFilter {
 
-	
 	private String[] nulls;
-	
 	
 	@Override
 	public <T> Map<String, Object> doFilter(Metadata<T> metadata, Map<String, Object> paraMap) {
