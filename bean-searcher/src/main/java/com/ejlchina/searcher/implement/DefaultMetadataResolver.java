@@ -20,7 +20,7 @@ public class DefaultMetadataResolver implements MetadataResolver {
 
     private final Map<Class<?>, Metadata<?>> cache = new ConcurrentHashMap<>();
 
-    private EmbedParamResolver embedParamResolver = new DefaultEmbedParamResolver();
+    private SnippetResolver snippetResolver = new DefaultSnippetResolver();
 
     @Override
     public <T> Metadata<T> resolve(Class<T> beanClass) {
@@ -42,9 +42,9 @@ public class DefaultMetadataResolver implements MetadataResolver {
             throw new SearcherException("The class [" + beanClass.getName()
                     + "] is not a valid SearchBean, please check whether the class is annotated correctly by @SearchBean");
         }
-        SqlSnippet tableSolution = embedParamResolver.resolve(searchBean.tables());
-        SqlSnippet joinCondSolution = embedParamResolver.resolve(searchBean.joinCond());
-        SqlSnippet groupBySolution = embedParamResolver.resolve(searchBean.groupBy());
+        SqlSnippet tableSolution = snippetResolver.resolve(searchBean.tables());
+        SqlSnippet joinCondSolution = snippetResolver.resolve(searchBean.joinCond());
+        SqlSnippet groupBySolution = snippetResolver.resolve(searchBean.groupBy());
 
         Metadata<T> metadata = new Metadata<>(beanClass, tableSolution, joinCondSolution, groupBySolution, searchBean.distinct());
 
@@ -53,10 +53,10 @@ public class DefaultMetadataResolver implements MetadataResolver {
             if (dbField == null) {
                 continue;
             }
-            SqlSnippet solution = embedParamResolver.resolve(dbField.value().trim());
-            String snippet = solution.getSqlSnippet();
+            SqlSnippet solution = snippetResolver.resolve(dbField.value().trim());
+            String snippet = solution.getSnippet();
             if (snippet.toLowerCase().startsWith("select ")) {
-                solution.setSqlSnippet("(" + snippet + ")");
+                solution.setSnippet("(" + snippet + ")");
             }
             String fieldName = field.getName();
             Class<?> fieldType = field.getType();
@@ -73,12 +73,12 @@ public class DefaultMetadataResolver implements MetadataResolver {
         return metadata;
     }
 
-    public EmbedParamResolver getEmbedParamResolver() {
-        return embedParamResolver;
+    public SnippetResolver getSnippetResolver() {
+        return snippetResolver;
     }
 
-    public void setEmbedParamResolver(EmbedParamResolver embedParamResolver) {
-        this.embedParamResolver = Objects.requireNonNull(embedParamResolver);
+    public void setSnippetResolver(SnippetResolver snippetResolver) {
+        this.snippetResolver = Objects.requireNonNull(snippetResolver);
     }
 
 }

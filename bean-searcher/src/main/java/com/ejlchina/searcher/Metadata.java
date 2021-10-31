@@ -76,9 +76,9 @@ public class Metadata<T> {
 		if (fieldList.contains(field)) {
 			throw new SearcherException("不可以重复添加字段");
 		}
-		String dbField = dbFieldSolution.getSqlSnippet();
+		String dbField = dbFieldSolution.getSnippet();
         if (dbField.toLowerCase().startsWith("select ")) {
-			dbFieldSolution.setSqlSnippet("(" + dbField + ")");
+			dbFieldSolution.setSnippet("(" + dbField + ")");
         }
 		fieldList.add(field);
 		fieldDbAliasMap.put(field, "d_" + fieldList.size());
@@ -92,7 +92,7 @@ public class Metadata<T> {
 	}
 
 	public String getTalbes() {
-		return tableSnippet.getSqlSnippet();
+		return tableSnippet.getSnippet();
 	}
 
 	public List<EmbedParam> getTableEmbedParams() {
@@ -100,7 +100,7 @@ public class Metadata<T> {
 	}
 
 	public String getJoinCond() {
-		return joinCondSnippet.getSqlSnippet();
+		return joinCondSnippet.getSnippet();
 	}
 
 	public List<EmbedParam> getJoinCondEmbedParams() {
@@ -108,7 +108,7 @@ public class Metadata<T> {
 	}
 
 	public String getGroupBy() {
-		return groupBySnippet.getSqlSnippet();
+		return groupBySnippet.getSnippet();
 	}
 
 	public List<EmbedParam> getGroupByEmbedParams() {
@@ -121,7 +121,7 @@ public class Metadata<T> {
 
 	public String getDbField(String field) {
 		SqlSnippet solution = fieldDbSnippetMap.get(field);
-		return solution != null ? solution.getSqlSnippet() : null;
+		return solution != null ? solution.getSnippet() : null;
 	}
 
 	public Map<String, String> getFieldDbAliasMap() {

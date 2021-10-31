@@ -14,19 +14,19 @@ public class SqlSnippet {
 	/**
 	 * SQL 片段
 	 */
-	private String sqlSnippet;
+	private String snippet;
 
 	/**
 	 * 内嵌参数
 	 */
 	private final List<EmbedParam> params = new ArrayList<>();
 	
-	public String getSqlSnippet() {
-		return sqlSnippet;
+	public String getSnippet() {
+		return snippet;
 	}
 
-	public void setSqlSnippet(String sqlSnippet) {
-		this.sqlSnippet = sqlSnippet;
+	public void setSnippet(String snippet) {
+		this.snippet = snippet;
 	}
 
 	public List<EmbedParam> getParams() {
