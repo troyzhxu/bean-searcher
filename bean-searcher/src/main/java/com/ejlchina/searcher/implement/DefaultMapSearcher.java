@@ -28,7 +28,7 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 
 	@Override
 	public <T> Map<String, Object> searchFirst(Class<T> beanClass, Map<String, Object> paraMap) {
-		paraMap.put(getPagination().getSizeParamName(), "1");
+		paraMap.put(getPagination().getSizeName(), "1");
 		List<Map<String, Object>> list = search(beanClass, paraMap, null, false, true, false).getDataList();
 		if (list.size() > 0) {
 			return list.get(0);

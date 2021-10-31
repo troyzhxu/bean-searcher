@@ -1,6 +1,5 @@
 package com.ejlchina.searcher;
 
-import com.ejlchina.searcher.implement.pagination.Pagination;
 import com.ejlchina.searcher.param.FetchInfo;
 
 import java.util.Map;
@@ -15,7 +14,7 @@ public interface ParamResolver {
 	/**
 	 * @return 分页解析器
 	 * */
-	Pagination getPagination();
+	PageExtractor getPagination();
 
 	/**
 	 * @param metadata 元数据

@@ -5,9 +5,9 @@ import com.ejlchina.searcher.dialect.*;
 import com.ejlchina.searcher.implement.*;
 import com.ejlchina.searcher.implement.convertor.DefaultFieldConvertor;
 import com.ejlchina.searcher.implement.convertor.FieldConvertor;
-import com.ejlchina.searcher.implement.pagination.MaxOffsetPagination;
-import com.ejlchina.searcher.implement.pagination.PageNumPagination;
-import com.ejlchina.searcher.implement.pagination.Pagination;
+import com.ejlchina.searcher.implement.PageOffsetExtractor;
+import com.ejlchina.searcher.implement.PageSizeExtractor;
+import com.ejlchina.searcher.PageExtractor;
 import com.ejlchina.searcher.ParamFilter;
 import com.ejlchina.searcher.implement.processor.DefaultParamProcessor;
 import com.ejlchina.searcher.implement.processor.ParamProcessor;
@@ -34,25 +34,25 @@ import javax.sql.DataSource;
 public class BeanSearcherAutoConfiguration {
 
 	@Bean
-	@ConditionalOnMissingBean(Pagination.class)
-	public Pagination pagination(BeanSearcherProperties config) {
+	@ConditionalOnMissingBean(PageExtractor.class)
+	public PageExtractor pagination(BeanSearcherProperties config) {
 		ParamsPorps.PaginationPorps conf = config.getParams().getPagination();
 		String type = conf.getType();
 		if (ParamsPorps.PaginationPorps.TYPE_PAGE.equals(type)) {
-			PageNumPagination p = new PageNumPagination();
+			PageSizeExtractor p = new PageSizeExtractor();
 			p.setMaxAllowedSize(conf.getMaxAllowedSize());
-			p.setSizeParamName(conf.getSize());
-			p.setPageParamName(conf.getPage());
-			p.setStartPage(conf.getStart());
+			p.setSizeName(conf.getSize());
+			p.setPageName(conf.getPage());
+			p.setStart(conf.getStart());
 			p.setDefaultSize(conf.getDefaultSize());
 			return p;
 		} 
 		if (ParamsPorps.PaginationPorps.TYPE_OFFSET.equals(type)) {
-			MaxOffsetPagination p = new MaxOffsetPagination();
+			PageOffsetExtractor p = new PageOffsetExtractor();
 			p.setMaxAllowedSize(conf.getMaxAllowedSize());
-			p.setSizeParamName(conf.getMax());
-			p.setOffsetParamName(conf.getOffset());
-			p.setStartOffset(conf.getStart());
+			p.setSizeName(conf.getMax());
+			p.setOffsetName(conf.getOffset());
+			p.setStart(conf.getStart());
 			p.setDefaultSize(conf.getDefaultSize());
 			return p;
 		}
@@ -61,10 +61,10 @@ public class BeanSearcherAutoConfiguration {
 
 	@Bean
 	@ConditionalOnMissingBean(ParamResolver.class)
-	public ParamResolver searchParamResolver(Pagination pagination, BeanSearcherProperties config,
+	public ParamResolver searchParamResolver(PageExtractor pageExtractor, BeanSearcherProperties config,
 											 ObjectProvider<ParamFilter[]> paramFilterProvider) {
 		DefaultParamResolver searchParamResolver = new DefaultParamResolver();
-		searchParamResolver.setPagination(pagination);
+		searchParamResolver.setPagination(pageExtractor);
 		ParamsPorps conf = config.getParams();
 		searchParamResolver.setOperatorSuffix(conf.getOperatorKey());
 		searchParamResolver.setIgnoreCaseSuffix(conf.getIgnoreCaseKey());

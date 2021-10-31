@@ -1,11 +1,6 @@
 package com.ejlchina.searcher.implement;
 
-import com.ejlchina.searcher.Metadata;
-import com.ejlchina.searcher.ParamFilter;
-import com.ejlchina.searcher.ParamResolver;
-import com.ejlchina.searcher.SearchParam;
-import com.ejlchina.searcher.implement.pagination.MaxOffsetPagination;
-import com.ejlchina.searcher.implement.pagination.Pagination;
+import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.param.FetchInfo;
 import com.ejlchina.searcher.param.FieldParam;
 import com.ejlchina.searcher.param.Operator;
@@ -52,13 +47,13 @@ public class DefaultParamResolver implements ParamResolver {
 	 */
 	private String operatorSuffix = "op";
 
-	private Pagination pagination = new MaxOffsetPagination();
+	private PageExtractor pageExtractor = new PageOffsetExtractor();
 
 	private ParamFilter[] filters = new ParamFilter[] { new BoolValueFilter() };
 	
 	@Override
-	public Pagination getPagination() {
-		return pagination;
+	public PageExtractor getPagination() {
+		return pageExtractor;
 	}
 	
 	@Override
@@ -79,7 +74,7 @@ public class DefaultParamResolver implements ParamResolver {
 		List<FieldParam> fieldParams = resolveFieldParams(fieldList, paraMap);
 		SearchParam searchParam = new SearchParam(paraMap, fetchInfo, fieldParams);
 		if (!fetchInfo.isFetchAll()) {
-			searchParam.setPageParam(pagination.paginate(paraMap));
+			searchParam.setPageParam(pageExtractor.extract(paraMap));
 		}
 		searchParam.setOrderParam(resolveOrderParam(paraMap));
 		return searchParam;
@@ -178,8 +173,8 @@ public class DefaultParamResolver implements ParamResolver {
 		return separator;
 	}
 
-	public void setPagination(Pagination pagination) {
-		this.pagination = Objects.requireNonNull(pagination);
+	public void setPagination(PageExtractor pageExtractor) {
+		this.pageExtractor = Objects.requireNonNull(pageExtractor);
 	}
 
 	public void setFilters(ParamFilter[] filters) {

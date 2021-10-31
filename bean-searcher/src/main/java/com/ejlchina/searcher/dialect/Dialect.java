@@ -1,6 +1,6 @@
 package com.ejlchina.searcher.dialect;
 
-import com.ejlchina.searcher.param.PageParam;
+import com.ejlchina.searcher.param.LimitParam;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +67,7 @@ public interface Dialect {
 	 *            偏移条数
 	 * @return 分页Sql
 	 */
-	PaginateSql forPaginate(String fieldSelectSql, String fromWhereSql, PageParam limitInfo);
+	PaginateSql forPaginate(String fieldSelectSql, String fromWhereSql, LimitParam limitInfo);
 
 	
 	/**

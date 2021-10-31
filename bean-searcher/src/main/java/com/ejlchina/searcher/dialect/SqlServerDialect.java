@@ -1,6 +1,6 @@
 package com.ejlchina.searcher.dialect;
 
-import com.ejlchina.searcher.param.PageParam;
+import com.ejlchina.searcher.param.LimitParam;
 
 /**
  * Sql Server 方言实现
@@ -31,7 +31,7 @@ public class SqlServerDialect implements Dialect {
 	}
 
 	@Override
-	public PaginateSql forPaginate(String fieldSelectSql, String fromWhereSql, PageParam limit) {
+	public PaginateSql forPaginate(String fieldSelectSql, String fromWhereSql, LimitParam limit) {
 
 		PaginateSql paginateSql = new PaginateSql();
 	

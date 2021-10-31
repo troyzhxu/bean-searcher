@@ -5,7 +5,7 @@ package com.ejlchina.searcher.param;
  * @author Troy.Zhou @ 2021-10-31
  * @since v3.0.0
  */
-public class PageParam {
+public class LimitParam {
 
     /**
      * 分页：最大条数（用于分页）
@@ -17,7 +17,7 @@ public class PageParam {
      */
     private long offset;
 
-    public PageParam(int size, long offset) {
+    public LimitParam(int size, long offset) {
         this.size = size;
         this.offset = offset;
     }

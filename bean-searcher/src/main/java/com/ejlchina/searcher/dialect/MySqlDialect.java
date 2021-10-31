@@ -1,7 +1,7 @@
 package com.ejlchina.searcher.dialect;
 
 
-import com.ejlchina.searcher.param.PageParam;
+import com.ejlchina.searcher.param.LimitParam;
 
 /**
  * MySql 方言实现
@@ -34,7 +34,7 @@ public class MySqlDialect implements Dialect {
 	}
 	
 	@Override
-	public PaginateSql forPaginate(String fieldSelectSql, String fromWhereSql, PageParam limit) {
+	public PaginateSql forPaginate(String fieldSelectSql, String fromWhereSql, LimitParam limit) {
 		PaginateSql paginateSql = new PaginateSql();
 		StringBuilder ret = new StringBuilder();
 		ret.append(fieldSelectSql).append(fromWhereSql);
