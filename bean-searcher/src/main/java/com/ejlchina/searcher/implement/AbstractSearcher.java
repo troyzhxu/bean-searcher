@@ -86,12 +86,6 @@ public abstract class AbstractSearcher implements Searcher {
 				shouldQueryList, fetchAll);
 		Metadata<T> metadata = metadataResolver.resolve(beanClass);
 		SearchParam searchParam = paramResolver.resolve(metadata, fetchInfo, paraMap);
-		searchParam.setSummaryFields(summaryFields);
-		searchParam.setShouldQueryTotal(shouldQueryTotal);
-		searchParam.setShouldQueryList(shouldQueryList);
-		if (fetchAll) {
-			searchParam.setSize(null);
-		}
 		SearchSql<T> searchSql = sqlResolver.resolve(metadata, searchParam);
 		searchSql.setShouldQueryCluster(shouldQueryTotal || summaryFields.length > 0);
 		searchSql.setShouldQueryList(shouldQueryList);
