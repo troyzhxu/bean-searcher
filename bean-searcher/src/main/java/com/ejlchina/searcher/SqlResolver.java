@@ -1,5 +1,7 @@
 package com.ejlchina.searcher;
 
+import com.ejlchina.searcher.param.SearchParam;
+
 /***
  * @author Troy.Zhou @ 2017-03-20
  * 

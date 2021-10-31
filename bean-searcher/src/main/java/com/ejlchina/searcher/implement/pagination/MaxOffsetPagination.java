@@ -1,6 +1,6 @@
 package com.ejlchina.searcher.implement.pagination;
 
-import com.ejlchina.searcher.SearchParam;
+import com.ejlchina.searcher.param.SearchParam;
 import com.ejlchina.searcher.util.MapBuilder;
 import com.ejlchina.searcher.util.ObjectUtils;
 

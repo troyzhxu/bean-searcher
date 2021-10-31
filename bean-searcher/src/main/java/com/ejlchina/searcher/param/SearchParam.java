@@ -1,9 +1,9 @@
-package com.ejlchina.searcher;
+package com.ejlchina.searcher.param;
 
+import com.ejlchina.searcher.param.FieldParam;
 import com.ejlchina.searcher.param.Operator;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +22,7 @@ public class SearchParam {
 	/**
 	 * 过滤检索参数列表
 	 */
-	private final List<FilterParam> filterParamList = new ArrayList<>();
+	private final List<FieldParam> fieldParams = new ArrayList<>();
 
 	/**
 	 * 排序字段（用于排序）
@@ -83,23 +83,23 @@ public class SearchParam {
 	}
 	
 	public void removeUselessFilterParam() {
-		int size = filterParamList.size();
+		int size = fieldParams.size();
 		for (int i = size - 1; i >= 0; i--) {
-			FilterParam param = filterParamList.get(i);
+			FieldParam param = fieldParams.get(i);
 			Operator op = param.getOperator();
 			if (param.allValuesEmpty() && op != Operator.Empty
 					&& op != Operator.NotEmpty) {
-				filterParamList.remove(i);
+				fieldParams.remove(i);
 			}
 		}
 	}
 
-	public void addFilterParam(FilterParam filterParam) {
-		filterParamList.add(filterParam);
+	public void addFilterParam(FieldParam fieldParam) {
+		fieldParams.add(fieldParam);
 	}
 
-	public List<FilterParam> getFilterParamList() {
-		return filterParamList;
+	public List<FieldParam> getFilterParamList() {
+		return fieldParams;
 	}
 
 	public String getSort() {

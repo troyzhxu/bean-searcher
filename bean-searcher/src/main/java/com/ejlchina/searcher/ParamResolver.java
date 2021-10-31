@@ -1,6 +1,7 @@
 package com.ejlchina.searcher;
 
 import com.ejlchina.searcher.implement.pagination.Pagination;
+import com.ejlchina.searcher.param.SearchParam;
 
 import java.util.Map;
 

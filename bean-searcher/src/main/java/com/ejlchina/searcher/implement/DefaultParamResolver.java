@@ -13,9 +13,9 @@ import com.ejlchina.searcher.ParamResolver;
 import com.ejlchina.searcher.implement.pagination.MaxOffsetPagination;
 import com.ejlchina.searcher.implement.pagination.Pagination;
 import com.ejlchina.searcher.ParamFilter;
-import com.ejlchina.searcher.FilterParam;
+import com.ejlchina.searcher.param.FieldParam;
 import com.ejlchina.searcher.param.Operator;
-import com.ejlchina.searcher.SearchParam;
+import com.ejlchina.searcher.param.SearchParam;
 
 /***
  * @author Troy.Zhou @ 2017-03-20
@@ -117,47 +117,47 @@ public class DefaultParamResolver implements ParamResolver {
 				continue;
 			}
 			if (rawParam.type == RawParam.FIELD) {
-				FilterParam filterParam = findFilterParam(searchParam, key);
-				filterParam.addValue(value);
-				if (filterParam.getOperator() == null) {
-					filterParam.setOperator(Operator.Equal);
+				FieldParam fieldParam = findFilterParam(searchParam, key);
+				fieldParam.addValue(value);
+				if (fieldParam.getOperator() == null) {
+					fieldParam.setOperator(Operator.Equal);
 				}
 			} else if (trueSuffix.equals(rawParam.suffix)) {
-				FilterParam filterParam = findFilterParam(searchParam, rawParam.field);
-				filterParam.setOperator(Operator.Equal);
-				filterParam.addValue("1");
+				FieldParam fieldParam = findFilterParam(searchParam, rawParam.field);
+				fieldParam.setOperator(Operator.Equal);
+				fieldParam.addValue("1");
 			} else if (falseSuffix.equals(rawParam.suffix)) {
-				FilterParam filterParam = findFilterParam(searchParam, rawParam.field);
-				filterParam.setOperator(Operator.Equal);
-				filterParam.addValue("0");
+				FieldParam fieldParam = findFilterParam(searchParam, rawParam.field);
+				fieldParam.setOperator(Operator.Equal);
+				fieldParam.addValue("0");
 			} else if (ignoreCaseSuffix.equals(rawParam.suffix)) {
-				FilterParam filterParam = findFilterParam(searchParam, rawParam.field);
+				FieldParam fieldParam = findFilterParam(searchParam, rawParam.field);
 				if (value != null) {
 					if (value instanceof Boolean) {
-						filterParam.setIgnoreCase((Boolean) value);
+						fieldParam.setIgnoreCase((Boolean) value);
 					} else
 					if (value instanceof String) {
 						String upcase = ((String) value).toUpperCase();
-						filterParam.setIgnoreCase(!("0".equals(upcase) || "OFF".equals(upcase) || "FALSE".endsWith(upcase) || "N".endsWith(upcase)
+						fieldParam.setIgnoreCase(!("0".equals(upcase) || "OFF".equals(upcase) || "FALSE".endsWith(upcase) || "N".endsWith(upcase)
 								|| "NO".endsWith(upcase) || "F".endsWith(upcase)));
 					}
 				}
 			} else if (operatorSuffix.equals(rawParam.suffix)) {
-				FilterParam filterParam = findFilterParam(searchParam, rawParam.field);
+				FieldParam fieldParam = findFilterParam(searchParam, rawParam.field);
 				if (value instanceof Operator) {
-					filterParam.setOperator((Operator) value);
+					fieldParam.setOperator((Operator) value);
 				} else
 				if (value instanceof String) {
-					filterParam.setOperator(Operator.from((String) value));
+					fieldParam.setOperator(Operator.from((String) value));
 				}
 			} else {	// 多值解析
 				try {
 					int index = Integer.parseInt(rawParam.suffix);
-					FilterParam filterParam = findFilterParam(searchParam, rawParam.field);
-					if (filterParam.getOperator() == null) {
-						filterParam.setOperator(Operator.Equal);
+					FieldParam fieldParam = findFilterParam(searchParam, rawParam.field);
+					if (fieldParam.getOperator() == null) {
+						fieldParam.setOperator(Operator.Equal);
 					}
-					filterParam.addValue(value, index);
+					fieldParam.addValue(value, index);
 				} catch (NumberFormatException e) {
 					log.error("不能解析的查询参数名：" + key, e);
 				}
@@ -167,21 +167,21 @@ public class DefaultParamResolver implements ParamResolver {
 		return searchParam;
 	}
 
-	private FilterParam findFilterParam(SearchParam searchParam, String field) {
-		FilterParam filterParam = null;
-		List<FilterParam> list = searchParam.getFilterParamList();
-		for (FilterParam param : list) {
+	private FieldParam findFilterParam(SearchParam searchParam, String field) {
+		FieldParam fieldParam = null;
+		List<FieldParam> list = searchParam.getFilterParamList();
+		for (FieldParam param : list) {
 			if (param.getName().equals(field)) {
-				filterParam = param;
+				fieldParam = param;
 				break;
 			}
 		}
-		if (filterParam == null) {
-			filterParam = new FilterParam();
-			filterParam.setName(field);
-			searchParam.addFilterParam(filterParam);
+		if (fieldParam == null) {
+			fieldParam = new FieldParam();
+			fieldParam.setName(field);
+			searchParam.addFilterParam(fieldParam);
 		}
-		return filterParam;
+		return fieldParam;
 	}
 	
 	private RawParam resolveRawParam(List<String> fieldList, String key) {

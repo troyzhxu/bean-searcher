@@ -2,7 +2,7 @@ package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.implement.pagination.Pagination;
-import com.ejlchina.searcher.SearchParam;
+import com.ejlchina.searcher.param.SearchParam;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

@@ -9,7 +9,9 @@ import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.dialect.Dialect;
 import com.ejlchina.searcher.dialect.Dialect.PaginateSql;
 import com.ejlchina.searcher.implement.processor.ParamProcessor;
+import com.ejlchina.searcher.param.FieldParam;
 import com.ejlchina.searcher.param.Operator;
+import com.ejlchina.searcher.param.SearchParam;
 import com.ejlchina.searcher.util.ObjectUtils;
 import com.ejlchina.searcher.util.StringUtils;
 
@@ -103,9 +105,9 @@ public class DefaultSqlResolver implements SqlResolver {
 		
 		String joinCond = metadata.getJoinCond();
 		boolean hasJoinCond = joinCond != null && !"".equals(joinCond.trim());
-		List<FilterParam> filterParamList = searchParam.getFilterParamList();
+		List<FieldParam> fieldParamList = searchParam.getFilterParamList();
 
-		if (hasJoinCond || filterParamList.size() > 0) {
+		if (hasJoinCond || fieldParamList.size() > 0) {
 			builder.append(" where ");
 			if (hasJoinCond) {
 				builder.append("(");
@@ -125,14 +127,14 @@ public class DefaultSqlResolver implements SqlResolver {
 				builder.append(joinCond).append(")");
 			}
 		}
-		for (int i = 0; i < filterParamList.size(); i++) {
+		for (int i = 0; i < fieldParamList.size(); i++) {
 			if (i > 0 || hasJoinCond) {
 				builder.append(" and ");
 			}
-			FilterParam filterParam = filterParamList.get(i);
-			String fieldName = filterParam.getName();
+			FieldParam fieldParam = fieldParamList.get(i);
+			String fieldName = fieldParam.getName();
 			List<Object> sqlParams = appendFilterConditionSql(builder, fieldTypeMap.get(fieldName),
-					metadata.getDbField(fieldName), filterParam);
+					metadata.getDbField(fieldName), fieldParam);
 			for (Object sqlParam : sqlParams) {
 				searchSql.addListSqlParam(sqlParam);
 				searchSql.addClusterSqlParam(sqlParam);
@@ -256,10 +258,10 @@ public class DefaultSqlResolver implements SqlResolver {
 	 * @return 查询参数值
 	 */
 	private List<Object> appendFilterConditionSql(StringBuilder builder, Class<?> fieldType, 
-			String dbField, FilterParam filterParam) {
-		Object[] values = filterParam.getValues();
-		boolean ignoreCase = filterParam.isIgnoreCase();
-		Operator operator = filterParam.getOperator();
+			String dbField, FieldParam fieldParam) {
+		Object[] values = fieldParam.getValues();
+		boolean ignoreCase = fieldParam.isIgnoreCase();
+		Operator operator = fieldParam.getOperator();
 		
 		if (Date.class.isAssignableFrom(fieldType)) {
 			values = paramProcessor.dateParams(values, operator);

@@ -1,4 +1,4 @@
-package com.ejlchina.searcher;
+package com.ejlchina.searcher.param;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -8,22 +8,54 @@ import com.ejlchina.searcher.param.Operator;
 import com.ejlchina.searcher.util.StringUtils;
 
 /**
- * 过滤检索参数
+ * 字段参数
  * 
  * @author Troy.Zhou @ 2017-03-20
  * 
  */
-public class FilterParam {
+public class FieldParam {
 
+	/**
+	 * 字段名
+	 */
 	private String name;
+
+	/**
+	 * 参数值
+	 */
 	private final List<Value> values = new ArrayList<>(2);
+
+	/**
+	 * 是否忽略大小写
+	 */
 	private boolean ignoreCase;
+
+	/**
+	 * 字段运算符
+	 */
 	private Operator operator;
 
-	@Override
-	public String toString() {
-		return "FilterParam [name=" + name + ", values=" + values + ", ignoreCase=" + ignoreCase + ", operator="
-				+ operator + "]";
+	/**
+	 * 字段参数值
+	 */
+	public static class Value {
+
+		private final Object value;
+		private final int index;
+
+		public Value(Object value, int index) {
+			this.value = value;
+			this.index = index;
+		}
+
+		public boolean isEmptyValue() {
+			return value == null || (value instanceof String && StringUtils.isBlank((String) value));
+		}
+
+		public Object getValue() {
+			return value;
+		}
+
 	}
 
 	public String getName() {
@@ -43,7 +75,7 @@ public class FilterParam {
 	}
 
 	public Object[] getValues() {
-		values.sort(Comparator.comparingInt(v -> v.sort));
+		values.sort(Comparator.comparingInt(v -> v.index));
 		Object[] vals = new Object[values.size()];
 		for (int i = 0; i < values.size(); i++) {
 			vals[i] = values.get(i).value;
@@ -74,47 +106,6 @@ public class FilterParam {
 			}
 		}
 		return true;
-	}
-	
-
-	public static class Value {
-
-		public Value(Object value, int sort) {
-			super();
-			this.value = value;
-			this.sort = sort;
-		}
-
-		private Object value;
-		private int sort;
-
-		
-		public boolean isEmptyValue() {
-			return value == null || (value instanceof String && StringUtils.isBlank((String) value));
-		}
-		
-		
-		public Object getValue() {
-			return value;
-		}
-
-		public void setValue(Object value) {
-			this.value = value;
-		}
-		
-		public int getSort() {
-			return sort;
-		}
-
-		public void setSort(int sort) {
-			this.sort = sort;
-		}
-
-		@Override
-		public String toString() {
-			return "Value [value=" + value + ", sort=" + sort + "]";
-		}
-		
 	}
 
 }
