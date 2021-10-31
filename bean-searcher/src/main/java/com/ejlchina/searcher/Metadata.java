@@ -19,17 +19,17 @@ public class Metadata<T> {
 	/**
 	 * 需要查询的数据表
 	 * */
-	private final EmbedSolution tableSolution;
+	private final SqlSnippet tableSnippet;
 
 	/**
 	 * 连表条件
 	 * */
-	private final EmbedSolution joinCondSolution;
+	private final SqlSnippet joinCondSnippet;
 	
 	/**
 	 * 分组字段
 	 * */
-	private final EmbedSolution groupBySolution;
+	private final SqlSnippet groupBySnippet;
 	
 	/**
 	 * 是否 distinct 结果
@@ -44,7 +44,7 @@ public class Metadata<T> {
 	/**
 	 * 映射: Bean属性-> DB字段
 	 * */
-	private final Map<String, EmbedSolution> fieldDbSolutionMap = new HashMap<>();
+	private final Map<String, SqlSnippet> fieldDbSnippetMap = new HashMap<>();
 
 	/**
 	 * 映射: Bean属性 -> DB字段别名
@@ -63,16 +63,16 @@ public class Metadata<T> {
 
 
 
-	public Metadata(Class<T> beanClass, EmbedSolution tableSolution, EmbedSolution joinCondSolution, EmbedSolution groupBySolution, boolean distinct) {
+	public Metadata(Class<T> beanClass, SqlSnippet tableSnippet, SqlSnippet joinCondSnippet, SqlSnippet groupBySnippet, boolean distinct) {
 		this.beanClass = beanClass;
-		this.tableSolution = tableSolution;
-		this.joinCondSolution = joinCondSolution;
-		this.groupBySolution = groupBySolution;
+		this.tableSnippet = tableSnippet;
+		this.joinCondSnippet = joinCondSnippet;
+		this.groupBySnippet = groupBySnippet;
 		this.distinct = distinct;
 	}
 
 	
-	public void addFieldDbMap(String field, EmbedSolution dbFieldSolution, Method getMethod, Class<?> fieldType) {
+	public void addFieldDbMap(String field, SqlSnippet dbFieldSolution, Method getMethod, Class<?> fieldType) {
 		if (fieldList.contains(field)) {
 			throw new SearcherException("不可以重复添加字段");
 		}
@@ -84,7 +84,7 @@ public class Metadata<T> {
 		fieldDbAliasMap.put(field, "d_" + fieldList.size());
 		fieldGetMethodMap.put(field, getMethod);
 		fieldTypeMap.put(field, fieldType);
-		fieldDbSolutionMap.put(field, dbFieldSolution);
+		fieldDbSnippetMap.put(field, dbFieldSolution);
 	}
 
 	public Class<T> getBeanClass() {
@@ -92,27 +92,27 @@ public class Metadata<T> {
 	}
 
 	public String getTalbes() {
-		return tableSolution.getSqlSnippet();
+		return tableSnippet.getSqlSnippet();
 	}
 
 	public List<EmbedParam> getTableEmbedParams() {
-		return tableSolution.getParams();
+		return tableSnippet.getParams();
 	}
 
 	public String getJoinCond() {
-		return joinCondSolution.getSqlSnippet();
+		return joinCondSnippet.getSqlSnippet();
 	}
 
 	public List<EmbedParam> getJoinCondEmbedParams() {
-		return joinCondSolution.getParams();
+		return joinCondSnippet.getParams();
 	}
 
 	public String getGroupBy() {
-		return groupBySolution.getSqlSnippet();
+		return groupBySnippet.getSqlSnippet();
 	}
 
 	public List<EmbedParam> getGroupByEmbedParams() {
-		return groupBySolution.getParams();
+		return groupBySnippet.getParams();
 	}
 
 	public boolean isDistinct() {
@@ -120,7 +120,7 @@ public class Metadata<T> {
 	}
 
 	public String getDbField(String field) {
-		EmbedSolution solution = fieldDbSolutionMap.get(field);
+		SqlSnippet solution = fieldDbSnippetMap.get(field);
 		return solution != null ? solution.getSqlSnippet() : null;
 	}
 
@@ -145,7 +145,7 @@ public class Metadata<T> {
 	}
 
 	public List<EmbedParam> getFieldEmbedParams(String field) {
-		EmbedSolution solution = fieldDbSolutionMap.get(field);
+		SqlSnippet solution = fieldDbSnippetMap.get(field);
 		return solution != null ? solution.getParams() : Collections.emptyList();
 	}
 	

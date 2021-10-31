@@ -2,7 +2,7 @@ package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.EmbedParam;
 import com.ejlchina.searcher.EmbedParamResolver;
-import com.ejlchina.searcher.EmbedSolution;
+import com.ejlchina.searcher.SqlSnippet;
 import com.ejlchina.searcher.SearcherException;
 import com.ejlchina.searcher.util.StringUtils;
 
@@ -20,8 +20,8 @@ public class DefaultEmbedParamResolver implements EmbedParamResolver {
     private final char[] quotations = new char[] {'\'', '"'};
 
     @Override
-    public EmbedSolution resolve(String sqlSnippet) {
-        EmbedSolution solution = new EmbedSolution();
+    public SqlSnippet resolve(String sqlSnippet) {
+        SqlSnippet solution = new SqlSnippet();
         int index1 = sqlSnippet.indexOf(paramPrefix);
         while (index1 >= 0) {
             int index2 = findParamEndIndex(sqlSnippet, index1);

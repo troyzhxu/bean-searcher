@@ -12,6 +12,6 @@ public interface EmbedParamResolver {
      * @param sqlSnippet SQL 片段
      * @return 解析结果
      */
-    EmbedSolution resolve(String sqlSnippet);
+    SqlSnippet resolve(String sqlSnippet);
 
 }

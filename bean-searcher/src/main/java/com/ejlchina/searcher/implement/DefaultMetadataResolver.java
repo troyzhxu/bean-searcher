@@ -42,9 +42,9 @@ public class DefaultMetadataResolver implements MetadataResolver {
             throw new SearcherException("The class [" + beanClass.getName()
                     + "] is not a valid SearchBean, please check whether the class is annotated correctly by @SearchBean");
         }
-        EmbedSolution tableSolution = embedParamResolver.resolve(searchBean.tables());
-        EmbedSolution joinCondSolution = embedParamResolver.resolve(searchBean.joinCond());
-        EmbedSolution groupBySolution = embedParamResolver.resolve(searchBean.groupBy());
+        SqlSnippet tableSolution = embedParamResolver.resolve(searchBean.tables());
+        SqlSnippet joinCondSolution = embedParamResolver.resolve(searchBean.joinCond());
+        SqlSnippet groupBySolution = embedParamResolver.resolve(searchBean.groupBy());
 
         Metadata<T> metadata = new Metadata<>(beanClass, tableSolution, joinCondSolution, groupBySolution, searchBean.distinct());
 
@@ -53,7 +53,7 @@ public class DefaultMetadataResolver implements MetadataResolver {
             if (dbField == null) {
                 continue;
             }
-            EmbedSolution solution = embedParamResolver.resolve(dbField.value().trim());
+            SqlSnippet solution = embedParamResolver.resolve(dbField.value().trim());
             String snippet = solution.getSqlSnippet();
             if (snippet.toLowerCase().startsWith("select ")) {
                 solution.setSqlSnippet("(" + snippet + ")");

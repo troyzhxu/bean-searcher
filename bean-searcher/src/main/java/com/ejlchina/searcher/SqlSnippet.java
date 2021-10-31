@@ -5,14 +5,20 @@ import java.util.List;
 
 
 /**
- * 内嵌参数解析结果
+ * SQL 片段
  * @author Troy.Zhou @ 2021-10-30
  * @since v3.0.0
  */
-public class EmbedSolution {
+public class SqlSnippet {
 
+	/**
+	 * SQL 片段
+	 */
 	private String sqlSnippet;
 
+	/**
+	 * 内嵌参数
+	 */
 	private final List<EmbedParam> params = new ArrayList<>();
 	
 	public String getSqlSnippet() {
