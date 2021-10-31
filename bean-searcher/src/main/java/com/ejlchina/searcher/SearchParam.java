@@ -45,11 +45,6 @@ public class SearchParam {
 	 * 过滤检索参数列表
 	 */
 	private final List<FilterParam> filterParamList = new ArrayList<>();
-
-	/**
-	 * 虚拟参数值映射
-	 */
-	private final Map<String, Object> virtualParamMap = new HashMap<>();
 	
 	/**
 	 * 需要求和的字段
@@ -72,6 +67,19 @@ public class SearchParam {
 		this.max = max;
 	}
 
+	/**
+	 * 获取原始参数
+	 */
+	public Map<String, Object> getParaMap() {
+		return paraMap;
+	}
+
+	/**
+	 * 获取原始参数值
+	 */
+	public Object getPara(String key) {
+		return paraMap.get(key);
+	}
 	
 	public void removeUselessFilterParam() {
 		int size = filterParamList.size();
@@ -91,14 +99,6 @@ public class SearchParam {
 
 	public List<FilterParam> getFilterParamList() {
 		return filterParamList;
-	}
-
-	public Map<String, Object> getVirtualParamMap() {
-		return virtualParamMap;
-	}
-
-	public void putVirtualParam(String name, Object value) {
-		this.virtualParamMap.put(name, value);;
 	}
 
 	public String getSort() {

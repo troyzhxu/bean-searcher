@@ -21,7 +21,6 @@ import com.ejlchina.searcher.util.StringUtils;
  */
 public class DefaultSqlResolver implements SqlResolver {
 
-	
 	/**
 	 * 数据库方言
 	 */
@@ -48,8 +47,6 @@ public class DefaultSqlResolver implements SqlResolver {
 		Map<String, String> fieldDbAliasMap = metadata.getFieldDbAliasMap();
 		Map<String, Class<?>> fieldTypeMap = metadata.getFieldTypeMap();
 		
-		Map<String, Object> virtualParamMap = searchParam.getVirtualParamMap();
-		
 		SearchSql<T> searchSql = new SearchSql<>(metadata);
 		StringBuilder builder = new StringBuilder("select ");
 		if (metadata.isDistinct()) {
@@ -65,7 +62,7 @@ public class DefaultSqlResolver implements SqlResolver {
 			List<SqlSnippet.Param> fieldParams = metadata.getFieldEmbedParams(field);
 			if (fieldParams != null) {
 				for (SqlSnippet.Param param : fieldParams) {
-					Object sqlParam = virtualParamMap.get(param.getName());
+					Object sqlParam = searchParam.getPara(param.getName());
 					if (param.isJdbcPara()) {
 						searchSql.addListSqlParam(sqlParam);
 						// 只有在 distinct 条件，聚族查询 SQL 里才会出现 字段查询 语句，才需要将 虚拟参数放到 聚族参数里 
@@ -92,7 +89,7 @@ public class DefaultSqlResolver implements SqlResolver {
 		List<SqlSnippet.Param> tableParams = metadata.getTableEmbedParams();
 		if (tableParams != null) {
 			for (SqlSnippet.Param param : tableParams) {
-				Object sqlParam = virtualParamMap.get(param.getName());
+				Object sqlParam = searchParam.getPara(param.getName());
 				if (param.isJdbcPara()) {
 					searchSql.addListSqlParam(sqlParam);
 					searchSql.addClusterSqlParam(sqlParam);
@@ -115,7 +112,7 @@ public class DefaultSqlResolver implements SqlResolver {
 				List<SqlSnippet.Param> joinCondParams = metadata.getJoinCondEmbedParams();
 				if (joinCondParams != null) {
 					for (SqlSnippet.Param param : joinCondParams) {
-						Object sqlParam = virtualParamMap.get(param.getName());
+						Object sqlParam = searchParam.getPara(param.getName());
 						if (param.isJdbcPara()) {
 							searchSql.addListSqlParam(sqlParam);
 							searchSql.addClusterSqlParam(sqlParam);
@@ -159,7 +156,7 @@ public class DefaultSqlResolver implements SqlResolver {
 			List<SqlSnippet.Param> groupParams = metadata.getGroupByEmbedParams();
 			if (groupParams != null) {
 				for (SqlSnippet.Param param : groupParams) {
-					Object sqlParam = virtualParamMap.get(param.getName());
+					Object sqlParam = searchParam.getPara(param.getName());
 					if (param.isJdbcPara()) {
 						searchSql.addListSqlParam(sqlParam);
 						searchSql.addClusterSqlParam(sqlParam);

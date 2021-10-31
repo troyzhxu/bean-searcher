@@ -113,9 +113,10 @@ public class DefaultParamResolver implements ParamResolver {
 				continue;
 			}
 			RawParam rawParam = resolveRawParam(fieldList, key);
-			if (rawParam.type == RawParam.VERTUAL) {
-				searchParam.putVirtualParam(key, value);
-			} else if (rawParam.type == RawParam.FEILD) {
+			if (rawParam == null) {
+				continue;
+			}
+			if (rawParam.type == RawParam.FIELD) {
 				FilterParam filterParam = findFilterParam(searchParam, key);
 				filterParam.addValue(value);
 				if (filterParam.getOperator() == null) {
@@ -186,7 +187,7 @@ public class DefaultParamResolver implements ParamResolver {
 	private RawParam resolveRawParam(List<String> fieldList, String key) {
 		for (String field : fieldList) {
 			if (key.equals(field)) {
-				return new RawParam(RawParam.FEILD, field, null);
+				return new RawParam(RawParam.FIELD, field, null);
 			}	
 			if (key.startsWith(field + separator)) {
 				String suffix = key.substring(field.length() + separator.length());
@@ -197,7 +198,7 @@ public class DefaultParamResolver implements ParamResolver {
 				}
 			}
 		}
-		return new RawParam(RawParam.VERTUAL, key, null);
+		return null;
 	}
 
 	public void setDefaultSize(Integer defaultSize) {
@@ -255,9 +256,8 @@ public class DefaultParamResolver implements ParamResolver {
 
 	static class RawParam {
 		
-		static final int FEILD = 1;
+		static final int FIELD = 1;
 		static final int OPERATOR = 2;
-		static final int VERTUAL = 3;
 		
 		int type;
 		String suffix;
