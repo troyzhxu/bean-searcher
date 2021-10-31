@@ -13,15 +13,18 @@ public class Application {
 	public static void main(String[] args) {
 
 		BeanSearcher searcher = SearcherBuilder.beanSearcher()
-				.searchSqlExecutor(searchSql -> {
-					System.out.println();
-					System.out.println("LIST 	SQL 	::: " +  searchSql.getListSqlString());
-					System.out.println("LIST 	PARAMS	::: " +  searchSql.getListSqlParams());
-					System.out.println();
-					System.out.println("CLUSTER	SQL 	::: " +  searchSql.getClusterSqlString());
-					System.out.println("CLUSTER	PARAMS	::: " +  searchSql.getClusterSqlParams());
-					System.out.println();
-					return new SqlResult(searchSql);
+				.searchSqlExecutor(new SqlExecutor() {
+					@Override
+					public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
+						System.out.println();
+						System.out.println("LIST 	SQL 	::: " +  searchSql.getListSqlString());
+						System.out.println("LIST 	PARAMS	::: " +  searchSql.getListSqlParams());
+						System.out.println();
+						System.out.println("CLUSTER	SQL 	::: " +  searchSql.getClusterSqlString());
+						System.out.println("CLUSTER	PARAMS	::: " +  searchSql.getClusterSqlParams());
+						System.out.println();
+						return new SqlResult<>(searchSql);
+					}
 				})
 				.build();
 
