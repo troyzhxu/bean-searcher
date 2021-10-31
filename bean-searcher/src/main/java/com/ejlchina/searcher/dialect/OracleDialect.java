@@ -1,5 +1,7 @@
 package com.ejlchina.searcher.dialect;
 
+import com.ejlchina.searcher.param.PageParam;
+
 /**
  * Oracle 方言实现
  * 
@@ -29,57 +31,42 @@ public class OracleDialect implements Dialect {
 	}
 
 	@Override
-	public PaginateSql forPaginate(String fieldSelectSql, String fromWhereSql, Integer max, Long offset) {
+	public PaginateSql forPaginate(String fieldSelectSql, String fromWhereSql, PageParam limit) {
 		PaginateSql paginateSql = new PaginateSql();
-		
-		if (max == null && offset == null) {
+		if (limit == null) {
 			paginateSql.setSql(fieldSelectSql + fromWhereSql);
 			return paginateSql;
 		}
-		
-		if (offset == null) {
-			offset = 0L;
-		}
-		
 		String rowAlias = "row_";
 		while (fromWhereSql.contains(rowAlias)) {
 			rowAlias += "_";
 		}
-
 		StringBuilder builder = new StringBuilder();
-		
-		if (max == null) {
-			
-			builder.append("select * from (");
 
-			builder.append(fieldSelectSql).append(fromWhereSql);
-			
-			builder.append(") ").append(rowAlias).append(" where rownum > ?");
-			
-			paginateSql.addParam(offset);
-		} else {
-			
-			String tableAlias = "table_";
-			while (fromWhereSql.contains(tableAlias)) {
-				tableAlias += "_";
-			}
-			
-			String rownumAlias = "rownum_";
-			while (fieldSelectSql.contains(tableAlias)) {
-				rownumAlias += "_";
-			}
-			
-			builder.append("select * from (select ").append(rowAlias).append(".*, rownum ").append(rownumAlias);
-		
-			builder.append(" from (").append(fieldSelectSql).append(fromWhereSql);
-			
-			builder.append(") ").append(rowAlias).append(" where rownum <= ?) ").append(tableAlias);
-			
-			builder.append(" where ").append(tableAlias).append(".").append(rownumAlias).append(" > ?");
-			
-			paginateSql.addParam(offset + max);
-			paginateSql.addParam(offset);
+		String tableAlias = "table_";
+		while (fromWhereSql.contains(tableAlias)) {
+			tableAlias += "_";
 		}
+
+		String rownumAlias = "rownum_";
+		while (fieldSelectSql.contains(rownumAlias)) {
+			rownumAlias += "_";
+		}
+
+		builder.append("select * from (select ").append(rowAlias).append(".*, rownum ").append(rownumAlias);
+
+		builder.append(" from (").append(fieldSelectSql).append(fromWhereSql);
+
+		builder.append(") ").append(rowAlias).append(" where rownum <= ?) ").append(tableAlias);
+
+		builder.append(" where ").append(tableAlias).append(".").append(rownumAlias).append(" > ?");
+
+		int size = limit.getSize();
+		long offset = limit.getOffset();
+
+		paginateSql.addParam(offset + size);
+		paginateSql.addParam(offset);
+
 
 		paginateSql.setSql(builder.toString());
 		

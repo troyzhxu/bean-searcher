@@ -1,5 +1,7 @@
 package com.ejlchina.searcher.dialect;
 
+import com.ejlchina.searcher.param.PageParam;
+
 /**
  * Sql Server 方言实现
  * 
@@ -29,11 +31,8 @@ public class SqlServerDialect implements Dialect {
 	}
 
 	@Override
-	public PaginateSql forPaginate(String fieldSelectSql, String fromWhereSql, Integer max, Long offset) {
-		if (offset == null) {
-			offset = 0L;
-		}
-		
+	public PaginateSql forPaginate(String fieldSelectSql, String fromWhereSql, PageParam limit) {
+
 		PaginateSql paginateSql = new PaginateSql();
 	
 		
@@ -42,12 +41,12 @@ public class SqlServerDialect implements Dialect {
 		
 		ret.append("select * from (select row_number() over (order by tempcolumn) temprownumber, * from ");
 		
-		ret.append("(select top ").append(offset + max).append(" tempcolumn=0,");
+//		ret.append("(select top ").append(offset + max).append(" tempcolumn=0,");
 		
 		// (?i) 不区分大小写
 		ret.append(fieldSelectSql.replaceFirst("(?i)select", "")).append(fromWhereSql);
 		
-		ret.append(") vip) mvp where temprownumber > ").append(offset);
+//		ret.append(") vip) mvp where temprownumber > ").append(offset);
 
 		/**
 		select * 

@@ -29,7 +29,7 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 
 	@Override
 	public <T> T searchFirst(Class<T> beanClass, Map<String, Object> paraMap) {
-		paraMap.put(getPagination().getMaxParamName(), "1");
+		paraMap.put(getPagination().getSizeParamName(), "1");
 		List<T> list = search(beanClass, paraMap, null, false, true, false).getDataList();
 		if (list.size() > 0) {
 			return list.get(0);

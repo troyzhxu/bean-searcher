@@ -41,17 +41,19 @@ public class BeanSearcherAutoConfiguration {
 		if (ParamsPorps.PaginationPorps.TYPE_PAGE.equals(type)) {
 			PageNumPagination p = new PageNumPagination();
 			p.setMaxAllowedSize(conf.getMaxAllowedSize());
-			p.setMaxParamName(conf.getSize());
+			p.setSizeParamName(conf.getSize());
 			p.setPageParamName(conf.getPage());
 			p.setStartPage(conf.getStart());
+			p.setDefaultSize(conf.getDefaultSize());
 			return p;
 		} 
 		if (ParamsPorps.PaginationPorps.TYPE_OFFSET.equals(type)) {
 			MaxOffsetPagination p = new MaxOffsetPagination();
 			p.setMaxAllowedSize(conf.getMaxAllowedSize());
-			p.setMaxParamName(conf.getMax());
+			p.setSizeParamName(conf.getMax());
 			p.setOffsetParamName(conf.getOffset());
 			p.setStartOffset(conf.getStart());
+			p.setDefaultSize(conf.getDefaultSize());
 			return p;
 		}
 		throw new SearchException("配置项【bean-searcher.params.pagination.type】只能为 page 或  offset！");
@@ -64,7 +66,6 @@ public class BeanSearcherAutoConfiguration {
 		DefaultParamResolver searchParamResolver = new DefaultParamResolver();
 		searchParamResolver.setPagination(pagination);
 		ParamsPorps conf = config.getParams();
-		searchParamResolver.setDefaultSize(conf.getPagination().getDefaultSize());
 		searchParamResolver.setOperatorSuffix(conf.getOperatorKey());
 		searchParamResolver.setIgnoreCaseSuffix(conf.getIgnoreCaseKey());
 		searchParamResolver.setOrderName(conf.getOrder());

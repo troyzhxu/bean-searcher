@@ -1,5 +1,7 @@
 package com.ejlchina.searcher.dialect;
 
+import com.ejlchina.searcher.param.PageParam;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +67,7 @@ public interface Dialect {
 	 *            偏移条数
 	 * @return 分页Sql
 	 */
-	PaginateSql forPaginate(String fieldSelectSql, String fromWhereSql, Integer max, Long offset);
+	PaginateSql forPaginate(String fieldSelectSql, String fromWhereSql, PageParam limitInfo);
 
 	
 	/**
@@ -75,7 +77,7 @@ public interface Dialect {
 	class PaginateSql {
 
 		private String sql;
-		private List<Object> params = new ArrayList<>(2);
+		private final List<Object> params = new ArrayList<>(2);
 
 		public String getSql() {
 			return sql;

@@ -9,9 +9,7 @@ import com.ejlchina.searcher.util.StringUtils;
 
 /**
  * 字段参数
- * 
  * @author Troy.Zhou @ 2017-03-20
- * 
  */
 public class FieldParam {
 

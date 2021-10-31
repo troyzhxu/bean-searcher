@@ -9,9 +9,8 @@ import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.dialect.Dialect;
 import com.ejlchina.searcher.dialect.Dialect.PaginateSql;
 import com.ejlchina.searcher.implement.processor.ParamProcessor;
-import com.ejlchina.searcher.param.FieldParam;
-import com.ejlchina.searcher.param.Operator;
-import com.ejlchina.searcher.param.SearchParam;
+import com.ejlchina.searcher.param.*;
+import com.ejlchina.searcher.SearchParam;
 import com.ejlchina.searcher.util.ObjectUtils;
 import com.ejlchina.searcher.util.StringUtils;
 
@@ -105,7 +104,7 @@ public class DefaultSqlResolver implements SqlResolver {
 		
 		String joinCond = metadata.getJoinCond();
 		boolean hasJoinCond = joinCond != null && !"".equals(joinCond.trim());
-		List<FieldParam> fieldParamList = searchParam.getFilterParamList();
+		List<FieldParam> fieldParamList = searchParam.getFieldParams();
 
 		if (hasJoinCond || fieldParamList.size() > 0) {
 			builder.append(" where ");
@@ -140,9 +139,11 @@ public class DefaultSqlResolver implements SqlResolver {
 				searchSql.addClusterSqlParam(sqlParam);
 			}
 		}
+		FetchInfo fetchInfo = searchParam.getFetchInfo();
+
 		String groupBy = metadata.getGroupBy();
-		String[] summaryFields = searchParam.getSummaryFields();
-		boolean shouldQueryTotal = searchParam.isShouldQueryTotal();
+		String[] summaryFields = fetchInfo.getSummaryFields();
+		boolean shouldQueryTotal = fetchInfo.isShouldQueryTotal();
 		if (StringUtils.isBlank(groupBy)) {
 			if (shouldQueryTotal || summaryFields.length > 0) {
 				if (metadata.isDistinct()) {
@@ -185,18 +186,20 @@ public class DefaultSqlResolver implements SqlResolver {
 				}
 			}
 		}
-		if (searchParam.isShouldQueryList()) {
-			String sortDbAlias = fieldDbAliasMap.get(searchParam.getSort());
-			if (sortDbAlias != null) {
-				builder.append(" order by ").append(sortDbAlias);
-				String order = searchParam.getOrder();
-				if (order != null) {
-					builder.append(" ").append(order);
+		if (fetchInfo.isShouldQueryList()) {
+			OrderParam orderPara = searchParam.getOrderParam();
+			if (orderPara != null) {
+				String sortDbAlias = fieldDbAliasMap.get(orderPara.getSort());
+				if (sortDbAlias != null) {
+					builder.append(" order by ").append(sortDbAlias);
+					String order = orderPara.getOrder();
+					if (order != null) {
+						builder.append(" ").append(order);
+					}
 				}
 			}
 			String fromWhereSql = builder.toString();
-			PaginateSql paginateSql = dialect.forPaginate(fieldSelectSql, fromWhereSql, searchParam.getMax(),
-					searchParam.getOffset());
+			PaginateSql paginateSql = dialect.forPaginate(fieldSelectSql, fromWhereSql, searchParam.getPageParam());
 			searchSql.setListSqlString(paginateSql.getSql());
 			searchSql.addListSqlParams(paginateSql.getParams());
 		}

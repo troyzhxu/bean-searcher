@@ -5,7 +5,9 @@ import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
 import com.ejlchina.searcher.Metadata;
+import com.ejlchina.searcher.param.*;
 import com.ejlchina.searcher.util.MapBuilder;
+import com.ejlchina.searcher.util.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,9 +15,7 @@ import com.ejlchina.searcher.ParamResolver;
 import com.ejlchina.searcher.implement.pagination.MaxOffsetPagination;
 import com.ejlchina.searcher.implement.pagination.Pagination;
 import com.ejlchina.searcher.ParamFilter;
-import com.ejlchina.searcher.param.FieldParam;
-import com.ejlchina.searcher.param.Operator;
-import com.ejlchina.searcher.param.SearchParam;
+import com.ejlchina.searcher.SearchParam;
 
 /***
  * @author Troy.Zhou @ 2017-03-20
@@ -24,14 +24,8 @@ import com.ejlchina.searcher.param.SearchParam;
  */
 public class DefaultParamResolver implements ParamResolver {
 
-
 	protected Logger log = LoggerFactory.getLogger(DefaultParamResolver.class);
 
-	/**
-	 * 默认最大条数
-	 */
-	private Integer defaultSize = 15;
-	
 	/**
 	 * 排序字段参数名
 	 */
@@ -82,7 +76,7 @@ public class DefaultParamResolver implements ParamResolver {
 	}
 	
 	@Override
-	public <T> SearchParam resolve(Metadata<T> metadata, Map<String, Object> paraMap) {
+	public <T> SearchParam resolve(Metadata<T> metadata, FetchInfo fetchInfo, Map<String, Object> paraMap) {
 		for (ParamFilter paramFilter: filters) {
 			if (paraMap == null) {
 				break;
@@ -90,28 +84,23 @@ public class DefaultParamResolver implements ParamResolver {
 			paraMap = paramFilter.doFilter(metadata, paraMap);
 		}
 		if (paraMap == null) {
-			return doResolve(metadata, new HashMap<>());
+			paraMap = new HashMap<>();
 		}
-		return doResolve(metadata, paraMap);
+		return doResolve(metadata, fetchInfo, paraMap);
 	}
 
-	private <T> SearchParam doResolve(Metadata<T> metadata, Map<String, Object> paraMap) {
+
+	private <T> SearchParam doResolve(Metadata<T> metadata, FetchInfo fetchInfo, Map<String, Object> paraMap) {
+		SearchParam searchParam = new SearchParam(paraMap, fetchInfo);
+		if (!fetchInfo.isFetchAll()) {
+			searchParam.setPageParam(pagination.paginate(paraMap));
+		}
+		searchParam.setOrderParam(resolveOrderParam(paraMap));
+
 		List<String> fieldList = metadata.getFieldList();
-		SearchParam searchParam = new SearchParam(paraMap, defaultSize);
 		for (Entry<String, Object> entry : paraMap.entrySet()) {
 			String key = entry.getKey();
 			Object value = entry.getValue();
-			if (key.equals(sortName) && value instanceof String) {
-				searchParam.setSort((String) value);
-				continue;
-			}
-			if (key.equals(orderName) && value instanceof String) {
-				searchParam.setOrder((String) value);
-				continue;
-			}
-			if (pagination.paginate(searchParam, key, value)) {
-				continue;
-			}
 			RawParam rawParam = resolveRawParam(fieldList, key);
 			if (rawParam == null) {
 				continue;
@@ -167,9 +156,18 @@ public class DefaultParamResolver implements ParamResolver {
 		return searchParam;
 	}
 
+	private OrderParam resolveOrderParam(Map<String, Object> paraMap) {
+		String sort = ObjectUtils.string(paraMap.get(sortName));
+		String order = ObjectUtils.string(paraMap.get(orderName));
+		if (sort != null) {
+			return new OrderParam(sort, order);
+		}
+		return null;
+	}
+
 	private FieldParam findFilterParam(SearchParam searchParam, String field) {
 		FieldParam fieldParam = null;
-		List<FieldParam> list = searchParam.getFilterParamList();
+		List<FieldParam> list = searchParam.getFieldParams();
 		for (FieldParam param : list) {
 			if (param.getName().equals(field)) {
 				fieldParam = param;
@@ -179,7 +177,7 @@ public class DefaultParamResolver implements ParamResolver {
 		if (fieldParam == null) {
 			fieldParam = new FieldParam();
 			fieldParam.setName(field);
-			searchParam.addFilterParam(fieldParam);
+			searchParam.addFieldParam(fieldParam);
 		}
 		return fieldParam;
 	}
@@ -199,10 +197,6 @@ public class DefaultParamResolver implements ParamResolver {
 			}
 		}
 		return null;
-	}
-
-	public void setDefaultSize(Integer defaultSize) {
-		this.defaultSize = defaultSize;
 	}
 	
 	public void setSortName(String sortName) {

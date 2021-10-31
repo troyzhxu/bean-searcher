@@ -1,5 +1,7 @@
 package com.ejlchina.searcher.dialect;
 
+import com.ejlchina.searcher.param.PageParam;
+
 public class PostgreSqlDialect implements Dialect {
 
 	@Override
@@ -26,7 +28,7 @@ public class PostgreSqlDialect implements Dialect {
 	}
 
 	@Override
-	public PaginateSql forPaginate(String fieldSelectSql, String fromWhereSql, Integer max, Long offset) {
+	public PaginateSql forPaginate(String fieldSelectSql, String fromWhereSql, PageParam limit) {
 		// TODO Auto-generated method stub
 		return null;
 	}

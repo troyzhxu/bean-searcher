@@ -2,7 +2,8 @@ package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.implement.pagination.Pagination;
-import com.ejlchina.searcher.param.SearchParam;
+import com.ejlchina.searcher.SearchParam;
+import com.ejlchina.searcher.param.FetchInfo;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -77,20 +78,19 @@ public abstract class AbstractSearcher implements Searcher {
 	}
 
 	protected <T> SqlResult<T> doSearch(Class<T> beanClass, Map<String, Object> paraMap, String[] summaryFields,
-								   boolean shouldQueryTotal, boolean shouldQueryList, boolean needNotLimit) {
+								   boolean shouldQueryTotal, boolean shouldQueryList, boolean fetchAll) {
 		if (sqlExecutor == null) {
 			throw new SearchException("you must set a searchSqlExecutor before search.");
 		}
-		if (summaryFields == null) {
-			summaryFields = new String[] { };
-		}
+		FetchInfo fetchInfo = new FetchInfo(summaryFields, shouldQueryTotal,
+				shouldQueryList, fetchAll);
 		Metadata<T> metadata = metadataResolver.resolve(beanClass);
-		SearchParam searchParam = paramResolver.resolve(metadata, paraMap);
+		SearchParam searchParam = paramResolver.resolve(metadata, fetchInfo, paraMap);
 		searchParam.setSummaryFields(summaryFields);
 		searchParam.setShouldQueryTotal(shouldQueryTotal);
 		searchParam.setShouldQueryList(shouldQueryList);
-		if (needNotLimit) {
-			searchParam.setMax(null);
+		if (fetchAll) {
+			searchParam.setSize(null);
 		}
 		SearchSql<T> searchSql = sqlResolver.resolve(metadata, searchParam);
 		searchSql.setShouldQueryCluster(shouldQueryTotal || summaryFields.length > 0);

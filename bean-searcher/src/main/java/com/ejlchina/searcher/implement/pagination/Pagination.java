@@ -1,6 +1,9 @@
 package com.ejlchina.searcher.implement.pagination;
 
-import com.ejlchina.searcher.param.SearchParam;
+import com.ejlchina.searcher.SearchParam;
+import com.ejlchina.searcher.param.PageParam;
+
+import java.util.Map;
 
 /**
  * 分页解析器
@@ -10,20 +13,17 @@ import com.ejlchina.searcher.param.SearchParam;
  */
 public interface Pagination {
 
-	
 	/**
-	 * @param searchParam 检索参数
-	 * @param paraName 参数名
-	 * @param paraValue 参数值
-	 * @return true if paginated else false
+	 * @param paraMap 检索参数
+	 * @return 分页信息
 	 */
-	boolean paginate(SearchParam searchParam, String paraName, Object paraValue);
+	PageParam paginate(Map<String, Object> paraMap);
 	
 	
 	/**
 	 * @return 最大条数的参数名
 	 * */
-	String getMaxParamName();
+	String getSizeParamName();
 	
 	/**
 	 * @return 开始页

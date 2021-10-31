@@ -1,7 +1,7 @@
 package com.ejlchina.searcher;
 
 import com.ejlchina.searcher.implement.pagination.Pagination;
-import com.ejlchina.searcher.param.SearchParam;
+import com.ejlchina.searcher.param.FetchInfo;
 
 import java.util.Map;
 
@@ -19,9 +19,10 @@ public interface ParamResolver {
 
 	/**
 	 * @param metadata 元数据
+	 * @param fetchInfo Fetch 信息
 	 * @param paraMap 原始检索参数
 	 * @return SearchParam
 	 * */
-	<T> SearchParam resolve(Metadata<T> metadata, Map<String, Object> paraMap);
+	<T> SearchParam resolve(Metadata<T> metadata, FetchInfo fetchInfo, Map<String, Object> paraMap);
 	
 }

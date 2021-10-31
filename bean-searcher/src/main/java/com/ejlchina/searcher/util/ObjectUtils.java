@@ -27,6 +27,12 @@ public class ObjectUtils {
 		return null;
 	}
 
+	public static String string(Object value) {
+		if (value instanceof String) {
+			return (String) value;
+		}
+		return null;
+	}
 	
 	public static Object firstNotNull(Object[] values) {
 		for (Object value: values) {
