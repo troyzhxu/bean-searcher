@@ -5,19 +5,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.ejlchina.searcher.Metadata;
-import com.ejlchina.searcher.SearchSql;
-import com.ejlchina.searcher.SqlResolver;
-import com.ejlchina.searcher.SearchException;
+import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.dialect.Dialect;
 import com.ejlchina.searcher.dialect.Dialect.PaginateSql;
 import com.ejlchina.searcher.implement.processor.ParamProcessor;
-import com.ejlchina.searcher.FilterParam;
 import com.ejlchina.searcher.param.Operator;
-import com.ejlchina.searcher.SearchParam;
 import com.ejlchina.searcher.util.ObjectUtils;
 import com.ejlchina.searcher.util.StringUtils;
-import com.ejlchina.searcher.EmbedParam;
 
 /**
  * 默认查询SQL解析器
@@ -68,11 +62,11 @@ public class DefaultSqlResolver implements SqlResolver {
 			String dbField = metadata.getDbField(field);
 			String dbAlias = fieldDbAliasMap.get(field);
 			
-			List<EmbedParam> fieldEmbedParams = metadata.getFieldEmbedParams(field);
-			if (fieldEmbedParams != null) {
-				for (EmbedParam embedParam : fieldEmbedParams) {
-					Object sqlParam = virtualParamMap.get(embedParam.getName());
-					if (embedParam.isParameterized()) {
+			List<SqlSnippet.Param> fieldParams = metadata.getFieldEmbedParams(field);
+			if (fieldParams != null) {
+				for (SqlSnippet.Param param : fieldParams) {
+					Object sqlParam = virtualParamMap.get(param.getName());
+					if (param.isJdbcPara()) {
 						searchSql.addListSqlParam(sqlParam);
 						// 只有在 distinct 条件，聚族查询 SQL 里才会出现 字段查询 语句，才需要将 虚拟参数放到 聚族参数里 
 						if (metadata.isDistinct()) {
@@ -80,7 +74,7 @@ public class DefaultSqlResolver implements SqlResolver {
 						}
 					} else {
 						String strParam = sqlParam != null ? sqlParam.toString() : "";
-						dbField = dbField.replace(embedParam.getSqlName(), strParam);
+						dbField = dbField.replace(param.getSqlName(), strParam);
 					}
 				}
 			}
@@ -95,16 +89,16 @@ public class DefaultSqlResolver implements SqlResolver {
 		builder = new StringBuilder(" from ");
 		String talbes = metadata.getTalbes();
 		
-		List<EmbedParam> tableEmbedParams = metadata.getTableEmbedParams();
-		if (tableEmbedParams != null) {
-			for (EmbedParam embedParam : tableEmbedParams) {
-				Object sqlParam = virtualParamMap.get(embedParam.getName());
-				if (embedParam.isParameterized()) {
+		List<SqlSnippet.Param> tableParams = metadata.getTableEmbedParams();
+		if (tableParams != null) {
+			for (SqlSnippet.Param param : tableParams) {
+				Object sqlParam = virtualParamMap.get(param.getName());
+				if (param.isJdbcPara()) {
 					searchSql.addListSqlParam(sqlParam);
 					searchSql.addClusterSqlParam(sqlParam);
 				} else {
 					String strParam = sqlParam != null ? sqlParam.toString() : "";
-					talbes = talbes.replace(embedParam.getSqlName(), strParam);
+					talbes = talbes.replace(param.getSqlName(), strParam);
 				}
 			}
 		}
@@ -118,16 +112,16 @@ public class DefaultSqlResolver implements SqlResolver {
 			builder.append(" where ");
 			if (hasJoinCond) {
 				builder.append("(");
-				List<EmbedParam> joinCondEmbedParams = metadata.getJoinCondEmbedParams();
-				if (joinCondEmbedParams != null) {
-					for (EmbedParam embedParam : joinCondEmbedParams) {
-						Object sqlParam = virtualParamMap.get(embedParam.getName());
-						if (embedParam.isParameterized()) {
+				List<SqlSnippet.Param> joinCondParams = metadata.getJoinCondEmbedParams();
+				if (joinCondParams != null) {
+					for (SqlSnippet.Param param : joinCondParams) {
+						Object sqlParam = virtualParamMap.get(param.getName());
+						if (param.isJdbcPara()) {
 							searchSql.addListSqlParam(sqlParam);
 							searchSql.addClusterSqlParam(sqlParam);
 						} else {
 							String strParam = sqlParam != null ? sqlParam.toString() : "";
-							joinCond = joinCond.replace(embedParam.getSqlName(), strParam);
+							joinCond = joinCond.replace(param.getSqlName(), strParam);
 						}
 					}
 				}
@@ -162,16 +156,16 @@ public class DefaultSqlResolver implements SqlResolver {
 				searchSql.setClusterSqlString(clusterSelectSql + fromWhereSql);
 			}
 		} else {
-			List<EmbedParam> groupEmbedParams = metadata.getGroupByEmbedParams();
-			if (groupEmbedParams != null) {
-				for (EmbedParam embedParam : groupEmbedParams) {
-					Object sqlParam = virtualParamMap.get(embedParam.getName());
-					if (embedParam.isParameterized()) {
+			List<SqlSnippet.Param> groupParams = metadata.getGroupByEmbedParams();
+			if (groupParams != null) {
+				for (SqlSnippet.Param param : groupParams) {
+					Object sqlParam = virtualParamMap.get(param.getName());
+					if (param.isJdbcPara()) {
 						searchSql.addListSqlParam(sqlParam);
 						searchSql.addClusterSqlParam(sqlParam);
 					} else {
 						String strParam = sqlParam != null ? sqlParam.toString() : "";
-						groupBy = groupBy.replace(embedParam.getSqlName(), strParam);
+						groupBy = groupBy.replace(param.getSqlName(), strParam);
 					}
 				}
 			}

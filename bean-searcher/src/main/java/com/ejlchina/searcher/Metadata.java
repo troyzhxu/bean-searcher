@@ -95,7 +95,7 @@ public class Metadata<T> {
 		return tableSnippet.getSnippet();
 	}
 
-	public List<EmbedParam> getTableEmbedParams() {
+	public List<SqlSnippet.Param> getTableEmbedParams() {
 		return tableSnippet.getParams();
 	}
 
@@ -103,7 +103,7 @@ public class Metadata<T> {
 		return joinCondSnippet.getSnippet();
 	}
 
-	public List<EmbedParam> getJoinCondEmbedParams() {
+	public List<SqlSnippet.Param> getJoinCondEmbedParams() {
 		return joinCondSnippet.getParams();
 	}
 
@@ -111,7 +111,7 @@ public class Metadata<T> {
 		return groupBySnippet.getSnippet();
 	}
 
-	public List<EmbedParam> getGroupByEmbedParams() {
+	public List<SqlSnippet.Param> getGroupByEmbedParams() {
 		return groupBySnippet.getParams();
 	}
 
@@ -144,7 +144,7 @@ public class Metadata<T> {
 		return fieldTypeMap;
 	}
 
-	public List<EmbedParam> getFieldEmbedParams(String field) {
+	public List<SqlSnippet.Param> getFieldEmbedParams(String field) {
 		SqlSnippet solution = fieldDbSnippetMap.get(field);
 		return solution != null ? solution.getParams() : Collections.emptyList();
 	}

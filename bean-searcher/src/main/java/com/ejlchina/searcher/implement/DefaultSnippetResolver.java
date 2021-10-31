@@ -1,6 +1,5 @@
 package com.ejlchina.searcher.implement;
 
-import com.ejlchina.searcher.EmbedParam;
 import com.ejlchina.searcher.SnippetResolver;
 import com.ejlchina.searcher.SqlSnippet;
 import com.ejlchina.searcher.SearchException;
@@ -29,12 +28,12 @@ public class DefaultSnippetResolver implements SnippetResolver {
             if (StringUtils.isBlank(sqlName) || sqlName.length() < 2) {
                 throw new SearchException("There is a syntax error about embed param: " + fragment);
             }
-            EmbedParam embedParam = new EmbedParam(sqlName);
+            SqlSnippet.Param param = new SqlSnippet.Param(sqlName);
             boolean endWithPrefix = sqlName.endsWith(paramPrefix);
             if (endWithPrefix) {
-                embedParam.setName(sqlName.substring(1, sqlName.length() - paramPrefix.length()));
+                param.setName(sqlName.substring(1, sqlName.length() - paramPrefix.length()));
             } else {
-                embedParam.setName(sqlName.substring(1));
+                param.setName(sqlName.substring(1));
             }
             int quotationCount1 = StringUtils.containCount(fragment, 0, index1, quotations);
             int quotationCount2 = StringUtils.containCount(fragment, Math.max(index1, index2), fragment.length(), quotations);
@@ -44,12 +43,12 @@ public class DefaultSnippetResolver implements SnippetResolver {
             int nextIndex = index1 + sqlName.length();
             // 判断虚拟参数是否不在引号内部，并且不是以 :name: 的形式
             if (quotationCount1 % 2 == 0 && !endWithPrefix) {
-                embedParam.setParameterized(true);
+                param.setJdbcPara(true);
                 fragment = fragment.replaceFirst(sqlName, "?");
                 // sqlSnippet 长度变短，寻找下标也该相应提前
                 nextIndex = nextIndex - sqlName.length() + 1;
             }
-            solution.addEmbedParam(embedParam);
+            solution.addParam(param);
             index1 = fragment.indexOf(paramPrefix, nextIndex);
         }
         solution.setSnippet(fragment);
