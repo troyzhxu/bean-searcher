@@ -70,7 +70,7 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 			}
 			return result;
 		} catch (SQLException e) {
-			throw new SearcherException("A exception occurred when collect sql result!", e);
+			throw new SearchException("A exception occurred when collect sql result!", e);
 		} finally {
 			sqlResult.closeResultSet();
 		}

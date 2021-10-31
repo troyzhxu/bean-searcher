@@ -54,7 +54,7 @@ public class BeanSearcherAutoConfiguration {
 			p.setStartOffset(conf.getStart());
 			return p;
 		}
-		throw new SearcherException("配置项【bean-searcher.params.pagination.type】只能为 page 或  offset！");
+		throw new SearchException("配置项【bean-searcher.params.pagination.type】只能为 page 或  offset！");
 	}
 
 	@Bean
@@ -82,7 +82,7 @@ public class BeanSearcherAutoConfiguration {
 	public Dialect dialect(BeanSearcherProperties config) {
 		String dialect = config.getSql().getDialect();
 		if (dialect == null) {
-			throw new SearcherException("配置项【bean-searcher.sql.dialect】不能为空");
+			throw new SearchException("配置项【bean-searcher.sql.dialect】不能为空");
 		}
 		switch (dialect.toLowerCase()) {
 		case SqlProps.DIALECT_MYSQL:
@@ -94,7 +94,7 @@ public class BeanSearcherAutoConfiguration {
 		case SqlProps.DIALECT_SQL_SERVER:
 			return new SqlServerDialect();
 		}
-		throw new SearcherException("配置项【bean-searcher.sql.dialect】只能为  MySql|Oracle|PostgreSql|SqlServer 中的一个 ！");
+		throw new SearchException("配置项【bean-searcher.sql.dialect】只能为  MySql|Oracle|PostgreSql|SqlServer 中的一个 ！");
 	}
 	
 	@Bean

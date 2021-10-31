@@ -73,7 +73,7 @@ public class SearcherBuilder {
 			if (sqlExecutor != null) {
 				mainSearcher.setSearchSqlExecutor(sqlExecutor);
 			} else {
-				throw new SearcherException("你必须配置一个 searchSqlExecutor，才能建立一个检索器！ ");
+				throw new SearchException("你必须配置一个 searchSqlExecutor，才能建立一个检索器！ ");
 			}
 			if (metadataResolver != null) {
 				mainSearcher.setMetadataResolver(metadataResolver);

@@ -74,7 +74,7 @@ public class Metadata<T> {
 	
 	public void addFieldDbMap(String field, SqlSnippet dbFieldSolution, Method getMethod, Class<?> fieldType) {
 		if (fieldList.contains(field)) {
-			throw new SearcherException("不可以重复添加字段");
+			throw new SearchException("不可以重复添加字段");
 		}
 		String dbField = dbFieldSolution.getSnippet();
         if (dbField.toLowerCase().startsWith("select ")) {

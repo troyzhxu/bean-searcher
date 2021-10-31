@@ -49,7 +49,7 @@ public class DefaultBeanReflector implements BeanReflector {
 				try {
 					value = fieldConvertor.convert(value, fieldType);
 				} catch (Exception e) {
-					throw new SearcherException(
+					throw new SearchException(
 							"可检索Bean【" + beanClass + "】的属性【" + field + "】的类型【" + fieldType + "】与数据库字段类型不兼容！", e);
 				}
 				setValue(beanClass, fieldGetMethodMap, bean, field, value);
@@ -67,7 +67,7 @@ public class DefaultBeanReflector implements BeanReflector {
 		try {
 			method.invoke(bean, value);
 		} catch (Exception e) {
-			throw new SearcherException(
+			throw new SearchException(
 					"为【" + beanClass.getName() + "】的【" + field + "】属性赋值时报错，请检查该属性的set方法参数类型是否正确！", e);
 		}
 	}
@@ -76,7 +76,7 @@ public class DefaultBeanReflector implements BeanReflector {
 		try {
 			return beanClass.getDeclaredConstructor().newInstance();
 		} catch (Exception e) {
-			throw new SearcherException("为【" + beanClass.getName() + "】创建对象时报错，请检查该类中是否有无参构造方法！", e);
+			throw new SearchException("为【" + beanClass.getName() + "】创建对象时报错，请检查该类中是否有无参构造方法！", e);
 		}
 	}
 

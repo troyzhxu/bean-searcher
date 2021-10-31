@@ -8,7 +8,7 @@ import java.util.Map;
 import com.ejlchina.searcher.Metadata;
 import com.ejlchina.searcher.SearchSql;
 import com.ejlchina.searcher.SqlResolver;
-import com.ejlchina.searcher.SearcherException;
+import com.ejlchina.searcher.SearchException;
 import com.ejlchina.searcher.dialect.Dialect;
 import com.ejlchina.searcher.dialect.Dialect.PaginateSql;
 import com.ejlchina.searcher.implement.processor.ParamProcessor;
@@ -223,7 +223,7 @@ public class DefaultSqlResolver implements SqlResolver {
 				String summaryAlias = generateColumnAlias(summaryField, originalSql);
 				String dbField = metadata.getDbField(summaryField);
 				if (dbField == null) {
-					throw new SearcherException("求和属性【" + summaryField + "】没有和数据库字段做映射，请检查该属性是否被 @DbField 正确注解！");
+					throw new SearchException("求和属性【" + summaryField + "】没有和数据库字段做映射，请检查该属性是否被 @DbField 正确注解！");
 				}
 				clusterSelectSqlBuilder.append("sum(").append(dbField)
 					.append(") ").append(summaryAlias);

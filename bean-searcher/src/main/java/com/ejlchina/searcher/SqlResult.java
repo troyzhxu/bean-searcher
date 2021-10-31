@@ -40,7 +40,7 @@ public class SqlResult<T> {
                 clusterResult.close();
             }
         } catch (SQLException e) {
-            throw new SearcherException("Can not close statement or resultSet!", e);
+            throw new SearchException("Can not close statement or resultSet!", e);
         }
     }
 

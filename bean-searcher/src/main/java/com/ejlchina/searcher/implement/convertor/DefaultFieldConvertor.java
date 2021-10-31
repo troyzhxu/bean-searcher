@@ -3,7 +3,7 @@ package com.ejlchina.searcher.implement.convertor;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-import com.ejlchina.searcher.SearcherException;
+import com.ejlchina.searcher.SearchException;
 
 /**
  * 默认数据库字段值转换器
@@ -48,7 +48,7 @@ public class DefaultFieldConvertor implements FieldConvertor {
 				return Double.valueOf(strValue);
 			}
 		} catch (Exception e) {
-			throw new SearcherException("不能把【" + value.getClass() + "】转换为【" + fieldType + "】类型！", e);
+			throw new SearchException("不能把【" + value.getClass() + "】转换为【" + fieldType + "】类型！", e);
 		}
 		if (fieldType == boolean.class || fieldType == Boolean.class) {
 			if (ignoreCase) {
@@ -64,7 +64,7 @@ public class DefaultFieldConvertor implements FieldConvertor {
 					return Boolean.FALSE;
 				}
 			}
-			throw new SearcherException("不能把【" + value.getClass() + "】转换为boolean值！");
+			throw new SearchException("不能把【" + value.getClass() + "】转换为boolean值！");
 		}
 		if (fieldType == BigDecimal.class) {
 			return new BigDecimal(strValue);
@@ -72,7 +72,7 @@ public class DefaultFieldConvertor implements FieldConvertor {
 		if (fieldType == BigInteger.class) {
 			return new BigInteger(strValue);
 		}
-		throw new SearcherException("不能把【" + value.getClass() + "】转换为【" + fieldType + "】类型！");
+		throw new SearchException("不能把【" + value.getClass() + "】转换为【" + fieldType + "】类型！");
 	}
 
 

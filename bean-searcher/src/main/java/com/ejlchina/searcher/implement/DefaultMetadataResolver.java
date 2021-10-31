@@ -39,7 +39,7 @@ public class DefaultMetadataResolver implements MetadataResolver {
     private <T> Metadata<T> resolveMetadata(Class<T> beanClass) {
         SearchBean searchBean = beanClass.getAnnotation(SearchBean.class);
         if (searchBean == null) {
-            throw new SearcherException("The class [" + beanClass.getName()
+            throw new SearchException("The class [" + beanClass.getName()
                     + "] is not a valid SearchBean, please check whether the class is annotated correctly by @SearchBean");
         }
         SqlSnippet tableSolution = snippetResolver.resolve(searchBean.tables());
@@ -64,11 +64,11 @@ public class DefaultMetadataResolver implements MetadataResolver {
                 Method method = beanClass.getMethod("set" + StringUtils.firstCharToUpperCase(fieldName), fieldType);
                 metadata.addFieldDbMap(fieldName, solution, method, fieldType);
             } catch (Exception e) {
-                throw new SearcherException("[" + beanClass.getName() + ": " + fieldName + "] is annotated by @DbField, but there is none correctly setter for it.", e);
+                throw new SearchException("[" + beanClass.getName() + ": " + fieldName + "] is annotated by @DbField, but there is none correctly setter for it.", e);
             }
         }
         if (metadata.getFieldList().size() == 0) {
-            throw new SearcherException("[" + beanClass.getName() + "] is annotated by @SearchBean, but there is none field annotated by @DbFile.");
+            throw new SearchException("[" + beanClass.getName() + "] is annotated by @SearchBean, but there is none field annotated by @DbFile.");
         }
         return metadata;
     }

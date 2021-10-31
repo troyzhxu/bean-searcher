@@ -2,7 +2,7 @@ package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.SearchSql;
 import com.ejlchina.searcher.SqlExecutor;
-import com.ejlchina.searcher.SearcherException;
+import com.ejlchina.searcher.SearchException;
 import com.ejlchina.searcher.SqlResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +45,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
 			return new SqlResult<>(searchSql);
 		}
 		if (dataSource == null) {
-			throw new SearcherException("You must config a dataSource for MainSearchSqlExecutor!");
+			throw new SearchException("You must config a dataSource for MainSearchSqlExecutor!");
 		}
 		Connection connection = null;
 		try {
@@ -73,7 +73,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
 			}
 			return result;
 		} catch (SQLException e) {
-			throw new SearcherException("A exception occurred when query!", e);
+			throw new SearchException("A exception occurred when query!", e);
 		} finally {
 			closeConnection(connection);
 		}
@@ -122,7 +122,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
 				connection.close();
 			}
 		} catch (SQLException e) {
-			throw new SearcherException("Can not close connection!", e);
+			throw new SearchException("Can not close connection!", e);
 		}
 	}
 
@@ -132,7 +132,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
 				statement.close();
 			}
 		} catch (SQLException e) {
-			throw new SearcherException("Can not close statement or resultSet!", e);
+			throw new SearchException("Can not close statement or resultSet!", e);
 		}
 	}
 

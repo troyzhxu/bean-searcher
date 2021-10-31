@@ -7,18 +7,18 @@ package com.ejlchina.searcher;
  * 
  * @author Troy.Zhou @ 2017-03-20
  * */
-public class SearcherException extends RuntimeException {
+public class SearchException extends RuntimeException {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -9137870101657363708L;
 
-	public SearcherException(String message) {
+	public SearchException(String message) {
 		super(message);
 	}
 
-	public SearcherException(String message, Throwable cause) {
+	public SearchException(String message, Throwable cause) {
 		super(message, cause);
 	}
 	

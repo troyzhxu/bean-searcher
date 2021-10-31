@@ -3,7 +3,7 @@ package com.ejlchina.searcher.implement;
 import com.ejlchina.searcher.EmbedParam;
 import com.ejlchina.searcher.SnippetResolver;
 import com.ejlchina.searcher.SqlSnippet;
-import com.ejlchina.searcher.SearcherException;
+import com.ejlchina.searcher.SearchException;
 import com.ejlchina.searcher.util.StringUtils;
 
 /**
@@ -27,7 +27,7 @@ public class DefaultSnippetResolver implements SnippetResolver {
             int index2 = findParamEndIndex(fragment, index1);
             String sqlName = getSqlName(fragment, index1, index2);
             if (StringUtils.isBlank(sqlName) || sqlName.length() < 2) {
-                throw new SearcherException("There is a syntax error about embed param: " + fragment);
+                throw new SearchException("There is a syntax error about embed param: " + fragment);
             }
             EmbedParam embedParam = new EmbedParam(sqlName);
             boolean endWithPrefix = sqlName.endsWith(paramPrefix);
@@ -39,7 +39,7 @@ public class DefaultSnippetResolver implements SnippetResolver {
             int quotationCount1 = StringUtils.containCount(fragment, 0, index1, quotations);
             int quotationCount2 = StringUtils.containCount(fragment, Math.max(index1, index2), fragment.length(), quotations);
             if ((quotationCount1 + quotationCount2) % 2 != 0) {
-                throw new SearcherException("There is a syntax error (quotations mismatch): " + fragment);
+                throw new SearchException("There is a syntax error (quotations mismatch): " + fragment);
             }
             int nextIndex = index1 + sqlName.length();
             // 判断虚拟参数是否不在引号内部，并且不是以 :name: 的形式

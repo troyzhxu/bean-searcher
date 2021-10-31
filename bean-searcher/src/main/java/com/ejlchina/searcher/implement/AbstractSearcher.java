@@ -30,7 +30,7 @@ public abstract class AbstractSearcher implements Searcher {
 		try {
 			return getCountFromSqlResult(sqlResult);
 		} catch (SQLException e) {
-			throw new SearcherException("A exception occurred when collect sql result!", e);
+			throw new SearchException("A exception occurred when collect sql result!", e);
 		} finally {
 			sqlResult.closeResultSet();
 		}
@@ -48,14 +48,14 @@ public abstract class AbstractSearcher implements Searcher {
 	@Override
 	public <T> Number[] searchSum(Class<T> beanClass, Map<String, Object> paraMap, String[] fields) {
 		if (fields == null || fields.length == 0) {
-			throw new SearcherException("检索该 Bean【" + beanClass.getName() 
+			throw new SearchException("检索该 Bean【" + beanClass.getName()
 			+ "】的统计信息时，必须要指定需要统计的属性！");
 		}
 		SqlResult<T> sqlResult = doSearch(beanClass, paraMap, fields, false, false, true);
 		try {
 			return getSummaryFromSqlResult(sqlResult);
 		} catch (SQLException e) {
-			throw new SearcherException("A exception occurred when collect sql result!", e);
+			throw new SearchException("A exception occurred when collect sql result!", e);
 		} finally {
 			sqlResult.closeResultSet();
 		}
@@ -79,7 +79,7 @@ public abstract class AbstractSearcher implements Searcher {
 	protected <T> SqlResult<T> doSearch(Class<T> beanClass, Map<String, Object> paraMap, String[] summaryFields,
 								   boolean shouldQueryTotal, boolean shouldQueryList, boolean needNotLimit) {
 		if (sqlExecutor == null) {
-			throw new SearcherException("you must set a searchSqlExecutor before search.");
+			throw new SearchException("you must set a searchSqlExecutor before search.");
 		}
 		Metadata<T> metadata = metadataResolver.resolve(beanClass);
 		SearchParam searchParam = paramResolver.resolve(metadata, paraMap);
