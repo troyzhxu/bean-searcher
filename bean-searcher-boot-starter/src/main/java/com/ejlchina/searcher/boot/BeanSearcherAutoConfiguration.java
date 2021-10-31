@@ -145,10 +145,10 @@ public class BeanSearcherAutoConfiguration {
 									 SqlExecutor sqlExecutor,
 									 BeanReflector beanReflector) {
 		DefaultBeanSearcher searcher = new DefaultBeanSearcher();
-		searcher.setSearchParamResolver(paramResolver);
-		searcher.setSearchSqlResolver(sqlResolver);
-		searcher.setSearchSqlExecutor(sqlExecutor);
-		searcher.setSearchResultResolver(beanReflector);
+		searcher.setParamResolver(paramResolver);
+		searcher.setSqlResolver(sqlResolver);
+		searcher.setSqlExecutor(sqlExecutor);
+		searcher.setBeanReflector(beanReflector);
 		return searcher;
 	}
 
@@ -158,9 +158,9 @@ public class BeanSearcherAutoConfiguration {
 								   SqlResolver sqlResolver,
 								   SqlExecutor sqlExecutor) {
 		DefaultMapSearcher searcher = new DefaultMapSearcher();
-		searcher.setSearchParamResolver(paramResolver);
-		searcher.setSearchSqlResolver(sqlResolver);
-		searcher.setSearchSqlExecutor(sqlExecutor);
+		searcher.setParamResolver(paramResolver);
+		searcher.setSqlResolver(sqlResolver);
+		searcher.setSqlExecutor(sqlExecutor);
 		return searcher;
 	}
 

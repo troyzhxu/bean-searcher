@@ -60,18 +60,18 @@ public class SearcherBuilder {
 
 		protected void buildInternal(AbstractSearcher mainSearcher) {
 			if (paramResolver != null) {
-				mainSearcher.setSearchParamResolver(paramResolver);
+				mainSearcher.setParamResolver(paramResolver);
 			}
 			if (sqlResolver != null) {
-				mainSearcher.setSearchSqlResolver(sqlResolver);
+				mainSearcher.setSqlResolver(sqlResolver);
 			} else {
 				DefaultSqlResolver searchSqlResolver = new DefaultSqlResolver();
 				searchSqlResolver.setDialect(new MySqlDialect());
 				searchSqlResolver.setParamProcessor(new DefaultParamProcessor());
-				mainSearcher.setSearchSqlResolver(searchSqlResolver);
+				mainSearcher.setSqlResolver(searchSqlResolver);
 			}
 			if (sqlExecutor != null) {
-				mainSearcher.setSearchSqlExecutor(sqlExecutor);
+				mainSearcher.setSqlExecutor(sqlExecutor);
 			} else {
 				throw new SearchException("你必须配置一个 searchSqlExecutor，才能建立一个检索器！ ");
 			}
@@ -99,11 +99,11 @@ public class SearcherBuilder {
 		public BeanSearcher build(DefaultBeanSearcher beanSearcher) {
 			buildInternal(beanSearcher);
 			if (beanReflector != null) {
-				beanSearcher.setSearchResultResolver(beanReflector);
+				beanSearcher.setBeanReflector(beanReflector);
 			} else {
 				DefaultBeanReflector searchResultResolver = new DefaultBeanReflector();
 				searchResultResolver.setFieldConvertor(new DefaultFieldConvertor());
-				beanSearcher.setSearchResultResolver(searchResultResolver);
+				beanSearcher.setBeanReflector(searchResultResolver);
 			}
 			return beanSearcher;
 		}

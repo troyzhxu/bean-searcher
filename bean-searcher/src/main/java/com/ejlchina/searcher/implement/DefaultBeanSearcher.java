@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /***
  * @author Troy.Zhou @ 2021-10-29
@@ -76,13 +77,12 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 		}
 	}
 
-
-	public BeanReflector getSearchResultResolver() {
+	public BeanReflector getBeanReflector() {
 		return beanReflector;
 	}
 
-	public void setSearchResultResolver(BeanReflector beanReflector) {
-		this.beanReflector = beanReflector;
+	public void setBeanReflector(BeanReflector beanReflector) {
+		this.beanReflector = Objects.requireNonNull(beanReflector);
 	}
 
 }

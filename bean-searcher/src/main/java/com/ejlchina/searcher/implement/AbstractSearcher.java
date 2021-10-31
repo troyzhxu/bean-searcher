@@ -96,27 +96,27 @@ public abstract class AbstractSearcher implements Searcher {
 		return paramResolver.getPagination();
 	}
 	
-	public ParamResolver getSearchParamResolver() {
+	public ParamResolver getParamResolver() {
 		return paramResolver;
 	}
 
-	public void setSearchParamResolver(ParamResolver paramResolver) {
+	public void setParamResolver(ParamResolver paramResolver) {
 		this.paramResolver = Objects.requireNonNull(paramResolver);
 	}
 
-	public SqlResolver getSearchSqlResolver() {
+	public SqlResolver getSqlResolver() {
 		return sqlResolver;
 	}
 
-	public void setSearchSqlResolver(SqlResolver sqlResolver) {
+	public void setSqlResolver(SqlResolver sqlResolver) {
 		this.sqlResolver = Objects.requireNonNull(sqlResolver);
 	}
 
-	public SqlExecutor getSearchSqlExecutor() {
+	public SqlExecutor getSqlExecutor() {
 		return sqlExecutor;
 	}
 
-	public void setSearchSqlExecutor(SqlExecutor sqlExecutor) {
+	public void setSqlExecutor(SqlExecutor sqlExecutor) {
 		this.sqlExecutor = Objects.requireNonNull(sqlExecutor);
 	}
 
