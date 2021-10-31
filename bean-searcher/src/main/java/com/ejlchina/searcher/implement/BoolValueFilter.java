@@ -38,7 +38,7 @@ public class BoolValueFilter implements ParamFilter {
 	/**
 	 * False 参数值
 	 */
-	private String[] falseParams = new String[] { "0", "OFF", "FALSE", "N", "NO", "F" };
+	private String[] falseValues = new String[] { "0", "OFF", "FALSE", "N", "NO", "F" };
 
 
 	@Override
@@ -106,11 +106,14 @@ public class BoolValueFilter implements ParamFilter {
 			return (Boolean) value;
 		}
 		if (value instanceof String) {
-			for (String v: falseParams) {
-				if (value.equals(v)) {
+			for (String v: falseValues) {
+				if (((String) value).equalsIgnoreCase(v)) {
 					return Boolean.FALSE;
 				}
 			}
+		}
+		if (value instanceof Number) {
+			return ((Number) value).intValue() != 0;
 		}
 		return Boolean.TRUE;
 	}
@@ -147,12 +150,12 @@ public class BoolValueFilter implements ParamFilter {
 		this.ignoreCaseSuffix = Objects.requireNonNull(ignoreCaseSuffix);
 	}
 
-	public String[] getFalseParams() {
-		return falseParams;
+	public String[] getFalseValues() {
+		return falseValues;
 	}
 
-	public void setFalseParams(String[] falseParams) {
-		this.falseParams = Objects.requireNonNull(falseParams);
+	public void setFalseValues(String[] falseValues) {
+		this.falseValues = Objects.requireNonNull(falseValues);
 	}
 
 }
