@@ -1,8 +1,6 @@
 package com.ejlchina.searcher;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
+import java.util.function.Function;
 
 /**
  * Bean 反射器
@@ -15,9 +13,9 @@ public interface BeanReflector {
 	/**
 	 * @param <T> bean 类型
 	 * @param metadata 元信息
-	 * @param listResult 数据集
-	 * @return 检索结果
+	 * @param valueGetter 数据库字段值获取器（更据字段别名获取）
+	 * @return 反射的对象
 	 */
-	<T> List<T> reflect(Metadata<T> metadata, ResultSet listResult) throws SQLException;
+	<T> T reflect(Metadata<T> metadata, Function<String, Object> valueGetter);
 
 }

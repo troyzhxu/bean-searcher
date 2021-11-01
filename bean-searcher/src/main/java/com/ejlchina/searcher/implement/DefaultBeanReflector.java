@@ -2,14 +2,12 @@ package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.bean.BeanAware;
-import com.ejlchina.searcher.implement.convertor.DefaultFieldConvertor;
-import com.ejlchina.searcher.implement.convertor.FieldConvertor;
+import com.ejlchina.searcher.FieldConvertor;
 
 import java.lang.reflect.Method;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.function.Function;
 
 /**
  * 默认查询结果解析器
@@ -19,60 +17,67 @@ import java.util.Map.Entry;
  */
 public class DefaultBeanReflector implements BeanReflector {
 
-	
-	private FieldConvertor fieldConvertor = new DefaultFieldConvertor();
+	private List<FieldConvertor> convertors = new ArrayList<>();
 
-	
 	public DefaultBeanReflector() {
 	}
 	
-	
-	public DefaultBeanReflector(FieldConvertor fieldConvertor) {
-		this.fieldConvertor = fieldConvertor;
+	public DefaultBeanReflector(List<FieldConvertor> convertors) {
+		this.convertors = convertors;
 	}
-
 	
 	@Override
-	public <T> List<T> reflect(Metadata<T> metadata, ResultSet listResult) throws SQLException {
+	public <T> T reflect(Metadata<T> metadata, Function<String, Object> valueGetter) {
 		Class<T> beanClass = metadata.getBeanClass();
 		Set<Entry<String, String>> fieldDbAliasEntrySet = metadata.getFieldDbAliasEntrySet();
 		Map<String, Method> fieldGetMethodMap = metadata.getFieldGetMethodMap();
 		Map<String, Class<?>> fieldTypeMap = metadata.getFieldTypeMap();
-		List<T> dataList = new ArrayList<>();
-		while (listResult.next()) {
-			T bean = newInstance(beanClass);
-			for (Entry<String, String> entry : fieldDbAliasEntrySet) {
-				String field = entry.getKey();
-				String dbAlias = entry.getValue();
-				Object value = listResult.getObject(dbAlias);
-				Class<?> fieldType = fieldTypeMap.get(field);
+		T bean = newInstance(beanClass);
+		for (Entry<String, String> entry : fieldDbAliasEntrySet) {
+			String field = entry.getKey();
+			String dbAlias = entry.getValue();
+			Class<?> fieldType = fieldTypeMap.get(field);
+			Object value = valueGetter.apply(dbAlias);
+			try {
+				value = convert(value, fieldType);
+			} catch (Exception e) {
+				throw new SearchException(
+						"The type of [" + beanClass + "#" + field + "] is mismatch with it's database table field type", e);
+			}
+			if (value != null) {
 				try {
-					value = fieldConvertor.convert(value, fieldType);
-				} catch (Exception e) {
+					Method method = fieldGetMethodMap.get(field);
+					method.invoke(bean, value);
+				} catch (ReflectiveOperationException e) {
 					throw new SearchException(
-							"可检索Bean【" + beanClass + "】的属性【" + field + "】的类型【" + fieldType + "】与数据库字段类型不兼容！", e);
+							"A exception occurred when setting value to [" + beanClass.getName() + "#" + field + "], please check whether it's setter is correct.", e);
 				}
-				setValue(beanClass, fieldGetMethodMap, bean, field, value);
 			}
-			if (bean instanceof BeanAware) {
-				((BeanAware) bean).afterAssembly();
-			}
-			dataList.add(bean);
 		}
-		return dataList;
+		if (bean instanceof BeanAware) {
+			((BeanAware) bean).afterAssembly();
+		}
+		return bean;
 	}
 
-	private <T> void setValue(Class<T> beanClass, Map<String, Method> fieldGetMethodMap, T bean, String field, Object value) {
-		Method method = fieldGetMethodMap.get(field);
-		try {
-			method.invoke(bean, value);
-		} catch (Exception e) {
-			throw new SearchException(
-					"为【" + beanClass.getName() + "】的【" + field + "】属性赋值时报错，请检查该属性的set方法参数类型是否正确！", e);
+	protected Object convert(Object value, Class<?> targetType) {
+		if (value == null) {
+			return null;
 		}
+		Class<?> valueType = value.getClass();
+		if (targetType.isAssignableFrom(valueType)) {
+			// 如果 valueType 是 targetType 的子类，则直接返回
+			return value;
+		}
+		for (FieldConvertor convertor: convertors) {
+			if (convertor.supports(valueType, targetType)) {
+				return convertor.convert(value, targetType);
+			}
+		}
+		throw new SearchException("不能把【" + valueType + "】类型的数据库值转换为【" + targetType + "】类型的字段值，你可以添加一个 FieldConvertor 来转换它！");
 	}
 
-	private <T> T newInstance(Class<T> beanClass) {
+	protected <T> T newInstance(Class<T> beanClass) {
 		try {
 			return beanClass.getDeclaredConstructor().newInstance();
 		} catch (Exception e) {
@@ -80,8 +85,12 @@ public class DefaultBeanReflector implements BeanReflector {
 		}
 	}
 
-	public void setFieldConvertor(FieldConvertor fieldConvertor) {
-		this.fieldConvertor = Objects.requireNonNull(fieldConvertor);
+	public List<FieldConvertor> getConvertors() {
+		return convertors;
 	}
-	
+
+	public void setConvertors(List<FieldConvertor> convertors) {
+		this.convertors = Objects.requireNonNull(convertors);
+	}
+
 }

@@ -1,8 +1,9 @@
-package com.ejlchina.searcher.implement.convertor;
+package com.ejlchina.searcher.implement;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+import com.ejlchina.searcher.FieldConvertor;
 import com.ejlchina.searcher.SearchException;
 
 /**
@@ -21,36 +22,41 @@ public class DefaultFieldConvertor implements FieldConvertor {
 	private String[] trues = DEFAULT_TRUES;
 	
 	private String[] falses = DEFAULT_FALSES;
-	
-	
+
+
 	@Override
-	public Object convert(Object value, Class<?> fieldType) {
+	public boolean supports(Class<?> valueType, Class<?> targetType) {
+		return true;
+	}
+
+	@Override
+	public Object convert(Object value, Class<?> targetType) {
 		if (value == null) {
 			return value;
 		}
 		Class<?> clazz = value.getClass();
 		// 有继承关系
-		if (fieldType.isAssignableFrom(clazz)) {
+		if (targetType.isAssignableFrom(clazz)) {
 			return value;
 		}
 		String strValue = value.toString();
 		try {
-			if (fieldType == int.class || fieldType == Integer.class) {
+			if (targetType == int.class || targetType == Integer.class) {
 				return Integer.valueOf(strValue);
 			}
-			if (fieldType == long.class || fieldType == Long.class) {
+			if (targetType == long.class || targetType == Long.class) {
 				return Long.valueOf(strValue);
 			}
-			if (fieldType == float.class || fieldType == Float.class) {
+			if (targetType == float.class || targetType == Float.class) {
 				return Float.valueOf(strValue);
 			}
-			if (fieldType == double.class || fieldType == Double.class) {
+			if (targetType == double.class || targetType == Double.class) {
 				return Double.valueOf(strValue);
 			}
 		} catch (Exception e) {
-			throw new SearchException("不能把【" + value.getClass() + "】转换为【" + fieldType + "】类型！", e);
+			throw new SearchException("不能把【" + value.getClass() + "】转换为【" + targetType + "】类型！", e);
 		}
-		if (fieldType == boolean.class || fieldType == Boolean.class) {
+		if (targetType == boolean.class || targetType == Boolean.class) {
 			if (ignoreCase) {
 				strValue = strValue.toUpperCase();
 			}
@@ -66,13 +72,13 @@ public class DefaultFieldConvertor implements FieldConvertor {
 			}
 			throw new SearchException("不能把【" + value.getClass() + "】转换为boolean值！");
 		}
-		if (fieldType == BigDecimal.class) {
+		if (targetType == BigDecimal.class) {
 			return new BigDecimal(strValue);
 		}
-		if (fieldType == BigInteger.class) {
+		if (targetType == BigInteger.class) {
 			return new BigInteger(strValue);
 		}
-		throw new SearchException("不能把【" + value.getClass() + "】转换为【" + fieldType + "】类型！");
+		throw new SearchException("不能把【" + value.getClass() + "】转换为【" + targetType + "】类型！");
 	}
 
 

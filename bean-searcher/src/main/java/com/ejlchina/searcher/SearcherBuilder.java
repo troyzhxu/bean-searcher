@@ -2,7 +2,7 @@ package com.ejlchina.searcher;
 
 import com.ejlchina.searcher.dialect.MySqlDialect;
 import com.ejlchina.searcher.implement.*;
-import com.ejlchina.searcher.implement.convertor.DefaultFieldConvertor;
+import com.ejlchina.searcher.implement.DefaultFieldConvertor;
 import com.ejlchina.searcher.implement.processor.DefaultParamProcessor;
 
 /***

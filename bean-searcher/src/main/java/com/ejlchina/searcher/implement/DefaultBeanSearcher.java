@@ -1,13 +1,14 @@
 package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.*;
+import com.ejlchina.searcher.bean.BeanAware;
 import com.ejlchina.searcher.param.FetchType;
 
+import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.function.Function;
 
 /***
  * @author Troy.Zhou @ 2021-10-29
@@ -49,17 +50,15 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 		return search(beanClass, paraMap, new FetchType(FetchType.LIST_ALL)).getDataList();
 	}
 
-
 	protected <T> SearchResult<T> search(Class<T> beanClass, Map<String, Object> paraMap, FetchType fetchType) {
 		SqlResult<T> sqlResult = doSearch(beanClass, paraMap, fetchType);
-		ResultSet dataListResult = sqlResult.getDataListResult();
+		ResultSet listResult = sqlResult.getDataListResult();
 		ResultSet clusterResult = sqlResult.getClusterResult();
 		try {
 			SearchResult<T> result;
-			if (dataListResult != null) {
+			if (listResult != null) {
 				Metadata<T> metadata = sqlResult.getSearchSql().getMetadata();
-				List<T> beanList = beanReflector.reflect(metadata, dataListResult);
-				result = new SearchResult<>(beanList);
+				result = new SearchResult<>(toBeanList(listResult, metadata));
 			} else {
 				result = new SearchResult<>();
 			}
@@ -71,10 +70,28 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 			}
 			return result;
 		} catch (SQLException e) {
-			throw new SearchException("A exception occurred when collect sql result!", e);
+			throw new SearchException("A exception occurred when collecting sql result!", e);
 		} finally {
 			sqlResult.closeResultSet();
 		}
+	}
+
+	protected <T> List<T> toBeanList(ResultSet listResult, Metadata<T> metadata) throws SQLException {
+		List<T> dataList = new ArrayList<>();
+		while (listResult.next()) {
+			T bean = beanReflector.reflect(metadata, dbAlias -> {
+				try {
+					return listResult.getObject(dbAlias);
+				} catch (SQLException e) {
+					throw new SearchException("A exception occurred when collecting sql result!", e);
+				}
+			});
+			if (bean instanceof BeanAware) {
+				((BeanAware) bean).afterAssembly();
+			}
+			dataList.add(bean);
+		}
+		return dataList;
 	}
 
 	public BeanReflector getBeanReflector() {

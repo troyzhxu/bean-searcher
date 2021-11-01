@@ -2,7 +2,7 @@ package com.ejlchina.searcher.boot;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import com.ejlchina.searcher.implement.convertor.DefaultFieldConvertor;
+import com.ejlchina.searcher.implement.DefaultFieldConvertor;
 
 
 @ConfigurationProperties(prefix = "bean-searcher")

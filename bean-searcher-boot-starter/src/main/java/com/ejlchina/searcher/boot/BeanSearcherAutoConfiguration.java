@@ -3,8 +3,8 @@ package com.ejlchina.searcher.boot;
 import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.dialect.*;
 import com.ejlchina.searcher.implement.*;
-import com.ejlchina.searcher.implement.convertor.DefaultFieldConvertor;
-import com.ejlchina.searcher.implement.convertor.FieldConvertor;
+import com.ejlchina.searcher.implement.DefaultFieldConvertor;
+import com.ejlchina.searcher.FieldConvertor;
 import com.ejlchina.searcher.implement.PageOffsetExtractor;
 import com.ejlchina.searcher.implement.PageSizeExtractor;
 import com.ejlchina.searcher.PageExtractor;
@@ -25,6 +25,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Configuration
@@ -135,7 +137,9 @@ public class BeanSearcherAutoConfiguration {
 	@Bean
 	@ConditionalOnMissingBean(BeanReflector.class)
 	public BeanReflector searchResultResolver(FieldConvertor fieldConvertor) {
-		return new DefaultBeanReflector(fieldConvertor);
+		List<FieldConvertor> fieldConvertors = new ArrayList<>();
+		fieldConvertors.add(fieldConvertor);
+		return new DefaultBeanReflector(fieldConvertors);
 	}
 
 	@Bean
