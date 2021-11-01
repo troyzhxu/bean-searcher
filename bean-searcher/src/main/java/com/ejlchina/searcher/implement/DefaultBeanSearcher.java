@@ -2,13 +2,15 @@ package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.bean.BeanAware;
+import com.ejlchina.searcher.bean.BeanParaAware;
 import com.ejlchina.searcher.param.FetchType;
 
-import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
-import java.util.function.Function;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /***
  * @author Troy.Zhou @ 2021-10-29
@@ -58,7 +60,7 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 			SearchResult<T> result;
 			if (listResult != null) {
 				Metadata<T> metadata = sqlResult.getSearchSql().getMetadata();
-				result = new SearchResult<>(toBeanList(listResult, metadata));
+				result = new SearchResult<>(toBeanList(listResult, metadata, paraMap));
 			} else {
 				result = new SearchResult<>();
 			}
@@ -76,7 +78,7 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 		}
 	}
 
-	protected <T> List<T> toBeanList(ResultSet listResult, Metadata<T> metadata) throws SQLException {
+	protected <T> List<T> toBeanList(ResultSet listResult, Metadata<T> metadata, Map<String, Object> paraMap) throws SQLException {
 		List<T> dataList = new ArrayList<>();
 		while (listResult.next()) {
 			T bean = beanReflector.reflect(metadata, dbAlias -> {
@@ -88,6 +90,9 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 			});
 			if (bean instanceof BeanAware) {
 				((BeanAware) bean).afterAssembly();
+			}
+			if (bean instanceof BeanParaAware) {
+				((BeanParaAware) bean).afterAssembly(paraMap);
 			}
 			dataList.add(bean);
 		}

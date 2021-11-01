@@ -1,8 +1,9 @@
 package com.ejlchina.searcher.implement;
 
-import com.ejlchina.searcher.*;
-import com.ejlchina.searcher.bean.BeanAware;
+import com.ejlchina.searcher.BeanReflector;
 import com.ejlchina.searcher.FieldConvertor;
+import com.ejlchina.searcher.Metadata;
+import com.ejlchina.searcher.SearchException;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -52,9 +53,6 @@ public class DefaultBeanReflector implements BeanReflector {
 							"A exception occurred when setting value to [" + beanClass.getName() + "#" + field + "], please check whether it's setter is correct.", e);
 				}
 			}
-		}
-		if (bean instanceof BeanAware) {
-			((BeanAware) bean).afterAssembly();
 		}
 		return bean;
 	}
