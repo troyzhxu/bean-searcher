@@ -18,13 +18,13 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE})
 public @interface SearchBean {
 
-
 	/**
 	 * 参与检索的数据库表名，例如:
 	 * users u, user_role ur, roles r
+	 * v3.0.0 后可以不给值，没有值的时候以类名做表名
 	 * @return tables
 	 */
-	String tables();
+	String tables() default "";
 	
 	/**
 	 * 参与检索的数据表的连接条件，例如：
@@ -45,6 +45,13 @@ public @interface SearchBean {
 	 * @return distinct
 	 * */
 	boolean distinct() default false;
-	
+
+	/**
+	 * 字段未加 @DbField 时，指定它映射到那张表（只有在 tables 属性不空时起作用）
+	 * 如果 autoMapping 为空，则表示未被 @DbField 注解的字段不需要映射
+	 * @return 自动映射的表名 或 别名
+	 */
+	String autoMapTab() default "";
+
 }
 

@@ -8,7 +8,7 @@ package com.ejlchina.searcher;
 public interface SnippetResolver {
 
     /**
-     * @param fragment SQL 碎片
+     * @param fragment SQL 碎片（非空）
      * @return 解析结果
      */
     SqlSnippet resolve(String fragment);

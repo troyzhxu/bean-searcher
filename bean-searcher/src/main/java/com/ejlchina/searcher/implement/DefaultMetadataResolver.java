@@ -7,8 +7,6 @@ import com.ejlchina.searcher.util.StringUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,7 +20,10 @@ public class DefaultMetadataResolver implements MetadataResolver {
 
     private final Map<Class<?>, Metadata<?>> cache = new ConcurrentHashMap<>();
 
+    private TableMapping tableMapping = new TableMapping();
+
     private SnippetResolver snippetResolver = new DefaultSnippetResolver();
+
 
     @Override
     public <T> Metadata<T> resolve(Class<T> beanClass) {
@@ -38,24 +39,38 @@ public class DefaultMetadataResolver implements MetadataResolver {
         }
     }
 
-    private <T> Metadata<T> resolveMetadata(Class<T> beanClass) {
-        SearchBean searchBean = beanClass.getAnnotation(SearchBean.class);
-        if (searchBean == null) {
-            throw new SearchException("The class [" + beanClass.getName()
-                    + "] is not a valid SearchBean, please check whether the class is annotated correctly by @SearchBean");
+    protected String dbField(SearchBean bean, Field field) {
+        DbField dbField = field.getAnnotation(DbField.class);
+        if (dbField != null) {
+            return dbField.value().trim();
         }
-        SqlSnippet tableSnippet = snippetResolver.resolve(searchBean.tables().trim());
-        SqlSnippet joinCondSnippet = snippetResolver.resolve(searchBean.joinCond().trim());
-        SqlSnippet groupBySnippet = snippetResolver.resolve(searchBean.groupBy().trim());
+        // 没加 @SearchBean 注解，或者加了但没给 tables 赋值，则可以自动映射列名，因为此时默认为单表映射
+        if (bean == null || StringUtils.isBlank(bean.tables())) {
+            return tableMapping.columnName(field);
+        }
+        String tab = bean.autoMapTab();
+        if (StringUtils.isBlank(tab)) {
+            return null;
+        }
+        String column = tableMapping.columnName(field);
+        return tab.trim() + "." + column;
+    }
 
-        Metadata<T> metadata = new Metadata<>(beanClass, tableSnippet, joinCondSnippet, groupBySnippet, searchBean.distinct());
-
+    protected <T> Metadata<T> resolveMetadata(Class<T> beanClass) {
+        SearchBean bean = beanClass.getAnnotation(SearchBean.class);
+        // v3.0.0 后 bean 可以为 null
+        Metadata<T> metadata = new Metadata<>(beanClass,
+                snippetResolver.resolve(tables(beanClass, bean)),
+                snippetResolver.resolve(joinCond(bean)),
+                snippetResolver.resolve(groupBy(bean)),
+                bean != null && bean.distinct());
+        // 字段解析
         for (Field field : beanClass.getDeclaredFields()) {
-            DbField dbField = field.getAnnotation(DbField.class);
+            String dbField = dbField(bean, field);
             if (dbField == null) {
                 continue;
             }
-            SqlSnippet fieldSnippet = snippetResolver.resolve(dbField.value().trim());
+            SqlSnippet fieldSnippet = snippetResolver.resolve(dbField);
             String fieldName = field.getName();
             Class<?> fieldType = field.getType();
             try {
@@ -73,12 +88,35 @@ public class DefaultMetadataResolver implements MetadataResolver {
         return metadata;
     }
 
+    protected String tables(Class<?> beanClass, SearchBean bean) {
+        if (bean == null || StringUtils.isBlank(bean.tables())) {
+            return tableMapping.tableName(beanClass);
+        }
+        return bean.tables().trim();
+    }
+
+    protected String joinCond(SearchBean bean) {
+        return bean != null ? bean.joinCond().trim() : "";
+    }
+
+    protected String groupBy(SearchBean bean) {
+        return bean != null ? bean.groupBy().trim() : "";
+    }
+
     public SnippetResolver getSnippetResolver() {
         return snippetResolver;
     }
 
     public void setSnippetResolver(SnippetResolver snippetResolver) {
         this.snippetResolver = Objects.requireNonNull(snippetResolver);
+    }
+
+    public TableMapping getTableMapping() {
+        return tableMapping;
+    }
+
+    public void setTableMapping(TableMapping tableMapping) {
+        this.tableMapping = tableMapping;
     }
 
 }
