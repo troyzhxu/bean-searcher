@@ -11,8 +11,6 @@ import com.ejlchina.searcher.param.LimitParam;
  * */
 public class MySqlDialect implements Dialect {
 
-
-	
 	@Override
 	public void toUpperCase(StringBuilder builder, String dbField) {
 		builder.append("upper").append("(").append(dbField).append(")");
@@ -34,18 +32,17 @@ public class MySqlDialect implements Dialect {
 	}
 	
 	@Override
-	public PaginateSql forPaginate(String fieldSelectSql, String fromWhereSql, LimitParam limit) {
+	public PaginateSql forPaginate(String fieldSelectSql, String fromWhereSql, LimitParam limitParam) {
 		PaginateSql paginateSql = new PaginateSql();
 		StringBuilder ret = new StringBuilder();
 		ret.append(fieldSelectSql).append(fromWhereSql);
-		if (limit != null) {
+		if (limitParam != null) {
 			ret.append(" limit ?, ?");
-			paginateSql.addParam(limit.getOffset());
-			paginateSql.addParam(limit.getSize());
+			paginateSql.addParam(limitParam.getOffset());
+			paginateSql.addParam(limitParam.getSize());
 		}
 		paginateSql.setSql(ret.toString());
 		return paginateSql;
 	}
-
 
 }

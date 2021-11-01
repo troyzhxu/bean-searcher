@@ -228,8 +228,6 @@ public class BeanSearcherProperties {
 		
 		public static final String DIALECT_MYSQL = "mysql";
 		public static final String DIALECT_ORACLE = "oracle";
-		public static final String DIALECT_POSTGRE_SQL = "postgresql";
-		public static final String DIALECT_SQL_SERVER = "sqlserver";
 
 		/**
 		 * 数据库方言，默认MySQL，可选：Oracle、PostgreSql、SqlServer

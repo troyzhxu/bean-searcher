@@ -83,10 +83,6 @@ public class BeanSearcherAutoConfiguration {
 			return new MySqlDialect();
 		case SqlProps.DIALECT_ORACLE:
 			return new OracleDialect();
-		case SqlProps.DIALECT_POSTGRE_SQL:
-			return new PostgreSqlDialect();
-		case SqlProps.DIALECT_SQL_SERVER:
-			return new SqlServerDialect();
 		}
 		throw new SearchException("配置项【bean-searcher.sql.dialect】只能为  MySql|Oracle|PostgreSql|SqlServer 中的一个 ！");
 	}

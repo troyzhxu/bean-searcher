@@ -31,9 +31,9 @@ public class OracleDialect implements Dialect {
 	}
 
 	@Override
-	public PaginateSql forPaginate(String fieldSelectSql, String fromWhereSql, LimitParam limit) {
+	public PaginateSql forPaginate(String fieldSelectSql, String fromWhereSql, LimitParam limitParam) {
 		PaginateSql paginateSql = new PaginateSql();
-		if (limit == null) {
+		if (limitParam == null) {
 			paginateSql.setSql(fieldSelectSql + fromWhereSql);
 			return paginateSql;
 		}
@@ -61,8 +61,8 @@ public class OracleDialect implements Dialect {
 
 		builder.append(" where ").append(tableAlias).append(".").append(rownumAlias).append(" > ?");
 
-		int size = limit.getSize();
-		long offset = limit.getOffset();
+		int size = limitParam.getSize();
+		long offset = limitParam.getOffset();
 
 		paginateSql.addParam(offset + size);
 		paginateSql.addParam(offset);
