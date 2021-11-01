@@ -1,6 +1,6 @@
 package com.ejlchina.searcher;
 
-import com.ejlchina.searcher.param.FetchInfo;
+import com.ejlchina.searcher.param.FetchType;
 import com.ejlchina.searcher.param.FieldParam;
 import com.ejlchina.searcher.param.OrderParam;
 import com.ejlchina.searcher.param.LimitParam;
@@ -23,7 +23,7 @@ public class SearchParam {
 	/**
 	 * Fetch 信息
 	 */
-	private final FetchInfo fetchInfo;
+	private final FetchType fetchType;
 
 	/**
 	 * 过滤检索参数列表
@@ -41,9 +41,9 @@ public class SearchParam {
 	private OrderParam orderParam;
 
 
-	public SearchParam(Map<String, Object> paraMap, FetchInfo fetchInfo, List<FieldParam> fieldParams) {
+	public SearchParam(Map<String, Object> paraMap, FetchType fetchType, List<FieldParam> fieldParams) {
 		this.paraMap = paraMap;
-		this.fetchInfo = fetchInfo;
+		this.fetchType = fetchType;
 		this.fieldParams = fieldParams;
 	}
 
@@ -65,8 +65,8 @@ public class SearchParam {
 		return fieldParams;
 	}
 
-	public FetchInfo getFetchInfo() {
-		return fetchInfo;
+	public FetchType getFetchInfo() {
+		return fetchType;
 	}
 
 	public LimitParam getPageParam() {

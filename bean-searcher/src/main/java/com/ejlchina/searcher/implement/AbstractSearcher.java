@@ -2,13 +2,11 @@ package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.SearchParam;
-import com.ejlchina.searcher.param.FetchInfo;
+import com.ejlchina.searcher.param.FetchType;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /***
  * 自动检索器 根据 Bean 的 Class 和请求参数，自动检索 Bean
@@ -26,7 +24,8 @@ public abstract class AbstractSearcher implements Searcher {
 
 	@Override
 	public <T> Number searchCount(Class<T> beanClass, Map<String, Object> paraMap) {
-		SqlResult<T> sqlResult = doSearch(beanClass, paraMap, null, true, false, true);
+		FetchType fetchType = new FetchType(FetchType.ONLY_TOTAL);
+		SqlResult<T> sqlResult = doSearch(beanClass, paraMap, fetchType);
 		try {
 			return getCountFromSqlResult(sqlResult);
 		} catch (SQLException e) {
@@ -38,7 +37,9 @@ public abstract class AbstractSearcher implements Searcher {
 
 	@Override
 	public <T> Number searchSum(Class<T> beanClass, Map<String, Object> paraMap, String field) {
-		Number[] results = searchSum(beanClass, paraMap, new String[] { field });
+		Number[] results = searchSum(beanClass, paraMap, new String[] {
+				Objects.requireNonNull(field)
+		});
 		if (results != null && results.length > 0) {
 			return results[0];
 		}
@@ -51,7 +52,8 @@ public abstract class AbstractSearcher implements Searcher {
 			throw new SearchException("检索该 Bean【" + beanClass.getName()
 			+ "】的统计信息时，必须要指定需要统计的属性！");
 		}
-		SqlResult<T> sqlResult = doSearch(beanClass, paraMap, fields, false, false, true);
+		FetchType fetchType = new FetchType(FetchType.ONLY_SUMMARY, fields);
+		SqlResult<T> sqlResult = doSearch(beanClass, paraMap, fetchType);
 		try {
 			return getSummaryFromSqlResult(sqlResult);
 		} catch (SQLException e) {
@@ -76,18 +78,15 @@ public abstract class AbstractSearcher implements Searcher {
 		return summaries;
 	}
 
-	protected <T> SqlResult<T> doSearch(Class<T> beanClass, Map<String, Object> paraMap, String[] summaryFields,
-								   boolean shouldQueryTotal, boolean shouldQueryList, boolean fetchAll) {
+	protected <T> SqlResult<T> doSearch(Class<T> beanClass, Map<String, Object> paraMap, FetchType fetchType) {
 		if (sqlExecutor == null) {
 			throw new SearchException("you must set a searchSqlExecutor before search.");
 		}
-		FetchInfo fetchInfo = new FetchInfo(summaryFields, shouldQueryTotal,
-				shouldQueryList, fetchAll);
 		Metadata<T> metadata = metadataResolver.resolve(beanClass);
-		SearchParam searchParam = paramResolver.resolve(metadata, fetchInfo, paraMap);
+		SearchParam searchParam = paramResolver.resolve(metadata, fetchType, paraMap);
 		SearchSql<T> searchSql = sqlResolver.resolve(metadata, searchParam);
-		searchSql.setShouldQueryCluster(shouldQueryTotal || summaryFields.length > 0);
-		searchSql.setShouldQueryList(shouldQueryList);
+		searchSql.setShouldQueryCluster(fetchType.isShouldQueryTotal() || fetchType.getSummaryFields().length > 0);
+		searchSql.setShouldQueryList(fetchType.isShouldQueryList());
 		return sqlExecutor.execute(searchSql);
 	}
 

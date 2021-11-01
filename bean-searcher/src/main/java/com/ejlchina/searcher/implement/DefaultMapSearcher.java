@@ -1,6 +1,7 @@
 package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.*;
+import com.ejlchina.searcher.param.FetchType;
 
 import java.sql.*;
 import java.util.HashMap;
@@ -18,18 +19,18 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 
 	@Override
 	public <T> SearchResult<Map<String, Object>> search(Class<T> beanClass, Map<String, Object> paraMap) {
-		return search(beanClass, paraMap, null, true, true, false);
+		return search(beanClass, paraMap, new FetchType(FetchType.ALL));
 	}
 
 	@Override
 	public <T> SearchResult<Map<String, Object>> search(Class<T> beanClass, Map<String, Object> paraMap, String[] summaryFields) {
-		return search(beanClass, paraMap, summaryFields, true, true, false);
+		return search(beanClass, paraMap, new FetchType(FetchType.ALL, summaryFields));
 	}
 
 	@Override
 	public <T> Map<String, Object> searchFirst(Class<T> beanClass, Map<String, Object> paraMap) {
-		paraMap.put(getPagination().getSizeName(), "1");
-		List<Map<String, Object>> list = search(beanClass, paraMap, null, false, true, false).getDataList();
+		FetchType fetchType = new FetchType(FetchType.LIST_FIRST);
+		List<Map<String, Object>> list = search(beanClass, paraMap, fetchType).getDataList();
 		if (list.size() > 0) {
 			return list.get(0);
 		}
@@ -38,18 +39,16 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 
 	@Override
 	public <T> List<Map<String, Object>> searchList(Class<T> beanClass, Map<String, Object> paraMap) {
-		return search(beanClass, paraMap, null, false, true, false).getDataList();
+		return search(beanClass, paraMap, new FetchType(FetchType.LIST_ONLY)).getDataList();
 	}
 
 	@Override
 	public <T> List<Map<String, Object>> searchAll(Class<T> beanClass, Map<String, Object> paraMap) {
-		return search(beanClass, paraMap, null, false, true, true).getDataList();
+		return search(beanClass, paraMap, new FetchType(FetchType.LIST_ALL)).getDataList();
 	}
 
-
-	protected <T> SearchResult<Map<String, Object>> search(Class<T> beanClass, Map<String, Object> paraMap, String[] summaryFields,
-										 boolean shouldQueryTotal, boolean shouldQueryList, boolean needNotLimit) {
-		SqlResult<T> sqlResult = doSearch(beanClass, paraMap, summaryFields, shouldQueryTotal, shouldQueryList, needNotLimit);
+	protected <T> SearchResult<Map<String, Object>> search(Class<T> beanClass, Map<String, Object> paraMap, FetchType fetchType) {
+		SqlResult<T> sqlResult = doSearch(beanClass, paraMap, fetchType);
 		ResultSet dataListResult = sqlResult.getDataListResult();
 		ResultSet clusterResult = sqlResult.getClusterResult();
 		try {

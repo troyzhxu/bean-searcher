@@ -1,7 +1,7 @@
 package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.*;
-import com.ejlchina.searcher.param.FetchInfo;
+import com.ejlchina.searcher.param.FetchType;
 import com.ejlchina.searcher.param.FieldParam;
 import com.ejlchina.searcher.param.Operator;
 import com.ejlchina.searcher.param.OrderParam;
@@ -57,7 +57,7 @@ public class DefaultParamResolver implements ParamResolver {
 	}
 	
 	@Override
-	public <T> SearchParam resolve(Metadata<T> metadata, FetchInfo fetchInfo, Map<String, Object> paraMap) {
+	public <T> SearchParam resolve(Metadata<T> metadata, FetchType fetchType, Map<String, Object> paraMap) {
 		for (ParamFilter paramFilter: filters) {
 			if (paraMap == null) {
 				break;
@@ -67,13 +67,13 @@ public class DefaultParamResolver implements ParamResolver {
 		if (paraMap == null) {
 			paraMap = new HashMap<>();
 		}
-		return doResolve(metadata.getFieldList(), fetchInfo, paraMap);
+		return doResolve(metadata.getFieldList(), fetchType, paraMap);
 	}
 
-	protected <T> SearchParam doResolve(List<String> fieldList, FetchInfo fetchInfo, Map<String, Object> paraMap) {
+	protected <T> SearchParam doResolve(List<String> fieldList, FetchType fetchType, Map<String, Object> paraMap) {
 		List<FieldParam> fieldParams = resolveFieldParams(fieldList, paraMap);
-		SearchParam searchParam = new SearchParam(paraMap, fetchInfo, fieldParams);
-		if (!fetchInfo.isFetchAll()) {
+		SearchParam searchParam = new SearchParam(paraMap, fetchType, fieldParams);
+		if (!fetchType.isFetchAll()) {
 			searchParam.setPageParam(pageExtractor.extract(paraMap));
 		}
 		searchParam.setOrderParam(resolveOrderParam(paraMap));

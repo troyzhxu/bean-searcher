@@ -1,6 +1,6 @@
 package com.ejlchina.searcher;
 
-import com.ejlchina.searcher.param.FetchInfo;
+import com.ejlchina.searcher.param.FetchType;
 
 import java.util.Map;
 
@@ -18,10 +18,10 @@ public interface ParamResolver {
 
 	/**
 	 * @param metadata 元数据
-	 * @param fetchInfo Fetch 信息
+	 * @param fetchType Fetch 类型
 	 * @param paraMap 原始检索参数
 	 * @return SearchParam
 	 * */
-	<T> SearchParam resolve(Metadata<T> metadata, FetchInfo fetchInfo, Map<String, Object> paraMap);
+	<T> SearchParam resolve(Metadata<T> metadata, FetchType fetchType, Map<String, Object> paraMap);
 	
 }

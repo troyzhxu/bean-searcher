@@ -139,11 +139,11 @@ public class DefaultSqlResolver implements SqlResolver {
 				searchSql.addClusterSqlParam(sqlParam);
 			}
 		}
-		FetchInfo fetchInfo = searchParam.getFetchInfo();
+		FetchType fetchType = searchParam.getFetchInfo();
 
 		String groupBy = metadata.getGroupBy();
-		String[] summaryFields = fetchInfo.getSummaryFields();
-		boolean shouldQueryTotal = fetchInfo.isShouldQueryTotal();
+		String[] summaryFields = fetchType.getSummaryFields();
+		boolean shouldQueryTotal = fetchType.isShouldQueryTotal();
 		if (StringUtils.isBlank(groupBy)) {
 			if (shouldQueryTotal || summaryFields.length > 0) {
 				if (metadata.isDistinct()) {
@@ -186,7 +186,7 @@ public class DefaultSqlResolver implements SqlResolver {
 				}
 			}
 		}
-		if (fetchInfo.isShouldQueryList()) {
+		if (fetchType.isShouldQueryList()) {
 			OrderParam orderPara = searchParam.getOrderParam();
 			if (orderPara != null) {
 				String sortDbAlias = fieldDbAliasMap.get(orderPara.getSort());
