@@ -273,23 +273,16 @@ public class DefaultSqlResolver implements SqlResolver {
 		Object[] values = fieldParam.getValues();
 		boolean ignoreCase = fieldParam.isIgnoreCase();
 		Operator operator = fieldParam.getOperator();
-
 		if (Date.class.isAssignableFrom(fieldType)) {
 			values = dateValueCorrector.correct(values, operator);
 		}
-
 		if (ignoreCase) {
-			values = upperCase(values);
+			dialect.toUpperCase(builder, dbField);
+			values = toUpperCase(values);
+		} else {
+			builder.append(dbField);
 		}
 		Object firstRealValue = ObjectUtils.firstNotNull(values);
-		
-		if (operator != Operator.MultiValue) {
-			if (ignoreCase) {
-				dialect.toUpperCase(builder, dbField);
-			} else {
-				builder.append(dbField);
-			}
-		}
 		List<Object> params = new ArrayList<>(2);
 		switch (operator) {
 		case Include:
@@ -358,24 +351,12 @@ public class DefaultSqlResolver implements SqlResolver {
 			}
 			break;
 		case MultiValue:
-			builder.append("(");
+			builder.append(" in (");
 			for (int i = 0; i < values.length; i++) {
-				Object value = values[i];
-				if (value == null) {
-					builder.append(dbField).append(" is null");
-				} else if (ignoreCase) {
-					dialect.toUpperCase(builder, dbField);
-					builder.append(" = ?");
-					params.add(value);
-				} else if (Date.class.isAssignableFrom(fieldType)) {
-					builder.append(dbField).append(" = ?");
-					params.add(value);
-				} else {
-					builder.append(dbField).append(" = ?");
-					params.add(value);
-				}
+				builder.append("?");
+				params.add(values[i]);
 				if (i < values.length - 1) {
-					builder.append(" or ");
+					builder.append(", ");
 				}
 			}
 			builder.append(")");
@@ -384,7 +365,7 @@ public class DefaultSqlResolver implements SqlResolver {
 		return params;
 	}
 
-	public Object[] upperCase(Object[] params) {
+	public Object[] toUpperCase(Object[] params) {
 		for (int i = 0; i < params.length; i++) {
 			Object val = params[i];
 			if (val != null) {

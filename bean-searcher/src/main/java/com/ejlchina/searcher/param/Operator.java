@@ -121,36 +121,5 @@ public enum Operator {
 		}
 		return Equal;
 	}
-	
-	public String val() {
-		switch (this) {
-		case Include:
-			return "in";
-		case Between:
-			return "bt";
-		case Empty:
-			return "ey";
-		case NotEmpty:
-			return "ny";
-		case GreaterEqual:
-			return "ge";
-		case GreaterThan:
-			return "gt";
-		case LessEqual:
-			return "le";
-		case LessThan:
-			return "lt";
-		case MultiValue:
-			return "mv";
-		case NotEqual:
-			return "ne";
-		case StartWith:
-			return "sw";
-		case EndWith:
-			return "ew";
-		default:
-			return "eq";
-		}
-	}
 
 }
