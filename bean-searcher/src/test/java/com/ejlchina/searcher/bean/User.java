@@ -4,21 +4,21 @@ import java.util.Date;
 
 import com.ejlchina.searcher.bean.DbField;
 import com.ejlchina.searcher.bean.SearchBean;
+import com.ejlchina.searcher.param.Operator;
 
 @SearchBean(tables = "user")
 public class User {
-
 	
 	@DbField("id")
 	private Long id; 
 	
-	@DbField("name")
+	@DbField(value = "name", onlyOn = Operator.StartWith)
 	private String name;
 	
 	@DbField("age")
 	private int age;
 
-	@DbField("date_created")
+	@DbField(value = "date_created", conditional = false)
 	private Date dateCreated;
 	
 	

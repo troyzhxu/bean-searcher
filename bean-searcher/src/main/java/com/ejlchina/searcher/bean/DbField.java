@@ -1,11 +1,12 @@
 package com.ejlchina.searcher.bean;
 
+import com.ejlchina.searcher.param.Operator;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
 
 /**
  * 用于注解一个可检索 bean 的属性
@@ -14,7 +15,6 @@ import java.lang.annotation.Target;
  * @author Troy.Zhou @ 2017-03-20
  *  
  */
-
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD})
@@ -28,6 +28,16 @@ public @interface DbField {
 	 * */
 	String value();
 
-	
+	/**
+	 * @return 该字段是否可以被作为检索条件
+	 */
+	boolean conditional() default true;
+
+	/**
+	 * 用于指定该字段只允许接受的运算符，为空时，表示任意运算符都接受
+	 * @return Operator[]
+	 */
+	Operator[] onlyOn() default {};
+
 }
 

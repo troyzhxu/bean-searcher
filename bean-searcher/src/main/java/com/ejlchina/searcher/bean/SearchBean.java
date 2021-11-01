@@ -6,12 +6,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-
 /**
  * 用于注解一个可检索 Bean
- * 
  * @author Troy.Zhou @ 2017-03-20
- * 
  */
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
@@ -36,7 +33,7 @@ public @interface SearchBean {
 	/**
 	 * 分组字段，例如
 	 * u.id,r.name
-	 * @return group infomation
+	 * @return group information
 	 */
 	String groupBy() default "";
 	
