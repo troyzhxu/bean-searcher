@@ -3,7 +3,7 @@ package com.ejlchina.searcher.implement;
 import com.ejlchina.searcher.FieldConvertor;
 
 /**
- * 数字类型转换器
+ * [数字 -> 数字] 字段转换器
  * @author Troy.Zhou @ 2021-11-01
  * @since v3.0.0
  */

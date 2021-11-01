@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 /**
- * 数字类型转换器
+ * [字符串 -> 数字] 字段转换器
  * @author Troy.Zhou @ 2021-11-01
  * @since v3.0.0
  */
