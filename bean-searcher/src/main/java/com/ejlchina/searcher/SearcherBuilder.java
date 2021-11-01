@@ -102,7 +102,7 @@ public class SearcherBuilder {
 				beanSearcher.setBeanReflector(beanReflector);
 			} else {
 				DefaultBeanReflector searchResultResolver = new DefaultBeanReflector();
-				searchResultResolver.setFieldConvertor(new DefaultFieldConvertor());
+				searchResultResolver.addConvertor(new DefaultFieldConvertor());
 				beanSearcher.setBeanReflector(searchResultResolver);
 			}
 			return beanSearcher;

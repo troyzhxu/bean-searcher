@@ -13,7 +13,6 @@ import java.util.function.Function;
  * 默认查询结果解析器
  * 
  * @author Troy.Zhou @ 2017-03-20
- * 
  */
 public class DefaultBeanReflector implements BeanReflector {
 
@@ -91,6 +90,12 @@ public class DefaultBeanReflector implements BeanReflector {
 
 	public void setConvertors(List<FieldConvertor> convertors) {
 		this.convertors = Objects.requireNonNull(convertors);
+	}
+
+	public void addConvertor(FieldConvertor convertor) {
+		if (convertor != null) {
+			convertors.add(convertor);
+		}
 	}
 
 }
