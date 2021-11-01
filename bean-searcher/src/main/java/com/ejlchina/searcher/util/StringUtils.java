@@ -84,15 +84,32 @@ public class StringUtils {
 		}
 		return count;
 	}
-	
-	
-	public static String[] toUpperCase(String[] ts) {
-		for (int i = 0; i < ts.length; i++) {
-			if (ts[i] != null) {
-				ts[i] = ts[i].toUpperCase();
+
+	/**
+	 * 驼峰风格风格转连字符风格
+	 * @param src 驼峰字符串
+	 * @param hyphenation 连字符
+	 * @return 连字符风格字符串
+	 */
+	public static String toHyphenation(String src, String hyphenation) {
+		StringBuilder sb = new StringBuilder(src);
+		int temp = 0;//定位
+		for(int i = 0; i < src.length(); i++){
+			if(Character.isUpperCase(src.charAt(i))){
+				sb.insert(i + temp, hyphenation);
+				temp += 1;
 			}
 		}
-		return ts;
+		return sb.toString().toLowerCase();
+	}
+
+	/**
+	 * 驼峰风格风格转下划线风格
+	 * @param src 驼峰字符串
+	 * @return 下划风格字符串
+	 */
+	public static String toUnderline(String src) {
+		return toHyphenation(src, "_");
 	}
 	
 }

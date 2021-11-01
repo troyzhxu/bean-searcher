@@ -20,10 +20,24 @@ public class DefaultMetadataResolver implements MetadataResolver {
 
     private final Map<Class<?>, Metadata<?>> cache = new ConcurrentHashMap<>();
 
-    private TableMapping tableMapping = new TableMapping();
-
     private SnippetResolver snippetResolver = new DefaultSnippetResolver();
 
+
+    private TableMapping tableMapping = new TableMapping() {
+
+        @Override
+        public String toTableName(Class<?> beanClass) {
+            // 默认使用连字符风格的表名映射
+            return StringUtils.toUnderline(beanClass.getSimpleName());
+        }
+
+        @Override
+        public String toColumnName(Field field) {
+            // 默认使用连字符风格的字段映射
+            return StringUtils.toUnderline(field.getName());
+        }
+
+    };
 
     @Override
     public <T> Metadata<T> resolve(Class<T> beanClass) {
@@ -37,23 +51,6 @@ public class DefaultMetadataResolver implements MetadataResolver {
             cache.put(beanClass, metadata);
             return metadata;
         }
-    }
-
-    protected String dbField(SearchBean bean, Field field) {
-        DbField dbField = field.getAnnotation(DbField.class);
-        if (dbField != null) {
-            return dbField.value().trim();
-        }
-        // 没加 @SearchBean 注解，或者加了但没给 tables 赋值，则可以自动映射列名，因为此时默认为单表映射
-        if (bean == null || StringUtils.isBlank(bean.tables())) {
-            return tableMapping.columnName(field);
-        }
-        String tab = bean.autoMapTab();
-        if (StringUtils.isBlank(tab)) {
-            return null;
-        }
-        String column = tableMapping.columnName(field);
-        return tab.trim() + "." + column;
     }
 
     protected <T> Metadata<T> resolveMetadata(Class<T> beanClass) {
@@ -90,7 +87,7 @@ public class DefaultMetadataResolver implements MetadataResolver {
 
     protected String tables(Class<?> beanClass, SearchBean bean) {
         if (bean == null || StringUtils.isBlank(bean.tables())) {
-            return tableMapping.tableName(beanClass);
+            return tableMapping.toTableName(beanClass);
         }
         return bean.tables().trim();
     }
@@ -101,6 +98,23 @@ public class DefaultMetadataResolver implements MetadataResolver {
 
     protected String groupBy(SearchBean bean) {
         return bean != null ? bean.groupBy().trim() : "";
+    }
+
+    protected String dbField(SearchBean bean, Field field) {
+        DbField dbField = field.getAnnotation(DbField.class);
+        if (dbField != null) {
+            return dbField.value().trim();
+        }
+        // 没加 @SearchBean 注解，或者加了但没给 tables 赋值，则可以自动映射列名，因为此时默认为单表映射
+        if (bean == null || StringUtils.isBlank(bean.tables())) {
+            return tableMapping.toColumnName(field);
+        }
+        String tab = bean.autoMapTab();
+        if (StringUtils.isBlank(tab)) {
+            return null;
+        }
+        String column = tableMapping.toColumnName(field);
+        return tab.trim() + "." + column;
     }
 
     public SnippetResolver getSnippetResolver() {
@@ -116,7 +130,7 @@ public class DefaultMetadataResolver implements MetadataResolver {
     }
 
     public void setTableMapping(TableMapping tableMapping) {
-        this.tableMapping = tableMapping;
+        this.tableMapping = Objects.requireNonNull(tableMapping);
     }
 
 }
