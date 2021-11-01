@@ -2,7 +2,7 @@ package com.ejlchina.searcher;
 
 import com.ejlchina.searcher.dialect.MySqlDialect;
 import com.ejlchina.searcher.implement.*;
-import com.ejlchina.searcher.implement.DefaultFieldConvertor;
+import com.ejlchina.searcher.implement.BoolFieldConvertor;
 import com.ejlchina.searcher.implement.processor.DefaultParamProcessor;
 
 /***
@@ -102,7 +102,7 @@ public class SearcherBuilder {
 				beanSearcher.setBeanReflector(beanReflector);
 			} else {
 				DefaultBeanReflector searchResultResolver = new DefaultBeanReflector();
-				searchResultResolver.addConvertor(new DefaultFieldConvertor());
+				searchResultResolver.addConvertor(new BoolFieldConvertor());
 				beanSearcher.setBeanReflector(searchResultResolver);
 			}
 			return beanSearcher;

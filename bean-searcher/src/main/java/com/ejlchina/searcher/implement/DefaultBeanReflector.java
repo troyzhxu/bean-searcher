@@ -65,15 +65,23 @@ public class DefaultBeanReflector implements BeanReflector {
 		}
 		Class<?> valueType = value.getClass();
 		if (targetType.isAssignableFrom(valueType)) {
-			// 如果 valueType 是 targetType 的子类，则直接返回
+			// 如果 targetType 是 valueType 的父类，则直接返回
 			return value;
 		}
+		Exception ex = null;
 		for (FieldConvertor convertor: convertors) {
 			if (convertor.supports(valueType, targetType)) {
-				return convertor.convert(value, targetType);
+				try {
+					return convertor.convert(value, targetType);
+				} catch (Exception e) {
+					if (ex != null) {
+						e.initCause(ex);
+					}
+					ex = e;
+				}
 			}
 		}
-		throw new SearchException("不能把【" + valueType + "】类型的数据库值转换为【" + targetType + "】类型的字段值，你可以添加一个 FieldConvertor 来转换它！");
+		throw new SearchException("不能把【" + valueType + "】类型的数据库值转换为【" + targetType + "】类型的字段值，你可以添加一个 FieldConvertor 来转换它！", ex);
 	}
 
 	protected <T> T newInstance(Class<T> beanClass) {

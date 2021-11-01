@@ -16,7 +16,7 @@ public class User {
 	private String name;
 	
 	@DbField("age")
-	private Integer age;
+	private int age;
 
 	@DbField("date_created")
 	private Date dateCreated;
@@ -38,11 +38,11 @@ public class User {
 		this.name = name;
 	}
 
-	public Integer getAge() {
+	public int getAge() {
 		return age;
 	}
 
-	public void setAge(Integer age) {
+	public void setAge(int age) {
 		this.age = age;
 	}
 

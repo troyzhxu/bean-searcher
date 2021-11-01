@@ -2,7 +2,7 @@ package com.ejlchina.searcher.boot;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import com.ejlchina.searcher.implement.DefaultFieldConvertor;
+import com.ejlchina.searcher.implement.BoolFieldConvertor;
 
 
 @ConfigurationProperties(prefix = "bean-searcher")
@@ -11,20 +11,14 @@ public class BeanSearcherProperties {
 	/**
 	 * 参数配置
 	 */
-	private final ParamsPorps params = new ParamsPorps();
+	private final ParamsProps params = new ParamsProps();
 
 	/**
 	 * SQL配置
 	 */
 	private final SqlProps sql = new SqlProps();
 
-	/**
-	 * 字段转换配置
-	 */
-	private final FieldConvertorProps fieldConvertor = new FieldConvertorProps();
-
-
-	public ParamsPorps getParams() {
+	public ParamsProps getParams() {
 		return params;
 	}
 
@@ -32,12 +26,8 @@ public class BeanSearcherProperties {
 		return sql;
 	}
 
-	public FieldConvertorProps getFieldConvertor() {
-		return fieldConvertor;
-	}
 
-
-	public static class ParamsPorps {
+	public static class ParamsProps {
 
 		/**
 		 * 排序字段参数名
@@ -252,50 +242,6 @@ public class BeanSearcherProperties {
 
 		public void setDialect(String dialect) {
 			this.dialect = dialect;
-		}
-		
-	}
-	
-	
-	public static class FieldConvertorProps {
-
-		/**
-		 * 字段真值（True）映射字符，可配多个
-		 */
-		private String[] trues = DefaultFieldConvertor.DEFAULT_TRUES;
-
-		/**
-		 * 字段假值（False）映射字符，可配多个
-		 */
-		private String[] falses = DefaultFieldConvertor.DEFAULT_FALSES;
-
-		/**
-		 * 匹配映射字符时，是否忽略大小写
-		 */
-		private boolean ignoreCase = true;
-		
-		public String[] getTrues() {
-			return trues;
-		}
-
-		public void setTrues(String[] trues) {
-			this.trues = trues;
-		}
-
-		public String[] getFalses() {
-			return falses;
-		}
-
-		public void setFalses(String[] falses) {
-			this.falses = falses;
-		}
-
-		public boolean isIgnoreCase() {
-			return ignoreCase;
-		}
-
-		public void setIgnoreCase(boolean ignoreCase) {
-			this.ignoreCase = ignoreCase;
 		}
 		
 	}

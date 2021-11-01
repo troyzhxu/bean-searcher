@@ -1,20 +1,12 @@
 package com.ejlchina.searcher.boot;
 
 import com.ejlchina.searcher.*;
+import com.ejlchina.searcher.boot.BeanSearcherProperties.ParamsProps;
+import com.ejlchina.searcher.boot.BeanSearcherProperties.SqlProps;
 import com.ejlchina.searcher.dialect.*;
 import com.ejlchina.searcher.implement.*;
-import com.ejlchina.searcher.implement.DefaultFieldConvertor;
-import com.ejlchina.searcher.FieldConvertor;
-import com.ejlchina.searcher.implement.PageOffsetExtractor;
-import com.ejlchina.searcher.implement.PageSizeExtractor;
-import com.ejlchina.searcher.PageExtractor;
-import com.ejlchina.searcher.ParamFilter;
 import com.ejlchina.searcher.implement.processor.DefaultParamProcessor;
 import com.ejlchina.searcher.implement.processor.ParamProcessor;
-import com.ejlchina.searcher.boot.BeanSearcherProperties.FieldConvertorProps;
-import com.ejlchina.searcher.boot.BeanSearcherProperties.ParamsPorps;
-import com.ejlchina.searcher.boot.BeanSearcherProperties.SqlProps;
-import com.ejlchina.searcher.util.StringUtils;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -38,9 +30,9 @@ public class BeanSearcherAutoConfiguration {
 	@Bean
 	@ConditionalOnMissingBean(PageExtractor.class)
 	public PageExtractor pagination(BeanSearcherProperties config) {
-		ParamsPorps.PaginationPorps conf = config.getParams().getPagination();
+		ParamsProps.PaginationPorps conf = config.getParams().getPagination();
 		String type = conf.getType();
-		if (ParamsPorps.PaginationPorps.TYPE_PAGE.equals(type)) {
+		if (ParamsProps.PaginationPorps.TYPE_PAGE.equals(type)) {
 			PageSizeExtractor p = new PageSizeExtractor();
 			p.setMaxAllowedSize(conf.getMaxAllowedSize());
 			p.setSizeName(conf.getSize());
@@ -49,7 +41,7 @@ public class BeanSearcherAutoConfiguration {
 			p.setDefaultSize(conf.getDefaultSize());
 			return p;
 		} 
-		if (ParamsPorps.PaginationPorps.TYPE_OFFSET.equals(type)) {
+		if (ParamsProps.PaginationPorps.TYPE_OFFSET.equals(type)) {
 			PageOffsetExtractor p = new PageOffsetExtractor();
 			p.setMaxAllowedSize(conf.getMaxAllowedSize());
 			p.setSizeName(conf.getMax());
@@ -67,7 +59,7 @@ public class BeanSearcherAutoConfiguration {
 											 ObjectProvider<ParamFilter[]> paramFilterProvider) {
 		DefaultParamResolver searchParamResolver = new DefaultParamResolver();
 		searchParamResolver.setPageExtractor(pageExtractor);
-		ParamsPorps conf = config.getParams();
+		ParamsProps conf = config.getParams();
 		searchParamResolver.setOperatorSuffix(conf.getOperatorKey());
 		searchParamResolver.setIgnoreCaseSuffix(conf.getIgnoreCaseKey());
 		searchParamResolver.setOrderName(conf.getOrder());
@@ -118,21 +110,21 @@ public class BeanSearcherAutoConfiguration {
 		return new DefaultSqlExecutor(dataSource);
 	}
 
-	@Bean
-	@ConditionalOnMissingBean(FieldConvertor.class)
-	public FieldConvertor fieldConvertor(BeanSearcherProperties config) {
-		DefaultFieldConvertor convertor = new DefaultFieldConvertor();
-		FieldConvertorProps conf = config.getFieldConvertor();
-		convertor.setIgnoreCase(conf.isIgnoreCase());
-		if (conf.isIgnoreCase()) {
-			convertor.setTrues(StringUtils.toUpperCase(conf.getTrues()));
-			convertor.setFalses(StringUtils.toUpperCase(conf.getFalses()));
-		} else {
-			convertor.setTrues(conf.getTrues());
-			convertor.setFalses(conf.getFalses());
-		}
-		return convertor;
-	}
+//	@Bean
+//	@ConditionalOnMissingBean(FieldConvertor.class)
+//	public FieldConvertor fieldConvertor(BeanSearcherProperties config) {
+//		BoolFieldConvertor convertor = new BoolFieldConvertor();
+//		FieldConvertorProps conf = config.getFieldConvertor();
+//		convertor.setIgnoreCase(conf.isIgnoreCase());
+//		if (conf.isIgnoreCase()) {
+//			convertor.setTrues(StringUtils.toUpperCase(conf.getTrues()));
+//			convertor.setFalses(StringUtils.toUpperCase(conf.getFalses()));
+//		} else {
+//			convertor.setTrues(conf.getTrues());
+//			convertor.setFalses(conf.getFalses());
+//		}
+//		return convertor;
+//	}
 	
 	@Bean
 	@ConditionalOnMissingBean(BeanReflector.class)
