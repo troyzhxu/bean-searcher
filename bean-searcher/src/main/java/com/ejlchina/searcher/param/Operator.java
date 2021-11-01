@@ -9,12 +9,6 @@ package com.ejlchina.searcher.param;
 public enum Operator {
 
 	/**
-	 * 包含
-	 * like '%xxx%'
-	 */
-	Include,
-	
-	/**
 	 * 等于
 	 */
 	Equal,
@@ -53,7 +47,13 @@ public enum Operator {
 	 * 不为空
 	 */
 	NotEmpty,
-	
+
+	/**
+	 * 包含
+	 * like '%xxx%'
+	 */
+	Like,
+
 	/**
 	 * 以 .. 开始
 	 * like 'xxx%'
@@ -73,7 +73,7 @@ public enum Operator {
 	
 	/**
 	 * 多值
-	 * or
+	 * in
 	 */
 	MultiValue;
 
@@ -81,7 +81,8 @@ public enum Operator {
 		switch (op) {
 		case "in":
 		case "Include":
-			return Include;
+		case "Like":
+			return Like;
 		case "eq":
 		case "Equal":
 			return Equal;

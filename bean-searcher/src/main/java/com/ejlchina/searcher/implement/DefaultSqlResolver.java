@@ -102,16 +102,18 @@ public class DefaultSqlResolver implements SqlResolver {
 		}
 		for (int i = 0; i < fieldParamList.size(); i++) {
 			if (i > 0 || hasJoinCond) {
-				builder.append(" and ");
+				builder.append(" and (");
 			}
 			FieldParam fieldParam = fieldParamList.get(i);
 			String fieldName = fieldParam.getName();
+			// 这里没取字段别名，因为在 count SQL 里，select 语句中可能没这个字段
 			List<Object> sqlParams = appendFilterConditionSql(builder, fieldTypeMap.get(fieldName),
 					metadata.getDbField(fieldName), fieldParam);
 			for (Object sqlParam : sqlParams) {
 				searchSql.addListSqlParam(sqlParam);
 				searchSql.addClusterSqlParam(sqlParam);
 			}
+			builder.append(")");
 		}
 
 		String groupBy = metadata.getGroupBy();
@@ -285,7 +287,7 @@ public class DefaultSqlResolver implements SqlResolver {
 		Object firstRealValue = ObjectUtils.firstNotNull(values);
 		List<Object> params = new ArrayList<>(2);
 		switch (operator) {
-		case Include:
+		case Like:
 			builder.append(" like ?");
 			params.add("%" + firstRealValue + "%");
 			break;
@@ -314,10 +316,10 @@ public class DefaultSqlResolver implements SqlResolver {
 			params.add(firstRealValue);
 			break;
 		case Empty:
-			builder.append(" is null");
+			builder.append(" is null or ").append(dbField).append(" = ''"); ;
 			break;
 		case NotEmpty:
-			builder.append(" is not null");
+			builder.append(" is not null and ").append(dbField).append(" != ''");
 			break;
 		case StartWith:
 			builder.append(" like ?");

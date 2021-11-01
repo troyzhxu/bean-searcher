@@ -42,7 +42,7 @@ public class Metadata<T> {
 	private final List<String> fieldList = new ArrayList<>();
 
 	/**
-	 * 映射: Bean属性-> DB字段
+	 * 映射: Bean属性-> DB 字段
 	 * */
 	private final Map<String, SqlSnippet> fieldDbSnippetMap = new HashMap<>();
 
