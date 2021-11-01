@@ -3,7 +3,7 @@ package com.ejlchina.searcher;
 import java.lang.reflect.Field;
 
 /**
- * 注解缺省时的 与字段映射
+ * 注解缺省时的表名与字段映射
  * @author Troy.Zhou @ 2021-11-01
  * @since v3.0.0
  */
