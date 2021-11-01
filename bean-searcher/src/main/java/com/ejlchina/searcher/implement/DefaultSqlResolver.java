@@ -1,13 +1,12 @@
 package com.ejlchina.searcher.implement;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.dialect.Dialect;
 import com.ejlchina.searcher.dialect.Dialect.PaginateSql;
+import com.ejlchina.searcher.dialect.MySqlDialect;
+import com.ejlchina.searcher.implement.processor.DefaultParamProcessor;
 import com.ejlchina.searcher.implement.processor.ParamProcessor;
 import com.ejlchina.searcher.param.*;
 import com.ejlchina.searcher.SearchParam;
@@ -25,12 +24,12 @@ public class DefaultSqlResolver implements SqlResolver {
 	/**
 	 * 数据库方言
 	 */
-	private Dialect dialect;
+	private Dialect dialect = new MySqlDialect();
 
 	/**
 	 * 参数处理器
 	 */
-	private ParamProcessor paramProcessor;
+	private ParamProcessor paramProcessor = new DefaultParamProcessor();
 	
 	
 	public DefaultSqlResolver() {
@@ -385,7 +384,7 @@ public class DefaultSqlResolver implements SqlResolver {
 	}
 	
 	public void setDialect(Dialect dialect) {
-		this.dialect = dialect;
+		this.dialect = Objects.requireNonNull(dialect);
 	}
 
 	public ParamProcessor getParamProcessor() {
@@ -393,7 +392,7 @@ public class DefaultSqlResolver implements SqlResolver {
 	}
 
 	public void setParamProcessor(ParamProcessor paramProcessor) {
-		this.paramProcessor = paramProcessor;
+		this.paramProcessor = Objects.requireNonNull(paramProcessor);
 	}
 
 }

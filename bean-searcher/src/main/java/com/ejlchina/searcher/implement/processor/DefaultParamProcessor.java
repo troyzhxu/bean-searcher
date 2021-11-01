@@ -65,7 +65,7 @@ public class DefaultParamProcessor implements ParamProcessor {
 
 
 	private Object dateValue(Object value, boolean roundDown) {
-		if (value != null && value instanceof String) {
+		if (value instanceof String) {
 			String strValue = (String) value;
 			if (DATE_PATTERN.matcher(strValue).matches()) {
 				if (roundDown) {
