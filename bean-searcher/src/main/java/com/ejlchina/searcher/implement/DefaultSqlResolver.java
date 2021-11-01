@@ -25,7 +25,7 @@ public class DefaultSqlResolver implements SqlResolver {
 	private Dialect dialect = new MySqlDialect();
 
 	/**
-	 * 参数处理器
+	 * 日期参数矫正器
 	 */
 	private DateValueCorrector dateValueCorrector = new DateValueCorrector();
 	
