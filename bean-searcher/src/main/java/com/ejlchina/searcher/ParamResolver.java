@@ -12,11 +12,6 @@ import java.util.Map;
 public interface ParamResolver {
 
 	/**
-	 * @return 分页解析器
-	 * */
-	PageExtractor getPagination();
-
-	/**
 	 * @param metadata 元数据
 	 * @param fetchType Fetch 类型
 	 * @param paraMap 原始检索参数

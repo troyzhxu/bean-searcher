@@ -50,12 +50,7 @@ public class DefaultParamResolver implements ParamResolver {
 	private PageExtractor pageExtractor = new PageOffsetExtractor();
 
 	private ParamFilter[] filters = new ParamFilter[] { new BoolValueFilter() };
-	
-	@Override
-	public PageExtractor getPagination() {
-		return pageExtractor;
-	}
-	
+
 	@Override
 	public <T> SearchParam resolve(Metadata<T> metadata, FetchType fetchType, Map<String, Object> paraMap) {
 		for (ParamFilter paramFilter: filters) {
@@ -118,7 +113,13 @@ public class DefaultParamResolver implements ParamResolver {
 			param.setIgnoreCase(ObjectUtils.toBoolean(paraMap.get(field + separator + ignoreCaseSuffix)));
 			for (int index : indices) {
 				Object value = paraMap.get(field + separator + index);
-				param.addValue(value, index);
+				if (value != null) {
+					param.addValue(value, index);
+				}
+			}
+			Object value = paraMap.get(field);
+			if (value != null) {
+				param.addValue(value, 0);
 			}
 			return param;
 		}
@@ -143,25 +144,45 @@ public class DefaultParamResolver implements ParamResolver {
 		}
 		return null;
 	}
-	
+
+	public String getSortName() {
+		return sortName;
+	}
+
 	public void setSortName(String sortName) {
 		MapBuilder.config(MapBuilder.SORT, sortName);
-		this.sortName = sortName;
+		this.sortName = Objects.requireNonNull(sortName);
+	}
+
+	public String getOrderName() {
+		return orderName;
 	}
 
 	public void setOrderName(String orderName) {
 		MapBuilder.config(MapBuilder.ORDER, orderName);
-		this.orderName = orderName;
+		this.orderName = Objects.requireNonNull(orderName);
+	}
+
+	public String getIgnoreCaseSuffix() {
+		return ignoreCaseSuffix;
 	}
 
 	public void setIgnoreCaseSuffix(String ignoreCaseSuffix) {
 		MapBuilder.config(MapBuilder.IC_SUFFIX, ignoreCaseSuffix);
-		this.ignoreCaseSuffix = ignoreCaseSuffix;
+		this.ignoreCaseSuffix = Objects.requireNonNull(ignoreCaseSuffix);
+	}
+
+	public String getOperatorSuffix() {
+		return operatorSuffix;
 	}
 
 	public void setOperatorSuffix(String operatorSuffix) {
 		MapBuilder.config(MapBuilder.OP_SUFFIX, operatorSuffix);
-		this.operatorSuffix = operatorSuffix;
+		this.operatorSuffix = Objects.requireNonNull(operatorSuffix);
+	}
+
+	public String getSeparator() {
+		return separator;
 	}
 
 	public void setSeparator(String separator) {
@@ -169,11 +190,11 @@ public class DefaultParamResolver implements ParamResolver {
 		this.separator = Objects.requireNonNull(separator);
 	}
 
-	public String getSeparator() {
-		return separator;
+	public PageExtractor getPageExtractor() {
+		return pageExtractor;
 	}
 
-	public void setPagination(PageExtractor pageExtractor) {
+	public void setPageExtractor(PageExtractor pageExtractor) {
 		this.pageExtractor = Objects.requireNonNull(pageExtractor);
 	}
 

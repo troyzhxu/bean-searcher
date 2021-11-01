@@ -24,8 +24,7 @@ public abstract class AbstractSearcher implements Searcher {
 
 	@Override
 	public <T> Number searchCount(Class<T> beanClass, Map<String, Object> paraMap) {
-		FetchType fetchType = new FetchType(FetchType.ONLY_TOTAL);
-		SqlResult<T> sqlResult = doSearch(beanClass, paraMap, fetchType);
+		SqlResult<T> sqlResult = doSearch(beanClass, paraMap, new FetchType(FetchType.ONLY_TOTAL));
 		try {
 			return getCountFromSqlResult(sqlResult);
 		} catch (SQLException e) {
@@ -52,8 +51,7 @@ public abstract class AbstractSearcher implements Searcher {
 			throw new SearchException("检索该 Bean【" + beanClass.getName()
 			+ "】的统计信息时，必须要指定需要统计的属性！");
 		}
-		FetchType fetchType = new FetchType(FetchType.ONLY_SUMMARY, fields);
-		SqlResult<T> sqlResult = doSearch(beanClass, paraMap, fetchType);
+		SqlResult<T> sqlResult = doSearch(beanClass, paraMap, new FetchType(FetchType.ONLY_SUMMARY, fields));
 		try {
 			return getSummaryFromSqlResult(sqlResult);
 		} catch (SQLException e) {
@@ -85,13 +83,7 @@ public abstract class AbstractSearcher implements Searcher {
 		Metadata<T> metadata = metadataResolver.resolve(beanClass);
 		SearchParam searchParam = paramResolver.resolve(metadata, fetchType, paraMap);
 		SearchSql<T> searchSql = sqlResolver.resolve(metadata, searchParam);
-		searchSql.setShouldQueryCluster(fetchType.isShouldQueryTotal() || fetchType.getSummaryFields().length > 0);
-		searchSql.setShouldQueryList(fetchType.isShouldQueryList());
 		return sqlExecutor.execute(searchSql);
-	}
-
-	public PageExtractor getPagination() {
-		return paramResolver.getPagination();
 	}
 	
 	public ParamResolver getParamResolver() {

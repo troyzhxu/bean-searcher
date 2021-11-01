@@ -77,6 +77,10 @@ public class FetchType {
         return fetchType == ALL || fetchType == ONLY_TOTAL;
     }
 
+    public boolean isShouldQueryCluster() {
+        return isShouldQueryTotal() || summaryFields.length > 0;
+    }
+
     public boolean isShouldQueryList() {
         return fetchType != ONLY_TOTAL && fetchType != ONLY_SUMMARY;
     }

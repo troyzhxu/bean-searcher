@@ -49,6 +49,11 @@ public class DefaultSqlResolver implements SqlResolver {
 		Map<String, Class<?>> fieldTypeMap = metadata.getFieldTypeMap();
 		
 		SearchSql<T> searchSql = new SearchSql<>(metadata);
+
+		FetchType fetchType = searchParam.getFetchType();
+		searchSql.setShouldQueryCluster(fetchType.isShouldQueryCluster());
+		searchSql.setShouldQueryList(fetchType.isShouldQueryList());
+
 		StringBuilder builder = new StringBuilder("select ");
 		if (metadata.isDistinct()) {
 			builder.append("distinct ");
@@ -139,7 +144,6 @@ public class DefaultSqlResolver implements SqlResolver {
 				searchSql.addClusterSqlParam(sqlParam);
 			}
 		}
-		FetchType fetchType = searchParam.getFetchInfo();
 
 		String groupBy = metadata.getGroupBy();
 		String[] summaryFields = fetchType.getSummaryFields();

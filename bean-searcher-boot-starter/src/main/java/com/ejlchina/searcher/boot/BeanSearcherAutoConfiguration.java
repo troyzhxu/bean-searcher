@@ -64,7 +64,7 @@ public class BeanSearcherAutoConfiguration {
 	public ParamResolver searchParamResolver(PageExtractor pageExtractor, BeanSearcherProperties config,
 											 ObjectProvider<ParamFilter[]> paramFilterProvider) {
 		DefaultParamResolver searchParamResolver = new DefaultParamResolver();
-		searchParamResolver.setPagination(pageExtractor);
+		searchParamResolver.setPageExtractor(pageExtractor);
 		ParamsPorps conf = config.getParams();
 		searchParamResolver.setOperatorSuffix(conf.getOperatorKey());
 		searchParamResolver.setIgnoreCaseSuffix(conf.getIgnoreCaseKey());

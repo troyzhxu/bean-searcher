@@ -65,7 +65,7 @@ public class SearchParam {
 		return fieldParams;
 	}
 
-	public FetchType getFetchInfo() {
+	public FetchType getFetchType() {
 		return fetchType;
 	}
 
