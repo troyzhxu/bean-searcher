@@ -20,7 +20,7 @@ public class DefaultSnippetResolver implements SnippetResolver {
 
     @Override
     public SqlSnippet resolve(String fragment) {
-        SqlSnippet solution = new SqlSnippet();
+        SqlSnippet sqlSnippet = newSqlSnippet();
         int index1 = fragment.indexOf(paramPrefix);
         while (index1 >= 0) {
             int index2 = findParamEndIndex(fragment, index1);
@@ -28,7 +28,7 @@ public class DefaultSnippetResolver implements SnippetResolver {
             if (StringUtils.isBlank(sqlName) || sqlName.length() < 2) {
                 throw new SearchException("There is a syntax error about embed param: " + fragment);
             }
-            SqlSnippet.Param param = new SqlSnippet.Param(sqlName);
+            SqlSnippet.Param param = newSqlSnippetParam(sqlName);
             boolean endWithPrefix = sqlName.endsWith(paramPrefix);
             if (endWithPrefix) {
                 param.setName(sqlName.substring(1, sqlName.length() - paramPrefix.length()));
@@ -48,11 +48,19 @@ public class DefaultSnippetResolver implements SnippetResolver {
                 // sqlSnippet 长度变短，寻找下标也该相应提前
                 nextIndex = nextIndex - sqlName.length() + 1;
             }
-            solution.addParam(param);
+            sqlSnippet.addParam(param);
             index1 = fragment.indexOf(paramPrefix, nextIndex);
         }
-        solution.setSnippet(fragment);
-        return solution;
+        sqlSnippet.setSnippet(fragment);
+        return sqlSnippet;
+    }
+
+    protected SqlSnippet newSqlSnippet() {
+        return new SqlSnippet();
+    }
+
+    protected SqlSnippet.Param newSqlSnippetParam(String sqlName) {
+        return new SqlSnippet.Param(sqlName);
     }
 
     private String getSqlName(String sqlSnippet, int index1, int index2) {

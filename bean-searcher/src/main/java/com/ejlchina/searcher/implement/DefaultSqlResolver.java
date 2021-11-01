@@ -60,26 +60,12 @@ public class DefaultSqlResolver implements SqlResolver {
 		int fieldCount = fieldList.size();
 		for (int i = 0; i < fieldCount; i++) {
 			String field = fieldList.get(i);
-
-			String dbField = metadata.getDbField(field);
-			String dbAlias = fieldDbAliasMap.get(field);
-			
-			List<SqlSnippet.Param> fieldParams = metadata.getFieldEmbedParams(field);
-			if (fieldParams != null) {
-				for (SqlSnippet.Param param : fieldParams) {
-					Object sqlParam = searchParam.getPara(param.getName());
-					if (param.isJdbcPara()) {
-						searchSql.addListSqlParam(sqlParam);
-						// 只有在 distinct 条件，聚族查询 SQL 里才会出现 字段查询 语句，才需要将 虚拟参数放到 聚族参数里 
-						if (metadata.isDistinct()) {
-							searchSql.addClusterSqlParam(sqlParam);
-						}
-					} else {
-						String strParam = sqlParam != null ? sqlParam.toString() : "";
-						dbField = dbField.replace(param.getSqlName(), strParam);
-					}
-				}
+			SqlSnippet snippet = metadata.getDbFieldSnippet(field);
+			if (snippet == null) {
+				continue;
 			}
+			String dbField = resolveDbField(snippet, searchParam, searchSql, metadata.isDistinct());
+			String dbAlias = fieldDbAliasMap.get(field);
 			builder.append(dbField).append(" ").append(dbAlias);
 			if (i < fieldCount - 1) {
 				builder.append(", ");
@@ -88,26 +74,12 @@ public class DefaultSqlResolver implements SqlResolver {
 		}
 		String fieldSelectSql = builder.toString();
 
-		builder = new StringBuilder(" from ");
-		String talbes = metadata.getTalbes();
-		
-		List<SqlSnippet.Param> tableParams = metadata.getTableEmbedParams();
-		if (tableParams != null) {
-			for (SqlSnippet.Param param : tableParams) {
-				Object sqlParam = searchParam.getPara(param.getName());
-				if (param.isJdbcPara()) {
-					searchSql.addListSqlParam(sqlParam);
-					searchSql.addClusterSqlParam(sqlParam);
-				} else {
-					String strParam = sqlParam != null ? sqlParam.toString() : "";
-					talbes = talbes.replace(param.getSqlName(), strParam);
-				}
-			}
-		}
-		builder.append(talbes);
+		builder = new StringBuilder(" from ")
+				.append(resolveTables(metadata.getTableSnippet(), searchParam, searchSql));
 		
 		String joinCond = metadata.getJoinCond();
-		boolean hasJoinCond = joinCond != null && !"".equals(joinCond.trim());
+		boolean hasJoinCond = !StringUtils.isBlank(joinCond);
+
 		List<FieldParam> fieldParamList = searchParam.getFieldParams();
 
 		if (hasJoinCond || fieldParamList.size() > 0) {
@@ -207,6 +179,41 @@ public class DefaultSqlResolver implements SqlResolver {
 			searchSql.addListSqlParams(paginateSql.getParams());
 		}
 		return searchSql;
+	}
+
+	private <T> String resolveTables(SqlSnippet tableSnippet, SearchParam searchParam, SearchSql<T> searchSql) {
+		String tables = tableSnippet.getSnippet();
+		List<SqlSnippet.Param> params = tableSnippet.getParams();
+		for (SqlSnippet.Param param : params) {
+			Object sqlParam = searchParam.getPara(param.getName());
+			if (param.isJdbcPara()) {
+				searchSql.addListSqlParam(sqlParam);
+				searchSql.addClusterSqlParam(sqlParam);
+			} else {
+				String strParam = sqlParam != null ? sqlParam.toString() : "";
+				tables = tables.replace(param.getSqlName(), strParam);
+			}
+		}
+		return tables;
+	}
+
+	private <T> String resolveDbField(SqlSnippet dbFieldSnippet, SearchParam searchParam, SearchSql<T> searchSql, boolean distinct) {
+		String dbField = dbFieldSnippet.getSnippet();
+		List<SqlSnippet.Param> params = dbFieldSnippet.getParams();
+		for (SqlSnippet.Param param : params) {
+			Object sqlParam = searchParam.getPara(param.getName());
+			if (param.isJdbcPara()) {
+				searchSql.addListSqlParam(sqlParam);
+				// 只有在 distinct 条件，聚族查询 SQL 里才会出现 字段查询 语句，才需要将 内嵌参数放到 聚族参数里
+				if (distinct) {
+					searchSql.addClusterSqlParam(sqlParam);
+				}
+			} else {
+				String strParam = sqlParam != null ? sqlParam.toString() : "";
+				dbField = dbField.replace(param.getSqlName(), strParam);
+			}
+		}
+		return dbField;
 	}
 
 

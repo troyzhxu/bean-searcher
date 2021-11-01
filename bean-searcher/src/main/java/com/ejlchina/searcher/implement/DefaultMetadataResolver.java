@@ -44,9 +44,9 @@ public class DefaultMetadataResolver implements MetadataResolver {
             throw new SearchException("The class [" + beanClass.getName()
                     + "] is not a valid SearchBean, please check whether the class is annotated correctly by @SearchBean");
         }
-        SqlSnippet tableSnippet = snippetResolver.resolve(searchBean.tables());
-        SqlSnippet joinCondSnippet = snippetResolver.resolve(searchBean.joinCond());
-        SqlSnippet groupBySnippet = snippetResolver.resolve(searchBean.groupBy());
+        SqlSnippet tableSnippet = snippetResolver.resolve(searchBean.tables().trim());
+        SqlSnippet joinCondSnippet = snippetResolver.resolve(searchBean.joinCond().trim());
+        SqlSnippet groupBySnippet = snippetResolver.resolve(searchBean.groupBy().trim());
 
         Metadata<T> metadata = new Metadata<>(beanClass, tableSnippet, joinCondSnippet, groupBySnippet, searchBean.distinct());
 

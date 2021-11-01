@@ -91,12 +91,8 @@ public class Metadata<T> {
 		return beanClass;
 	}
 
-	public String getTalbes() {
-		return tableSnippet.getSnippet();
-	}
-
-	public List<SqlSnippet.Param> getTableEmbedParams() {
-		return tableSnippet.getParams();
+	public SqlSnippet getTableSnippet() {
+		return tableSnippet;
 	}
 
 	public String getJoinCond() {
@@ -120,8 +116,12 @@ public class Metadata<T> {
 	}
 
 	public String getDbField(String field) {
-		SqlSnippet solution = fieldDbSnippetMap.get(field);
-		return solution != null ? solution.getSnippet() : null;
+		SqlSnippet snippet = fieldDbSnippetMap.get(field);
+		return snippet != null ? snippet.getSnippet() : null;
+	}
+
+	public SqlSnippet getDbFieldSnippet(String field) {
+		return fieldDbSnippetMap.get(field);
 	}
 
 	public Map<String, String> getFieldDbAliasMap() {
@@ -142,11 +142,6 @@ public class Metadata<T> {
 
 	public Map<String, Class<?>> getFieldTypeMap() {
 		return fieldTypeMap;
-	}
-
-	public List<SqlSnippet.Param> getFieldEmbedParams(String field) {
-		SqlSnippet solution = fieldDbSnippetMap.get(field);
-		return solution != null ? solution.getParams() : Collections.emptyList();
 	}
 	
 }
