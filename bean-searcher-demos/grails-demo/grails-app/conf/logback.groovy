@@ -36,5 +36,7 @@ if (Environment.isDevelopmentMode() && targetDir != null) {
 }
 
 logger("com.ejlchina.searcher.implement.MainSearchSqlExecutor", DEBUG, ['STDOUT'], false)
+logger("org.hibernate.SQL", DEBUG, ['STDOUT'], false)
+
 
 root(ERROR, ['STDOUT'])

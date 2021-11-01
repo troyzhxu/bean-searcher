@@ -103,6 +103,8 @@ dataSource:
     driverClassName: org.h2.Driver
     username: sa
     password: ''
+#    hibernate:
+#        show_sql: true
 
 environments:
     development:

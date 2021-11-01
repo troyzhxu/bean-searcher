@@ -12,4 +12,10 @@ class EmployeeController {
         render searcher.search(EmployeeBean, params) as JSON
     }
 
+    def test() {
+        def employees = Employee.findAllByNameIlike("S")
+        println(employees)
+        render employees as JSON
+    }
+
 }

@@ -6,18 +6,17 @@ import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.dialect.Dialect;
 import com.ejlchina.searcher.dialect.Dialect.PaginateSql;
 import com.ejlchina.searcher.dialect.MySqlDialect;
-import com.ejlchina.searcher.implement.processor.DefaultParamProcessor;
-import com.ejlchina.searcher.implement.processor.ParamProcessor;
+import com.ejlchina.searcher.ParamProcessor;
 import com.ejlchina.searcher.param.*;
 import com.ejlchina.searcher.SearchParam;
 import com.ejlchina.searcher.util.ObjectUtils;
 import com.ejlchina.searcher.util.StringUtils;
 
 /**
- * 默认查询SQL解析器
+ * 默认 SQL 解析器
  * 
  * @author Troy.Zhou @ 2017-03-20
- * @since V1.1.1
+ * @since v1.1.1
  */
 public class DefaultSqlResolver implements SqlResolver {
 
@@ -275,7 +274,7 @@ public class DefaultSqlResolver implements SqlResolver {
 		Object[] values = fieldParam.getValues();
 		boolean ignoreCase = fieldParam.isIgnoreCase();
 		Operator operator = fieldParam.getOperator();
-		
+
 		if (Date.class.isAssignableFrom(fieldType)) {
 			values = paramProcessor.dateParams(values, operator);
 		}

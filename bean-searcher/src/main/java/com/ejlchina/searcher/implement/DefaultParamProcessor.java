@@ -1,9 +1,9 @@
-package com.ejlchina.searcher.implement.processor;
+package com.ejlchina.searcher.implement;
 
 import java.util.regex.Pattern;
 
+import com.ejlchina.searcher.ParamProcessor;
 import com.ejlchina.searcher.param.Operator;
-
 
 
 public class DefaultParamProcessor implements ParamProcessor {
@@ -14,8 +14,6 @@ public class DefaultParamProcessor implements ParamProcessor {
 	static final Pattern DATE_HOUR_PATTERN = Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}");
 	
 	static final Pattern DATE_MINUTE_PATTERN = Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}");
-	
-	static final Pattern DATE_SECOND_PATTERN = Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}");
 
 	
 	@Override

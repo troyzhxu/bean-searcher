@@ -1,4 +1,4 @@
-package com.ejlchina.searcher.implement.processor;
+package com.ejlchina.searcher;
 
 import com.ejlchina.searcher.param.Operator;
 

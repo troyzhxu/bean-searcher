@@ -3,7 +3,7 @@ package com.ejlchina.searcher;
 import com.ejlchina.searcher.dialect.MySqlDialect;
 import com.ejlchina.searcher.implement.*;
 import com.ejlchina.searcher.implement.BoolFieldConvertor;
-import com.ejlchina.searcher.implement.processor.DefaultParamProcessor;
+import com.ejlchina.searcher.implement.DefaultParamProcessor;
 
 /***
  * 检索器 Builder
