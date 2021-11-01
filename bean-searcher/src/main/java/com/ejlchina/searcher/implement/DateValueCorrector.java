@@ -2,67 +2,57 @@ package com.ejlchina.searcher.implement;
 
 import java.util.regex.Pattern;
 
-import com.ejlchina.searcher.ParamProcessor;
 import com.ejlchina.searcher.param.Operator;
 
+/**
+ * 日期参数值矫正器
+ * @author Troy.Zhou @ 2021-11-01
+ * @since v3.0.0
+ */
+public class DateValueCorrector {
 
-public class DefaultParamProcessor implements ParamProcessor {
-
-	
 	static final Pattern DATE_PATTERN = Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{2}");
 
 	static final Pattern DATE_HOUR_PATTERN = Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}");
 	
 	static final Pattern DATE_MINUTE_PATTERN = Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}");
 
-	
-	@Override
-	public Object[] upperCase(Object[] params) {
-		for (int i = 0; i < params.length; i++) {
-			Object val = params[i];
-			if (val != null) {
-				if (val instanceof String) {
-					params[i] = ((String) val).toUpperCase();
-				} else {
-					params[i] = val;
-				}
-			}
-		}
-		return params;
-	}
-
-	
-	@Override
-	public Object[] dateParams(Object[] params, Operator operator) {
+	/**
+	 * 日期参数值矫正处理
+	 * @param dateValues 参数值
+	 * @param operator 字段运算符
+	 * @return 矫正后的日期参数
+	 */
+	public Object[] correct(Object[] dateValues, Operator operator) {
 		switch (operator) {
 		case LessThan:
 		case GreaterEqual:
-			for (int i = 0; i <params.length; i++) {
-				params[i] = dateValue(params[i], true);
+			for (int i = 0; i <dateValues.length; i++) {
+				dateValues[i] = dateValue(dateValues[i], true);
 			}
 			break;
 		case LessEqual:
 		case GreaterThan:
-			for (int i = 0; i <params.length; i++) {
-				params[i] = dateValue(params[i], false);
+			for (int i = 0; i <dateValues.length; i++) {
+				dateValues[i] = dateValue(dateValues[i], false);
 			}
 			break;
 		case Between:
-			if (params.length > 0) {
-				params[0] = dateValue(params[0], true);
+			if (dateValues.length > 0) {
+				dateValues[0] = dateValue(dateValues[0], true);
 			}
-			if (params.length > 1) {
-				params[1] = dateValue(params[1], false);
+			if (dateValues.length > 1) {
+				dateValues[1] = dateValue(dateValues[1], false);
 			}
 			break;
 		default:
 			break;
 		}
-		return params;
+		return dateValues;
 	}
 
 
-	private Object dateValue(Object value, boolean roundDown) {
+	protected Object dateValue(Object value, boolean roundDown) {
 		if (value instanceof String) {
 			String strValue = (String) value;
 			if (DATE_PATTERN.matcher(strValue).matches()) {

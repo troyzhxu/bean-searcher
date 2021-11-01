@@ -6,9 +6,8 @@ import java.util.Objects;
 
 /**
  * 默认数据库字段值转换器
- *  
- * @author Troy.Zhou @ 2017-04-07
- * 
+ * @author Troy.Zhou @ 2021-11-01
+ * @since v3.0.0
  */
 public class BoolFieldConvertor implements FieldConvertor {
 

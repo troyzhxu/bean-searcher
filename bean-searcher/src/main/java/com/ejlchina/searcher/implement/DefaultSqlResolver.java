@@ -6,7 +6,6 @@ import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.dialect.Dialect;
 import com.ejlchina.searcher.dialect.Dialect.PaginateSql;
 import com.ejlchina.searcher.dialect.MySqlDialect;
-import com.ejlchina.searcher.ParamProcessor;
 import com.ejlchina.searcher.param.*;
 import com.ejlchina.searcher.SearchParam;
 import com.ejlchina.searcher.util.ObjectUtils;
@@ -28,15 +27,15 @@ public class DefaultSqlResolver implements SqlResolver {
 	/**
 	 * 参数处理器
 	 */
-	private ParamProcessor paramProcessor = new DefaultParamProcessor();
+	private DateValueCorrector dateValueCorrector = new DateValueCorrector();
 	
 	
 	public DefaultSqlResolver() {
 	}
 
-	public DefaultSqlResolver(Dialect dialect, ParamProcessor paramProcessor) {
+	public DefaultSqlResolver(Dialect dialect, DateValueCorrector dateValueCorrector) {
 		this.dialect = dialect;
-		this.paramProcessor = paramProcessor;
+		this.dateValueCorrector = dateValueCorrector;
 	}
 
 
@@ -276,10 +275,11 @@ public class DefaultSqlResolver implements SqlResolver {
 		Operator operator = fieldParam.getOperator();
 
 		if (Date.class.isAssignableFrom(fieldType)) {
-			values = paramProcessor.dateParams(values, operator);
+			values = dateValueCorrector.correct(values, operator);
 		}
+
 		if (ignoreCase) {
-			values = paramProcessor.upperCase(values);
+			values = upperCase(values);
 		}
 		Object firstRealValue = ObjectUtils.firstNotNull(values);
 		
@@ -384,6 +384,19 @@ public class DefaultSqlResolver implements SqlResolver {
 		return params;
 	}
 
+	public Object[] upperCase(Object[] params) {
+		for (int i = 0; i < params.length; i++) {
+			Object val = params[i];
+			if (val != null) {
+				if (val instanceof String) {
+					params[i] = ((String) val).toUpperCase();
+				} else {
+					params[i] = val;
+				}
+			}
+		}
+		return params;
+	}
 	
 	public Dialect getDialect() {
 		return dialect;
@@ -393,12 +406,12 @@ public class DefaultSqlResolver implements SqlResolver {
 		this.dialect = Objects.requireNonNull(dialect);
 	}
 
-	public ParamProcessor getParamProcessor() {
-		return paramProcessor;
+	public DateValueCorrector getDateValueCorrector() {
+		return dateValueCorrector;
 	}
 
-	public void setParamProcessor(ParamProcessor paramProcessor) {
-		this.paramProcessor = Objects.requireNonNull(paramProcessor);
+	public void setDateValueCorrector(DateValueCorrector dateValueCorrector) {
+		this.dateValueCorrector = Objects.requireNonNull(dateValueCorrector);
 	}
 
 }

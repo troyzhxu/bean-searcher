@@ -10,7 +10,8 @@ import java.util.Objects;
 
 /**
  * Bool 值过滤器
- * 
+ * @author Troy.Zhou @ 2021-11-01
+ * @since v3.0.0
  * */
 public class BoolValueFilter implements ParamFilter {
 

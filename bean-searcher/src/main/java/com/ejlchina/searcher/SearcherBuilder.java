@@ -3,7 +3,7 @@ package com.ejlchina.searcher;
 import com.ejlchina.searcher.dialect.MySqlDialect;
 import com.ejlchina.searcher.implement.*;
 import com.ejlchina.searcher.implement.BoolFieldConvertor;
-import com.ejlchina.searcher.implement.DefaultParamProcessor;
+import com.ejlchina.searcher.implement.DateValueCorrector;
 
 /***
  * 检索器 Builder
@@ -67,7 +67,7 @@ public class SearcherBuilder {
 			} else {
 				DefaultSqlResolver searchSqlResolver = new DefaultSqlResolver();
 				searchSqlResolver.setDialect(new MySqlDialect());
-				searchSqlResolver.setParamProcessor(new DefaultParamProcessor());
+				searchSqlResolver.setDateValueCorrector(new DateValueCorrector());
 				mainSearcher.setSqlResolver(searchSqlResolver);
 			}
 			if (sqlExecutor != null) {

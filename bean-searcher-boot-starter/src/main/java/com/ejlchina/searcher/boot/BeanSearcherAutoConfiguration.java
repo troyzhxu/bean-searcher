@@ -5,8 +5,7 @@ import com.ejlchina.searcher.boot.BeanSearcherProperties.ParamsProps;
 import com.ejlchina.searcher.boot.BeanSearcherProperties.SqlProps;
 import com.ejlchina.searcher.dialect.*;
 import com.ejlchina.searcher.implement.*;
-import com.ejlchina.searcher.implement.DefaultParamProcessor;
-import com.ejlchina.searcher.ParamProcessor;
+import com.ejlchina.searcher.implement.DateValueCorrector;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -93,15 +92,15 @@ public class BeanSearcherAutoConfiguration {
 	}
 	
 	@Bean
-	@ConditionalOnMissingBean(ParamProcessor.class)
-	public ParamProcessor paramProcessor() {
-		return new DefaultParamProcessor();
+	@ConditionalOnMissingBean(DateValueCorrector.class)
+	public DateValueCorrector dateParamCorrector() {
+		return new DateValueCorrector();
 	}
 
 	@Bean
 	@ConditionalOnMissingBean(SqlResolver.class)
-	public SqlResolver searchSqlResolver(Dialect dialect, ParamProcessor paramProcessor) {
-		return new DefaultSqlResolver(dialect, paramProcessor);
+	public SqlResolver searchSqlResolver(Dialect dialect, DateValueCorrector dateValueCorrector) {
+		return new DefaultSqlResolver(dialect, dateValueCorrector);
 	}
 
 	@Bean
