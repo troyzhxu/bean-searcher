@@ -47,17 +47,23 @@ public class DefaultParamResolver implements ParamResolver {
 	 */
 	private String operatorSuffix = "op";
 
+	/**
+	 * 分页参数提取器
+	 */
 	private PageExtractor pageExtractor = new PageOffsetExtractor();
 
-	private ParamFilter[] filters = new ParamFilter[] { new BoolValueFilter() };
+	/**
+	 * 参数过滤器
+	 */
+	private ParamFilter[] paramFilters = new ParamFilter[] { new BoolValueFilter() };
 
 	@Override
 	public <T> SearchParam resolve(Metadata<T> metadata, FetchType fetchType, Map<String, Object> paraMap) {
-		for (ParamFilter paramFilter: filters) {
+		for (ParamFilter filter: paramFilters) {
 			if (paraMap == null) {
 				break;
 			}
-			paraMap = paramFilter.doFilter(metadata, paraMap);
+			paraMap = filter.doFilter(metadata, paraMap);
 		}
 		if (paraMap == null) {
 			paraMap = new HashMap<>();
@@ -198,12 +204,12 @@ public class DefaultParamResolver implements ParamResolver {
 		this.pageExtractor = Objects.requireNonNull(pageExtractor);
 	}
 
-	public void setFilters(ParamFilter[] filters) {
-		this.filters = Objects.requireNonNull(filters);
+	public void setParamFilters(ParamFilter[] paramFilters) {
+		this.paramFilters = Objects.requireNonNull(paramFilters);
 	}
 
-	public ParamFilter[] getFilters() {
-		return filters;
+	public ParamFilter[] getParamFilters() {
+		return paramFilters;
 	}
 
 }

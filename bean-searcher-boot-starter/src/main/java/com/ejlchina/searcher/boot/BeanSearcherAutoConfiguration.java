@@ -66,7 +66,7 @@ public class BeanSearcherAutoConfiguration {
 		searchParamResolver.setSeparator(conf.getSeparator());
 		ParamFilter[] paramFilters = paramFilterProvider.getIfAvailable();
 		if (paramFilters != null) {
-			searchParamResolver.setFilters(paramFilters);
+			searchParamResolver.setParamFilters(paramFilters);
 		}
 		return searchParamResolver;
 	}
