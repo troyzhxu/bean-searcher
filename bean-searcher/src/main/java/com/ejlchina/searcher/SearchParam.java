@@ -3,7 +3,7 @@ package com.ejlchina.searcher;
 import com.ejlchina.searcher.param.FetchType;
 import com.ejlchina.searcher.param.FieldParam;
 import com.ejlchina.searcher.param.OrderParam;
-import com.ejlchina.searcher.param.LimitParam;
+import com.ejlchina.searcher.param.Paging;
 
 import java.util.List;
 import java.util.Map;
@@ -33,7 +33,7 @@ public class SearchParam {
 	/**
 	 * 分页参数
 	 */
-	private LimitParam limitParam;
+	private Paging paging;
 
 	/**
 	 * 排序参数
@@ -69,12 +69,12 @@ public class SearchParam {
 		return fetchType;
 	}
 
-	public LimitParam getPageParam() {
-		return limitParam;
+	public Paging getPaging() {
+		return paging;
 	}
 
-	public void setPageParam(LimitParam limitParam) {
-		this.limitParam = limitParam;
+	public void setPaging(Paging paging) {
+		this.paging = paging;
 	}
 
 	public OrderParam getOrderParam() {

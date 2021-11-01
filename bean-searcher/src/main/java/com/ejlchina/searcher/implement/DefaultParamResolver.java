@@ -1,10 +1,7 @@
 package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.*;
-import com.ejlchina.searcher.param.FetchType;
-import com.ejlchina.searcher.param.FieldParam;
-import com.ejlchina.searcher.param.Operator;
-import com.ejlchina.searcher.param.OrderParam;
+import com.ejlchina.searcher.param.*;
 import com.ejlchina.searcher.util.MapBuilder;
 import com.ejlchina.searcher.util.ObjectUtils;
 
@@ -74,8 +71,12 @@ public class DefaultParamResolver implements ParamResolver {
 	protected <T> SearchParam doResolve(List<String> fieldList, FetchType fetchType, Map<String, Object> paraMap) {
 		List<FieldParam> fieldParams = resolveFieldParams(fieldList, paraMap);
 		SearchParam searchParam = new SearchParam(paraMap, fetchType, fieldParams);
-		if (!fetchType.isFetchAll()) {
-			searchParam.setPageParam(pageExtractor.extract(paraMap));
+		if (fetchType.isFetchByPage()) {
+			Paging paging = pageExtractor.extract(paraMap);
+			if (fetchType.isFetchFirst()) {
+				paging.setSize(1);
+			}
+			searchParam.setPaging(paging);
 		}
 		searchParam.setOrderParam(resolveOrderParam(paraMap));
 		return searchParam;

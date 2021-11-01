@@ -1,7 +1,7 @@
 package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.PageExtractor;
-import com.ejlchina.searcher.param.LimitParam;
+import com.ejlchina.searcher.param.Paging;
 import com.ejlchina.searcher.util.MapBuilder;
 import com.ejlchina.searcher.util.ObjectUtils;
 
@@ -31,9 +31,9 @@ public abstract class BasePageExtractor implements PageExtractor {
 	private int defaultSize = 15;
 
 	@Override
-	public LimitParam extract(Map<String, Object> paraMap) {
+	public Paging extract(Map<String, Object> paraMap) {
 		int size = toSize(paraMap.get(getSizeName()));
-		return new LimitParam(size, toOffset(paraMap, size));
+		return new Paging(size, toOffset(paraMap, size));
 	}
 
 	protected abstract long toOffset(Map<String, Object> paraMap, int size);

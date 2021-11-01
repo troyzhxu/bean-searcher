@@ -1,6 +1,6 @@
 package com.ejlchina.searcher.dialect;
 
-import com.ejlchina.searcher.param.LimitParam;
+import com.ejlchina.searcher.param.Paging;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,10 +46,10 @@ public interface Dialect {
 	 * 分页
 	 * @param fieldSelectSql 查询语句
 	 * @param fromWhereSql 条件语句
-	 * @param limitParam 分页参数
+	 * @param paging 分页参数
 	 * @return 分页Sql
 	 */
-	PaginateSql forPaginate(String fieldSelectSql, String fromWhereSql, LimitParam limitParam);
+	PaginateSql forPaginate(String fieldSelectSql, String fromWhereSql, Paging paging);
 
 	
 	/**

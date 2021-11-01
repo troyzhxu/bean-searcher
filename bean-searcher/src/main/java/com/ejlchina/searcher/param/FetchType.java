@@ -11,28 +11,35 @@ public class FetchType {
      * 列表、总条数与统计都查询
      */
     public static final int ALL = 0;
+
     /**
      * 只查询第一条列表数据
      */
     public static final int LIST_FIRST = 1;
+
     /**
      * 只查询列表数据（分页）
      */
     public static final int LIST_ONLY = 2;
+
     /**
      * 查询所有列表数据，即不分页
      */
     public static final int LIST_ALL = 3;
+
     /**
      * 只查询总条数
      */
     public static final int ONLY_TOTAL = 4;
+
     /**
      * 只查询统计信息
      */
     public static final int ONLY_SUMMARY = 5;
 
-
+    /**
+     * 空字段
+     */
     private static final String[] EMPTY_FIELDS = {};
 
     /**
@@ -44,7 +51,7 @@ public class FetchType {
      *   @see #ONLY_TOTAL
      *   @see #ONLY_SUMMARY
      **/
-    private final int fetchType;
+    private final int type;
 
     /**
      * 需要求和的字段
@@ -52,41 +59,51 @@ public class FetchType {
     private final String[] summaryFields;
 
 
-    public FetchType(int fetchType) {
-        this(fetchType, null);
+    public FetchType(int type) {
+        this(type, null);
     }
 
-    public FetchType(int fetchType, String[] summaryFields) {
+    public FetchType(int type, String[] summaryFields) {
         if (summaryFields == null) {
             this.summaryFields = EMPTY_FIELDS;
         } else {
             this.summaryFields = summaryFields;
         }
-        this.fetchType = fetchType;
+        this.type = type;
     }
 
-    public int getFetchType() {
-        return fetchType;
+    public int getType() {
+        return type;
     }
 
     public String[] getSummaryFields() {
         return summaryFields;
     }
 
-    public boolean isShouldQueryTotal() {
-        return fetchType == ALL || fetchType == ONLY_TOTAL;
+    public boolean shouldQueryTotal() {
+        return type == ALL || type == ONLY_TOTAL;
     }
 
-    public boolean isShouldQueryCluster() {
-        return isShouldQueryTotal() || summaryFields.length > 0;
+    public boolean shouldQueryCluster() {
+        return shouldQueryTotal() || summaryFields.length > 0;
     }
 
-    public boolean isShouldQueryList() {
-        return fetchType != ONLY_TOTAL && fetchType != ONLY_SUMMARY;
+    public boolean shouldQueryList() {
+        return type != ONLY_TOTAL && type != ONLY_SUMMARY;
     }
 
-    public boolean isFetchAll() {
-        return fetchType == LIST_ALL;
+    /**
+     * @return 是否需要分页
+     */
+    public boolean isFetchByPage() {
+        return type != LIST_ALL && type != ONLY_TOTAL && type != ONLY_SUMMARY;
+    }
+
+    /**
+     * @return 是否只查询一条数据
+     */
+    public boolean isFetchFirst() {
+        return type == LIST_FIRST;
     }
 
 }

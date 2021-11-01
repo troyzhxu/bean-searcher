@@ -1,6 +1,6 @@
 package com.ejlchina.searcher.dialect;
 
-import com.ejlchina.searcher.param.LimitParam;
+import com.ejlchina.searcher.param.Paging;
 
 /**
  * Oracle 方言实现
@@ -31,9 +31,9 @@ public class OracleDialect implements Dialect {
 	}
 
 	@Override
-	public PaginateSql forPaginate(String fieldSelectSql, String fromWhereSql, LimitParam limitParam) {
+	public PaginateSql forPaginate(String fieldSelectSql, String fromWhereSql, Paging paging) {
 		PaginateSql paginateSql = new PaginateSql();
-		if (limitParam == null) {
+		if (paging == null) {
 			paginateSql.setSql(fieldSelectSql + fromWhereSql);
 			return paginateSql;
 		}
@@ -61,8 +61,8 @@ public class OracleDialect implements Dialect {
 
 		builder.append(" where ").append(tableAlias).append(".").append(rownumAlias).append(" > ?");
 
-		int size = limitParam.getSize();
-		long offset = limitParam.getOffset();
+		int size = paging.getSize();
+		long offset = paging.getOffset();
 
 		paginateSql.addParam(offset + size);
 		paginateSql.addParam(offset);

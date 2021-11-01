@@ -48,8 +48,8 @@ public class DefaultSqlResolver implements SqlResolver {
 		SearchSql<T> searchSql = new SearchSql<>(metadata);
 
 		FetchType fetchType = searchParam.getFetchType();
-		searchSql.setShouldQueryCluster(fetchType.isShouldQueryCluster());
-		searchSql.setShouldQueryList(fetchType.isShouldQueryList());
+		searchSql.setShouldQueryCluster(fetchType.shouldQueryCluster());
+		searchSql.setShouldQueryList(fetchType.shouldQueryList());
 
 		StringBuilder builder = new StringBuilder("select ");
 		if (metadata.isDistinct()) {
@@ -116,7 +116,7 @@ public class DefaultSqlResolver implements SqlResolver {
 
 		String groupBy = metadata.getGroupBy();
 		String[] summaryFields = fetchType.getSummaryFields();
-		boolean shouldQueryTotal = fetchType.isShouldQueryTotal();
+		boolean shouldQueryTotal = fetchType.shouldQueryTotal();
 		if (StringUtils.isBlank(groupBy)) {
 			if (shouldQueryTotal || summaryFields.length > 0) {
 				if (metadata.isDistinct()) {
@@ -159,7 +159,7 @@ public class DefaultSqlResolver implements SqlResolver {
 				}
 			}
 		}
-		if (fetchType.isShouldQueryList()) {
+		if (fetchType.shouldQueryList()) {
 			OrderParam orderPara = searchParam.getOrderParam();
 			if (orderPara != null) {
 				String sortDbAlias = fieldDbAliasMap.get(orderPara.getSort());
@@ -172,7 +172,7 @@ public class DefaultSqlResolver implements SqlResolver {
 				}
 			}
 			String fromWhereSql = builder.toString();
-			PaginateSql paginateSql = dialect.forPaginate(fieldSelectSql, fromWhereSql, searchParam.getPageParam());
+			PaginateSql paginateSql = dialect.forPaginate(fieldSelectSql, fromWhereSql, searchParam.getPaging());
 			searchSql.setListSqlString(paginateSql.getSql());
 			searchSql.addListSqlParams(paginateSql.getParams());
 		}
