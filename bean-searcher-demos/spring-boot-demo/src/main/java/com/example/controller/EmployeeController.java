@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.ejlchina.searcher.BeanSearcher;
+import com.ejlchina.searcher.MapSearcher;
 import com.ejlchina.searcher.SearchResult;
 import com.ejlchina.searcher.util.MapUtils;
 import com.example.sbean.Employee;
@@ -19,7 +20,10 @@ import java.util.Map;
 public class EmployeeController {
 
 	@Autowired
-	private BeanSearcher searcher;
+	private BeanSearcher beanSearcher;
+
+	@Autowired
+	private MapSearcher mapSearcher;
 
 	/**
 	 * 员工列表检索接口
@@ -27,7 +31,18 @@ public class EmployeeController {
 	@GetMapping("/index")
 	public Object index(HttpServletRequest request) {
 		// 组合检索、排序、分页 和 统计 都在这一句代码中实现了
-		return searcher.search(Employee.class,				// 指定实体类
+		return beanSearcher.search(Employee.class,				// 指定实体类
+				MapUtils.flat(request.getParameterMap()), 	// 直接收集前端传来的检索参数，此种方式代码最为简洁
+				new String[] { "age" });					// 统计字段：年龄
+	}
+
+	/**
+	 * 员工列表检索接口
+	 */
+	@GetMapping("/map")
+	public Object map(HttpServletRequest request) {
+		// 组合检索、排序、分页 和 统计 都在这一句代码中实现了
+		return mapSearcher.search(Employee.class,				// 指定实体类
 				MapUtils.flat(request.getParameterMap()), 	// 直接收集前端传来的检索参数，此种方式代码最为简洁
 				new String[] { "age" });					// 统计字段：年龄
 	}
@@ -56,7 +71,7 @@ public class EmployeeController {
 				.page(page, size)
 				.build();
 		// 组合检索、排序、分页 和 统计 都在这一句代码中实现了
-		return searcher.search(Employee.class, params, new String[] { "age" });
+		return beanSearcher.search(Employee.class, params, new String[] { "age" });
 	}
 
 	// 还等效于：
@@ -92,7 +107,7 @@ public class EmployeeController {
 		params.put("sort", sort);					// 排序字段
 		params.put("order", order);					// 排序方法：asc|desc
 		// 组合检索、排序、分页 和 统计 都在这一句代码中实现了
-		return searcher.search(Employee.class, params, new String[] { "age" });
+		return beanSearcher.search(Employee.class, params, new String[] { "age" });
 	}
 
 }
