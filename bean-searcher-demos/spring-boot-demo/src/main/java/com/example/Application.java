@@ -1,7 +1,10 @@
 package com.example;
 
+import com.ejlchina.searcher.FieldConvertor;
+import com.ejlchina.searcher.implement.NumberFieldConvertor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -19,5 +22,11 @@ public class Application implements WebMvcConfigurer {
 		registry.addResourceHandler("/static/**")
 				.addResourceLocations("classpath:/static/");
 	}
-	
+
+	@Bean
+	public FieldConvertor fieldConvertor() {
+		return new NumberFieldConvertor();
+	}
+
+
 }

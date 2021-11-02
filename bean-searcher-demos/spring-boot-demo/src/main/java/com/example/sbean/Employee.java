@@ -1,31 +1,35 @@
 package com.example.sbean;
 
 import java.util.Date;
+import java.util.Map;
 
 import com.ejlchina.searcher.bean.BeanAware;
+import com.ejlchina.searcher.bean.BeanParaAware;
 import com.ejlchina.searcher.bean.DbField;
 import com.ejlchina.searcher.bean.SearchBean;
+import com.ejlchina.searcher.param.Operator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-@SearchBean(tables = "employee e, department d", joinCond = "e.department_id = d.id")
+@SearchBean(
+		tables = "employee e, department d",
+		joinCond = "e.department_id = d.id",
+		autoMapTo = "e"							// 字段没使用 DbField 注解时，自动映射到 employee 表
+)
 public class Employee
-		implements BeanAware 	// 这个接口 是可选的
+		implements BeanAware, BeanParaAware    	// 这两接口 都是可选的
 {
 
-	@DbField("e.id")
 	private Long id;
 
-	@DbField("e.name")
+	@DbField(onlyOn = Operator.Equal)
 	private String name;
-	
-	@DbField("e.age")
+
 	private Integer age;
 
 	@DbField("d.name")
 	private String department;
 
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm", timezone = "GMT+8")
-	@DbField("e.entry_date")
 	private Date entryDate;
 
 	public Long getId() {
@@ -74,6 +78,14 @@ public class Employee
 	@Override
 	public void afterAssembly() {
 		System.out.println("id = " + id + ", name = " + name + ", age = " + age);
+	}
+
+	/**
+	 * BeanParaAware 接口的方法
+	 */
+	@Override
+	public void afterAssembly(Map<String, Object> paraMap) {
+		System.out.println("paraMap" + paraMap);
 	}
 
 }
