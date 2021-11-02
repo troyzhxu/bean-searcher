@@ -30,7 +30,7 @@
 		
 		<dependency>
 			<groupId>com.ejlchina</groupId>
-			<artifactId>bean-searcher</artifactId>
+			<artifactId>bean-searcher-boot-starter</artifactId>
 			<version>3.0.0</version>
 		</dependency>
 

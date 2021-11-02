@@ -1,7 +1,7 @@
 package com.example.controller;
 
+import com.ejlchina.searcher.BeanSearcher;
 import com.ejlchina.searcher.SearchResult;
-import com.ejlchina.searcher.Searcher;
 import com.ejlchina.searcher.util.MapUtils;
 import com.example.sbean.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +14,12 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
-
 @RestController
 @RequestMapping("/employee")
 public class EmployeeController {
 
 	@Autowired
-	private Searcher searcher;
+	private BeanSearcher searcher;
 
 	/**
 	 * 员工列表检索接口

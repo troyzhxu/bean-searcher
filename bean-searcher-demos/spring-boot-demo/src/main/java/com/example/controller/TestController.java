@@ -1,6 +1,6 @@
 package com.example.controller;
 
-import com.ejlchina.searcher.Searcher;
+import com.ejlchina.searcher.MapSearcher;
 import com.example.sbean.DFieldBean;
 import com.example.sbean.DTableBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import java.util.Map;
 public class TestController {
 
 	@Autowired
-	private Searcher searcher;
+	private MapSearcher searcher;
 
 	@GetMapping("/dynamic-field")
 	public Object dynamicField() {
