@@ -41,7 +41,8 @@ public class DefaultSqlResolver implements SqlResolver {
 
 	@Override
 	public <T> SearchSql<T> resolve(BeanMeta<T> beanMeta, SearchParam searchParam) {
-		SearchSql<T> searchSql = new SearchSql<>(beanMeta);
+		List<String> fetchFields = searchParam.getFetchFields();
+		SearchSql<T> searchSql = new SearchSql<>(beanMeta, fetchFields);
 
 		FetchType fetchType = searchParam.getFetchType();
 		searchSql.setShouldQueryCluster(fetchType.shouldQueryCluster());
@@ -51,8 +52,6 @@ public class DefaultSqlResolver implements SqlResolver {
 		if (beanMeta.isDistinct()) {
 			builder.append("distinct ");
 		}
-		List<String> fetchFields = searchParam.getFetchFields();
-
 		int fieldCount = fetchFields.size();
 		for (int i = 0; i < fieldCount; i++) {
 			String field = fetchFields.get(i);
@@ -223,7 +222,7 @@ public class DefaultSqlResolver implements SqlResolver {
 			searchSql.setCountAlias(countAlias);
 		}
 		if (summaryFields != null) {
-			BeanMeta<T> beanMeta = searchSql.getMetadata();
+			BeanMeta<T> beanMeta = searchSql.getBeanMeta();
 			if (shouldQueryTotal && summaryFields.length > 0) {
 				clusterSelectSqlBuilder.append(", ");
 			}

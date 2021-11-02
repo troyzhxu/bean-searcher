@@ -51,10 +51,13 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 		try {
 			SearchResult<Map<String, Object>> result = new SearchResult<>();
 			if (listResult != null) {
-				Collection<FieldMeta> fieldMetas = sqlResult.getSearchSql().getMetadata().getFieldMetas();
+				SearchSql<T> searchSql = sqlResult.getSearchSql();
+				BeanMeta<T> beanMeta = searchSql.getBeanMeta();
+				List<String> fetchFields = searchSql.getFetchFields();
 				while (listResult.next()) {
 					Map<String, Object> dataMap = new HashMap<>();
-					for (FieldMeta meta : fieldMetas) {
+					for (String field : fetchFields) {
+						FieldMeta meta = beanMeta.requireFieldMeta(field);
 						dataMap.put(meta.getName(), listResult.getObject(meta.getDbAlias()));
 					}
 					result.addData(dataMap);

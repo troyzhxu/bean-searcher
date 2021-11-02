@@ -59,8 +59,10 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 		try {
 			SearchResult<T> result;
 			if (listResult != null) {
-				BeanMeta<T> beanMeta = sqlResult.getSearchSql().getMetadata();
-				result = new SearchResult<>(toBeanList(listResult, beanMeta, paraMap));
+				SearchSql<T> searchSql = sqlResult.getSearchSql();
+				BeanMeta<T> beanMeta = searchSql.getBeanMeta();
+				List<String> fetchFields = searchSql.getFetchFields();
+				result = new SearchResult<>(toBeanList(listResult, beanMeta, fetchFields, paraMap));
 			} else {
 				result = new SearchResult<>();
 			}
@@ -78,10 +80,10 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 		}
 	}
 
-	protected <T> List<T> toBeanList(ResultSet listResult, BeanMeta<T> beanMeta, Map<String, Object> paraMap) throws SQLException {
+	protected <T> List<T> toBeanList(ResultSet listResult, BeanMeta<T> beanMeta, List<String> fetchFields, Map<String, Object> paraMap) throws SQLException {
 		List<T> dataList = new ArrayList<>();
 		while (listResult.next()) {
-			T bean = beanReflector.reflect(beanMeta, dbAlias -> {
+			T bean = beanReflector.reflect(beanMeta, fetchFields, dbAlias -> {
 				try {
 					return listResult.getObject(dbAlias);
 				} catch (SQLException e) {

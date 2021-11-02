@@ -17,6 +17,11 @@ public class SearchSql<T> {
 	private final BeanMeta<T> beanMeta;
 
 	/**
+	 * 需要 Select 的字段
+	 */
+	private final List<String> fetchFields;
+
+	/**
 	 * 查询数据列表的SQL
 	 * */
 	private String listSqlString;
@@ -62,12 +67,17 @@ public class SearchSql<T> {
 	private boolean shouldQueryList;
 
 
-	public SearchSql(BeanMeta<T> beanMeta) {
+	public SearchSql(BeanMeta<T> beanMeta, List<String> fetchFields) {
 		this.beanMeta = beanMeta;
+		this.fetchFields = fetchFields;
 	}
 
-	public BeanMeta<T> getMetadata() {
+	public BeanMeta<T> getBeanMeta() {
 		return beanMeta;
+	}
+
+	public List<String> getFetchFields() {
+		return fetchFields;
 	}
 
 	public String getListSqlString() {

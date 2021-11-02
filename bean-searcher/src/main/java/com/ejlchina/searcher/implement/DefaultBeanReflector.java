@@ -22,17 +22,14 @@ public class DefaultBeanReflector implements BeanReflector {
 	}
 	
 	@Override
-	public <T> T reflect(BeanMeta<T> beanMeta, Function<String, Object> valueGetter) {
+	public <T> T reflect(BeanMeta<T> beanMeta, List<String> fetchFields, Function<String, Object> valueGetter) {
 		Class<T> beanClass = beanMeta.getBeanClass();
-		Collection<FieldMeta> fieldMetas = beanMeta.getFieldMetas();
 		T bean = newInstance(beanClass);
-		for (FieldMeta meta : fieldMetas) {
-			String field = meta.getName();
-			String dbAlias = meta.getDbAlias();
-			Class<?> fieldType = meta.getType();
-			Object value = valueGetter.apply(dbAlias);
+		for (String field : fetchFields) {
+			FieldMeta meta = beanMeta.requireFieldMeta(field);
+			Object value = valueGetter.apply(meta.getDbAlias());
 			try {
-				value = convert(value, fieldType);
+				value = convert(value, meta.getType());
 			} catch (Exception e) {
 				throw new SearchException(
 						"The type of [" + beanClass + "#" + field + "] is mismatch with it's database table field type", e);
