@@ -40,24 +40,24 @@ public class DefaultSqlResolver implements SqlResolver {
 
 
 	@Override
-	public <T> SearchSql<T> resolve(Metadata<T> metadata, SearchParam searchParam) {
-		SearchSql<T> searchSql = new SearchSql<>(metadata);
+	public <T> SearchSql<T> resolve(BeanMeta<T> beanMeta, SearchParam searchParam) {
+		SearchSql<T> searchSql = new SearchSql<>(beanMeta);
 
 		FetchType fetchType = searchParam.getFetchType();
 		searchSql.setShouldQueryCluster(fetchType.shouldQueryCluster());
 		searchSql.setShouldQueryList(fetchType.shouldQueryList());
 
 		StringBuilder builder = new StringBuilder("select ");
-		if (metadata.isDistinct()) {
+		if (beanMeta.isDistinct()) {
 			builder.append("distinct ");
 		}
-		List<String> fieldList = metadata.getFieldList();
+		List<String> fieldList = beanMeta.getFieldList();
 
 		int fieldCount = fieldList.size();
 		for (int i = 0; i < fieldCount; i++) {
 			String field = fieldList.get(i);
-			FieldMeta meta = metadata.requireFieldMeta(field);
-			String dbField = resolveDbField(meta.getFieldSql(), searchParam, searchSql, metadata.isDistinct());
+			FieldMeta meta = beanMeta.requireFieldMeta(field);
+			String dbField = resolveDbField(meta.getFieldSql(), searchParam, searchSql, beanMeta.isDistinct());
 			String dbAlias = meta.getDbAlias();
 			builder.append(dbField).append(" ").append(dbAlias);
 			if (i < fieldCount - 1) {
@@ -68,9 +68,9 @@ public class DefaultSqlResolver implements SqlResolver {
 		String fieldSelectSql = builder.toString();
 
 		builder = new StringBuilder(" from ")
-				.append(resolveTables(metadata.getTableSnippet(), searchParam, searchSql));
+				.append(resolveTables(beanMeta.getTableSnippet(), searchParam, searchSql));
 		
-		String joinCond = metadata.getJoinCond();
+		String joinCond = beanMeta.getJoinCond();
 		boolean hasJoinCond = StringUtils.isNotBlank(joinCond);
 
 		List<FieldParam> fieldParamList = searchParam.getFieldParams();
@@ -79,7 +79,7 @@ public class DefaultSqlResolver implements SqlResolver {
 			builder.append(" where ");
 			if (hasJoinCond) {
 				builder.append("(");
-				List<SqlSnippet.Param> joinCondParams = metadata.getJoinCondEmbedParams();
+				List<SqlSnippet.Param> joinCondParams = beanMeta.getJoinCondEmbedParams();
 				if (joinCondParams != null) {
 					for (SqlSnippet.Param param : joinCondParams) {
 						Object sqlParam = searchParam.getPara(param.getName());
@@ -103,7 +103,7 @@ public class DefaultSqlResolver implements SqlResolver {
 			FieldParam fieldParam = fieldParamList.get(i);
 			String fieldName = fieldParam.getName();
 			// 这里没取字段别名，因为在 count SQL 里，select 语句中可能没这个字段
-			FieldMeta meta = metadata.requireFieldMeta(fieldName);
+			FieldMeta meta = beanMeta.requireFieldMeta(fieldName);
 			List<Object> sqlParams = appendFilterConditionSql(builder, meta.getType(),
 					meta.getFieldSql().getSnippet(), fieldParam);
 			for (Object sqlParam : sqlParams) {
@@ -113,12 +113,12 @@ public class DefaultSqlResolver implements SqlResolver {
 			builder.append(")");
 		}
 
-		String groupBy = metadata.getGroupBy();
+		String groupBy = beanMeta.getGroupBy();
 		String[] summaryFields = fetchType.getSummaryFields();
 		boolean shouldQueryTotal = fetchType.shouldQueryTotal();
 		if (StringUtils.isBlank(groupBy)) {
 			if (shouldQueryTotal || summaryFields.length > 0) {
-				if (metadata.isDistinct()) {
+				if (beanMeta.isDistinct()) {
 					String originalSql = fieldSelectSql + builder;
 					String clusterSelectSql = resolveClusterSelectSql(searchSql, summaryFields, shouldQueryTotal, originalSql);
 					String tableAlias = generateTableAlias(originalSql);
@@ -130,7 +130,7 @@ public class DefaultSqlResolver implements SqlResolver {
 				}
 			}
 		} else {
-			List<SqlSnippet.Param> groupParams = metadata.getGroupByEmbedParams();
+			List<SqlSnippet.Param> groupParams = beanMeta.getGroupByEmbedParams();
 			if (groupParams != null) {
 				for (SqlSnippet.Param param : groupParams) {
 					Object sqlParam = searchParam.getPara(param.getName());
@@ -146,7 +146,7 @@ public class DefaultSqlResolver implements SqlResolver {
 			builder.append(" group by ").append(groupBy);
 			if (shouldQueryTotal || summaryFields.length > 0) {
 				String fromWhereSql = builder.toString();
-				if (metadata.isDistinct()) {
+				if (beanMeta.isDistinct()) {
 					String originalSql = fieldSelectSql + fromWhereSql;
 					String clusterSelectSql = resolveClusterSelectSql(searchSql, summaryFields, shouldQueryTotal, originalSql);
 					String tableAlias = generateTableAlias(originalSql);
@@ -161,7 +161,7 @@ public class DefaultSqlResolver implements SqlResolver {
 		if (fetchType.shouldQueryList()) {
 			OrderParam orderPara = searchParam.getOrderParam();
 			if (orderPara != null) {
-				FieldMeta meta = metadata.getFieldMeta(orderPara.getSort());
+				FieldMeta meta = beanMeta.getFieldMeta(orderPara.getSort());
 				if (meta != null) {
 					builder.append(" order by ").append(meta.getDbAlias());
 					String order = orderPara.getOrder();
@@ -223,14 +223,14 @@ public class DefaultSqlResolver implements SqlResolver {
 			searchSql.setCountAlias(countAlias);
 		}
 		if (summaryFields != null) {
-			Metadata<T> metadata = searchSql.getMetadata();
+			BeanMeta<T> beanMeta = searchSql.getMetadata();
 			if (shouldQueryTotal && summaryFields.length > 0) {
 				clusterSelectSqlBuilder.append(", ");
 			}
 			for (int i = 0; i < summaryFields.length; i++) {
 				String summaryField = summaryFields[i];
 				String summaryAlias = generateColumnAlias(summaryField, originalSql);
-				String fieldSql = metadata.getFieldSql(summaryField);
+				String fieldSql = beanMeta.getFieldSql(summaryField);
 				if (fieldSql == null) {
 					throw new SearchException("求和属性【" + summaryField + "】没有和数据库字段做映射，请检查该属性是否被 @DbField 正确注解！");
 				}

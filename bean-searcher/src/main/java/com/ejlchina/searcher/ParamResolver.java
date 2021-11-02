@@ -12,11 +12,11 @@ import java.util.Map;
 public interface ParamResolver {
 
 	/**
-	 * @param metadata 元数据
+	 * @param beanMeta 元数据
 	 * @param fetchType Fetch 类型
 	 * @param paraMap 原始检索参数
 	 * @return SearchParam
 	 * */
-	<T> SearchParam resolve(Metadata<T> metadata, FetchType fetchType, Map<String, Object> paraMap);
+	<T> SearchParam resolve(BeanMeta<T> beanMeta, FetchType fetchType, Map<String, Object> paraMap);
 	
 }

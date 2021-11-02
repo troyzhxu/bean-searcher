@@ -55,17 +55,17 @@ public class DefaultParamResolver implements ParamResolver {
 	private ParamFilter[] paramFilters = new ParamFilter[] { new BoolValueFilter() };
 
 	@Override
-	public <T> SearchParam resolve(Metadata<T> metadata, FetchType fetchType, Map<String, Object> paraMap) {
+	public <T> SearchParam resolve(BeanMeta<T> beanMeta, FetchType fetchType, Map<String, Object> paraMap) {
 		for (ParamFilter filter: paramFilters) {
 			if (paraMap == null) {
 				break;
 			}
-			paraMap = filter.doFilter(metadata, paraMap);
+			paraMap = filter.doFilter(beanMeta, paraMap);
 		}
 		if (paraMap == null) {
 			paraMap = new HashMap<>();
 		}
-		return doResolve(metadata.getFieldList(), fetchType, paraMap);
+		return doResolve(beanMeta.getFieldList(), fetchType, paraMap);
 	}
 
 	protected <T> SearchParam doResolve(List<String> fieldList, FetchType fetchType, Map<String, Object> paraMap) {

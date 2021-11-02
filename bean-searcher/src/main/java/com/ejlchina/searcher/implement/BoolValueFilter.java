@@ -1,7 +1,7 @@
 package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.FieldMeta;
-import com.ejlchina.searcher.Metadata;
+import com.ejlchina.searcher.BeanMeta;
 import com.ejlchina.searcher.ParamFilter;
 
 import java.util.HashMap;
@@ -44,8 +44,8 @@ public class BoolValueFilter implements ParamFilter {
 
 
 	@Override
-	public <T> Map<String, Object> doFilter(Metadata<T> metadata, Map<String, Object> paraMap) {
-		String[] fields = getBoolFieldList(metadata);
+	public <T> Map<String, Object> doFilter(BeanMeta<T> beanMeta, Map<String, Object> paraMap) {
+		String[] fields = getBoolFieldList(beanMeta);
 		String icSuffix = separator + ignoreCaseSuffix;
 		Map<String, Object> map = new HashMap<>();
 		for (Entry<String, Object> entry : paraMap.entrySet()) {
@@ -71,8 +71,8 @@ public class BoolValueFilter implements ParamFilter {
 		return map;
 	}
 
-	protected String[] getBoolFieldList(Metadata<?> metadata) {
-		return metadata.getFieldMetas().stream()
+	protected String[] getBoolFieldList(BeanMeta<?> beanMeta) {
+		return beanMeta.getFieldMetas().stream()
 				.filter(meta -> {
 					Class<?> type = meta.getType();
 					return type == boolean.class || type == Boolean.class;

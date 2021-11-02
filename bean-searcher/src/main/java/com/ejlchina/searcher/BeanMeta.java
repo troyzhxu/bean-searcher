@@ -8,7 +8,7 @@ import java.util.*;
  * @author Troy.Zhou @ 2017-03-20
  * 
  */
-public class Metadata<T> {
+public class BeanMeta<T> {
 
 	/**
 	 * 用户 Bean Class
@@ -47,7 +47,7 @@ public class Metadata<T> {
 
 
 
-	public Metadata(Class<T> beanClass, SqlSnippet tableSnippet, SqlSnippet joinCondSnippet, SqlSnippet groupBySnippet, boolean distinct) {
+	public BeanMeta(Class<T> beanClass, SqlSnippet tableSnippet, SqlSnippet joinCondSnippet, SqlSnippet groupBySnippet, boolean distinct) {
 		this.beanClass = beanClass;
 		this.tableSnippet = tableSnippet;
 		this.joinCondSnippet = joinCondSnippet;

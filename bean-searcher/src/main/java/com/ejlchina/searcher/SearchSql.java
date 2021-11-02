@@ -14,7 +14,7 @@ public class SearchSql<T> {
 	/**
 	 * 待检索数据的元信息
 	 */
-	private final Metadata<T> metadata;
+	private final BeanMeta<T> beanMeta;
 
 	/**
 	 * 查询数据列表的SQL
@@ -62,12 +62,12 @@ public class SearchSql<T> {
 	private boolean shouldQueryList;
 
 
-	public SearchSql(Metadata<T> metadata) {
-		this.metadata = metadata;
+	public SearchSql(BeanMeta<T> beanMeta) {
+		this.beanMeta = beanMeta;
 	}
 
-	public Metadata<T> getMetadata() {
-		return metadata;
+	public BeanMeta<T> getMetadata() {
+		return beanMeta;
 	}
 
 	public String getListSqlString() {

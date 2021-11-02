@@ -2,9 +2,7 @@ package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.*;
 
-import java.lang.reflect.Method;
 import java.util.*;
-import java.util.Map.Entry;
 import java.util.function.Function;
 
 /**
@@ -24,9 +22,9 @@ public class DefaultBeanReflector implements BeanReflector {
 	}
 	
 	@Override
-	public <T> T reflect(Metadata<T> metadata, Function<String, Object> valueGetter) {
-		Class<T> beanClass = metadata.getBeanClass();
-		Collection<FieldMeta> fieldMetas = metadata.getFieldMetas();
+	public <T> T reflect(BeanMeta<T> beanMeta, Function<String, Object> valueGetter) {
+		Class<T> beanClass = beanMeta.getBeanClass();
+		Collection<FieldMeta> fieldMetas = beanMeta.getFieldMetas();
 		T bean = newInstance(beanClass);
 		for (FieldMeta meta : fieldMetas) {
 			String field = meta.getName();

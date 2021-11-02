@@ -12,10 +12,10 @@ public interface BeanReflector {
 
 	/**
 	 * @param <T> bean 类型
-	 * @param metadata 元信息
+	 * @param beanMeta 元信息
 	 * @param valueGetter 数据库字段值获取器（更据字段别名获取）
 	 * @return 反射的对象
 	 */
-	<T> T reflect(Metadata<T> metadata, Function<String, Object> valueGetter);
+	<T> T reflect(BeanMeta<T> beanMeta, Function<String, Object> valueGetter);
 
 }

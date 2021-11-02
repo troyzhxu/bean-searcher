@@ -8,11 +8,11 @@ package com.ejlchina.searcher;
 public interface SqlResolver {
 
 	/**
-	 * @param metadata 元信息
+	 * @param beanMeta 元信息
 	 * @param searchParam 检索参数
 	 * @param <T> 泛型
 	 * @return 检索 SQL
 	 */
-	<T> SearchSql<T> resolve(Metadata<T> metadata, SearchParam searchParam);
+	<T> SearchSql<T> resolve(BeanMeta<T> beanMeta, SearchParam searchParam);
 	
 }

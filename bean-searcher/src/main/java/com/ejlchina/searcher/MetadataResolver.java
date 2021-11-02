@@ -11,6 +11,6 @@ public interface MetadataResolver {
      * @param beanClass 要检索的 bean 类型
      * @return Bean 的元信息
      * */
-    <T> Metadata<T> resolve(Class<T> beanClass);
+    <T> BeanMeta<T> resolve(Class<T> beanClass);
 
 }

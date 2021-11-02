@@ -21,7 +21,7 @@ public class DefaultMetadataResolver implements MetadataResolver {
 
     private static final Operator[] EMPTY_OPERATORS = {};
 
-    private final Map<Class<?>, Metadata<?>> cache = new ConcurrentHashMap<>();
+    private final Map<Class<?>, BeanMeta<?>> cache = new ConcurrentHashMap<>();
 
     private SnippetResolver snippetResolver = new DefaultSnippetResolver();
 
@@ -42,23 +42,23 @@ public class DefaultMetadataResolver implements MetadataResolver {
     };
 
     @Override
-    public <T> Metadata<T> resolve(Class<T> beanClass) {
+    public <T> BeanMeta<T> resolve(Class<T> beanClass) {
         @SuppressWarnings("unchecked")
-        Metadata<T> metadata = (Metadata<T>) cache.get(beanClass);
-        if (metadata != null) {
-            return metadata;
+        BeanMeta<T> beanMeta = (BeanMeta<T>) cache.get(beanClass);
+        if (beanMeta != null) {
+            return beanMeta;
         }
         synchronized (cache) {
-            metadata = resolveMetadata(beanClass);
-            cache.put(beanClass, metadata);
-            return metadata;
+            beanMeta = resolveMetadata(beanClass);
+            cache.put(beanClass, beanMeta);
+            return beanMeta;
         }
     }
 
-    protected <T> Metadata<T> resolveMetadata(Class<T> beanClass) {
+    protected <T> BeanMeta<T> resolveMetadata(Class<T> beanClass) {
         SearchBean bean = beanClass.getAnnotation(SearchBean.class);
         // v3.0.0 后 bean 可以为 null
-        Metadata<T> metadata = new Metadata<>(beanClass,
+        BeanMeta<T> beanMeta = new BeanMeta<>(beanClass,
                 snippetResolver.resolve(tables(beanClass, bean)),
                 snippetResolver.resolve(joinCond(bean)),
                 snippetResolver.resolve(groupBy(bean)),
@@ -73,12 +73,12 @@ public class DefaultMetadataResolver implements MetadataResolver {
             }
             SqlSnippet fieldSnippet = snippetResolver.resolve(fieldSql);
             FieldMeta fieldMeta = resolveFieldMeta(beanClass, field, fieldSnippet, index);
-            metadata.addFieldMeta(field.getName(), fieldMeta);
+            beanMeta.addFieldMeta(field.getName(), fieldMeta);
         }
-        if (metadata.getFieldList().size() == 0) {
+        if (beanMeta.getFieldList().size() == 0) {
             throw new SearchException("[" + beanClass.getName() + "] is not a valid SearchBean, because there is none field mapping to database.");
         }
-        return metadata;
+        return beanMeta;
     }
 
     protected FieldMeta resolveFieldMeta(Class<?> beanClass, Field field, SqlSnippet snippet, int index) {
