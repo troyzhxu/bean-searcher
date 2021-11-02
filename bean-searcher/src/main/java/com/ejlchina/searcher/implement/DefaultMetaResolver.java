@@ -17,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Troy.Zhou @ 2021-10-30
  * @since v3.0.0
  */
-public class DefaultMetadataResolver implements MetadataResolver {
+public class DefaultMetaResolver implements MetaResolver {
 
     private static final Operator[] EMPTY_OPERATORS = {};
 

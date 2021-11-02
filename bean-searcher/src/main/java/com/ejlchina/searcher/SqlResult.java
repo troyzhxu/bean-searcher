@@ -16,7 +16,7 @@ public class SqlResult<T> {
     /**
      * 列表查询结果集
      */
-    private ResultSet dataListResult;
+    private ResultSet listResult;
 
     /**
      * 聚合查询结果集
@@ -33,8 +33,8 @@ public class SqlResult<T> {
      */
     public void closeResultSet() {
         try {
-            if (dataListResult != null) {
-                dataListResult.close();
+            if (listResult != null) {
+                listResult.close();
             }
             if (clusterResult != null) {
                 clusterResult.close();
@@ -48,12 +48,12 @@ public class SqlResult<T> {
         return searchSql;
     }
 
-    public ResultSet getDataListResult() {
-        return dataListResult;
+    public ResultSet getListResult() {
+        return listResult;
     }
 
-    public void setDataListResult(ResultSet dataListResult) {
-        this.dataListResult = dataListResult;
+    public void setListResult(ResultSet listResult) {
+        this.listResult = listResult;
     }
 
     public ResultSet getClusterResult() {

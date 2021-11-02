@@ -20,7 +20,7 @@ public abstract class AbstractSearcher implements Searcher {
 
 	private SqlResolver sqlResolver = new DefaultSqlResolver();
 
-	private MetadataResolver metadataResolver = new DefaultMetadataResolver();
+	private MetaResolver metaResolver = new DefaultMetaResolver();
 
 	@Override
 	public <T> Number searchCount(Class<T> beanClass, Map<String, Object> paraMap) {
@@ -80,7 +80,7 @@ public abstract class AbstractSearcher implements Searcher {
 		if (sqlExecutor == null) {
 			throw new SearchException("you must set a searchSqlExecutor before search.");
 		}
-		BeanMeta<T> beanMeta = metadataResolver.resolve(beanClass);
+		BeanMeta<T> beanMeta = metaResolver.resolve(beanClass);
 		SearchParam searchParam = paramResolver.resolve(beanMeta, fetchType, paraMap);
 		SearchSql<T> searchSql = sqlResolver.resolve(beanMeta, searchParam);
 		return sqlExecutor.execute(searchSql);
@@ -110,12 +110,12 @@ public abstract class AbstractSearcher implements Searcher {
 		this.sqlExecutor = Objects.requireNonNull(sqlExecutor);
 	}
 
-	public MetadataResolver getMetadataResolver() {
-		return metadataResolver;
+	public MetaResolver getMetaResolver() {
+		return metaResolver;
 	}
 
-	public void setMetadataResolver(MetadataResolver metadataResolver) {
-		this.metadataResolver = Objects.requireNonNull(metadataResolver);
+	public void setMetaResolver(MetaResolver metaResolver) {
+		this.metaResolver = Objects.requireNonNull(metaResolver);
 	}
 
 }

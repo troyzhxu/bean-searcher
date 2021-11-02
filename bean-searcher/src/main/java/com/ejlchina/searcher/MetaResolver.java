@@ -5,7 +5,7 @@ package com.ejlchina.searcher;
  * @author Troy.Zhou @ 2021-10-30
  * @since v3.0.0
  * */
-public interface MetadataResolver {
+public interface MetaResolver {
 
     /**
      * @param beanClass 要检索的 bean 类型

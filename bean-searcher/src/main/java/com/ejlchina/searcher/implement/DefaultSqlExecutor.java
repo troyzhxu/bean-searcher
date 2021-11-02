@@ -91,7 +91,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
 			statement = connection.prepareStatement(sql);
 			setStatementParams(statement, params);
 			ResultSet resultSet = statement.executeQuery();
-			sqlResult.setDataListResult(resultSet);
+			sqlResult.setListResult(resultSet);
 		} finally {
 			closeStatement(statement);
 		}

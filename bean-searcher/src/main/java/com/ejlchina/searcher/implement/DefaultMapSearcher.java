@@ -46,7 +46,7 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 
 	protected <T> SearchResult<Map<String, Object>> search(Class<T> beanClass, Map<String, Object> paraMap, FetchType fetchType) {
 		SqlResult<T> sqlResult = doSearch(beanClass, paraMap, fetchType);
-		ResultSet listResult = sqlResult.getDataListResult();
+		ResultSet listResult = sqlResult.getListResult();
 		ResultSet clusterResult = sqlResult.getClusterResult();
 		try {
 			SearchResult<Map<String, Object>> result = new SearchResult<>();

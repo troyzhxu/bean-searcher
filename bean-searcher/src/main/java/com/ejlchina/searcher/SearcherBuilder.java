@@ -36,7 +36,7 @@ public class SearcherBuilder {
 
 		private SqlExecutor sqlExecutor;
 
-		private MetadataResolver metadataResolver;
+		private MetaResolver metaResolver;
 
 		public Builder searchParamResolver(ParamResolver paramResolver) {
 			this.paramResolver = paramResolver;
@@ -53,8 +53,8 @@ public class SearcherBuilder {
 			return (Builder) this;
 		}
 
-		public Builder metadataResolver(MetadataResolver metadataResolver) {
-			this.metadataResolver = metadataResolver;
+		public Builder metadataResolver(MetaResolver metaResolver) {
+			this.metaResolver = metaResolver;
 			return (Builder) this;
 		}
 
@@ -75,8 +75,8 @@ public class SearcherBuilder {
 			} else {
 				throw new SearchException("你必须配置一个 searchSqlExecutor，才能建立一个检索器！ ");
 			}
-			if (metadataResolver != null) {
-				mainSearcher.setMetadataResolver(metadataResolver);
+			if (metaResolver != null) {
+				mainSearcher.setMetaResolver(metaResolver);
 			}
 		}
 
