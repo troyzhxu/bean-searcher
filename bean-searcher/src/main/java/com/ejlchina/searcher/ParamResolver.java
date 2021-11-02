@@ -17,6 +17,6 @@ public interface ParamResolver {
 	 * @param paraMap 原始检索参数
 	 * @return SearchParam
 	 * */
-	<T> SearchParam resolve(BeanMeta<T> beanMeta, FetchType fetchType, Map<String, Object> paraMap);
+	SearchParam resolve(BeanMeta<?> beanMeta, FetchType fetchType, Map<String, Object> paraMap);
 	
 }

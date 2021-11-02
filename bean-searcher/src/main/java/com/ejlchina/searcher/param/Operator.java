@@ -120,7 +120,7 @@ public enum Operator {
 		case "MultiValue":
 			return MultiValue;
 		}
-		return Equal;
+		return null;
 	}
 
 }

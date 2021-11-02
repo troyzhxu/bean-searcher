@@ -78,7 +78,7 @@ public abstract class AbstractSearcher implements Searcher {
 
 	protected <T> SqlResult<T> doSearch(Class<T> beanClass, Map<String, Object> paraMap, FetchType fetchType) {
 		if (sqlExecutor == null) {
-			throw new SearchException("you must set a searchSqlExecutor before search.");
+			throw new SearchException("you must set a sqlExecutor before search.");
 		}
 		BeanMeta<T> beanMeta = metaResolver.resolve(beanClass);
 		SearchParam searchParam = paramResolver.resolve(beanMeta, fetchType, paraMap);

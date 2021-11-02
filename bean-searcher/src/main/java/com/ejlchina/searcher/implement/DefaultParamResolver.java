@@ -55,7 +55,7 @@ public class DefaultParamResolver implements ParamResolver {
 	private ParamFilter[] paramFilters = new ParamFilter[] { new BoolValueFilter() };
 
 	@Override
-	public <T> SearchParam resolve(BeanMeta<T> beanMeta, FetchType fetchType, Map<String, Object> paraMap) {
+	public SearchParam resolve(BeanMeta<?> beanMeta, FetchType fetchType, Map<String, Object> paraMap) {
 		for (ParamFilter filter: paramFilters) {
 			if (paraMap == null) {
 				break;
@@ -65,11 +65,11 @@ public class DefaultParamResolver implements ParamResolver {
 		if (paraMap == null) {
 			paraMap = new HashMap<>();
 		}
-		return doResolve(beanMeta.getFieldList(), fetchType, paraMap);
+		return doResolve(beanMeta.getFieldMetas(), fetchType, paraMap);
 	}
 
-	protected <T> SearchParam doResolve(List<String> fieldList, FetchType fetchType, Map<String, Object> paraMap) {
-		List<FieldParam> fieldParams = resolveFieldParams(fieldList, paraMap);
+	protected SearchParam doResolve(Collection<FieldMeta> fieldMetas, FetchType fetchType, Map<String, Object> paraMap) {
+		List<FieldParam> fieldParams = resolveFieldParams(fieldMetas, paraMap);
 		SearchParam searchParam = new SearchParam(paraMap, fetchType, fieldParams);
 		if (fetchType.isFetchByPage()) {
 			Paging paging = pageExtractor.extract(paraMap);
@@ -82,7 +82,7 @@ public class DefaultParamResolver implements ParamResolver {
 		return searchParam;
 	}
 
-	protected List<FieldParam> resolveFieldParams(List<String> fieldList, Map<String, Object> paraMap) {
+	protected List<FieldParam> resolveFieldParams(Collection<FieldMeta> fieldMetas, Map<String, Object> paraMap) {
 		Map<String, List<Integer>> fieldIndicesMap = new HashMap<>();
 		for (String key : paraMap.keySet()) {
 			int index = key.lastIndexOf(separator);
@@ -96,9 +96,12 @@ public class DefaultParamResolver implements ParamResolver {
 			mapFieldIndex(fieldIndicesMap, key, 0);
 		}
 		List<FieldParam> fieldParams = new ArrayList<>();
-		for (String field : fieldList) {
-			List<Integer> indices = fieldIndicesMap.get(field);
-			FieldParam param = toFieldParam(field, indices, paraMap);
+		for (FieldMeta meta : fieldMetas) {
+			if (!meta.isConditional()) {
+				continue;
+			}
+			List<Integer> indices = fieldIndicesMap.get(meta.getName());
+			FieldParam param = toFieldParam(meta, indices, paraMap);
 			if (param != null) {
 				fieldParams.add(param);
 			}
@@ -110,8 +113,14 @@ public class DefaultParamResolver implements ParamResolver {
 		fieldIndicesKeysMap.computeIfAbsent(field, k -> new ArrayList<>(2)).add(index);
 	}
 
-	protected FieldParam toFieldParam(String field, List<Integer> indices, Map<String, Object> paraMap) {
-		Operator operator = toOperator(paraMap.get(field + separator + operatorSuffix));
+	protected FieldParam toFieldParam(FieldMeta meta, List<Integer> indices, Map<String, Object> paraMap) {
+		String field = meta.getName();
+		Object opValue = paraMap.get(field + separator + operatorSuffix);
+		Operator operator = toOperator(opValue, meta.getOnlyOn());
+		if (operator == null) {
+			// 表示该字段不支持 opValue 的检索
+			return null;
+		}
 		if (operator == Operator.Empty || operator == Operator.NotEmpty) {
 			return new FieldParam(field, operator);
 		}
@@ -133,14 +142,32 @@ public class DefaultParamResolver implements ParamResolver {
 		return null;
 	}
 
-	protected Operator toOperator(Object value) {
+	protected Operator toOperator(Object value, Operator[] onlyOn) {
+		Operator op = null;
 		if (value instanceof Operator) {
-			return (Operator) value;
+			op = (Operator) value;
 		}
 		if (value instanceof String) {
-			return Operator.from((String) value);
+			op = Operator.from((String) value);
 		}
-		return Operator.Equal;
+		if (op == null) {
+			if (onlyOn.length == 0) {
+				// 为空，代表没有约束
+				return Operator.Equal;
+			}
+			// 当指定 onlyOn 时，缺省使用 onlyOn 的第一个运算符
+			return onlyOn[0];
+		}
+		if (onlyOn.length == 0) {
+			return op;
+		}
+		for (Operator o : onlyOn) {
+			if (o == op) {
+				return op;
+			}
+		}
+		// op 不在 onlyOn 的允许范围内，返回 null
+		return null;
 	}
 
 	private OrderParam resolveOrderParam(Map<String, Object> paraMap) {
