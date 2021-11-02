@@ -53,9 +53,9 @@ public class DefaultSqlExecutor implements SqlExecutor {
 		try {
 			return doExecute(searchSql, connection);
 		} catch (SQLException e) {
-			throw new SearchException("A exception occurred when query!", e);
-		} finally {
+			// 如果有异常，则立马关闭，否则与 SqlResult 一起关闭
 			closeConnection(connection);
+			throw new SearchException("A exception occurred when query!", e);
 		}
 	}
 
@@ -68,7 +68,16 @@ public class DefaultSqlExecutor implements SqlExecutor {
 			connection.setAutoCommit(false);
 			connection.setReadOnly(true);
 		}
-		SqlResult<T> result = new SqlResult<>(searchSql);
+		SqlResult<T> result = new SqlResult<T>(searchSql) {
+			@Override
+			public void close() {
+				try {
+					super.close();
+				} finally {
+					closeConnection(connection);
+				}
+			}
+		};
 		if (searchSql.isShouldQueryList()) {
 			String sql = searchSql.getListSqlString();
 			List<Object> params = searchSql.getListSqlParams();
@@ -94,29 +103,19 @@ public class DefaultSqlExecutor implements SqlExecutor {
 	}
 
 	protected void executeListSqlAndCollectResult(Connection connection, String sql, List<Object> params,
-												  SqlResult<?> sqlResult) throws SQLException {
-		PreparedStatement statement = null;
-		try {
-			statement = connection.prepareStatement(sql);
-			setStatementParams(statement, params);
-			ResultSet resultSet = statement.executeQuery();
-			sqlResult.setListResult(resultSet);
-		} finally {
-			closeStatement(statement);
-		}
+				SqlResult<?> sqlResult) throws SQLException {
+		PreparedStatement statement = connection.prepareStatement(sql);
+		setStatementParams(statement, params);
+		ResultSet resultSet = statement.executeQuery();
+		sqlResult.setListResult(resultSet, statement);
 	}
 
 	protected void executeClusterSqlAndCollectResult(Connection connection, String sqlString, List<Object> sqlParams,
-													 SqlResult<?> sqlResult) throws SQLException {
-		PreparedStatement statement = null;
-		try {
-			statement = connection.prepareStatement(sqlString);
-			setStatementParams(statement, sqlParams);
-			ResultSet resultSet = statement.executeQuery();
-			sqlResult.setClusterResult(resultSet);
-		} finally {
-			closeStatement(statement);
-		}
+				SqlResult<?> sqlResult) throws SQLException {
+		PreparedStatement statement = connection.prepareStatement(sqlString);
+		setStatementParams(statement, sqlParams);
+		ResultSet resultSet = statement.executeQuery();
+		sqlResult.setClusterResult(resultSet, statement);
 	}
 
 	protected void setStatementParams(PreparedStatement statement, List<Object> params) throws SQLException {
@@ -132,16 +131,6 @@ public class DefaultSqlExecutor implements SqlExecutor {
 			}
 		} catch (SQLException e) {
 			throw new SearchException("Can not close connection!", e);
-		}
-	}
-
-	protected void closeStatement(Statement statement) {
-		try {
-			if (statement != null) {
-				statement.close();
-			}
-		} catch (SQLException e) {
-			throw new SearchException("Can not close statement or resultSet!", e);
 		}
 	}
 
