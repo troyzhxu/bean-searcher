@@ -2,8 +2,6 @@ package com.ejlchina.searcher.bean;
 
 import java.util.Date;
 
-import com.ejlchina.searcher.bean.DbField;
-import com.ejlchina.searcher.bean.SearchBean;
 import com.ejlchina.searcher.param.Operator;
 
 @SearchBean(tables = "user")

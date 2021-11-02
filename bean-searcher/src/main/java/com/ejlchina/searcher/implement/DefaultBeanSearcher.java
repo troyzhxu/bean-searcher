@@ -2,7 +2,7 @@ package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.bean.BeanAware;
-import com.ejlchina.searcher.bean.BeanParaAware;
+import com.ejlchina.searcher.bean.ParamAware;
 import com.ejlchina.searcher.param.FetchType;
 
 import java.sql.ResultSet;
@@ -89,8 +89,8 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 			if (bean instanceof BeanAware) {
 				((BeanAware) bean).afterAssembly();
 			}
-			if (bean instanceof BeanParaAware) {
-				((BeanParaAware) bean).afterAssembly(paraMap);
+			if (bean instanceof ParamAware) {
+				((ParamAware) bean).afterAssembly(paraMap);
 			}
 			dataList.add(bean);
 		}
