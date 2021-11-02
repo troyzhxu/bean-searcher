@@ -1,9 +1,6 @@
 package com.ejlchina.searcher.implement;
 
-import com.ejlchina.searcher.SearchSql;
-import com.ejlchina.searcher.SqlExecutor;
-import com.ejlchina.searcher.SearchException;
-import com.ejlchina.searcher.SqlResult;
+import com.ejlchina.searcher.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,36 +44,48 @@ public class DefaultSqlExecutor implements SqlExecutor {
 		if (dataSource == null) {
 			throw new SearchException("You must config a dataSource for MainSearchSqlExecutor!");
 		}
-		Connection connection = null;
+		Connection connection;
 		try {
-			connection = dataSource.getConnection();
-			if (transactional) {
-				connection.setAutoCommit(false);
-				connection.setReadOnly(true);
-			}
-			SqlResult<T> result = new SqlResult<>(searchSql);
-			if (searchSql.isShouldQueryList()) {
-				String sql = searchSql.getListSqlString();
-				List<Object> params = searchSql.getListSqlParams();
-				writeLog(sql, params);
-				executeListSqlAndCollectResult(connection, sql, params, result);
-			}
-			if (searchSql.isShouldQueryCluster()) {
-				String sql = searchSql.getClusterSqlString();
-				List<Object> params = searchSql.getClusterSqlParams();
-				writeLog(sql, params);
-				executeClusterSqlAndCollectResult(connection, sql, params, result);
-			}
-			if (transactional) {
-				connection.commit();
-				connection.setReadOnly(false);
-			}
-			return result;
+			connection = getConnection(searchSql.getBeanMeta());
+		} catch (SQLException e) {
+			throw new SearchException("Can not get connection from dataSource!", e);
+		}
+		try {
+			return doExecute(searchSql, connection);
 		} catch (SQLException e) {
 			throw new SearchException("A exception occurred when query!", e);
 		} finally {
 			closeConnection(connection);
 		}
+	}
+
+	protected Connection getConnection(BeanMeta<?> beanMeta) throws SQLException {
+		return dataSource.getConnection();
+	}
+
+	protected <T> SqlResult<T> doExecute(SearchSql<T> searchSql, Connection connection) throws SQLException {
+		if (transactional) {
+			connection.setAutoCommit(false);
+			connection.setReadOnly(true);
+		}
+		SqlResult<T> result = new SqlResult<>(searchSql);
+		if (searchSql.isShouldQueryList()) {
+			String sql = searchSql.getListSqlString();
+			List<Object> params = searchSql.getListSqlParams();
+			writeLog(sql, params);
+			executeListSqlAndCollectResult(connection, sql, params, result);
+		}
+		if (searchSql.isShouldQueryCluster()) {
+			String sql = searchSql.getClusterSqlString();
+			List<Object> params = searchSql.getClusterSqlParams();
+			writeLog(sql, params);
+			executeClusterSqlAndCollectResult(connection, sql, params, result);
+		}
+		if (transactional) {
+			connection.commit();
+			connection.setReadOnly(false);
+		}
+		return result;
 	}
 
 	protected void writeLog(String sql, List<Object> params) {
