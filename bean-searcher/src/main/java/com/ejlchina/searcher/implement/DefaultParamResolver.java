@@ -82,9 +82,10 @@ public class DefaultParamResolver implements ParamResolver {
 	}
 
 	protected SearchParam doResolve(BeanMeta<?> beanMeta, FetchType fetchType, Map<String, Object> paraMap) {
-		List<String> fetchFields = resolveFetchFields(beanMeta, fetchType, paraMap);
-		List<FieldParam> fieldParams = resolveFieldParams(beanMeta.getFieldMetas(), paraMap);
-		SearchParam searchParam = new SearchParam(paraMap, fetchType, fetchFields, fieldParams);
+		SearchParam searchParam = new SearchParam(paraMap, fetchType,
+				resolveFetchFields(beanMeta, fetchType, paraMap),
+				resolveFieldParams(beanMeta.getFieldMetas(), paraMap)
+		);
 		if (fetchType.canPaging()) {
 			Paging paging = pageExtractor.extract(paraMap);
 			if (fetchType.isFetchFirst()) {
