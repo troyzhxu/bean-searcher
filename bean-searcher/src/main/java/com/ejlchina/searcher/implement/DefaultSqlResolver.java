@@ -51,11 +51,11 @@ public class DefaultSqlResolver implements SqlResolver {
 		if (beanMeta.isDistinct()) {
 			builder.append("distinct ");
 		}
-		List<String> fieldList = beanMeta.getFieldList();
+		List<String> fetchFields = searchParam.getFetchFields();
 
-		int fieldCount = fieldList.size();
+		int fieldCount = fetchFields.size();
 		for (int i = 0; i < fieldCount; i++) {
-			String field = fieldList.get(i);
+			String field = fetchFields.get(i);
 			FieldMeta meta = beanMeta.requireFieldMeta(field);
 			String dbField = resolveDbField(meta.getFieldSql(), searchParam, searchSql, beanMeta.isDistinct());
 			String dbAlias = meta.getDbAlias();

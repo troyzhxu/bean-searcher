@@ -102,7 +102,7 @@ public class DefaultParamResolver implements ParamResolver {
 
 	protected List<String> resolveFetchFields(BeanMeta<?> beanMeta, FetchType fetchType, Map<String, Object> paraMap) {
 		if (fetchType.shouldQueryList() || beanMeta.isDistinct() || StringUtils.isNotBlank(beanMeta.getGroupBy())) {
-			List<String> fieldList = beanMeta.getFieldList();
+			Set<String> fieldList = beanMeta.getFieldSet();
 			List<String> onlySelect = toList(paraMap.get(onlySelectName)).stream()
 					.filter(fieldList::contains)
 					.collect(Collectors.toList());

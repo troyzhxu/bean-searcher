@@ -34,11 +34,6 @@ public class BeanMeta<T> {
 	 * 是否 distinct 结果
 	 * */
 	private final boolean distinct;
-	
-	/**
-	 * Bean 的属性列表（已排好序）
-	 * */
-	private final List<String> fieldList = new ArrayList<>();
 
 	/**
 	 * 映射: Bean属性 -> 属性元信息
@@ -57,10 +52,9 @@ public class BeanMeta<T> {
 
 
 	public void addFieldMeta(String field, FieldMeta meta) {
-		if (fieldList.contains(field)) {
+		if (fieldMetaMap.containsKey(field)) {
 			throw new SearchException("不可以重复添加字段：" + field);
 		}
-		fieldList.add(field);
 		fieldMetaMap.put(field, meta);
 	}
 
@@ -93,12 +87,12 @@ public class BeanMeta<T> {
 		return distinct;
 	}
 
-	public List<String> getFieldList() {
-		return Collections.unmodifiableList(fieldList);
+	public Set<String> getFieldSet() {
+		return Collections.unmodifiableSet(fieldMetaMap.keySet());
 	}
 
 	public int getFieldCount() {
-		return fieldList.size();
+		return fieldMetaMap.size();
 	}
 
 	public FieldMeta requireFieldMeta(String field) {
