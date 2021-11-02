@@ -1,9 +1,6 @@
 package com.ejlchina.searcher.implement;
 
-import com.ejlchina.searcher.BeanReflector;
-import com.ejlchina.searcher.FieldConvertor;
-import com.ejlchina.searcher.Metadata;
-import com.ejlchina.searcher.SearchException;
+import com.ejlchina.searcher.*;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -29,14 +26,12 @@ public class DefaultBeanReflector implements BeanReflector {
 	@Override
 	public <T> T reflect(Metadata<T> metadata, Function<String, Object> valueGetter) {
 		Class<T> beanClass = metadata.getBeanClass();
-		Set<Entry<String, String>> fieldDbAliasEntrySet = metadata.getFieldDbAliasEntrySet();
-		Map<String, Method> fieldGetMethodMap = metadata.getFieldGetMethodMap();
-		Map<String, Class<?>> fieldTypeMap = metadata.getFieldTypeMap();
+		Collection<FieldMeta> fieldMetas = metadata.getFieldMetas();
 		T bean = newInstance(beanClass);
-		for (Entry<String, String> entry : fieldDbAliasEntrySet) {
-			String field = entry.getKey();
-			String dbAlias = entry.getValue();
-			Class<?> fieldType = fieldTypeMap.get(field);
+		for (FieldMeta meta : fieldMetas) {
+			String field = meta.getName();
+			String dbAlias = meta.getDbAlias();
+			Class<?> fieldType = meta.getType();
 			Object value = valueGetter.apply(dbAlias);
 			try {
 				value = convert(value, fieldType);
@@ -46,8 +41,7 @@ public class DefaultBeanReflector implements BeanReflector {
 			}
 			if (value != null) {
 				try {
-					Method method = fieldGetMethodMap.get(field);
-					method.invoke(bean, value);
+					meta.getSetter().invoke(bean, value);
 				} catch (ReflectiveOperationException e) {
 					throw new SearchException(
 							"A exception occurred when setting value to [" + beanClass.getName() + "#" + field + "], please check whether it's setter is correct.", e);

@@ -18,7 +18,7 @@ public @interface SearchBean {
 	/**
 	 * 参与检索的数据库表名，例如:
 	 * users u, user_role ur, roles r
-	 * v3.0.0 后可以不给值，没有值的时候以类名做表名
+	 * v3.0.0 后可空，为空时以类名映射表名
 	 * @return tables
 	 */
 	String tables() default "";
@@ -44,11 +44,11 @@ public @interface SearchBean {
 	boolean distinct() default false;
 
 	/**
-	 * 字段未加 @DbField 时，指定它映射到那张表（只有在 tables 属性不空时起作用）
+	 * 字段未加 @DbField 时，指定它自动映射到那张表（只有在 tables 属性不空时起作用，当 tables 为空时，则自动映射到默认的那张表）
 	 * 如果 autoMapping 为空，则表示未被 @DbField 注解的字段不需要映射
 	 * @return 自动映射的表名 或 别名
 	 */
-	String autoMapTab() default "";
+	String autoMapTo() default "";
 
 }
 

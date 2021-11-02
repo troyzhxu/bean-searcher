@@ -4,10 +4,7 @@ import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.param.FetchType;
 
 import java.sql.*;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /***
  * @author Troy.Zhou @ 2021-10-29
@@ -49,16 +46,16 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 
 	protected <T> SearchResult<Map<String, Object>> search(Class<T> beanClass, Map<String, Object> paraMap, FetchType fetchType) {
 		SqlResult<T> sqlResult = doSearch(beanClass, paraMap, fetchType);
-		ResultSet dataListResult = sqlResult.getDataListResult();
+		ResultSet listResult = sqlResult.getDataListResult();
 		ResultSet clusterResult = sqlResult.getClusterResult();
 		try {
 			SearchResult<Map<String, Object>> result = new SearchResult<>();
-			if (dataListResult != null) {
-				Set<Map.Entry<String, String>> fieldDbAliasEntrySet = sqlResult.getSearchSql().getMetadata().getFieldDbAliasEntrySet();
-				while (dataListResult.next()) {
+			if (listResult != null) {
+				Collection<FieldMeta> fieldMetas = sqlResult.getSearchSql().getMetadata().getFieldMetas();
+				while (listResult.next()) {
 					Map<String, Object> dataMap = new HashMap<>();
-					for (Map.Entry<String, String> entry : fieldDbAliasEntrySet) {
-						dataMap.put(entry.getKey(), dataListResult.getObject(entry.getValue()));
+					for (FieldMeta meta : fieldMetas) {
+						dataMap.put(meta.getName(), listResult.getObject(meta.getDbAlias()));
 					}
 					result.addData(dataMap);
 				}

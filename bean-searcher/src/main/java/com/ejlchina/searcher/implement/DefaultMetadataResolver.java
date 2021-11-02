@@ -3,6 +3,7 @@ package com.ejlchina.searcher.implement;
 import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.bean.DbField;
 import com.ejlchina.searcher.bean.SearchBean;
+import com.ejlchina.searcher.param.Operator;
 import com.ejlchina.searcher.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -18,10 +19,11 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class DefaultMetadataResolver implements MetadataResolver {
 
+    private static final Operator[] EMPTY_OPERATORS = {};
+
     private final Map<Class<?>, Metadata<?>> cache = new ConcurrentHashMap<>();
 
     private SnippetResolver snippetResolver = new DefaultSnippetResolver();
-
 
     private TableMapping tableMapping = new TableMapping() {
 
@@ -62,27 +64,39 @@ public class DefaultMetadataResolver implements MetadataResolver {
                 snippetResolver.resolve(groupBy(bean)),
                 bean != null && bean.distinct());
         // 字段解析
-        for (Field field : beanClass.getDeclaredFields()) {
-            String dbField = dbField(bean, field);
-            if (dbField == null) {
+        Field[] fields = beanClass.getDeclaredFields();
+        for (int index = 0; index < fields.length; index++) {
+            Field field = fields[index];
+            String fieldSql = dbFieldSql(bean, field);
+            if (fieldSql == null) {
                 continue;
             }
-            SqlSnippet fieldSnippet = snippetResolver.resolve(dbField);
-            String fieldName = field.getName();
-            Class<?> fieldType = field.getType();
-            try {
-                Method method = beanClass.getMethod("set" + StringUtils.firstCharToUpperCase(fieldName), fieldType);
-                metadata.addFieldDbMap(fieldName, fieldSnippet, method, fieldType);
-            } catch (Exception e) {
-                throw new SearchException("[" + beanClass.getName() + ": " + fieldName + "] is annotated by @DbField, but there is none correctly setter for it.", e);
-            }
+            SqlSnippet fieldSnippet = snippetResolver.resolve(fieldSql);
+            FieldMeta fieldMeta = resolveFieldMeta(beanClass, field, fieldSnippet, index);
+            metadata.addFieldMeta(field.getName(), fieldMeta);
         }
         if (metadata.getFieldList().size() == 0) {
-            throw new SearchException("[" + beanClass.getName() + "] is annotated by @SearchBean, but there is none field annotated by @DbFile.");
+            throw new SearchException("[" + beanClass.getName() + "] is not a valid SearchBean, because there is none field mapping to database.");
         }
-        // 对字段进行排序
-        metadata.getFieldList().sort(String::compareTo);
         return metadata;
+    }
+
+    protected FieldMeta resolveFieldMeta(Class<?> beanClass, Field field, SqlSnippet snippet, int index) {
+        Method setter = getSetterMethod(beanClass, field);
+        String dbAlias = "_" + index;
+        DbField dbField = field.getAnnotation(DbField.class);
+        boolean conditional = dbField == null || dbField.conditional();
+        Operator[] onlyOn = dbField != null ? dbField.onlyOn() : EMPTY_OPERATORS;
+        return new FieldMeta(field.getName(), field.getType(), setter, snippet, dbAlias, conditional, onlyOn);
+    }
+
+    protected Method getSetterMethod(Class<?> beanClass, Field field) {
+        String fieldName = field.getName();
+        try {
+            return beanClass.getMethod("set" + StringUtils.firstCharToUpperCase(fieldName), field.getType());
+        } catch (Exception e) {
+            throw new SearchException("[" + beanClass.getName() + ": " + fieldName + "] is annotated by @DbField, but there is none correctly setter for it.", e);
+        }
     }
 
     protected String tables(Class<?> beanClass, SearchBean bean) {
@@ -100,16 +114,22 @@ public class DefaultMetadataResolver implements MetadataResolver {
         return bean != null ? bean.groupBy().trim() : "";
     }
 
-    protected String dbField(SearchBean bean, Field field) {
+    protected String dbFieldSql(SearchBean bean, Field field) {
         DbField dbField = field.getAnnotation(DbField.class);
         if (dbField != null) {
-            return dbField.value().trim();
+            String fieldSql = dbField.value().trim();
+            if (StringUtils.isNotBlank(fieldSql)) {
+                if (fieldSql.toLowerCase().startsWith("select ")) {
+                    return "(" + fieldSql + ")";
+                }
+                return fieldSql;
+            }
         }
         // 没加 @SearchBean 注解，或者加了但没给 tables 赋值，则可以自动映射列名，因为此时默认为单表映射
         if (bean == null || StringUtils.isBlank(bean.tables())) {
             return tableMapping.toColumnName(field);
         }
-        String tab = bean.autoMapTab();
+        String tab = bean.autoMapTo();
         if (StringUtils.isBlank(tab)) {
             return null;
         }

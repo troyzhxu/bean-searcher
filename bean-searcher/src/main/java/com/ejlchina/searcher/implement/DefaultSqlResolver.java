@@ -41,10 +41,6 @@ public class DefaultSqlResolver implements SqlResolver {
 
 	@Override
 	public <T> SearchSql<T> resolve(Metadata<T> metadata, SearchParam searchParam) {
-		List<String> fieldList = metadata.getFieldList();
-		Map<String, String> fieldDbAliasMap = metadata.getFieldDbAliasMap();
-		Map<String, Class<?>> fieldTypeMap = metadata.getFieldTypeMap();
-		
 		SearchSql<T> searchSql = new SearchSql<>(metadata);
 
 		FetchType fetchType = searchParam.getFetchType();
@@ -55,15 +51,14 @@ public class DefaultSqlResolver implements SqlResolver {
 		if (metadata.isDistinct()) {
 			builder.append("distinct ");
 		}
+		List<String> fieldList = metadata.getFieldList();
+
 		int fieldCount = fieldList.size();
 		for (int i = 0; i < fieldCount; i++) {
 			String field = fieldList.get(i);
-			SqlSnippet snippet = metadata.getDbFieldSnippet(field);
-			if (snippet == null) {
-				continue;
-			}
-			String dbField = resolveDbField(snippet, searchParam, searchSql, metadata.isDistinct());
-			String dbAlias = fieldDbAliasMap.get(field);
+			FieldMeta meta = metadata.requireFieldMeta(field);
+			String dbField = resolveDbField(meta.getFieldSql(), searchParam, searchSql, metadata.isDistinct());
+			String dbAlias = meta.getDbAlias();
 			builder.append(dbField).append(" ").append(dbAlias);
 			if (i < fieldCount - 1) {
 				builder.append(", ");
@@ -76,7 +71,7 @@ public class DefaultSqlResolver implements SqlResolver {
 				.append(resolveTables(metadata.getTableSnippet(), searchParam, searchSql));
 		
 		String joinCond = metadata.getJoinCond();
-		boolean hasJoinCond = !StringUtils.isBlank(joinCond);
+		boolean hasJoinCond = StringUtils.isNotBlank(joinCond);
 
 		List<FieldParam> fieldParamList = searchParam.getFieldParams();
 
@@ -100,6 +95,7 @@ public class DefaultSqlResolver implements SqlResolver {
 				builder.append(joinCond).append(")");
 			}
 		}
+
 		for (int i = 0; i < fieldParamList.size(); i++) {
 			if (i > 0 || hasJoinCond) {
 				builder.append(" and (");
@@ -107,8 +103,9 @@ public class DefaultSqlResolver implements SqlResolver {
 			FieldParam fieldParam = fieldParamList.get(i);
 			String fieldName = fieldParam.getName();
 			// 这里没取字段别名，因为在 count SQL 里，select 语句中可能没这个字段
-			List<Object> sqlParams = appendFilterConditionSql(builder, fieldTypeMap.get(fieldName),
-					metadata.getDbField(fieldName), fieldParam);
+			FieldMeta meta = metadata.requireFieldMeta(fieldName);
+			List<Object> sqlParams = appendFilterConditionSql(builder, meta.getType(),
+					meta.getFieldSql().getSnippet(), fieldParam);
 			for (Object sqlParam : sqlParams) {
 				searchSql.addListSqlParam(sqlParam);
 				searchSql.addClusterSqlParam(sqlParam);
@@ -164,9 +161,9 @@ public class DefaultSqlResolver implements SqlResolver {
 		if (fetchType.shouldQueryList()) {
 			OrderParam orderPara = searchParam.getOrderParam();
 			if (orderPara != null) {
-				String sortDbAlias = fieldDbAliasMap.get(orderPara.getSort());
-				if (sortDbAlias != null) {
-					builder.append(" order by ").append(sortDbAlias);
+				FieldMeta meta = metadata.getFieldMeta(orderPara.getSort());
+				if (meta != null) {
+					builder.append(" order by ").append(meta.getDbAlias());
 					String order = orderPara.getOrder();
 					if (order != null) {
 						builder.append(" ").append(order);
@@ -233,11 +230,11 @@ public class DefaultSqlResolver implements SqlResolver {
 			for (int i = 0; i < summaryFields.length; i++) {
 				String summaryField = summaryFields[i];
 				String summaryAlias = generateColumnAlias(summaryField, originalSql);
-				String dbField = metadata.getDbField(summaryField);
-				if (dbField == null) {
+				String fieldSql = metadata.getFieldSql(summaryField);
+				if (fieldSql == null) {
 					throw new SearchException("求和属性【" + summaryField + "】没有和数据库字段做映射，请检查该属性是否被 @DbField 正确注解！");
 				}
-				clusterSelectSqlBuilder.append("sum(").append(dbField)
+				clusterSelectSqlBuilder.append("sum(").append(fieldSql)
 					.append(") ").append(summaryAlias);
 				if (i < summaryFields.length - 1) {
 					clusterSelectSqlBuilder.append(", ");

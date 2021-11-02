@@ -1,5 +1,6 @@
 package com.ejlchina.searcher.implement;
 
+import com.ejlchina.searcher.FieldMeta;
 import com.ejlchina.searcher.Metadata;
 import com.ejlchina.searcher.ParamFilter;
 
@@ -71,11 +72,13 @@ public class BoolValueFilter implements ParamFilter {
 	}
 
 	protected String[] getBoolFieldList(Metadata<?> metadata) {
-		Map<String, Class<?>> fieldTypeMap = metadata.getFieldTypeMap();
-		return metadata.getFieldList().stream().filter(field -> {
-			Class<?> type = fieldTypeMap.get(field);
-			return type == boolean.class || type == Boolean.class;
-		}).toArray(String[]::new);
+		return metadata.getFieldMetas().stream()
+				.filter(meta -> {
+					Class<?> type = meta.getType();
+					return type == boolean.class || type == Boolean.class;
+				})
+				.map(FieldMeta::getName)
+				.toArray(String[]::new);
 	}
 
 	protected String findField(String[] fields, String key) {

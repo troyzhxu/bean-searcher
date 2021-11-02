@@ -2,7 +2,18 @@ package com.ejlchina.searcher.util;
 
 public class StringUtils {
 
+	/**
+	 * @param str 字符串
+	 * @return 是否不空
+	 */
+	public static boolean isNotBlank(String str) {
+		return !isBlank(str);
+	}
 
+	/**
+	 * @param str 字符串
+	 * @return 是否为空
+	 */
 	public static boolean isBlank(String str) {
 		if (str == null) {
 			return true;
@@ -24,22 +35,28 @@ public class StringUtils {
 		}
 		return true;
 	}
-	
-	public static String firstCharToUpperCase(String string) {
-		if (string == null || string.length() == 0) {
-			return string;
+
+	/**
+	 * 首字母大写
+	 */
+	public static String firstCharToUpperCase(String str) {
+		if (str == null || str.length() == 0) {
+			return str;
 		}
-		char first = string.charAt(0);
+		char first = str.charAt(0);
 		if (first >= 'a' && first <= 'z') {
 			first = (char) (first - 32);
-			if (string.length() == 1) {
+			if (str.length() == 1) {
 				return String.valueOf(first);
 			}
-			return first + string.substring(1);
+			return first + str.substring(1);
 		}
-		return string;
+		return str;
 	}
 
+	/**
+	 * 首字母小写
+	 */
 	public static String firstCharToLoweCase(String string) {
 		if (string == null || string.length() == 0) {
 			return string;

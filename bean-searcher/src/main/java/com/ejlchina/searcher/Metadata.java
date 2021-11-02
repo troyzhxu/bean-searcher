@@ -1,6 +1,5 @@
 package com.ejlchina.searcher;
 
-import java.lang.reflect.Method;
 import java.util.*;
 
 /**
@@ -42,24 +41,9 @@ public class Metadata<T> {
 	private final List<String> fieldList = new ArrayList<>();
 
 	/**
-	 * 映射: Bean属性-> DB 字段
+	 * 映射: Bean属性 -> 属性元信息
 	 * */
-	private final Map<String, SqlSnippet> fieldDbSnippetMap = new HashMap<>();
-
-	/**
-	 * 映射: Bean属性 -> DB字段别名
-	 * */
-	private final Map<String, String> fieldDbAliasMap = new HashMap<>();
-	
-	/**
-	 * 映射: Bean属性 -> 属性GET方法
-	 * */
-	private final Map<String, Method> fieldGetMethodMap = new HashMap<>();
-	
-	/**
-	 * 映射: Bean属性 -> 属性类型
-	 * */
-	private final Map<String, Class<?>> fieldTypeMap = new HashMap<>();
+	private final Map<String, FieldMeta> fieldMetaMap = new HashMap<>();
 
 
 
@@ -71,21 +55,15 @@ public class Metadata<T> {
 		this.distinct = distinct;
 	}
 
-	
-	public void addFieldDbMap(String field, SqlSnippet fieldSnippet, Method getMethod, Class<?> fieldType) {
+
+	public void addFieldMeta(String field, FieldMeta meta) {
 		if (fieldList.contains(field)) {
-			throw new SearchException("不可以重复添加字段");
+			throw new SearchException("不可以重复添加字段：" + field);
 		}
-		String dbField = fieldSnippet.getSnippet();
-        if (dbField.toLowerCase().startsWith("select ")) {
-			fieldSnippet.setSnippet("(" + dbField + ")");
-        }
 		fieldList.add(field);
-		fieldDbAliasMap.put(field, "d_" + fieldList.size());
-		fieldGetMethodMap.put(field, getMethod);
-		fieldTypeMap.put(field, fieldType);
-		fieldDbSnippetMap.put(field, fieldSnippet);
+		fieldMetaMap.put(field, meta);
 	}
+
 
 	public Class<T> getBeanClass() {
 		return beanClass;
@@ -115,33 +93,38 @@ public class Metadata<T> {
 		return distinct;
 	}
 
-	public String getDbField(String field) {
-		SqlSnippet snippet = fieldDbSnippetMap.get(field);
-		return snippet != null ? snippet.getSnippet() : null;
-	}
-
-	public SqlSnippet getDbFieldSnippet(String field) {
-		return fieldDbSnippetMap.get(field);
-	}
-
-	public Map<String, String> getFieldDbAliasMap() {
-		return fieldDbAliasMap;
-	}
-
-	public Set<Map.Entry<String, String>> getFieldDbAliasEntrySet() {
-		return fieldDbAliasMap.entrySet();
-	}
-
 	public List<String> getFieldList() {
 		return fieldList;
 	}
 
-	public Map<String, Method> getFieldGetMethodMap() {
-		return fieldGetMethodMap;
+	public FieldMeta requireFieldMeta(String field) {
+		FieldMeta meta = getFieldMeta(field);
+		if (meta == null) {
+			throw new IllegalStateException("No such field named: " + field);
+		}
+		return meta;
 	}
 
-	public Map<String, Class<?>> getFieldTypeMap() {
-		return fieldTypeMap;
+	public FieldMeta getFieldMeta(String field) {
+		if (field != null) {
+			return fieldMetaMap.get(field);
+		}
+		return null;
+	}
+
+	/**
+	 * 获取某字段的 SQL 片段
+	 */
+	public String getFieldSql(String field) {
+		FieldMeta meta = getFieldMeta(field);
+		if (meta != null) {
+			return meta.getFieldSql().getSnippet();
+		}
+		return null;
+	}
+
+	public Collection<FieldMeta> getFieldMetas() {
+		return fieldMetaMap.values();
 	}
 	
 }

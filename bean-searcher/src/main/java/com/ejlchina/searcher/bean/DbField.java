@@ -23,10 +23,11 @@ public @interface DbField {
 	/**
 	 * 用于指定属性对应数据库的哪张表的哪个字段，例如:
 	 * u.username
-	 * 别名 u 由  @SearchBean 注解的 tables 值指定 
+	 * 别名 u 由  @SearchBean 注解的 tables 值指定
+	 * v3.0.0 后可空，为空时以字段名映射列名
 	 * @return 数据库字段
 	 * */
-	String value();
+	String value() default "";
 
 	/**
 	 * @return 该字段是否可以被作为检索条件
