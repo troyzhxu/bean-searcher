@@ -4,9 +4,11 @@ import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.param.*;
 import com.ejlchina.searcher.util.MapBuilder;
 import com.ejlchina.searcher.util.ObjectUtils;
+import com.ejlchina.searcher.util.StringUtils;
 
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /***
  * @author Troy.Zhou @ 2017-03-20
@@ -15,7 +17,17 @@ import java.util.regex.Pattern;
  */
 public class DefaultParamResolver implements ParamResolver {
 
-	public final Pattern INDEX_PATTERN = Pattern.compile("[0-9]+");
+	public static final Pattern INDEX_PATTERN = Pattern.compile("[0-9]+");
+
+	/**
+	 * 分页参数提取器
+	 */
+	private PageExtractor pageExtractor = new PageOffsetExtractor();
+
+	/**
+	 * 参数过滤器
+	 */
+	private ParamFilter[] paramFilters = new ParamFilter[] { new BoolValueFilter() };
 
 	/**
 	 * 排序字段参数名
@@ -45,14 +57,15 @@ public class DefaultParamResolver implements ParamResolver {
 	private String operatorSuffix = "op";
 
 	/**
-	 * 分页参数提取器
+	 * 用于指定只 Select 某些字段的参数名
 	 */
-	private PageExtractor pageExtractor = new PageOffsetExtractor();
+	private String onlySelectName = "onlySelect";
 
 	/**
-	 * 参数过滤器
+	 * 用于指定不需要 Select 的字段的参数名
 	 */
-	private ParamFilter[] paramFilters = new ParamFilter[] { new BoolValueFilter() };
+	private String selectExcludeName = "selectExclude";
+
 
 	@Override
 	public SearchParam resolve(BeanMeta<?> beanMeta, FetchType fetchType, Map<String, Object> paraMap) {
@@ -65,22 +78,46 @@ public class DefaultParamResolver implements ParamResolver {
 		if (paraMap == null) {
 			paraMap = new HashMap<>();
 		}
-		return doResolve(beanMeta.getFieldMetas(), fetchType, paraMap);
+		return doResolve(beanMeta, fetchType, paraMap);
 	}
 
-	protected SearchParam doResolve(Collection<FieldMeta> fieldMetas, FetchType fetchType, Map<String, Object> paraMap) {
-		List<FieldParam> fieldParams = resolveFieldParams(fieldMetas, paraMap);
-		SearchParam searchParam = new SearchParam(paraMap, fetchType, fieldParams);
-		if (fetchType.isFetchByPage()) {
+	protected SearchParam doResolve(BeanMeta<?> beanMeta, FetchType fetchType, Map<String, Object> paraMap) {
+		List<String> fetchFields = resolveFetchFields(beanMeta, fetchType, paraMap);
+		List<FieldParam> fieldParams = resolveFieldParams(beanMeta.getFieldMetas(), paraMap);
+		SearchParam searchParam = new SearchParam(paraMap, fetchType, fetchFields, fieldParams);
+		if (fetchType.canPaging()) {
 			Paging paging = pageExtractor.extract(paraMap);
 			if (fetchType.isFetchFirst()) {
 				paging.setSize(1);
 			}
 			searchParam.setPaging(paging);
 		}
-		searchParam.setOrderParam(resolveOrderParam(paraMap));
+		if (fetchType.shouldQueryList()) {
+			// 只有列表检索，才需要排序
+			searchParam.setOrderParam(resolveOrderParam(paraMap));
+		}
 		return searchParam;
 	}
+
+	protected List<String> resolveFetchFields(BeanMeta<?> beanMeta, FetchType fetchType, Map<String, Object> paraMap) {
+		if (fetchType.shouldQueryList() || beanMeta.isDistinct() || StringUtils.isNotBlank(beanMeta.getGroupBy())) {
+			List<String> fieldList = beanMeta.getFieldList();
+			List<String> onlySelect = toList(paraMap.get(onlySelectName)).stream()
+					.filter(fieldList::contains)
+					.collect(Collectors.toList());
+			List<String> selectExclude = toList(paraMap.get(selectExcludeName));
+			return (onlySelect.isEmpty() ? fieldList : onlySelect).stream()
+					.filter(f -> !selectExclude.contains(f))
+					.collect(Collectors.toList());
+		}
+		return Collections.emptyList();
+	}
+
+
+	protected List<String> toList(Object value) {
+		return ObjectUtils.toList(value);
+	}
+
 
 	protected List<FieldParam> resolveFieldParams(Collection<FieldMeta> fieldMetas, Map<String, Object> paraMap) {
 		Map<String, List<Integer>> fieldIndicesMap = new HashMap<>();
@@ -116,7 +153,7 @@ public class DefaultParamResolver implements ParamResolver {
 	protected FieldParam toFieldParam(FieldMeta meta, List<Integer> indices, Map<String, Object> paraMap) {
 		String field = meta.getName();
 		Object opValue = paraMap.get(field + separator + operatorSuffix);
-		Operator operator = toOperator(opValue, meta.getOnlyOn());
+		Operator operator = allowedOperator(opValue, meta.getOnlyOn());
 		if (operator == null) {
 			// 表示该字段不支持 opValue 的检索
 			return null;
@@ -142,7 +179,7 @@ public class DefaultParamResolver implements ParamResolver {
 		return null;
 	}
 
-	protected Operator toOperator(Object value, Operator[] onlyOn) {
+	protected Operator allowedOperator(Object value, Operator[] onlyOn) {
 		Operator op = null;
 		if (value instanceof Operator) {
 			op = (Operator) value;
@@ -152,7 +189,7 @@ public class DefaultParamResolver implements ParamResolver {
 		}
 		if (op == null) {
 			if (onlyOn.length == 0) {
-				// 为空，代表没有约束
+				// 为空，代表没有约束，则缺省使用 Equal
 				return Operator.Equal;
 			}
 			// 当指定 onlyOn 时，缺省使用 onlyOn 的第一个运算符
@@ -177,6 +214,22 @@ public class DefaultParamResolver implements ParamResolver {
 			return new OrderParam(sort, order);
 		}
 		return null;
+	}
+
+	public PageExtractor getPageExtractor() {
+		return pageExtractor;
+	}
+
+	public void setPageExtractor(PageExtractor pageExtractor) {
+		this.pageExtractor = Objects.requireNonNull(pageExtractor);
+	}
+
+	public void setParamFilters(ParamFilter[] paramFilters) {
+		this.paramFilters = Objects.requireNonNull(paramFilters);
+	}
+
+	public ParamFilter[] getParamFilters() {
+		return paramFilters;
 	}
 
 	public String getSortName() {
@@ -224,20 +277,20 @@ public class DefaultParamResolver implements ParamResolver {
 		this.separator = Objects.requireNonNull(separator);
 	}
 
-	public PageExtractor getPageExtractor() {
-		return pageExtractor;
+	public String getOnlySelectName() {
+		return onlySelectName;
 	}
 
-	public void setPageExtractor(PageExtractor pageExtractor) {
-		this.pageExtractor = Objects.requireNonNull(pageExtractor);
+	public void setOnlySelectName(String onlySelectName) {
+		this.onlySelectName = onlySelectName;
 	}
 
-	public void setParamFilters(ParamFilter[] paramFilters) {
-		this.paramFilters = Objects.requireNonNull(paramFilters);
+	public String getSelectExcludeName() {
+		return selectExcludeName;
 	}
 
-	public ParamFilter[] getParamFilters() {
-		return paramFilters;
+	public void setSelectExcludeName(String selectExcludeName) {
+		this.selectExcludeName = selectExcludeName;
 	}
 
 }

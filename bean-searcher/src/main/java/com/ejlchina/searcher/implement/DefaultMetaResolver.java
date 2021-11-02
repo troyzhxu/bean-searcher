@@ -75,7 +75,7 @@ public class DefaultMetaResolver implements MetaResolver {
             FieldMeta fieldMeta = resolveFieldMeta(beanClass, field, fieldSnippet, index);
             beanMeta.addFieldMeta(field.getName(), fieldMeta);
         }
-        if (beanMeta.getFieldList().size() == 0) {
+        if (beanMeta.getFieldCount() == 0) {
             throw new SearchException("[" + beanClass.getName() + "] is not a valid SearchBean, because there is none field mapping to database.");
         }
         return beanMeta;

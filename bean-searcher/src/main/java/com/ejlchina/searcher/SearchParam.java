@@ -21,9 +21,14 @@ public class SearchParam {
 	private final Map<String, Object> paraMap;
 
 	/**
-	 * Fetch 信息
+	 * Fetch 类型
 	 */
 	private final FetchType fetchType;
+
+	/**
+	 * 需要 Select 的字段
+	 */
+	private final List<String> fetchFields;
 
 	/**
 	 * 过滤检索参数列表
@@ -41,9 +46,10 @@ public class SearchParam {
 	private OrderParam orderParam;
 
 
-	public SearchParam(Map<String, Object> paraMap, FetchType fetchType, List<FieldParam> fieldParams) {
+	public SearchParam(Map<String, Object> paraMap, FetchType fetchType, List<String> fetchFields, List<FieldParam> fieldParams) {
 		this.paraMap = paraMap;
 		this.fetchType = fetchType;
+		this.fetchFields = fetchFields;
 		this.fieldParams = fieldParams;
 	}
 
@@ -67,6 +73,10 @@ public class SearchParam {
 
 	public FetchType getFetchType() {
 		return fetchType;
+	}
+
+	public List<String> getFetchFields() {
+		return fetchFields;
 	}
 
 	public Paging getPaging() {

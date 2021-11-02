@@ -94,7 +94,11 @@ public class BeanMeta<T> {
 	}
 
 	public List<String> getFieldList() {
-		return fieldList;
+		return Collections.unmodifiableList(fieldList);
+	}
+
+	public int getFieldCount() {
+		return fieldList.size();
 	}
 
 	public FieldMeta requireFieldMeta(String field) {
@@ -124,7 +128,7 @@ public class BeanMeta<T> {
 	}
 
 	public Collection<FieldMeta> getFieldMetas() {
-		return fieldMetaMap.values();
+		return Collections.unmodifiableCollection(fieldMetaMap.values());
 	}
 	
 }

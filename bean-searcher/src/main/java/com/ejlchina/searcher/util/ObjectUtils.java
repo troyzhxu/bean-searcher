@@ -1,5 +1,8 @@
 package com.ejlchina.searcher.util;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
 public class ObjectUtils {
 
 
@@ -56,6 +59,32 @@ public class ObjectUtils {
 			}
 		}
 		return null;
+	}
+
+	public static List<String> toList(Object value) {
+		if (value instanceof Collection) {
+			Collection<?> list = (Collection<?>) value;
+			return list.stream().map(it -> it.toString().trim())
+					.filter(StringUtils::isNotBlank)
+					.collect(Collectors.toList());
+		}
+		String[] array = null;
+		if (value instanceof String) {
+			array = ((String) value).split("[^A-Za-z0-9_]");
+		}
+		if (value instanceof String[]) {
+			array = (String[]) value;
+		}
+		if (array != null) {
+			List<String> list = new ArrayList<>();
+			for (String str : array) {
+				if (StringUtils.isNotBlank(str)) {
+					list.add(str.trim());
+				}
+			}
+			return list;
+		}
+		return Collections.emptyList();
 	}
 
 }

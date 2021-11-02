@@ -93,9 +93,9 @@ public class FetchType {
     }
 
     /**
-     * @return 是否需要分页
+     * @return 是否可以分页
      */
-    public boolean isFetchByPage() {
+    public boolean canPaging() {
         return type != LIST_ALL && type != ONLY_TOTAL && type != ONLY_SUMMARY;
     }
 
