@@ -57,12 +57,10 @@ public class DefaultSqlResolver implements SqlResolver {
 			String field = fetchFields.get(i);
 			FieldMeta meta = beanMeta.requireFieldMeta(field);
 			String dbField = resolveDbField(meta.getFieldSql(), searchParam, searchSql, beanMeta.isDistinct());
-			String dbAlias = meta.getDbAlias();
-			builder.append(dbField).append(" ").append(dbAlias);
+			builder.append(dbField).append(" ").append(meta.getDbAlias());
 			if (i < fieldCount - 1) {
 				builder.append(", ");
 			}
-			searchSql.addListAlias(dbAlias);
 		}
 		String fieldSelectSql = builder.toString();
 

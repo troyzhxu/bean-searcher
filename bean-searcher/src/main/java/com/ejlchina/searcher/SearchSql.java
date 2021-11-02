@@ -40,12 +40,7 @@ public class SearchSql<T> {
 	 * 聚族查询的参数
 	 * */
 	private final List<Object> clusterSqlParams = new ArrayList<>();
-	
-	/**
-	 * 数据别名列表
-	 * */
-	private final List<String> listAliases = new ArrayList<>();
-	
+
 	/**
 	 * 总条数别名
 	 */
@@ -114,14 +109,6 @@ public class SearchSql<T> {
 
 	public void addClusterSqlParam(Object sqlParam) {
 		this.clusterSqlParams.add(sqlParam);
-	}
-
-	public void addListAlias(String alias) {
-		listAliases.add(alias);
-	}
-
-	public List<String> getListAliases() {
-		return listAliases;
 	}
 	
 	public String getCountAlias() {
