@@ -7,7 +7,9 @@ import java.util.Map.Entry;
 public class MapUtils {
 
 	/**
-	 * 将一个 value 为 数组的 Map 对象，拉平为 value 为 单值的 Map 对象
+	 * 将一个 value 为数组的 Map 对象，拉平为 value 为单值的 Map 对象
+	 * @param map 已有 Map 参数
+	 * @return Map 参数
 	 */
 	public static Map<String, Object> flat(Map<String, String[]> map) {
 		Map<String, Object> newMap = new HashMap<>();
@@ -21,21 +23,26 @@ public class MapUtils {
 	}
 
 	/**
-	 * 返回一个 lambda Map 构造器
+	 * 返回一个 lambda Map 参数构造器
+	 * @return MapBuilder
 	 */
 	public static MapBuilder builder() {
 		return builder(new HashMap<>());
 	}
 
 	/**
-	 * 返回一个 lambda Map 构造器
+	 * 将一个 value 为数组的 Map 对象，拉平为 value 为单值的 Map 对象，并返回一个 lambda Map 参数构造器
+	 * @param map 已有 Map 参数
+	 * @return MapBuilder
 	 */
 	public static MapBuilder flatBuilder(Map<String, String[]> map) {
 		return new MapBuilder(flat(map));
 	}
 
 	/**
-	 * 返回一个 lambda Map 构造器
+	 * 返回一个 lambda Map 参数构造器
+	 * @param map 已有 Map 参数
+	 * @return MapBuilder
 	 */
 	public static MapBuilder builder(Map<String, Object> map) {
 		return new MapBuilder(map);

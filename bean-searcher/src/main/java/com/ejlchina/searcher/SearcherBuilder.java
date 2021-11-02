@@ -15,6 +15,7 @@ public class SearcherBuilder {
 
 	/**
 	 * 用于构建一个 BeanSearcher 实例
+	 * @return BeanSearcherBuilder
 	 */
 	public static BeanSearcherBuilder beanSearcher() {
 		return new BeanSearcherBuilder();
@@ -22,6 +23,7 @@ public class SearcherBuilder {
 
 	/**
 	 * 用于构建一个 MapSearcher 实例
+	 * @return MapSearcherBuilder
 	 */
 	public static MapSearcherBuilder mapSearcher() {
 		return new MapSearcherBuilder();

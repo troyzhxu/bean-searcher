@@ -13,10 +13,9 @@ import java.util.Map;
 import java.util.Objects;
 
 /***
+ * 自动检索器 根据 SearcherBean 的 Class 和 请求参数，自动检索，数据以 Bean 对象呈现
  * @author Troy.Zhou @ 2021-10-29
- * 
- * 自动检索器 根据 SearcherBean 的 Class 和 请求参数，自动检索，数据以 Map<String, Object> 对象呈现
- * 
+ * @since v3.0.0
  */
 public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearcher {
 

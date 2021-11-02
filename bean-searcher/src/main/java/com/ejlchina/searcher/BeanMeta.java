@@ -112,6 +112,8 @@ public class BeanMeta<T> {
 
 	/**
 	 * 获取某字段的 SQL 片段
+	 * @param field Java 字段名
+	 * @return SQL 片段
 	 */
 	public String getFieldSql(String field) {
 		FieldMeta meta = getFieldMeta(field);

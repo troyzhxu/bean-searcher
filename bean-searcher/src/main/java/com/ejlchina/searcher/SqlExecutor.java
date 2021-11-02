@@ -8,6 +8,7 @@ package com.ejlchina.searcher;
 public interface SqlExecutor {
 
 	/**
+	 * @param <T> 泛型
 	 * @param searchSql 检索 SQL
 	 * @return 执行结果
 	 */

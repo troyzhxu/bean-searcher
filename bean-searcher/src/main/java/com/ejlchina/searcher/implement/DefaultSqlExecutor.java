@@ -165,6 +165,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
 
 	/**
 	 * 设置是否使用只读事务
+	 * @param transactional 是否使用事务
 	 */
 	public void setTransactional(boolean transactional) {
 		this.transactional = transactional;

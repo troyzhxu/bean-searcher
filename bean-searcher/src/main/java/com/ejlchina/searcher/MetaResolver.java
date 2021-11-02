@@ -8,6 +8,7 @@ package com.ejlchina.searcher;
 public interface MetaResolver {
 
     /**
+     * @param <T> 泛型
      * @param beanClass 要检索的 bean 类型
      * @return Bean 的元信息
      * */

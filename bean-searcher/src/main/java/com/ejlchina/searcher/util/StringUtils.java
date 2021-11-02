@@ -38,6 +38,8 @@ public class StringUtils {
 
 	/**
 	 * 首字母大写
+	 * @param str 字符串
+	 * @return String
 	 */
 	public static String firstCharToUpperCase(String str) {
 		if (str == null || str.length() == 0) {
@@ -56,20 +58,22 @@ public class StringUtils {
 
 	/**
 	 * 首字母小写
+	 * @param str 字符串
+	 * @return String
 	 */
-	public static String firstCharToLoweCase(String string) {
-		if (string == null || string.length() == 0) {
-			return string;
+	public static String firstCharToLoweCase(String str) {
+		if (str == null || str.length() == 0) {
+			return str;
 		}
-		char first = string.charAt(0);
+		char first = str.charAt(0);
 		if (first >= 'A' && first <= 'Z') {
 			first = (char) (first + 32);
-			if (string.length() == 1) {
+			if (str.length() == 1) {
 				return String.valueOf(first);
 			}
-			return first + string.substring(1);
+			return first + str.substring(1);
 		}
-		return string;
+		return str;
 	}
 
 	/**

@@ -55,6 +55,7 @@ public class SearchParam {
 
 	/**
 	 * 获取原始参数
+	 * @return 原始参数
 	 */
 	public Map<String, Object> getParaMap() {
 		return paraMap;
@@ -62,6 +63,8 @@ public class SearchParam {
 
 	/**
 	 * 获取原始参数值
+	 * @param key 参数名
+	 * @return 参数值
 	 */
 	public Object getPara(String key) {
 		return paraMap.get(key);
