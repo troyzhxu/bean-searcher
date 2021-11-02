@@ -1,12 +1,13 @@
 package com.ejlchina.searcher;
 
+import java.io.Closeable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
  * SQL 执行结果
  */
-public class SqlResult<T> {
+public class SqlResult<T> implements Closeable {
 
     /**
      * 检索 SQL 信息
@@ -31,7 +32,8 @@ public class SqlResult<T> {
     /**
      * 关闭结果集
      */
-    public void closeResultSet() {
+    @Override
+    public void close() {
         try {
             if (listResult != null) {
                 listResult.close();

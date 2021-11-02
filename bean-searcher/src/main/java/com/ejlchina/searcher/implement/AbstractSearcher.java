@@ -24,25 +24,18 @@ public abstract class AbstractSearcher implements Searcher {
 
 	@Override
 	public <T> Number searchCount(Class<T> beanClass, Map<String, Object> paraMap) {
-		SqlResult<T> sqlResult = doSearch(beanClass, paraMap, new FetchType(FetchType.ONLY_TOTAL));
-		try {
-			return getCountFromSqlResult(sqlResult);
+		try (SqlResult<T> result = doSearch(beanClass, paraMap, new FetchType(FetchType.ONLY_TOTAL))) {
+			return getCountFromSqlResult(result);
 		} catch (SQLException e) {
 			throw new SearchException("A exception occurred when collect sql result!", e);
-		} finally {
-			sqlResult.closeResultSet();
 		}
 	}
 
 	@Override
 	public <T> Number searchSum(Class<T> beanClass, Map<String, Object> paraMap, String field) {
-		Number[] results = searchSum(beanClass, paraMap, new String[] {
-				Objects.requireNonNull(field)
-		});
-		if (results != null && results.length > 0) {
-			return results[0];
-		}
-		return null;
+		String[] fields = { Objects.requireNonNull(field) };
+		Number[] results = searchSum(beanClass, paraMap, fields);
+		return results != null && results.length > 0 ? results[0] : null;
 	}
 
 	@Override
@@ -51,13 +44,10 @@ public abstract class AbstractSearcher implements Searcher {
 			throw new SearchException("检索该 Bean【" + beanClass.getName()
 			+ "】的统计信息时，必须要指定需要统计的属性！");
 		}
-		SqlResult<T> sqlResult = doSearch(beanClass, paraMap, new FetchType(FetchType.ONLY_SUMMARY, fields));
-		try {
-			return getSummaryFromSqlResult(sqlResult);
+		try (SqlResult<T> result = doSearch(beanClass, paraMap, new FetchType(FetchType.ONLY_SUMMARY, fields))) {
+			return getSummaryFromSqlResult(result);
 		} catch (SQLException e) {
 			throw new SearchException("A exception occurred when collect sql result!", e);
-		} finally {
-			sqlResult.closeResultSet();
 		}
 	}
 

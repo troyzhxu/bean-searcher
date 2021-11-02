@@ -44,10 +44,9 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 	}
 
 	protected <T> SearchResult<Map<String, Object>> search(Class<T> beanClass, Map<String, Object> paraMap, FetchType fetchType) {
-		SqlResult<T> sqlResult = doSearch(beanClass, paraMap, fetchType);
-		ResultSet listResult = sqlResult.getListResult();
-		ResultSet clusterResult = sqlResult.getClusterResult();
-		try {
+		try (SqlResult<T> sqlResult = doSearch(beanClass, paraMap, fetchType)) {
+			ResultSet listResult = sqlResult.getListResult();
+			ResultSet clusterResult = sqlResult.getClusterResult();
 			SearchResult<Map<String, Object>> result = new SearchResult<>();
 			if (listResult != null) {
 				SearchSql<T> searchSql = sqlResult.getSearchSql();
@@ -71,8 +70,6 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 			return result;
 		} catch (SQLException e) {
 			throw new SearchException("A exception occurred when collecting sql result!", e);
-		} finally {
-			sqlResult.closeResultSet();
 		}
 	}
 
