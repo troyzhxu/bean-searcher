@@ -1,14 +1,11 @@
 package com.example.sbean;
 
-import java.util.Date;
-import java.util.Map;
-
-import com.ejlchina.searcher.bean.BeanAware;
-import com.ejlchina.searcher.bean.BeanParaAware;
-import com.ejlchina.searcher.bean.DbField;
-import com.ejlchina.searcher.bean.SearchBean;
+import com.ejlchina.searcher.bean.*;
 import com.ejlchina.searcher.param.Operator;
 import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.util.Date;
+import java.util.Map;
 
 @SearchBean(
 		tables = "employee e, department d",
@@ -16,21 +13,28 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 		autoMapTo = "e"							// 字段没使用 DbField 注解时，自动映射到 employee 表
 )
 public class Employee
-		implements BeanAware, BeanParaAware    	// 这两接口 都是可选的
+		implements BeanAware, ParamAware    	// 这两接口 都是可选的
 {
 
+	// 自动映射到 "e.id"
 	private Long id;
 
 	@DbField(onlyOn = Operator.Equal)
 	private String name;
 
+	// 自动映射到 "e.age"
 	private Integer age;
 
 	@DbField("d.name")
 	private String department;
 
+	// 自动映射到 "e.entry_date"
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm", timezone = "GMT+8")
 	private Date entryDate;
+
+	// 该字段不会映射到数据表
+	@DbIgnore
+	private String ignoreField = "ignore";
 
 	public Long getId() {
 		return id;
@@ -72,16 +76,24 @@ public class Employee
 		this.entryDate = entryDate;
 	}
 
+	public String getIgnoreField() {
+		return ignoreField;
+	}
+
+	public void setIgnoreField(String ignoreField) {
+		this.ignoreField = ignoreField;
+	}
+
 	/**
 	 * BeanAware 接口的方法
 	 */
 	@Override
 	public void afterAssembly() {
-		System.out.println("id = " + id + ", name = " + name + ", age = " + age);
+		System.out.println("id = " + id + ", name = " + name + ", age = " + age + ", ignoreField = " + ignoreField);
 	}
 
 	/**
-	 * BeanParaAware 接口的方法
+	 * ParamAware 接口的方法
 	 */
 	@Override
 	public void afterAssembly(Map<String, Object> paraMap) {
