@@ -38,22 +38,22 @@ public class SearcherBuilder {
 
 		private MetaResolver metaResolver;
 
-		public Builder searchParamResolver(ParamResolver paramResolver) {
+		public Builder paramResolver(ParamResolver paramResolver) {
 			this.paramResolver = paramResolver;
 			return (Builder) this;
 		}
 
-		public Builder searchSqlResolver(SqlResolver sqlResolver) {
+		public Builder sqlResolver(SqlResolver sqlResolver) {
 			this.sqlResolver = sqlResolver;
 			return (Builder) this;
 		}
 
-		public Builder searchSqlExecutor(SqlExecutor sqlExecutor) {
+		public Builder sqlExecutor(SqlExecutor sqlExecutor) {
 			this.sqlExecutor = sqlExecutor;
 			return (Builder) this;
 		}
 
-		public Builder metadataResolver(MetaResolver metaResolver) {
+		public Builder metaResolver(MetaResolver metaResolver) {
 			this.metaResolver = metaResolver;
 			return (Builder) this;
 		}
@@ -87,7 +87,7 @@ public class SearcherBuilder {
 
 		private BeanReflector beanReflector;
 
-		public BeanSearcherBuilder searchResultResolver(BeanReflector beanReflector) {
+		public BeanSearcherBuilder beanReflector(BeanReflector beanReflector) {
 			this.beanReflector = beanReflector;
 			return this;
 		}
