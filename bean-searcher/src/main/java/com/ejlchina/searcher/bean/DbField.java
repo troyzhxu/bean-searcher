@@ -10,10 +10,10 @@ import java.lang.annotation.Target;
 
 /**
  * 用于注解一个可检索 bean 的属性
- * 来指定属性对应数据库的哪张表的哪个字段，与 @SearchBean 配合使用
- * 
+ * 来指定属性对应数据库的哪张表的哪个字段，可与 @SearchBean 配合使用
+ * 不可与 @DbIgnore 同时使用
  * @author Troy.Zhou @ 2017-03-20
- *  
+ * @since v1.0.0
  */
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
@@ -31,12 +31,14 @@ public @interface DbField {
 
 	/**
 	 * @return 该字段是否可以被作为检索条件
+	 * @since v3.0.0
 	 */
 	boolean conditional() default true;
 
 	/**
 	 * 用于指定该字段只允许接受的运算符，为空时，表示任意运算符都接受
 	 * @return Operator[]
+	 * @since v3.0.0
 	 */
 	Operator[] onlyOn() default {};
 

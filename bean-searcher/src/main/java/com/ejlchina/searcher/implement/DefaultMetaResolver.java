@@ -2,6 +2,7 @@ package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.bean.DbField;
+import com.ejlchina.searcher.bean.DbIgnore;
 import com.ejlchina.searcher.bean.SearchBean;
 import com.ejlchina.searcher.param.Operator;
 import com.ejlchina.searcher.util.StringUtils;
@@ -116,7 +117,11 @@ public class DefaultMetaResolver implements MetaResolver {
 
     protected String dbFieldSql(SearchBean bean, Field field) {
         DbField dbField = field.getAnnotation(DbField.class);
+        boolean dbIgnore = field.getAnnotation(DbIgnore.class) != null;
         if (dbField != null) {
+            if (dbIgnore) {
+                throw new SearchException("[" + field.getDeclaringClass().getName() + ": " + field.getName() + "] is annotated by @DbField and @DbIgnore, which are mutually exclusive.");
+            }
             String fieldSql = dbField.value().trim();
             if (StringUtils.isNotBlank(fieldSql)) {
                 if (fieldSql.toLowerCase().startsWith("select ")) {
@@ -124,6 +129,9 @@ public class DefaultMetaResolver implements MetaResolver {
                 }
                 return fieldSql;
             }
+        }
+        if (dbIgnore) {
+            return null;
         }
         // 没加 @SearchBean 注解，或者加了但没给 tables 赋值，则可以自动映射列名，因为此时默认为单表映射
         if (bean == null || StringUtils.isBlank(bean.tables())) {
