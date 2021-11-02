@@ -121,7 +121,7 @@ public class DefaultParamResolver implements ParamResolver {
 
 
 	protected List<FieldParam> resolveFieldParams(Collection<FieldMeta> fieldMetas, Map<String, Object> paraMap) {
-		Map<String, List<Integer>> fieldIndicesMap = new HashMap<>();
+		Map<String, Set<Integer>> fieldIndicesMap = new HashMap<>();
 		for (String key : paraMap.keySet()) {
 			int index = key.lastIndexOf(separator);
 			if (index > 0 && key.length() > index + 1) {
@@ -138,7 +138,7 @@ public class DefaultParamResolver implements ParamResolver {
 			if (!meta.isConditional()) {
 				continue;
 			}
-			List<Integer> indices = fieldIndicesMap.get(meta.getName());
+			Set<Integer> indices = fieldIndicesMap.get(meta.getName());
 			FieldParam param = toFieldParam(meta, indices, paraMap);
 			if (param != null) {
 				fieldParams.add(param);
@@ -147,11 +147,11 @@ public class DefaultParamResolver implements ParamResolver {
 		return fieldParams;
 	}
 
-	protected void mapFieldIndex(Map<String, List<Integer>> fieldIndicesKeysMap, String field, int index) {
-		fieldIndicesKeysMap.computeIfAbsent(field, k -> new ArrayList<>(2)).add(index);
+	protected void mapFieldIndex(Map<String, Set<Integer>> fieldIndicesKeysMap, String field, int index) {
+		fieldIndicesKeysMap.computeIfAbsent(field, k -> new HashSet<>(2)).add(index);
 	}
 
-	protected FieldParam toFieldParam(FieldMeta meta, List<Integer> indices, Map<String, Object> paraMap) {
+	protected FieldParam toFieldParam(FieldMeta meta, Set<Integer> indices, Map<String, Object> paraMap) {
 		String field = meta.getName();
 		Object opValue = paraMap.get(field + separator + operatorSuffix);
 		Operator operator = allowedOperator(opValue, meta.getOnlyOn());
@@ -162,22 +162,31 @@ public class DefaultParamResolver implements ParamResolver {
 		if (operator == Operator.Empty || operator == Operator.NotEmpty) {
 			return new FieldParam(field, operator);
 		}
-		if (indices != null && indices.size() > 0) {
-			FieldParam param = new FieldParam(field, operator);
-			param.setIgnoreCase(ObjectUtils.toBoolean(paraMap.get(field + separator + ignoreCaseSuffix)));
-			for (int index : indices) {
-				Object value = paraMap.get(field + separator + index);
-				if (value != null) {
-					param.addValue(value, index);
-				}
-			}
-			Object value = paraMap.get(field);
-			if (value != null) {
-				param.addValue(value, 0);
-			}
-			return param;
+		if (indices == null || indices.isEmpty()) {
+			return null;
 		}
-		return null;
+		List<FieldParam.Value> values = new ArrayList<>();
+		for (int index : indices) {
+			Object value = paraMap.get(field + separator + index);
+			if (index == 0 && value == null) {
+				value = paraMap.get(field);
+			}
+			values.add(new FieldParam.Value(value, index));
+		}
+		if (isAllEmpty(values)) {
+			return null;
+		}
+		boolean ignoreCase = ObjectUtils.toBoolean(paraMap.get(field + separator + ignoreCaseSuffix));
+		return new FieldParam(field, operator, values, ignoreCase);
+	}
+
+	private boolean isAllEmpty(List<FieldParam.Value> values) {
+		for (FieldParam.Value value : values) {
+			if (!value.isEmptyValue()) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	protected Operator allowedOperator(Object value, Operator[] onlyOn) {

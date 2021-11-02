@@ -3,6 +3,7 @@ package com.ejlchina.searcher.param;
 import com.ejlchina.searcher.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -25,12 +26,12 @@ public class FieldParam {
 	/**
 	 * 参数值
 	 */
-	private final List<Value> values = new ArrayList<>(2);
+	private final List<Value> values;
 
 	/**
 	 * 是否忽略大小写
 	 */
-	private boolean ignoreCase;
+	private final boolean ignoreCase;
 
 	/**
 	 * 字段参数值
@@ -56,16 +57,18 @@ public class FieldParam {
 	}
 
 	public FieldParam(String name, Operator operator) {
+		this(name, operator, Collections.emptyList(), false);
+	}
+
+	public FieldParam(String name, Operator operator, List<Value> values, boolean ignoreCase) {
 		this.name = name;
 		this.operator = operator;
+		this.values = values;
+		this.ignoreCase = ignoreCase;
 	}
 
 	public String getName() {
 		return name;
-	}
-	
-	public void addValue(Object value, int index) {
-		values.add(new Value(value, index));
 	}
 
 	public Object[] getValues() {
@@ -81,21 +84,8 @@ public class FieldParam {
 		return ignoreCase;
 	}
 
-	public void setIgnoreCase(boolean ignoreCase) {
-		this.ignoreCase = ignoreCase;
-	}
-
 	public Operator getOperator() {
 		return operator;
-	}
-
-	public boolean allValuesEmpty() {
-		for (Value value : values) {
-			if (!value.isEmptyValue()) {
-				return false;
-			}
-		}
-		return true;
 	}
 
 }

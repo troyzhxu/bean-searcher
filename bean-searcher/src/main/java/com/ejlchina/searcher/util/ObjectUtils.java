@@ -30,7 +30,7 @@ public class ObjectUtils {
 		return null;
 	}
 
-	public static Boolean toBoolean(Object value) {
+	public static boolean toBoolean(Object value) {
 		if (value != null) {
 			if (value instanceof Boolean) {
 				return (Boolean) value;
@@ -42,7 +42,7 @@ public class ObjectUtils {
 				return ((Number) value).intValue() != 0;
 			}
 		}
-		return Boolean.FALSE;
+		return false;
 	}
 
 	public static String string(Object value) {
