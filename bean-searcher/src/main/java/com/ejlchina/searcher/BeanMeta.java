@@ -3,10 +3,10 @@ package com.ejlchina.searcher;
 import java.util.*;
 
 /**
- * SearchBean 的属性与数据库表字段的映射信息
- *  
+ * SearchBean 的元信息
+ *
  * @author Troy.Zhou @ 2017-03-20
- * 
+ * @since v3.0.0
  */
 public class BeanMeta<T> {
 
@@ -14,6 +14,11 @@ public class BeanMeta<T> {
 	 * 用户 Bean Class
 	 */
 	private final Class<T> beanClass;
+
+	/**
+	 * 所属数据源
+	 */
+	private final String dataSource;
 
 	/**
 	 * 需要查询的数据表
@@ -41,15 +46,15 @@ public class BeanMeta<T> {
 	private final Map<String, FieldMeta> fieldMetaMap = new HashMap<>();
 
 
-
-	public BeanMeta(Class<T> beanClass, SqlSnippet tableSnippet, SqlSnippet joinCondSnippet, SqlSnippet groupBySnippet, boolean distinct) {
+	public BeanMeta(Class<T> beanClass, String dataSource, SqlSnippet tableSnippet, SqlSnippet joinCondSnippet,
+					SqlSnippet groupBySnippet, boolean distinct) {
 		this.beanClass = beanClass;
+		this.dataSource = dataSource;
 		this.tableSnippet = tableSnippet;
 		this.joinCondSnippet = joinCondSnippet;
 		this.groupBySnippet = groupBySnippet;
 		this.distinct = distinct;
 	}
-
 
 	public void addFieldMeta(String field, FieldMeta meta) {
 		if (fieldMetaMap.containsKey(field)) {
@@ -58,9 +63,12 @@ public class BeanMeta<T> {
 		fieldMetaMap.put(field, meta);
 	}
 
-
 	public Class<T> getBeanClass() {
 		return beanClass;
+	}
+
+	public String getDataSource() {
+		return dataSource;
 	}
 
 	public SqlSnippet getTableSnippet() {

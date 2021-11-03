@@ -17,11 +17,11 @@ import java.lang.annotation.Target;
 public @interface SearchBean {
 
 	/**
-	 * 指定数据源（默认：default）
+	 * 指定数据源
 	 * @since v3.0.0
 	 * @return 数据源
 	 */
-	String dataSource() default "default";
+	String dataSource() default "";
 
 	/**
 	 * 参与检索的数据库表名，例如:
