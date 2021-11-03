@@ -34,7 +34,7 @@ public class MapBuilder {
 
     private final Map<String, Object> map;
 
-    private FieldParam lastFieldParam = null;
+    private FieldParam fieldParam = null;
 
     public MapBuilder(Map<String, Object> map) {
         this.map = map;
@@ -69,10 +69,9 @@ public class MapBuilder {
     /**
      * 指定只 Select 某些字段
      * @param fields 需要 Select 的字段名，可多个
-     * @param <T> 泛型
      * @return MapBuilder
      */
-    public <T> MapBuilder onlySelect(String... fields) {
+    public MapBuilder onlySelect(String... fields) {
         @SuppressWarnings("unchecked")
         List<String> list = (List<String>) map.get(ONLY_SELECT);
         if (list == null) {
@@ -101,10 +100,9 @@ public class MapBuilder {
     /**
      * 指定 Select 需要排除哪些字段
      * @param fields 需要排除的字段名，可多个
-     * @param <T> 泛型
      * @return MapBuilder
      */
-    public <T> MapBuilder selectExclude(String... fields) {
+    public MapBuilder selectExclude(String... fields) {
         @SuppressWarnings("unchecked")
         List<String> list = (List<String>) map.get(SELECT_EXCLUDE);
         if (list == null) {
@@ -130,69 +128,64 @@ public class MapBuilder {
      * 指定某个字段的检索值
      * @param fieldName 字段名
      * @param values 检索值，可多个
-     * @param <T> 泛型
      * @return MapBuilder
      */
-    public <T> MapBuilder field(String fieldName, Object... values) {
+    public MapBuilder field(String fieldName, Object... values) {
         List<FieldParam.Value> pValues = new ArrayList<>();
         for (int index = 0; index < values.length; index++) {
             pValues.add(new FieldParam.Value(values[index], index));
         }
-        lastFieldParam = new FieldParam(fieldName, pValues);
+        fieldParam = new FieldParam(fieldName, pValues);
         @SuppressWarnings("unchecked")
         List<FieldParam> params = (List<FieldParam>) map.get(FIELD_PARAM_LIST);
         if (params == null) {
             params = new ArrayList<>();
             map.put(FIELD_PARAM_LIST, params);
         }
-        params.add(lastFieldParam);
+        params.add(fieldParam);
         return this;
     }
 
     /**
      * 指定上个字段的运算符
      * @param operator 检索运算符
-     * @param <T> 泛型
      * @return MapBuilder
      */
-    public <T> MapBuilder op(String operator) {
+    public MapBuilder op(String operator) {
         return op(Operator.from(operator));
     }
 
     /**
      * 指定上个字段的运算符
      * @param operator 检索运算符
-     * @param <T> 泛型
      * @return MapBuilder
      */
-    public <T> MapBuilder op(Operator operator) {
-        if (lastFieldParam == null) {
+    public MapBuilder op(Operator operator) {
+        if (fieldParam == null) {
             throw new IllegalStateException("the method [ op(...) ] must go after [ field(...) ] method");
         }
-        lastFieldParam.setOperator(operator);
+        fieldParam.setOperator(operator);
         return this;
     }
 
     /**
      * 指定上个字段检索时忽略大小写
-     * @param <T> 泛型
      * @return MapBuilder
      */
-    public <T> MapBuilder ic() {
+    public MapBuilder ic() {
         return ic(true);
     }
 
     /**
      * 指定上个字段检索时是否忽略大小写
-     * @param <T> 泛型
      * @param ignoreCase 是否忽略大小写
      * @return MapBuilder
      */
-    public <T> MapBuilder ic(boolean ignoreCase) {
-        if (lastFieldParam == null) {
+    public MapBuilder ic(boolean ignoreCase) {
+        if (fieldParam == null) {
             throw new IllegalStateException("the method [ ic(...) ] must go after [ field(...) ] method");
         }
-        lastFieldParam.setIgnoreCase(ignoreCase);
+        fieldParam.setIgnoreCase(ignoreCase);
         return this;
     }
 
@@ -209,35 +202,32 @@ public class MapBuilder {
 
     /**
      * 指定按某个字段排序
-     * @param <T> 泛型
      * @param fieldName 字段名
      * @param order 排序方法：asc, desc
      * @return MapBuilder
      */
-    public <T> MapBuilder orderBy(String fieldName, String order) {
+    public MapBuilder orderBy(String fieldName, String order) {
         map.put(ORDER_BY, new OrderBy(fieldName, order));
         return this;
     }
 
     /**
      * 分页
-     * @param <T> 泛型
      * @param page 页码，从 0 开始
      * @param size 每页大小
      * @return MapBuilder
      */
-    public <T> MapBuilder page(long page, int size) {
+    public MapBuilder page(long page, int size) {
         return limit(page * size, size);
     }
 
     /**
      * 分页
-     * @param <T> 泛型
      * @param offset 偏移量，从 0 开始
      * @param size 每页大小
      * @return MapBuilder
      */
-    public <T> MapBuilder limit(long offset, int size) {
+    public MapBuilder limit(long offset, int size) {
         map.put(PAGING, new Paging(size, offset));
         return this;
     }
