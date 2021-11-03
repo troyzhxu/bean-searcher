@@ -12,6 +12,7 @@ import java.lang.annotation.Target;
  * 用于注解一个可检索 bean 的属性
  * 来指定属性对应数据库的哪张表的哪个字段，可与 @SearchBean 配合使用
  * 不可与 @DbIgnore 同时使用
+ * v3.0.0 后该注解可以缺省，缺省时, 如果 @SearchBean 注解同时缺省 tables 或指定了 autoMapTo，则以 Field 自动映射到表字段
  * @author Troy.Zhou @ 2017-03-20
  * @since v1.0.0
  */
@@ -30,15 +31,15 @@ public @interface DbField {
 	String value() default "";
 
 	/**
-	 * @return 该字段是否可以被作为检索条件
 	 * @since v3.0.0
+	 * @return 该字段是否可以被作为检索条件
 	 */
 	boolean conditional() default true;
 
 	/**
 	 * 用于指定该字段只允许接受的运算符，为空时，表示任意运算符都接受
-	 * @return Operator[]
 	 * @since v3.0.0
+	 * @return Operator[]
 	 */
 	Operator[] onlyOn() default {};
 

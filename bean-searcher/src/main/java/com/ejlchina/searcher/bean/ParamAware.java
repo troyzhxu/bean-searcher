@@ -9,7 +9,7 @@ import java.util.Map;
  * 并且可以感知到检索时的参数
  *
  * @author Troy.Zhou @ 2021-11-01
- * 
+ * @since v3.0.0
  * */
 public interface ParamAware {
 
