@@ -10,9 +10,9 @@ import java.lang.annotation.Target;
 
 /**
  * 用于注解一个可检索 bean 的属性
- * 来指定属性对应数据库的哪张表的哪个字段，可与 @SearchBean 配合使用
- * 不可与 @DbIgnore 同时使用
- * v3.0.0 后该注解可以缺省，缺省时, 如果 @SearchBean 注解同时缺省 tables 或指定了 autoMapTo，则以 Field 自动映射到表字段
+ * 来指定属性对应数据库的哪张表的哪个字段，可与 {@link com.ejlchina.searcher.bean.SearchBean } 配合使用
+ * 不可与 {@link com.ejlchina.searcher.bean.DbIgnore } 在同一字段上使用
+ * v3.0.0 后该注解可以缺省，缺省时, 如果 @SearchBean 注解同时缺省 tables 或指定了 autoMapTo，则根据 {@link com.ejlchina.searcher.DbMapping } 自动映射到表字段
  * @author Troy.Zhou @ 2017-03-20
  * @since v1.0.0
  */

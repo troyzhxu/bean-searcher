@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 
 /**
  * 用于注解一个 SearchBean
- * v3.0.0 后该注解可以缺省，缺省时以 Class 信息自动映射数据库表
+ * v3.0.0 后该注解可以缺省，缺省时根据 {@link com.ejlchina.searcher.DbMapping } 自动映射数据库表
  * @author Troy.Zhou @ 2017-03-20
  */
 @Inherited

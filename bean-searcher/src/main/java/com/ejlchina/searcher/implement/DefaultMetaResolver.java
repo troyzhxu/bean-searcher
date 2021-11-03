@@ -26,16 +26,16 @@ public class DefaultMetaResolver implements MetaResolver {
 
     private SnippetResolver snippetResolver = new DefaultSnippetResolver();
 
-    private TableMapping tableMapping = new TableMapping() {
+    private DbMapping dbMapping = new DbMapping() {
 
         @Override
-        public String toTableName(Class<?> beanClass) {
+        public String tableName(Class<?> beanClass) {
             // 默认使用连字符风格的表名映射
             return StringUtils.toUnderline(beanClass.getSimpleName());
         }
 
         @Override
-        public String toColumnName(Field field) {
+        public String columnName(Field field) {
             // 默认使用连字符风格的字段映射
             return StringUtils.toUnderline(field.getName());
         }
@@ -103,7 +103,7 @@ public class DefaultMetaResolver implements MetaResolver {
 
     protected String tables(Class<?> beanClass, SearchBean bean) {
         if (bean == null || StringUtils.isBlank(bean.tables())) {
-            return tableMapping.toTableName(beanClass);
+            return dbMapping.tableName(beanClass);
         }
         return bean.tables().trim();
     }
@@ -136,13 +136,13 @@ public class DefaultMetaResolver implements MetaResolver {
         }
         // 没加 @SearchBean 注解，或者加了但没给 tables 赋值，则可以自动映射列名，因为此时默认为单表映射
         if (bean == null || StringUtils.isBlank(bean.tables())) {
-            return tableMapping.toColumnName(field);
+            return dbMapping.columnName(field);
         }
         String tab = bean.autoMapTo();
         if (StringUtils.isBlank(tab)) {
             return null;
         }
-        String column = tableMapping.toColumnName(field);
+        String column = dbMapping.columnName(field);
         return tab.trim() + "." + column;
     }
 
@@ -154,12 +154,12 @@ public class DefaultMetaResolver implements MetaResolver {
         this.snippetResolver = Objects.requireNonNull(snippetResolver);
     }
 
-    public TableMapping getTableMapping() {
-        return tableMapping;
+    public DbMapping getDbMapping() {
+        return dbMapping;
     }
 
-    public void setTableMapping(TableMapping tableMapping) {
-        this.tableMapping = Objects.requireNonNull(tableMapping);
+    public void setDbMapping(DbMapping dbMapping) {
+        this.dbMapping = Objects.requireNonNull(dbMapping);
     }
 
 }
