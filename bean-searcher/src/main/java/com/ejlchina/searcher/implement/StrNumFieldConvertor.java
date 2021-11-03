@@ -1,6 +1,7 @@
 package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.FieldConvertor;
+import com.ejlchina.searcher.FieldMeta;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -13,7 +14,7 @@ import java.math.BigInteger;
 public class StrNumFieldConvertor implements FieldConvertor {
 
     @Override
-    public boolean supports(Class<?> valueType, Class<?> targetType) {
+    public boolean supports(FieldMeta meta, Class<?> valueType, Class<?> targetType) {
         return valueType == String.class && (
                targetType == int.class || targetType == Integer.class ||
                targetType == long.class || targetType == Long.class ||
@@ -26,7 +27,7 @@ public class StrNumFieldConvertor implements FieldConvertor {
     }
 
     @Override
-    public Object convert(Object value, Class<?> targetType) {
+    public Object convert(FieldMeta meta, Object value, Class<?> targetType) {
         String number = (String) value;
         if (targetType == int.class || targetType == Integer.class) {
             return Integer.parseInt(number);
@@ -56,5 +57,3 @@ public class StrNumFieldConvertor implements FieldConvertor {
     }
 
 }
-
-

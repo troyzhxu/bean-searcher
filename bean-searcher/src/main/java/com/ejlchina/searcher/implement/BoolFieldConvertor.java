@@ -1,6 +1,7 @@
 package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.FieldConvertor;
+import com.ejlchina.searcher.FieldMeta;
 
 import java.util.Objects;
 
@@ -16,12 +17,12 @@ public class BoolFieldConvertor implements FieldConvertor {
 	private String[] falseValues = new String[] { "0", "OFF", "FALSE", "N", "NO", "F" };
 
 	@Override
-	public boolean supports(Class<?> valueType, Class<?> targetType) {
+	public boolean supports(FieldMeta meta, Class<?> valueType, Class<?> targetType) {
 		return (valueType == String.class || Number.class.isAssignableFrom(valueType)) && (targetType == boolean.class || targetType == Boolean.class);
 	}
 
 	@Override
-	public Object convert(Object value, Class<?> targetType) {
+	public Object convert(FieldMeta meta, Object value, Class<?> targetType) {
 		if (value instanceof String) {
 			String bool = (String) value;
 			for (String t: falseValues) {

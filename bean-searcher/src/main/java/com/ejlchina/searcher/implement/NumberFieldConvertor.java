@@ -1,6 +1,7 @@
 package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.FieldConvertor;
+import com.ejlchina.searcher.FieldMeta;
 
 /**
  * [数字 to 数字] 字段转换器
@@ -10,7 +11,7 @@ import com.ejlchina.searcher.FieldConvertor;
 public class NumberFieldConvertor implements FieldConvertor {
 
     @Override
-    public boolean supports(Class<?> valueType, Class<?> targetType) {
+    public boolean supports(FieldMeta meta, Class<?> valueType, Class<?> targetType) {
         return Number.class.isAssignableFrom(valueType) && (
                targetType == int.class || targetType == Integer.class ||
                targetType == long.class || targetType == Long.class ||
@@ -22,7 +23,7 @@ public class NumberFieldConvertor implements FieldConvertor {
     }
 
     @Override
-    public Object convert(Object value, Class<?> targetType) {
+    public Object convert(FieldMeta meta, Object value, Class<?> targetType) {
         Number number = (Number) value;
         if (targetType == int.class || targetType == Integer.class) {
             return number.intValue();

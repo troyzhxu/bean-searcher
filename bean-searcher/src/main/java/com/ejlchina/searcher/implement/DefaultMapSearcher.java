@@ -3,7 +3,8 @@ package com.ejlchina.searcher.implement;
 import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.param.FetchType;
 
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 
 /***
@@ -87,9 +88,8 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 		if (value != null && convertors.size() > 0) {
 			Class<?> valueType = value.getClass();
 			for (FieldConvertor convertor : convertors) {
-				if (convertor.supports(valueType, null) && (!(convertor instanceof FieldConvertor.Selector) ||
-						((FieldConvertor.Selector) convertor).supports(meta))) {
-					return convertor.convert(value, null);
+				if (convertor.supports(meta, valueType, null)) {
+					return convertor.convert(meta, value, null);
 				}
 			}
 		}
