@@ -57,7 +57,7 @@ public class BeanSearcherProperties {
 		/**
 		 * 分页参数配置
 		 */
-		private final PaginationPorps pagination = new PaginationPorps();
+		private final PaginationProps pagination = new PaginationProps();
 		
 		
 		public String getSort() {
@@ -100,12 +100,12 @@ public class BeanSearcherProperties {
 			this.operatorKey = operatorKey;
 		}
 
-		public PaginationPorps getPagination() {
+		public PaginationProps getPagination() {
 			return pagination;
 		}
 
 
-		public static class PaginationPorps {
+		public static class PaginationProps {
 
 			public static final String TYPE_PAGE = "page";
 

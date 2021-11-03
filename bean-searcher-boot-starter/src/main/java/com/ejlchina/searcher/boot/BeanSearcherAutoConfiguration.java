@@ -29,9 +29,9 @@ public class BeanSearcherAutoConfiguration {
 	@Bean
 	@ConditionalOnMissingBean(PageExtractor.class)
 	public PageExtractor pagination(BeanSearcherProperties config) {
-		ParamsProps.PaginationPorps conf = config.getParams().getPagination();
+		ParamsProps.PaginationProps conf = config.getParams().getPagination();
 		String type = conf.getType();
-		if (ParamsProps.PaginationPorps.TYPE_PAGE.equals(type)) {
+		if (ParamsProps.PaginationProps.TYPE_PAGE.equals(type)) {
 			PageSizeExtractor p = new PageSizeExtractor();
 			p.setMaxAllowedSize(conf.getMaxAllowedSize());
 			p.setSizeName(conf.getSize());
@@ -40,7 +40,7 @@ public class BeanSearcherAutoConfiguration {
 			p.setDefaultSize(conf.getDefaultSize());
 			return p;
 		} 
-		if (ParamsProps.PaginationPorps.TYPE_OFFSET.equals(type)) {
+		if (ParamsProps.PaginationProps.TYPE_OFFSET.equals(type)) {
 			PageOffsetExtractor p = new PageOffsetExtractor();
 			p.setMaxAllowedSize(conf.getMaxAllowedSize());
 			p.setSizeName(conf.getMax());
