@@ -22,6 +22,13 @@ public abstract class AbstractSearcher implements Searcher {
 
 	private MetaResolver metaResolver = new DefaultMetaResolver();
 
+	public AbstractSearcher() {
+	}
+
+	public AbstractSearcher(SqlExecutor sqlExecutor) {
+		this.sqlExecutor = sqlExecutor;
+	}
+
 	@Override
 	public <T> Number searchCount(Class<T> beanClass, Map<String, Object> paraMap) {
 		try (SqlResult<T> result = doSearch(beanClass, paraMap, new FetchType(FetchType.ONLY_TOTAL))) {

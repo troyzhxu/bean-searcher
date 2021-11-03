@@ -21,6 +21,13 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 
 	private BeanReflector beanReflector = new DefaultBeanReflector();
 
+	public DefaultBeanSearcher() {
+	}
+
+	public DefaultBeanSearcher(SqlExecutor sqlExecutor) {
+		super(sqlExecutor);
+	}
+
 	@Override
 	public <T> SearchResult<T> search(Class<T> beanClass, Map<String, Object> paraMap) {
 		return search(beanClass, paraMap, new FetchType(FetchType.ALL));

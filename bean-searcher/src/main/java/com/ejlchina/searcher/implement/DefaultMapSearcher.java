@@ -13,6 +13,15 @@ import java.util.*;
  */
 public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher {
 
+	private List<FieldConvertor> convertors = new ArrayList<>();
+
+	public DefaultMapSearcher() {
+	}
+
+	public DefaultMapSearcher(SqlExecutor sqlExecutor) {
+		super(sqlExecutor);
+	}
+
 	@Override
 	public <T> SearchResult<Map<String, Object>> search(Class<T> beanClass, Map<String, Object> paraMap) {
 		return search(beanClass, paraMap, new FetchType(FetchType.ALL));
@@ -56,7 +65,8 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 					Map<String, Object> dataMap = new HashMap<>();
 					for (String field : fetchFields) {
 						FieldMeta meta = beanMeta.requireFieldMeta(field);
-						dataMap.put(meta.getName(), listResult.getObject(meta.getDbAlias()));
+						Object value = listResult.getObject(meta.getDbAlias());
+						dataMap.put(meta.getName(), convert(meta, value));
 					}
 					result.addData(dataMap);
 				}
@@ -70,6 +80,34 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 			return result;
 		} catch (SQLException e) {
 			throw new SearchException("A exception occurred when collecting sql result!", e);
+		}
+	}
+
+	protected Object convert(FieldMeta meta, Object value) {
+		if (value != null && convertors.size() > 0) {
+			Class<?> valueType = value.getClass();
+			for (FieldConvertor convertor : convertors) {
+				if (convertor.supports(valueType, null) && (!(convertor instanceof FieldConvertor.Selector) ||
+						((FieldConvertor.Selector) convertor).supports(meta))) {
+					return convertor.convert(value, null);
+				}
+			}
+		}
+		return value;
+	}
+
+
+	public List<FieldConvertor> getConvertors() {
+		return convertors;
+	}
+
+	public void setConvertors(List<FieldConvertor> convertors) {
+		this.convertors = Objects.requireNonNull(convertors);
+	}
+
+	public void addConvertor(FieldConvertor convertor) {
+		if (convertor != null) {
+			convertors.add(convertor);
 		}
 	}
 

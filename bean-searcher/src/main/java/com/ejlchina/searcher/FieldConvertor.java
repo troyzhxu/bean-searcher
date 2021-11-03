@@ -12,8 +12,8 @@ public interface FieldConvertor {
 	/**
 	 * @since v3.0.0
 	 * 是否支持 valueType 转成 targetType
-	 * @param valueType 数据库值的类型
-	 * @param targetType 目标类型
+	 * @param valueType 数据库值的类型（非空）
+	 * @param targetType 目标类型（可空，为空时表示：字段转换后将放入 Map 对象里）
 	 * @return 是否支持
 	 */
 	boolean supports(Class<?> valueType, Class<?> targetType);
@@ -21,7 +21,7 @@ public interface FieldConvertor {
 	/**
 	 * 把 value 转换为 targetType 类型的数据
 	 * @param value 从数据库查出的字段值（非空）
-	 * @param targetType 转换目标类型
+	 * @param targetType 转换目标类型（可空，为空时表示：字段转换后将放入 Map 对象里）
 	 * @return 转换目标值
 	 * */
 	Object convert(Object value, Class<?> targetType);
@@ -35,13 +35,11 @@ public interface FieldConvertor {
 
 		/**
 		 * 是否支持某个 Bean 的某个字段
-		 * @param beanMeta Bean 元信息
-		 * @param field 需要转换的 Java 字段名
+		 * @param fieldMeta 需要转换的字段元信息（非空）
 		 * @return 是否支持
 		 */
-		boolean supports(BeanMeta<?> beanMeta, String field);
+		boolean supports(FieldMeta fieldMeta);
 
 	}
-
 
 }
