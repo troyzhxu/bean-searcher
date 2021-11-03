@@ -29,13 +29,13 @@ public class DefaultMetaResolver implements MetaResolver {
     private DbMapping dbMapping = new DbMapping() {
 
         @Override
-        public String tableName(Class<?> beanClass) {
+        public String table(Class<?> beanClass) {
             // 默认使用连字符风格的表名映射
             return StringUtils.toUnderline(beanClass.getSimpleName());
         }
 
         @Override
-        public String columnName(Field field) {
+        public String column(Field field) {
             // 默认使用连字符风格的字段映射
             return StringUtils.toUnderline(field.getName());
         }
@@ -104,7 +104,12 @@ public class DefaultMetaResolver implements MetaResolver {
 
     protected String tables(Class<?> beanClass, SearchBean bean) {
         if (bean == null || StringUtils.isBlank(bean.tables())) {
-            return dbMapping.tableName(beanClass);
+            String table = dbMapping.table(beanClass);
+            if (StringUtils.isBlank(table)) {
+                throw new SearchException("The class [" + beanClass.getName()
+                        + "] can not be searched, because there is no table mapping provided by @SearchBean and DbMapping");
+            }
+            return table.trim();
         }
         return bean.tables().trim();
     }
@@ -137,14 +142,25 @@ public class DefaultMetaResolver implements MetaResolver {
         }
         // 没加 @SearchBean 注解，或者加了但没给 tables 赋值，则可以自动映射列名，因为此时默认为单表映射
         if (bean == null || StringUtils.isBlank(bean.tables())) {
-            return dbMapping.columnName(field);
+            return getColumn(field);
         }
         String tab = bean.autoMapTo();
         if (StringUtils.isBlank(tab)) {
             return null;
         }
-        String column = dbMapping.columnName(field);
+        String column = getColumn(field);
+        if (column == null) {
+            return null;
+        }
         return tab.trim() + "." + column;
+    }
+
+    private String getColumn(Field field) {
+        String column = dbMapping.column(field);
+        if (StringUtils.isBlank(column)) {
+            return null;
+        }
+        return column.trim();
     }
 
     public SnippetResolver getSnippetResolver() {
