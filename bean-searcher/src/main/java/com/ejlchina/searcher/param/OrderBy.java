@@ -5,7 +5,7 @@ package com.ejlchina.searcher.param;
  * @author Troy.Zhou @ 2021-10-31
  * @since v3.0.0
  */
-public class OrderParam {
+public class OrderBy {
 
     /**
      * 排序字段（用于排序）
@@ -17,7 +17,7 @@ public class OrderParam {
      */
     private String order;
 
-    public OrderParam(String sort, String order) {
+    public OrderBy(String sort, String order) {
         this.sort = sort;
         this.order = order;
     }

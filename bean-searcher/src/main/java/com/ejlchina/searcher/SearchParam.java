@@ -2,7 +2,7 @@ package com.ejlchina.searcher;
 
 import com.ejlchina.searcher.param.FetchType;
 import com.ejlchina.searcher.param.FieldParam;
-import com.ejlchina.searcher.param.OrderParam;
+import com.ejlchina.searcher.param.OrderBy;
 import com.ejlchina.searcher.param.Paging;
 
 import java.util.List;
@@ -43,7 +43,7 @@ public class SearchParam {
 	/**
 	 * 排序参数
 	 */
-	private OrderParam orderParam;
+	private OrderBy orderBy;
 
 
 	public SearchParam(Map<String, Object> paraMap, FetchType fetchType, List<String> fetchFields, List<FieldParam> fieldParams) {
@@ -90,12 +90,12 @@ public class SearchParam {
 		this.paging = paging;
 	}
 
-	public OrderParam getOrderParam() {
-		return orderParam;
+	public OrderBy getOrderBy() {
+		return orderBy;
 	}
 
-	public void setOrderParam(OrderParam orderParam) {
-		this.orderParam = orderParam;
+	public void setOrderBy(OrderBy orderBy) {
+		this.orderBy = orderBy;
 	}
 
 }

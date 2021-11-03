@@ -95,7 +95,7 @@ public class DefaultParamResolver implements ParamResolver {
 		}
 		if (fetchType.shouldQueryList()) {
 			// 只有列表检索，才需要排序
-			searchParam.setOrderParam(resolveOrderParam(paraMap));
+			searchParam.setOrderBy(resolveOrderBy(beanMeta.getFieldSet(), paraMap));
 		}
 		return searchParam;
 	}
@@ -217,11 +217,17 @@ public class DefaultParamResolver implements ParamResolver {
 		return null;
 	}
 
-	private OrderParam resolveOrderParam(Map<String, Object> paraMap) {
+	private OrderBy resolveOrderBy(Set<String> fieldSet, Map<String, Object> paraMap) {
 		String sort = ObjectUtils.string(paraMap.get(sortName));
 		String order = ObjectUtils.string(paraMap.get(orderName));
-		if (sort != null) {
-			return new OrderParam(sort, order);
+		if (sort != null && fieldSet.contains(sort)) {
+			if ("asc".equalsIgnoreCase(order)) {
+				return new OrderBy(sort, "asc");
+			}
+			if ("desc".equalsIgnoreCase(order)) {
+				return new OrderBy(sort, "desc");
+			}
+			return new OrderBy(sort, null);
 		}
 		return null;
 	}

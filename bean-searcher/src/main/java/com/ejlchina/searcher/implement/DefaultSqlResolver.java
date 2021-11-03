@@ -156,15 +156,13 @@ public class DefaultSqlResolver implements SqlResolver {
 			}
 		}
 		if (fetchType.shouldQueryList()) {
-			OrderParam orderPara = searchParam.getOrderParam();
-			if (orderPara != null) {
-				FieldMeta meta = beanMeta.getFieldMeta(orderPara.getSort());
-				if (meta != null) {
-					builder.append(" order by ").append(meta.getDbAlias());
-					String order = orderPara.getOrder();
-					if (order != null) {
-						builder.append(" ").append(order);
-					}
+			OrderBy orderBy = searchParam.getOrderBy();
+			if (orderBy != null) {
+				FieldMeta meta = beanMeta.requireFieldMeta(orderBy.getSort());
+				builder.append(" order by ").append(meta.getDbAlias());
+				String order = orderBy.getOrder();
+				if (order != null) {
+					builder.append(" ").append(order);
 				}
 			}
 			String fromWhereSql = builder.toString();

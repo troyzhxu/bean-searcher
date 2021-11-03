@@ -11,7 +11,7 @@ import java.util.Map;
 public abstract class BasePageExtractor implements PageExtractor {
 
 	/**
-	 * 开始页
+	 * 开始页，或开始条数
 	 * */
 	private int start = 0;
 	
