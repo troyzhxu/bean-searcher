@@ -2,6 +2,7 @@ package com.ejlchina.searcher;
 
 import com.ejlchina.searcher.param.Operator;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 /**
@@ -15,14 +16,9 @@ public class FieldMeta {
     private final BeanMeta<?> beanMeta;
 
     /**
-     * Java 字段名
+     * Java 字段
      */
-    private final String name;
-
-    /**
-     * 该字段的类型
-     */
-    private final Class<?> type;
+    private final Field field;
 
     /**
      * 该字段的 Set 方法
@@ -50,11 +46,10 @@ public class FieldMeta {
     private final Operator[] onlyOn;
 
 
-    public FieldMeta(BeanMeta<?> beanMeta, String name, Class<?> type, Method setter, SqlSnippet fieldSql,
+    public FieldMeta(BeanMeta<?> beanMeta, Field field, Method setter, SqlSnippet fieldSql,
                      String dbAlias, boolean conditional, Operator[] onlyOn) {
         this.beanMeta = beanMeta;
-        this.name = name;
-        this.type = type;
+        this.field = field;
         this.setter = setter;
         this.fieldSql = fieldSql;
         this.dbAlias = dbAlias;
@@ -66,12 +61,16 @@ public class FieldMeta {
         return beanMeta;
     }
 
+    public Field getField() {
+        return field;
+    }
+
     public String getName() {
-        return name;
+        return field.getName();
     }
 
     public Class<?> getType() {
-        return type;
+        return field.getType();
     }
 
     public Method getSetter() {

@@ -89,7 +89,7 @@ public class DefaultMetaResolver implements MetaResolver {
         DbField dbField = field.getAnnotation(DbField.class);
         boolean conditional = dbField == null || dbField.conditional();
         Operator[] onlyOn = dbField != null ? dbField.onlyOn() : EMPTY_OPERATORS;
-        return new FieldMeta(beanMeta, field.getName(), field.getType(), setter, snippet, dbAlias, conditional, onlyOn);
+        return new FieldMeta(beanMeta, field, setter, snippet, dbAlias, conditional, onlyOn);
     }
 
     protected Method getSetterMethod(Class<?> beanClass, Field field) {
