@@ -73,7 +73,7 @@ public class DefaultMetaResolver implements MetaResolver {
                 continue;
             }
             SqlSnippet fieldSnippet = snippetResolver.resolve(fieldSql);
-            FieldMeta fieldMeta = resolveFieldMeta(beanClass, field, fieldSnippet, index);
+            FieldMeta fieldMeta = resolveFieldMeta(beanMeta, field, fieldSnippet, index);
             beanMeta.addFieldMeta(field.getName(), fieldMeta);
         }
         if (beanMeta.getFieldCount() == 0) {
@@ -82,13 +82,14 @@ public class DefaultMetaResolver implements MetaResolver {
         return beanMeta;
     }
 
-    protected FieldMeta resolveFieldMeta(Class<?> beanClass, Field field, SqlSnippet snippet, int index) {
+    protected FieldMeta resolveFieldMeta(BeanMeta<?> beanMeta, Field field, SqlSnippet snippet, int index) {
+        Class<?> beanClass = beanMeta.getBeanClass();
         Method setter = getSetterMethod(beanClass, field);
         String dbAlias = "_" + index;
         DbField dbField = field.getAnnotation(DbField.class);
         boolean conditional = dbField == null || dbField.conditional();
         Operator[] onlyOn = dbField != null ? dbField.onlyOn() : EMPTY_OPERATORS;
-        return new FieldMeta(field.getName(), field.getType(), setter, snippet, dbAlias, conditional, onlyOn);
+        return new FieldMeta(beanMeta, field.getName(), field.getType(), setter, snippet, dbAlias, conditional, onlyOn);
     }
 
     protected Method getSetterMethod(Class<?> beanClass, Field field) {

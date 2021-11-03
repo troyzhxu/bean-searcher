@@ -10,6 +10,11 @@ import java.lang.reflect.Method;
 public class FieldMeta {
 
     /**
+     * 所属的 Bean 元信息
+     */
+    private final BeanMeta<?> beanMeta;
+
+    /**
      * Java 字段名
      */
     private final String name;
@@ -45,7 +50,9 @@ public class FieldMeta {
     private final Operator[] onlyOn;
 
 
-    public FieldMeta(String name, Class<?> type, Method setter, SqlSnippet fieldSql, String dbAlias, boolean conditional, Operator[] onlyOn) {
+    public FieldMeta(BeanMeta<?> beanMeta, String name, Class<?> type, Method setter, SqlSnippet fieldSql,
+                     String dbAlias, boolean conditional, Operator[] onlyOn) {
+        this.beanMeta = beanMeta;
         this.name = name;
         this.type = type;
         this.setter = setter;
@@ -53,6 +60,10 @@ public class FieldMeta {
         this.dbAlias = dbAlias;
         this.conditional = conditional;
         this.onlyOn = onlyOn;
+    }
+
+    public BeanMeta<?> getBeanMeta() {
+        return beanMeta;
     }
 
     public String getName() {
