@@ -26,4 +26,22 @@ public interface FieldConvertor {
 	 * */
 	Object convert(Object value, Class<?> targetType);
 
+	/**
+	 * 进一步指定该转换器支持哪些 Bean 和 字段
+	 * @author Troy.Zhou @ 2021-11-03
+	 * @since v3.0.0
+	 */
+	interface Selector {
+
+		/**
+		 * 是否支持某个 Bean 的某个字段
+		 * @param beanMeta Bean 元信息
+		 * @param field 需要转换的 Java 字段名
+		 * @return 是否支持
+		 */
+		boolean supports(BeanMeta<?> beanMeta, String field);
+
+	}
+
+
 }

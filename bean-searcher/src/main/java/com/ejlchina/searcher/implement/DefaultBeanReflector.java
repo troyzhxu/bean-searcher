@@ -29,7 +29,7 @@ public class DefaultBeanReflector implements BeanReflector {
 			FieldMeta meta = beanMeta.requireFieldMeta(field);
 			Object value = valueGetter.apply(meta.getDbAlias());
 			try {
-				value = convert(value, meta.getType());
+				value = convert(beanMeta, field, value, meta.getType());
 			} catch (Exception e) {
 				throw new SearchException(
 						"The type of [" + beanClass + "#" + field + "] is mismatch with it's database table field type", e);
@@ -46,7 +46,7 @@ public class DefaultBeanReflector implements BeanReflector {
 		return bean;
 	}
 
-	protected Object convert(Object value, Class<?> targetType) {
+	protected Object convert(BeanMeta<?> beanMeta, String field, Object value, Class<?> targetType) {
 		if (value == null) {
 			return null;
 		}
@@ -57,16 +57,19 @@ public class DefaultBeanReflector implements BeanReflector {
 		}
 		Exception ex = null;
 		for (FieldConvertor convertor: convertors) {
-			if (convertor.supports(valueType, targetType)) {
-				try {
-					return convertor.convert(value, targetType);
-				} catch (Exception e) {
-					if (ex != null) {
-						e.initCause(ex);
-					}
-					ex = e;
-				}
+			if (!convertor.supports(valueType, targetType) || convertor instanceof FieldConvertor.Selector &&
+					!((FieldConvertor.Selector) convertor).supports(beanMeta, field)) {
+				continue;
 			}
+			try {
+				return convertor.convert(value, targetType);
+			} catch (Exception e) {
+				if (ex != null) {
+					e.initCause(ex);
+				}
+				ex = e;
+			}
+
 		}
 		throw new SearchException("不能把【" + valueType + "】类型的数据库值转换为【" + targetType + "】类型的字段值，你可以添加一个 FieldConvertor 来转换它！", ex);
 	}
