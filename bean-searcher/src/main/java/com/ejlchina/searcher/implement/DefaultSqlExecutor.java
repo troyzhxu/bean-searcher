@@ -1,12 +1,19 @@
 package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.*;
+import com.ejlchina.searcher.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * JDBC Search Sql 执行器
@@ -19,9 +26,17 @@ public class DefaultSqlExecutor implements SqlExecutor {
 
 
 	protected Logger log = LoggerFactory.getLogger(DefaultSqlExecutor.class);
-	
-	
+
+	/**
+	 * 默认数据源
+	 */
 	private DataSource dataSource;
+
+	/**
+	 * 多数据源
+	 * @since v3.0.0
+	 */
+	private final Map<String, DataSource> dataSourceMap = new ConcurrentHashMap<>();
 
 	/**
 	 * 是否使用只读事务
@@ -41,9 +56,6 @@ public class DefaultSqlExecutor implements SqlExecutor {
 		if (!searchSql.isShouldQueryList() && !searchSql.isShouldQueryCluster()) {
 			return new SqlResult<>(searchSql);
 		}
-		if (dataSource == null) {
-			throw new SearchException("You must config a dataSource for MainSearchSqlExecutor!");
-		}
 		Connection connection;
 		try {
 			connection = getConnection(searchSql.getBeanMeta());
@@ -60,6 +72,17 @@ public class DefaultSqlExecutor implements SqlExecutor {
 	}
 
 	protected Connection getConnection(BeanMeta<?> beanMeta) throws SQLException {
+		String name = beanMeta.getDataSource();
+		if (StringUtils.isBlank(name)) {
+			if (dataSource == null) {
+				throw new SearchException("There is no default dataSource for " + beanMeta.getBeanClass());
+			}
+			return dataSource.getConnection();
+		}
+		DataSource dataSource = dataSourceMap.get(name);
+		if (dataSource == null) {
+			throw new SearchException("There is no dataSource named " + name + " for " + beanMeta.getBeanClass());
+		}
 		return dataSource.getConnection();
 	}
 
@@ -135,21 +158,31 @@ public class DefaultSqlExecutor implements SqlExecutor {
 	}
 
 	/**
-	 * 设置数据源
-	 *
-	 * @param dataSource
-	 *            数据源
+	 * 设置默认数据源
+	 * @param dataSource 数据源
 	 */
 	public void setDataSource(DataSource dataSource) {
-		this.dataSource = dataSource;
+		this.dataSource = Objects.requireNonNull(dataSource);
 	}
 
 	public DataSource getDataSource() {
 		return dataSource;
 	}
 
-	public boolean isTransactional() {
-		return transactional;
+	/**
+	 * 添加数据源
+	 * @since v3.0.0
+	 * @param name 数据源名称
+	 * @param dataSource 数据源
+	 */
+	public void addDataSource(String name, DataSource dataSource) {
+		if (name != null && dataSource != null) {
+			dataSourceMap.put(name.trim(), dataSource);
+		}
+	}
+
+	public Map<String, DataSource> getDataSourceMap() {
+		return dataSourceMap;
 	}
 
 	/**
@@ -158,6 +191,10 @@ public class DefaultSqlExecutor implements SqlExecutor {
 	 */
 	public void setTransactional(boolean transactional) {
 		this.transactional = transactional;
+	}
+
+	public boolean isTransactional() {
+		return transactional;
 	}
 
 }

@@ -60,7 +60,7 @@ public class DefaultMetaResolver implements MetaResolver {
         SearchBean bean = beanClass.getAnnotation(SearchBean.class);
         // v3.0.0 后 bean 可以为 null
         BeanMeta<T> beanMeta = new BeanMeta<>(beanClass,
-                bean != null ? bean.dataSource() : "",
+                bean != null ? bean.dataSource().trim() : null,
                 snippetResolver.resolve(tables(beanClass, bean)),
                 snippetResolver.resolve(joinCond(bean)),
                 snippetResolver.resolve(groupBy(bean)),
