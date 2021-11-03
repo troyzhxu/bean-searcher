@@ -2,6 +2,7 @@ package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.param.*;
+import com.ejlchina.searcher.util.MapBuilder;
 import com.ejlchina.searcher.util.ObjectUtils;
 import com.ejlchina.searcher.util.StringUtils;
 
@@ -86,7 +87,8 @@ public class DefaultParamResolver implements ParamResolver {
 				resolveFieldParams(beanMeta.getFieldMetas(), paraMap)
 		);
 		if (fetchType.canPaging()) {
-			Paging paging = pageExtractor.extract(paraMap);
+			Object value = paraMap.get(MapBuilder.PAGING);
+			Paging paging = value instanceof Paging ? (Paging) value : pageExtractor.extract(paraMap);
 			if (fetchType.isFetchFirst()) {
 				paging.setSize(1);
 			}
@@ -94,7 +96,12 @@ public class DefaultParamResolver implements ParamResolver {
 		}
 		if (fetchType.shouldQueryList()) {
 			// 只有列表检索，才需要排序
-			searchParam.setOrderBy(resolveOrderBy(beanMeta.getFieldSet(), paraMap));
+			Object value = paraMap.get(MapBuilder.ORDER_BY);
+			if (value instanceof OrderBy) {
+				searchParam.setOrderBy((OrderBy) value);
+			} else {
+				searchParam.setOrderBy(resolveOrderBy(beanMeta.getFieldSet(), paraMap));
+			}
 		}
 		return searchParam;
 	}
@@ -102,10 +109,10 @@ public class DefaultParamResolver implements ParamResolver {
 	protected List<String> resolveFetchFields(BeanMeta<?> beanMeta, FetchType fetchType, Map<String, Object> paraMap) {
 		if (fetchType.shouldQueryList() || beanMeta.isDistinct() || StringUtils.isNotBlank(beanMeta.getGroupBy())) {
 			Set<String> fieldList = beanMeta.getFieldSet();
-			List<String> onlySelect = toList(paraMap.get(onlySelectName)).stream()
-					.filter(fieldList::contains)
+			List<String> onlySelect = ObjectUtils.toList(getOnlySelect(paraMap))
+					.stream().filter(fieldList::contains)
 					.collect(Collectors.toList());
-			List<String> selectExclude = toList(paraMap.get(selectExcludeName));
+			List<String> selectExclude = ObjectUtils.toList(getSelectExclude(paraMap));
 			return (onlySelect.isEmpty() ? fieldList : onlySelect).stream()
 					.filter(f -> !selectExclude.contains(f))
 					.collect(Collectors.toList());
@@ -113,11 +120,21 @@ public class DefaultParamResolver implements ParamResolver {
 		return Collections.emptyList();
 	}
 
-
-	protected List<String> toList(Object value) {
-		return ObjectUtils.toList(value);
+	private Object getSelectExclude(Map<String, Object> paraMap) {
+		Object value = paraMap.get(MapBuilder.SELECT_EXCLUDE);
+		if (value != null) {
+			return value;
+		}
+		return paraMap.get(selectExcludeName);
 	}
 
+	private Object getOnlySelect(Map<String, Object> paraMap) {
+		Object value = paraMap.get(MapBuilder.ONLY_SELECT);
+		if (value != null) {
+			return value;
+		}
+		return paraMap.get(onlySelectName);
+	}
 
 	protected List<FieldParam> resolveFieldParams(Collection<FieldMeta> fieldMetas, Map<String, Object> paraMap) {
 		Map<String, Set<Integer>> fieldIndicesMap = new HashMap<>();
@@ -150,32 +167,49 @@ public class DefaultParamResolver implements ParamResolver {
 		fieldIndicesKeysMap.computeIfAbsent(field, k -> new HashSet<>(2)).add(index);
 	}
 
+	private FieldParam getFieldParam(Map<String, Object> paraMap, String field) {
+		Object value = paraMap.get(MapBuilder.FIELD_PARAM + "." + field);
+		if (value instanceof FieldParam) {
+			return (FieldParam) value;
+		}
+		return null;
+	}
+
 	protected FieldParam toFieldParam(FieldMeta meta, Set<Integer> indices, Map<String, Object> paraMap) {
 		String field = meta.getName();
-		Object opValue = paraMap.get(field + separator + operatorSuffix);
-		Operator operator = allowedOperator(opValue, meta.getOnlyOn());
+		FieldParam param = getFieldParam(paraMap, field);
+		Operator op = toOperator(field, paraMap, param);
+		Operator operator = allowedOperator(op, meta.getOnlyOn());
 		if (operator == null) {
-			// 表示该字段不支持 opValue 的检索
+			// 表示该字段不支持 op 的检索
 			return null;
 		}
-		if (operator == Operator.Empty || operator == Operator.NotEmpty) {
+		if (op != null && (operator == Operator.Empty || operator == Operator.NotEmpty)) {
 			return new FieldParam(field, operator);
 		}
-		if (indices == null || indices.isEmpty()) {
+		if ((indices == null || indices.isEmpty()) && param == null) {
 			return null;
 		}
-		List<FieldParam.Value> values = new ArrayList<>();
-		for (int index : indices) {
-			Object value = paraMap.get(field + separator + index);
-			if (index == 0 && value == null) {
-				value = paraMap.get(field);
+		List<FieldParam.Value> values = param != null ? param.getValueList() : new ArrayList<>();
+		if (values.isEmpty() && indices != null) {
+			for (int index : indices) {
+				Object value = paraMap.get(field + separator + index);
+				if (index == 0 && value == null) {
+					value = paraMap.get(field);
+				}
+				values.add(new FieldParam.Value(value, index));
 			}
-			values.add(new FieldParam.Value(value, index));
 		}
 		if (isAllEmpty(values)) {
 			return null;
 		}
-		boolean ignoreCase = ObjectUtils.toBoolean(paraMap.get(field + separator + ignoreCaseSuffix));
+		Boolean ignoreCase = null;
+		if (param != null) {
+			ignoreCase = param.isIgnoreCase();
+		}
+		if (ignoreCase == null) {
+			ignoreCase = ObjectUtils.toBoolean(paraMap.get(field + separator + ignoreCaseSuffix));
+		}
 		return new FieldParam(field, operator, values, ignoreCase);
 	}
 
@@ -188,14 +222,24 @@ public class DefaultParamResolver implements ParamResolver {
 		return true;
 	}
 
-	protected Operator allowedOperator(Object value, Operator[] onlyOn) {
-		Operator op = null;
+	private Operator toOperator(String field, Map<String, Object> paraMap, FieldParam param) {
+		if (param != null) {
+			Operator op = param.getOperator();
+			if (op != null) {
+				return op;
+			}
+		}
+		Object value = paraMap.get(field + separator + operatorSuffix);
 		if (value instanceof Operator) {
-			op = (Operator) value;
+			return (Operator) value;
 		}
 		if (value instanceof String) {
-			op = Operator.from((String) value);
+			return Operator.from((String) value);
 		}
+		return null;
+	}
+
+	protected Operator allowedOperator(Operator op, Operator[] onlyOn) {
 		if (op == null) {
 			if (onlyOn.length == 0) {
 				// 为空，代表没有约束，则缺省使用 Equal

@@ -31,7 +31,7 @@ public class FieldParam {
 	/**
 	 * 是否忽略大小写
 	 */
-	private boolean ignoreCase;
+	private Boolean ignoreCase;
 
 	/**
 	 * 字段参数值
@@ -85,7 +85,11 @@ public class FieldParam {
 		return objects;
 	}
 
-	public boolean isIgnoreCase() {
+	public List<Value> getValueList() {
+		return values;
+	}
+
+	public Boolean isIgnoreCase() {
 		return ignoreCase;
 	}
 
@@ -97,7 +101,7 @@ public class FieldParam {
 		this.operator = operator;
 	}
 
-	public void setIgnoreCase(boolean ignoreCase) {
+	public void setIgnoreCase(Boolean ignoreCase) {
 		this.ignoreCase = ignoreCase;
 	}
 

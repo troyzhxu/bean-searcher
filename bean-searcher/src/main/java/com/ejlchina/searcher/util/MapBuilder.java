@@ -23,7 +23,7 @@ public class MapBuilder {
 
     public static final String ORDER_BY = OrderBy.class.getName();
     public static final String PAGING = Paging.class.getName();
-    public static final String FIELD_PARAM_LIST = FieldParam.class.getName();
+    public static final String FIELD_PARAM = FieldParam.class.getName();
     public static final String ONLY_SELECT = SearchParam.class.getName() + ".ONLY_SELECT";
     public static final String SELECT_EXCLUDE = SearchParam.class.getName() + ".SELECT_EXCLUDE";
 
@@ -135,14 +135,9 @@ public class MapBuilder {
         for (int index = 0; index < values.length; index++) {
             pValues.add(new FieldParam.Value(values[index], index));
         }
-        fieldParam = new FieldParam(fieldName, pValues);
-        @SuppressWarnings("unchecked")
-        List<FieldParam> params = (List<FieldParam>) map.get(FIELD_PARAM_LIST);
-        if (params == null) {
-            params = new ArrayList<>();
-            map.put(FIELD_PARAM_LIST, params);
-        }
-        params.add(fieldParam);
+        String field = fieldName.trim();
+        fieldParam = new FieldParam(field, pValues);
+        map.put(FIELD_PARAM + "." + field, fieldParam);
         return this;
     }
 
