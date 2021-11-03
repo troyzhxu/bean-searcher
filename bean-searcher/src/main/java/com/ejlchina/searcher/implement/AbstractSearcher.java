@@ -10,7 +10,8 @@ import java.util.*;
 
 /***
  * 自动检索器 根据 Bean 的 Class 和请求参数，自动检索 Bean
- * @author Troy.Zhou @ 2017-03-20
+ * @author Troy.Zhou @ 2021-10-30
+ * @since v3.0.0
  */
 public abstract class AbstractSearcher implements Searcher {
 
@@ -21,6 +22,8 @@ public abstract class AbstractSearcher implements Searcher {
 	private SqlResolver sqlResolver = new DefaultSqlResolver();
 
 	private MetaResolver metaResolver = new DefaultMetaResolver();
+
+	private List<SqlInterceptor> interceptors;
 
 	public AbstractSearcher() {
 	}
@@ -80,9 +83,20 @@ public abstract class AbstractSearcher implements Searcher {
 		BeanMeta<T> beanMeta = metaResolver.resolve(beanClass);
 		SearchParam searchParam = paramResolver.resolve(beanMeta, fetchType, paraMap);
 		SearchSql<T> searchSql = sqlResolver.resolve(beanMeta, searchParam);
-		return sqlExecutor.execute(searchSql);
+		return sqlExecutor.execute(intercept(searchSql, paraMap));
 	}
-	
+
+	protected <T> SearchSql<T> intercept(SearchSql<T> searchSql, Map<String, Object> paraMap) {
+		List<SqlInterceptor> interceptors = this.interceptors;
+		if (interceptors == null) {
+			return searchSql;
+		}
+		for (SqlInterceptor interceptor : interceptors) {
+			searchSql = interceptor.intercept(searchSql, paraMap);
+		}
+		return searchSql;
+	}
+
 	public ParamResolver getParamResolver() {
 		return paramResolver;
 	}
@@ -113,6 +127,14 @@ public abstract class AbstractSearcher implements Searcher {
 
 	public void setMetaResolver(MetaResolver metaResolver) {
 		this.metaResolver = Objects.requireNonNull(metaResolver);
+	}
+
+	public List<SqlInterceptor> getInterceptors() {
+		return interceptors;
+	}
+
+	public void setInterceptors(List<SqlInterceptor> interceptors) {
+		this.interceptors = Objects.requireNonNull(interceptors);
 	}
 
 }

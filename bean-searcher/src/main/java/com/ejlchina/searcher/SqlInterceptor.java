@@ -11,10 +11,10 @@ public interface SqlInterceptor {
 
     /**
      * Sql 拦截
-     * @param searchSql 检索 SQL 信息
-     * @param paraMap 原始检索参数
      * @param <T> 泛型
-     * @return 新的检索 SQL
+     * @param searchSql 检索 SQL 信息（非空）
+     * @param paraMap 原始检索参数（非空）
+     * @return 新的检索 SQL（非空）
      */
     <T> SearchSql<T> intercept(SearchSql<T> searchSql, Map<String, Object> paraMap);
 
