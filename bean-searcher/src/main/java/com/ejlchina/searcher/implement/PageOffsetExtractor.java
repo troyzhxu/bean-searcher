@@ -1,6 +1,5 @@
 package com.ejlchina.searcher.implement;
 
-import com.ejlchina.searcher.util.MapBuilder;
 import com.ejlchina.searcher.util.ObjectUtils;
 
 import java.util.Map;
@@ -24,7 +23,6 @@ public class PageOffsetExtractor extends BasePageExtractor {
 	}
 
 	public void setOffsetName(String offsetName) {
-		MapBuilder.config(MapBuilder.OFFSET, offsetName);
 		this.offsetName = offsetName;
 	}
 

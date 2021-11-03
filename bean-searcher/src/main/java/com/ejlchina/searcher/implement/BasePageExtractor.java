@@ -2,7 +2,6 @@ package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.PageExtractor;
 import com.ejlchina.searcher.param.Paging;
-import com.ejlchina.searcher.util.MapBuilder;
 import com.ejlchina.searcher.util.ObjectUtils;
 
 import java.util.Map;
@@ -56,7 +55,6 @@ public abstract class BasePageExtractor implements PageExtractor {
 	}
 
 	public void setSizeName(String sizeName) {
-		MapBuilder.config(MapBuilder.SIZE, sizeName);
 		this.sizeName = sizeName;
 	}
 

@@ -2,7 +2,6 @@ package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.param.*;
-import com.ejlchina.searcher.util.MapBuilder;
 import com.ejlchina.searcher.util.ObjectUtils;
 import com.ejlchina.searcher.util.StringUtils;
 
@@ -253,7 +252,6 @@ public class DefaultParamResolver implements ParamResolver {
 	}
 
 	public void setSortName(String sortName) {
-		MapBuilder.config(MapBuilder.SORT, sortName);
 		this.sortName = Objects.requireNonNull(sortName);
 	}
 
@@ -262,7 +260,6 @@ public class DefaultParamResolver implements ParamResolver {
 	}
 
 	public void setOrderName(String orderName) {
-		MapBuilder.config(MapBuilder.ORDER, orderName);
 		this.orderName = Objects.requireNonNull(orderName);
 	}
 
@@ -271,7 +268,6 @@ public class DefaultParamResolver implements ParamResolver {
 	}
 
 	public void setIgnoreCaseSuffix(String ignoreCaseSuffix) {
-		MapBuilder.config(MapBuilder.IC_SUFFIX, ignoreCaseSuffix);
 		this.ignoreCaseSuffix = Objects.requireNonNull(ignoreCaseSuffix);
 	}
 
@@ -280,7 +276,6 @@ public class DefaultParamResolver implements ParamResolver {
 	}
 
 	public void setOperatorSuffix(String operatorSuffix) {
-		MapBuilder.config(MapBuilder.OP_SUFFIX, operatorSuffix);
 		this.operatorSuffix = Objects.requireNonNull(operatorSuffix);
 	}
 
@@ -289,7 +284,6 @@ public class DefaultParamResolver implements ParamResolver {
 	}
 
 	public void setSeparator(String separator) {
-		MapBuilder.config(MapBuilder.SEPARATOR, separator);
 		this.separator = Objects.requireNonNull(separator);
 	}
 

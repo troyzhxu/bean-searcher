@@ -21,7 +21,7 @@ public class FieldParam {
 	/**
 	 * 字段运算符
 	 */
-	private final Operator operator;
+	private Operator operator;
 
 	/**
 	 * 参数值
@@ -31,7 +31,7 @@ public class FieldParam {
 	/**
 	 * 是否忽略大小写
 	 */
-	private final boolean ignoreCase;
+	private boolean ignoreCase;
 
 	/**
 	 * 字段参数值
@@ -60,6 +60,11 @@ public class FieldParam {
 		this(name, operator, Collections.emptyList(), false);
 	}
 
+	public FieldParam(String name, List<Value> values) {
+		this.name = name;
+		this.values = values;
+	}
+
 	public FieldParam(String name, Operator operator, List<Value> values, boolean ignoreCase) {
 		this.name = name;
 		this.operator = operator;
@@ -86,6 +91,14 @@ public class FieldParam {
 
 	public Operator getOperator() {
 		return operator;
+	}
+
+	public void setOperator(Operator operator) {
+		this.operator = operator;
+	}
+
+	public void setIgnoreCase(boolean ignoreCase) {
+		this.ignoreCase = ignoreCase;
 	}
 
 }

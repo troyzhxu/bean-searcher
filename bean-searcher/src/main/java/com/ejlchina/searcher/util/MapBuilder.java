@@ -1,28 +1,20 @@
 package com.ejlchina.searcher.util;
 
+import com.ejlchina.searcher.param.FieldParam;
 import com.ejlchina.searcher.param.Operator;
+import com.ejlchina.searcher.param.OrderBy;
+import com.ejlchina.searcher.param.Paging;
 
 import java.io.Serializable;
 import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.Method;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 public class MapBuilder {
-
-    public static final String SEPARATOR = "-";
-    public static final String OP_SUFFIX = "op";
-    public static final String IC_SUFFIX = "ic";
-    public static final String SORT = "sort";
-    public static final String ORDER = "order";
-    public static final String PAGE = "page";
-    public static final String SIZE = "size";
-    public static final String OFFSET = "offset";
-    public static final String MAX = "max";
-
-    private static final Map<String, String> CONFIGS = new HashMap<>();
 
     @FunctionalInterface
     public interface FieldFn<T, R> extends Function<T, R>, Serializable {  }
@@ -31,22 +23,10 @@ public class MapBuilder {
 
     private final Map<String, Object> map;
 
-    private String lastField = null;
+    private FieldParam lastFieldParam = null;
 
     public MapBuilder(Map<String, Object> map) {
         this.map = map;
-    }
-
-    public static void config(String key, String value) {
-        CONFIGS.put(key, value);
-    }
-
-    public static String config(String key) {
-        String config = CONFIGS.get(key);
-        if (config != null) {
-            return config;
-        }
-        return key;
     }
 
     public MapBuilder put(String key, Object value) {
@@ -59,50 +39,42 @@ public class MapBuilder {
     }
 
     public <T> MapBuilder field(String fieldName, Object... values) {
-        String separator = config(SEPARATOR);
+        List<FieldParam.Value> pValues = new ArrayList<>();
         for (int index = 0; index < values.length; index++) {
-            map.put(fieldName + separator + index, values[index]);
+            pValues.add(new FieldParam.Value(values[index], index));
         }
-        lastField = fieldName;
-        return this;
-    }
-
-    public <T> MapBuilder op(Operator operator) {
-        if (lastField == null) {
-            throw new IllegalStateException("the method [ op(Operator operator) ] must go after [ val(FieldFunction<T, ?> fieldFn, Object... values) ]");
+        lastFieldParam = new FieldParam(fieldName, pValues);
+        @SuppressWarnings("unchecked")
+        List<FieldParam> params = (List<FieldParam>) map.get(FieldParam.class.getName());
+        if (params == null) {
+            params = new ArrayList<>();
+            map.put(FieldParam.class.getName(), params);
         }
-        map.put(lastField + config(SEPARATOR) + config(OP_SUFFIX), operator);
+        params.add(lastFieldParam);
         return this;
     }
 
     public <T> MapBuilder op(String operator) {
-        if (lastField == null) {
-            throw new IllegalStateException("the method [ op(Operator operator) ] must go after [ val(FieldFunction<T, ?> fieldFn, Object... values) ]");
+        return op(Operator.from(operator));
+    }
+
+    public <T> MapBuilder op(Operator operator) {
+        if (lastFieldParam == null) {
+            throw new IllegalStateException("the method [ op(...) ] must go after [ field(...) ] method");
         }
-        map.put(lastField + config(SEPARATOR) + config(OP_SUFFIX), operator);
+        lastFieldParam.setOperator(operator);
         return this;
     }
 
     public <T> MapBuilder ic() {
-        if (lastField == null) {
-            throw new IllegalStateException("the method [ ic() ] must go after [ val(FieldFunction<T, ?> fieldFn, Object... values) ]");
-        }
         return ic(true);
     }
 
     public <T> MapBuilder ic(boolean ignoreCase) {
-        if (lastField == null) {
-            throw new IllegalStateException("the method [ ic(boolean ignoreCase) ] must go after [ val(FieldFunction<T, ?> fieldFn, Object... values) ]");
+        if (lastFieldParam == null) {
+            throw new IllegalStateException("the method [ ic(...) ] must go after [ field(...) ] method");
         }
-        map.put(lastField + config(SEPARATOR) + config(IC_SUFFIX), ignoreCase);
-        return this;
-    }
-
-    public <T> MapBuilder ic(String ignoreCase) {
-        if (lastField == null) {
-            throw new IllegalStateException("the method [ ic(String ignoreCase) ] must go after [ val(FieldFunction<T, ?> fieldFn, Object... values) ]");
-        }
-        map.put(lastField + config(SEPARATOR) + config(IC_SUFFIX), ignoreCase);
+        lastFieldParam.setIgnoreCase(ignoreCase);
         return this;
     }
 
@@ -111,20 +83,16 @@ public class MapBuilder {
     }
 
     public <T> MapBuilder orderBy(String fieldName, String order) {
-        map.put(config(SORT), fieldName);
-        map.put(config(ORDER), order);
+        map.put(OrderBy.class.getName(), new OrderBy(fieldName, order));
         return this;
     }
 
-    public <T> MapBuilder page(int page, int size) {
-        map.put(config(PAGE), page);
-        map.put(config(SIZE), size);
-        return this;
+    public <T> MapBuilder page(long page, int size) {
+        return limit(page * size, size);
     }
 
-    public <T> MapBuilder limit(int offset, int max) {
-        map.put(config(OFFSET), offset);
-        map.put(config(MAX), max);
+    public <T> MapBuilder limit(long offset, int size) {
+        map.put(Paging.class.getName(), new Paging(size, offset));
         return this;
     }
 
