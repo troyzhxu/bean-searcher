@@ -1,5 +1,6 @@
 package com.ejlchina.searcher.util;
 
+import com.ejlchina.searcher.SearchParam;
 import com.ejlchina.searcher.param.FieldParam;
 import com.ejlchina.searcher.param.Operator;
 import com.ejlchina.searcher.param.OrderBy;
@@ -9,12 +10,22 @@ import java.io.Serializable;
 import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
+/**
+ * 检索参数构建起
+ */
 public class MapBuilder {
+
+    public static final String ORDER_BY = OrderBy.class.getName();
+    public static final String PAGING = Paging.class.getName();
+    public static final String FIELD_PARAM_LIST = FieldParam.class.getName();
+    public static final String ONLY_SELECT = SearchParam.class.getName() + ".ONLY_SELECT";
+    public static final String SELECT_EXCLUDE = SearchParam.class.getName() + ".SELECT_EXCLUDE";
 
     @FunctionalInterface
     public interface FieldFn<T, R> extends Function<T, R>, Serializable {  }
@@ -29,15 +40,99 @@ public class MapBuilder {
         this.map = map;
     }
 
+    /**
+     * 添加参数
+     * @param key 参数名
+     * @param value 参数值
+     * @return MapBuilder
+     */
     public MapBuilder put(String key, Object value) {
         map.put(key, value);
         return this;
     }
 
+    /**
+     * 指定只 Select 某些字段
+     * @param fieldFns 需要 Select 的字段表达式，可多个
+     * @param <T> 泛型
+     * @return MapBuilder
+     */
+    @SafeVarargs
+    public final <T> MapBuilder onlySelect(FieldFn<T, ?>... fieldFns) {
+        String[] fields = new String[fieldFns.length];
+        for (int i = 0; i < fields.length; i++) {
+            fields[i] = toFieldName(fieldFns[i]);
+        }
+        return onlySelect(fields);
+    }
+
+    /**
+     * 指定只 Select 某些字段
+     * @param fields 需要 Select 的字段名，可多个
+     * @param <T> 泛型
+     * @return MapBuilder
+     */
+    public <T> MapBuilder onlySelect(String... fields) {
+        @SuppressWarnings("unchecked")
+        List<String> list = (List<String>) map.get(ONLY_SELECT);
+        if (list == null) {
+            list = new ArrayList<>();
+            map.put(ONLY_SELECT, list);
+        }
+        Collections.addAll(list, fields);
+        return this;
+    }
+
+    /**
+     * 指定 Select 需要排除哪些字段
+     * @param fieldFns 需要排除的字段表达式，可多个
+     * @param <T> 泛型
+     * @return MapBuilder
+     */
+    @SafeVarargs
+    public final <T> MapBuilder selectExclude(FieldFn<T, ?>... fieldFns) {
+        String[] fields = new String[fieldFns.length];
+        for (int i = 0; i < fields.length; i++) {
+            fields[i] = toFieldName(fieldFns[i]);
+        }
+        return selectExclude(fields);
+    }
+
+    /**
+     * 指定 Select 需要排除哪些字段
+     * @param fields 需要排除的字段名，可多个
+     * @param <T> 泛型
+     * @return MapBuilder
+     */
+    public <T> MapBuilder selectExclude(String... fields) {
+        @SuppressWarnings("unchecked")
+        List<String> list = (List<String>) map.get(SELECT_EXCLUDE);
+        if (list == null) {
+            list = new ArrayList<>();
+            map.put(SELECT_EXCLUDE, list);
+        }
+        Collections.addAll(list, fields);
+        return this;
+    }
+
+    /**
+     * 指定某个字段的检索值
+     * @param fieldFn 字段表达式
+     * @param values 检索值，可多个
+     * @param <T> 泛型
+     * @return MapBuilder
+     */
     public <T> MapBuilder field(FieldFn<T, ?> fieldFn, Object... values) {
         return field(toFieldName(fieldFn), values);
     }
 
+    /**
+     * 指定某个字段的检索值
+     * @param fieldName 字段名
+     * @param values 检索值，可多个
+     * @param <T> 泛型
+     * @return MapBuilder
+     */
     public <T> MapBuilder field(String fieldName, Object... values) {
         List<FieldParam.Value> pValues = new ArrayList<>();
         for (int index = 0; index < values.length; index++) {
@@ -45,19 +140,31 @@ public class MapBuilder {
         }
         lastFieldParam = new FieldParam(fieldName, pValues);
         @SuppressWarnings("unchecked")
-        List<FieldParam> params = (List<FieldParam>) map.get(FieldParam.class.getName());
+        List<FieldParam> params = (List<FieldParam>) map.get(FIELD_PARAM_LIST);
         if (params == null) {
             params = new ArrayList<>();
-            map.put(FieldParam.class.getName(), params);
+            map.put(FIELD_PARAM_LIST, params);
         }
         params.add(lastFieldParam);
         return this;
     }
 
+    /**
+     * 指定上个字段的运算符
+     * @param operator 检索运算符
+     * @param <T> 泛型
+     * @return MapBuilder
+     */
     public <T> MapBuilder op(String operator) {
         return op(Operator.from(operator));
     }
 
+    /**
+     * 指定上个字段的运算符
+     * @param operator 检索运算符
+     * @param <T> 泛型
+     * @return MapBuilder
+     */
     public <T> MapBuilder op(Operator operator) {
         if (lastFieldParam == null) {
             throw new IllegalStateException("the method [ op(...) ] must go after [ field(...) ] method");
@@ -66,10 +173,21 @@ public class MapBuilder {
         return this;
     }
 
+    /**
+     * 指定上个字段检索时忽略大小写
+     * @param <T> 泛型
+     * @return MapBuilder
+     */
     public <T> MapBuilder ic() {
         return ic(true);
     }
 
+    /**
+     * 指定上个字段检索时是否忽略大小写
+     * @param <T> 泛型
+     * @param ignoreCase 是否忽略大小写
+     * @return MapBuilder
+     */
     public <T> MapBuilder ic(boolean ignoreCase) {
         if (lastFieldParam == null) {
             throw new IllegalStateException("the method [ ic(...) ] must go after [ field(...) ] method");
@@ -78,22 +196,58 @@ public class MapBuilder {
         return this;
     }
 
+    /**
+     * 指定按某个字段排序
+     * @param <T> 泛型
+     * @param fieldFn 字段表达式
+     * @param order 排序方法：asc, desc
+     * @return MapBuilder
+     */
     public <T> MapBuilder orderBy(FieldFn<T, ?> fieldFn, String order) {
         return orderBy(toFieldName(fieldFn), order);
     }
 
+    /**
+     * 指定按某个字段排序
+     * @param <T> 泛型
+     * @param fieldName 字段名
+     * @param order 排序方法：asc, desc
+     * @return MapBuilder
+     */
     public <T> MapBuilder orderBy(String fieldName, String order) {
-        map.put(OrderBy.class.getName(), new OrderBy(fieldName, order));
+        map.put(ORDER_BY, new OrderBy(fieldName, order));
         return this;
     }
 
+    /**
+     * 分页
+     * @param <T> 泛型
+     * @param page 页码，从 0 开始
+     * @param size 每页大小
+     * @return MapBuilder
+     */
     public <T> MapBuilder page(long page, int size) {
         return limit(page * size, size);
     }
 
+    /**
+     * 分页
+     * @param <T> 泛型
+     * @param offset 偏移量，从 0 开始
+     * @param size 每页大小
+     * @return MapBuilder
+     */
     public <T> MapBuilder limit(long offset, int size) {
-        map.put(Paging.class.getName(), new Paging(size, offset));
+        map.put(PAGING, new Paging(size, offset));
         return this;
+    }
+
+    /**
+     * 构建参数
+     * @return 检索参数
+     */
+    public Map<String, Object> build() {
+        return map;
     }
 
     private String toFieldName(FieldFn<?, ?> fieldFn) {
@@ -126,10 +280,6 @@ public class MapBuilder {
         } catch (ReflectiveOperationException e) {
             throw new IllegalStateException("无法反射出字段名", e);
         }
-    }
-
-    public Map<String, Object> build() {
-        return map;
     }
 
 }

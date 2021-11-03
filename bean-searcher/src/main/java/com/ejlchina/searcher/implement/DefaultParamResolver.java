@@ -292,7 +292,7 @@ public class DefaultParamResolver implements ParamResolver {
 	}
 
 	public void setOnlySelectName(String onlySelectName) {
-		this.onlySelectName = onlySelectName;
+		this.onlySelectName = Objects.requireNonNull(onlySelectName);
 	}
 
 	public String getSelectExcludeName() {
@@ -300,7 +300,7 @@ public class DefaultParamResolver implements ParamResolver {
 	}
 
 	public void setSelectExcludeName(String selectExcludeName) {
-		this.selectExcludeName = selectExcludeName;
+		this.selectExcludeName = Objects.requireNonNull(selectExcludeName);
 	}
 
 }
