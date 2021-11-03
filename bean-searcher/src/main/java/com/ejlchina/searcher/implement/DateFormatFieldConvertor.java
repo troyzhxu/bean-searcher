@@ -27,11 +27,18 @@ public class DateFormatFieldConvertor implements FieldConvertor {
 
     /**
      * 添加一个日期格式，例如：
-     * addPattern("com.example.bean.User.dateCreated", "yyyy-MM-dd");   // 这个日期格式只对 com.example.bean.User 的 dateCreated 字段起作用，优先级最高
-     * addPattern("com.example.bean.User", "yyyy-MM-dd HH");            // 这个日期格式可对 com.example.bean.User 类的所有字段起作用，但优先级比上一个低一点
-     * addPattern("com.example.bean", "yyyy-MM-dd HH:mm");              // 这个日期格式可对 com.example.bean 包下的所有类字段起作用，优先级比上一个再低一点
-     * addPattern("com.example", "yyyy-MM-dd HH:mm:ss");                // 这个日期格式可对 com.example 包下的所有类字段起作用，优先级比上一个更低一点
-     * addPattern("com", "yyyy-MM-dd HH:mm:ss:SSS");                    // 这个日期格式可对 com 包下的所有类字段起作用，但使用优先级最低
+     * <pre>
+     * addPattern("com.example.bean.User.dateCreated", "yyyy-MM-dd");
+     * 只对 com.example.bean.User 的 dateCreated 字段起作用，优先级最高
+     * addPattern("com.example.bean.User", "yyyy-MM-dd HH");
+     * 可对 com.example.bean.User 类的所有字段起作用，但优先级比上一个低一点
+     * addPattern("com.example.bean", "yyyy-MM-dd HH:mm");
+     * 可对 com.example.bean 包下的所有类字段起作用，优先级比上一个再低一点
+     * addPattern("com.example", "yyyy-MM-dd HH:mm:ss");
+     * 可对 com.example 包下的所有类字段起作用，优先级比上一个更低一点
+     * addPattern("com", "yyyy-MM-dd HH:mm:ss:SSS");
+     * 可对 com 包下的所有类字段起作用，但使用优先级最低
+     * </pre>
      * @param scope 生效范围（越精确，优先级越高）
      * @param pattern 日期格式
      */
