@@ -26,7 +26,6 @@ public class BeanSearcherProperties {
 		return sql;
 	}
 
-
 	public static class ParamsProps {
 
 		/**
@@ -53,6 +52,16 @@ public class BeanSearcherProperties {
 		 * 检索运算符参数名后缀
 		 */
 		private String operatorKey = "op";
+
+		/**
+		 * 用于指定只 Select 某些字段的参数名
+		 */
+		private String onlySelect = "onlySelect";
+
+		/**
+		 * 用于指定不需要 Select 的字段的参数名
+		 */
+		private String selectExclude = "selectExclude";
 
 		/**
 		 * 分页参数配置
@@ -100,10 +109,25 @@ public class BeanSearcherProperties {
 			this.operatorKey = operatorKey;
 		}
 
+		public String getOnlySelect() {
+			return onlySelect;
+		}
+
+		public void setOnlySelect(String onlySelect) {
+			this.onlySelect = onlySelect;
+		}
+
+		public String getSelectExclude() {
+			return selectExclude;
+		}
+
+		public void setSelectExclude(String selectExclude) {
+			this.selectExclude = selectExclude;
+		}
+
 		public PaginationProps getPagination() {
 			return pagination;
 		}
-
 
 		public static class PaginationProps {
 
@@ -117,13 +141,12 @@ public class BeanSearcherProperties {
 			private int defaultSize = 15;
 
 			/**
-			 * 分页类型:page 和  offset
+			 * 分页类型: page 和 offset
 			 * */
 			private String type = TYPE_PAGE;
 
 			/**
 			 * 默认分页大小参数名
-			 * 在 type = page 时有效
 			 */
 			private String size = "size";
 
@@ -132,12 +155,6 @@ public class BeanSearcherProperties {
 			 * 在 type = page 时有效
 			 */
 			private String page = "page";
-
-			/**
-			 * 分页大小参数名
-			 * 在 type = offset 时有效
-			 */
-			private String max = "max";
 
 			/**
 			 * 偏移分页参数名
@@ -186,14 +203,6 @@ public class BeanSearcherProperties {
 
 			public void setPage(String page) {
 				this.page = page;
-			}
-
-			public String getMax() {
-				return max;
-			}
-
-			public void setMax(String max) {
-				this.max = max;
 			}
 
 			public String getOffset() {

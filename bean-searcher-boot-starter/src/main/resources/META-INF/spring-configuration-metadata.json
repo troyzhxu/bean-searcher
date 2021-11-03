@@ -73,6 +73,20 @@
     },
     {
       "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$ParamsProps",
+      "defaultValue": "onlySelect",
+      "name": "bean-searcher.params.only-select",
+      "description": "用于指定只 Select 某些字段的参数名",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$ParamsProps",
+      "defaultValue": "selectExclude",
+      "name": "bean-searcher.params.select-exclude",
+      "description": "用于指定 Select 需要排除的字段的参数名",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$ParamsProps",
       "defaultValue": "order",
       "name": "bean-searcher.params.order",
       "description": "排序方法参数名",
@@ -84,13 +98,6 @@
       "name": "bean-searcher.params.pagination.default-size",
       "description": "默认分页大小",
       "type": "java.lang.Integer"
-    },
-    {
-      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$ParamsProps$PaginationProps",
-      "defaultValue": "max",
-      "name": "bean-searcher.params.pagination.max",
-      "description": "分页大小参数名 在 type = offset 时有效",
-      "type": "java.lang.String"
     },
     {
       "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$ParamsProps$PaginationProps",
@@ -117,7 +124,7 @@
       "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$ParamsProps$PaginationProps",
       "defaultValue": "size",
       "name": "bean-searcher.params.pagination.size",
-      "description": "默认分页大小参数名 在 type = page 时有效",
+      "description": "分页大小参数名",
       "type": "java.lang.String"
     },
     {

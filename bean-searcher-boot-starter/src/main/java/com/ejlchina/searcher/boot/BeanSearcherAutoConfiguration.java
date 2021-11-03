@@ -3,9 +3,10 @@ package com.ejlchina.searcher.boot;
 import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.boot.BeanSearcherProperties.ParamsProps;
 import com.ejlchina.searcher.boot.BeanSearcherProperties.SqlProps;
-import com.ejlchina.searcher.dialect.*;
+import com.ejlchina.searcher.dialect.Dialect;
+import com.ejlchina.searcher.dialect.MySqlDialect;
+import com.ejlchina.searcher.dialect.OracleDialect;
 import com.ejlchina.searcher.implement.*;
-import com.ejlchina.searcher.implement.DateValueCorrector;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -16,7 +17,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -28,47 +28,46 @@ public class BeanSearcherAutoConfiguration {
 
 	@Bean
 	@ConditionalOnMissingBean(PageExtractor.class)
-	public PageExtractor pagination(BeanSearcherProperties config) {
+	public PageExtractor pageExtractor(BeanSearcherProperties config) {
 		ParamsProps.PaginationProps conf = config.getParams().getPagination();
 		String type = conf.getType();
+		BasePageExtractor extractor;
 		if (ParamsProps.PaginationProps.TYPE_PAGE.equals(type)) {
 			PageSizeExtractor p = new PageSizeExtractor();
-			p.setMaxAllowedSize(conf.getMaxAllowedSize());
-			p.setSizeName(conf.getSize());
 			p.setPageName(conf.getPage());
-			p.setStart(conf.getStart());
-			p.setDefaultSize(conf.getDefaultSize());
-			return p;
-		} 
+			extractor = p;
+		}  else
 		if (ParamsProps.PaginationProps.TYPE_OFFSET.equals(type)) {
 			PageOffsetExtractor p = new PageOffsetExtractor();
-			p.setMaxAllowedSize(conf.getMaxAllowedSize());
-			p.setSizeName(conf.getMax());
 			p.setOffsetName(conf.getOffset());
-			p.setStart(conf.getStart());
-			p.setDefaultSize(conf.getDefaultSize());
-			return p;
+			extractor = p;
+		} else {
+			throw new SearchException("配置项 [bean-searcher.params.pagination.type] 只能为 page 或 offset！");
 		}
-		throw new SearchException("配置项【bean-searcher.params.pagination.type】只能为 page 或  offset！");
+		extractor.setMaxAllowedSize(conf.getMaxAllowedSize());
+		extractor.setSizeName(conf.getSize());
+		extractor.setStart(conf.getStart());
+		extractor.setDefaultSize(conf.getDefaultSize());
+		return extractor;
 	}
 
 	@Bean
 	@ConditionalOnMissingBean(ParamResolver.class)
-	public ParamResolver searchParamResolver(PageExtractor pageExtractor, BeanSearcherProperties config,
-											 ObjectProvider<ParamFilter[]> paramFilterProvider) {
-		DefaultParamResolver searchParamResolver = new DefaultParamResolver();
-		searchParamResolver.setPageExtractor(pageExtractor);
+	public ParamResolver paramResolver(PageExtractor pageExtractor,
+									   ObjectProvider<ParamFilter[]> paramFilters,
+									   BeanSearcherProperties config) {
+		DefaultParamResolver paramResolver = new DefaultParamResolver();
+		paramResolver.setPageExtractor(pageExtractor);
+		paramFilters.ifAvailable(paramResolver::setParamFilters);
 		ParamsProps conf = config.getParams();
-		searchParamResolver.setOperatorSuffix(conf.getOperatorKey());
-		searchParamResolver.setIgnoreCaseSuffix(conf.getIgnoreCaseKey());
-		searchParamResolver.setOrderName(conf.getOrder());
-		searchParamResolver.setSortName(conf.getSort());
-		searchParamResolver.setSeparator(conf.getSeparator());
-		ParamFilter[] paramFilters = paramFilterProvider.getIfAvailable();
-		if (paramFilters != null) {
-			searchParamResolver.setParamFilters(paramFilters);
-		}
-		return searchParamResolver;
+		paramResolver.setOperatorSuffix(conf.getOperatorKey());
+		paramResolver.setIgnoreCaseSuffix(conf.getIgnoreCaseKey());
+		paramResolver.setOrderName(conf.getOrder());
+		paramResolver.setSortName(conf.getSort());
+		paramResolver.setSeparator(conf.getSeparator());
+		paramResolver.setOnlySelectName(conf.getOnlySelect());
+		paramResolver.setSelectExcludeName(conf.getSelectExclude());
+		return paramResolver;
 	}
 
 	@Bean
@@ -84,74 +83,79 @@ public class BeanSearcherAutoConfiguration {
 		case SqlProps.DIALECT_ORACLE:
 			return new OracleDialect();
 		}
-		throw new SearchException("配置项【bean-searcher.sql.dialect】只能为  MySql|Oracle|PostgreSql|SqlServer 中的一个 ！");
+		throw new SearchException("配置项【bean-searcher.sql.dialect】只能为  MySql | Oracle 中的一个，若需支持其它方言，可自己注入一个 com.ejlchina.searcher.dialect.Dialect 类型的 Bean！");
 	}
 	
 	@Bean
 	@ConditionalOnMissingBean(DateValueCorrector.class)
-	public DateValueCorrector dateParamCorrector() {
+	public DateValueCorrector dateValueCorrector() {
 		return new DateValueCorrector();
 	}
 
 	@Bean
 	@ConditionalOnMissingBean(SqlResolver.class)
-	public SqlResolver searchSqlResolver(Dialect dialect, DateValueCorrector dateValueCorrector) {
+	public SqlResolver sqlResolver(Dialect dialect, DateValueCorrector dateValueCorrector) {
 		return new DefaultSqlResolver(dialect, dateValueCorrector);
 	}
 
 	@Bean
 	@ConditionalOnMissingBean(SqlExecutor.class)
-	public SqlExecutor searchSqlExecutor(DataSource dataSource) {
+	public SqlExecutor sqlExecutor(DataSource dataSource) {
 		return new DefaultSqlExecutor(dataSource);
 	}
-
-//	@Bean
-//	@ConditionalOnMissingBean(FieldConvertor.class)
-//	public FieldConvertor fieldConvertor(BeanSearcherProperties config) {
-//		BoolFieldConvertor convertor = new BoolFieldConvertor();
-//		FieldConvertorProps conf = config.getFieldConvertor();
-//		convertor.setIgnoreCase(conf.isIgnoreCase());
-//		if (conf.isIgnoreCase()) {
-//			convertor.setTrues(StringUtils.toUpperCase(conf.getTrues()));
-//			convertor.setFalses(StringUtils.toUpperCase(conf.getFalses()));
-//		} else {
-//			convertor.setTrues(conf.getTrues());
-//			convertor.setFalses(conf.getFalses());
-//		}
-//		return convertor;
-//	}
 	
 	@Bean
 	@ConditionalOnMissingBean(BeanReflector.class)
-	public BeanReflector searchResultResolver(FieldConvertor fieldConvertor) {
-		List<FieldConvertor> fieldConvertors = new ArrayList<>();
-		fieldConvertors.add(fieldConvertor);
-		return new DefaultBeanReflector(fieldConvertors);
+	public BeanReflector beanReflector(ObjectProvider<List<FieldConvertor>> convertorsProvider) {
+		List<FieldConvertor> convertors = convertorsProvider.getIfAvailable();
+		if (convertors != null) {
+			return new DefaultBeanReflector(convertors);
+		}
+		return new DefaultBeanReflector();
+	}
+
+	@Bean
+	@ConditionalOnMissingBean(MetaResolver.class)
+	public MetaResolver metaResolver(ObjectProvider<SnippetResolver> snippetResolver, ObjectProvider<DbMapping> dbMapping) {
+		DefaultMetaResolver metaResolver = new DefaultMetaResolver();
+		snippetResolver.ifAvailable(metaResolver::setSnippetResolver);
+		dbMapping.ifAvailable(metaResolver::setDbMapping);
+		return metaResolver;
 	}
 
 	@Bean
 	@ConditionalOnMissingBean(BeanSearcher.class)
-	public BeanSearcher beanSearcher(ParamResolver paramResolver,
+	public BeanSearcher beanSearcher(MetaResolver metaResolver,
+									 ParamResolver paramResolver,
 									 SqlResolver sqlResolver,
 									 SqlExecutor sqlExecutor,
-									 BeanReflector beanReflector) {
+									 BeanReflector beanReflector,
+									 ObjectProvider<List<SqlInterceptor>> interceptors) {
 		DefaultBeanSearcher searcher = new DefaultBeanSearcher();
+		searcher.setMetaResolver(metaResolver);
 		searcher.setParamResolver(paramResolver);
 		searcher.setSqlResolver(sqlResolver);
 		searcher.setSqlExecutor(sqlExecutor);
 		searcher.setBeanReflector(beanReflector);
+		interceptors.ifAvailable(searcher::setInterceptors);
 		return searcher;
 	}
 
 	@Bean
 	@ConditionalOnMissingBean(MapSearcher.class)
-	public MapSearcher mapSearcher(ParamResolver paramResolver,
+	public MapSearcher mapSearcher(MetaResolver metaResolver,
+								   ParamResolver paramResolver,
 								   SqlResolver sqlResolver,
-								   SqlExecutor sqlExecutor) {
+								   SqlExecutor sqlExecutor,
+								   ObjectProvider<List<SqlInterceptor>> interceptors,
+								   ObjectProvider<List<FieldConvertor>> convertors) {
 		DefaultMapSearcher searcher = new DefaultMapSearcher();
+		searcher.setMetaResolver(metaResolver);
 		searcher.setParamResolver(paramResolver);
 		searcher.setSqlResolver(sqlResolver);
 		searcher.setSqlExecutor(sqlExecutor);
+		interceptors.ifAvailable(searcher::setInterceptors);
+		convertors.ifAvailable(searcher::setConvertors);
 		return searcher;
 	}
 
