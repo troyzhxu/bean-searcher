@@ -2,8 +2,6 @@ package com.ejlchina.searcher.boot;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import com.ejlchina.searcher.implement.BoolFieldConvertor;
-
 
 @ConfigurationProperties(prefix = "bean-searcher")
 public class BeanSearcherProperties {
