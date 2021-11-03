@@ -1,9 +1,11 @@
 package com.ejlchina.searcher;
 
-import com.ejlchina.searcher.dialect.MySqlDialect;
-import com.ejlchina.searcher.implement.*;
-import com.ejlchina.searcher.implement.BoolFieldConvertor;
-import com.ejlchina.searcher.implement.DateValueCorrector;
+import com.ejlchina.searcher.implement.AbstractSearcher;
+import com.ejlchina.searcher.implement.DefaultBeanSearcher;
+import com.ejlchina.searcher.implement.DefaultMapSearcher;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /***
  * 检索器 Builder
@@ -40,6 +42,8 @@ public class SearcherBuilder {
 
 		private MetaResolver metaResolver;
 
+		private final List<SqlInterceptor> interceptors = new ArrayList<>();
+
 		public Builder paramResolver(ParamResolver paramResolver) {
 			this.paramResolver = paramResolver;
 			return (Builder) this;
@@ -60,26 +64,29 @@ public class SearcherBuilder {
 			return (Builder) this;
 		}
 
+		public Builder addInterceptor(SqlInterceptor interceptor) {
+			if (interceptor != null) {
+				interceptors.add(interceptor);
+			}
+			return (Builder) this;
+		}
+
 		protected void buildInternal(AbstractSearcher mainSearcher) {
 			if (paramResolver != null) {
 				mainSearcher.setParamResolver(paramResolver);
 			}
 			if (sqlResolver != null) {
 				mainSearcher.setSqlResolver(sqlResolver);
-			} else {
-				DefaultSqlResolver searchSqlResolver = new DefaultSqlResolver();
-				searchSqlResolver.setDialect(new MySqlDialect());
-				searchSqlResolver.setDateValueCorrector(new DateValueCorrector());
-				mainSearcher.setSqlResolver(searchSqlResolver);
 			}
 			if (sqlExecutor != null) {
 				mainSearcher.setSqlExecutor(sqlExecutor);
-			} else {
+			} else if (mainSearcher.getSqlExecutor() == null) {
 				throw new SearchException("你必须配置一个 searchSqlExecutor，才能建立一个检索器！ ");
 			}
 			if (metaResolver != null) {
 				mainSearcher.setMetaResolver(metaResolver);
 			}
+			mainSearcher.setInterceptors(interceptors);
 		}
 
 	}
@@ -95,17 +102,10 @@ public class SearcherBuilder {
 		}
 
 		public BeanSearcher build() {
-			return build(new DefaultBeanSearcher());
-		}
-
-		public BeanSearcher build(DefaultBeanSearcher beanSearcher) {
+			DefaultBeanSearcher beanSearcher = new DefaultBeanSearcher();
 			buildInternal(beanSearcher);
 			if (beanReflector != null) {
 				beanSearcher.setBeanReflector(beanReflector);
-			} else {
-				DefaultBeanReflector searchResultResolver = new DefaultBeanReflector();
-				searchResultResolver.addConvertor(new BoolFieldConvertor());
-				beanSearcher.setBeanReflector(searchResultResolver);
 			}
 			return beanSearcher;
 		}
@@ -114,13 +114,20 @@ public class SearcherBuilder {
 
 	public static class MapSearcherBuilder extends DefaultSearcherBuilder<MapSearcherBuilder> {
 
+		private final List<FieldConvertor> convertors = new ArrayList<>();
+
 		public MapSearcher build() {
-			return build(new DefaultMapSearcher());
+			DefaultMapSearcher beanSearcher = new DefaultMapSearcher();
+			buildInternal(beanSearcher);
+			beanSearcher.setConvertors(convertors);
+			return beanSearcher;
 		}
 
-		public MapSearcher build(DefaultMapSearcher beanSearcher) {
-			buildInternal(beanSearcher);
-			return beanSearcher;
+		public MapSearcherBuilder addFieldConvertor(FieldConvertor convertor) {
+			if (convertor != null) {
+				this.convertors.add(convertor);
+			}
+			return this;
 		}
 
 	}

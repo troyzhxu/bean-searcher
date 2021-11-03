@@ -23,7 +23,7 @@ public abstract class AbstractSearcher implements Searcher {
 
 	private MetaResolver metaResolver = new DefaultMetaResolver();
 
-	private List<SqlInterceptor> interceptors;
+	private List<SqlInterceptor> interceptors = new ArrayList<>();
 
 	public AbstractSearcher() {
 	}
@@ -87,10 +87,6 @@ public abstract class AbstractSearcher implements Searcher {
 	}
 
 	protected <T> SearchSql<T> intercept(SearchSql<T> searchSql, Map<String, Object> paraMap) {
-		List<SqlInterceptor> interceptors = this.interceptors;
-		if (interceptors == null) {
-			return searchSql;
-		}
 		for (SqlInterceptor interceptor : interceptors) {
 			searchSql = interceptor.intercept(searchSql, paraMap);
 		}
