@@ -114,10 +114,15 @@ implementation 'com.ejlchina:bean-searcher-boot-stater:3.0.0'
 接着便可在 `Controller` 或 `Service` 里注入检索器：
 
 ```groovy
-// 注入 Map 检索器，它检索出来的数据以 Map 对象呈现
+/**
+ * 注入 Map 检索器，它检索出来的数据以 Map 对象呈现
+ */
 @Autowired
 private MapSearcher mapSearcher;
-// 注入 Bean 检索器，它检索出来的数据以 泛型 对象呈现
+
+/**
+ * 注入 Bean 检索器，它检索出来的数据以 泛型 对象呈现
+ */
 @Autowired
 private BeanSearcher beanSearcher;
 ```
@@ -132,12 +137,15 @@ implementation 'com.ejlchina:bean-searcher:3.0.0'
 
 ```java
 DataSource dataSource = ...     // 拿到应用的数据源
+
 // DefaultSqlExecutor 也支持多数据源
 SqlExecutor sqlExecutor = new DefaultSqlExecutor(dataSource);
+
 // 构建 Map 检索器
 MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
         .sqlExecutor(sqlExecutor)
         .build();
+
 // 构建 Bean 检索器
 BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
         .sqlExecutor(sqlExecutor)
