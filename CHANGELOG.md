@@ -1,5 +1,5 @@
 
-# Bean Searcher v3.0.0 已发布
+# Bean Searcher v3.0.0 重大更新
 
 #### 新特性概览
 
