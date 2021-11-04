@@ -8,7 +8,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -21,9 +20,20 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class DateFormatFieldConvertor implements FieldConvertor {
 
-    private Map<String, String> patternMap = new ConcurrentHashMap<>();
+    private final Map<String, Pattern> formatMap = new ConcurrentHashMap<>();
 
     private final ThreadLocal<Map<String, DateFormat>> local = new ThreadLocal<>();
+
+    public static class Pattern {
+
+        final String format;
+
+        public Pattern(String format) {
+            this.format = format;
+        }
+
+    }
+
 
     /**
      * 添加一个日期格式，例如：
@@ -40,10 +50,10 @@ public class DateFormatFieldConvertor implements FieldConvertor {
      * 可对 com 包下的所有类字段起作用，但使用优先级最低
      * </pre>
      * @param scope 生效范围（越精确，优先级越高）
-     * @param pattern 日期格式
+     * @param format 日期格式，如：yyyy-MM-dd，传入 null 时表示该 scope 下的日期字段不进行格式化
      */
-    public void addPattern(String scope, String pattern) {
-        patternMap.put(scope, pattern);
+    public void addFormat(String scope, String format) {
+        formatMap.put(scope, new Pattern(format));
     }
 
     @Override
@@ -53,24 +63,24 @@ public class DateFormatFieldConvertor implements FieldConvertor {
 
     @Override
     public Object convert(FieldMeta meta, Object value, Class<?> targetType) {
-        String pattern = getPattern(meta);
-        if (pattern == null) {
+        Pattern pattern = getPattern(meta);
+        if (pattern == null || pattern.format == null) {
             // 该字段不需要格式化
             return value;
         }
-        return getFormat(pattern).format((Date) value);
+        return getFormat(pattern.format).format((Date) value);
     }
 
-    protected String getPattern(FieldMeta meta) {
+    protected Pattern getPattern(FieldMeta meta) {
         Class<?> clazz = meta.getBeanMeta().getBeanClass();
         String className = clazz.getName();
         // 以 类全名.属性名 为 key 寻找 pattern
-        String pattern = patternMap.get(className + "." + meta.getName());
+        Pattern pattern = formatMap.get(className + "." + meta.getName());
         if (pattern != null) {
             return pattern;
         }
         // 以 类全名 为 key 寻找 pattern
-        pattern = patternMap.get(className);
+        pattern = formatMap.get(className);
         if (pattern != null) {
             return pattern;
         }
@@ -79,7 +89,7 @@ public class DateFormatFieldConvertor implements FieldConvertor {
         int index = className.lastIndexOf('.');
         while (index > 0) {
             pkgName = pkgName.substring(0, index);
-            pattern = patternMap.get(pkgName);
+            pattern = formatMap.get(pkgName);
             if (pattern != null) {
                 return pattern;
             }
@@ -102,12 +112,8 @@ public class DateFormatFieldConvertor implements FieldConvertor {
         return format;
     }
 
-    public Map<String, String> getPatternMap() {
-        return patternMap;
-    }
-
-    public void setPatternMap(Map<String, String> patternMap) {
-        this.patternMap = Objects.requireNonNull(patternMap);
+    public Map<String, Pattern> getFormatMap() {
+        return formatMap;
     }
 
 }

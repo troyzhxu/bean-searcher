@@ -78,7 +78,7 @@ public class DefaultMetaResolver implements MetaResolver {
             beanMeta.addFieldMeta(field.getName(), fieldMeta);
         }
         if (beanMeta.getFieldCount() == 0) {
-            throw new SearchException("[" + beanClass.getName() + "] is not a valid SearchBean, because there is none field mapping to database.");
+            throw new SearchException("[" + beanClass.getName() + "] is not a valid SearchBean, because there is no field mapping to database.");
         }
         return beanMeta;
     }
@@ -98,7 +98,7 @@ public class DefaultMetaResolver implements MetaResolver {
         try {
             return beanClass.getMethod("set" + StringUtils.firstCharToUpperCase(fieldName), field.getType());
         } catch (Exception e) {
-            throw new SearchException("[" + beanClass.getName() + ": " + fieldName + "] is annotated by @DbField, but there is none correctly setter for it.", e);
+            throw new SearchException("[" + beanClass.getName() + ": " + fieldName + "] is annotated by @DbField, but there is no correctly setter for it.", e);
         }
     }
 
