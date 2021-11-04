@@ -46,7 +46,7 @@
 public class UserController {
 
     @Autowired
-    private Searcher searcher;                      // 注入 Bean Searcher 的检索器
+    private BeanSearcher searcher;                      // 注入 BeanSearcher 的检索器
 
     @GetMapping("/index")
     public SearchResult<User> index(HttpServletRequest request) {
@@ -102,6 +102,45 @@ https://gitee.com/ejlchina-zhxu/bean-searcher-demo
 ### 🌱 集成简单
 
 可以和任意 Java Web 框架集成，如：SpringBoot、Spring MVC、Grails、Jfinal 等等。
+
+#### Spring Boot 项目，添加依赖即集成完毕：
+
+```groovy
+implementation 'com.ejlchina:bean-searcher-boot-stater:3.0.0'
+```
+
+接着便可在 `Controller` 或 `Service` 里注入检索器：
+
+```groovy
+// 该检索器检索出来的数据以 Map 对象呈现
+@Autowired
+private MapSearcher mapSearcher;
+// 该检索器检索出来的数据以 泛型 对象呈现
+@Autowired
+private BeanSearcher beanSearcher;
+```
+
+#### 其它框架，使用如下依赖：
+
+```groovy
+implementation 'com.ejlchina:bean-searcher:3.0.0'
+```
+
+接口构建一个检索器：
+
+```java
+DataSource dataSource = ...     // 拿到应用的数据源
+// DefaultSqlExecutor 也支持多数据源
+SqlExecutor sqlExecutor = new DefaultSqlExecutor(dataSource);
+// 构建 Map 检索器
+MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
+        .sqlExecutor(sqlExecutor)
+        .build();
+// 构建 Bean 检索器
+BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
+        .sqlExecutor(sqlExecutor)
+        .build();
+```
 
 ### 🔨 扩展性强
 
