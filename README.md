@@ -10,7 +10,7 @@
 
 * 案例：https://gitee.com/ejlchina-zhxu/bean-searcher-demo
 
-### ⛳ v3.0 新特性预览
+### ⛳ v3.0 重大更新
 
 * 支持 **热加载**
 * 支持 **无注解**
