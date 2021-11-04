@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 日期格式化字段转换器
  * 该转换器可将数据库取出的 Date 对象字段 转换为 格式化的日期字符串
- * 常用于 {@link com.ejlchina.searcher.implement.DefaultMapSearcher } 内
+ * 常与 {@link com.ejlchina.searcher.MapSearcher } 配合使用
  *
  * @author Troy.Zhou @ 2021-11-03
  * @since v3.0.0
@@ -34,19 +34,18 @@ public class DateFormatFieldConvertor implements FieldConvertor {
 
     }
 
-
     /**
      * 添加一个日期格式，例如：
      * <pre>
-     * addPattern("com.example.bean.User.dateCreated", "yyyy-MM-dd");
+     * addFormat("com.example.bean.User.dateCreated", "yyyy-MM-dd");
      * 只对 com.example.bean.User 的 dateCreated 字段起作用，优先级最高
-     * addPattern("com.example.bean.User", "yyyy-MM-dd HH");
+     * addFormat("com.example.bean.User", "yyyy-MM-dd HH");
      * 可对 com.example.bean.User 类的所有字段起作用，但优先级比上一个低一点
-     * addPattern("com.example.bean", "yyyy-MM-dd HH:mm");
+     * addFormat("com.example.bean", "yyyy-MM-dd HH:mm");
      * 可对 com.example.bean 包下的所有类字段起作用，优先级比上一个再低一点
-     * addPattern("com.example", "yyyy-MM-dd HH:mm:ss");
+     * addFormat("com.example", "yyyy-MM-dd HH:mm:ss");
      * 可对 com.example 包下的所有类字段起作用，优先级比上一个更低一点
-     * addPattern("com", "yyyy-MM-dd HH:mm:ss:SSS");
+     * addFormat("com", "yyyy-MM-dd HH:mm:ss:SSS");
      * 可对 com 包下的所有类字段起作用，但使用优先级最低
      * </pre>
      * @param scope 生效范围（越精确，优先级越高）
