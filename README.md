@@ -126,7 +126,7 @@ private BeanSearcher beanSearcher;
 implementation 'com.ejlchina:bean-searcher:3.0.0'
 ```
 
-接口构建一个检索器：
+然后可以使用 `SearcherBuilder` 构建一个检索器：
 
 ```java
 DataSource dataSource = ...     // 拿到应用的数据源
