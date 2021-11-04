@@ -46,12 +46,12 @@
 public class UserController {
 
     @Autowired
-    private BeanSearcher searcher;                      // 注入 BeanSearcher 的检索器
+    private BeanSearcher beanSearcher;              // 注入 BeanSearcher 的检索器
 
     @GetMapping("/index")
     public SearchResult<User> index(HttpServletRequest request) {
         // 只一行代码，实现包含 分页、组合过滤、任意字段排序、甚至统计、多表联查的 复杂检索功能
-        return searcher.search(User.class, MapUtils.flat(request.getParameterMap()));
+        return beanSearcher.search(User.class, MapUtils.flat(request.getParameterMap()));
     }
 	
 }
@@ -87,7 +87,7 @@ Map<String, Object> params = MapUtils.builder()
         .orderBy(User::getAge, "asc")               // 排序：年龄，从小到大
         .page(0, 15)                                // 分页：第 0 页, 每页 15 条
         .build();
-SearchResult<User> result = searcher.search(User.class, params);
+SearchResult<User> result = beanSearcher.search(User.class, params);
 ```
 
 小 **DEMO 快速体验** 一下：
