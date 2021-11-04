@@ -146,6 +146,13 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 
 面向接口设计，用户可自定义扩展 Bean Searcher 中的任何组件！
 
+比如你可以：
+* 自定义注解，或让 Bean Searcher 识别 Hibernate 的注解（实现一个 [`DbMapping`](/bean-searcher/src/main/java/com/ejlchina/searcher/DbMapping.java)）
+* 自定义参数解析器（[`ParamResolver`](/bean-searcher/src/main/java/com/ejlchina/searcher/ParamResolver.java)）来支持 JSON 形式的检索参数
+* 自定义字段转换器（[`FieldConvertor`](/bean-searcher/src/main/java/com/ejlchina/searcher/FieldConvertor.java)）来支持 数据库没有的 字段类型
+* 自定义数据库方言（[`Dialect`](/bean-searcher/src/main/java/com/ejlchina/searcher/Dialect.java)）来支持更多的数据库
+* 等等..
+
 ### 📚 详细文档
 
 参阅：https://searcher.ejlchina.com/
