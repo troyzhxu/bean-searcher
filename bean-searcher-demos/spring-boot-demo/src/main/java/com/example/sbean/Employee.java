@@ -19,7 +19,7 @@ public class Employee
 	// 自动映射到 "e.id"
 	private Long id;
 
-	@DbField(onlyOn = Operator.Equal)
+	@DbField
 	private String name;
 
 	// 自动映射到 "e.age"
@@ -97,7 +97,7 @@ public class Employee
 	 */
 	@Override
 	public void afterAssembly(Map<String, Object> paraMap) {
-		System.out.println("paraMap" + paraMap);
+		System.out.println("paraMap = " + paraMap);
 	}
 
 }

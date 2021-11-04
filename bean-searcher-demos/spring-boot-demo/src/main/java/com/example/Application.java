@@ -1,6 +1,7 @@
 package com.example;
 
 import com.ejlchina.searcher.FieldConvertor;
+import com.ejlchina.searcher.implement.DateFormatFieldConvertor;
 import com.ejlchina.searcher.implement.NumberFieldConvertor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,9 +25,18 @@ public class Application implements WebMvcConfigurer {
 	}
 
 	@Bean
-	public FieldConvertor fieldConvertor() {
+	public FieldConvertor numberFieldConvertor() {
 		return new NumberFieldConvertor();
 	}
 
+	@Bean
+	public FieldConvertor dateFormatFieldConvertor() {
+		DateFormatFieldConvertor convertor = new DateFormatFieldConvertor();
+		convertor.addFormat("com.example", "yyyy-MM-dd HH:mm");
+		convertor.addFormat("com.example.sbean", "yyyy-MM-dd HH");
+		convertor.addFormat("com.example.sbean.Employee", "yyyy-MM-dd");
+//		convertor.addFormat("com.example.sbean.Employee.entryDate", null);
+		return convertor;
+	}
 
 }
