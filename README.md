@@ -94,10 +94,12 @@ SearchResult<User> result = searcher.search(User.class, params);
 
 https://gitee.com/ejlchina-zhxu/bean-searcher-demo
 
-
 ### 🚀 快速开发
 
 使用 Bean Searcher 可以极大地节省后端的复杂列表检索接口的开发时间！
+
+* 普通的复杂列表查询只需一行代码
+* 单表检索可复用原有 `Domain`，无需定义 `SearchBean`
 
 ### 🌱 集成简单
 
