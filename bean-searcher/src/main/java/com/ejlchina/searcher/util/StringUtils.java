@@ -114,11 +114,11 @@ public class StringUtils {
 	 */
 	public static String toHyphenation(String src, String hyphenation) {
 		StringBuilder sb = new StringBuilder(src);
-		int temp = 0;//定位
-		for(int i = 0; i < src.length(); i++){
+		int cnt = 0;	// 插入连字符的个数
+		for(int i = 1; i < src.length(); i++){
 			if(Character.isUpperCase(src.charAt(i))){
-				sb.insert(i + temp, hyphenation);
-				temp += 1;
+				sb.insert(i + cnt, hyphenation);
+				cnt += hyphenation.length();
 			}
 		}
 		return sb.toString().toLowerCase();
