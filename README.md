@@ -67,10 +67,14 @@ public class UserController {
 
 例如，该接口支持如下查询：
 
-* `/user/index?type=1&page=1&size=10` - 检索 type = 1 的用户，返回第 2 页，每页 10 条
-* `/user/index?type=1&name=张&name-op=sw` - 检索 type = 1 并且 name 以 `张` 开头的用户，分页默认（第 0 页，每页 15 条）
-* `/user/index?type=1&sort=age&order=desc` - 检索 type = 1 的用户，以 age 排序，降序输出，分页默认
-* `/user/index?age-0=20&age-1=30&age-op=bt` - 检索 age 在 20 与 30 之间的用户
+* `/user/index?type=1&page=1&size=10`
+  - 检索 type = 1 的用户，返回第 2 页，每页 10 条
+* `/user/index?type=1&name=张&name-op=sw`
+  - 检索 type = 1 并且 name 以 `张` 开头的用户，分页默认（第 0 页，每页 15 条）
+* `/user/index?type=1&sort=age&order=desc`
+  - 检索 type = 1 的用户，以 age 排序，降序输出，分页默认
+* `/user/index?age-0=20&age-1=30&age-op=bt`
+  - 检索 age 在 20 与 30 之间的用户
 
 ### ✨ 独创动态字段运算符，检索方式随心所欲
 
