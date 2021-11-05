@@ -25,7 +25,15 @@ import java.util.regex.Pattern;
  */
 public class DateFormatFieldConvertor implements FieldConvertor {
 
+    public static final Pattern DATE_PATTERN = Pattern.compile("[yMd]+");
+    public static final Pattern TIME_PATTERN = Pattern.compile("[HhmsS]+");
+
     private final Map<String, Formatter> formatMap = new ConcurrentHashMap<>();
+
+    /**
+     * 时区
+     */
+    private ZoneId zoneId = ZoneId.systemDefault();
 
     /**
      * 添加一个日期格式，例如（优先级以此递减）：
@@ -72,14 +80,10 @@ public class DateFormatFieldConvertor implements FieldConvertor {
         return formatter != null ? formatter.format(value) : value;
     }
 
-    static class Formatter {
+    class Formatter {
 
-        public static final Pattern DATE_PATTERN = Pattern.compile("[yMd]+");
-        public static final Pattern TIME_PATTERN = Pattern.compile("[HhmsS]+");
-        public static final ZoneId ZONE_ID = ZoneId.systemDefault();
-
-        final String pattern;
-        final DateTimeFormatter formatter;
+        private final String pattern;
+        private final DateTimeFormatter formatter;
 
         Formatter(String pattern) {
             if (pattern != null) {
@@ -94,11 +98,11 @@ public class DateFormatFieldConvertor implements FieldConvertor {
             if (formatter != null) {
                 if (value instanceof Date) {
                     Instant instant = ((Date) value).toInstant();
-                    LocalDateTime dateTime = LocalDateTime.ofInstant(instant, ZONE_ID);
+                    LocalDateTime dateTime = LocalDateTime.ofInstant(instant, zoneId);
                     return formatter.format(dateTime);
                 }
                 if (value instanceof Instant) {
-                    LocalDateTime dateTime = LocalDateTime.ofInstant((Instant) value, ZONE_ID);
+                    LocalDateTime dateTime = LocalDateTime.ofInstant((Instant) value, zoneId);
                     return formatter.format(dateTime);
                 }
                 if (value instanceof Temporal) {
@@ -154,6 +158,14 @@ public class DateFormatFieldConvertor implements FieldConvertor {
             index = pkgName.lastIndexOf('.');
         }
         return null;
+    }
+
+    public ZoneId getZoneId() {
+        return zoneId;
+    }
+
+    public void setZoneId(ZoneId zoneId) {
+        this.zoneId = zoneId;
     }
 
 }
