@@ -72,11 +72,15 @@ public class UserController {
 * `/user/index?type=1&page=1&size=10`
   - 检索 type = 1 的用户，返回第 2 页，每页 10 条
 * `/user/index?type=1&name=张&name-op=sw`
-  - 检索 type = 1 并且 name 以 `张` 开头的用户，分页默认（第 0 页，每页 15 条）
+  - 检索 type = 1 并且 name 以 `张` 开头的用户，默认分页（第 0 页，每页 15 条）
 * `/user/index?type=1&sort=age&order=desc`
-  - 检索 type = 1 的用户，以 age 排序，降序输出，分页默认
+  - 检索 type = 1 的用户，以 age 排序，降序输出，默认分页
 * `/user/index?age-0=20&age-1=30&age-op=bt`
-  - 检索 age 在 20 与 30 之间的用户
+  - 检索 age 在 20 与 30 之间的用户，默认分页
+* `/user/index?onlySelect=name,age`
+  - 检索 所有用户，默认分页，但只查询 name 和 age 字段
+* `/user/index?selectExclude=dateCreated`
+  - 检索 所有用户，默认分页，但不查询 dateCreated  字段
 
 ### ✨ 独创动态字段运算符，检索方式随心所欲
 
@@ -159,7 +163,7 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 面向接口设计，用户可自定义扩展 Bean Searcher 中的任何组件！
 
 比如你可以：
-* 自定义注解，或让 Bean Searcher 识别 Hibernate 的注解（实现一个 [`DbMapping`](/bean-searcher/src/main/java/com/ejlchina/searcher/DbMapping.java)）
+* 自定义数据库映射（[`DbMapping`](/bean-searcher/src/main/java/com/ejlchina/searcher/DbMapping.java)）来实现自定义注解，或让 Bean Searcher 识别其它 ORM 的注解（实现一个 ）
 * 自定义参数解析器（[`ParamResolver`](/bean-searcher/src/main/java/com/ejlchina/searcher/ParamResolver.java)）来支持 JSON 形式的检索参数
 * 自定义字段转换器（[`FieldConvertor`](/bean-searcher/src/main/java/com/ejlchina/searcher/FieldConvertor.java)）来支持 数据库没有的 字段类型
 * 自定义数据库方言（[`Dialect`](/bean-searcher/src/main/java/com/ejlchina/searcher/Dialect.java)）来支持更多的数据库
