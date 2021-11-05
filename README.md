@@ -96,7 +96,7 @@ Map<String, Object> params = MapUtils.builder()
 SearchResult<User> result = beanSearcher.search(User.class, params);
 ```
 
-小 **DEMO 快速体验** 一下：
+**DEMO 快速体验**：
 
 https://gitee.com/ejlchina-zhxu/bean-searcher-demo
 
