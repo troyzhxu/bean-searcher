@@ -238,14 +238,13 @@ public class DefaultSqlResolver implements SqlResolver {
 		}
 		return clusterSelectSqlBuilder.toString();
 	}
-	
 
 	private String generateTableAlias(String originalSql) {
-		return generateAlias("tbl_", originalSql);
+		return generateAlias("t_", originalSql);
 	}
 
 	private String generateColumnAlias(String seed, String originalSql) {
-		return generateAlias("col_" + seed, originalSql);
+		return generateAlias("_" + seed, originalSql);
 	}
 	
 	private String generateAlias(String seed, String originalSql) {

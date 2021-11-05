@@ -1,9 +1,12 @@
 package com.ejlchina.searcher;
 
+import com.ejlchina.searcher.bean.DbField;
+import com.ejlchina.searcher.bean.SearchBean;
+
 import java.lang.reflect.Field;
 
 /**
- * 在 {@link com.ejlchina.searcher.bean.SearchBean } 或 {@link com.ejlchina.searcher.bean.DbField } 缺省时
+ * 在 {@link SearchBean } 或 {@link DbField } 缺省时
  * 自动与数据库表名与字段名映射
  * @author Troy.Zhou @ 2021-11-01
  * @since v3.0.0
