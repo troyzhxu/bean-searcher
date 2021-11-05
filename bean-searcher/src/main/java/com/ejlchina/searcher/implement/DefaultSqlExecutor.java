@@ -17,7 +17,7 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * JDBC Search Sql 执行器
+ * JDBC Sql 执行器
  * 
  * @author Troy.Zhou
  * @since 1.1.1
@@ -43,7 +43,14 @@ public class DefaultSqlExecutor implements SqlExecutor {
 	 * 是否使用只读事务
 	 */
 	private boolean transactional = false;
-	
+
+	/**
+	 * 使用事务时的隔离级别，默认为 READ_COMMITTED
+	 * @since v3.1.0
+	 */
+	private int transactionIsolation = Connection.TRANSACTION_READ_COMMITTED;
+
+
 	public DefaultSqlExecutor() {
 	}
 	
@@ -90,6 +97,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
 	protected <T> SqlResult<T> doExecute(SearchSql<T> searchSql, Connection connection) throws SQLException {
 		if (transactional) {
 			connection.setAutoCommit(false);
+			connection.setTransactionIsolation(transactionIsolation);
 			connection.setReadOnly(true);
 		}
 		SqlResult<T> result = new SqlResult<T>(searchSql) {
@@ -102,21 +110,24 @@ public class DefaultSqlExecutor implements SqlExecutor {
 				}
 			}
 		};
-		if (searchSql.isShouldQueryList()) {
-			String sql = searchSql.getListSqlString();
-			List<Object> params = searchSql.getListSqlParams();
-			writeLog(sql, params);
-			executeListSqlAndCollectResult(connection, sql, params, result);
-		}
-		if (searchSql.isShouldQueryCluster()) {
-			String sql = searchSql.getClusterSqlString();
-			List<Object> params = searchSql.getClusterSqlParams();
-			writeLog(sql, params);
-			executeClusterSqlAndCollectResult(connection, sql, params, result);
-		}
-		if (transactional) {
-			connection.commit();
-			connection.setReadOnly(false);
+		try {
+			if (searchSql.isShouldQueryList()) {
+				String sql = searchSql.getListSqlString();
+				List<Object> params = searchSql.getListSqlParams();
+				writeLog(sql, params);
+				executeListSqlAndCollectResult(connection, sql, params, result);
+			}
+			if (searchSql.isShouldQueryCluster()) {
+				String sql = searchSql.getClusterSqlString();
+				List<Object> params = searchSql.getClusterSqlParams();
+				writeLog(sql, params);
+				executeClusterSqlAndCollectResult(connection, sql, params, result);
+			}
+		} finally {
+			if (transactional) {
+				connection.commit();
+				connection.setReadOnly(false);
+			}
 		}
 		return result;
 	}
@@ -175,7 +186,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
 	 * @see SearchBean#dataSource()
 	 * @param name 数据源名称
 	 * @param dataSource 数据源
-	 * @since v3.0.1
+	 * @since v3.1.0
 	 */
 	public void setDataSource(String name, DataSource dataSource) {
 		if (name != null && dataSource != null) {
@@ -185,7 +196,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
 
 	/**
 	 * 添加数据源
-	 * Deprecated from v3.0.1
+	 * Deprecated from v3.1.0
 	 * 请使用 {@link #setDataSource(String scope, DataSource dataSource) } 方法
 	 * @since v3.0.0
 	 * @param name 数据源名称
@@ -210,6 +221,23 @@ public class DefaultSqlExecutor implements SqlExecutor {
 
 	public boolean isTransactional() {
 		return transactional;
+	}
+
+	public int getTransactionIsolation() {
+		return transactionIsolation;
+	}
+
+	/**
+	 * 设置只读事务的隔离级别（只在开启了事务后有效）
+	 * @param level 隔离级别
+	 * @see Connection#TRANSACTION_NONE
+	 * @see Connection#TRANSACTION_READ_UNCOMMITTED
+	 * @see Connection#TRANSACTION_READ_COMMITTED
+	 * @see Connection#TRANSACTION_REPEATABLE_READ
+	 * @see Connection#TRANSACTION_SERIALIZABLE
+	 */
+	public void setTransactionIsolation(int level) {
+		this.transactionIsolation = level;
 	}
 
 }
