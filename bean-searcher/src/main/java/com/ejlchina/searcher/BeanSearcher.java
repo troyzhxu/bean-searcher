@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 自动检索器接口
+ * Bean 对象检索器接口
  * 根据 SearchBean 的 Class 和请求参数，自动检索，数据以 SearchBean 泛型对象呈现
  * @author Troy.Zhou @ 2021-10-29
  * @since v3.0.0
