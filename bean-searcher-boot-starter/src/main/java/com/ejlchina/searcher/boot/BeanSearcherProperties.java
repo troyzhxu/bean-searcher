@@ -16,6 +16,9 @@ public class BeanSearcherProperties {
 	 */
 	private final SqlProps sql = new SqlProps();
 
+
+
+
 	public ParamsProps getParams() {
 		return params;
 	}
@@ -230,9 +233,9 @@ public class BeanSearcherProperties {
 		}
 
 	}
-	
+
 	public static class SqlProps {
-		
+
 		public static final String DIALECT_MYSQL = "mysql";
 		public static final String DIALECT_ORACLE = "oracle";
 
@@ -248,7 +251,52 @@ public class BeanSearcherProperties {
 		public void setDialect(String dialect) {
 			this.dialect = dialect;
 		}
-		
+
 	}
-	
+
+	public static class Field {
+
+		/**
+		 * 使用 Number to Number 的字段转换器
+		 */
+		private boolean useNumberConvertor = true;
+
+		/**
+		 * 使用 String to Number 的字段转换器
+		 */
+		private boolean useStrNumConvertor = true;
+
+		/**
+		 * 使用 String | Number to Boolean 的字段转换器
+		 */
+		private boolean useBoolConvertor = true;
+
+
+		public boolean isUseNumberConvertor() {
+			return useNumberConvertor;
+		}
+
+		public void setUseNumberConvertor(boolean useNumberConvertor) {
+			this.useNumberConvertor = useNumberConvertor;
+		}
+
+		public boolean isUseStrNumConvertor() {
+			return useStrNumConvertor;
+		}
+
+		public void setUseStrNumConvertor(boolean useStrNumConvertor) {
+			this.useStrNumConvertor = useStrNumConvertor;
+		}
+
+		public boolean isUseBoolConvertor() {
+			return useBoolConvertor;
+		}
+
+		public void setUseBoolConvertor(boolean useBoolConvertor) {
+			this.useBoolConvertor = useBoolConvertor;
+		}
+
+	}
+
+
 }
