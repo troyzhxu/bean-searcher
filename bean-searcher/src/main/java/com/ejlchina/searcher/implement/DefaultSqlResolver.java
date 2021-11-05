@@ -73,9 +73,8 @@ public class DefaultSqlResolver implements SqlResolver {
 		List<FieldParam> fieldParamList = searchParam.getFieldParams();
 
 		if (hasJoinCond || fieldParamList.size() > 0) {
-			builder.append(" where ");
+			builder.append(" where (");
 			if (hasJoinCond) {
-				builder.append("(");
 				List<SqlSnippet.Param> joinCondParams = beanMeta.getJoinCondEmbedParams();
 				if (joinCondParams != null) {
 					for (SqlSnippet.Param param : joinCondParams) {
