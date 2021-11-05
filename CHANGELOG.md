@@ -1,5 +1,21 @@
+# Next
 
-# Bean Searcher v3.0.0 重大更新
+### Fetures
+
+* 增强 `DefaultSqlExecutor`，新增 `setTransactionIsolation(int level)` 方法，可配置隔离级别
+* 增强 `DateFormatFieldConvertor`，使支持 `Temporal` 及其子类的对象的格式化
+* 增强 `DateFormatFieldConvertor`，新增：`setZoneId(ZoneId)` 方法，可配置时区
+* Bean Searcher Boot Starter 自动配置一些常用的字段转换器
+
+# v3.0.1
+
+### Fetures
+* DateFormatFieldConvertor 新增 setFormat 方法
+
+### Bug Fix
+* 修复：v3.0.0 中，再没有指定 @SearchBean 注解的 joinCond 属性时，带条件的 SQL 生成中 where 后少一个 左括号的问题
+
+# v3.0.0 重大更新
 
 #### 新特性概览
 
