@@ -5,7 +5,7 @@ import java.util.Map;
 
 /**
  * Map 对象检索器接口
- * 根据 SearchBean 的 Class 和请求参数，自动检索，数据以 Map 对象呈现
+ * 根据 SearchBean 的 Class 和 检索参数，自动检索，数据以 Map 对象呈现
  * @author Troy.Zhou @ 2021-10-29
  * @since v3.0.0
  * */

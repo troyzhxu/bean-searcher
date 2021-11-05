@@ -5,7 +5,7 @@ import java.util.Map;
 
 /**
  * 检索器接口
- * 根据 SearchBean 的 Class 和请求参数，自动检索数据
+ * 根据 SearchBean 的 Class 和 检索参数，自动检索数据
  * 它有两个子接口：{@link MapSearcher } 与 {@link BeanSearcher }
  *
  * @author Troy.Zhou @ 2017-03-20
