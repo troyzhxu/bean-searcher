@@ -35,7 +35,9 @@ if (Environment.isDevelopmentMode() && targetDir != null) {
     logger("StackTrace", ERROR, ['FULL_STACKTRACE'], false)
 }
 
-logger("com.ejlchina.searcher.implement.MainSearchSqlExecutor", DEBUG, ['STDOUT'], false)
+// 开启 Bean Searcher 的 SQL 日志
+logger("com.ejlchina.searcher.implement.DefaultSqlExecutor", DEBUG, ['STDOUT'], false)
+
 logger("org.hibernate.SQL", DEBUG, ['STDOUT'], false)
 
 
