@@ -2,58 +2,52 @@ package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.FieldConvertor;
 import com.ejlchina.searcher.FieldMeta;
+import com.ejlchina.searcher.MapSearcher;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.Temporal;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Pattern;
 
 /**
  * 日期格式化字段转换器
  * 该转换器可将数据库取出的 Date 对象字段 转换为 格式化的日期字符串
- * 常与 {@link com.ejlchina.searcher.MapSearcher } 配合使用
+ * 常与 {@link MapSearcher } 配合使用
+ *
+ * v3.0.0 支持 {@link Date } 及其子类的 日期格式化
+ * v3.0.1 支持 {@link Temporal } 及其子类的 日期格式化
  *
  * @author Troy.Zhou @ 2021-11-03
  * @since v3.0.0
  */
 public class DateFormatFieldConvertor implements FieldConvertor {
 
-    private final Map<String, Pattern> formatMap = new ConcurrentHashMap<>();
-
-    private final ThreadLocal<Map<String, DateFormat>> local = new ThreadLocal<>();
-
-    public static class Pattern {
-
-        final String format;
-
-        public Pattern(String format) {
-            this.format = format;
-        }
-
-    }
+    private final Map<String, Formatter> formatMap = new ConcurrentHashMap<>();
 
     /**
-     * 添加一个日期格式，例如：
+     * 添加一个日期格式，例如（优先级以此递减）：
      * <pre>
-     * addFormat("com.example.bean.User.dateCreated", "yyyy-MM-dd");
-     * 只对 com.example.bean.User 的 dateCreated 字段起作用，优先级最高
-     * addFormat("com.example.bean.User", "yyyy-MM-dd HH");
-     * 可对 com.example.bean.User 类的所有字段起作用，但优先级比上一个低一点
-     * addFormat("com.example.bean", "yyyy-MM-dd HH:mm");
-     * 可对 com.example.bean 包下的所有类字段起作用，优先级比上一个再低一点
-     * addFormat("com.example", "yyyy-MM-dd HH:mm:ss");
-     * 可对 com.example 包下的所有类字段起作用，优先级比上一个更低一点
-     * addFormat("com", "yyyy-MM-dd HH:mm:ss:SSS");
-     * 可对 com 包下的所有类字段起作用，但使用优先级最低
+     * setFormat("demo.User.dateCreated", "yyyy-MM-dd");
+     *  指定 demo.User 的 dateCreated 字段的格式
+     * setFormat("demo.User:LocalTime", "HH:mm:ss");
+     *  指定 demo.User 类的 LocalTime 类型的字段的格式
+     * setFormat("demo.User", "yyyy-MM-dd HH");
+     *  指定 demo.User 类的其它字段的格式
+     * setFormat("demo:LocalDate", "yyyy-MM-dd");
+     *  指定 demo 包下的 LocalDate 类型的字段的格式
+     * setFormat("demo", "yyyy-MM-dd HH:mm:ss:SSS");
+     *  指定 demo 包下的其它日期字段的格式
      * </pre>
-     * @param scope 生效范围（越精确，优先级越高）
+     *
+     * @param scope 生效范围，可以是 全类名.字段名、全类名:字段类型名、包名:字段类型名 或 包名，范围越小，使用优先级越高
      * @param format 日期格式，如：yyyy-MM-dd，传入 null 时表示该 scope 下的日期字段不进行格式化
      * @since v3.0.1
      */
     public void setFormat(String scope, String format) {
-        formatMap.put(scope, new Pattern(format));
+        formatMap.put(scope, new Formatter(format));
     }
 
     /**
@@ -69,62 +63,97 @@ public class DateFormatFieldConvertor implements FieldConvertor {
 
     @Override
     public boolean supports(FieldMeta meta, Class<?> valueType, Class<?> targetType) {
-        return Date.class.isAssignableFrom(valueType) && targetType == null;
+        return targetType == null && (Date.class.isAssignableFrom(valueType) || Temporal.class.isAssignableFrom(valueType));
     }
 
     @Override
     public Object convert(FieldMeta meta, Object value, Class<?> targetType) {
-        Pattern pattern = getPattern(meta);
-        if (pattern == null || pattern.format == null) {
-            // 该字段不需要格式化
-            return value;
-        }
-        return getFormat(pattern.format).format((Date) value);
+        Formatter formatter = findFormatter(meta, value.getClass());
+        return formatter != null ? formatter.format(value) : value;
     }
 
-    protected Pattern getPattern(FieldMeta meta) {
+    static class Formatter {
+
+        public static final Pattern DATE_PATTERN = Pattern.compile("[yMd]+");
+        public static final Pattern TIME_PATTERN = Pattern.compile("[HhmsS]+");
+        public static final ZoneId ZONE_ID = ZoneId.systemDefault();
+
+        final String pattern;
+        final DateTimeFormatter formatter;
+
+        Formatter(String pattern) {
+            if (pattern != null) {
+                formatter = DateTimeFormatter.ofPattern(pattern);
+            } else {
+                formatter = null;
+            }
+            this.pattern = pattern;
+        }
+
+        Object format(Object value) {
+            if (formatter != null) {
+                if (value instanceof Date) {
+                    Instant instant = ((Date) value).toInstant();
+                    LocalDateTime dateTime = LocalDateTime.ofInstant(instant, ZONE_ID);
+                    return formatter.format(dateTime);
+                }
+                if (value instanceof Instant) {
+                    LocalDateTime dateTime = LocalDateTime.ofInstant((Instant) value, ZONE_ID);
+                    return formatter.format(dateTime);
+                }
+                if (value instanceof Temporal) {
+                    return formatter.format(((Temporal) value));
+                }
+            }
+            return value;
+        }
+
+        boolean supports(Class<?> dateType) {
+            return pattern == null || (
+                    dateType != LocalTime.class || !DATE_PATTERN.matcher(pattern).matches()
+            ) && (
+                    dateType != LocalDate.class || !TIME_PATTERN.matcher(pattern).matches()
+            );
+        }
+
+    }
+
+    private Formatter findFormatter(FieldMeta meta, Class<?> type) {
         Class<?> clazz = meta.getBeanMeta().getBeanClass();
         String className = clazz.getName();
-        // 以 类全名.属性名 为 key 寻找 pattern
-        Pattern pattern = formatMap.get(className + "." + meta.getName());
-        if (pattern != null) {
-            return pattern;
+        // 以 [类全名.属性名] 为 key 寻找 formatter
+        Formatter formatter = formatMap.get(className + "." + meta.getName());
+        if (formatter != null && formatter.supports(type)) {
+            return formatter;
         }
-        // 以 类全名 为 key 寻找 pattern
-        pattern = formatMap.get(className);
-        if (pattern != null) {
-            return pattern;
+        String typeName = type.getSimpleName();
+        // 以 [类全名:字段类型名] 为 key 寻找 formatter
+        formatter = formatMap.get(className + ":" + typeName);
+        if (formatter != null && formatter.supports(type)) {
+            return formatter;
         }
-        // 以 包名 为 key 寻找 pattern
+        // 以 [类全名] 为 key 寻找 formatter
+        formatter = formatMap.get(className);
+        if (formatter != null && formatter.supports(type)) {
+            return formatter;
+        }
         String pkgName = className;
         int index = className.lastIndexOf('.');
         while (index > 0) {
             pkgName = pkgName.substring(0, index);
-            pattern = formatMap.get(pkgName);
-            if (pattern != null) {
-                return pattern;
+            // 以 [包名:字段类型名] 为 key 寻找 formatter
+            formatter = formatMap.get(pkgName + ":" + typeName);
+            if (formatter != null && formatter.supports(type)) {
+                return formatter;
+            }
+            // 以 [包名] 为 key 寻找 formatter
+            formatter = formatMap.get(pkgName);
+            if (formatter != null && formatter.supports(type)) {
+                return formatter;
             }
             index = pkgName.lastIndexOf('.');
         }
         return null;
-    }
-
-    private DateFormat getFormat(String pattern) {
-        Map<String, DateFormat> cache = local.get();
-        if (cache == null) {
-            cache = new HashMap<>();
-            local.set(cache);
-        }
-        DateFormat format = cache.get(pattern);
-        if (format == null) {
-            format = new SimpleDateFormat(pattern);
-            cache.put(pattern, format);
-        }
-        return format;
-    }
-
-    public Map<String, Pattern> getFormatMap() {
-        return formatMap;
     }
 
 }
