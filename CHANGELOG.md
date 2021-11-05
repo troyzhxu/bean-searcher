@@ -5,7 +5,7 @@
 * 增强 `DefaultSqlExecutor`，新增 `setTransactionIsolation(int level)` 方法，可配置隔离级别
 * 增强 `DateFormatFieldConvertor`，使支持 `Temporal` 及其子类的对象的格式化
 * 增强 `DateFormatFieldConvertor`，新增：`setZoneId(ZoneId)` 方法，可配置时区
-* Bean Searcher Boot Starter 自动配置一些常用的字段转换器
+* 优化 `bean-searcher-boot-starter`，自动配置一些常用的字段转换器
 
 # v3.0.1
 
