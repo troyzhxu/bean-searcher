@@ -1,5 +1,9 @@
 package com.ejlchina.searcher.bean;
 
+import com.ejlchina.searcher.DbMapping;
+import com.ejlchina.searcher.implement.DefaultSqlExecutor;
+
+import javax.sql.DataSource;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
@@ -8,7 +12,7 @@ import java.lang.annotation.Target;
 
 /**
  * 用于注解一个 SearchBean
- * v3.0.0 后该注解可以缺省，缺省时根据 {@link com.ejlchina.searcher.DbMapping } 自动映射数据库表
+ * v3.0.0 后该注解可以缺省，缺省时根据 {@link DbMapping } 自动映射数据库表
  * @author Troy.Zhou @ 2017-03-20
  */
 @Inherited
@@ -18,8 +22,9 @@ public @interface SearchBean {
 
 	/**
 	 * 指定数据源
+	 * @see DefaultSqlExecutor#setDataSource(String name, DataSource)
 	 * @since v3.0.0
-	 * @return 数据源
+	 * @return 数据源名称（name of DataSource）
 	 */
 	String dataSource() default "";
 
@@ -52,7 +57,8 @@ public @interface SearchBean {
 	boolean distinct() default false;
 
 	/**
-	 * 字段未加 @DbField 时，指定它自动映射到那张表（只有在 tables 属性不空时起作用，当 tables 为空时，则自动映射到默认的那张表）
+	 * 字段未加 {@link DbField } 注解时，指定它自动映射到那张表
+	 * 只有在 {@link #tables()} 属性不空时起作用，当 {@link #tables()} 为空时，并且没有添加 {@link DbIgnore } 注解时，则字段自动映射到 {@link DbMapping } 决定的那张表）
 	 * 如果 autoMapping 为空，则表示未被 @DbField 注解的字段不需要映射
 	 * @since v3.0.0
 	 * @return 自动映射的表名 或 别名

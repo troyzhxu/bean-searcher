@@ -1,6 +1,7 @@
 package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.*;
+import com.ejlchina.searcher.bean.SearchBean;
 import com.ejlchina.searcher.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +34,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
 	private DataSource dataSource;
 
 	/**
-	 * 多数据源
+	 * 具名数据源
 	 * @since v3.0.0
 	 */
 	private final Map<String, DataSource> dataSourceMap = new ConcurrentHashMap<>();
@@ -170,15 +171,29 @@ public class DefaultSqlExecutor implements SqlExecutor {
 	}
 
 	/**
+	 * 添加具名数据源
+	 * @see SearchBean#dataSource()
+	 * @param name 数据源名称
+	 * @param dataSource 数据源
+	 * @since v3.0.1
+	 */
+	public void setDataSource(String name, DataSource dataSource) {
+		if (name != null && dataSource != null) {
+			dataSourceMap.put(name.trim(), dataSource);
+		}
+	}
+
+	/**
 	 * 添加数据源
+	 * Deprecated from v3.0.1
+	 * 请使用 {@link #setDataSource(String scope, DataSource dataSource) } 方法
 	 * @since v3.0.0
 	 * @param name 数据源名称
 	 * @param dataSource 数据源
 	 */
+	@Deprecated
 	public void addDataSource(String name, DataSource dataSource) {
-		if (name != null && dataSource != null) {
-			dataSourceMap.put(name.trim(), dataSource);
-		}
+		setDataSource(name, dataSource);
 	}
 
 	public Map<String, DataSource> getDataSourceMap() {

@@ -10,10 +10,9 @@ import java.util.Map;
 
 public class TestCase1 {
 
-    public static class Bean {
+    public static class SearchBean {
         private long id;
         private String name;
-
         public long getId() {
             return id;
         }
@@ -47,12 +46,12 @@ public class TestCase1 {
         };
 
         MapSearcher mapSearcher = SearcherBuilder.mapSearcher().sqlExecutor(sqlExecutor).build();
-        mapSearcher.search(Bean.class, new HashMap<>());
-        mapSearcher.search(Bean.class, null);
+        mapSearcher.search(SearchBean.class, new HashMap<>());
+        mapSearcher.search(SearchBean.class, null);
 
         BeanSearcher beanSearcher = SearcherBuilder.beanSearcher().sqlExecutor(sqlExecutor).build();
-        beanSearcher.search(Bean.class, new HashMap<>());
-        beanSearcher.search(Bean.class, null);
+        beanSearcher.search(SearchBean.class, new HashMap<>());
+        beanSearcher.search(SearchBean.class, null);
     }
 
     @Test
@@ -93,13 +92,13 @@ public class TestCase1 {
 
         Map<String, Object> params1 = new HashMap<>();
         params1.put("id", 1);
-        Map<String, Object> params2 = MapUtils.builder().field(Bean::getId, 1).build();
+        Map<String, Object> params2 = MapUtils.builder().field(SearchBean::getId, 1).build();
 
-        mapSearcher.search(Bean.class, params1);
-        mapSearcher.search(Bean.class, params2);
+        mapSearcher.search(SearchBean.class, params1);
+        mapSearcher.search(SearchBean.class, params2);
 
-        beanSearcher.search(Bean.class, params1);
-        beanSearcher.search(Bean.class, params2);
+        beanSearcher.search(SearchBean.class, params1);
+        beanSearcher.search(SearchBean.class, params2);
     }
 
 

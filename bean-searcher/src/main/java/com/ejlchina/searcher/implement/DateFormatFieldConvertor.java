@@ -50,14 +50,15 @@ public class DateFormatFieldConvertor implements FieldConvertor {
      * </pre>
      * @param scope 生效范围（越精确，优先级越高）
      * @param format 日期格式，如：yyyy-MM-dd，传入 null 时表示该 scope 下的日期字段不进行格式化
+     * @since v3.0.1
      */
     public void setFormat(String scope, String format) {
         formatMap.put(scope, new Pattern(format));
     }
 
     /**
-     * Deprecated from v3.1.0
-     * 请使用 setFormat(String scope, String format) 方法
+     * Deprecated from v3.0.1
+     * 请使用 {@link #setFormat(String scope, String format) } 方法
      * @param scope 生效范围（越精确，优先级越高）
      * @param format 日期格式，如：yyyy-MM-dd，传入 null 时表示该 scope 下的日期字段不进行格式化
      */
