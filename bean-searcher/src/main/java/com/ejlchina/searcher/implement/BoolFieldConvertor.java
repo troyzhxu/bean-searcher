@@ -12,8 +12,6 @@ import java.util.Objects;
  */
 public class BoolFieldConvertor implements FieldConvertor {
 
-	private boolean ignoreCase = true;
-
 	private String[] falseValues = new String[] { "0", "OFF", "FALSE", "N", "NO", "F" };
 
 	@Override
@@ -43,12 +41,4 @@ public class BoolFieldConvertor implements FieldConvertor {
 		this.falseValues = Objects.requireNonNull(falseValues);
 	}
 
-	public boolean isIgnoreCase() {
-		return ignoreCase;
-	}
-
-	public void setIgnoreCase(boolean ignoreCase) {
-		this.ignoreCase = ignoreCase;
-	}
-	
 }
