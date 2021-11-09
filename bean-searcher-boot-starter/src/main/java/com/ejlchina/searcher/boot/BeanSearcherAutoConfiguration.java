@@ -1,7 +1,7 @@
 package com.ejlchina.searcher.boot;
 
 import com.ejlchina.searcher.*;
-import com.ejlchina.searcher.boot.BeanSearcherProperties.ParamsProps;
+import com.ejlchina.searcher.boot.BeanSearcherProperties.Params;
 import com.ejlchina.searcher.boot.BeanSearcherProperties.SqlProps;
 import com.ejlchina.searcher.dialect.Dialect;
 import com.ejlchina.searcher.dialect.MySqlDialect;
@@ -29,15 +29,15 @@ public class BeanSearcherAutoConfiguration {
 	@Bean
 	@ConditionalOnMissingBean(PageExtractor.class)
 	public PageExtractor pageExtractor(BeanSearcherProperties config) {
-		ParamsProps.PaginationProps conf = config.getParams().getPagination();
+		Params.PaginationProps conf = config.getParams().getPagination();
 		String type = conf.getType();
 		BasePageExtractor extractor;
-		if (ParamsProps.PaginationProps.TYPE_PAGE.equals(type)) {
+		if (Params.PaginationProps.TYPE_PAGE.equals(type)) {
 			PageSizeExtractor p = new PageSizeExtractor();
 			p.setPageName(conf.getPage());
 			extractor = p;
 		}  else
-		if (ParamsProps.PaginationProps.TYPE_OFFSET.equals(type)) {
+		if (Params.PaginationProps.TYPE_OFFSET.equals(type)) {
 			PageOffsetExtractor p = new PageOffsetExtractor();
 			p.setOffsetName(conf.getOffset());
 			extractor = p;
@@ -59,7 +59,7 @@ public class BeanSearcherAutoConfiguration {
 		DefaultParamResolver paramResolver = new DefaultParamResolver();
 		paramResolver.setPageExtractor(pageExtractor);
 		paramFilters.ifAvailable(paramResolver::setParamFilters);
-		ParamsProps conf = config.getParams();
+		Params conf = config.getParams();
 		paramResolver.setOperatorSuffix(conf.getOperatorKey());
 		paramResolver.setIgnoreCaseSuffix(conf.getIgnoreCaseKey());
 		paramResolver.setOrderName(conf.getOrder());

@@ -16,13 +16,13 @@
       "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties",
       "name": "bean-searcher.params",
       "sourceMethod": "getParams()",
-      "type": "com.ejlchina.searcher.boot.BeanSearcherProperties$ParamsProps"
+      "type": "com.ejlchina.searcher.boot.BeanSearcherProperties$Params"
     },
     {
-      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$ParamsProps",
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Params",
       "name": "bean-searcher.params.pagination",
       "sourceMethod": "getPagination()",
-      "type": "com.ejlchina.searcher.boot.BeanSearcherProperties$ParamsProps$PaginationProps"
+      "type": "com.ejlchina.searcher.boot.BeanSearcherProperties$Params$PaginationProps"
     },
     {
       "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties",
@@ -58,98 +58,98 @@
       "type": "java.lang.String[]"
     },
     {
-      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$ParamsProps",
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Params",
       "defaultValue": "ic",
       "name": "bean-searcher.params.ignore-case-key",
       "description": "是否忽略大小写字段参数名后缀",
       "type": "java.lang.String"
     },
     {
-      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$ParamsProps",
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Params",
       "defaultValue": "op",
       "name": "bean-searcher.params.operator-key",
       "description": "检索运算符参数名后缀",
       "type": "java.lang.String"
     },
     {
-      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$ParamsProps",
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Params",
       "defaultValue": "onlySelect",
       "name": "bean-searcher.params.only-select",
       "description": "用于指定只 Select 某些字段的参数名",
       "type": "java.lang.String"
     },
     {
-      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$ParamsProps",
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Params",
       "defaultValue": "selectExclude",
       "name": "bean-searcher.params.select-exclude",
       "description": "用于指定 Select 需要排除的字段的参数名",
       "type": "java.lang.String"
     },
     {
-      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$ParamsProps",
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Params",
       "defaultValue": "order",
       "name": "bean-searcher.params.order",
       "description": "排序方法参数名",
       "type": "java.lang.String"
     },
     {
-      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$ParamsProps$PaginationProps",
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Params$PaginationProps",
       "defaultValue": 15,
       "name": "bean-searcher.params.pagination.default-size",
       "description": "默认分页大小",
       "type": "java.lang.Integer"
     },
     {
-      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$ParamsProps$PaginationProps",
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Params$PaginationProps",
       "defaultValue": 100,
       "name": "bean-searcher.params.pagination.max-allowed-size",
       "description": "最大允许每页大小",
       "type": "java.lang.Integer"
     },
     {
-      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$ParamsProps$PaginationProps",
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Params$PaginationProps",
       "defaultValue": "offset",
       "name": "bean-searcher.params.pagination.offset",
       "description": "偏移分页参数名 在 type = offset 时有效",
       "type": "java.lang.String"
     },
     {
-      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$ParamsProps$PaginationProps",
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Params$PaginationProps",
       "defaultValue": "page",
       "name": "bean-searcher.params.pagination.page",
       "description": "页数参数名 在 type = page 时有效",
       "type": "java.lang.String"
     },
     {
-      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$ParamsProps$PaginationProps",
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Params$PaginationProps",
       "defaultValue": "size",
       "name": "bean-searcher.params.pagination.size",
       "description": "分页大小参数名",
       "type": "java.lang.String"
     },
     {
-      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$ParamsProps$PaginationProps",
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Params$PaginationProps",
       "defaultValue": 0,
       "name": "bean-searcher.params.pagination.start",
       "description": "起始页码或起始偏移量",
       "type": "java.lang.Integer"
     },
     {
-      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$ParamsProps$PaginationProps",
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Params$PaginationProps",
       "defaultValue": "page",
       "name": "bean-searcher.params.pagination.type",
       "description": "分页类型:page 和  offset",
       "type": "java.lang.String"
     },
     {
-      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$ParamsProps",
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Params",
       "defaultValue": "-",
       "name": "bean-searcher.params.separator",
       "description": "字段参数名分隔符",
       "type": "java.lang.String"
     },
     {
-      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$ParamsProps",
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Params",
       "defaultValue": "sort",
       "name": "bean-searcher.params.sort",
       "description": "排序字段参数名",

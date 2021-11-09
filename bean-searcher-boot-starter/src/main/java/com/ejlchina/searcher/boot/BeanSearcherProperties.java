@@ -12,7 +12,7 @@ public class BeanSearcherProperties {
 	/**
 	 * 参数配置
 	 */
-	private final ParamsProps params = new ParamsProps();
+	private final Params params = new Params();
 
 	/**
 	 * SQL 配置
@@ -25,7 +25,7 @@ public class BeanSearcherProperties {
 	private final FieldConvertor fieldConvertor = new FieldConvertor();
 
 
-	public ParamsProps getParams() {
+	public Params getParams() {
 		return params;
 	}
 
@@ -33,7 +33,7 @@ public class BeanSearcherProperties {
 		return sql;
 	}
 
-	public static class ParamsProps {
+	public static class Params {
 
 		/**
 		 * 排序字段参数名
