@@ -33,6 +33,10 @@ public class BeanSearcherProperties {
 		return sql;
 	}
 
+	public FieldConvertor getFieldConvertor() {
+		return fieldConvertor;
+	}
+
 	public static class Params {
 
 		/**

@@ -8,12 +8,6 @@
     },
     {
       "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties",
-      "name": "bean-searcher.field-convertor",
-      "sourceMethod": "getFieldConvertor()",
-      "type": "com.ejlchina.searcher.boot.BeanSearcherProperties$FieldConvertorProps"
-    },
-    {
-      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties",
       "name": "bean-searcher.params",
       "sourceMethod": "getParams()",
       "type": "com.ejlchina.searcher.boot.BeanSearcherProperties$Params"
@@ -29,6 +23,12 @@
       "name": "bean-searcher.sql",
       "sourceMethod": "getSql()",
       "type": "com.ejlchina.searcher.boot.BeanSearcherProperties$Sql"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties",
+      "name": "bean-searcher.field-convertor",
+      "sourceMethod": "getFieldConvertor()",
+      "type": "com.ejlchina.searcher.boot.BeanSearcherProperties$FieldConvertor"
     }
   ],
   "properties": [
@@ -168,6 +168,48 @@
       "name": "bean-searcher.sql.dialect",
       "description": "数据库方言，默认MySQL，可选：Oracle、PostgreSql、SqlServer",
       "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$FieldConvertor",
+      "defaultValue": true,
+      "name": "bean-searcher.field-convertor.use-number",
+      "description": "是否使用 NumberFieldConvertor",
+      "type": "java.lang.Boolean"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$FieldConvertor",
+      "defaultValue": true,
+      "name": "bean-searcher.field-convertor.use-str-num",
+      "description": "是否使用 StrNumFieldConvertor",
+      "type": "java.lang.Boolean"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$FieldConvertor",
+      "defaultValue": true,
+      "name": "bean-searcher.field-convertor.use-bool",
+      "description": "是否使用 BoolFieldConvertor",
+      "type": "java.lang.Boolean"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$FieldConvertor",
+      "defaultValue": "0,OFF,FALSE,N,NO,F",
+      "name": "bean-searcher.field-convertor.bool-false-values",
+      "description": "指定 BoolFieldConvertor 的假值",
+      "type": "java.lang.String[]"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$FieldConvertor",
+      "defaultValue": true,
+      "name": "bean-searcher.field-convertor.use-date-format",
+      "description": "是否使用 DateFormatFieldConvertor",
+      "type": "java.lang.Boolean"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$FieldConvertor",
+      "defaultValue": true,
+      "name": "bean-searcher.field-convertor.date-formats",
+      "description": "DateFormatFieldConvertor 使用的日期格式",
+      "type": "java.util.Map<String, String>"
     }
   ]
 }
