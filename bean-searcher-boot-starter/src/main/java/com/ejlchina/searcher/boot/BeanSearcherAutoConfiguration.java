@@ -11,6 +11,7 @@ import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -109,7 +110,33 @@ public class BeanSearcherAutoConfiguration {
 		});
 		return executor;
 	}
-	
+
+	@Bean
+	@ConditionalOnProperty(name = "bean-searcher.field-convertor.use-number", havingValue = "true")
+	@ConditionalOnMissingBean(NumberFieldConvertor.class)
+	public NumberFieldConvertor numberFieldConvertor() {
+		return new NumberFieldConvertor();
+	}
+
+	@Bean
+	@ConditionalOnProperty(name = "bean-searcher.field-convertor.use-str-num", havingValue = "true")
+	@ConditionalOnMissingBean(StrNumFieldConvertor.class)
+	public StrNumFieldConvertor strNumFieldConvertor() {
+		return new StrNumFieldConvertor();
+	}
+
+	@Bean
+	@ConditionalOnProperty(name = "bean-searcher.field-convertor.use-bool", havingValue = "true")
+	@ConditionalOnMissingBean(BoolFieldConvertor.class)
+	public BoolFieldConvertor boolFieldConvertor(BeanSearcherProperties config) {
+		String[] falseValues = config.getFieldConvertor().getBoolFalseValues();
+		BoolFieldConvertor convertor = new BoolFieldConvertor();
+		if (falseValues != null) {
+			convertor.addFalseValues(falseValues);
+		}
+		return convertor;
+	}
+
 	@Bean
 	@ConditionalOnMissingBean(BeanReflector.class)
 	public BeanReflector beanReflector(ObjectProvider<List<FieldConvertor>> convertorsProvider) {

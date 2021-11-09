@@ -284,7 +284,7 @@ public class BeanSearcherProperties {
 		/**
 		 * BoolFieldConvertor 的假值
 		 */
-		private String[] boolFalseValues = new String[] { "0", "OFF", "FALSE", "N", "NO", "F" };
+		private String[] boolFalseValues;
 
 		/**
 		 * 使用日期格式化字段转换器
