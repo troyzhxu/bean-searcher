@@ -2,7 +2,7 @@ package com.ejlchina.searcher.boot;
 
 import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.boot.BeanSearcherProperties.Params;
-import com.ejlchina.searcher.boot.BeanSearcherProperties.SqlProps;
+import com.ejlchina.searcher.boot.BeanSearcherProperties.Sql;
 import com.ejlchina.searcher.dialect.Dialect;
 import com.ejlchina.searcher.dialect.MySqlDialect;
 import com.ejlchina.searcher.dialect.OracleDialect;
@@ -78,9 +78,9 @@ public class BeanSearcherAutoConfiguration {
 			throw new SearchException("配置项【bean-searcher.sql.dialect】不能为空");
 		}
 		switch (dialect.toLowerCase()) {
-		case SqlProps.DIALECT_MYSQL:
+		case Sql.DIALECT_MYSQL:
 			return new MySqlDialect();
-		case SqlProps.DIALECT_ORACLE:
+		case Sql.DIALECT_ORACLE:
 			return new OracleDialect();
 		}
 		throw new SearchException("配置项【bean-searcher.sql.dialect】只能为  MySql | Oracle 中的一个，若需支持其它方言，可自己注入一个 com.ejlchina.searcher.dialect.Dialect 类型的 Bean！");

@@ -28,7 +28,7 @@
       "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties",
       "name": "bean-searcher.sql",
       "sourceMethod": "getSql()",
-      "type": "com.ejlchina.searcher.boot.BeanSearcherProperties$SqlProps"
+      "type": "com.ejlchina.searcher.boot.BeanSearcherProperties$Sql"
     }
   ],
   "properties": [
@@ -163,7 +163,7 @@
       "type": "java.lang.Integer"
     },
     {
-      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$SqlProps",
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Sql",
       "defaultValue": "mysql",
       "name": "bean-searcher.sql.dialect",
       "description": "数据库方言，默认MySQL，可选：Oracle、PostgreSql、SqlServer",

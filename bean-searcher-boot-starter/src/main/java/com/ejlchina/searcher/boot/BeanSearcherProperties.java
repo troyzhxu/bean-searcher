@@ -17,7 +17,7 @@ public class BeanSearcherProperties {
 	/**
 	 * SQL 配置
 	 */
-	private final SqlProps sql = new SqlProps();
+	private final Sql sql = new Sql();
 
 	/**
 	 * 字段转换器配置
@@ -29,7 +29,7 @@ public class BeanSearcherProperties {
 		return params;
 	}
 
-	public SqlProps getSql() {
+	public Sql getSql() {
 		return sql;
 	}
 
@@ -240,7 +240,7 @@ public class BeanSearcherProperties {
 
 	}
 
-	public static class SqlProps {
+	public static class Sql {
 
 		public static final String DIALECT_MYSQL = "mysql";
 		public static final String DIALECT_ORACLE = "oracle";
