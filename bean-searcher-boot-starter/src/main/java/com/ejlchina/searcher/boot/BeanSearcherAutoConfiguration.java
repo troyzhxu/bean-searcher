@@ -21,6 +21,7 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.Map;
 
 
 @Configuration
@@ -174,6 +175,18 @@ public class BeanSearcherAutoConfiguration {
 		searcher.setBeanReflector(beanReflector);
 		interceptors.ifAvailable(searcher::setInterceptors);
 		return searcher;
+	}
+
+	@Bean
+	@ConditionalOnProperty(name = "bean-searcher.field-convertor.use-date-format", havingValue = "true")
+	@ConditionalOnMissingBean(DateFormatFieldConvertor.class)
+	public DateFormatFieldConvertor dateFormatFieldConvertor(BeanSearcherProperties config) {
+		Map<String, String> dateFormats = config.getFieldConvertor().getDateFormats();
+		DateFormatFieldConvertor convertor = new DateFormatFieldConvertor();
+		if (dateFormats != null) {
+			dateFormats.forEach(convertor::setFormat);
+		}
+		return convertor;
 	}
 
 	@Bean
