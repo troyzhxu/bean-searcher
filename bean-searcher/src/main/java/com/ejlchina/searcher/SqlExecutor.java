@@ -1,9 +1,9 @@
 package com.ejlchina.searcher;
 
-/***
- * @author Troy.Zhou @ 2017-03-20
- * 
+/**
  * SQL 执行器
+ * @author Troy.Zhou @ 2017-03-20
+ * @since v1.0.0
  * */
 public interface SqlExecutor {
 
