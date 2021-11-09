@@ -6,9 +6,7 @@
 
 * 文档：https://searcher.ejlchina.com/
  
- 若以上地址不可用，请访问：http://searcher.ejlchina-app.com/
-
-* 案例：https://gitee.com/ejlchina-zhxu/bean-searcher-demo
+* 掘金手把手教程：https://juejin.cn/post/7027733039299952676
 
 ### ⛳ v3.0 重大更新
 
