@@ -6,7 +6,7 @@
   * 增强 `DefaultSqlExecutor`，新增 `setTransactionIsolation(int level)` 方法，可配置隔离级别
   * 增强 `DateFormatFieldConvertor`，使支持 `Temporal` 及其子类的对象的格式化
   * 增强 `DateFormatFieldConvertor`，新增：`setZoneId(ZoneId)` 方法，可配置时区
-  * 新增 `BFieldConvertor` 与 `MFieldConvertor` 字段转换器子接口，提高字段转换器效能
+  * 新增 `BFieldConvertor` 与 `MFieldConvertor` 字段转换器子接口，提高字段转换效能
 * Bean Searcher Boot Starter
   * 支持配置 `NamedDataSource` 类型的 Bean 来添加多个具名数据源
   * 默认自动配置添加 NumberFieldConvertor
