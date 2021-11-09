@@ -2,6 +2,9 @@ package com.ejlchina.searcher.boot;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 @ConfigurationProperties(prefix = "bean-searcher")
 public class BeanSearcherProperties {
@@ -12,11 +15,14 @@ public class BeanSearcherProperties {
 	private final ParamsProps params = new ParamsProps();
 
 	/**
-	 * SQL配置
+	 * SQL 配置
 	 */
 	private final SqlProps sql = new SqlProps();
 
-
+	/**
+	 * 字段转换器配置
+	 */
+	private final FieldConvertor fieldConvertor = new FieldConvertor();
 
 
 	public ParamsProps getParams() {
@@ -254,49 +260,87 @@ public class BeanSearcherProperties {
 
 	}
 
-	public static class Field {
+	public static class FieldConvertor {
 
 		/**
 		 * 使用 Number to Number 的字段转换器
 		 */
-		private boolean useNumberConvertor = true;
+		private boolean useNumber = true;
 
 		/**
 		 * 使用 String to Number 的字段转换器
 		 */
-		private boolean useStrNumConvertor = true;
+		private boolean useStrNum = true;
 
 		/**
 		 * 使用 String | Number to Boolean 的字段转换器
 		 */
-		private boolean useBoolConvertor = true;
+		private boolean useBool = true;
+
+		/**
+		 * BoolFieldConvertor 的假值
+		 */
+		private String[] boolFalseValues = new String[] { "0", "OFF", "FALSE", "N", "NO", "F" };
+
+		/**
+		 * 使用日期格式化字段转换器
+		 */
+		private boolean useDateFormat = true;
+
+		/**
+		 * 使用日期格式化字段转换器的格式
+		 */
+		private Map<String, String> dateFormats = new HashMap<>();
 
 
-		public boolean isUseNumberConvertor() {
-			return useNumberConvertor;
+		public boolean isUseNumber() {
+			return useNumber;
 		}
 
-		public void setUseNumberConvertor(boolean useNumberConvertor) {
-			this.useNumberConvertor = useNumberConvertor;
+		public void setUseNumber(boolean useNumber) {
+			this.useNumber = useNumber;
 		}
 
-		public boolean isUseStrNumConvertor() {
-			return useStrNumConvertor;
+		public boolean isUseStrNum() {
+			return useStrNum;
 		}
 
-		public void setUseStrNumConvertor(boolean useStrNumConvertor) {
-			this.useStrNumConvertor = useStrNumConvertor;
+		public void setUseStrNum(boolean useStrNum) {
+			this.useStrNum = useStrNum;
 		}
 
-		public boolean isUseBoolConvertor() {
-			return useBoolConvertor;
+		public boolean isUseBool() {
+			return useBool;
 		}
 
-		public void setUseBoolConvertor(boolean useBoolConvertor) {
-			this.useBoolConvertor = useBoolConvertor;
+		public void setUseBool(boolean useBool) {
+			this.useBool = useBool;
+		}
+
+		public String[] getBoolFalseValues() {
+			return boolFalseValues;
+		}
+
+		public void setBoolFalseValues(String[] boolFalseValues) {
+			this.boolFalseValues = boolFalseValues;
+		}
+
+		public boolean isUseDateFormat() {
+			return useDateFormat;
+		}
+
+		public void setUseDateFormat(boolean useDateFormat) {
+			this.useDateFormat = useDateFormat;
+		}
+
+		public Map<String, String> getDateFormats() {
+			return dateFormats;
+		}
+
+		public void setDateFormats(Map<String, String> dateFormats) {
+			this.dateFormats = dateFormats;
 		}
 
 	}
-
 
 }
