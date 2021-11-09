@@ -177,7 +177,7 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 
 ### 🤝 友情接链
 
-[**[ Sa-Token ]** 一个 JavaWeb 轻量级权限认证框架，功能全面，上手简单](https://github.com/dromara/Sa-Token)
+[**[ Sa-Token ]** 一个轻量级 Java 权限认证框架，让鉴权变得简单、优雅！](https://github.com/dromara/Sa-Token)
 
 [**[ OkHttps ]** 轻量却强大的 HTTP 客户端，前后端通用，支持 WebSocket 与 Stomp 协议](https://gitee.com/ejlchina-zhxu/okhttps)
 
