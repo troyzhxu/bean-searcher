@@ -8,7 +8,9 @@
   * 增强 `DateFormatFieldConvertor`，新增：`setZoneId(ZoneId)` 方法，可配置时区
 * Bean Searcher Boot Starter
   * 支持配置 `NamedDataSource` 类型的 Bean 来添加多个具名数据源
-  * 自动配置一些常用的字段转换器
+  * 自动配置一些常用的字段转换器（TODO）
+  * 支持配置文件指定表名与字段默认小写映射 或 大写映射（TODO）
+  * 支持配置文件指定表名默认映射的前缀（TODO）
 
 # v3.0.1
 
