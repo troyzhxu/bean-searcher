@@ -1,6 +1,6 @@
 # Next
 
-### Fetures
+### Features
 
 * Bean Searcher
   * 增强 `DefaultSqlExecutor`，新增 `setTransactionIsolation(int level)` 方法，可配置隔离级别
@@ -18,7 +18,8 @@
 
 # v3.0.1
 
-### Fetures
+### Features
+
 * DateFormatFieldConvertor 新增 setFormat 方法
 
 ### Bug Fix
@@ -26,7 +27,7 @@
 
 # v3.0.0 重大更新
 
-#### 新特性概览
+#### Features
 
 * 支持 热加载
 * 支持 无注解
