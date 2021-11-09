@@ -3,6 +3,7 @@ package com.ejlchina.searcher.implement;
 import com.ejlchina.searcher.FieldConvertor;
 import com.ejlchina.searcher.FieldMeta;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -39,6 +40,17 @@ public class BoolFieldConvertor implements FieldConvertor {
 
 	public void setFalseValues(String[] falseValues) {
 		this.falseValues = Objects.requireNonNull(falseValues);
+	}
+
+	/**
+	 * 追加假值
+	 * @param falseValues 假值
+	 * @since v3.1.0
+	 */
+	public void addFalseValues(String[] falseValues) {
+		int newLength = falseValues.length + this.falseValues.length;
+		this.falseValues = Arrays.copyOf(this.falseValues, newLength);
+		System.arraycopy(falseValues, 0, this.falseValues, this.falseValues.length, falseValues.length);
 	}
 
 }
