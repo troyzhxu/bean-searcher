@@ -11,7 +11,7 @@ import java.math.BigInteger;
  * @author Troy.Zhou @ 2021-11-01
  * @since v3.0.0
  */
-public class StrNumFieldConvertor implements FieldConvertor {
+public class StrNumFieldConvertor implements FieldConvertor.BFieldConvertor {
 
     @Override
     public boolean supports(FieldMeta meta, Class<?> valueType, Class<?> targetType) {

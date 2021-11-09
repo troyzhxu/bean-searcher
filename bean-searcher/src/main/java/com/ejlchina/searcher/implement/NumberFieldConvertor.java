@@ -8,7 +8,7 @@ import com.ejlchina.searcher.FieldMeta;
  * @author Troy.Zhou @ 2021-11-01
  * @since v3.0.0
  */
-public class NumberFieldConvertor implements FieldConvertor {
+public class NumberFieldConvertor implements FieldConvertor.BFieldConvertor {
 
     @Override
     public boolean supports(FieldMeta meta, Class<?> valueType, Class<?> targetType) {

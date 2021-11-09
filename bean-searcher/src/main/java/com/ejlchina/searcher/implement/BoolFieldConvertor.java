@@ -11,7 +11,7 @@ import java.util.Objects;
  * @author Troy.Zhou @ 2021-11-01
  * @since v3.0.0
  */
-public class BoolFieldConvertor implements FieldConvertor {
+public class BoolFieldConvertor implements FieldConvertor.BFieldConvertor {
 
 	private String[] falseValues = new String[] { "0", "OFF", "FALSE", "N", "NO", "F" };
 

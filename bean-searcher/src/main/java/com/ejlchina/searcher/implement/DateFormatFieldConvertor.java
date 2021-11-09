@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
  * @author Troy.Zhou @ 2021-11-03
  * @since v3.0.0
  */
-public class DateFormatFieldConvertor implements FieldConvertor {
+public class DateFormatFieldConvertor implements FieldConvertor.MFieldConvertor {
 
     public static final Pattern DATE_PATTERN = Pattern.compile("[yMd]+");
     public static final Pattern TIME_PATTERN = Pattern.compile("[HhmsS]+");
