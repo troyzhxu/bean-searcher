@@ -5,8 +5,8 @@
 [![Troy.Zhou](https://img.shields.io/badge/%E4%BD%9C%E8%80%85-ejlchina-orange.svg)](https://github.com/ejlchina)
 
 * 文档：https://searcher.ejlchina.com/
- 
-* 掘金手把手教程：https://juejin.cn/post/7027733039299952676
+* 掘金手把手入门：https://juejin.cn/post/7027733039299952676
+* 更新日志：[CHANGELOG](./CHANGELOG.md)
 
 ### ⛳ v3.0 重大更新
 
@@ -96,7 +96,9 @@ SearchResult<User> result = beanSearcher.search(User.class, params);
 
 **DEMO 快速体验**：
 
-https://gitee.com/ejlchina-zhxu/bean-searcher-demo
+* [v3.x 的 spring-boot-demo](./bean-searcher-demos/spring-boot-demo)
+* [v3.x 的 grails-demo](./bean-searcher-demos/grails-demo)
+* [v2.x 的 demo](https://gitee.com/ejlchina-zhxu/bean-searcher-demo)
 
 ### 🚀 快速开发
 
