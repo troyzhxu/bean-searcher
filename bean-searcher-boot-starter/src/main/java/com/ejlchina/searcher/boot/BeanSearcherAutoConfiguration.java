@@ -1,6 +1,8 @@
 package com.ejlchina.searcher.boot;
 
 import com.ejlchina.searcher.*;
+import com.ejlchina.searcher.FieldConvertor.BFieldConvertor;
+import com.ejlchina.searcher.FieldConvertor.MFieldConvertor;
 import com.ejlchina.searcher.boot.BeanSearcherProperties.Params;
 import com.ejlchina.searcher.boot.BeanSearcherProperties.Sql;
 import com.ejlchina.searcher.dialect.Dialect;
@@ -139,8 +141,8 @@ public class BeanSearcherAutoConfiguration {
 
 	@Bean
 	@ConditionalOnMissingBean(BeanReflector.class)
-	public BeanReflector beanReflector(ObjectProvider<List<FieldConvertor>> convertorsProvider) {
-		List<FieldConvertor> convertors = convertorsProvider.getIfAvailable();
+	public BeanReflector beanReflector(ObjectProvider<List<BFieldConvertor>> convertorsProvider) {
+		List<BFieldConvertor> convertors = convertorsProvider.getIfAvailable();
 		if (convertors != null) {
 			return new DefaultBeanReflector(convertors);
 		}
@@ -181,7 +183,7 @@ public class BeanSearcherAutoConfiguration {
 								   SqlResolver sqlResolver,
 								   SqlExecutor sqlExecutor,
 								   ObjectProvider<List<SqlInterceptor>> interceptors,
-								   ObjectProvider<List<FieldConvertor>> convertors) {
+								   ObjectProvider<List<MFieldConvertor>> convertors) {
 		DefaultMapSearcher searcher = new DefaultMapSearcher();
 		searcher.setMetaResolver(metaResolver);
 		searcher.setParamResolver(paramResolver);

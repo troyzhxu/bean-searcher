@@ -1,5 +1,6 @@
 package com.ejlchina.searcher;
 
+import com.ejlchina.searcher.FieldConvertor.MFieldConvertor;
 import com.ejlchina.searcher.implement.AbstractSearcher;
 import com.ejlchina.searcher.implement.DefaultBeanSearcher;
 import com.ejlchina.searcher.implement.DefaultMapSearcher;
@@ -114,7 +115,7 @@ public class SearcherBuilder {
 
 	public static class MapSearcherBuilder extends DefaultSearcherBuilder<MapSearcherBuilder> {
 
-		private final List<FieldConvertor> convertors = new ArrayList<>();
+		private final List<MFieldConvertor> convertors = new ArrayList<>();
 
 		public MapSearcher build() {
 			DefaultMapSearcher beanSearcher = new DefaultMapSearcher();
@@ -123,7 +124,7 @@ public class SearcherBuilder {
 			return beanSearcher;
 		}
 
-		public MapSearcherBuilder addFieldConvertor(FieldConvertor convertor) {
+		public MapSearcherBuilder addFieldConvertor(MFieldConvertor convertor) {
 			if (convertor != null) {
 				this.convertors.add(convertor);
 			}

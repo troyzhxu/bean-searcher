@@ -1,6 +1,7 @@
 package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.*;
+import com.ejlchina.searcher.FieldConvertor.BFieldConvertor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,12 +15,13 @@ import java.util.function.Function;
  */
 public class DefaultBeanReflector implements BeanReflector {
 
-	private List<FieldConvertor> convertors = new ArrayList<>();
+	private List<BFieldConvertor> convertors;
 
 	public DefaultBeanReflector() {
+		this(new ArrayList<>());
 	}
 	
-	public DefaultBeanReflector(List<FieldConvertor> convertors) {
+	public DefaultBeanReflector(List<BFieldConvertor> convertors) {
 		this.convertors = convertors;
 	}
 	
@@ -74,15 +76,15 @@ public class DefaultBeanReflector implements BeanReflector {
 		}
 	}
 
-	public List<FieldConvertor> getConvertors() {
+	public List<BFieldConvertor> getConvertors() {
 		return convertors;
 	}
 
-	public void setConvertors(List<FieldConvertor> convertors) {
+	public void setConvertors(List<BFieldConvertor> convertors) {
 		this.convertors = Objects.requireNonNull(convertors);
 	}
 
-	public void addConvertor(FieldConvertor convertor) {
+	public void addConvertor(BFieldConvertor convertor) {
 		if (convertor != null) {
 			convertors.add(convertor);
 		}

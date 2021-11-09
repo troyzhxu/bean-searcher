@@ -1,6 +1,7 @@
 package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.*;
+import com.ejlchina.searcher.FieldConvertor.MFieldConvertor;
 import com.ejlchina.searcher.param.FetchType;
 
 import java.sql.ResultSet;
@@ -14,7 +15,7 @@ import java.util.*;
  */
 public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher {
 
-	private List<FieldConvertor> convertors = new ArrayList<>();
+	private List<MFieldConvertor> convertors = new ArrayList<>();
 
 	public DefaultMapSearcher() {
 	}
@@ -97,15 +98,15 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 	}
 
 
-	public List<FieldConvertor> getConvertors() {
+	public List<MFieldConvertor> getConvertors() {
 		return convertors;
 	}
 
-	public void setConvertors(List<FieldConvertor> convertors) {
+	public void setConvertors(List<MFieldConvertor> convertors) {
 		this.convertors = Objects.requireNonNull(convertors);
 	}
 
-	public void addConvertor(FieldConvertor convertor) {
+	public void addConvertor(MFieldConvertor convertor) {
 		if (convertor != null) {
 			convertors.add(convertor);
 		}

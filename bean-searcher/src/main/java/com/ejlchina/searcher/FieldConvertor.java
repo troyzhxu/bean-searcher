@@ -8,6 +8,8 @@ import com.ejlchina.searcher.implement.DefaultMapSearcher;
  * 
  * 数据库字段值转换接口
  * 用于把 数据库查出的字段值 型转为 另外一种值
+ * 为提高字段转换效能，v3.1.0 把字段转换器拆为两类：{@link BFieldConvertor } 与 {@link MFieldConvertor }
+ * 以降低 {@link #supports(FieldMeta, Class, Class)} 方法判断次数
  */
 public interface FieldConvertor {
 
@@ -31,7 +33,6 @@ public interface FieldConvertor {
 	Object convert(FieldMeta meta, Object value, Class<?> targetType);
 
 	/**
-	 * 为提高检索性能，v3.1.0 把字段转换器拆为两类
 	 * 只使用在 {@link DefaultBeanReflector } 中的字段转换器
 	 * @author Troy.Zhou @ 2021-11-09
 	 * @since v3.1.0
@@ -39,7 +40,6 @@ public interface FieldConvertor {
 	interface BFieldConvertor extends FieldConvertor { }
 
 	/**
-	 * 为提高检索性能，v3.1.0 把字段转换器拆为两类
 	 * 只使用在 {@link DefaultMapSearcher } 中的字段转换器
 	 * @author Troy.Zhou @ 2021-11-09
 	 * @since v3.1.0
