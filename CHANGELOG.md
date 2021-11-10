@@ -7,6 +7,8 @@
   * 增强 `DateFormatFieldConvertor`，使支持 `Temporal` 及其子类的对象的格式化
   * 增强 `DateFormatFieldConvertor`，新增：`setZoneId(ZoneId)` 方法，可配置时区
   * 新增 `BFieldConvertor` 与 `MFieldConvertor` 字段转换器子接口，提高字段转换效能
+  * 新增 `DefaultDbMapping`，从 `DefaultMetaResolver` 的内部类独立出来
+  * 增强 `DbMapping`，使其完全接管数据映射的解析工作（TODO）
 * Bean Searcher Boot Starter
   * 支持配置 `NamedDataSource` 类型的 Bean 来添加多个具名数据源
   * 自动添加 `spring-boot-starter-jdbc` 依赖
