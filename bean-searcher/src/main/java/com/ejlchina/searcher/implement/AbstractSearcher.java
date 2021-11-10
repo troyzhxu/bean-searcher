@@ -62,12 +62,12 @@ public abstract class AbstractSearcher implements Searcher {
 	}
 
 	protected Number getCountFromSqlResult(SqlResult<?> sqlResult) throws SQLException {
-		return (Number) sqlResult.getClusterResult().getObject(sqlResult.getSearchSql().getCountAlias());
+		return (Number) sqlResult.getAlreadyClusterResult().getObject(sqlResult.getSearchSql().getCountAlias());
 	}
 
 	protected Number[] getSummaryFromSqlResult(SqlResult<?> sqlResult) throws SQLException {
 		List<String> summaryAliases = sqlResult.getSearchSql().getSummaryAliases();
-		ResultSet countResultSet = sqlResult.getClusterResult();
+		ResultSet countResultSet = sqlResult.getAlreadyClusterResult();
 		Number[] summaries = new Number[summaryAliases.size()];
 		for (int i = 0; i < summaries.length; i++) {
 			String summaryAlias = summaryAliases.get(i);

@@ -61,7 +61,7 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 	protected <T> SearchResult<T> search(Class<T> beanClass, Map<String, Object> paraMap, FetchType fetchType) {
 		try (SqlResult<T> sqlResult = doSearch(beanClass, paraMap, fetchType)) {
 			ResultSet listResult = sqlResult.getListResult();
-			ResultSet clusterResult = sqlResult.getClusterResult();
+			ResultSet clusterResult = sqlResult.getAlreadyClusterResult();
 			SearchResult<T> result;
 			if (listResult != null) {
 				SearchSql<T> searchSql = sqlResult.getSearchSql();
@@ -72,10 +72,8 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 				result = new SearchResult<>();
 			}
 			if (clusterResult != null) {
-				if (clusterResult.next()) {
-					result.setTotalCount(getCountFromSqlResult(sqlResult));
-					result.setSummaries(getSummaryFromSqlResult(sqlResult));
-				}
+				result.setTotalCount(getCountFromSqlResult(sqlResult));
+				result.setSummaries(getSummaryFromSqlResult(sqlResult));
 			}
 			return result;
 		} catch (SQLException e) {
