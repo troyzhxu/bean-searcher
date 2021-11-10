@@ -16,6 +16,12 @@
   * 支持配置文件指定表名与字段默认小写映射 或 大写映射（TODO）
   * 支持配置文件指定表名默认映射的前缀（TODO）
 
+# v3.0.2
+
+### Bug Fix
+
+* 修复：在 v3.0.0 中，单独使用 `searchCount` 和 `searchSum` 方法时，获取 SQL 结果会出错的问题
+
 # v3.0.1
 
 ### Features
@@ -23,7 +29,8 @@
 * DateFormatFieldConvertor 新增 setFormat 方法
 
 ### Bug Fix
-* 修复：v3.0.0 中，再没有指定 @SearchBean 注解的 joinCond 属性时，带条件的 SQL 生成中 where 后少一个 左括号的问题
+
+* 修复：在 v3.0.0 中，再没有指定 @SearchBean 注解的 joinCond 属性时，带条件的 SQL 生成中 where 后少一个 左括号的问题
 
 # v3.0.0 重大更新
 
