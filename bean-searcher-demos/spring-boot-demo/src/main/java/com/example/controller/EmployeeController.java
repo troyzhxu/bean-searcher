@@ -36,6 +36,27 @@ public class EmployeeController {
 				new String[] { "age" });					// 统计字段：年龄
 	}
 
+	@GetMapping("/count")
+	public Object count(HttpServletRequest request) {
+		// 组合检索、排序、分页 和 统计 都在这一句代码中实现了
+		return beanSearcher.searchCount(Employee.class,				// 指定实体类
+				MapUtils.flat(request.getParameterMap()));					// 统计字段：年龄
+	}
+
+	@GetMapping("/sum")
+	public Object sum(HttpServletRequest request) {
+		// 组合检索、排序、分页 和 统计 都在这一句代码中实现了
+		return beanSearcher.searchSum(Employee.class,				// 指定实体类
+				MapUtils.flat(request.getParameterMap()), "age");					// 统计字段：年龄
+	}
+
+	@GetMapping("/sums")
+	public Object sums(HttpServletRequest request) {
+		// 组合检索、排序、分页 和 统计 都在这一句代码中实现了
+		return beanSearcher.searchSum(Employee.class,				// 指定实体类
+				MapUtils.flat(request.getParameterMap()), new String[] {"id", "age"});					// 统计字段：年龄
+	}
+
 	/**
 	 * 员工列表检索接口
 	 */

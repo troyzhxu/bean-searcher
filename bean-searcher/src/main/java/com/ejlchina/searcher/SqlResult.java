@@ -76,7 +76,12 @@ public class SqlResult<T> implements Closeable {
         this.listStatement = listStatement;
     }
 
-    public ResultSet getClusterResult() {
+    public ResultSet getAlreadyClusterResult() throws SQLException {
+        if (clusterResult != null) {
+            if (clusterResult.isBeforeFirst()) {
+                clusterResult.next();
+            }
+        }
         return clusterResult;
     }
 
