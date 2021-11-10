@@ -9,6 +9,7 @@
   * 新增 `BFieldConvertor` 与 `MFieldConvertor` 字段转换器子接口，提高字段转换效能
 * Bean Searcher Boot Starter
   * 支持配置 `NamedDataSource` 类型的 Bean 来添加多个具名数据源
+  * 自动添加 `spring-boot-starter-jdbc` 依赖
   * 默认自动配置添加 NumberFieldConvertor
   * 默认自动配置添加 StrNumFieldConvertor
   * 默认自动配置添加 BoolFieldConvertor
