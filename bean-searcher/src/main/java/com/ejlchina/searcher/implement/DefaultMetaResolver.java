@@ -26,21 +26,7 @@ public class DefaultMetaResolver implements MetaResolver {
 
     private SnippetResolver snippetResolver = new DefaultSnippetResolver();
 
-    private DbMapping dbMapping = new DbMapping() {
-
-        @Override
-        public String table(Class<?> beanClass) {
-            // 默认使用连字符风格的表名映射
-            return StringUtils.toUnderline(beanClass.getSimpleName());
-        }
-
-        @Override
-        public String column(Field field) {
-            // 默认使用连字符风格的字段映射
-            return StringUtils.toUnderline(field.getName());
-        }
-
-    };
+    private DbMapping dbMapping = new DefaultDbMapping();
 
     @Override
     public <T> BeanMeta<T> resolve(Class<T> beanClass) {
