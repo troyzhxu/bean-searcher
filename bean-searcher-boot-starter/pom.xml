@@ -14,6 +14,10 @@
 		<version>3.0.2</version>
 	</parent>
 
+	<properties>
+		<spring.boot.version>2.5.6</spring.boot.version>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.ejlchina</groupId>
@@ -21,15 +25,21 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+			<version>${spring.boot.version}</version>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
 		  <groupId>org.springframework.boot</groupId>
 		  <artifactId>spring-boot-autoconfigure</artifactId>
-		  <version>2.5.6</version>
+		  <version>${spring.boot.version}</version>
 		  <scope>provided</scope>
 		</dependency>
 		<dependency>
 		  <groupId>org.springframework.boot</groupId>
 		  <artifactId>spring-boot-configuration-processor</artifactId>
-		  <version>2.5.6</version>
+		  <version>${spring.boot.version}</version>
 		  <optional>true</optional>
 		</dependency>
 	</dependencies>
