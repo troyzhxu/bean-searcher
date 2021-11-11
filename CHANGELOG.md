@@ -1,6 +1,6 @@
 # Next
 
-### Features
+### ✨ Features
 
 * Bean Searcher
   * 增强 `DefaultSqlExecutor`，新增 `setTransactionIsolation(int level)` 方法，可配置隔离级别
@@ -21,23 +21,23 @@
 
 # v3.0.2
 
-### Bug Fix
+### 🐛 Bug Fixes
 
 * 修复：在 v3.0.0 中，单独使用 `searchCount` 和 `searchSum` 方法时，获取 SQL 结果会出错的问题
 
 # v3.0.1
 
-### Features
+### ✨ Features
 
 * DateFormatFieldConvertor 新增 setFormat 方法
 
-### Bug Fix
+### 🐛 Bug Fixes
 
 * 修复：在 v3.0.0 中，再没有指定 @SearchBean 注解的 joinCond 属性时，带条件的 SQL 生成中 where 后少一个 左括号的问题
 
 # v3.0.0 重大更新
 
-#### Features
+### ✨ Features
 
 * 支持 热加载
 * 支持 无注解
