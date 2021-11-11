@@ -19,6 +19,12 @@ public class DefaultDbMapping implements DbMapping {
 
     private static final Operator[] EMPTY_OPERATORS = {};
 
+    // 表名前缀
+    private String tablePrefix;
+
+    // 表与列是否是大写风格
+    private boolean upperCase = false;
+
     @Override
     public Table table(Class<?> beanClass) {
         SearchBean bean = beanClass.getAnnotation(SearchBean.class);
@@ -30,7 +36,7 @@ public class DefaultDbMapping implements DbMapping {
                     bean.distinct()
             );
         }
-        return new Table(null, tables(beanClass), "", "", false);
+        return new Table(null, toTableName(beanClass), "", "", false);
     }
 
     @Override
@@ -49,25 +55,35 @@ public class DefaultDbMapping implements DbMapping {
     }
 
     protected String tables(Class<?> beanClass, SearchBean bean) {
-        if (StringUtils.isBlank(bean.tables())) {
-            return tables(beanClass);
+        String tables = bean.tables();
+        if (StringUtils.isBlank(tables)) {
+            return toTableName(beanClass);
         }
-        return bean.tables().trim();
+        return tables.trim();
     }
 
-    protected String tables(Class<?> beanClass) {
-        return StringUtils.toUnderline(beanClass.getSimpleName());
+    protected String toTableName(Class<?> beanClass) {
+        String className = beanClass.getSimpleName();
+        String tables = StringUtils.toUnderline(className);
+        if (upperCase) {
+            tables = tables.toUpperCase();
+        }
+        if (tablePrefix != null) {
+            return tablePrefix + tables;
+        }
+        return tables;
     }
 
     protected String dbFieldSql(Field field) {
         Class<?> beanClass = field.getDeclaringClass();
-        SearchBean bean = beanClass.getAnnotation(SearchBean.class);
         DbField dbField = field.getAnnotation(DbField.class);
-        boolean dbIgnore = field.getAnnotation(DbIgnore.class) != null;
-        if (dbField != null) {
-            if (dbIgnore) {
-                throw new SearchException("[" + beanClass.getName() + ": " + field.getName() + "] is annotated by @DbField and @DbIgnore, which are mutually exclusive.");
+        if (field.getAnnotation(DbIgnore.class) != null) {
+            if (dbField == null) {
+                return null;
             }
+            throw new SearchException("[" + beanClass.getName() + ": " + field.getName() + "] is annotated by @DbField and @DbIgnore, which are mutually exclusive.");
+        }
+        if (dbField != null) {
             String fieldSql = dbField.value().trim();
             if (StringUtils.isNotBlank(fieldSql)) {
                 if (fieldSql.toLowerCase().startsWith("select ")) {
@@ -76,24 +92,38 @@ public class DefaultDbMapping implements DbMapping {
                 return fieldSql;
             }
         }
-        if (dbIgnore) {
-            return null;
-        }
+        SearchBean bean = beanClass.getAnnotation(SearchBean.class);
         // 没加 @SearchBean 注解，或者加了但没给 tables 赋值，则可以自动映射列名，因为此时默认为单表映射
         if (bean == null || StringUtils.isBlank(bean.tables())) {
             // 默认使用下划线风格的字段映射
-            return getColumn(field);
+            return toColumnName(field);
         }
         String tab = bean.autoMapTo();
         if (StringUtils.isBlank(tab)) {
             return null;
         }
-        return tab.trim() + "." + getColumn(field);
+        return tab.trim() + "." + toColumnName(field);
     }
 
+    private String toColumnName(Field field) {
+        String column = StringUtils.toUnderline(field.getName());
+        return upperCase ? column.toUpperCase() : column;
+    }
 
-    private String getColumn(Field field) {
-        return StringUtils.toUnderline(field.getName());
+    public String getTablePrefix() {
+        return tablePrefix;
+    }
+
+    public void setTablePrefix(String tablePrefix) {
+        this.tablePrefix = tablePrefix;
+    }
+
+    public boolean isUpperCase() {
+        return upperCase;
+    }
+
+    public void setUpperCase(boolean upperCase) {
+        this.upperCase = upperCase;
     }
 
 }
