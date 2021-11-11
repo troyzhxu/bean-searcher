@@ -1,10 +1,6 @@
 package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.*;
-import com.ejlchina.searcher.bean.DbField;
-import com.ejlchina.searcher.bean.DbIgnore;
-import com.ejlchina.searcher.bean.SearchBean;
-import com.ejlchina.searcher.param.Operator;
 import com.ejlchina.searcher.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -19,8 +15,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since v3.0.0
  */
 public class DefaultMetaResolver implements MetaResolver {
-
-    private static final Operator[] EMPTY_OPERATORS = {};
 
     private final Map<Class<?>, BeanMeta<?>> cache = new ConcurrentHashMap<>();
 
@@ -43,24 +37,24 @@ public class DefaultMetaResolver implements MetaResolver {
     }
 
     protected <T> BeanMeta<T> resolveMetadata(Class<T> beanClass) {
-        SearchBean bean = beanClass.getAnnotation(SearchBean.class);
-        // v3.0.0 后 bean 可以为 null
-        BeanMeta<T> beanMeta = new BeanMeta<>(beanClass,
-                bean != null ? bean.dataSource().trim() : null,
-                snippetResolver.resolve(tables(beanClass, bean)),
-                snippetResolver.resolve(joinCond(bean)),
-                snippetResolver.resolve(groupBy(bean)),
-                bean != null && bean.distinct());
+        DbMapping.Table table = dbMapping.table(beanClass);
+        if (table == null) {
+            throw new SearchException("The class [" + beanClass.getName() + "] can not be searched, because it can not be resolved by " + dbMapping.getClass());
+        }
+        BeanMeta<T> beanMeta = new BeanMeta<>(beanClass, table.getDataSource(),
+                snippetResolver.resolve(table.getTables()),
+                snippetResolver.resolve(table.getJoinCond()),
+                snippetResolver.resolve(table.getGroupBy()),
+                table.isDistinct());
         // 字段解析
         Field[] fields = beanClass.getDeclaredFields();
         for (int index = 0; index < fields.length; index++) {
             Field field = fields[index];
-            String fieldSql = dbFieldSql(bean, field);
-            if (fieldSql == null) {
+            DbMapping.Column column = dbMapping.column(fields[index]);
+            if (column == null) {
                 continue;
             }
-            SqlSnippet fieldSnippet = snippetResolver.resolve(fieldSql);
-            FieldMeta fieldMeta = resolveFieldMeta(beanMeta, field, fieldSnippet, index);
+            FieldMeta fieldMeta = resolveFieldMeta(beanMeta, column, field, index);
             beanMeta.addFieldMeta(field.getName(), fieldMeta);
         }
         if (beanMeta.getFieldCount() == 0) {
@@ -69,14 +63,10 @@ public class DefaultMetaResolver implements MetaResolver {
         return beanMeta;
     }
 
-    protected FieldMeta resolveFieldMeta(BeanMeta<?> beanMeta, Field field, SqlSnippet snippet, int index) {
-        Class<?> beanClass = beanMeta.getBeanClass();
-        Method setter = getSetterMethod(beanClass, field);
-        String dbAlias = "_" + index;
-        DbField dbField = field.getAnnotation(DbField.class);
-        boolean conditional = dbField == null || dbField.conditional();
-        Operator[] onlyOn = dbField != null ? dbField.onlyOn() : EMPTY_OPERATORS;
-        return new FieldMeta(beanMeta, field, setter, snippet, dbAlias, conditional, onlyOn);
+    protected FieldMeta resolveFieldMeta(BeanMeta<?> beanMeta, DbMapping.Column column, Field field, int index) {
+        Method setter = getSetterMethod(beanMeta.getBeanClass(), field);
+        SqlSnippet snippet = snippetResolver.resolve(column.getFieldSql());
+        return new FieldMeta(beanMeta, field, setter, snippet, "_" + index, column.isConditional(), column.getOnlyOn());
     }
 
     protected Method getSetterMethod(Class<?> beanClass, Field field) {
@@ -86,67 +76,6 @@ public class DefaultMetaResolver implements MetaResolver {
         } catch (Exception e) {
             throw new SearchException("[" + beanClass.getName() + ": " + fieldName + "] is annotated by @DbField, but there is no correctly setter for it.", e);
         }
-    }
-
-    protected String tables(Class<?> beanClass, SearchBean bean) {
-        if (bean == null || StringUtils.isBlank(bean.tables())) {
-            String table = dbMapping.table(beanClass);
-            if (StringUtils.isBlank(table)) {
-                throw new SearchException("The class [" + beanClass.getName()
-                        + "] can not be searched, because there is no table mapping provided by @SearchBean and DbMapping");
-            }
-            return table.trim();
-        }
-        return bean.tables().trim();
-    }
-
-    protected String joinCond(SearchBean bean) {
-        return bean != null ? bean.joinCond().trim() : "";
-    }
-
-    protected String groupBy(SearchBean bean) {
-        return bean != null ? bean.groupBy().trim() : "";
-    }
-
-    protected String dbFieldSql(SearchBean bean, Field field) {
-        DbField dbField = field.getAnnotation(DbField.class);
-        boolean dbIgnore = field.getAnnotation(DbIgnore.class) != null;
-        if (dbField != null) {
-            if (dbIgnore) {
-                throw new SearchException("[" + field.getDeclaringClass().getName() + ": " + field.getName() + "] is annotated by @DbField and @DbIgnore, which are mutually exclusive.");
-            }
-            String fieldSql = dbField.value().trim();
-            if (StringUtils.isNotBlank(fieldSql)) {
-                if (fieldSql.toLowerCase().startsWith("select ")) {
-                    return "(" + fieldSql + ")";
-                }
-                return fieldSql;
-            }
-        }
-        if (dbIgnore) {
-            return null;
-        }
-        // 没加 @SearchBean 注解，或者加了但没给 tables 赋值，则可以自动映射列名，因为此时默认为单表映射
-        if (bean == null || StringUtils.isBlank(bean.tables())) {
-            return getColumn(field);
-        }
-        String tab = bean.autoMapTo();
-        if (StringUtils.isBlank(tab)) {
-            return null;
-        }
-        String column = getColumn(field);
-        if (column == null) {
-            return null;
-        }
-        return tab.trim() + "." + column;
-    }
-
-    private String getColumn(Field field) {
-        String column = dbMapping.column(field);
-        if (StringUtils.isBlank(column)) {
-            return null;
-        }
-        return column.trim();
     }
 
     public SnippetResolver getSnippetResolver() {
