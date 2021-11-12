@@ -44,7 +44,7 @@ public class NumberFieldConvertor implements FieldConvertor.BFieldConvertor {
         if (targetType == byte.class || targetType == Byte.class) {
             return number.byteValue();
         }
-        return null;
+        throw new UnsupportedOperationException();
     }
 
 }

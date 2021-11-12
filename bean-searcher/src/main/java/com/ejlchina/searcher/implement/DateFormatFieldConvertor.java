@@ -2,7 +2,6 @@ package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.FieldConvertor;
 import com.ejlchina.searcher.FieldMeta;
-import com.ejlchina.searcher.MapSearcher;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
