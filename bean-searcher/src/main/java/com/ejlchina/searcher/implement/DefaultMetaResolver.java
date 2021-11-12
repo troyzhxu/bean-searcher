@@ -20,7 +20,16 @@ public class DefaultMetaResolver implements MetaResolver {
 
     private SnippetResolver snippetResolver = new DefaultSnippetResolver();
 
-    private DbMapping dbMapping = new DefaultDbMapping();
+    private DbMapping dbMapping;
+
+
+    public DefaultMetaResolver() {
+        this(new DefaultDbMapping());
+    }
+
+    public DefaultMetaResolver(DbMapping dbMapping) {
+        this.dbMapping = dbMapping;
+    }
 
     @Override
     public <T> BeanMeta<T> resolve(Class<T> beanClass) {

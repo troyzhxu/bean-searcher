@@ -115,7 +115,9 @@ public class DefaultDbMapping implements DbMapping {
     }
 
     public void setTablePrefix(String tablePrefix) {
-        this.tablePrefix = tablePrefix;
+        if (StringUtils.isNotBlank(tablePrefix)) {
+            this.tablePrefix = tablePrefix.trim();
+        }
     }
 
     public boolean isUpperCase() {
