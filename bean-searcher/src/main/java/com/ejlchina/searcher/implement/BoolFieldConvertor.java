@@ -8,6 +8,7 @@ import java.util.Objects;
 
 /**
  * [字符串 | 数字 to 布尔] 字段转换器
+ * 与 {@link DefaultBeanReflector } 配合使用
  * @author Troy.Zhou @ 2021-11-01
  * @since v3.0.0
  */

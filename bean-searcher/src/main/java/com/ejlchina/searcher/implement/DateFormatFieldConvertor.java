@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 /**
  * 日期格式化字段转换器
  * 该转换器可将数据库取出的 Date 对象字段 转换为 格式化的日期字符串
- * 常与 {@link MapSearcher } 配合使用
+ * 与 {@link DefaultMapSearcher } 配合使用
  *
  * v3.0.0 支持 {@link Date } 及其子类的 日期格式化
  * v3.0.1 支持 {@link Temporal } 及其子类的 日期格式化
