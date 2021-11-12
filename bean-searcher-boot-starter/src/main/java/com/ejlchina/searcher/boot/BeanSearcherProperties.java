@@ -254,12 +254,41 @@ public class BeanSearcherProperties {
 		 */
 		private String dialect = DIALECT_MYSQL;
 
+		private final DefaultMapping defaultMapping = new DefaultMapping();
+
 		public String getDialect() {
 			return dialect;
 		}
 
 		public void setDialect(String dialect) {
 			this.dialect = dialect;
+		}
+
+		public DefaultMapping getDefaultMapping() {
+			return defaultMapping;
+		}
+
+		public static class DefaultMapping {
+
+			private boolean upperCase = false;
+			private String tablePrefix = null;
+
+			public boolean isUpperCase() {
+				return upperCase;
+			}
+
+			public void setUpperCase(boolean upperCase) {
+				this.upperCase = upperCase;
+			}
+
+			public String getTablePrefix() {
+				return tablePrefix;
+			}
+
+			public void setTablePrefix(String tablePrefix) {
+				this.tablePrefix = tablePrefix;
+			}
+
 		}
 
 	}

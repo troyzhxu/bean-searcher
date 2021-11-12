@@ -25,6 +25,12 @@
       "type": "com.ejlchina.searcher.boot.BeanSearcherProperties$Sql"
     },
     {
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Sql",
+      "name": "bean-searcher.sql.default-mapping",
+      "sourceMethod": "getDefaultMapping()",
+      "type": "com.ejlchina.searcher.boot.BeanSearcherProperties$Sql$DefaultMapping"
+    },
+    {
       "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties",
       "name": "bean-searcher.field-convertor",
       "sourceMethod": "getFieldConvertor()",
@@ -167,6 +173,20 @@
       "defaultValue": "mysql",
       "name": "bean-searcher.sql.dialect",
       "description": "数据库方言，默认MySQL，可选：Oracle、PostgreSql、SqlServer",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Sql$DefaultMapping",
+      "defaultValue": false,
+      "name": "bean-searcher.sql.default-mapping.upper-case",
+      "description": "自动映射的表名与字段名是否大写",
+      "type": "java.lang.Boolean"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Sql$DefaultMapping",
+      "defaultValue": null,
+      "name": "bean-searcher.sql.default-mapping.table-prefix",
+      "description": "自动映射的表名是使用的前缀",
       "type": "java.lang.String"
     },
     {

@@ -151,11 +151,20 @@ public class BeanSearcherAutoConfiguration {
 	}
 
 	@Bean
+	@ConditionalOnMissingBean(DbMapping.class)
+	public DbMapping dbMapping(BeanSearcherProperties config) {
+		DefaultDbMapping mapping = new DefaultDbMapping();
+		Sql.DefaultMapping conf = config.getSql().getDefaultMapping();
+		mapping.setTablePrefix(conf.getTablePrefix());
+		mapping.setUpperCase(conf.isUpperCase());
+		return mapping;
+	}
+
+	@Bean
 	@ConditionalOnMissingBean(MetaResolver.class)
-	public MetaResolver metaResolver(ObjectProvider<SnippetResolver> snippetResolver, ObjectProvider<DbMapping> dbMapping) {
-		DefaultMetaResolver metaResolver = new DefaultMetaResolver();
+	public MetaResolver metaResolver(DbMapping dbMapping, ObjectProvider<SnippetResolver> snippetResolver) {
+		DefaultMetaResolver metaResolver = new DefaultMetaResolver(dbMapping);
 		snippetResolver.ifAvailable(metaResolver::setSnippetResolver);
-		dbMapping.ifAvailable(metaResolver::setDbMapping);
 		return metaResolver;
 	}
 
