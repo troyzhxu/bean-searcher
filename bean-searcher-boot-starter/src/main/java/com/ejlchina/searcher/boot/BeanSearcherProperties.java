@@ -2,6 +2,7 @@ package com.ejlchina.searcher.boot;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -316,9 +317,19 @@ public class BeanSearcherProperties {
 		private String[] boolFalseValues;
 
 		/**
+		 * 使用日期字段转换器
+		 */
+		private boolean useDate = true;
+
+		/**
 		 * 使用日期格式化字段转换器
 		 */
 		private boolean useDateFormat = true;
+
+		/**
+		 * 时区
+		 */
+		private ZoneId zoneId = null;
 
 		/**
 		 * 使用日期格式化字段转换器的格式
@@ -358,6 +369,14 @@ public class BeanSearcherProperties {
 			this.boolFalseValues = boolFalseValues;
 		}
 
+		public boolean isUseDate() {
+			return useDate;
+		}
+
+		public void setUseDate(boolean useDate) {
+			this.useDate = useDate;
+		}
+
 		public boolean isUseDateFormat() {
 			return useDateFormat;
 		}
@@ -372,6 +391,14 @@ public class BeanSearcherProperties {
 
 		public void setDateFormats(Map<String, String> dateFormats) {
 			this.dateFormats = dateFormats;
+		}
+
+		public ZoneId getZoneId() {
+			return zoneId;
+		}
+
+		public void setZoneId(ZoneId zoneId) {
+			this.zoneId = zoneId;
 		}
 
 	}

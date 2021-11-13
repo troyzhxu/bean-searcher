@@ -16,7 +16,7 @@
   * 默认自动配置添加 NumberFieldConvertor
   * 默认自动配置添加 StrNumFieldConvertor
   * 默认自动配置添加 BoolFieldConvertor
-  * 默认自动配置添加 DateFieldConvertor（TODO）
+  * 默认自动配置添加 DateFieldConvertor
   * 默认自动配置添加 DateFormatFieldConvertor
   * 支持配置文件指定表名与字段默认小写映射 或 大写映射
   * 支持配置文件指定表名默认映射的前缀

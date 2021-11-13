@@ -20,6 +20,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
 
@@ -141,6 +142,18 @@ public class BeanSearcherAutoConfiguration {
 	}
 
 	@Bean
+	@ConditionalOnProperty(name = "bean-searcher.field-convertor.use-date", havingValue = "true")
+	@ConditionalOnMissingBean(DateFieldConvertor.class)
+	public DateFieldConvertor dateFieldConvertor(BeanSearcherProperties config) {
+		DateFieldConvertor convertor = new DateFieldConvertor();
+		ZoneId zoneId = config.getFieldConvertor().getZoneId();
+		if (zoneId != null) {
+			convertor.setZoneId(zoneId);
+		}
+		return convertor;
+	}
+
+	@Bean
 	@ConditionalOnMissingBean(BeanReflector.class)
 	public BeanReflector beanReflector(ObjectProvider<List<BFieldConvertor>> convertorsProvider) {
 		List<BFieldConvertor> convertors = convertorsProvider.getIfAvailable();
@@ -190,10 +203,15 @@ public class BeanSearcherAutoConfiguration {
 	@ConditionalOnProperty(name = "bean-searcher.field-convertor.use-date-format", havingValue = "true")
 	@ConditionalOnMissingBean(DateFormatFieldConvertor.class)
 	public DateFormatFieldConvertor dateFormatFieldConvertor(BeanSearcherProperties config) {
-		Map<String, String> dateFormats = config.getFieldConvertor().getDateFormats();
+		BeanSearcherProperties.FieldConvertor conf = config.getFieldConvertor();
+		Map<String, String> dateFormats = conf.getDateFormats();
+		ZoneId zoneId = conf.getZoneId();
 		DateFormatFieldConvertor convertor = new DateFormatFieldConvertor();
 		if (dateFormats != null) {
 			dateFormats.forEach(convertor::setFormat);
+		}
+		if (zoneId != null) {
+			convertor.setZoneId(zoneId);
 		}
 		return convertor;
 	}

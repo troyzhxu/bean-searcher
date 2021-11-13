@@ -220,6 +220,13 @@
     {
       "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$FieldConvertor",
       "defaultValue": true,
+      "name": "bean-searcher.field-convertor.use-date",
+      "description": "是否使用 DateFieldConvertor",
+      "type": "java.lang.Boolean"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$FieldConvertor",
+      "defaultValue": true,
       "name": "bean-searcher.field-convertor.use-date-format",
       "description": "是否使用 DateFormatFieldConvertor",
       "type": "java.lang.Boolean"
@@ -230,6 +237,13 @@
       "name": "bean-searcher.field-convertor.date-formats",
       "description": "DateFormatFieldConvertor 使用的日期格式",
       "type": "java.util.Map<String, String>"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$FieldConvertor",
+      "defaultValue": null,
+      "name": "bean-searcher.field-convertor.zone-id",
+      "description": "时区 ID",
+      "type": "java.time.ZoneId"
     }
   ]
 }
