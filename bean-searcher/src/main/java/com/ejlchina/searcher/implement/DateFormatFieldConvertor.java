@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.Temporal;
 import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
@@ -164,7 +165,7 @@ public class DateFormatFieldConvertor implements FieldConvertor.MFieldConvertor 
     }
 
     public void setZoneId(ZoneId zoneId) {
-        this.zoneId = zoneId;
+        this.zoneId = Objects.requireNonNull(zoneId);
     }
 
 }
