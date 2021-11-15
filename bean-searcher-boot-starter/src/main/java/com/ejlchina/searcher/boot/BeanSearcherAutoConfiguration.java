@@ -116,21 +116,21 @@ public class BeanSearcherAutoConfiguration {
 	}
 
 	@Bean
-	@ConditionalOnProperty(name = "bean-searcher.field-convertor.use-number", havingValue = "true")
+	@ConditionalOnProperty(name = "bean-searcher.field-convertor.use-number", havingValue = "true", matchIfMissing = true)
 	@ConditionalOnMissingBean(NumberFieldConvertor.class)
 	public NumberFieldConvertor numberFieldConvertor() {
 		return new NumberFieldConvertor();
 	}
 
 	@Bean
-	@ConditionalOnProperty(name = "bean-searcher.field-convertor.use-str-num", havingValue = "true")
+	@ConditionalOnProperty(name = "bean-searcher.field-convertor.use-str-num", havingValue = "true", matchIfMissing = true)
 	@ConditionalOnMissingBean(StrNumFieldConvertor.class)
 	public StrNumFieldConvertor strNumFieldConvertor() {
 		return new StrNumFieldConvertor();
 	}
 
 	@Bean
-	@ConditionalOnProperty(name = "bean-searcher.field-convertor.use-bool", havingValue = "true")
+	@ConditionalOnProperty(name = "bean-searcher.field-convertor.use-bool", havingValue = "true", matchIfMissing = true)
 	@ConditionalOnMissingBean(BoolFieldConvertor.class)
 	public BoolFieldConvertor boolFieldConvertor(BeanSearcherProperties config) {
 		String[] falseValues = config.getFieldConvertor().getBoolFalseValues();
@@ -142,7 +142,7 @@ public class BeanSearcherAutoConfiguration {
 	}
 
 	@Bean
-	@ConditionalOnProperty(name = "bean-searcher.field-convertor.use-date", havingValue = "true")
+	@ConditionalOnProperty(name = "bean-searcher.field-convertor.use-date", havingValue = "true", matchIfMissing = true)
 	@ConditionalOnMissingBean(DateFieldConvertor.class)
 	public DateFieldConvertor dateFieldConvertor(BeanSearcherProperties config) {
 		DateFieldConvertor convertor = new DateFieldConvertor();
@@ -200,7 +200,7 @@ public class BeanSearcherAutoConfiguration {
 	}
 
 	@Bean
-	@ConditionalOnProperty(name = "bean-searcher.field-convertor.use-date-format", havingValue = "true")
+	@ConditionalOnProperty(name = "bean-searcher.field-convertor.use-date-format", havingValue = "true", matchIfMissing = true)
 	@ConditionalOnMissingBean(DateFormatFieldConvertor.class)
 	public DateFormatFieldConvertor dateFormatFieldConvertor(BeanSearcherProperties config) {
 		BeanSearcherProperties.FieldConvertor conf = config.getFieldConvertor();
