@@ -6,9 +6,7 @@ import com.ejlchina.searcher.FieldMeta;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.Temporal;
-import java.util.Date;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
@@ -29,6 +27,9 @@ public class DateFormatFieldConvertor implements FieldConvertor.MFieldConvertor 
     public static final Pattern TIME_PATTERN = Pattern.compile("[HhmsS]+");
 
     private final Map<String, Formatter> formatMap = new ConcurrentHashMap<>();
+
+    private final Map<Class<?>, List<String>> typeNameMap = new ConcurrentHashMap<>();
+
 
     /**
      * 时区
@@ -124,40 +125,44 @@ public class DateFormatFieldConvertor implements FieldConvertor.MFieldConvertor 
 
     private Formatter findFormatter(FieldMeta meta, Class<?> type) {
         Class<?> clazz = meta.getBeanMeta().getBeanClass();
-        String className = clazz.getName();
+        String pathName = clazz.getName();
         // 以 [类全名.属性名] 为 key 寻找 formatter
-        Formatter formatter = formatMap.get(className + "." + meta.getName());
+        Formatter formatter = formatMap.get(pathName + "." + meta.getName());
         if (formatter != null && formatter.supports(type)) {
             return formatter;
         }
-        String typeName = type.getSimpleName();
-        // 以 [类全名:字段类型名] 为 key 寻找 formatter
-        formatter = formatMap.get(className + ":" + typeName);
-        if (formatter != null && formatter.supports(type)) {
-            return formatter;
-        }
-        // 以 [类全名] 为 key 寻找 formatter
-        formatter = formatMap.get(className);
-        if (formatter != null && formatter.supports(type)) {
-            return formatter;
-        }
-        String pkgName = className;
-        int index = className.lastIndexOf('.');
-        while (index > 0) {
-            pkgName = pkgName.substring(0, index);
-            // 以 [包名:字段类型名] 为 key 寻找 formatter
-            formatter = formatMap.get(pkgName + ":" + typeName);
+        List<String> typeNames = getTypeNames(type);
+        while (true) {
+            for (String typeName : typeNames) {
+                // 以 [类全名/包名:字段类型名/父] 为 key 寻找 formatter
+                formatter = formatMap.get(pathName + ":" + typeName);
+                if (formatter != null && formatter.supports(type)) {
+                    return formatter;
+                }
+            }
+            // 以 [类全名/包名] 为 key 寻找 formatter
+            formatter = formatMap.get(pathName);
             if (formatter != null && formatter.supports(type)) {
                 return formatter;
             }
-            // 以 [包名] 为 key 寻找 formatter
-            formatter = formatMap.get(pkgName);
-            if (formatter != null && formatter.supports(type)) {
-                return formatter;
+            int index = pathName.lastIndexOf('.');
+            if (index > -1) {
+                pathName = pathName.substring(0, index);
+            } else {
+                return null;
             }
-            index = pkgName.lastIndexOf('.');
         }
-        return null;
+    }
+
+    private List<String> getTypeNames(Class<?> type) {
+        List<String> names = typeNameMap.computeIfAbsent(type, k -> new ArrayList<>(3));
+        if (names.isEmpty()) {
+            while (type != null && type != Object.class) {
+                names.add(type.getSimpleName());
+                type = type.getSuperclass();
+            }
+        }
+        return names;
     }
 
     public ZoneId getZoneId() {
