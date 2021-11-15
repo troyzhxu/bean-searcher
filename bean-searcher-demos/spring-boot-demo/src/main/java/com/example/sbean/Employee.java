@@ -4,6 +4,7 @@ import com.ejlchina.searcher.bean.*;
 import com.ejlchina.searcher.param.Operator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Map;
 
@@ -30,7 +31,7 @@ public class Employee
 
 	// 自动映射到 "e.entry_date"
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm", timezone = "GMT+8")
-	private Date entryDate;
+	private LocalDateTime entryDate;
 
 	// 该字段不会映射到数据表
 	@DbIgnore
@@ -68,11 +69,11 @@ public class Employee
 		this.department = department;
 	}
 
-	public Date getEntryDate() {
+	public LocalDateTime getEntryDate() {
 		return entryDate;
 	}
 
-	public void setEntryDate(Date entryDate) {
+	public void setEntryDate(LocalDateTime entryDate) {
 		this.entryDate = entryDate;
 	}
 
@@ -89,7 +90,7 @@ public class Employee
 	 */
 	@Override
 	public void afterAssembly() {
-		System.out.println("id = " + id + ", name = " + name + ", age = " + age + ", ignoreField = " + ignoreField);
+//		System.out.println("id = " + id + ", name = " + name + ", age = " + age + ", ignoreField = " + ignoreField);
 	}
 
 	/**
@@ -97,7 +98,7 @@ public class Employee
 	 */
 	@Override
 	public void afterAssembly(Map<String, Object> paraMap) {
-		System.out.println("paraMap = " + paraMap);
+//		System.out.println("paraMap = " + paraMap);
 	}
 
 }
