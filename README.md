@@ -8,7 +8,7 @@
 * 掘金手把手入门：https://juejin.cn/post/7027733039299952676
 * 更新日志：[CHANGELOG](./CHANGELOG.md)
 
-### ⛳ v3.0 重大更新
+### ⛳ v3.x 重大更新
 
 * 支持 **热加载**
 * 支持 **无注解**
@@ -165,7 +165,7 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 比如你可以：
 * 自定义数据库映射（[`DbMapping`](/bean-searcher/src/main/java/com/ejlchina/searcher/DbMapping.java)）来实现自定义注解，或让 Bean Searcher 识别其它 ORM 的注解
 * 自定义参数解析器（[`ParamResolver`](/bean-searcher/src/main/java/com/ejlchina/searcher/ParamResolver.java)）来支持 JSON 形式的检索参数
-* 自定义字段转换器（[`FieldConvertor`](/bean-searcher/src/main/java/com/ejlchina/searcher/FieldConvertor.java)）来支持 数据库没有的 字段类型
+* 自定义字段转换器（[`FieldConvertor`](/bean-searcher/src/main/java/com/ejlchina/searcher/FieldConvertor.java)）来支持任意的 字段类型
 * 自定义数据库方言（[`Dialect`](/bean-searcher/src/main/java/com/ejlchina/searcher/Dialect.java)）来支持更多的数据库
 * 等等..
 
