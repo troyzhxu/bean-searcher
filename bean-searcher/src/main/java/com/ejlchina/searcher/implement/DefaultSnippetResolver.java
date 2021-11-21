@@ -14,9 +14,9 @@ public class DefaultSnippetResolver implements SnippetResolver {
 
     private String paramPrefix = ":";
 
-    private String[] paramEndFlags = new String[] {" ", "\t", "\n", "\r", "+", "-", "*", "/", "=", "!", ">", "<", ",", ")", "'", "%"};
+    private String[] paramEndFlags = new String[] { " ", "\t", "\n", "\r", "+", "-", "*", "/", "=", "!", ">", "<", ",", ")", "'", "%" };
 
-    private final char[] quotations = new char[] {'\'', '"'};
+    private final char[] quotations = new char[] { '\'', '"' };
 
     @Override
     public SqlSnippet resolve(String fragment) {
