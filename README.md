@@ -185,6 +185,9 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 
 [**[ JsonKit ]** 超轻量级 JSON 门面工具，用法简单，不依赖具体实现，让业务代码与 Jackson、Gson、Fastjson 等解耦！](https://gitee.com/ejlchina-zhxu/jsonkit)
 
+[**[ Free UI ]** 基于 Vue3 + TypeScript，一个非常轻量炫酷的 UI 组件库 ！](https://gitee.com/phoeon/free-ui)
+
+
 ### ❤️ 参与贡献
 
 1.  Star and Fork 本仓库

@@ -76,7 +76,7 @@ public class DefaultParamResolver implements ParamResolver {
 			paraMap = filter.doFilter(beanMeta, paraMap);
 		}
 		if (paraMap == null) {
-			paraMap = new HashMap<>();
+			paraMap = Collections.emptyMap();
 		}
 		return doResolve(beanMeta, fetchType, paraMap);
 	}
