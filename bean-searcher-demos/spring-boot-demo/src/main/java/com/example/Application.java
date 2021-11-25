@@ -20,19 +20,4 @@ public class Application implements WebMvcConfigurer {
 				.addResourceLocations("classpath:/static/");
 	}
 
-//	@Bean
-//	public FieldConvertor numberFieldConvertor() {
-//		return new NumberFieldConvertor();
-//	}
-//
-//	@Bean
-//	public FieldConvertor dateFormatFieldConvertor() {
-//		DateFormatFieldConvertor convertor = new DateFormatFieldConvertor();
-//		convertor.addFormat("com.example", "yyyy-MM-dd HH:mm");
-//		convertor.addFormat("com.example.sbean", "yyyy-MM-dd HH");
-//		convertor.addFormat("com.example.sbean.Employee", "yyyy-MM-dd");
-////		convertor.addFormat("com.example.sbean.Employee.entryDate", null);
-//		return convertor;
-//	}
-
 }
