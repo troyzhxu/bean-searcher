@@ -36,7 +36,8 @@ new Vue({
         },
         strOps: [
             { key: 'eq', label: '等于'},
-            { key: 'in', label: '包含'},
+            { key: 'in', label: '在..列表中(多个值英文字符;分隔开)'},
+            { key: 'like', label: '包含'},
             { key: 'sw', label: '以...开始'},
             { key: 'ew', label: '以...结束'}
         ],

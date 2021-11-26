@@ -69,17 +69,25 @@ public enum Operator {
 	/**
 	 * 在 .. 和 .. 之间
 	 */
-	Between, 
-	
+	Between,
+
+	/**
+	 * 在列表..中
+	 */
+	In,
 	/**
 	 * 多值
 	 * in
+	 * @deprecated 建议使用In向SQL对应关键字看齐，语义更加明确
+	 * {@link #In}
 	 */
+	@Deprecated
 	MultiValue;
 
 	public static Operator from(String op) {
 		switch (op) {
-		case "in":
+		case "ct":
+		case "Contains":
 		case "Include":
 		case "Like":
 			return Like;
@@ -116,6 +124,9 @@ public enum Operator {
 		case "bt":
 		case "Between":
 			return Between;
+		case "in":
+		case "In":
+			return In;
 		case "mv":
 		case "MultiValue":
 			return MultiValue;
