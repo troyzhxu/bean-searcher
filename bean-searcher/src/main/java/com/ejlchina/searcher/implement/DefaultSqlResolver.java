@@ -1,5 +1,7 @@
 package com.ejlchina.searcher.implement;
 
+import com.ejlchina.searcher.constants.BeanSearcherConstant;
+import com.ejlchina.searcher.constants.BeanSearcherConstant.Symbol;
 import java.util.*;
 
 import com.ejlchina.searcher.*;
@@ -10,6 +12,7 @@ import com.ejlchina.searcher.param.*;
 import com.ejlchina.searcher.SearchParam;
 import com.ejlchina.searcher.util.ObjectUtils;
 import com.ejlchina.searcher.util.StringUtils;
+import java.util.regex.Pattern;
 
 /**
  * 默认 SQL 解析器
@@ -342,12 +345,23 @@ public class DefaultSqlResolver implements SqlResolver {
 				params.add(value0);
 			}
 			break;
+		case In:
 		case MultiValue:
 			builder.append(" in (");
-			for (int i = 0; i < values.length; i++) {
+			//多个参数的情况
+			Object[] inValues = values;
+			if(values.length == 1) {
+				//1个参数分隔的情况
+				Object[] infinalValues = values;
+				String inVal = infinalValues[0].toString();
+				if(inVal.contains(Symbol.SEMICOLON)) {
+					inValues = inVal.split(Symbol.SEMICOLON, -1);
+				}
+			}
+			for (int i = 0; i < inValues.length; i++) {
 				builder.append("?");
-				params.add(values[i]);
-				if (i < values.length - 1) {
+				params.add(inValues[i]);
+				if (i < inValues.length - 1) {
 					builder.append(", ");
 				}
 			}
