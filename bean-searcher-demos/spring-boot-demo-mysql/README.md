@@ -16,8 +16,8 @@
 ### 三步运行 DEMO
 
 ```bash
-> git clone https://gitee.com/ejlchina-zhxu/bean-searcher-demo.git
-> cd bean-searcher-demo && 修改MySQL相关配置: application.properties
+> git clone https://github.com/ejlchina/bean-searcher.git
+> cd bean-searcher/bean-searcher-demos/spring-boot-demo # 修改MySQL相关配置: application.properties
 > mvn spring-boot:run
 ```
 

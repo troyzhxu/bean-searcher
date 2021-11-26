@@ -16,8 +16,8 @@
 ### 三步运行 DEMO
 
 ```bash
-> git clone https://gitee.com/ejlchina-zhxu/bean-searcher-demo.git
-> cd bean-searcher-demo
+> git clone https://github.com/ejlchina/bean-searcher.git
+> cd bean-searcher/bean-searcher-demos/spring-boot-demo
 > mvn spring-boot:run
 ```
 
