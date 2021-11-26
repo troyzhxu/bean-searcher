@@ -17,7 +17,7 @@
 
 ```bash
 > git clone https://gitee.com/ejlchina-zhxu/bean-searcher-demo.git
-> cd bean-searcher-demo
+> cd bean-searcher-demo && 修改MySQL相关配置: application.properties
 > mvn spring-boot:run
 ```
 
