@@ -112,7 +112,7 @@ SearchResult<User> result = beanSearcher.search(User.class, params);
 #### Spring Boot 项目，添加依赖即集成完毕：
 
 ```groovy
-implementation 'com.ejlchina:bean-searcher-boot-stater:3.0.1'
+implementation 'com.ejlchina:bean-searcher-boot-stater:3.1.0'
 ```
 
 接着便可在 `Controller` 或 `Service` 里注入检索器：
@@ -192,6 +192,4 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 2.  新建 Feat_xxx 分支
 3.  提交代码
 4.  新建 Pull Request
-
-
 
