@@ -134,7 +134,7 @@ private BeanSearcher beanSearcher;
 #### 其它框架，使用如下依赖：
 
 ```groovy
-implementation 'com.ejlchina:bean-searcher:3.0.1'
+implementation 'com.ejlchina:bean-searcher:3.1.0'
 ```
 
 然后可以使用 `SearcherBuilder` 构建一个检索器：
