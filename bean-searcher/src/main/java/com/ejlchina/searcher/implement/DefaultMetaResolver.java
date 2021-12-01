@@ -86,7 +86,7 @@ public class DefaultMetaResolver implements MetaResolver {
     protected FieldMeta resolveFieldMeta(BeanMeta<?> beanMeta, Field field, SqlSnippet snippet, int index) {
         Class<?> beanClass = beanMeta.getBeanClass();
         Method setter = getSetterMethod(beanClass, field);
-        String dbAlias = "_" + index;
+        String dbAlias = "c_" + index;          // 注意：Oracle 数据库的别名不能以下划线开头
         DbField dbField = field.getAnnotation(DbField.class);
         boolean conditional = dbField == null || dbField.conditional();
         Operator[] onlyOn = dbField != null ? dbField.onlyOn() : EMPTY_OPERATORS;
