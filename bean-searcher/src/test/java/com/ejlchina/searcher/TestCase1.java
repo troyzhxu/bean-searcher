@@ -32,14 +32,14 @@ public class TestCase1 {
         SqlExecutor sqlExecutor = new SqlExecutor() {
             @Override
             public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
-                Assert.assertEquals("select name _1, id _0 from search_bean limit ?, ?", searchSql.getListSqlString());
+                Assert.assertEquals("select name c_1, id c_0 from search_bean limit ?, ?", searchSql.getListSqlString());
                 List<Object> listParams = searchSql.getListSqlParams();
                 Assert.assertEquals(2, listParams.size());
                 Assert.assertEquals(0L, listParams.get(0));
                 Assert.assertEquals(15, listParams.get(1));
-                Assert.assertEquals("select count(*) _count from search_bean", searchSql.getClusterSqlString());
+                Assert.assertEquals("select count(*) s_count from search_bean", searchSql.getClusterSqlString());
                 Assert.assertEquals(0, searchSql.getClusterSqlParams().size());
-                Assert.assertEquals("_count", searchSql.getCountAlias());
+                Assert.assertEquals("s_count", searchSql.getCountAlias());
                 Assert.assertEquals(0, searchSql.getSummaryAliases().size());
                 return new SqlResult<>(searchSql);
             }
@@ -62,7 +62,7 @@ public class TestCase1 {
                 System.out.println(searchSql.getListSqlString());
                 System.out.println(searchSql.getListSqlParams());
 
-                Assert.assertEquals("select name _1, id _0 from search_bean where (id = ?) limit ?, ?", searchSql.getListSqlString());
+                Assert.assertEquals("select name c_1, id c_0 from search_bean where (id = ?) limit ?, ?", searchSql.getListSqlString());
                 List<Object> listParams = searchSql.getListSqlParams();
                 Assert.assertEquals(3, listParams.size());
                 Assert.assertEquals(1, listParams.get(0));
@@ -70,7 +70,7 @@ public class TestCase1 {
                 Assert.assertEquals(15, listParams.get(2));
 
                 System.out.println(searchSql.getClusterSqlString());
-                Assert.assertEquals("select count(*) _count from search_bean where (id = ?)", searchSql.getClusterSqlString());
+                Assert.assertEquals("select count(*) s_count from search_bean where (id = ?)", searchSql.getClusterSqlString());
 
                 List<Object> clusterSqlParams = searchSql.getClusterSqlParams();
                 System.out.println(clusterSqlParams);
@@ -79,7 +79,7 @@ public class TestCase1 {
 
                 System.out.println(searchSql.getCountAlias());
 
-                Assert.assertEquals("_count", searchSql.getCountAlias());
+                Assert.assertEquals("s_count", searchSql.getCountAlias());
 
                 System.out.println(searchSql.getSummaryAliases());
 

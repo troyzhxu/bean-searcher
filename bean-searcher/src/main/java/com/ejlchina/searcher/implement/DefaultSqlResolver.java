@@ -243,8 +243,8 @@ public class DefaultSqlResolver implements SqlResolver {
 		return generateAlias("t_", originalSql);
 	}
 
-	// 注意：Oracle 数据库的别名不能已下划线开头
 	protected String generateColumnAlias(String seed, String originalSql) {
+		// 注意：Oracle 数据库的别名不能以下划线开头
 		return generateAlias("s_" + seed, originalSql);
 	}
 
