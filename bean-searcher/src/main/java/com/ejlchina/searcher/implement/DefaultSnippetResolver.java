@@ -63,7 +63,7 @@ public class DefaultSnippetResolver implements SnippetResolver {
         return new SqlSnippet.Param(sqlName);
     }
 
-    private String getSqlName(String sqlSnippet, int index1, int index2) {
+    protected String getSqlName(String sqlSnippet, int index1, int index2) {
         if (index2 > 0) {
             return sqlSnippet.substring(index1, index2);
         } else {
@@ -71,7 +71,7 @@ public class DefaultSnippetResolver implements SnippetResolver {
         }
     }
 
-    private int findParamEndIndex(String sqlSnippet, int fromIndex) {
+    protected int findParamEndIndex(String sqlSnippet, int fromIndex) {
         int index = -1;
         for (String flag : paramEndFlags) {
             int index0 = sqlSnippet.indexOf(flag, fromIndex);
