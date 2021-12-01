@@ -10,7 +10,6 @@
 
 ### ⛳ v3.x 重大更新
 
-* 支持 **热加载**
 * 支持 **无注解**
 * 支持 **Select 指定字段**
 * 支持 **条件与运算符的约束**
@@ -112,7 +111,7 @@ SearchResult<User> result = beanSearcher.search(User.class, params);
 #### Spring Boot 项目，添加依赖即集成完毕：
 
 ```groovy
-implementation 'com.ejlchina:bean-searcher-boot-stater:3.1.0'
+implementation 'com.ejlchina:bean-searcher-boot-stater:3.1.1'
 ```
 
 接着便可在 `Controller` 或 `Service` 里注入检索器：
@@ -134,7 +133,7 @@ private BeanSearcher beanSearcher;
 #### 其它框架，使用如下依赖：
 
 ```groovy
-implementation 'com.ejlchina:bean-searcher:3.1.0'
+implementation 'com.ejlchina:bean-searcher:3.1.1'
 ```
 
 然后可以使用 `SearcherBuilder` 构建一个检索器：

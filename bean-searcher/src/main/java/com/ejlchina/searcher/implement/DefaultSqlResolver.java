@@ -172,7 +172,7 @@ public class DefaultSqlResolver implements SqlResolver {
 		return searchSql;
 	}
 
-	private <T> String resolveTables(SqlSnippet tableSnippet, SearchParam searchParam, SearchSql<T> searchSql) {
+	protected <T> String resolveTables(SqlSnippet tableSnippet, SearchParam searchParam, SearchSql<T> searchSql) {
 		String tables = tableSnippet.getSnippet();
 		List<SqlSnippet.Param> params = tableSnippet.getParams();
 		for (SqlSnippet.Param param : params) {
@@ -188,7 +188,7 @@ public class DefaultSqlResolver implements SqlResolver {
 		return tables;
 	}
 
-	private <T> String resolveDbField(SqlSnippet dbFieldSnippet, SearchParam searchParam, SearchSql<T> searchSql, boolean distinct) {
+	protected <T> String resolveDbField(SqlSnippet dbFieldSnippet, SearchParam searchParam, SearchSql<T> searchSql, boolean distinct) {
 		String dbField = dbFieldSnippet.getSnippet();
 		List<SqlSnippet.Param> params = dbFieldSnippet.getParams();
 		for (SqlSnippet.Param param : params) {
@@ -208,7 +208,7 @@ public class DefaultSqlResolver implements SqlResolver {
 	}
 
 
-	private <T> String resolveClusterSelectSql(SearchSql<T> searchSql, String[] summaryFields,
+	protected <T> String resolveClusterSelectSql(SearchSql<T> searchSql, String[] summaryFields,
 				boolean shouldQueryTotal, String originalSql) {
 		StringBuilder clusterSelectSqlBuilder = new StringBuilder("select ");
 		if (shouldQueryTotal) {
@@ -239,15 +239,16 @@ public class DefaultSqlResolver implements SqlResolver {
 		return clusterSelectSqlBuilder.toString();
 	}
 
-	private String generateTableAlias(String originalSql) {
+	protected String generateTableAlias(String originalSql) {
 		return generateAlias("t_", originalSql);
 	}
 
-	private String generateColumnAlias(String seed, String originalSql) {
-		return generateAlias("_" + seed, originalSql);
+	protected String generateColumnAlias(String seed, String originalSql) {
+		// 注意：Oracle 数据库的别名不能以下划线开头
+		return generateAlias("s_" + seed, originalSql);
 	}
-	
-	private String generateAlias(String seed, String originalSql) {
+
+	protected String generateAlias(String seed, String originalSql) {
 		int index = 0;
 		String tableAlias = seed;
 		while (originalSql.contains(tableAlias)) {
@@ -255,12 +256,11 @@ public class DefaultSqlResolver implements SqlResolver {
 		}
 		return tableAlias;
 	}
-	
-	
+
 	/**
 	 * @return 查询参数值
 	 */
-	private List<Object> appendFilterConditionSql(StringBuilder builder, Class<?> fieldType, 
+	protected List<Object> appendFilterConditionSql(StringBuilder builder, Class<?> fieldType,
 			String dbField, FieldParam fieldParam) {
 		Object[] values = fieldParam.getValues();
 		boolean ignoreCase = fieldParam.isIgnoreCase();
@@ -357,7 +357,7 @@ public class DefaultSqlResolver implements SqlResolver {
 		return params;
 	}
 
-	public Object[] toUpperCase(Object[] params) {
+	protected Object[] toUpperCase(Object[] params) {
 		for (int i = 0; i < params.length; i++) {
 			Object val = params[i];
 			if (val != null) {

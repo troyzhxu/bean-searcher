@@ -59,7 +59,7 @@ dependencies {
     implementation "org.grails.plugins:events"
     implementation "org.grails.plugins:gsp"
 
-    implementation "com.ejlchina:bean-searcher:3.1.0"
+    implementation "com.ejlchina:bean-searcher:3.1.1"
 
     profile "org.grails.profiles:web"
     runtimeOnly "org.glassfish.web:el-impl:2.2.1-b05"

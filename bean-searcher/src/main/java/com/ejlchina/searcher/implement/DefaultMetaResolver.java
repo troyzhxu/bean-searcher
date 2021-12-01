@@ -75,7 +75,8 @@ public class DefaultMetaResolver implements MetaResolver {
     protected FieldMeta resolveFieldMeta(BeanMeta<?> beanMeta, DbMapping.Column column, Field field, int index) {
         Method setter = getSetterMethod(beanMeta.getBeanClass(), field);
         SqlSnippet snippet = snippetResolver.resolve(column.getFieldSql());
-        return new FieldMeta(beanMeta, field, setter, snippet, "_" + index, column.isConditional(), column.getOnlyOn());
+        // 注意：Oracle 数据库的别名不能以下划线开头
+        return new FieldMeta(beanMeta, field, setter, snippet, "c_" + index, column.isConditional(), column.getOnlyOn());
     }
 
     protected Method getSetterMethod(Class<?> beanClass, Field field) {
