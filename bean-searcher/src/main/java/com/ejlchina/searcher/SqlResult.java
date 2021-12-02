@@ -25,6 +25,9 @@ public class SqlResult<T> implements Closeable {
      */
     private ResultSet clusterResult;
 
+    // clusterResult 是否已未执行过 next 方法
+    private boolean clusterNotReady = true;
+
     /**
      * 列表查询语句
      */
@@ -78,8 +81,10 @@ public class SqlResult<T> implements Closeable {
 
     public ResultSet getAlreadyClusterResult() throws SQLException {
         if (clusterResult != null) {
-            if (clusterResult.isBeforeFirst()) {
+            // 为了兼容 ShardingSphere，这里不能使用 ResultSet#isBeforeFirst() 方法，因为 ShardingSphere 没有实现它
+            if (clusterNotReady) {
                 clusterResult.next();
+                clusterNotReady = false;
             }
         }
         return clusterResult;

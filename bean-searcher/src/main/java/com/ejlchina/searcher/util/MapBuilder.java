@@ -131,13 +131,15 @@ public class MapBuilder {
      * @return MapBuilder
      */
     public MapBuilder field(String fieldName, Object... values) {
-        List<FieldParam.Value> pValues = new ArrayList<>();
-        for (int index = 0; index < values.length; index++) {
-            pValues.add(new FieldParam.Value(values[index], index));
+        if (fieldName != null) {
+            List<FieldParam.Value> pValues = new ArrayList<>();
+            for (int index = 0; index < values.length; index++) {
+                pValues.add(new FieldParam.Value(values[index], index));
+            }
+            String field = fieldName.trim();
+            fieldParam = new FieldParam(field, pValues);
+            map.put(FIELD_PARAM + "." + field, fieldParam);
         }
-        String field = fieldName.trim();
-        fieldParam = new FieldParam(field, pValues);
-        map.put(FIELD_PARAM + "." + field, fieldParam);
         return this;
     }
 
@@ -202,7 +204,9 @@ public class MapBuilder {
      * @return MapBuilder
      */
     public MapBuilder orderBy(String fieldName, String order) {
-        map.put(ORDER_BY, new OrderBy(fieldName, order));
+        if (fieldName != null && order != null) {
+            map.put(ORDER_BY, new OrderBy(fieldName, order));
+        }
         return this;
     }
 
