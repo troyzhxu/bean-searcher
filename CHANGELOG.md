@@ -9,15 +9,23 @@
 * Bean Searcher Boot Starter
   * 默认自动配置添加 `EnumFieldConvertor`（TODO）
 
+# v3.1.2 & v3.0.4
+
+### 🌻 Better
+
+* 优化 `JDBC` 调用，兼容 `sharding-jdbc`
+* 优化 `Operator.from(Object)` 方法
+* 优化 `MapBuilder`：增加非空校验
+
 # v3.1.1 & v3.0.3
 
 ### ✨ Features
 
-1. 优化 `DefaultSqlResolver` 的方法的权限修饰符，便于子类复用
+* 优化 `DefaultSqlResolver` 的方法的权限修饰符，便于子类复用
 
 ### 🐛 Bug Fixes
 
-1. 优化别名生成规则，兼容 Oracle 数据库
+* 优化别名生成规则，兼容 Oracle 数据库
 
 # v3.1.0
 
