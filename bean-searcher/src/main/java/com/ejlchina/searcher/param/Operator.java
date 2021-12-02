@@ -77,8 +77,14 @@ public enum Operator {
 	 */
 	MultiValue;
 
-	public static Operator from(String op) {
-		switch (op) {
+	public static Operator from(Object op) {
+		if (op == null) {
+			return null;
+		}
+		if (op instanceof Operator) {
+			return (Operator) op;
+		}
+		switch (op.toString()) {
 		case "in":
 		case "Include":
 		case "Like":
