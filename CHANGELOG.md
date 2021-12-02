@@ -15,7 +15,7 @@
 
 * 优化 `JDBC` 调用，兼容 `sharding-jdbc`
 * 优化 `Operator.from(Object)` 方法
-* 优化 `MapBuilder`：增加非空校验
+* 优化 `MapBuilder` 工具类，增加非空校验
 
 # v3.1.1 & v3.0.3
 
