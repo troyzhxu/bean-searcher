@@ -8,6 +8,8 @@
 * 掘金手把手入门：https://juejin.cn/post/7027733039299952676
 * 更新日志：[CHANGELOG](./CHANGELOG.md)
 
+![](./assets/architecture.jpg)
+
 ### ⛳ v3.x 重大更新
 
 * 支持 **无注解**
