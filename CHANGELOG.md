@@ -4,8 +4,8 @@
 
 * Bean Searcher
   * 新增条件分组 与 组逻辑运算功能（TODO）
-  * 优化参数：对于 op = mv / bt 的查询，可用 JSON 数组来传输多个值，例如：age=[20,30] 替代 age-0=20&age-1=30（TODO）
   * 新增 `EnumFieldConvertor`，用来做枚举字段转换（TODO）
+  * SearchBean 映射字段支持从父类继承（TODO）
 * Bean Searcher Boot Starter
   * 默认自动配置添加 `EnumFieldConvertor`（TODO）
 
@@ -13,11 +13,11 @@
 
 ### ✨ Features
 
-1. 优化 `DefaultSqlResolver` 的方法的权限修饰符，便于子类复用
+* 优化 `DefaultSqlResolver` 的方法的权限修饰符，便于子类复用
 
 ### 🐛 Bug Fixes
 
-1. 优化别名生成规则，兼容 Oracle 数据库
+* 优化别名生成规则，兼容 Oracle 数据库
 
 # v3.1.0
 
