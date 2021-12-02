@@ -9,6 +9,10 @@
 * Bean Searcher Boot Starter
   * 默认自动配置添加 `EnumFieldConvertor`（TODO）
 
+### 🌻 Better
+
+* 优化 JDBC 调用，不使用 `ResultSet#isBeforeFirst()` 方法，兼容 ShardingShpere（TODO）
+
 # v3.1.1 & v3.0.3 @ 2021-12-01
 
 ### ✨ Features
