@@ -7,6 +7,12 @@
 * 文档：https://searcher.ejlchina.com/
 * 掘金手把手入门：https://juejin.cn/post/7027733039299952676
 * 更新日志：[CHANGELOG](./CHANGELOG.md)
+* 框架目的，只一行代码实现：
+  - **多表联查**
+  - **分页搜索**
+  - **任意字段组合过滤**
+  - **任意字段排序**
+  - **多字段统计**
 * 架构图：
 
 ![](./assets/architecture.jpg)
