@@ -7,19 +7,24 @@
 * 文档：https://searcher.ejlchina.com/
 * 掘金手把手入门：https://juejin.cn/post/7027733039299952676
 * 更新日志：[CHANGELOG](./CHANGELOG.md)
+* 架构图：
 
 ![](./assets/architecture.jpg)
 
-### ⛳ v3.x 重大更新
+### ✨ 特性
 
-* 支持 **无注解**
-* 支持 **Select 指定字段**
-* 支持 **条件与运算符的约束**
-* 支持 **参数过滤器**
+* 支持 **实体多表映射**
+* 支持 **动态字段运算符**
+* 支持 **分组聚合 查询**
+* 支持 **Select | Where | From 子查询**
+* 支持 **实体类嵌入参数**
 * 支持 **字段转换器**
 * 支持 **Sql 拦截器**
-* 支持 **多数据源**
-* 支持 **JDK 9+ 的模块机制**
+* 支持 **数据库 Dialect 扩展**
+* 支持 **多数据源 与 动态数据源**
+* 支持 **注解缺省 与 自定义**
+* 支持 **JDK 模块机制**
+* 等等
 
 ### ⁉️为什么用
 
@@ -79,7 +84,7 @@ public class UserController {
 * `/user/index?selectExclude=dateCreated`
   - 检索 所有用户，默认分页，但不查询 dateCreated  字段
 
-### ✨ 独创动态字段运算符，检索方式随心所欲
+### ✨ 编码式构建检索参数
 
 ```java
 Map<String, Object> params = MapUtils.builder()
