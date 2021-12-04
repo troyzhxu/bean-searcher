@@ -4,6 +4,9 @@ import com.ejlchina.searcher.DbMapping;
 
 /**
  * 继承类型
+ * 表示 SearchBean 与父类之间的表映射继承关系
+ * @author Troy.Zhou @ 2017-03-21
+ * @since v3.2.0
  */
 public enum InheritType {
 

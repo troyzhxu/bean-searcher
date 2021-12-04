@@ -67,6 +67,7 @@ public @interface SearchBean {
 
 	/**
 	 * 继承类型
+	 * @since v3.2.0
 	 * @return InheritType
 	 */
 	InheritType inheritType() default InheritType.DEFAULT;

@@ -1,6 +1,7 @@
 package com.ejlchina.searcher;
 
 import com.ejlchina.searcher.bean.DbField;
+import com.ejlchina.searcher.bean.InheritType;
 import com.ejlchina.searcher.bean.SearchBean;
 import com.ejlchina.searcher.param.Operator;
 
@@ -15,34 +16,11 @@ import java.lang.reflect.Field;
 public interface DbMapping {
 
     /**
-     * 不继承
-     */
-    int INHERIT_NONE = 0;
-
-    /**
-     * 只继承表属性
-     */
-    int INHERIT_TABLE = 1;
-
-    /**
-     * 只继承字段属性
-     */
-    int INHERIT_FIELD = 2;
-
-    /**
-     * 表与字段都继承
-     */
-    int INHERIT_ALL = 3;
-
-    /**
      * 默认的继承类型
-     * @see #INHERIT_NONE
-     * @see #INHERIT_TABLE
-     * @see #INHERIT_FIELD
-     * @see #INHERIT_ALL
+     * @since v3.2.0
      * @return 继承类型
      */
-    int getInheritType();
+    InheritType getInheritType();
 
     /**
      * 根据 beanClass 获取表名

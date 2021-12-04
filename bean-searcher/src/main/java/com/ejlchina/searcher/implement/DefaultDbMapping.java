@@ -4,6 +4,7 @@ import com.ejlchina.searcher.DbMapping;
 import com.ejlchina.searcher.SearchException;
 import com.ejlchina.searcher.bean.DbField;
 import com.ejlchina.searcher.bean.DbIgnore;
+import com.ejlchina.searcher.bean.InheritType;
 import com.ejlchina.searcher.bean.SearchBean;
 import com.ejlchina.searcher.param.Operator;
 import com.ejlchina.searcher.util.StringUtils;
@@ -26,8 +27,7 @@ public class DefaultDbMapping implements DbMapping {
     private boolean upperCase = false;
 
     // 继承类型
-    private int inheritType = DbMapping.INHERIT_ALL;
-
+    private InheritType inheritType = InheritType.ALL;
 
     @Override
     public Table table(Class<?> beanClass) {
@@ -115,11 +115,11 @@ public class DefaultDbMapping implements DbMapping {
     }
 
     @Override
-    public int getInheritType() {
+    public InheritType getInheritType() {
         return inheritType;
     }
 
-    public void setInheritType(int inheritType) {
+    public void setInheritType(InheritType inheritType) {
         this.inheritType = inheritType;
     }
 
