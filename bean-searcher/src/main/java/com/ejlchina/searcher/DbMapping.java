@@ -16,11 +16,11 @@ import java.lang.reflect.Field;
 public interface DbMapping {
 
     /**
-     * 默认的继承类型
+     * SearchBean 的继承类型
      * @since v3.2.0
      * @return 继承类型
      */
-    InheritType getInheritType();
+    InheritType inheritType(Class<?> beanClass);
 
     /**
      * 根据 beanClass 获取表名

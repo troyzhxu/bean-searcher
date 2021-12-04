@@ -26,8 +26,13 @@ public class DefaultDbMapping implements DbMapping {
     // 表与列是否是大写风格
     private boolean upperCase = false;
 
-    // 继承类型
-    private InheritType inheritType = InheritType.ALL;
+    // 默认继承类型
+    private InheritType defaultInheritType = InheritType.ALL;
+
+    @Override
+    public InheritType inheritType(Class<?> beanClass) {
+        return defaultInheritType;
+    }
 
     @Override
     public Table table(Class<?> beanClass) {
@@ -114,13 +119,12 @@ public class DefaultDbMapping implements DbMapping {
         return upperCase ? column.toUpperCase() : column;
     }
 
-    @Override
-    public InheritType getInheritType() {
-        return inheritType;
+    public InheritType getDefaultInheritType() {
+        return defaultInheritType;
     }
 
-    public void setInheritType(InheritType inheritType) {
-        this.inheritType = inheritType;
+    public void setDefaultInheritType(InheritType defaultInheritType) {
+        this.defaultInheritType = defaultInheritType;
     }
 
     public String getTablePrefix() {
