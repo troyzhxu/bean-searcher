@@ -2,6 +2,7 @@ package com.example.sbean;
 
 import com.ejlchina.searcher.bean.*;
 import com.ejlchina.searcher.param.Operator;
+import com.example.enums.Gender;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
@@ -25,6 +26,10 @@ public class Employee
 
 	// 自动映射到 "e.age"
 	private Integer age;
+
+	// 枚举字段
+	// 自动映射到 "e.gender"
+	private Gender gender;
 
 	@DbField("d.name")
 	private String department;
@@ -59,6 +64,14 @@ public class Employee
 
 	public void setAge(Integer age) {
 		this.age = age;
+	}
+
+	public Gender getGender() {
+		return gender;
+	}
+
+	public void setGender(Gender gender) {
+		this.gender = gender;
 	}
 
 	public String getDepartment() {
