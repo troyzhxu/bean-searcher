@@ -336,6 +336,11 @@ public class BeanSearcherProperties {
 		 */
 		private Map<String, String> dateFormats = new HashMap<>();
 
+		/**
+		 * 使用枚举字段转换器
+		 */
+		private boolean useEnum = true;
+
 
 		public boolean isUseNumber() {
 			return useNumber;
@@ -399,6 +404,14 @@ public class BeanSearcherProperties {
 
 		public void setZoneId(ZoneId zoneId) {
 			this.zoneId = zoneId;
+		}
+
+		public boolean isUseEnum() {
+			return useEnum;
+		}
+
+		public void setUseEnum(boolean useEnum) {
+			this.useEnum = useEnum;
 		}
 
 	}

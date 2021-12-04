@@ -154,6 +154,13 @@ public class BeanSearcherAutoConfiguration {
 	}
 
 	@Bean
+	@ConditionalOnProperty(name = "bean-searcher.field-convertor.use-enum", havingValue = "true", matchIfMissing = true)
+	@ConditionalOnMissingBean(EnumFieldConvertor.class)
+	public EnumFieldConvertor enumFieldConvertor() {
+		return new EnumFieldConvertor();
+	}
+
+	@Bean
 	@ConditionalOnMissingBean(BeanReflector.class)
 	public BeanReflector beanReflector(ObjectProvider<List<BFieldConvertor>> convertorsProvider) {
 		List<BFieldConvertor> convertors = convertorsProvider.getIfAvailable();

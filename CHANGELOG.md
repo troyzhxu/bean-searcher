@@ -7,7 +7,7 @@
   * 新增 `EnumFieldConvertor`，用来做枚举字段转换
   * SearchBean 映射字段支持从父类继承（TODO）
 * Bean Searcher Boot Starter
-  * 默认自动配置添加 `EnumFieldConvertor`（TODO）
+  * 默认自动配置添加 `EnumFieldConvertor`
 
 # v3.1.2 & v3.0.4 @ 2021-12-02
 
