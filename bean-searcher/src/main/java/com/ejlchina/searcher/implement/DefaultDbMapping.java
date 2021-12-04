@@ -25,6 +25,10 @@ public class DefaultDbMapping implements DbMapping {
     // 表与列是否是大写风格
     private boolean upperCase = false;
 
+    // 继承类型
+    private int inheritType = DbMapping.INHERIT_ALL;
+
+
     @Override
     public Table table(Class<?> beanClass) {
         SearchBean bean = beanClass.getAnnotation(SearchBean.class);
@@ -108,6 +112,15 @@ public class DefaultDbMapping implements DbMapping {
     private String toColumnName(Field field) {
         String column = StringUtils.toUnderline(field.getName());
         return upperCase ? column.toUpperCase() : column;
+    }
+
+    @Override
+    public int getInheritType() {
+        return inheritType;
+    }
+
+    public void setInheritType(int inheritType) {
+        this.inheritType = inheritType;
     }
 
     public String getTablePrefix() {

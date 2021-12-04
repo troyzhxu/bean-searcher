@@ -15,6 +15,36 @@ import java.lang.reflect.Field;
 public interface DbMapping {
 
     /**
+     * 不继承
+     */
+    int INHERIT_NONE = 0;
+
+    /**
+     * 只继承表属性
+     */
+    int INHERIT_TABLE = 1;
+
+    /**
+     * 只继承字段属性
+     */
+    int INHERIT_FIELD = 2;
+
+    /**
+     * 表与字段都继承
+     */
+    int INHERIT_ALL = 3;
+
+    /**
+     * 默认的继承类型
+     * @see #INHERIT_NONE
+     * @see #INHERIT_TABLE
+     * @see #INHERIT_FIELD
+     * @see #INHERIT_ALL
+     * @return 继承类型
+     */
+    int getInheritType();
+
+    /**
      * 根据 beanClass 获取表名
      * 在 SearchBean 的类上没加 {@link SearchBean } 注解时 或 {@link SearchBean#tables()} 属性为空时，根据该方法自动映射
      * @param beanClass SearchBean 的 Class
