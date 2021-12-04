@@ -65,5 +65,11 @@ public @interface SearchBean {
 	 */
 	String autoMapTo() default "";
 
+	/**
+	 * 继承类型
+	 * @return InheritType
+	 */
+	InheritType inheritType() default InheritType.DEFAULT;
+
 }
 
