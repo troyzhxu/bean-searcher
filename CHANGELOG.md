@@ -4,7 +4,7 @@
 
 * Bean Searcher
   * 新增条件分组 与 组逻辑运算功能（TODO）
-  * 新增 `EnumFieldConvertor`，用来做枚举字段转换（TODO）
+  * 新增 `EnumFieldConvertor`，用来做枚举字段转换
   * SearchBean 映射字段支持从父类继承（TODO）
 * Bean Searcher Boot Starter
   * 默认自动配置添加 `EnumFieldConvertor`（TODO）
