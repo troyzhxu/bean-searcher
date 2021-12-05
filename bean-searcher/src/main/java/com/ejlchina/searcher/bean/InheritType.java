@@ -11,7 +11,7 @@ import com.ejlchina.searcher.DbMapping;
 public enum InheritType {
 
     /**
-     * 使用全局默认值 {@link DbMapping#getInheritType() }
+     * 使用全局默认值 {@link DbMapping#inheritType(Class)}  }
      */
     DEFAULT,
 

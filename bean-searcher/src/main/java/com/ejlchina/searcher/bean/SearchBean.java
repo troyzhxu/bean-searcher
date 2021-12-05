@@ -41,7 +41,7 @@ public @interface SearchBean {
 	 * u.id = ur.user_id and ur.role_id = r.id 
 	 * @return join condition
 	 * */
-	String joinCond() default "";	
+	String joinCond() default "";
 	
 	/**
 	 * 分组字段，例如

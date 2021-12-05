@@ -31,6 +31,16 @@ public class DefaultDbMapping implements DbMapping {
 
     @Override
     public InheritType inheritType(Class<?> beanClass) {
+        while (beanClass != Object.class) {
+            SearchBean bean = beanClass.getAnnotation(SearchBean.class);
+            if (bean != null) {
+                InheritType iType = bean.inheritType();
+                if (iType != InheritType.DEFAULT) {
+                    return iType;
+                }
+            }
+            beanClass = beanClass.getSuperclass();
+        }
         return defaultInheritType;
     }
 

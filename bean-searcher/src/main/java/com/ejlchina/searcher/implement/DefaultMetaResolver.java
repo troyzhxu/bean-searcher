@@ -1,12 +1,12 @@
 package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.*;
+import com.ejlchina.searcher.bean.InheritType;
 import com.ejlchina.searcher.util.StringUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /***
@@ -56,7 +56,7 @@ public class DefaultMetaResolver implements MetaResolver {
                 snippetResolver.resolve(table.getGroupBy()),
                 table.isDistinct());
         // 字段解析
-        Field[] fields = beanClass.getDeclaredFields();
+        Field[] fields = getBeanFields(beanClass);
         for (int index = 0; index < fields.length; index++) {
             Field field = fields[index];
             DbMapping.Column column = dbMapping.column(fields[index]);
@@ -70,6 +70,23 @@ public class DefaultMetaResolver implements MetaResolver {
             throw new SearchException("[" + beanClass.getName() + "] is not a valid SearchBean, because there is no field mapping to database.");
         }
         return beanMeta;
+    }
+
+    protected Field[] getBeanFields(Class<?> beanClass) {
+        InheritType iType = dbMapping.inheritType(beanClass);
+        List<Field> fieldList = new ArrayList<>();
+        while (beanClass != Object.class) {
+            for (Field field : beanClass.getDeclaredFields()) {
+                if (!field.isSynthetic()) {
+                    fieldList.add(field);
+                }
+            }
+            if (iType != InheritType.FIELD && iType != InheritType.ALL) {
+                break;
+            }
+            beanClass = beanClass.getSuperclass();
+        }
+        return fieldList.toArray(new Field[0]);
     }
 
     protected FieldMeta resolveFieldMeta(BeanMeta<?> beanMeta, DbMapping.Column column, Field field, int index) {
