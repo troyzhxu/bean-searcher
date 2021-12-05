@@ -40,7 +40,7 @@ public class DefaultBeanReflector implements BeanReflector {
 			}
 			if (value != null) {
 				try {
-					meta.getSetter().invoke(bean, value);
+					meta.getField().set(bean, value);
 				} catch (ReflectiveOperationException e) {
 					throw new SearchException(
 							"A exception occurred when setting value to [" + beanClass.getName() + "#" + field + "], please check whether it's setter is correct.", e);

@@ -3,7 +3,6 @@ package com.ejlchina.searcher;
 import com.ejlchina.searcher.param.Operator;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 /**
  * 字段元信息
@@ -19,11 +18,6 @@ public class FieldMeta {
      * Java 字段
      */
     private final Field field;
-
-    /**
-     * 该字段的 Set 方法
-     */
-    private final Method setter;
 
     /**
      * 该字段对应的 SQL 片段
@@ -46,11 +40,10 @@ public class FieldMeta {
     private final Operator[] onlyOn;
 
 
-    public FieldMeta(BeanMeta<?> beanMeta, Field field, Method setter, SqlSnippet fieldSql,
+    public FieldMeta(BeanMeta<?> beanMeta, Field field, SqlSnippet fieldSql,
                      String dbAlias, boolean conditional, Operator[] onlyOn) {
         this.beanMeta = beanMeta;
         this.field = field;
-        this.setter = setter;
         this.fieldSql = fieldSql;
         this.dbAlias = dbAlias;
         this.conditional = conditional;
@@ -71,10 +64,6 @@ public class FieldMeta {
 
     public Class<?> getType() {
         return field.getType();
-    }
-
-    public Method getSetter() {
-        return setter;
     }
 
     public SqlSnippet getFieldSql() {

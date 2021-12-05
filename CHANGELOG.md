@@ -9,6 +9,7 @@
   * SearchBean 的映射字段支持从父类继承
   * 注解 @SearchBean 也支持从父类继承
   * 支持非静态内部类形式的 SearchBean
+  * SearchBean 的映射字段支持省略 Setter 方法
   * 新增 `ct`（`Contain`）运算符，用于取代 `in`（`Include`）运算符（使用 `in` 将输出警告）
 * Bean Searcher Boot Starter
   * 默认自动配置添加 `EnumFieldConvertor`
