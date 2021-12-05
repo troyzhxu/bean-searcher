@@ -46,14 +46,22 @@ public class DefaultDbMapping implements DbMapping {
 
     @Override
     public Table table(Class<?> beanClass) {
-        SearchBean bean = beanClass.getAnnotation(SearchBean.class);
-        if (bean != null) {
-            return new Table(bean.dataSource().trim(),
-                    tables(beanClass, bean),
-                    bean.joinCond().trim(),
-                    bean.groupBy().trim(),
-                    bean.distinct()
-            );
+        InheritType iType = inheritType(beanClass);
+        Class<?> clazz = beanClass;
+        while (clazz != Object.class) {
+            SearchBean bean = clazz.getAnnotation(SearchBean.class);
+            if (bean != null) {
+                return new Table(bean.dataSource().trim(),
+                        tables(beanClass, bean),
+                        bean.joinCond().trim(),
+                        bean.groupBy().trim(),
+                        bean.distinct()
+                );
+            }
+            if (iType != InheritType.TABLE && iType != InheritType.ALL) {
+                break;
+            }
+            clazz = clazz.getSuperclass();
         }
         return new Table(null, toTableName(beanClass), "", "", false);
     }
