@@ -12,20 +12,25 @@ import com.ejlchina.searcher.FieldMeta;
 public class NumberFieldConvertor implements FieldConvertor.BFieldConvertor {
 
     @Override
-    public boolean supports(FieldMeta meta, Class<?> valueType, Class<?> targetType) {
-        return Number.class.isAssignableFrom(valueType) && (
-               targetType == int.class || targetType == Integer.class ||
-               targetType == long.class || targetType == Long.class ||
-               targetType == float.class || targetType == Float.class ||
-               targetType == double.class || targetType == Double.class ||
-               targetType == short.class || targetType == Short.class ||
-               targetType == byte.class || targetType == Byte.class
-        );
+    public boolean supports(FieldMeta meta, Class<?> valueType) {
+        if (Number.class.isAssignableFrom(valueType)) {
+            Class<?> targetType = meta.getType();
+            return (
+                    targetType == int.class || targetType == Integer.class ||
+                    targetType == long.class || targetType == Long.class ||
+                    targetType == float.class || targetType == Float.class ||
+                    targetType == double.class || targetType == Double.class ||
+                    targetType == short.class || targetType == Short.class ||
+                    targetType == byte.class || targetType == Byte.class
+            );
+        }
+        return false;
     }
 
     @Override
-    public Object convert(FieldMeta meta, Object value, Class<?> targetType) {
+    public Object convert(FieldMeta meta, Object value) {
         Number number = (Number) value;
+        Class<?> targetType = meta.getType();
         if (targetType == int.class || targetType == Integer.class) {
             return number.intValue();
         }

@@ -4,6 +4,7 @@ import com.ejlchina.searcher.DbMapping;
 import com.ejlchina.searcher.SearchException;
 import com.ejlchina.searcher.bean.DbField;
 import com.ejlchina.searcher.bean.DbIgnore;
+import com.ejlchina.searcher.bean.InheritType;
 import com.ejlchina.searcher.bean.SearchBean;
 import com.ejlchina.searcher.param.Operator;
 import com.ejlchina.searcher.util.StringUtils;
@@ -25,16 +26,42 @@ public class DefaultDbMapping implements DbMapping {
     // 表与列是否是大写风格
     private boolean upperCase = false;
 
+    // 默认继承类型
+    private InheritType defaultInheritType = InheritType.ALL;
+
+    @Override
+    public InheritType inheritType(Class<?> beanClass) {
+        while (beanClass != Object.class) {
+            SearchBean bean = beanClass.getAnnotation(SearchBean.class);
+            if (bean != null) {
+                InheritType iType = bean.inheritType();
+                if (iType != InheritType.DEFAULT) {
+                    return iType;
+                }
+            }
+            beanClass = beanClass.getSuperclass();
+        }
+        return defaultInheritType;
+    }
+
     @Override
     public Table table(Class<?> beanClass) {
-        SearchBean bean = beanClass.getAnnotation(SearchBean.class);
-        if (bean != null) {
-            return new Table(bean.dataSource().trim(),
-                    tables(beanClass, bean),
-                    bean.joinCond().trim(),
-                    bean.groupBy().trim(),
-                    bean.distinct()
-            );
+        InheritType iType = inheritType(beanClass);
+        Class<?> clazz = beanClass;
+        while (clazz != Object.class) {
+            SearchBean bean = clazz.getAnnotation(SearchBean.class);
+            if (bean != null) {
+                return new Table(bean.dataSource().trim(),
+                        tables(beanClass, bean),
+                        bean.joinCond().trim(),
+                        bean.groupBy().trim(),
+                        bean.distinct()
+                );
+            }
+            if (iType != InheritType.TABLE && iType != InheritType.ALL) {
+                break;
+            }
+            clazz = clazz.getSuperclass();
         }
         return new Table(null, toTableName(beanClass), "", "", false);
     }
@@ -108,6 +135,14 @@ public class DefaultDbMapping implements DbMapping {
     private String toColumnName(Field field) {
         String column = StringUtils.toUnderline(field.getName());
         return upperCase ? column.toUpperCase() : column;
+    }
+
+    public InheritType getDefaultInheritType() {
+        return defaultInheritType;
+    }
+
+    public void setDefaultInheritType(InheritType defaultInheritType) {
+        this.defaultInheritType = defaultInheritType;
     }
 
     public String getTablePrefix() {

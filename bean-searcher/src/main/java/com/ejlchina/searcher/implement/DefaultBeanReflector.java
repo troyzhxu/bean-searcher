@@ -40,7 +40,7 @@ public class DefaultBeanReflector implements BeanReflector {
 			}
 			if (value != null) {
 				try {
-					meta.getSetter().invoke(bean, value);
+					meta.getField().set(bean, value);
 				} catch (ReflectiveOperationException e) {
 					throw new SearchException(
 							"A exception occurred when setting value to [" + beanClass.getName() + "#" + field + "], please check whether it's setter is correct.", e);
@@ -61,8 +61,8 @@ public class DefaultBeanReflector implements BeanReflector {
 			return value;
 		}
 		for (FieldConvertor convertor: convertors) {
-			if (convertor.supports(meta, valueType, targetType)) {
-				return convertor.convert(meta, value, targetType);
+			if (convertor.supports(meta, valueType)) {
+				return convertor.convert(meta, value);
 			}
 		}
 		throw new SearchException("不能把【" + valueType + "】类型的数据库值转换为【" + targetType + "】类型的字段值，你可以添加一个 FieldConvertor 来转换它！");

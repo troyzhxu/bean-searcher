@@ -1,5 +1,8 @@
 package com.ejlchina.searcher.param;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * 过滤运算符
  * 
@@ -49,10 +52,17 @@ public enum Operator {
 	NotEmpty,
 
 	/**
+	 * 包含，同 {@link #Contain }
+	 * like '%xxx%'
+	 */
+	@Deprecated
+	Like,
+
+	/**
 	 * 包含
 	 * like '%xxx%'
 	 */
-	Like,
+	Contain,
 
 	/**
 	 * 以 .. 开始
@@ -85,7 +95,11 @@ public enum Operator {
 			return (Operator) op;
 		}
 		switch (op.toString()) {
-		case "in":
+		case "in":			// 将在 v3.3 中移除，v3.2 中使用 in 将打印警告
+			Logger logger = LoggerFactory.getLogger(Operator.class);
+			logger.warn("Please use [ct] operator instead of [in] which will be removed in the future.");
+		case "ct":			// 新的运算符，用于取代 in
+		case "Contain":
 		case "Include":
 		case "Like":
 			return Like;

@@ -41,7 +41,7 @@ public @interface SearchBean {
 	 * u.id = ur.user_id and ur.role_id = r.id 
 	 * @return join condition
 	 * */
-	String joinCond() default "";	
+	String joinCond() default "";
 	
 	/**
 	 * 分组字段，例如
@@ -64,6 +64,13 @@ public @interface SearchBean {
 	 * @return 自动映射的表名 或 别名
 	 */
 	String autoMapTo() default "";
+
+	/**
+	 * 继承类型
+	 * @since v3.2.0
+	 * @return InheritType
+	 */
+	InheritType inheritType() default InheritType.DEFAULT;
 
 }
 

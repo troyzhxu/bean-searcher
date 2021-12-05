@@ -1,10 +1,11 @@
 package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.*;
-import com.ejlchina.searcher.util.StringUtils;
+import com.ejlchina.searcher.bean.InheritType;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -56,14 +57,18 @@ public class DefaultMetaResolver implements MetaResolver {
                 snippetResolver.resolve(table.getGroupBy()),
                 table.isDistinct());
         // 字段解析
-        Field[] fields = beanClass.getDeclaredFields();
+        Field[] fields = getBeanFields(beanClass);
         for (int index = 0; index < fields.length; index++) {
             Field field = fields[index];
             DbMapping.Column column = dbMapping.column(fields[index]);
             if (column == null) {
                 continue;
             }
-            FieldMeta fieldMeta = resolveFieldMeta(beanMeta, column, field, index);
+            field.setAccessible(true);
+            SqlSnippet snippet = snippetResolver.resolve(column.getFieldSql());
+            // 注意：Oracle 数据库的别名不能以下划线开头
+            FieldMeta fieldMeta = new FieldMeta(beanMeta, field, snippet, "c_" + index,
+                    column.isConditional(), column.getOnlyOn());
             beanMeta.addFieldMeta(field.getName(), fieldMeta);
         }
         if (beanMeta.getFieldCount() == 0) {
@@ -72,20 +77,21 @@ public class DefaultMetaResolver implements MetaResolver {
         return beanMeta;
     }
 
-    protected FieldMeta resolveFieldMeta(BeanMeta<?> beanMeta, DbMapping.Column column, Field field, int index) {
-        Method setter = getSetterMethod(beanMeta.getBeanClass(), field);
-        SqlSnippet snippet = snippetResolver.resolve(column.getFieldSql());
-        // 注意：Oracle 数据库的别名不能以下划线开头
-        return new FieldMeta(beanMeta, field, setter, snippet, "c_" + index, column.isConditional(), column.getOnlyOn());
-    }
-
-    protected Method getSetterMethod(Class<?> beanClass, Field field) {
-        String fieldName = field.getName();
-        try {
-            return beanClass.getMethod("set" + StringUtils.firstCharToUpperCase(fieldName), field.getType());
-        } catch (Exception e) {
-            throw new SearchException("[" + beanClass.getName() + ": " + fieldName + "] is annotated by @DbField, but there is no correctly setter for it.", e);
+    protected Field[] getBeanFields(Class<?> beanClass) {
+        InheritType iType = dbMapping.inheritType(beanClass);
+        List<Field> fieldList = new ArrayList<>();
+        while (beanClass != Object.class) {
+            for (Field field : beanClass.getDeclaredFields()) {
+                if (!field.isSynthetic()) {
+                    fieldList.add(field);
+                }
+            }
+            if (iType != InheritType.FIELD && iType != InheritType.ALL) {
+                break;
+            }
+            beanClass = beanClass.getSuperclass();
         }
+        return fieldList.toArray(new Field[0]);
     }
 
     public SnippetResolver getSnippetResolver() {

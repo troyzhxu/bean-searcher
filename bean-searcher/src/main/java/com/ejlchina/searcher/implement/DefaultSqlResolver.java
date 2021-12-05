@@ -278,6 +278,7 @@ public class DefaultSqlResolver implements SqlResolver {
 		List<Object> params = new ArrayList<>(2);
 		switch (operator) {
 		case Like:
+		case Contain:
 			builder.append(" like ?");
 			params.add("%" + firstRealValue + "%");
 			break;
