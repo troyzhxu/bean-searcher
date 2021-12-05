@@ -71,12 +71,12 @@ public class DateFormatFieldConvertor implements FieldConvertor.MFieldConvertor 
     }
 
     @Override
-    public boolean supports(FieldMeta meta, Class<?> valueType, Class<?> targetType) {
-        return targetType == null && (Date.class.isAssignableFrom(valueType) || Temporal.class.isAssignableFrom(valueType));
+    public boolean supports(FieldMeta meta, Class<?> valueType) {
+        return Date.class.isAssignableFrom(valueType) || Temporal.class.isAssignableFrom(valueType);
     }
 
     @Override
-    public Object convert(FieldMeta meta, Object value, Class<?> targetType) {
+    public Object convert(FieldMeta meta, Object value) {
         Formatter formatter = findFormatter(meta, value.getClass());
         return formatter != null ? formatter.format(value) : value;
     }

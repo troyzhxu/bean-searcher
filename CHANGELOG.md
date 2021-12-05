@@ -4,7 +4,8 @@
 
 * Bean Searcher
   * 新增条件分组 与 组逻辑运算功能（TODO）
-  * 新增 `EnumFieldConvertor`，用来做枚举字段转换
+  * 重构 `FieldConvertor`：移除冗余参数 `targetType`
+  * 新增 `EnumFieldConvertor`：用来做枚举字段转换
   * SearchBean 的映射字段支持从父类继承
   * 注解 @SearchBean 也支持从父类继承
   * 支持非静态内部类形式的 SearchBean

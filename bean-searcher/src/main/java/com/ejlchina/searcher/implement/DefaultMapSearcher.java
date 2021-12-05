@@ -87,8 +87,8 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 		if (value != null && convertors.size() > 0) {
 			Class<?> valueType = value.getClass();
 			for (FieldConvertor convertor : convertors) {
-				if (convertor.supports(meta, valueType, null)) {
-					return convertor.convert(meta, value, null);
+				if (convertor.supports(meta, valueType)) {
+					return convertor.convert(meta, value);
 				}
 			}
 		}

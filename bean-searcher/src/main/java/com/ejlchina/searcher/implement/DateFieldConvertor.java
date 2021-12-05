@@ -21,25 +21,30 @@ public class DateFieldConvertor implements FieldConvertor.BFieldConvertor {
     private ZoneId zoneId = ZoneId.systemDefault();
 
     @Override
-    public boolean supports(FieldMeta meta, Class<?> valueType, Class<?> targetType) {
-        return (
+    public boolean supports(FieldMeta meta, Class<?> valueType) {
+        if (
                 valueType == Date.class ||
                 valueType == java.sql.Date.class ||
                 valueType == Timestamp.class ||
                 valueType == LocalDateTime.class ||
-                valueType == LocalDate.class)
-        && (
-                targetType == Date.class ||
-                targetType == java.sql.Date.class ||
-                targetType == Timestamp.class ||
-                targetType == LocalDateTime.class ||
-                targetType == LocalDate.class
-        );
+                valueType == LocalDate.class
+        ) {
+            Class<?> targetType = meta.getType();
+            return (
+                    targetType == Date.class ||
+                    targetType == java.sql.Date.class ||
+                    targetType == Timestamp.class ||
+                    targetType == LocalDateTime.class ||
+                    targetType == LocalDate.class
+            );
+        }
+        return false;
     }
 
     @Override
-    public Object convert(FieldMeta meta, Object value, Class<?> targetType) {
+    public Object convert(FieldMeta meta, Object value) {
         Class<?> valueType = value.getClass();
+        Class<?> targetType = meta.getType();
         if (Date.class.isAssignableFrom(valueType)) {
             Date date = (Date) value;
             if (targetType == java.sql.Date.class) {

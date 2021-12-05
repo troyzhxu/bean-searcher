@@ -11,13 +11,16 @@ import com.ejlchina.searcher.FieldMeta;
 public class EnumFieldConvertor implements FieldConvertor.BFieldConvertor {
 
     @Override
-    public boolean supports(FieldMeta meta, Class<?> valueType, Class<?> targetType) {
-        return valueType == String.class && Enum.class.isAssignableFrom(targetType);
+    public boolean supports(FieldMeta meta, Class<?> valueType) {
+        if (valueType == String.class) {
+            return Enum.class.isAssignableFrom(meta.getType());
+        }
+        return false;
     }
 
     @Override
-    public Object convert(FieldMeta meta, Object value, Class<?> targetType) {
-        return convertToEnum(targetType, (String) value);
+    public Object convert(FieldMeta meta, Object value) {
+        return convertToEnum(meta.getType(), (String) value);
     }
 
     @SuppressWarnings("unchecked")

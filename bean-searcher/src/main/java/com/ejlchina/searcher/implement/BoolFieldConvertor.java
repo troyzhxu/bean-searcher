@@ -17,12 +17,16 @@ public class BoolFieldConvertor implements FieldConvertor.BFieldConvertor {
 	private String[] falseValues = new String[] { "0", "OFF", "FALSE", "N", "NO", "F" };
 
 	@Override
-	public boolean supports(FieldMeta meta, Class<?> valueType, Class<?> targetType) {
-		return (valueType == String.class || Number.class.isAssignableFrom(valueType)) && (targetType == boolean.class || targetType == Boolean.class);
+	public boolean supports(FieldMeta meta, Class<?> valueType) {
+		if (valueType == String.class || Number.class.isAssignableFrom(valueType)) {
+			Class<?> targetType = meta.getType();
+			return targetType == boolean.class || targetType == Boolean.class;
+		}
+		return false;
 	}
 
 	@Override
-	public Object convert(FieldMeta meta, Object value, Class<?> targetType) {
+	public Object convert(FieldMeta meta, Object value) {
 		if (value instanceof String) {
 			String bool = (String) value;
 			for (String t: falseValues) {
