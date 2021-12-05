@@ -10,6 +10,7 @@ import com.ejlchina.searcher.param.Operator;
 import com.ejlchina.searcher.util.StringUtils;
 
 import java.lang.reflect.Field;
+import java.util.Objects;
 
 /***
  * 默认的数据库映射解析器
@@ -31,44 +32,33 @@ public class DefaultDbMapping implements DbMapping {
 
     @Override
     public InheritType inheritType(Class<?> beanClass) {
-        while (beanClass != Object.class) {
-            SearchBean bean = beanClass.getAnnotation(SearchBean.class);
-            if (bean != null) {
-                InheritType iType = bean.inheritType();
-                if (iType != InheritType.DEFAULT) {
-                    return iType;
-                }
+        SearchBean bean = getSearchBean(beanClass);
+        if (bean != null) {
+            InheritType iType = bean.inheritType();
+            if (iType != InheritType.DEFAULT) {
+                return iType;
             }
-            beanClass = beanClass.getSuperclass();
         }
         return defaultInheritType;
     }
 
     @Override
     public Table table(Class<?> beanClass) {
-        InheritType iType = inheritType(beanClass);
-        Class<?> clazz = beanClass;
-        while (clazz != Object.class) {
-            SearchBean bean = clazz.getAnnotation(SearchBean.class);
-            if (bean != null) {
-                return new Table(bean.dataSource().trim(),
-                        tables(beanClass, bean),
-                        bean.joinCond().trim(),
-                        bean.groupBy().trim(),
-                        bean.distinct()
-                );
-            }
-            if (iType != InheritType.TABLE && iType != InheritType.ALL) {
-                break;
-            }
-            clazz = clazz.getSuperclass();
+        SearchBean bean = getSearchBean(beanClass);
+        if (bean != null) {
+            return new Table(bean.dataSource().trim(),
+                    tables(beanClass, bean),
+                    bean.joinCond().trim(),
+                    bean.groupBy().trim(),
+                    bean.distinct()
+            );
         }
         return new Table(null, toTableName(beanClass), "", "", false);
     }
 
     @Override
-    public Column column(Field field) {
-        String fieldSql = dbFieldSql(field);
+    public Column column(Class<?> beanClass, Field field) {
+        String fieldSql = dbFieldSql(beanClass, field);
         if (fieldSql == null) {
             return null;
         }
@@ -79,6 +69,20 @@ public class DefaultDbMapping implements DbMapping {
             return new Column(fieldSql, conditional, onlyOn);
         }
         return new Column(fieldSql, true, EMPTY_OPERATORS);
+    }
+
+    protected SearchBean getSearchBean(Class<?> beanClass) {
+        while (beanClass != Object.class) {
+            SearchBean bean = beanClass.getAnnotation(SearchBean.class);
+            if (bean != null) {
+                return bean;
+            }
+            if (defaultInheritType != InheritType.TABLE && defaultInheritType != InheritType.ALL) {
+                break;
+            }
+            beanClass = beanClass.getSuperclass();
+        }
+        return null;
     }
 
     protected String tables(Class<?> beanClass, SearchBean bean) {
@@ -101,8 +105,7 @@ public class DefaultDbMapping implements DbMapping {
         return tables;
     }
 
-    protected String dbFieldSql(Field field) {
-        Class<?> beanClass = field.getDeclaringClass();
+    protected String dbFieldSql(Class<?> beanClass, Field field) {
         DbField dbField = field.getAnnotation(DbField.class);
         if (field.getAnnotation(DbIgnore.class) != null) {
             if (dbField == null) {
@@ -119,7 +122,7 @@ public class DefaultDbMapping implements DbMapping {
                 return fieldSql;
             }
         }
-        SearchBean bean = beanClass.getAnnotation(SearchBean.class);
+        SearchBean bean = getSearchBean(beanClass);
         // 没加 @SearchBean 注解，或者加了但没给 tables 赋值，则可以自动映射列名，因为此时默认为单表映射
         if (bean == null || StringUtils.isBlank(bean.tables())) {
             // 默认使用下划线风格的字段映射
@@ -141,8 +144,8 @@ public class DefaultDbMapping implements DbMapping {
         return defaultInheritType;
     }
 
-    public void setDefaultInheritType(InheritType defaultInheritType) {
-        this.defaultInheritType = defaultInheritType;
+    public void setDefaultInheritType(InheritType inheritType) {
+        this.defaultInheritType = Objects.requireNonNull(inheritType);
     }
 
     public String getTablePrefix() {

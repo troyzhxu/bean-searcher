@@ -60,7 +60,7 @@ public class DefaultMetaResolver implements MetaResolver {
         Field[] fields = getBeanFields(beanClass);
         for (int index = 0; index < fields.length; index++) {
             Field field = fields[index];
-            DbMapping.Column column = dbMapping.column(fields[index]);
+            DbMapping.Column column = dbMapping.column(beanClass, fields[index]);
             if (column == null) {
                 continue;
             }

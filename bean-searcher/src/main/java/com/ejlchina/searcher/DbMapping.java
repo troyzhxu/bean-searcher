@@ -34,10 +34,12 @@ public interface DbMapping {
      * 根据 field 获取表列名
      * 在 SearchBean 的某字段上没加 {@link DbField } 注解，同时没加 {@link SearchBean } 注解
      * 或 {@link SearchBean#tables()} 属性为空 或指定了 {@link SearchBean#autoMapTo()} 属性时，根据该方法自动自动映射字段
-     * @param field 类字段
+     * v3.2.0 新增 beanClass 参数（因为 field 参数可能是父类的字段）
+     * @param beanClass SearchBean 的 Class
+     * @param field SearchBean 的字段
      * @return {@link Column }，若返回 null，则表示忽略该字段
      */
-    Column column(Field field);
+    Column column(Class<?> beanClass, Field field);
 
     /**
      * 表信息
