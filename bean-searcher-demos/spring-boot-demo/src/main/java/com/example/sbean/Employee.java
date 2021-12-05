@@ -1,11 +1,9 @@
 package com.example.sbean;
 
 import com.ejlchina.searcher.bean.*;
-import com.ejlchina.searcher.param.Operator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Map;
 
 @SearchBean(
