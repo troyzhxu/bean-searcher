@@ -15,6 +15,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 import javax.sql.DataSource;
 import java.util.List;
@@ -141,7 +142,7 @@ public class BeanSearcherAutoConfiguration {
 		return searcher;
 	}
 
-	@Bean
+	@Bean @Primary
 	@ConditionalOnMissingBean(MapSearcher.class)
 	public MapSearcher mapSearcher(MetaResolver metaResolver,
 								   ParamResolver paramResolver,
