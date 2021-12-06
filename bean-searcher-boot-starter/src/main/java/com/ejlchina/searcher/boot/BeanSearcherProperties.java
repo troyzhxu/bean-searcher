@@ -25,6 +25,12 @@ public class BeanSearcherProperties {
 	 */
 	private final FieldConvertor fieldConvertor = new FieldConvertor();
 
+	// 使用 MapSearcher 检索器
+	private boolean useMapSearcher = true;
+
+	// 使用 BeanSearcher 检索器
+	private boolean useBeanSearcher = true;
+
 
 	public Params getParams() {
 		return params;
@@ -414,6 +420,22 @@ public class BeanSearcherProperties {
 			this.useEnum = useEnum;
 		}
 
+	}
+
+	public boolean isUseMapSearcher() {
+		return useMapSearcher;
+	}
+
+	public void setUseMapSearcher(boolean useMapSearcher) {
+		this.useMapSearcher = useMapSearcher;
+	}
+
+	public boolean isUseBeanSearcher() {
+		return useBeanSearcher;
+	}
+
+	public void setUseBeanSearcher(boolean useBeanSearcher) {
+		this.useBeanSearcher = useBeanSearcher;
 	}
 
 }

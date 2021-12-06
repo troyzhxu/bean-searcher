@@ -190,6 +190,7 @@ public class BeanSearcherAutoConfiguration {
 
 	@Bean
 	@ConditionalOnMissingBean(BeanSearcher.class)
+	@ConditionalOnProperty(name = "bean-searcher.use-bean-searcher", havingValue = "true", matchIfMissing = true)
 	public BeanSearcher beanSearcher(MetaResolver metaResolver,
 									 ParamResolver paramResolver,
 									 SqlResolver sqlResolver,
@@ -225,6 +226,7 @@ public class BeanSearcherAutoConfiguration {
 
 	@Bean
 	@ConditionalOnMissingBean(MapSearcher.class)
+	@ConditionalOnProperty(name = "bean-searcher.use-map-searcher", havingValue = "true", matchIfMissing = true)
 	public MapSearcher mapSearcher(MetaResolver metaResolver,
 								   ParamResolver paramResolver,
 								   SqlResolver sqlResolver,

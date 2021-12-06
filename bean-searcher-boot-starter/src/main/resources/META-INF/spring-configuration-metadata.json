@@ -39,6 +39,20 @@
   ],
   "properties": [
     {
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties",
+      "defaultValue": true,
+      "name": "bean-searcher.use-map-searcher",
+      "description": "是否使用 MapSearcher 检索器",
+      "type": "java.lang.Boolean"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties",
+      "defaultValue": true,
+      "name": "bean-searcher.use-bean-searcher",
+      "description": "是否使用 BeanSearcher 检索器",
+      "type": "java.lang.Boolean"
+    },
+    {
       "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$FieldConvertorProps",
       "name": "bean-searcher.field-convertor.falses",
       "description": "字段假值（False）映射字符，可配多个",
