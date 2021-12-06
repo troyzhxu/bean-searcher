@@ -19,6 +19,7 @@ import org.springframework.context.annotation.Primary;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.function.Consumer;
 
 
 @Configuration
@@ -59,7 +60,7 @@ public class BeanSearcherAutoConfiguration {
 									   BeanSearcherProperties config) {
 		DefaultParamResolver paramResolver = new DefaultParamResolver();
 		paramResolver.setPageExtractor(pageExtractor);
-		paramFilters.ifAvailable(paramResolver::setParamFilters);
+		ifAvailable(paramFilters, paramResolver::setParamFilters);
 		ParamsProps conf = config.getParams();
 		paramResolver.setOperatorSuffix(conf.getOperatorKey());
 		paramResolver.setIgnoreCaseSuffix(conf.getIgnoreCaseKey());
@@ -119,8 +120,8 @@ public class BeanSearcherAutoConfiguration {
 	@ConditionalOnMissingBean(MetaResolver.class)
 	public MetaResolver metaResolver(ObjectProvider<SnippetResolver> snippetResolver, ObjectProvider<DbMapping> dbMapping) {
 		DefaultMetaResolver metaResolver = new DefaultMetaResolver();
-		snippetResolver.ifAvailable(metaResolver::setSnippetResolver);
-		dbMapping.ifAvailable(metaResolver::setDbMapping);
+		ifAvailable(snippetResolver, metaResolver::setSnippetResolver);
+		ifAvailable(dbMapping, metaResolver::setDbMapping);
 		return metaResolver;
 	}
 
@@ -138,7 +139,7 @@ public class BeanSearcherAutoConfiguration {
 		searcher.setSqlResolver(sqlResolver);
 		searcher.setSqlExecutor(sqlExecutor);
 		searcher.setBeanReflector(beanReflector);
-		interceptors.ifAvailable(searcher::setInterceptors);
+		ifAvailable(interceptors, searcher::setInterceptors);
 		return searcher;
 	}
 
@@ -155,9 +156,19 @@ public class BeanSearcherAutoConfiguration {
 		searcher.setParamResolver(paramResolver);
 		searcher.setSqlResolver(sqlResolver);
 		searcher.setSqlExecutor(sqlExecutor);
-		interceptors.ifAvailable(searcher::setInterceptors);
-		convertors.ifAvailable(searcher::setConvertors);
+		ifAvailable(interceptors, searcher::setInterceptors);
+		ifAvailable(convertors, searcher::setConvertors);
 		return searcher;
+	}
+
+
+	private <T> void ifAvailable(ObjectProvider<T> provider, Consumer<T> consumer) {
+		// 为了兼容 1.x 的 SpringBoot，最低兼容到 v1.4
+		// 不直接使用 ObjectProvider.ifAvailable 方法
+		T dependency = provider.getIfAvailable();
+		if (dependency != null) {
+			consumer.accept(dependency);
+		}
 	}
 
 }
