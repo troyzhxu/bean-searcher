@@ -16,6 +16,12 @@
   * 新增 `bean-searcher.use-map-searcher` 配置项，表示是否自动创建 `MapSearcher` 检索器，默认 `true`
   * 新增 `bean-searcher.use-bean-searcher` 配置项，表示是否自动创建 `BeanSearcher` 检索器，默认 `true`
 
+### 🌻 Better
+
+* Bean Searcher Boot Starter
+  * 使用 Searcher 类型注入检索器时，默认注入 MapSearcher，不再报错
+  * 提高兼容性，SpringBoot 最低版本支持到 v1.4+
+
 # v3.1.2 & v3.0.4 @ 2021-12-02
 
 ### 🌻 Better
