@@ -148,24 +148,23 @@ public class UserController {
 
   检索时排除 `joinDate` 字段
 
-### ✨ 编码式构建检索参数
+### ✨ 参数构建器
 
 ```java
 Map<String, Object> params = MapUtils.builder()
-        .field(User::getType, 1).op("eq")           // 条件：type 等于 1
-        .field(User::getName, "张").op("sw")        // 条件：姓名以"张"开头
-        .field(User::getAge, 20, 30).op("bt")       // 条件：年龄在 20 与 30 之间
-        .field(User::getNickname, "Jack").ic()      // 条件：昵称等于 Jack, 忽略大小写
-        .orderBy(User::getAge, "asc")               // 排序：年龄，从小到大
-        .page(0, 15)                                // 分页：第 0 页, 每页 15 条
+        .selectExclude(User::getJoinDate)                 // 排除 joinDate 字段
+        .field(User::getStatus, 1)                        // 过滤：status = 1
+        .field(User::getName, "Jack").ic()                // 过滤：name = 'Jack' (case ignored)
+        .field(User::getAge, 20, 30).op(Opetator.Between) // 过滤：age between 20 and 30
+        .orderBy(User::getAge, "asc")                     // 排序：年龄，从小到大
+        .page(0, 15)                                      // 分页：第 0 页, 每页 15 条
         .build();
-SearchResult<User> result = beanSearcher.search(User.class, params);
+List<User> users = beanSearcher.searchList(User.class, params);
 ```
 
 **DEMO 快速体验**：
 
-* [v3.x 的 spring-boot-demo](./bean-searcher-demos/spring-boot-demo)
-* [v3.x 的 grails-demo](./bean-searcher-demos/grails-demo)
+* [v3.x 的 demos](./bean-searcher-demos)
 * [v2.x 的 demo](https://gitee.com/ejlchina-zhxu/bean-searcher-demo)
 
 ### 🚀 快速开发
@@ -231,10 +230,10 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 面向接口设计，用户可自定义扩展 Bean Searcher 中的任何组件！
 
 比如你可以：
-* 自定义数据库映射（[`DbMapping`](/bean-searcher/src/main/java/com/ejlchina/searcher/DbMapping.java)）来实现自定义注解，或让 Bean Searcher 识别其它 ORM 的注解
-* 自定义参数解析器（[`ParamResolver`](/bean-searcher/src/main/java/com/ejlchina/searcher/ParamResolver.java)）来支持 JSON 形式的检索参数
-* 自定义字段转换器（[`FieldConvertor`](/bean-searcher/src/main/java/com/ejlchina/searcher/FieldConvertor.java)）来支持任意的 字段类型
-* 自定义数据库方言（[`Dialect`](/bean-searcher/src/main/java/com/ejlchina/searcher/Dialect.java)）来支持更多的数据库
+* 自定义 [`DbMapping`](/bean-searcher/src/main/java/com/ejlchina/searcher/DbMapping.java) 来实现自定义注解，或让 Bean Searcher 识别其它 ORM 的注解
+* 自定义 [`ParamResolver`](/bean-searcher/src/main/java/com/ejlchina/searcher/ParamResolver.java) 来支持 JSON 形式的检索参数
+* 自定义 [`FieldConvertor`](/bean-searcher/src/main/java/com/ejlchina/searcher/FieldConvertor.java) 来支持任意的 字段类型
+* 自定义 [`Dialect`](/bean-searcher/src/main/java/com/ejlchina/searcher/Dialect.java) 来支持更多的数据库
 * 等等..
 
 ### 📚 详细文档
