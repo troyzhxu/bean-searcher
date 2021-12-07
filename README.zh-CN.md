@@ -82,7 +82,7 @@ public class UserController {
 
     @GetMapping("/index")
     public SearchResult<User> index(HttpServletRequest request) {
-        // 只一行代码，实现包含 分页、组合过滤、任意字段排序、甚至统计、多表联查的 复杂检索功能
+        // 这里只写一行代码
         return beanSearcher.search(User.class, MapUtils.flat(request.getParameterMap()));
     }
 	
