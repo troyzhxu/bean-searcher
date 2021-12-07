@@ -9,7 +9,7 @@ English | [中文](./README.zh-CN.md)
 * Document：https://searcher.ejlchina.com/
 * Getting start：https://juejin.cn/post/7027733039299952676
 * Change log：[CHANGELOG](./CHANGELOG.md)
-* Purpose of this framework: only one line of code:
+* Only one line of code to achieve:
   - Multi table associated query
   - Paging search
   - Any field combination filtering
