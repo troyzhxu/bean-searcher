@@ -91,6 +91,7 @@ For example, this api can be accessed like:
         "username": "Jack",
         "status": 1,
         "level": 1,
+        "age": 25,
         "gender": "Male",
         "joinDate": "2021-10-01"
       },
@@ -110,12 +111,27 @@ For example, this api can be accessed like:
   - Retrieving with `name` starting with `Jac` by default pagination
 * `/user/index? name=Jack & name-ic=true`
   - Retrieving with `name = Jack`(case ignored) by default pagination
-* `/user/index?type=1&sort=age&order=desc`
-  - 检索 status = 1 的用户，以 age 排序，降序输出，默认分页
-* `/user/index? onlySelect=name,age`
-  - 检索 所有用户，默认分页，但只查询 name 和 age 字段
+* `/user/index? sort=age & order=desc`
+  - Retrieving sorting by `age` descending and by default pagination
+* `/user/index? onlySelect=username,age`
+  - Retrieving `username,age` only by default pagination:
+  ```json
+  {
+    "dataList": [
+      {
+        "username": "Jack",
+        "age": 25,
+      },
+      ...     // 15 records default
+    ],
+    "totalCount": 100,
+    "summaries": [
+      2500    // age statistics
+    ]
+  }
+  ```
 * `/user/index? selectExclude=joinDate`
-  - 检索 所有用户，默认分页，但不查询 dateCreated  字段
+  - Retrieving `joinDate` excluded default pagination
 
 ### ✨ Parameter builder
 
