@@ -49,7 +49,7 @@ Traditional ORM is difficult to realize a complex list retrieval with less code,
 
 ![](./assets/case.png)
 
-The back-end needs to write a retrieval api, and if it is written with traditional ORM, the complexity of the code is very high
+The back-end needs to write a retrieval API, and if it is written with traditional ORM, the complexity of the code is very high
 
 But Bean Searcher can：
 
@@ -73,7 +73,7 @@ public class User {
 }
 ```
 
-Then you can complete the api with one line of code :
+Then you can complete the API with one line of code :
 
 ```java
 @RestController
@@ -100,7 +100,7 @@ This line of code can achieve：
 * **Sorting by any field**
 * **Summary with `age` field**
 
-For example, this api can be requested like:
+For example, this API can be requested as follows:
 
 * `/user/index`
   
