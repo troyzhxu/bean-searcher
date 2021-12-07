@@ -55,7 +55,25 @@ But Bean Searcher can：
 
 ### 💥 Achieved with one line of code
 
-Whether simple or complex of requirements, Bean Searcher requires only one line of code:
+First, you have an Entity class:
+
+```java
+@SearchBean(tables="user u, role r", joinCond="u.role_id = r.id", autoMapTo="u")
+public class User {
+  private long id;
+  private String username;
+  private int status;
+  private int age;
+  private String gender;
+  private Date joinDate;
+  private int roleId;
+  @DbField("r.name")
+  private String roleName;
+  // Getters and setters...
+}
+```
+
+Then you can complete the api with one line of code :
 
 ```java
 @RestController
@@ -94,10 +112,11 @@ For example, this api can be accessed like:
         "id": 1,
         "username": "Jack",
         "status": 1,
-        "level": 1,
         "age": 25,
         "gender": "Male",
-        "joinDate": "2021-10-01"
+        "joinDate": "2021-10-01",
+        "roleId": 1,
+        "roleName": "User"
       },
       ...     // 15 records default
     ],
