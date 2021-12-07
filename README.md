@@ -85,7 +85,8 @@ This line of code can achieve：
 For example, this api can be accessed like:
 
 * `/user/index`
-  - Retrieving by default pagination:
+  
+  Retrieving by default pagination:
   ```json
   {
     "dataList": [
@@ -106,18 +107,29 @@ For example, this api can be accessed like:
     ]
   }
   ```
+  
 * `/user/index? page=1 & size=10`
-  - Retrieval by specified pagination
+  
+  Retrieval by specified pagination
+
 * `/user/index? status=1`
-  - Retrieval with `status = 1` by default pagination
+  
+  Retrieval with `status = 1` by default pagination
+
 * `/user/index? name=Jac & name-op=sw`
-  - Retrieval with `name` starting with `Jac` by default pagination
+  
+  Retrieval with `name` starting with `Jac` by default pagination
+
 * `/user/index? name=Jack & name-ic=true`
-  - Retrieval with `name = Jack`(case ignored) by default pagination
+  
+  Retrieval with `name = Jack`(case ignored) by default pagination
+
 * `/user/index? sort=age & order=desc`
-  - Retrieval sorting by `age` descending and by default pagination
+   
+  Retrieval sorting by `age` descending and by default pagination
 * `/user/index? onlySelect=username,age`
-  - Retrieval `username,age` only by default pagination:
+
+  Retrieval `username,age` only by default pagination:
   ```json
   {
     "dataList": [
@@ -134,7 +146,8 @@ For example, this api can be accessed like:
   }
   ```
 * `/user/index? selectExclude=joinDate`
-  - Retrieving `joinDate` excluded default pagination
+
+  Retrieving `joinDate` excluded default pagination
 
 ### ✨ Parameter builder
 
