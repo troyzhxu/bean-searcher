@@ -97,8 +97,7 @@ public class UserController {
 * **任意字段排序**
 * **字段统计**
 
-例如，该接口支持如下查询：
-
+例如，该接口支持如下请求：
 
 * `/user/index`
 

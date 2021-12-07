@@ -100,7 +100,7 @@ This line of code can achieve：
 * **Sorting by any field**
 * **Summary with `age` field**
 
-For example, this api can be accessed like:
+For example, this api can be requested like:
 
 * `/user/index`
   
