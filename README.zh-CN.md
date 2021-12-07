@@ -52,7 +52,25 @@
 
 ### 💥 只一行代码实现以上功能
 
-无论简单还是复杂，Bean Searcher 都只需一行代码：
+首先，你有一个实体类：
+
+```java
+@SearchBean(tables="user u, role r", joinCond="u.role_id = r.id", autoMapTo="u")
+public class User {
+  private long id;
+  private String username;
+  private int status;
+  private int age;
+  private String gender;
+  private Date joinDate;
+  private int roleId;
+  @DbField("r.name")
+  private String roleName;
+  // Getters and setters...
+}
+```
+
+然后你就可以用一行代码实现这个用户检索接口：
 
 ```java
 @RestController
@@ -71,7 +89,7 @@ public class UserController {
 }
 ```
 
-这一行代码可实现：
+这一行代码实现了以下功能：
 
 * **多表联查**
 * **分页搜索**

@@ -27,7 +27,7 @@ English | [中文](./README.zh-CN.md)
 
 * Support **one entity mapping to multi tables**
 * Support **dynamic field operator**
-* Support **group aggregation query**
+* Support **group and aggregation query**
 * Support **Select | Where | From subquery**
 * Support **embedded params in entity**
 * Support **field converters**
