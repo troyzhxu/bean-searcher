@@ -38,17 +38,17 @@ English | [中文](./README.zh-CN.md)
 
 #### This is not a repeating wheel
 
-虽然 **增删改** 是 hibernate 和 mybatis、data-jdbc 等等 ORM 的强项，但查询，特别是有 **多条件**、**联表**、**分页**、**排序** 的复杂的列表查询，却一直是它们的弱项。
+Although CREATE/UPDATE/DELETE are the strengths of Hibernate, MyBatis, DataJDBC and other ORM, queries, especially complex list queries with **multi conditions**, **multi tables**, **paging**, **sorting**, have always been their weaknesses.
 
-传统的 ORM 很难用较少的代码实现一个复杂的列表检索，但 Bean Searcher 却在这方面下足了功夫，这些复杂的查询，几乎只用一行代码便可以解决。
+Traditional ORM is difficult to realize a complex list retrieval with less code, but **Bean Searcher** has made great efforts in this regard. These complex queries can be solved in almost one line of code.
 
-* 例如，这样的一个典型的需求：
+* For example, such a typical requirement：
 
 ![](./assets/case.png)
 
-后端需要写一个检索接口，而如果用传统的 ORM 来写，代码之复杂是可以想象的。
+The back-end needs to write a retrieval api, and if it is written with traditional ORM, the complexity of the code is very high
 
-而 Bean Searcher 却可以：
+But Bean Searcher can：
 
 ### 💥 Achieved in just one line of code
 
