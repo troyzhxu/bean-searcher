@@ -102,22 +102,14 @@ For example, this api can be accessed like:
     ]
   }
   ```
-
 * `/user/index? page=1 & size=10`
   - Retrieving by specified pagination
-  
-
 * `/user/index? status=1`
   - Retrieving with `status = 1` by default pagination
-
-
 * `/user/index? name=Jac & name-op=sw`
   - Retrieving with `name` starting with `Jac` by default pagination
-  
 * `/user/index? name=Jack & name-ic=true`
   - Retrieving with `name = Jack`(case ignored) by default pagination
-
-
 * `/user/index?type=1&sort=age&order=desc`
   - 检索 status = 1 的用户，以 age 排序，降序输出，默认分页
 * `/user/index? onlySelect=name,age`
