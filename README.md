@@ -127,6 +127,7 @@ For example, this api can be accessed like:
 * `/user/index? sort=age & order=desc`
    
   Retrieval sorting by `age` descending and by default pagination
+
 * `/user/index? onlySelect=username,age`
 
   Retrieval `username,age` only by default pagination:

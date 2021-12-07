@@ -81,16 +81,72 @@ public class UserController {
 
 例如，该接口支持如下查询：
 
-* `/user/index?type=1&page=1&size=10`
-  - 检索 type = 1 的用户，返回第 2 页，每页 10 条
-* `/user/index?type=1&name=张&name-op=sw`
-  - 检索 type = 1 并且 name 以 `张` 开头的用户，默认分页（第 0 页，每页 15 条）
-* `/user/index?type=1&sort=age&order=desc`
-  - 检索 type = 1 的用户，以 age 排序，降序输出，默认分页
-* `/user/index?onlySelect=name,age`
-  - 检索 所有用户，默认分页，但只查询 name 和 age 字段
-* `/user/index?selectExclude=dateCreated`
-  - 检索 所有用户，默认分页，但不查询 dateCreated  字段
+
+* `/user/index`
+
+  无参请求（默认分页）:
+  ```json
+  {
+    "dataList": [
+      {
+        "id": 1,
+        "username": "Jack",
+        "status": 1,
+        "level": 1,
+        "age": 25,
+        "gender": "Male",
+        "joinDate": "2021-10-01"
+      },
+      ...     // 默认返回 15 条数据
+    ],
+    "totalCount": 100,
+    "summaries": [
+      2500    // age 字段统计
+    ]
+  }
+  ```
+
+* `/user/index? page=1 & size=10`
+
+  指定分页参数
+
+* `/user/index? status=1`
+
+  返回 `status = 1` 的用户
+
+* `/user/index? name=Jac & name-op=sw`
+
+  返回 `name` 已 `Jac` 开头的用户
+
+* `/user/index? name=Jack & name-ic=true`
+
+  返回 `name = Jack`（忽略大小写）的用户
+
+* `/user/index? sort=age & order=desc`
+
+  按字段 `age` 降序查询
+
+* `/user/index? onlySelect=username,age`
+
+  只检索 `username` 与 `age` 两个字段:
+  ```json
+  {
+    "dataList": [
+      {
+        "username": "Jack",
+        "age": 25
+      },
+      ...
+    ],
+    "totalCount": 100,
+    "summaries": [
+      2500
+    ]
+  }
+  ```
+* `/user/index? selectExclude=joinDate`
+
+  检索时排除 `joinDate` 字段
 
 ### ✨ 编码式构建检索参数
 
