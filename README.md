@@ -6,16 +6,16 @@
 
 English | [中文](./README.zh-CN.md)
 
-* Document：https://searcher.ejlchina.com/
+* Documentation：https://searcher.ejlchina.com/
 
 * Getting start：https://juejin.cn/post/7027733039299952676
 
 * Change log：[CHANGELOG](./CHANGELOG.md)
 
 * Only one line of code to achieve:
-  - Retrieving with multi tables joined
+  - Retrieval from multi tables
   - Pagination by any field
-  - Combined filtering by any field 
+  - Combined filter by any field 
   - Sorting by any field 
   - Summaries with multi field
 
@@ -30,11 +30,11 @@ English | [中文](./README.zh-CN.md)
 * Support **group aggregation query**
 * Support **Select | Where | From subquery**
 * Support **embedded params in entity**
-* Support **field converter**
-* Support **sql interceptor**
+* Support **field converters**
+* Support **sql interceptors**
 * Support **sql dialect extension**
-* Support **Multi data source and dynamic data source**
-* Support **annotations omitting and customizing**
+* Support **multi datasource and dynamic datasource**
+* Support **annotation omitting and customizing**
 * and so on
 
 ### ⁉️WHY
@@ -55,7 +55,7 @@ But Bean Searcher can：
 
 ### 💥 Achieved with one line of code
 
-Whether simple or complex of requirements, Bean Searcher requires only one line of code
+Whether simple or complex of requirements, Bean Searcher requires only one line of code:
 
 ```java
 @RestController
@@ -76,9 +76,9 @@ public class UserController {
 
 This line of code can achieve：
 
-* **Retrieving with multi tables joined**
+* **Retrieval from multi tables**
 * **Pagination by any field**
-* **Combined filtering by any field**
+* **Combined filter by any field**
 * **Sorting by any field**
 * **Summary with `age` field**
 
@@ -107,17 +107,17 @@ For example, this api can be accessed like:
   }
   ```
 * `/user/index? page=1 & size=10`
-  - Retrieving by specified pagination
+  - Retrieval by specified pagination
 * `/user/index? status=1`
-  - Retrieving with `status = 1` by default pagination
+  - Retrieval with `status = 1` by default pagination
 * `/user/index? name=Jac & name-op=sw`
-  - Retrieving with `name` starting with `Jac` by default pagination
+  - Retrieval with `name` starting with `Jac` by default pagination
 * `/user/index? name=Jack & name-ic=true`
-  - Retrieving with `name = Jack`(case ignored) by default pagination
+  - Retrieval with `name = Jack`(case ignored) by default pagination
 * `/user/index? sort=age & order=desc`
-  - Retrieving sorting by `age` descending and by default pagination
+  - Retrieval sorting by `age` descending and by default pagination
 * `/user/index? onlySelect=username,age`
-  - Retrieving `username,age` only by default pagination:
+  - Retrieval `username,age` only by default pagination:
   ```json
   {
     "dataList": [
@@ -157,57 +157,61 @@ List<User> users = beanSearcher.searchList(User.class, params);
 
 ### 🚀 Rapid development
 
-使用 Bean Searcher 可以极大地节省后端的复杂列表检索接口的开发时间！
+Using Bean Searcher can greatly save the development time of the complex list retrieval apis!
 
-* 普通的复杂列表查询只需一行代码
-* 单表检索可复用原有 `Domain`，无需定义 `SearchBean`
+* An ordinary complex list query requires only one line of code
+* Retrieval from single table can reuse the original `domain`, without defining new `Entity`
 
 ### 🌱 Easy integration
 
-可以和任意 Java Web 框架集成，如：SpringBoot、Spring MVC、Grails、Jfinal 等等。
+Bean Searcher can work with any JavaWeb frameworks, such as: SpringBoot, SpringMVC, Grails, Jfinal and so on.
 
-#### Spring Boot 项目，添加依赖即集成完毕：
+#### SpringBoot
+
+All you need is to add a dependence:
 
 ```groovy
 implementation 'com.ejlchina:bean-searcher-boot-stater:3.1.2'
 ```
 
-接着便可在 `Controller` 或 `Service` 里注入检索器：
+and then you can inject `Searcher` into a `Controller` or `Service`:
 
 ```groovy
 /**
- * 注入 Map 检索器，它检索出来的数据以 Map 对象呈现
+ * Inject a MapSearcher, which retrieved data is Map objects
  */
 @Autowired
 private MapSearcher mapSearcher;
 
 /**
- * 注入 Bean 检索器，它检索出来的数据以 泛型 对象呈现
+ * Inject a BeanSearcher, which retrieved data is generic objects
  */
 @Autowired
 private BeanSearcher beanSearcher;
 ```
 
-#### 其它框架，使用如下依赖：
+#### Other frameworks
+
+Adding this dependence:
 
 ```groovy
 implementation 'com.ejlchina:bean-searcher:3.1.2'
 ```
 
-然后可以使用 `SearcherBuilder` 构建一个检索器：
+then you can build a `Searcher` with `SearcherBuilder`:
 
 ```java
-DataSource dataSource = ...     // 拿到应用的数据源
+DataSource dataSource = ...     // Get the dataSource of the application
 
-// DefaultSqlExecutor 也支持多数据源
+// DefaultSqlExecutor suports multi datasources
 SqlExecutor sqlExecutor = new DefaultSqlExecutor(dataSource);
 
-// 构建 Map 检索器
+// build a MapSearcher
 MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
         .sqlExecutor(sqlExecutor)
         .build();
 
-// 构建 Bean 检索器
+// build a BeanSearcher
 BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
         .sqlExecutor(sqlExecutor)
         .build();
@@ -215,14 +219,15 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 
 ### 🔨 Easy extended
 
-面向接口设计，用户可自定义扩展 Bean Searcher 中的任何组件！
+You can customize and extend any component in Bean Searcher .
 
-比如你可以：
-* 自定义数据库映射（[`DbMapping`](/bean-searcher/src/main/java/com/ejlchina/searcher/DbMapping.java)）来实现自定义注解，或让 Bean Searcher 识别其它 ORM 的注解
-* 自定义参数解析器（[`ParamResolver`](/bean-searcher/src/main/java/com/ejlchina/searcher/ParamResolver.java)）来支持 JSON 形式的检索参数
-* 自定义字段转换器（[`FieldConvertor`](/bean-searcher/src/main/java/com/ejlchina/searcher/FieldConvertor.java)）来支持任意的 字段类型
-* 自定义数据库方言（[`Dialect`](/bean-searcher/src/main/java/com/ejlchina/searcher/Dialect.java)）来支持更多的数据库
-* 等等..
+For example:
+
+* Customizing [`DbMapping`](/bean-searcher/src/main/java/com/ejlchina/searcher/DbMapping.java) to support other ORM‘s annotations
+* Customizing [`ParamResolver`](/bean-searcher/src/main/java/com/ejlchina/searcher/ParamResolver.java) to support JSON query params
+* Customizing [`FieldConvertor`](/bean-searcher/src/main/java/com/ejlchina/searcher/FieldConvertor.java) to support any type of field
+* Customizing [`Dialect`](/bean-searcher/src/main/java/com/ejlchina/searcher/Dialect.java) to support more database
+* and so and
 
 ### 📚 Detailed documentation
 
