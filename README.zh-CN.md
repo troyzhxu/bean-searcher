@@ -4,39 +4,39 @@
 [![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 [![Troy.Zhou](https://img.shields.io/badge/%E4%BD%9C%E8%80%85-ejlchina-orange.svg)](https://github.com/ejlchina)
 
-English | [中文](./README.zh-CN.md)
+中文 | [English](./README.md)
 
-* Document：https://searcher.ejlchina.com/
-* Getting start：https://juejin.cn/post/7027733039299952676
-* Change log：[CHANGELOG](./CHANGELOG.md)
-* Purpose of this framework: only one line of code:
-  - Multi table associated query
-  - Paging search
-  - Any field combination filtering
-  - Any field sort
-  - Multi field statistics
-* Architecture:
+* 文档：https://searcher.ejlchina.com/
+* 掘金手把手入门：https://juejin.cn/post/7027733039299952676
+* 更新日志：[CHANGELOG](./CHANGELOG.md)
+* 框架目的：只一行代码实现：
+  - **多表联查**
+  - **分页搜索**
+  - **任意字段组合过滤**
+  - **任意字段排序**
+  - **多字段统计**
+* 架构图：
 
 ![](./assets/architecture.jpg)
 
-### ✨ Features
+### ✨ 特性
 
-* Support **one entity mapping to multi tables**
-* Support **dynamic field operator**
-* Support **group aggregation query**
-* Support **Select | Where | From subquery**
-* Support **embedded params in entity**
-* Support **field converter**
-* Support **sql interceptor**
-* Support **sql dialect extension**
-* Support **Multi data source and dynamic data source**
-* Support **annotations omitting and customizing**
-* Support **JDK module mechanism**
-* and so on
+* 支持 **实体多表映射**
+* 支持 **动态字段运算符**
+* 支持 **分组聚合 查询**
+* 支持 **Select | Where | From 子查询**
+* 支持 **实体类嵌入参数**
+* 支持 **字段转换器**
+* 支持 **Sql 拦截器**
+* 支持 **数据库 Dialect 扩展**
+* 支持 **多数据源 与 动态数据源**
+* 支持 **注解缺省 与 自定义**
+* 支持 **JDK 模块机制**
+* 等等
 
-### ⁉️WHY
+### ⁉️为什么用
 
-#### This is not a repeating wheel
+#### 这绝不是一个重复的轮子
 
 虽然 **增删改** 是 hibernate 和 mybatis、data-jdbc 等等 ORM 的强项，但查询，特别是有 **多条件**、**联表**、**分页**、**排序** 的复杂的列表查询，却一直是它们的弱项。
 
@@ -50,7 +50,7 @@ English | [中文](./README.zh-CN.md)
 
 而 Bean Searcher 却可以：
 
-### 💥 Achieved in just one line of code
+### 💥 只一行代码实现以上功能
 
 无论简单还是复杂，Bean Searcher 都只需一行代码：
 
@@ -92,7 +92,7 @@ public class UserController {
 * `/user/index?selectExclude=dateCreated`
   - 检索 所有用户，默认分页，但不查询 dateCreated  字段
 
-### ✨ Parameter builder
+### ✨ 编码式构建检索参数
 
 ```java
 Map<String, Object> params = MapUtils.builder()
@@ -112,14 +112,14 @@ SearchResult<User> result = beanSearcher.search(User.class, params);
 * [v3.x 的 grails-demo](./bean-searcher-demos/grails-demo)
 * [v2.x 的 demo](https://gitee.com/ejlchina-zhxu/bean-searcher-demo)
 
-### 🚀 Rapid development
+### 🚀 快速开发
 
 使用 Bean Searcher 可以极大地节省后端的复杂列表检索接口的开发时间！
 
 * 普通的复杂列表查询只需一行代码
 * 单表检索可复用原有 `Domain`，无需定义 `SearchBean`
 
-### 🌱 Easy integration
+### 🌱 集成简单
 
 可以和任意 Java Web 框架集成，如：SpringBoot、Spring MVC、Grails、Jfinal 等等。
 
@@ -170,7 +170,7 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
         .build();
 ```
 
-### 🔨 Easy extended
+### 🔨 扩展性强
 
 面向接口设计，用户可自定义扩展 Bean Searcher 中的任何组件！
 
@@ -181,11 +181,13 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 * 自定义数据库方言（[`Dialect`](/bean-searcher/src/main/java/com/ejlchina/searcher/Dialect.java)）来支持更多的数据库
 * 等等..
 
-### 📚 Detailed documentation
+### 📚 详细文档
 
-Reference ：https://searcher.ejlchina.com/
+参阅：https://searcher.ejlchina.com/
 
-### 🤝 Friendship links
+文档已完善！
+
+### 🤝 友情接链
 
 [**[ Sa-Token ]** 一个轻量级 Java 权限认证框架，让鉴权变得简单、优雅！](https://github.com/dromara/Sa-Token)
 
@@ -198,10 +200,10 @@ Reference ：https://searcher.ejlchina.com/
 [**[ Free UI ]** 基于 Vue3 + TypeScript，一个非常轻量炫酷的 UI 组件库 ！](https://gitee.com/phoeon/free-ui)
 
 
-### ❤️ How to contribute
+### ❤️ 参与贡献
 
-1. Fork code!
-2. Create your own branch: `git checkout -b feat/xxxx`
-3. Submit your changes: `git commit -am 'feat(function): add xxxxx'`
-4. Push your branch: `git push origin feat/xxxx`
-5. submit `pull request`
+1.  Star and Fork 本仓库
+2.  新建 Feat_xxx 分支
+3.  提交代码
+4.  新建 Pull Request
+
