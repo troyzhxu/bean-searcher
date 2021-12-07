@@ -79,17 +79,50 @@ This line of code can achieve：
 * **Any field sort**
 * **Field statistics**
 
-例如，该接口支持如下查询：
+For example, this api can be accessed like:
 
-* `/user/index?type=1&page=1&size=10`
-  - 检索 type = 1 的用户，返回第 2 页，每页 10 条
-* `/user/index?type=1&name=张&name-op=sw`
-  - 检索 type = 1 并且 name 以 `张` 开头的用户，默认分页（第 0 页，每页 15 条）
+* `/user/index`
+  - Retrieving by default pagination:
+  ```json
+  {
+    "dataList": [
+      {
+        "id": 1,
+        "username": "Jack",
+        "status": 1,
+        "level": 1,
+        "gender": "Male",
+        "joinDate": "2021-10-01"
+      },
+      ...     // 15 records default
+    ],
+    "totalCount": 100,
+    "summaries": [
+      2500    // age statistics
+    ]
+  }
+  ```
+
+* `/user/index? page=1 & size=10`
+  - Retrieving by specified pagination
+  
+
+* `/user/index? status=1`
+  - Retrieving with `status = 1` by default pagination
+
+
+* `/user/index? name=Jac & name-op=sw`
+  - Retrieving with `name` starting with `Jac` by default pagination
+  
+* `/user/index? name=Jack & name-ic=true`
+  - Retrieving with `name = Jack`(case ignored) by default pagination
+
+
 * `/user/index?type=1&sort=age&order=desc`
-  - 检索 type = 1 的用户，以 age 排序，降序输出，默认分页
-* `/user/index?onlySelect=name,age`
+  - 检索 status = 1 的用户，以 age 排序，降序输出，默认分页
+* `/user/index? onlySelect=name,age`
   - 检索 所有用户，默认分页，但只查询 name 和 age 字段
-* `/user/index?selectExclude=dateCreated`
+* `/user/index? selectExclude=joinDate`
   - 检索 所有用户，默认分页，但不查询 dateCreated  字段
 
 ### ✨ Parameter builder
