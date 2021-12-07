@@ -102,7 +102,7 @@ This line of code can achieve：
 
 For example, this API can be requested as follows:
 
-* `/user/index`
+* `GET: /user/index`
   
   Retrieving by default pagination:
   ```json
@@ -127,27 +127,27 @@ For example, this API can be requested as follows:
   }
   ```
   
-* `/user/index? page=1 & size=10`
+* `GET: /user/index? page=1 & size=10`
   
   Retrieval by specified pagination
 
-* `/user/index? status=1`
+* `GET: /user/index? status=1`
   
   Retrieval with `status = 1` by default pagination
 
-* `/user/index? name=Jac & name-op=sw`
+* `GET: /user/index? name=Jac & name-op=sw`
   
   Retrieval with `name` starting with `Jac` by default pagination
 
-* `/user/index? name=Jack & name-ic=true`
+* `GET: /user/index? name=Jack & name-ic=true`
   
   Retrieval with `name = Jack`(case ignored) by default pagination
 
-* `/user/index? sort=age & order=desc`
+* `GET: /user/index? sort=age & order=desc`
    
   Retrieval sorting by `age` descending and by default pagination
 
-* `/user/index? onlySelect=username,age`
+* `GET: /user/index? onlySelect=username,age`
 
   Retrieval `username,age` only by default pagination:
   ```json
@@ -165,7 +165,7 @@ For example, this API can be requested as follows:
     ]
   }
   ```
-* `/user/index? selectExclude=joinDate`
+* `GET: /user/index? selectExclude=joinDate`
 
   Retrieving `joinDate` excluded default pagination
 

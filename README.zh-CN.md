@@ -99,7 +99,7 @@ public class UserController {
 
 例如，该接口支持如下请求：
 
-* `/user/index`
+* `GET: /user/index`
 
   无参请求（默认分页）:
   ```json
@@ -123,27 +123,27 @@ public class UserController {
   }
   ```
 
-* `/user/index? page=1 & size=10`
+* `GET: /user/index? page=1 & size=10`
 
   指定分页参数
 
-* `/user/index? status=1`
+* `GET: /user/index? status=1`
 
   返回 `status = 1` 的用户
 
-* `/user/index? name=Jac & name-op=sw`
+* `GET: /user/index? name=Jac & name-op=sw`
 
   返回 `name` 已 `Jac` 开头的用户
 
-* `/user/index? name=Jack & name-ic=true`
+* `GET: /user/index? name=Jack & name-ic=true`
 
   返回 `name = Jack`（忽略大小写）的用户
 
-* `/user/index? sort=age & order=desc`
+* `GET: /user/index? sort=age & order=desc`
 
   按字段 `age` 降序查询
 
-* `/user/index? onlySelect=username,age`
+* `GET: /user/index? onlySelect=username,age`
 
   只检索 `username` 与 `age` 两个字段:
   ```json
@@ -161,7 +161,7 @@ public class UserController {
     ]
   }
   ```
-* `/user/index? selectExclude=joinDate`
+* `GET: /user/index? selectExclude=joinDate`
 
   检索时排除 `joinDate` 字段
 
