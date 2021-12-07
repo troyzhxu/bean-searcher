@@ -7,14 +7,18 @@
 English | [中文](./README.zh-CN.md)
 
 * Document：https://searcher.ejlchina.com/
+
 * Getting start：https://juejin.cn/post/7027733039299952676
+
 * Change log：[CHANGELOG](./CHANGELOG.md)
+
 * Only one line of code to achieve:
-  - Multi table associated query
-  - Paging search
-  - Any field combination filtering
-  - Any field sort
-  - Multi field statistics
+  - Retrieving with multi tables joined
+  - Pagination by any field
+  - Combined filtering by any field 
+  - Sorting by any field 
+  - Summaries with multi field
+
 * Architecture:
 
 ![](./assets/architecture.jpg)
@@ -31,7 +35,6 @@ English | [中文](./README.zh-CN.md)
 * Support **sql dialect extension**
 * Support **Multi data source and dynamic data source**
 * Support **annotations omitting and customizing**
-* Support **JDK module mechanism**
 * and so on
 
 ### ⁉️WHY
@@ -73,11 +76,11 @@ public class UserController {
 
 This line of code can achieve：
 
-* **Multi table associated query**
-* **Paging search**
-* **Any field combination filtering**
-* **Any field sort**
-* **Field statistics**
+* **Retrieving with multi tables joined**
+* **Pagination by any field**
+* **Combined filtering by any field**
+* **Sorting by any field**
+* **Summary with `age` field**
 
 For example, this api can be accessed like:
 
@@ -137,21 +140,20 @@ For example, this api can be accessed like:
 
 ```java
 Map<String, Object> params = MapUtils.builder()
-        .field(User::getType, 1).op("eq")           // 条件：type 等于 1
-        .field(User::getName, "张").op("sw")        // 条件：姓名以"张"开头
-        .field(User::getAge, 20, 30).op("bt")       // 条件：年龄在 20 与 30 之间
-        .field(User::getNickname, "Jack").ic()      // 条件：昵称等于 Jack, 忽略大小写
-        .orderBy(User::getAge, "asc")               // 排序：年龄，从小到大
-        .page(0, 15)                                // 分页：第 0 页, 每页 15 条
+        .selectExclude(User::getJoinDate)                 // Exclude joinDate field
+        .field(User::getStatus, 1)                        // Filter：status = 1
+        .field(User::getName, "Jack").ic()                // Filter：name = 'Jack' (case ignored)
+        .field(User::getAge, 20, 30).op(Opetator.Between) // Filter：age between 20 and 30
+        .orderBy(User::getAge, "asc")                     // Sorting by age ascending 
+        .page(0, 15)                                      // Pagination: page=0 and size=15
         .build();
-SearchResult<User> result = beanSearcher.search(User.class, params);
+List<User> users = beanSearcher.searchList(User.class, params);
 ```
 
-**DEMO 快速体验**：
+**Demos**：
 
-* [v3.x 的 spring-boot-demo](./bean-searcher-demos/spring-boot-demo)
-* [v3.x 的 grails-demo](./bean-searcher-demos/grails-demo)
-* [v2.x 的 demo](https://gitee.com/ejlchina-zhxu/bean-searcher-demo)
+* [v3.x - demos](./bean-searcher-demos)
+* [v2.x - demo](https://gitee.com/ejlchina-zhxu/bean-searcher-demo)
 
 ### 🚀 Rapid development
 
