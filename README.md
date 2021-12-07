@@ -50,9 +50,9 @@ The back-end needs to write a retrieval api, and if it is written with tradition
 
 But Bean Searcher can：
 
-### 💥 Achieved in just one line of code
+### 💥 Achieved with one line of code
 
-无论简单还是复杂，Bean Searcher 都只需一行代码：
+Whether simple or complex of requirements, Bean Searcher requires only one line of code
 
 ```java
 @RestController
@@ -60,24 +60,24 @@ But Bean Searcher can：
 public class UserController {
 
     @Autowired
-    private BeanSearcher beanSearcher;              // 注入 BeanSearcher 的检索器
+    private BeanSearcher beanSearcher;              // Inject BeanSearcher
 
     @GetMapping("/index")
     public SearchResult<User> index(HttpServletRequest request) {
-        // 只一行代码，实现包含 分页、组合过滤、任意字段排序、甚至统计、多表联查的 复杂检索功能
-        return beanSearcher.search(User.class, MapUtils.flat(request.getParameterMap()));
+        // Only one line of code written here
+        return beanSearcher.search(User.class, MapUtils.flat(request.getParameterMap()), new String[]{ "age" });
     }
-	
+
 }
 ```
 
-这一行代码可实现：
+This line of code can achieve：
 
-* **多表联查**
-* **分页搜索**
-* **组合过滤**
-* **任意字段排序**
-* **字段统计**
+* **Multi table associated query**
+* **Paging search**
+* **Any field combination filtering**
+* **Any field sort**
+* **Field statistics**
 
 例如，该接口支持如下查询：
 
