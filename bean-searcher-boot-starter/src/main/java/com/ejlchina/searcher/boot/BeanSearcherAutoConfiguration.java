@@ -18,11 +18,13 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 import javax.sql.DataSource;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 
 @Configuration
@@ -63,7 +65,7 @@ public class BeanSearcherAutoConfiguration {
 									   BeanSearcherProperties config) {
 		DefaultParamResolver paramResolver = new DefaultParamResolver();
 		paramResolver.setPageExtractor(pageExtractor);
-		paramFilters.ifAvailable(paramResolver::setParamFilters);
+		ifAvailable(paramFilters, paramResolver::setParamFilters);
 		Params conf = config.getParams();
 		paramResolver.setOperatorSuffix(conf.getOperatorKey());
 		paramResolver.setIgnoreCaseSuffix(conf.getIgnoreCaseKey());
@@ -107,7 +109,7 @@ public class BeanSearcherAutoConfiguration {
 	@ConditionalOnMissingBean(SqlExecutor.class)
 	public SqlExecutor sqlExecutor(DataSource dataSource, ObjectProvider<List<NamedDataSource>> namedDataSources) {
 		DefaultSqlExecutor executor = new DefaultSqlExecutor(dataSource);
-		namedDataSources.ifAvailable(ndsList -> {
+		ifAvailable(namedDataSources, ndsList -> {
 			for (NamedDataSource nds: ndsList) {
 				executor.setDataSource(nds.getName(), nds.getDataSource());
 			}
@@ -184,12 +186,13 @@ public class BeanSearcherAutoConfiguration {
 	@ConditionalOnMissingBean(MetaResolver.class)
 	public MetaResolver metaResolver(DbMapping dbMapping, ObjectProvider<SnippetResolver> snippetResolver) {
 		DefaultMetaResolver metaResolver = new DefaultMetaResolver(dbMapping);
-		snippetResolver.ifAvailable(metaResolver::setSnippetResolver);
+		ifAvailable(snippetResolver, metaResolver::setSnippetResolver);
 		return metaResolver;
 	}
 
 	@Bean
 	@ConditionalOnMissingBean(BeanSearcher.class)
+	@ConditionalOnProperty(name = "bean-searcher.use-bean-searcher", havingValue = "true", matchIfMissing = true)
 	public BeanSearcher beanSearcher(MetaResolver metaResolver,
 									 ParamResolver paramResolver,
 									 SqlResolver sqlResolver,
@@ -202,7 +205,7 @@ public class BeanSearcherAutoConfiguration {
 		searcher.setSqlResolver(sqlResolver);
 		searcher.setSqlExecutor(sqlExecutor);
 		searcher.setBeanReflector(beanReflector);
-		interceptors.ifAvailable(searcher::setInterceptors);
+		ifAvailable(interceptors, searcher::setInterceptors);
 		return searcher;
 	}
 
@@ -223,8 +226,9 @@ public class BeanSearcherAutoConfiguration {
 		return convertor;
 	}
 
-	@Bean
+	@Bean @Primary
 	@ConditionalOnMissingBean(MapSearcher.class)
+	@ConditionalOnProperty(name = "bean-searcher.use-map-searcher", havingValue = "true", matchIfMissing = true)
 	public MapSearcher mapSearcher(MetaResolver metaResolver,
 								   ParamResolver paramResolver,
 								   SqlResolver sqlResolver,
@@ -236,9 +240,18 @@ public class BeanSearcherAutoConfiguration {
 		searcher.setParamResolver(paramResolver);
 		searcher.setSqlResolver(sqlResolver);
 		searcher.setSqlExecutor(sqlExecutor);
-		interceptors.ifAvailable(searcher::setInterceptors);
-		convertors.ifAvailable(searcher::setConvertors);
+		ifAvailable(interceptors, searcher::setInterceptors);
+		ifAvailable(convertors, searcher::setConvertors);
 		return searcher;
+	}
+
+	private <T> void ifAvailable(ObjectProvider<T> provider, Consumer<T> consumer) {
+		// 为了兼容 1.x 的 SpringBoot，最低兼容到 v1.4
+		// 不直接使用 ObjectProvider.ifAvailable 方法
+		T dependency = provider.getIfAvailable();
+		if (dependency != null) {
+			consumer.accept(dependency);
+		}
 	}
 
 }

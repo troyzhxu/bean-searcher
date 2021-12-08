@@ -102,4 +102,36 @@ public class TestCase1 {
     }
 
 
+    @Test
+    public void test3() {
+        SqlExecutor sqlExecutor = new SqlExecutor() {
+            @Override
+            public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
+                System.out.println(searchSql.getListSqlString());
+                Assert.assertEquals("select name c_1, id c_0 from search_bean order by c_1 asc", searchSql.getListSqlString());
+                List<Object> listParams = searchSql.getListSqlParams();
+                Assert.assertEquals(0, listParams.size());
+                Assert.assertNull(searchSql.getClusterSqlString());
+                List<Object> clusterSqlParams = searchSql.getClusterSqlParams();
+                Assert.assertEquals(0, clusterSqlParams.size());
+                Assert.assertNull(searchSql.getCountAlias());
+                Assert.assertEquals(0, searchSql.getSummaryAliases().size());
+                return new SqlResult<>(searchSql);
+            }
+        };
+        MapSearcher mapSearcher = SearcherBuilder.mapSearcher().sqlExecutor(sqlExecutor).build();
+        BeanSearcher beanSearcher = SearcherBuilder.beanSearcher().sqlExecutor(sqlExecutor).build();
+
+        Map<String, Object> params1 = new HashMap<>();
+        params1.put("sort", "name");
+        params1.put("order", "asc");
+        Map<String, Object> params2 = MapUtils.builder()
+                .orderBy(SearchBean::getName, "asc")
+                .build();
+        mapSearcher.searchAll(SearchBean.class, params1);
+        mapSearcher.searchAll(SearchBean.class, params2);
+        beanSearcher.searchAll(SearchBean.class, params1);
+        beanSearcher.searchAll(SearchBean.class, params2);
+    }
+
 }
