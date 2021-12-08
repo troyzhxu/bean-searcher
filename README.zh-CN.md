@@ -263,7 +263,7 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 
 [**[ Sa-Token ]** 一个轻量级 Java 权限认证框架，让鉴权变得简单、优雅！](https://github.com/dromara/Sa-Token)
 
-[**[ Fluent MyBatis ]** MyBatis语法增强框架, 综合了 mybatis-plus, dynamic-sql,jpa 等框架特性和优点, 利用 annotation processor 生成代码](https://gitee.com/fluent-mybatis/fluent-mybatis)
+[**[ Fluent MyBatis ]** MyBatis 语法增强框架, 综合了 MyBatisPlus, DynamicSql,Jpa 等框架的特性和优点，利用注解处理器生成代码](https://gitee.com/fluent-mybatis/fluent-mybatis)
 
 [**[ OkHttps ]** 轻量却强大的 HTTP 客户端，前后端通用，支持 WebSocket 与 Stomp 协议](https://gitee.com/ejlchina-zhxu/okhttps)
 
