@@ -270,6 +270,8 @@ Reference ：https://searcher.ejlchina.com/
 
 [**[ Sa-Token ]** 一个轻量级 Java 权限认证框架，让鉴权变得简单、优雅！](https://github.com/dromara/Sa-Token)
 
+[**[ Fluent MyBatis ]** MyBatis语法增强框架, 综合了 mybatis-plus, dynamic-sql,jpa 等框架特性和优点, 利用 annotation processor 生成代码](https://gitee.com/fluent-mybatis/fluent-mybatis)
+
 [**[ OkHttps ]** 轻量却强大的 HTTP 客户端，前后端通用，支持 WebSocket 与 Stomp 协议](https://gitee.com/ejlchina-zhxu/okhttps)
 
 [**[ hrun4j ]** 接口自动化测试解决方案 --工具选得好，下班回家早；测试用得对，半夜安心睡 ](https://github.com/lematechvip/hrun4j)
