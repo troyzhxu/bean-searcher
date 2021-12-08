@@ -4,6 +4,12 @@
 
 * Bean Searcher
   * 新增条件分组 与 组逻辑运算功能（TODO）
+
+# v3.2.0 @ 2021-12-08
+
+### ✨ Features
+
+* Bean Searcher
   * 重构 `FieldConvertor`：移除冗余参数 `targetType`
   * 新增 `EnumFieldConvertor`：用来做枚举字段转换
   * SearchBean 的映射字段支持从父类继承
