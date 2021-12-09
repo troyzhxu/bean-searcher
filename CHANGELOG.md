@@ -12,9 +12,10 @@
 * Bean Searcher
   * 重构 `FieldConvertor`：移除冗余参数 `targetType`
   * 新增 `EnumFieldConvertor`：用来做枚举字段转换
-  * SearchBean 的映射字段支持从父类继承
-  * 注解 @SearchBean 也支持从父类继承
-  * SearchBean 的映射字段支持省略 Setter 方法
+  * 实体类 SearchBean 支持继承（可继承 @SearchBean 注解与映射字段）
+  * 注解 `@SearchBean` 新增 `inheritType` 属性，可控制继承规则
+  * 类 `DefaultDbMapping` 新增 `defaultInheritType` 属性，可配置实体类的默认继承规则
+  * 实体类 SearchBean 的映射字段支持省略 Setter 方法
   * 新增 `ct`（`Contain`）运算符，用于取代 `in`（`Include`）运算符（使用 `in` 将输出警告）
 * Bean Searcher Boot Starter
   * 新增 `bean-searcher.field-convertor.use-enum` 配置项，表示是否自动添加 `EnumFieldConvertor`，默认 `true`
