@@ -1,8 +1,13 @@
-# Bean Searcher
-
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.ejlchina/bean-searcher/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.ejlchina/bean-searcher/)
-[![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
-[![Troy.Zhou](https://img.shields.io/badge/%E4%BD%9C%E8%80%85-ejlchina-orange.svg)](https://github.com/ejlchina)
+<p align="center">
+  <a href="https://searcher.ejlchina.com/" target="_blank">
+    <img width="128" src="./assets/logo.png" alt="logo">
+  </a>
+</p>
+<p align="center">
+  <a href="https://maven-badges.herokuapp.com/maven-central/com.ejlchina/bean-searcher/"><img src="https://maven-badges.herokuapp.com/maven-central/com.ejlchina/bean-searcher/badge.svg" alt="Maven Central"></a>
+  <a href="https://gitee.com/ejlchina-zhxu/bean-searcher/blob/master/LICENSE"><img src="https://img.shields.io/hexpm/l/plug.svg" alt="License"></a>
+  <a href="https://github.com/ejlchina"><img src="https://img.shields.io/badge/%E4%BD%9C%E8%80%85-ejlchina-orange.svg" alt="Troy.Zhou"></a>
+</p>
 
 2021年度 OSC 中国最佳开源项目评选活动，走过路过的投上两票，万分感谢：
 * https://www.oschina.net/project/top_cn_2021/?id=627
