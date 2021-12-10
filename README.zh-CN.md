@@ -4,6 +4,10 @@
 [![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 [![Troy.Zhou](https://img.shields.io/badge/%E4%BD%9C%E8%80%85-ejlchina-orange.svg)](https://github.com/ejlchina)
 
+2021年度 OSC 中国最佳开源项目评选活动，走过路过的投上两票，万分感谢：
+* https://www.oschina.net/project/top_cn_2021/?id=627
+* https://www.oschina.net/project/top_cn_2021/?id=626
+
 中文 | [English](./README.md)
 
 * 文档：https://searcher.ejlchina.com/
@@ -82,7 +86,7 @@ public class UserController {
     @GetMapping("/index")
     public SearchResult<User> index(HttpServletRequest request) {
         // 这里只写一行代码
-        return beanSearcher.search(User.class, MapUtils.flat(request.getParameterMap()));
+        return beanSearcher.search(User.class, MapUtils.flat(request.getParameterMap()), new String[]{ "age" });
     }
 	
 }
