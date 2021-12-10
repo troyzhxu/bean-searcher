@@ -1,4 +1,8 @@
-# Bean Searcher
+<p align="center">
+  <a href="http://okhttps.ejlchina.com/" target="_blank">
+    <img width="128" src="./assets/logo.png" alt="logo">
+  </a>
+</p>
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.ejlchina/bean-searcher/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.ejlchina/bean-searcher/)
 [![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
