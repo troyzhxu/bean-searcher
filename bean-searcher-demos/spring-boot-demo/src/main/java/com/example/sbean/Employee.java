@@ -1,7 +1,6 @@
 package com.example.sbean;
 
 import com.ejlchina.searcher.bean.*;
-import com.ejlchina.searcher.param.Operator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
@@ -13,8 +12,10 @@ import java.util.Map;
 		autoMapTo = "e"							// 字段没使用 DbField 注解时，自动映射到 employee 表
 )
 public class Employee
-		implements BeanAware, ParamAware    	// 这两接口 都是可选的
+		implements BeanAware, ParamAware        // 这两接口 都是可选的
 {
+
+	public static final int serialID = 1233;
 
 	// 自动映射到 "e.id"
 	private Long id;
