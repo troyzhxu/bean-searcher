@@ -6,6 +6,7 @@ import com.ejlchina.searcher.bean.InheritType;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.lang.reflect.Modifier;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -60,6 +61,9 @@ public class DefaultMetaResolver implements MetaResolver {
         Field[] fields = getBeanFields(beanClass);
         for (int index = 0; index < fields.length; index++) {
             Field field = fields[index];
+            if (Modifier.isStatic(field.getModifiers())) {
+                continue;
+            }
             DbMapping.Column column = dbMapping.column(beanClass, fields[index]);
             if (column == null) {
                 continue;
