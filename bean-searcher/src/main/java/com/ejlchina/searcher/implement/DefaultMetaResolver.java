@@ -85,7 +85,10 @@ public class DefaultMetaResolver implements MetaResolver {
         while (beanClass != Object.class) {
             for (Field field : beanClass.getDeclaredFields()) {
                 String name = field.getName();
-                if (field.isSynthetic() || fieldNames.contains(name)) {
+                int modifiers = field.getModifiers();
+                if (field.isSynthetic() || Modifier.isStatic(modifiers)
+                        || Modifier.isTransient(modifiers)
+                        || fieldNames.contains(name)) {
                     continue;
                 }
                 fieldList.add(field);
