@@ -5,6 +5,39 @@
 * Bean Searcher
   * 新增条件分组 与 组逻辑运算功能（TODO）
 
+# v3.2.1 @ 2021-12-18
+
+### 🌻 Better
+
+* Bean Searcher
+  * 无 `@DbIgnore` 注解也自动忽略实体类中的 `static` 与 `transient` 属性
+  * 实体类支持子类重写父类中已存在的属性
+
+### 🐛 Bug Fixes
+
+* Bean Searcher
+  * 修复非字符串字段使用 Empty/NotEmpty 运算符时会报错的问题：https://gitee.com/ejlchina-zhxu/bean-searcher/issues/I4N1MG
+
+# v3.1.3 @ 2021-12-14
+
+### 🌻 Better
+
+* Bean Searcher
+  * 无 `@DbIgnore` 也自动忽略实体类中的静态字段
+* Bean Searcher Boot Starter
+  * 使用 Searcher 类型注入检索器时，默认注入 MapSearcher，不再报错
+  * 提高兼容性，SpringBoot 最低版本支持到 v1.4+
+  
+# v3.0.5 @ 2021-12-12
+
+### 🌻 Better
+
+* Bean Searcher
+  * 无 `@DbIgnore` 也自动忽略实体类中的静态字段
+* Bean Searcher Boot Starter
+  * 使用 Searcher 类型注入检索器时，默认注入 MapSearcher，不再报错
+  * 提高兼容性，SpringBoot 最低版本支持到 v1.4+
+
 # v3.2.0 @ 2021-12-08
 
 ### ✨ Features

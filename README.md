@@ -9,10 +9,6 @@
   <a href="https://github.com/ejlchina"><img src="https://img.shields.io/badge/%E4%BD%9C%E8%80%85-ejlchina-orange.svg" alt="Troy.Zhou"></a>
 </p>
 
-2021年度 OSC 中国最佳开源项目评选活动，走过路过的朋友投上两票，万分感谢：
-* https://www.oschina.net/project/top_cn_2021/?id=627
-* https://www.oschina.net/project/top_cn_2021/?id=626
-
 English | [中文](./README.zh-CN.md)
 
 * Documentation：https://searcher.ejlchina.com/
@@ -213,7 +209,7 @@ Bean Searcher can work with any JavaWeb frameworks, such as: SpringBoot, SpringM
 All you need is to add a dependence:
 
 ```groovy
-implementation 'com.ejlchina:bean-searcher-boot-stater:3.2.0'
+implementation 'com.ejlchina:bean-searcher-boot-stater:3.2.1'
 ```
 
 and then you can inject `Searcher` into a `Controller` or `Service`:
@@ -237,7 +233,7 @@ private BeanSearcher beanSearcher;
 Adding this dependence:
 
 ```groovy
-implementation 'com.ejlchina:bean-searcher:3.2.0'
+implementation 'com.ejlchina:bean-searcher:3.2.1'
 ```
 
 then you can build a `Searcher` with `SearcherBuilder`:

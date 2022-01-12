@@ -307,10 +307,16 @@ public class DefaultSqlResolver implements SqlResolver {
 			params.add(firstRealValue);
 			break;
 		case Empty:
-			builder.append(" is null or ").append(dbField).append(" = ''"); ;
+			builder.append(" is null");
+			if (fieldType == String.class) {
+				builder.append(" or ").append(dbField).append(" = ''");
+			}
 			break;
 		case NotEmpty:
-			builder.append(" is not null and ").append(dbField).append(" != ''");
+			builder.append(" is not null");
+			if (fieldType == String.class) {
+				builder.append(" and ").append(dbField).append(" != ''");
+			}
 			break;
 		case StartWith:
 			builder.append(" like ?");
