@@ -16,21 +16,6 @@ public class OracleDialect implements Dialect {
 	}
 
 	@Override
-	public void truncateToDateStr(StringBuilder builder, String dbField) {
-		builder.append("to_char(").append(dbField).append(", 'yy-mm-dd')");
-	}
-
-	@Override
-	public void truncateToDateMinuteStr(StringBuilder builder, String dbField) {
-		builder.append("to_char(").append(dbField).append(", 'yy-mm-dd hh24:mi')");
-	}
-
-	@Override
-	public void truncateToDateSecondStr(StringBuilder builder, String dbField) {
-		builder.append("to_char(").append(dbField).append(", 'yy-mm-dd hh24:mi:ss')");
-	}
-
-	@Override
 	public PaginateSql forPaginate(String fieldSelectSql, String fromWhereSql, Paging paging) {
 		PaginateSql paginateSql = new PaginateSql();
 		if (paging == null) {
