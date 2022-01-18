@@ -277,89 +277,100 @@ public class DefaultSqlResolver implements SqlResolver {
 		Object firstRealValue = ObjectUtils.firstNotNull(values);
 		List<Object> params = new ArrayList<>(2);
 		switch (operator) {
-		case Like:
-		case Contain:
-			builder.append(" like ?");
-			params.add("%" + firstRealValue + "%");
-			break;
-		case Equal:
-			builder.append(" = ?");
-			params.add(firstRealValue);
-			break;
-		case GreaterEqual:
-			builder.append(" >= ?");
-			params.add(firstRealValue);
-			break;
-		case GreaterThan:
-			builder.append(" > ?");
-			params.add(firstRealValue);
-			break;
-		case LessEqual:
-			builder.append(" <= ?");
-			params.add(firstRealValue);
-			break;
-		case LessThan:
-			builder.append(" < ?");
-			params.add(firstRealValue);
-			break;
-		case NotEqual:
-			builder.append(" != ?");
-			params.add(firstRealValue);
-			break;
-		case Empty:
-			builder.append(" is null");
-			if (fieldType == String.class) {
-				builder.append(" or ").append(dbField).append(" = ''");
-			}
-			break;
-		case NotEmpty:
-			builder.append(" is not null");
-			if (fieldType == String.class) {
-				builder.append(" and ").append(dbField).append(" != ''");
-			}
-			break;
-		case StartWith:
-			builder.append(" like ?");
-			params.add(firstRealValue + "%");
-			break;
-		case EndWith:
-			builder.append(" like ?");
-			params.add("%" + firstRealValue);
-			break;
-		case Between:
-			boolean val1Null = false;
-			boolean val2Null = false;
-			Object value0 = values.length > 0 ? values[0] : null;
-			Object value1 = values.length > 1 ? values[1] : null;
-			if (value0 == null || (value0 instanceof String && StringUtils.isBlank((String) value0))) {
-				val1Null = true;
-			}
-			if (value1 == null || (value1 instanceof String && StringUtils.isBlank((String) value1))) {
-				val2Null = true;
-			}
-			if (!val1Null && !val2Null) {
-				builder.append(" between ? and ? ");
-				params.add(value0);
-				params.add(value1);
-			} else if (val1Null && !val2Null) {
-				builder.append(" <= ? ");
-				params.add(value1);
-			} else if (!val1Null) {
-				builder.append(" >= ? ");
-				params.add(value0);
-			}
-			break;
-		case MultiValue:
-			builder.append(" in (");
-			for (int i = 0; i < values.length; i++) {
-				builder.append("?");
-				params.add(values[i]);
-				if (i < values.length - 1) {
-					builder.append(", ");
+			case Like:
+			case Contain:
+				builder.append(" like ?");
+				params.add("%" + firstRealValue + "%");
+				break;
+			case Equal:
+				builder.append(" = ?");
+				params.add(firstRealValue);
+				break;
+			case GreaterEqual:
+				builder.append(" >= ?");
+				params.add(firstRealValue);
+				break;
+			case GreaterThan:
+				builder.append(" > ?");
+				params.add(firstRealValue);
+				break;
+			case LessEqual:
+				builder.append(" <= ?");
+				params.add(firstRealValue);
+				break;
+			case LessThan:
+				builder.append(" < ?");
+				params.add(firstRealValue);
+				break;
+			case NotEqual:
+				builder.append(" != ?");
+				params.add(firstRealValue);
+				break;
+			case Empty:
+				builder.append(" is null");
+				if (fieldType == String.class) {
+					builder.append(" or ").append(dbField).append(" = ''");
 				}
-			}
-			builder.append(")");
-			break;
+				break;
+			case NotEmpty:
+				builder.append(" is not null");
+				if (fieldType == String.class) {
+					builder.append(" and ").append(dbField).append(" != ''");
+				}
+				break;
+			case StartWith:
+				builder.append(" like ?");
+				params.add(firstRealValue + "%");
+				break;
+			case EndWith:
+				builder.append(" like ?");
+				params.add("%" + firstRealValue);
+				break;
+			case Between:
+				boolean val1Null = false;
+				boolean val2Null = false;
+				Object value0 = values.length > 0 ? values[0] : null;
+				Object value1 = values.length > 1 ? values[1] : null;
+				if (value0 == null || (value0 instanceof String && StringUtils.isBlank((String) value0))) {
+					val1Null = true;
+				}
+				if (value1 == null || (value1 instanceof String && StringUtils.isBlank((String) value1))) {
+					val2Null = true;
+				}
+				if (!val1Null && !val2Null) {
+					builder.append(" between ? and ? ");
+					params.add(value0);
+					params.add(value1);
+				} else if (val1Null && !val2Null) {
+					builder.append(" <= ? ");
+					params.add(value1);
+				} else if (!val1Null) {
+					builder.append(" >= ? ");
+					params.add(value0);
+				}
+				break;
+			case MultiValue:
+				builder.append(" in (");
+				for (int i = 0; i < values.length; i++) {
+					builder.append("?");
+					params.add(values[i]);
+					if (i < values.length - 1) {
+						builder.append(", ");
+					}
+				}
+				builder.append(")");
+				break;
+			case NotIn:
+				builder.append(" not in (");
+				for (int i = 0; i < values.length; i++) {
+					builder.append("?");
+					params.add(values[i]);
+					if (i < values.length - 1) {
+						builder.append(", ");
+					}
+				}
+				builder.append(")");
+				break;
 		}
 		return params;
 	}

@@ -85,7 +85,14 @@ public enum Operator {
 	 * 多值
 	 * in
 	 */
-	MultiValue;
+	MultiValue,
+
+	/**
+	 * 不在某个集合内
+	 * not in
+	 * @since v3.3
+	 */
+	NotIn;
 
 	public static Operator from(Object op) {
 		if (op == null) {
@@ -139,6 +146,9 @@ public enum Operator {
 		case "mv":
 		case "MultiValue":
 			return MultiValue;
+		case "ni":
+		case "NotIn":
+			return NotIn;
 		}
 		return null;
 	}
