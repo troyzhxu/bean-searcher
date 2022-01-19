@@ -14,7 +14,12 @@ public class Operator {
 	 * 等于
 	 */
 	public static final Equal Equal = new Equal();
-	
+
+	/**
+	 * 不等于
+	 */
+	public static final NotEqual NotEqual = new NotEqual();
+
 	/**
 	 * 大于等于
 	 */
@@ -34,11 +39,6 @@ public class Operator {
 	 * 小于
 	 */
 	public static final LessThan LessThan = new LessThan();
-	
-	/**
-	 * 不等于
-	 */
-	public static final NotEqual NotEqual = new NotEqual();
 
 	/**
 	 * 为 null
@@ -82,6 +82,11 @@ public class Operator {
 	 * 在 .. 和 .. 之间
 	 */
 	public static final Between Between = new Between();
+
+	/**
+	 * 不在 .. 和 .. 之间
+	 */
+	public static final NotBetween NotBetween = new NotBetween();
 
 	/**
 	 * 多值

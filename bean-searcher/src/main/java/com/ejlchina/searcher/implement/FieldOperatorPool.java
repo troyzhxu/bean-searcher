@@ -36,6 +36,7 @@ public class FieldOperatorPool extends DialectWrapper {
         fieldOps.add(Operator.LessThan);
         fieldOps.add(Operator.LessEqual);
         fieldOps.add(Operator.Between);
+        fieldOps.add(Operator.NotBetween);
         fieldOps.add(Operator.Contain);
         fieldOps.add(Operator.StartWith);
         fieldOps.add(Operator.EndWith);
