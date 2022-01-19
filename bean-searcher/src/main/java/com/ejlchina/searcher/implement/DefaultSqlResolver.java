@@ -8,6 +8,7 @@ import com.ejlchina.searcher.param.FieldParam;
 import com.ejlchina.searcher.param.OrderBy;
 import com.ejlchina.searcher.util.StringUtils;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -259,7 +260,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 												String dbField, FieldParam fieldParam) {
 		Object[] values = fieldParam.getValues();
 		FieldOp operator = (FieldOp) fieldParam.getOperator();
-		if (Date.class.isAssignableFrom(fieldType)) {
+		if (Date.class.isAssignableFrom(fieldType) || LocalDateTime.class == fieldType) {
 			values = dateValueCorrector.correct(values, operator);
 		}
 		FieldOp.OpPara opPara = new FieldOp.OpPara(dbField, fieldParam.isIgnoreCase(), values);
