@@ -92,12 +92,10 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 			if (i > 0 || hasJoinCond) {
 				builder.append(" and (");
 			}
-			FieldParam fieldParam = fieldParamList.get(i);
-			String fieldName = fieldParam.getName();
+			FieldParam param = fieldParamList.get(i);
 			// 这里没取字段别名，因为在 count SQL 里，select 语句中可能没这个字段
-			FieldMeta meta = beanMeta.requireFieldMeta(fieldName);
-			List<Object> sqlParams = appendFieldCondition(builder, meta.getType(),
-					meta.getFieldSql().getSnippet(), fieldParam);
+			FieldMeta meta = beanMeta.requireFieldMeta(param.getName());
+			List<Object> sqlParams = appendCondition(builder, meta, param);
 			for (Object sqlParam : sqlParams) {
 				searchSql.addListSqlParam(sqlParam);
 				searchSql.addClusterSqlParam(sqlParam);
@@ -256,14 +254,14 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 	/**
 	 * @return 查询参数值
 	 */
-	protected List<Object> appendFieldCondition(StringBuilder builder, Class<?> fieldType,
-												String dbField, FieldParam fieldParam) {
-		Object[] values = fieldParam.getValues();
-		FieldOp operator = (FieldOp) fieldParam.getOperator();
+	protected List<Object> appendCondition(StringBuilder builder, FieldMeta fieldMeta, FieldParam param) {
+		Class<?> fieldType = fieldMeta.getType();
+		Object[] values = param.getValues();
+		FieldOp operator = (FieldOp) param.getOperator();
 		if (Date.class.isAssignableFrom(fieldType) || LocalDateTime.class == fieldType) {
 			values = dateValueCorrector.correct(values, operator);
 		}
-		FieldOp.OpPara opPara = new FieldOp.OpPara(dbField, fieldParam.isIgnoreCase(), values);
+		FieldOp.OpPara opPara = new FieldOp.OpPara(fieldMeta, param.isIgnoreCase(), values);
 		return operator.operate(builder, opPara);
 	}
 

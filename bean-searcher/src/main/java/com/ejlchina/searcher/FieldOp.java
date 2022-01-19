@@ -50,18 +50,22 @@ public interface FieldOp {
      */
     class OpPara {
 
-        final String dbField;
+        final FieldMeta fieldMeta;
         final boolean ignoreCase;
         final Object[] values;
 
-        public OpPara(String dbField, boolean ignoreCase, Object[] values) {
-            this.dbField = dbField;
+        public OpPara(FieldMeta fieldMeta, boolean ignoreCase, Object[] values) {
+            this.fieldMeta = fieldMeta;
             this.ignoreCase = ignoreCase;
             this.values = values;
         }
 
+        public FieldMeta getFieldMeta() {
+            return fieldMeta;
+        }
+
         public String getDbField() {
-            return dbField;
+            return fieldMeta.getFieldSql().getSnippet();
         }
 
         public boolean isIgnoreCase() {
