@@ -89,14 +89,15 @@ public class Operator {
 	public static final NotBetween NotBetween = new NotBetween();
 
 	/**
-	 * 多值
-	 * in
+	 * 在列表中
+	 * in (...)
 	 */
 	public static final InList InList = new InList();
 
 	/**
 	 * 多值
-	 * in
+	 * in (...)
+	 * @see #InList
 	 */
 	@Deprecated
 	public static final InList MultiValue = InList;
