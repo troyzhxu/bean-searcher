@@ -31,6 +31,9 @@ public class DefaultDbMapping implements DbMapping {
     // 默认继承类型
     private InheritType defaultInheritType = InheritType.ALL;
 
+    // 冗余的后缀（如果类名已这些后缀结尾，将自动去掉这些后缀）
+    private String[] redundantSuffixes;
+
     @Override
     public InheritType inheritType(Class<?> beanClass) {
         SearchBean bean = getSearchBean(beanClass);
@@ -93,8 +96,8 @@ public class DefaultDbMapping implements DbMapping {
     }
 
     protected String toTableName(Class<?> beanClass) {
-        String className = beanClass.getSimpleName();
-        String tables = StringUtils.toUnderline(className);
+        String name = simplify(beanClass.getSimpleName());
+        String tables = StringUtils.toUnderline(name);
         if (upperCase) {
             tables = tables.toUpperCase();
         }
@@ -102,6 +105,18 @@ public class DefaultDbMapping implements DbMapping {
             return tablePrefix + tables;
         }
         return tables;
+    }
+
+    protected String simplify(String clazzName) {
+        if (redundantSuffixes != null) {
+            int length = clazzName.length();
+            for (String suffix: redundantSuffixes) {
+                if (length > suffix.length() && clazzName.endsWith(suffix)) {
+                    return clazzName.substring(0, length - suffix.length());
+                }
+            }
+        }
+        return clazzName;
     }
 
     protected String dbFieldSql(Class<?> beanClass, Field field) {
@@ -163,6 +178,14 @@ public class DefaultDbMapping implements DbMapping {
 
     public void setUpperCase(boolean upperCase) {
         this.upperCase = upperCase;
+    }
+
+    public String[] getRedundantSuffixes() {
+        return redundantSuffixes;
+    }
+
+    public void setRedundantSuffixes(String[] redundantSuffixes) {
+        this.redundantSuffixes = redundantSuffixes;
     }
 
 }
