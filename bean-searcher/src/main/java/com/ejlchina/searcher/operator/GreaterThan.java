@@ -8,20 +8,20 @@ import static com.ejlchina.searcher.util.ObjectUtils.firstNotNull;
 import static java.util.Collections.singletonList;
 
 /**
- * 等于运算符
- * @author Troy.Zhou @ 2022-01-18
+ * 大于运算符
+ * @author Troy.Zhou @ 2022-01-19
  * @since v3.3.0
  */
-public class Equal implements FieldOp {
+public class GreaterThan implements FieldOp {
 
     @Override
     public boolean isNamed(String name) {
-        return "eq".equals(name) || "Equal".equals(name);
+        return "gt".equals(name) || "GreaterThan".equals(name);
     }
 
     @Override
     public List<Object> operate(StringBuilder sqlBuilder, String dbField, Object[] values) {
-        sqlBuilder.append(" = ?");
+        sqlBuilder.append(" > ?");
         return singletonList(firstNotNull(values));
     }
 

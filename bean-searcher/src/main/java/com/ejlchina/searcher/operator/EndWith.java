@@ -8,21 +8,21 @@ import static com.ejlchina.searcher.util.ObjectUtils.firstNotNull;
 import static java.util.Collections.singletonList;
 
 /**
- * 等于运算符
- * @author Troy.Zhou @ 2022-01-18
+ * 起始运算符
+ * @author Troy.Zhou @ 2022-01-19
  * @since v3.3.0
  */
-public class Equal implements FieldOp {
+public class EndWith implements FieldOp {
 
     @Override
     public boolean isNamed(String name) {
-        return "eq".equals(name) || "Equal".equals(name);
+        return "ew".equals(name) || "EndWith".equals(name);
     }
 
     @Override
     public List<Object> operate(StringBuilder sqlBuilder, String dbField, Object[] values) {
-        sqlBuilder.append(" = ?");
-        return singletonList(firstNotNull(values));
+        sqlBuilder.append(" like ?");
+        return singletonList("%" + firstNotNull(values));
     }
 
 }
