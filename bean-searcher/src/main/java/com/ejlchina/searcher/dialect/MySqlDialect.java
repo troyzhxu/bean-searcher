@@ -12,6 +12,11 @@ import com.ejlchina.searcher.param.Paging;
 public class MySqlDialect implements Dialect {
 
 	@Override
+	public String getType() {
+		return "MySQL";
+	}
+
+	@Override
 	public void toUpperCase(StringBuilder builder, String dbField) {
 		builder.append("upper").append("(").append(dbField).append(")");
 	}

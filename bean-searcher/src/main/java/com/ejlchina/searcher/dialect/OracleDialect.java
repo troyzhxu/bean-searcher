@@ -11,6 +11,11 @@ import com.ejlchina.searcher.param.Paging;
 public class OracleDialect implements Dialect {
 
 	@Override
+	public String getType() {
+		return "Oracle";
+	}
+
+	@Override
 	public void toUpperCase(StringBuilder builder, String dbField) {
 		builder.append("upper").append("(").append(dbField).append(")");
 	}
