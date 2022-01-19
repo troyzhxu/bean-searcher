@@ -15,6 +15,11 @@ import static java.util.Collections.singletonList;
 public class NotEqual implements FieldOp {
 
     @Override
+    public String name() {
+        return "NotEqual";
+    }
+
+    @Override
     public boolean isNamed(String name) {
         return "ne".equals(name) || "NotEqual".equals(name);
     }

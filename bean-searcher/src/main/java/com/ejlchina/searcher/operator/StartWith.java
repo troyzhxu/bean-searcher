@@ -15,6 +15,11 @@ import static java.util.Collections.singletonList;
 public class StartWith implements FieldOp {
 
     @Override
+    public String name() {
+        return "StartWith";
+    }
+
+    @Override
     public boolean isNamed(String name) {
         return "sw".equals(name) || "StartWith".equals(name);
     }

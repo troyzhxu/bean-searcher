@@ -13,6 +13,11 @@ import java.util.List;
 public class Empty implements FieldOp {
 
     @Override
+    public String name() {
+        return "Empty";
+    }
+
+    @Override
     public boolean isNamed(String name) {
         return "ey".equals(name) || "Empty".equals(name);
     }

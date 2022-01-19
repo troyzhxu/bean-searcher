@@ -6,11 +6,16 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * 非 Null 运算符
+ * 非 IsNull 运算符
  * @author Troy.Zhou @ 2022-01-19
  * @since v3.3.0
  */
 public class NotNull implements FieldOp {
+
+    @Override
+    public String name() {
+        return "NotNull";
+    }
 
     @Override
     public boolean isNamed(String name) {

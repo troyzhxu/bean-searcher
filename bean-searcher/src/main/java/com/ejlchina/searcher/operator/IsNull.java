@@ -6,15 +6,20 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Null 值运算符
+ * IsNull 值运算符
  * @author Troy.Zhou @ 2022-01-19
  * @since v3.3.0
  */
-public class Null implements FieldOp {
+public class IsNull implements FieldOp {
+
+    @Override
+    public String name() {
+        return "IsNull";
+    }
 
     @Override
     public boolean isNamed(String name) {
-        return "nl".equals(name) || "Null".equals(name);
+        return "nl".equals(name) || "IsNull".equals(name);
     }
 
     @Override

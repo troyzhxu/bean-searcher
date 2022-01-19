@@ -10,6 +10,12 @@ import java.util.List;
 public interface FieldOp {
 
     /**
+     * 该运算符的名称
+     * @return 该运算符的名称
+     */
+    String name();
+
+    /**
      * 猜测该运算符的名字
      * @param name 猜测名称
      * @return 是否正确
@@ -24,5 +30,20 @@ public interface FieldOp {
      * @return 该运算符产生的 JDBC 参数列表
      */
     List<Object> operate(StringBuilder sqlBuilder, String dbField, Object[] values);
+
+    /**
+     * 判断两个运算符是否是同一个类型
+     * @param another 另一个运算符
+     * @return 是否是同一个
+     */
+    default boolean sameTo(FieldOp another) {
+        if (another == null) {
+            return false;
+        }
+        if (another == this) {
+            return true;
+        }
+        return isNamed(another.name());
+    }
 
 }

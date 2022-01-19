@@ -17,6 +17,11 @@ import static java.util.Collections.singletonList;
 public class Between implements FieldOp {
 
     @Override
+    public String name() {
+        return "Between";
+    }
+
+    @Override
     public boolean isNamed(String name) {
         return "bt".equals(name) || "Between".equals(name);
     }

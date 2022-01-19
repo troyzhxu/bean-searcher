@@ -2,6 +2,7 @@ package com.ejlchina.searcher.implement;
 
 import java.util.regex.Pattern;
 
+import com.ejlchina.searcher.FieldOp;
 import com.ejlchina.searcher.param.Operator;
 
 /**
@@ -23,30 +24,24 @@ public class DateValueCorrector {
 	 * @param operator 字段运算符
 	 * @return 矫正后的日期参数
 	 */
-	public Object[] correct(Object[] dateValues, Operator operator) {
-		switch (operator) {
-		case LessThan:
-		case GreaterEqual:
+	public Object[] correct(Object[] dateValues, FieldOp operator) {
+		if (operator.sameTo(Operator.LessThan) || operator.sameTo(Operator.GreaterEqual)) {
 			for (int i = 0; i <dateValues.length; i++) {
 				dateValues[i] = dateValue(dateValues[i], true);
 			}
-			break;
-		case LessEqual:
-		case GreaterThan:
+		}
+		if (operator.sameTo(Operator.LessEqual) || operator.sameTo(Operator.GreaterThan)) {
 			for (int i = 0; i <dateValues.length; i++) {
 				dateValues[i] = dateValue(dateValues[i], false);
 			}
-			break;
-		case Between:
+		}
+		if (operator.sameTo(Operator.Between)) {
 			if (dateValues.length > 0) {
 				dateValues[0] = dateValue(dateValues[0], true);
 			}
 			if (dateValues.length > 1) {
 				dateValues[1] = dateValue(dateValues[1], false);
 			}
-			break;
-		default:
-			break;
 		}
 		return dateValues;
 	}

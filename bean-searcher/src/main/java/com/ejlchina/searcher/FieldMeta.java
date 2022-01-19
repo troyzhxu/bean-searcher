@@ -1,7 +1,5 @@
 package com.ejlchina.searcher;
 
-import com.ejlchina.searcher.param.Operator;
-
 import java.lang.reflect.Field;
 
 /**
@@ -37,11 +35,11 @@ public class FieldMeta {
     /**
      * 该字段可作为检索时，被允许的运算符
      */
-    private final Operator[] onlyOn;
+    private final FieldOp[] onlyOn;
 
 
     public FieldMeta(BeanMeta<?> beanMeta, Field field, SqlSnippet fieldSql,
-                     String dbAlias, boolean conditional, Operator[] onlyOn) {
+                     String dbAlias, boolean conditional, FieldOp[] onlyOn) {
         this.beanMeta = beanMeta;
         this.field = field;
         this.fieldSql = fieldSql;
@@ -78,7 +76,7 @@ public class FieldMeta {
         return conditional;
     }
 
-    public Operator[] getOnlyOn() {
+    public FieldOp[] getOnlyOn() {
         return onlyOn;
     }
 

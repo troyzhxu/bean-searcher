@@ -13,6 +13,11 @@ import java.util.List;
 public class NotIn implements FieldOp {
 
     @Override
+    public String name() {
+        return "NotIn";
+    }
+
+    @Override
     public boolean isNamed(String name) {
         return "ni".equals(name) || "NotIn".equals(name);
     }

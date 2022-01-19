@@ -15,6 +15,11 @@ import static java.util.Collections.singletonList;
 public class Contain implements FieldOp {
 
     @Override
+    public String name() {
+        return "Contain";
+    }
+
+    @Override
     public boolean isNamed(String name) {
         return "ct".equals(name) || "in".equals(name) || "Contain".equals(name) || "Include".equals(name);
     }

@@ -1,5 +1,6 @@
 package com.ejlchina.searcher.param;
 
+import com.ejlchina.searcher.FieldOp;
 import com.ejlchina.searcher.util.StringUtils;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class FieldParam {
 	/**
 	 * 字段运算符
 	 */
-	private Operator operator;
+	private FieldOp operator;
 
 	/**
 	 * 参数值
@@ -56,7 +57,7 @@ public class FieldParam {
 
 	}
 
-	public FieldParam(String name, Operator operator) {
+	public FieldParam(String name, FieldOp operator) {
 		this(name, operator, Collections.emptyList(), false);
 	}
 
@@ -65,7 +66,7 @@ public class FieldParam {
 		this.values = values;
 	}
 
-	public FieldParam(String name, Operator operator, List<Value> values, boolean ignoreCase) {
+	public FieldParam(String name, FieldOp operator, List<Value> values, boolean ignoreCase) {
 		this.name = name;
 		this.operator = operator;
 		this.values = values;
@@ -93,11 +94,11 @@ public class FieldParam {
 		return ignoreCase;
 	}
 
-	public Operator getOperator() {
+	public FieldOp getOperator() {
 		return operator;
 	}
 
-	public void setOperator(Operator operator) {
+	public void setOperator(FieldOp operator) {
 		this.operator = operator;
 	}
 

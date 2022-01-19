@@ -30,6 +30,11 @@ public class DefaultParamResolver implements ParamResolver {
 	private ParamFilter[] paramFilters = new ParamFilter[] { new BoolValueFilter() };
 
 	/**
+	 * 字段运算符池
+	 */
+	private FieldOpPool fieldOpPool = new FieldOpPool();
+
+	/**
 	 * 排序字段参数名
 	 */
 	private String sortName = "sort";
@@ -178,8 +183,8 @@ public class DefaultParamResolver implements ParamResolver {
 	protected FieldParam toFieldParam(FieldMeta meta, Set<Integer> indices, Map<String, Object> paraMap) {
 		String field = meta.getName();
 		FieldParam param = getFieldParam(paraMap, field);
-		Operator op = toOperator(field, paraMap, param);
-		Operator operator = allowedOperator(op, meta.getOnlyOn());
+		FieldOp op = toOperator(field, paraMap, param);
+		FieldOp operator = allowedOperator(op, meta.getOnlyOn());
 		if (operator == null) {
 			// 表示该字段不支持 op 的检索
 			return null;
@@ -222,37 +227,27 @@ public class DefaultParamResolver implements ParamResolver {
 		return true;
 	}
 
-	private Operator toOperator(String field, Map<String, Object> paraMap, FieldParam param) {
+	private FieldOp toOperator(String field, Map<String, Object> paraMap, FieldParam param) {
 		if (param != null) {
-			Operator op = param.getOperator();
+			FieldOp op = param.getOperator();
 			if (op != null) {
 				return op;
 			}
 		}
 		Object value = paraMap.get(field + separator + operatorSuffix);
-		if (value instanceof Operator) {
-			return (Operator) value;
-		}
-		if (value instanceof String) {
-			return Operator.from((String) value);
-		}
-		return null;
+		return fieldOpPool.getFieldOp(value);
 	}
 
-	protected Operator allowedOperator(Operator op, Operator[] onlyOn) {
+	protected FieldOp allowedOperator(FieldOp op, FieldOp[] onlyOn) {
 		if (op == null) {
-			if (onlyOn.length == 0) {
-				// 为空，代表没有约束，则缺省使用 Equal
-				return Operator.Equal;
-			}
-			// 当指定 onlyOn 时，缺省使用 onlyOn 的第一个运算符
-			return onlyOn[0];
+			FieldOp tOp = onlyOn.length == 0 ? Operator.Equal : onlyOn[0];
+			return fieldOpPool.getFieldOp(tOp);
 		}
 		if (onlyOn.length == 0) {
 			return op;
 		}
-		for (Operator o : onlyOn) {
-			if (o == op) {
+		for (FieldOp o : onlyOn) {
+			if (op.sameTo(o)) {
 				return op;
 			}
 		}
@@ -289,6 +284,14 @@ public class DefaultParamResolver implements ParamResolver {
 
 	public ParamFilter[] getParamFilters() {
 		return paramFilters;
+	}
+
+	public FieldOpPool getFieldOpPool() {
+		return fieldOpPool;
+	}
+
+	public void setFieldOpPool(FieldOpPool fieldOpPool) {
+		this.fieldOpPool = fieldOpPool;
 	}
 
 	public String getSortName() {

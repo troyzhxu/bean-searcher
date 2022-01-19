@@ -18,6 +18,11 @@ import static java.util.Collections.singletonList;
 public class InList implements FieldOp {
 
     @Override
+    public String name() {
+        return "InList";
+    }
+
+    @Override
     public boolean isNamed(String name) {
         return "il".equals(name) || "mv".equals(name) || "InList".equals(name) || "MultiValue".equals(name);
     }

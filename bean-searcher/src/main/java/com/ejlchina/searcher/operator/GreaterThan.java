@@ -15,6 +15,11 @@ import static java.util.Collections.singletonList;
 public class GreaterThan implements FieldOp {
 
     @Override
+    public String name() {
+        return "GreaterThan";
+    }
+
+    @Override
     public boolean isNamed(String name) {
         return "gt".equals(name) || "GreaterThan".equals(name);
     }
