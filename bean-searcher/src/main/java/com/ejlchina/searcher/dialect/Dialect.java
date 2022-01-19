@@ -13,13 +13,6 @@ import java.util.List;
 public interface Dialect {
 
 	/**
-	 * 返回方言的类别
-	 * @return 方言类别
-	 * @since v3.3.0
-	 */
-	String getType();
-
-	/**
 	 * 把字段 dbField 转换为大写
 	 * @param builder sql builder
 	 * @param dbField 数据库字段
