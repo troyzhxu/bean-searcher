@@ -3,7 +3,6 @@ package com.ejlchina.searcher.implement;
 import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.dialect.Dialect;
 import com.ejlchina.searcher.dialect.Dialect.PaginateSql;
-import com.ejlchina.searcher.dialect.MySqlDialect;
 import com.ejlchina.searcher.param.FetchType;
 import com.ejlchina.searcher.param.FieldParam;
 import com.ejlchina.searcher.param.OrderBy;
