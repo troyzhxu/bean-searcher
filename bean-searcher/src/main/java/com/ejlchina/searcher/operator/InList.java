@@ -1,23 +1,18 @@
 package com.ejlchina.searcher.operator;
 
 import com.ejlchina.searcher.FieldOp;
-import com.ejlchina.searcher.dialect.Dialect;
+import com.ejlchina.searcher.implement.DialectWrapper;
 import com.ejlchina.searcher.util.ObjectUtils;
-import com.ejlchina.searcher.util.StringUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-
-import static java.util.Collections.singletonList;
 
 /**
  * In 运算符
  * @author Troy.Zhou @ 2022-01-19
  * @since v3.3.0
  */
-public class InList implements FieldOp {
+public class InList extends DialectWrapper implements FieldOp {
 
     @Override
     public String name() {
@@ -30,11 +25,11 @@ public class InList implements FieldOp {
     }
 
     @Override
-    public List<Object> operate(StringBuilder sqlBuilder, OpPara opPara, Dialect dialect) {
+    public List<Object> operate(StringBuilder sqlBuilder, OpPara opPara) {
         String dbField = opPara.getDbField();
         Object[] values = opPara.getValues();
         if (opPara.isIgnoreCase()) {
-            dialect.toUpperCase(sqlBuilder, dbField);
+            toUpperCase(sqlBuilder, dbField);
             ObjectUtils.upperCase(values);
         } else {
             sqlBuilder.append(dbField);

@@ -59,12 +59,39 @@ public class BeanSearcherAutoConfiguration {
 	}
 
 	@Bean
+	@ConditionalOnMissingBean(Dialect.class)
+	public Dialect dialect(BeanSearcherProperties config) {
+		String dialect = config.getSql().getDialect();
+		if (dialect == null) {
+			throw new SearchException("配置项【bean-searcher.sql.dialect】不能为空");
+		}
+		switch (dialect.toLowerCase()) {
+			case Sql.DIALECT_MYSQL:
+				return new MySqlDialect();
+			case Sql.DIALECT_ORACLE:
+				return new OracleDialect();
+		}
+		throw new SearchException("配置项【bean-searcher.sql.dialect】只能为  MySql | Oracle 中的一个，若需支持其它方言，可自己注入一个 com.ejlchina.searcher.dialect.Dialect 类型的 Bean！");
+	}
+
+	@Bean
+	@ConditionalOnMissingBean(FieldOperatorPool.class)
+	public FieldOperatorPool fieldOperatorPool(Dialect dialect, ObjectProvider<List<FieldOp>> fieldOps) {
+		FieldOperatorPool pool = new FieldOperatorPool();
+		ifAvailable(fieldOps, ops -> ops.forEach(pool::addFieldOp));
+		pool.setDialect(dialect);
+		return pool;
+	}
+
+	@Bean
 	@ConditionalOnMissingBean(ParamResolver.class)
 	public ParamResolver paramResolver(PageExtractor pageExtractor,
+									   FieldOperatorPool fieldOperatorPool,
 									   ObjectProvider<ParamFilter[]> paramFilters,
 									   BeanSearcherProperties config) {
 		DefaultParamResolver paramResolver = new DefaultParamResolver();
 		paramResolver.setPageExtractor(pageExtractor);
+		paramResolver.setFieldOperatorPool(fieldOperatorPool);
 		ifAvailable(paramFilters, paramResolver::setParamFilters);
 		Params conf = config.getParams();
 		paramResolver.setOperatorSuffix(conf.getOperatorKey());
@@ -77,22 +104,6 @@ public class BeanSearcherAutoConfiguration {
 		return paramResolver;
 	}
 
-	@Bean
-	@ConditionalOnMissingBean(Dialect.class)
-	public Dialect dialect(BeanSearcherProperties config) {
-		String dialect = config.getSql().getDialect();
-		if (dialect == null) {
-			throw new SearchException("配置项【bean-searcher.sql.dialect】不能为空");
-		}
-		switch (dialect.toLowerCase()) {
-		case Sql.DIALECT_MYSQL:
-			return new MySqlDialect();
-		case Sql.DIALECT_ORACLE:
-			return new OracleDialect();
-		}
-		throw new SearchException("配置项【bean-searcher.sql.dialect】只能为  MySql | Oracle 中的一个，若需支持其它方言，可自己注入一个 com.ejlchina.searcher.dialect.Dialect 类型的 Bean！");
-	}
-	
 	@Bean
 	@ConditionalOnMissingBean(DateValueCorrector.class)
 	public DateValueCorrector dateValueCorrector() {

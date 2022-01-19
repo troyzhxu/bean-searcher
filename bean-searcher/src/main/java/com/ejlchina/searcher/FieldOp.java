@@ -1,7 +1,5 @@
 package com.ejlchina.searcher;
 
-import com.ejlchina.searcher.dialect.Dialect;
-
 import java.util.List;
 
 /**
@@ -28,10 +26,9 @@ public interface FieldOp {
      * 执行该运算符
      * @param sqlBuilder SQL 构建器
      * @param opPara 运算参数
-     * @param dialect 方言
      * @return 该运算符产生的 JDBC 参数列表
      */
-    List<Object> operate(StringBuilder sqlBuilder, OpPara opPara, Dialect dialect);
+    List<Object> operate(StringBuilder sqlBuilder, OpPara opPara);
 
     /**
      * 判断两个运算符是否是同一个类型
@@ -48,6 +45,9 @@ public interface FieldOp {
         return isNamed(another.name());
     }
 
+    /**
+     * 运算参数
+     */
     class OpPara {
 
         final String dbField;

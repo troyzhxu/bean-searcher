@@ -1,6 +1,8 @@
 package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.FieldOp;
+import com.ejlchina.searcher.dialect.Dialect;
+import com.ejlchina.searcher.dialect.DialectSensor;
 import com.ejlchina.searcher.param.Operator;
 
 import java.util.ArrayList;
@@ -14,18 +16,18 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Troy.Zhou @ 2022-01-19
  * @since v3.3.0
  */
-public class FieldOpPool {
+public class FieldOperatorPool extends DialectWrapper {
 
     private List<FieldOp> fieldOps;
 
     private final Map<Object, FieldOp> cache = new ConcurrentHashMap<>();
 
 
-    public FieldOpPool(List<FieldOp> fieldOps) {
+    public FieldOperatorPool(List<FieldOp> fieldOps) {
         this.fieldOps = Objects.requireNonNull(fieldOps);
     }
 
-    public FieldOpPool() {
+    public FieldOperatorPool() {
         fieldOps = new ArrayList<>();
         fieldOps.add(Operator.Equal);
         fieldOps.add(Operator.NotEqual);
@@ -63,7 +65,6 @@ public class FieldOpPool {
         return null;
     }
 
-
     private boolean isMatch(FieldOp op, Object key) {
         if (key instanceof FieldOp) {
             return op.sameTo((FieldOp) key);
@@ -77,13 +78,37 @@ public class FieldOpPool {
         return false;
     }
 
-
     public List<FieldOp> getFieldOps() {
         return fieldOps;
     }
 
-    public void setFieldOps(List<FieldOp> fieldOps) {
+    public synchronized void setFieldOps(List<FieldOp> fieldOps) {
         this.fieldOps = fieldOps;
+        updateAllOpDialect();
+    }
+
+    public synchronized void addFieldOp(FieldOp fieldOp) {
+        this.fieldOps.add(fieldOp);
+        updateOpDialect(fieldOp);
+    }
+
+    @Override
+    public synchronized void setDialect(Dialect dialect) {
+        super.setDialect(dialect);
+        updateAllOpDialect();
+    }
+
+    private void updateAllOpDialect() {
+        for (FieldOp op : fieldOps) {
+            updateOpDialect(op);
+        }
+    }
+
+    private void updateOpDialect(FieldOp op) {
+        if (op instanceof DialectSensor) {
+            ((DialectSensor) op).setDialect(getDialect());
+        }
     }
 
 }
+

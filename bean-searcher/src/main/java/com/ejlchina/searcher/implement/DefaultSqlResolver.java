@@ -19,12 +19,7 @@ import java.util.Objects;
  * @author Troy.Zhou @ 2017-03-20
  * @since v1.1.1
  */
-public class DefaultSqlResolver implements SqlResolver {
-
-	/**
-	 * 数据库方言
-	 */
-	private Dialect dialect = new MySqlDialect();
+public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 
 	/**
 	 * 日期参数矫正器
@@ -36,10 +31,9 @@ public class DefaultSqlResolver implements SqlResolver {
 	}
 
 	public DefaultSqlResolver(Dialect dialect, DateValueCorrector dateValueCorrector) {
-		this.dialect = dialect;
+		super(dialect);
 		this.dateValueCorrector = dateValueCorrector;
 	}
-
 
 	@Override
 	public <T> SearchSql<T> resolve(BeanMeta<T> beanMeta, SearchParam searchParam) {
@@ -167,7 +161,7 @@ public class DefaultSqlResolver implements SqlResolver {
 				}
 			}
 			String fromWhereSql = builder.toString();
-			PaginateSql paginateSql = dialect.forPaginate(fieldSelectSql, fromWhereSql, searchParam.getPaging());
+			PaginateSql paginateSql = forPaginate(fieldSelectSql, fromWhereSql, searchParam.getPaging());
 			searchSql.setListSqlString(paginateSql.getSql());
 			searchSql.addListSqlParams(paginateSql.getParams());
 		}
@@ -270,15 +264,7 @@ public class DefaultSqlResolver implements SqlResolver {
 			values = dateValueCorrector.correct(values, operator);
 		}
 		FieldOp.OpPara opPara = new FieldOp.OpPara(dbField, fieldParam.isIgnoreCase(), values);
-		return operator.operate(builder, opPara, dialect);
-	}
-	
-	public Dialect getDialect() {
-		return dialect;
-	}
-	
-	public void setDialect(Dialect dialect) {
-		this.dialect = Objects.requireNonNull(dialect);
+		return operator.operate(builder, opPara);
 	}
 
 	public DateValueCorrector getDateValueCorrector() {

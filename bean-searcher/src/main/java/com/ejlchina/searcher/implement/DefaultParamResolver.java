@@ -32,7 +32,7 @@ public class DefaultParamResolver implements ParamResolver {
 	/**
 	 * 字段运算符池
 	 */
-	private FieldOpPool fieldOpPool = new FieldOpPool();
+	private FieldOperatorPool fieldOpPool = new FieldOperatorPool();
 
 	/**
 	 * 排序字段参数名
@@ -285,11 +285,11 @@ public class DefaultParamResolver implements ParamResolver {
 		return paramFilters;
 	}
 
-	public FieldOpPool getFieldOpPool() {
+	public FieldOperatorPool getFieldOperatorPool() {
 		return fieldOpPool;
 	}
 
-	public void setFieldOpPool(FieldOpPool fieldOpPool) {
+	public void setFieldOperatorPool(FieldOperatorPool fieldOpPool) {
 		this.fieldOpPool = fieldOpPool;
 	}
 
