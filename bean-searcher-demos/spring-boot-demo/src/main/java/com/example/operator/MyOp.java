@@ -27,7 +27,7 @@ public class MyOp implements FieldOp {
 
     @Override
     public List<Object> operate(StringBuilder sqlBuilder, OpPara opPara) {
-        sqlBuilder.append(opPara.getDbField()).append(" = 20");
+        sqlBuilder.append(opPara.getDbField()).append(" = 25");
         return Collections.emptyList();
     }
 }

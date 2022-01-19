@@ -5,6 +5,7 @@ import com.ejlchina.searcher.MapSearcher;
 import com.ejlchina.searcher.SearchResult;
 import com.ejlchina.searcher.util.MapUtils;
 import com.example.sbean.Employee;
+import com.example.sbean.EmployeeVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +33,15 @@ public class EmployeeController {
 	public Object index(@RequestParam Map<String, Object> params) {
 		// 组合检索、排序、分页 和 统计 都在这一句代码中实现了
 		return beanSearcher.search(Employee.class, params, new String[] { "age" });
+	}
+
+	/**
+	 * 测试带冗余后缀的实体类
+	 */
+	@GetMapping("/index-vo")
+	public Object indexVo(@RequestParam Map<String, Object> params) {
+		// 组合检索、排序、分页 和 统计 都在这一句代码中实现了
+		return beanSearcher.searchList(EmployeeVO.class, params);
 	}
 
 	@GetMapping("/count")
