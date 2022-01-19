@@ -1,5 +1,6 @@
 package com.ejlchina.searcher.implement;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 import com.ejlchina.searcher.*;
@@ -265,7 +266,7 @@ public class DefaultSqlResolver implements SqlResolver {
 		Object[] values = fieldParam.getValues();
 		boolean ignoreCase = fieldParam.isIgnoreCase();
 		Operator operator = fieldParam.getOperator();
-		if (Date.class.isAssignableFrom(fieldType)) {
+		if (Date.class.isAssignableFrom(fieldType) || LocalDateTime.class == fieldType) {
 			values = dateValueCorrector.correct(values, operator);
 		}
 		if (ignoreCase) {
