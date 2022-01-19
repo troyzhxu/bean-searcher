@@ -75,9 +75,9 @@ public class BeanSearcherAutoConfiguration {
 	}
 
 	@Bean
-	@ConditionalOnMissingBean(FieldOperatorPool.class)
-	public FieldOperatorPool fieldOperatorPool(Dialect dialect, ObjectProvider<List<FieldOp>> fieldOps) {
-		FieldOperatorPool pool = new FieldOperatorPool();
+	@ConditionalOnMissingBean(FieldOpPool.class)
+	public FieldOpPool fieldOpPool(Dialect dialect, ObjectProvider<List<FieldOp>> fieldOps) {
+		FieldOpPool pool = new FieldOpPool();
 		ifAvailable(fieldOps, ops -> ops.forEach(pool::addFieldOp));
 		pool.setDialect(dialect);
 		return pool;
@@ -86,12 +86,12 @@ public class BeanSearcherAutoConfiguration {
 	@Bean
 	@ConditionalOnMissingBean(ParamResolver.class)
 	public ParamResolver paramResolver(PageExtractor pageExtractor,
-									   FieldOperatorPool fieldOperatorPool,
+									   FieldOpPool fieldOpPool,
 									   ObjectProvider<ParamFilter[]> paramFilters,
 									   BeanSearcherProperties config) {
 		DefaultParamResolver paramResolver = new DefaultParamResolver();
 		paramResolver.setPageExtractor(pageExtractor);
-		paramResolver.setFieldOperatorPool(fieldOperatorPool);
+		paramResolver.setFieldOpPool(fieldOpPool);
 		ifAvailable(paramFilters, paramResolver::setParamFilters);
 		Params conf = config.getParams();
 		paramResolver.setOperatorSuffix(conf.getOperatorKey());

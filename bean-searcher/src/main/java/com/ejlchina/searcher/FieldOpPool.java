@@ -1,8 +1,8 @@
-package com.ejlchina.searcher.implement;
+package com.ejlchina.searcher;
 
-import com.ejlchina.searcher.FieldOp;
 import com.ejlchina.searcher.dialect.Dialect;
 import com.ejlchina.searcher.dialect.DialectSensor;
+import com.ejlchina.searcher.implement.DialectWrapper;
 import com.ejlchina.searcher.param.Operator;
 
 import java.util.ArrayList;
@@ -12,22 +12,22 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 字段运算符池
+ * 字段运算符池（支持的运算符都在这里）
  * @author Troy.Zhou @ 2022-01-19
  * @since v3.3.0
  */
-public class FieldOperatorPool extends DialectWrapper {
+public class FieldOpPool extends DialectWrapper {
 
     private List<FieldOp> fieldOps;
 
     private final Map<Object, FieldOp> cache = new ConcurrentHashMap<>();
 
 
-    public FieldOperatorPool(List<FieldOp> fieldOps) {
+    public FieldOpPool(List<FieldOp> fieldOps) {
         this.fieldOps = Objects.requireNonNull(fieldOps);
     }
 
-    public FieldOperatorPool() {
+    public FieldOpPool() {
         fieldOps = new ArrayList<>();
         fieldOps.add(Operator.Equal);
         fieldOps.add(Operator.NotEqual);
