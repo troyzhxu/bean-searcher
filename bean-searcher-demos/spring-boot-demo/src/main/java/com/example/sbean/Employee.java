@@ -2,6 +2,7 @@ package com.example.sbean;
 
 import com.ejlchina.searcher.bean.DbField;
 import com.ejlchina.searcher.bean.SearchBean;
+import com.ejlchina.searcher.operator.Contain;
 import com.ejlchina.searcher.operator.StartWith;
 import com.example.enums.Gender;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 )
 public class Employee extends BaseBean {
 
-	@DbField(onlyOn = { StartWith.class })
+	@DbField(onlyOn = { StartWith.class, Contain.class })
 	private String name;
 
 	private Integer age;
