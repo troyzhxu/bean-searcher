@@ -190,6 +190,7 @@ public class BeanSearcherAutoConfiguration {
 		Sql.DefaultMapping conf = config.getSql().getDefaultMapping();
 		mapping.setTablePrefix(conf.getTablePrefix());
 		mapping.setUpperCase(conf.isUpperCase());
+		mapping.setRedundantSuffixes(conf.getRedundantSuffixes());
 		return mapping;
 	}
 

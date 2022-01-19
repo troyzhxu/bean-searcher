@@ -204,6 +204,13 @@
       "type": "java.lang.String"
     },
     {
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Sql$DefaultMapping",
+      "defaultValue": null,
+      "name": "bean-searcher.sql.default-mapping.redundant-suffixes",
+      "description": "实体类的冗余后缀，将在自动映射表名时自动去除",
+      "type": "java.lang.String[]"
+    },
+    {
       "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$FieldConvertor",
       "defaultValue": true,
       "name": "bean-searcher.field-convertor.use-number",
