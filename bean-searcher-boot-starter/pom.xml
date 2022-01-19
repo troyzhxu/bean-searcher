@@ -15,7 +15,7 @@
 	</parent>
 
 	<properties>
-		<spring.boot.version>2.5.6</spring.boot.version>
+		<spring.boot.version>2.6.2</spring.boot.version>
 	</properties>
 
 	<dependencies>
