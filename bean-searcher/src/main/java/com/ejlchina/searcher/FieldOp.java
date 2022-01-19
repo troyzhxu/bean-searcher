@@ -1,5 +1,7 @@
 package com.ejlchina.searcher;
 
+import com.ejlchina.searcher.dialect.Dialect;
+
 import java.util.List;
 
 /**
@@ -25,11 +27,11 @@ public interface FieldOp {
     /**
      * 执行该运算符
      * @param sqlBuilder SQL 构建器
-     * @param dbField 字段名
-     * @param values 字段参数值
+     * @param opPara 运算参数
+     * @param dialect 方言
      * @return 该运算符产生的 JDBC 参数列表
      */
-    List<Object> operate(StringBuilder sqlBuilder, String dbField, Object[] values);
+    List<Object> operate(StringBuilder sqlBuilder, OpPara opPara, Dialect dialect);
 
     /**
      * 判断两个运算符是否是同一个类型
@@ -44,6 +46,32 @@ public interface FieldOp {
             return true;
         }
         return isNamed(another.name());
+    }
+
+    class OpPara {
+
+        final String dbField;
+        final boolean ignoreCase;
+        final Object[] values;
+
+        public OpPara(String dbField, boolean ignoreCase, Object[] values) {
+            this.dbField = dbField;
+            this.ignoreCase = ignoreCase;
+            this.values = values;
+        }
+
+        public String getDbField() {
+            return dbField;
+        }
+
+        public boolean isIgnoreCase() {
+            return ignoreCase;
+        }
+
+        public Object[] getValues() {
+            return values;
+        }
+
     }
 
 }

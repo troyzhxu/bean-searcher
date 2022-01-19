@@ -102,7 +102,7 @@ public class DefaultSqlResolver implements SqlResolver {
 			String fieldName = fieldParam.getName();
 			// 这里没取字段别名，因为在 count SQL 里，select 语句中可能没这个字段
 			FieldMeta meta = beanMeta.requireFieldMeta(fieldName);
-			List<Object> sqlParams = appendFilterConditionSql(builder, meta.getType(),
+			List<Object> sqlParams = appendFieldCondition(builder, meta.getType(),
 					meta.getFieldSql().getSnippet(), fieldParam);
 			for (Object sqlParam : sqlParams) {
 				searchSql.addListSqlParam(sqlParam);
@@ -262,35 +262,15 @@ public class DefaultSqlResolver implements SqlResolver {
 	/**
 	 * @return 查询参数值
 	 */
-	protected List<Object> appendFilterConditionSql(StringBuilder builder, Class<?> fieldType,
-			String dbField, FieldParam fieldParam) {
+	protected List<Object> appendFieldCondition(StringBuilder builder, Class<?> fieldType,
+												String dbField, FieldParam fieldParam) {
 		Object[] values = fieldParam.getValues();
-		boolean ignoreCase = fieldParam.isIgnoreCase();
 		FieldOp operator = (FieldOp) fieldParam.getOperator();
 		if (Date.class.isAssignableFrom(fieldType)) {
 			values = dateValueCorrector.correct(values, operator);
 		}
-		if (ignoreCase) {
-			dialect.toUpperCase(builder, dbField);
-			values = toUpperCase(values);
-		} else {
-			builder.append(dbField);
-		}
-		return operator.operate(builder, dbField, values);
-	}
-
-	protected Object[] toUpperCase(Object[] params) {
-		for (int i = 0; i < params.length; i++) {
-			Object val = params[i];
-			if (val != null) {
-				if (val instanceof String) {
-					params[i] = ((String) val).toUpperCase();
-				} else {
-					params[i] = val;
-				}
-			}
-		}
-		return params;
+		FieldOp.OpPara opPara = new FieldOp.OpPara(dbField, fieldParam.isIgnoreCase(), values);
+		return operator.operate(builder, opPara, dialect);
 	}
 	
 	public Dialect getDialect() {

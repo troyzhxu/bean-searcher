@@ -87,4 +87,13 @@ public class ObjectUtils {
 		return Collections.emptyList();
 	}
 
+	public static void upperCase(Object[] params) {
+		for (int i = 0; i < params.length; i++) {
+			Object val = params[i];
+			if (val instanceof String) {
+				params[i] = ((String) val).toUpperCase();
+			}
+		}
+	}
+
 }

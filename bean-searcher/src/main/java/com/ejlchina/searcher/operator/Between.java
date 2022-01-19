@@ -1,6 +1,8 @@
 package com.ejlchina.searcher.operator;
 
 import com.ejlchina.searcher.FieldOp;
+import com.ejlchina.searcher.dialect.Dialect;
+import com.ejlchina.searcher.util.ObjectUtils;
 import com.ejlchina.searcher.util.StringUtils;
 
 import java.util.Arrays;
@@ -27,7 +29,15 @@ public class Between implements FieldOp {
     }
 
     @Override
-    public List<Object> operate(StringBuilder sqlBuilder, String dbField, Object[] values) {
+    public List<Object> operate(StringBuilder sqlBuilder, OpPara opPara, Dialect dialect) {
+        String dbField = opPara.getDbField();
+        Object[] values = opPara.getValues();
+        if (opPara.isIgnoreCase()) {
+            dialect.toUpperCase(sqlBuilder, dbField);
+            ObjectUtils.upperCase(values);
+        } else {
+            sqlBuilder.append(dbField);
+        }
         boolean val1Null = false;
         boolean val2Null = false;
         Object value0 = values.length > 0 ? values[0] : null;

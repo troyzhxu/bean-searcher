@@ -1,6 +1,8 @@
 package com.ejlchina.searcher.operator;
 
 import com.ejlchina.searcher.FieldOp;
+import com.ejlchina.searcher.dialect.Dialect;
+import com.ejlchina.searcher.util.ObjectUtils;
 
 import java.util.List;
 
@@ -25,7 +27,15 @@ public class LessEqual implements FieldOp {
     }
 
     @Override
-    public List<Object> operate(StringBuilder sqlBuilder, String dbField, Object[] values) {
+    public List<Object> operate(StringBuilder sqlBuilder, OpPara opPara, Dialect dialect) {
+        String dbField = opPara.getDbField();
+        Object[] values = opPara.getValues();
+        if (opPara.isIgnoreCase()) {
+            dialect.toUpperCase(sqlBuilder, dbField);
+            ObjectUtils.upperCase(values);
+        } else {
+            sqlBuilder.append(dbField);
+        }
         sqlBuilder.append(" <= ?");
         return singletonList(firstNotNull(values));
     }

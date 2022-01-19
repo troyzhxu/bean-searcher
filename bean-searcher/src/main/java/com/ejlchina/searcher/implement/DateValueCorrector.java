@@ -26,12 +26,12 @@ public class DateValueCorrector {
 	 */
 	public Object[] correct(Object[] dateValues, FieldOp operator) {
 		if (operator.sameTo(Operator.LessThan) || operator.sameTo(Operator.GreaterEqual)) {
-			for (int i = 0; i <dateValues.length; i++) {
+			for (int i = 0; i < dateValues.length; i++) {
 				dateValues[i] = dateValue(dateValues[i], true);
 			}
 		}
 		if (operator.sameTo(Operator.LessEqual) || operator.sameTo(Operator.GreaterThan)) {
-			for (int i = 0; i <dateValues.length; i++) {
+			for (int i = 0; i < dateValues.length; i++) {
 				dateValues[i] = dateValue(dateValues[i], false);
 			}
 		}
