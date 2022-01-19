@@ -3,7 +3,7 @@ package com.ejlchina.searcher.operator;
 import com.ejlchina.searcher.FieldOperator;
 import com.ejlchina.searcher.util.ObjectUtils;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -19,7 +19,7 @@ public class Equal implements FieldOperator {
     @Override
     public List<Object> operate(StringBuilder sqlBuilder, String dbField, Object[] values) {
         sqlBuilder.append(" = ?");
-        return Arrays.asList(ObjectUtils.firstNotNull(values));
+        return Collections.singletonList(ObjectUtils.firstNotNull(values));
     }
 
 }
