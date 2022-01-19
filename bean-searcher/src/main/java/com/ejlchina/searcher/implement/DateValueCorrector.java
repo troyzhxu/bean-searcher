@@ -35,7 +35,7 @@ public class DateValueCorrector {
 				dateValues[i] = dateValue(dateValues[i], false);
 			}
 		}
-		if (operator.sameTo(Operator.Between)) {
+		if (operator.sameTo(Operator.Between) || operator.sameTo(Operator.NotBetween)) {
 			if (dateValues.length > 0) {
 				dateValues[0] = dateValue(dateValues[0], true);
 			}
