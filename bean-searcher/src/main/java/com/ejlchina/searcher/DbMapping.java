@@ -121,9 +121,9 @@ public interface DbMapping {
         /**
          * 该字段可作为检索时，被允许的运算符
          */
-        private final Class<FieldOp>[] onlyOn;
+        private final Class<? extends FieldOp>[] onlyOn;
 
-        public Column(String fieldSql, boolean conditional, Class<FieldOp>[] onlyOn) {
+        public Column(String fieldSql, boolean conditional, Class<? extends FieldOp>[] onlyOn) {
             this.fieldSql = fieldSql;
             this.conditional = conditional;
             this.onlyOn = onlyOn;
@@ -137,7 +137,7 @@ public interface DbMapping {
             return conditional;
         }
 
-        public Class<FieldOp>[] getOnlyOn() {
+        public Class<? extends FieldOp>[] getOnlyOn() {
             return onlyOn;
         }
 

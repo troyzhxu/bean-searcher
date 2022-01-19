@@ -237,7 +237,7 @@ public class DefaultParamResolver implements ParamResolver {
 		return fieldOpPool.getFieldOp(value);
 	}
 
-	protected FieldOp allowedOperator(FieldOp op, Class<FieldOp>[] onlyOn) {
+	protected FieldOp allowedOperator(FieldOp op, Class<? extends FieldOp>[] onlyOn) {
 		if (op == null) {
 			Object tOp = onlyOn.length == 0 ? Operator.Equal : onlyOn[0];
 			return fieldOpPool.getFieldOp(tOp);
@@ -245,7 +245,7 @@ public class DefaultParamResolver implements ParamResolver {
 		if (onlyOn.length == 0) {
 			return op;
 		}
-		for (Class<FieldOp> opClass : onlyOn) {
+		for (Class<? extends FieldOp> opClass : onlyOn) {
 			if (opClass.isAssignableFrom(op.getClass())) {
 				return op;
 			}

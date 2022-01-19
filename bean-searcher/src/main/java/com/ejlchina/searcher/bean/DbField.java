@@ -38,7 +38,7 @@ public @interface DbField {
 	 * @since v3.0.0
 	 * @return Operator[]
 	 */
-	Class<FieldOp>[] onlyOn() default {};
+	Class<? extends FieldOp>[] onlyOn() default {};
 
 }
 
