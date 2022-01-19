@@ -1,12 +1,12 @@
 package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.DbMapping;
+import com.ejlchina.searcher.FieldOp;
 import com.ejlchina.searcher.SearchException;
 import com.ejlchina.searcher.bean.DbField;
 import com.ejlchina.searcher.bean.DbIgnore;
 import com.ejlchina.searcher.bean.InheritType;
 import com.ejlchina.searcher.bean.SearchBean;
-import com.ejlchina.searcher.param.Operator;
 import com.ejlchina.searcher.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -19,7 +19,8 @@ import java.util.Objects;
  */
 public class DefaultDbMapping implements DbMapping {
 
-    private static final Operator[] EMPTY_OPERATORS = {};
+    @SuppressWarnings("unchecked")
+    private static final Class<FieldOp>[] EMPTY_OPERATORS = new Class[0];
 
     // 表名前缀
     private String tablePrefix;
@@ -64,9 +65,7 @@ public class DefaultDbMapping implements DbMapping {
         }
         DbField dbField = field.getAnnotation(DbField.class);
         if (dbField != null) {
-            boolean conditional = dbField.conditional();
-            Operator[] onlyOn = dbField.onlyOn();
-            return new Column(fieldSql, conditional, onlyOn);
+            return new Column(fieldSql, dbField.conditional(), dbField.onlyOn());
         }
         return new Column(fieldSql, true, EMPTY_OPERATORS);
     }

@@ -3,7 +3,6 @@ package com.ejlchina.searcher;
 import com.ejlchina.searcher.bean.DbField;
 import com.ejlchina.searcher.bean.InheritType;
 import com.ejlchina.searcher.bean.SearchBean;
-import com.ejlchina.searcher.param.Operator;
 
 import java.lang.reflect.Field;
 
@@ -122,9 +121,9 @@ public interface DbMapping {
         /**
          * 该字段可作为检索时，被允许的运算符
          */
-        private final Operator[] onlyOn;
+        private final Class<FieldOp>[] onlyOn;
 
-        public Column(String fieldSql, boolean conditional, Operator[] onlyOn) {
+        public Column(String fieldSql, boolean conditional, Class<FieldOp>[] onlyOn) {
             this.fieldSql = fieldSql;
             this.conditional = conditional;
             this.onlyOn = onlyOn;
@@ -138,7 +137,7 @@ public interface DbMapping {
             return conditional;
         }
 
-        public Operator[] getOnlyOn() {
+        public Class<FieldOp>[] getOnlyOn() {
             return onlyOn;
         }
 

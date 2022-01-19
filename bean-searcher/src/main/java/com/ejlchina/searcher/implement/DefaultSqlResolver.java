@@ -266,7 +266,7 @@ public class DefaultSqlResolver implements SqlResolver {
 			String dbField, FieldParam fieldParam) {
 		Object[] values = fieldParam.getValues();
 		boolean ignoreCase = fieldParam.isIgnoreCase();
-		FieldOp operator = fieldParam.getOperator();
+		FieldOp operator = (FieldOp) fieldParam.getOperator();
 		if (Date.class.isAssignableFrom(fieldType)) {
 			values = dateValueCorrector.correct(values, operator);
 		}

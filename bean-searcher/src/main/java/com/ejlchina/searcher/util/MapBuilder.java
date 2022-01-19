@@ -1,8 +1,8 @@
 package com.ejlchina.searcher.util;
 
+import com.ejlchina.searcher.FieldOp;
 import com.ejlchina.searcher.SearchParam;
 import com.ejlchina.searcher.param.FieldParam;
-import com.ejlchina.searcher.param.Operator;
 import com.ejlchina.searcher.param.OrderBy;
 import com.ejlchina.searcher.param.Paging;
 
@@ -149,7 +149,11 @@ public class MapBuilder {
      * @return MapBuilder
      */
     public MapBuilder op(String operator) {
-        return op(Operator.from(operator));
+        if (fieldParam == null) {
+            throw new IllegalStateException("the method [ op(...) ] must go after [ field(...) ] method");
+        }
+        fieldParam.setOperator(operator);
+        return this;
     }
 
     /**
@@ -157,7 +161,7 @@ public class MapBuilder {
      * @param operator 检索运算符
      * @return MapBuilder
      */
-    public MapBuilder op(Operator operator) {
+    public MapBuilder op(FieldOp operator) {
         if (fieldParam == null) {
             throw new IllegalStateException("the method [ op(...) ] must go after [ field(...) ] method");
         }

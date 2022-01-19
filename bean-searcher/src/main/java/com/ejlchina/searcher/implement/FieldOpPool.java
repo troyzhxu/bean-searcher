@@ -47,19 +47,36 @@ public class FieldOpPool {
 
 
     public FieldOp getFieldOp(Object key) {
+        if (key == null) {
+            return null;
+        }
         FieldOp fOp = cache.get(key);
         if (fOp != null) {
             return fOp;
         }
-        String name = key.toString();
         for (FieldOp op: fieldOps) {
-            if (op == key || op.isNamed(name)) {
+            if (isMatch(op, key)) {
                 cache.put(key, op);
                 return op;
             }
         }
         return null;
     }
+
+
+    private boolean isMatch(FieldOp op, Object key) {
+        if (key instanceof FieldOp) {
+            return op.sameTo((FieldOp) key);
+        }
+        if (key instanceof String) {
+            return op.isNamed((String) key);
+        }
+        if (key instanceof Class) {
+            return ((Class<?>) key).isAssignableFrom(op.getClass());
+        }
+        return false;
+    }
+
 
     public List<FieldOp> getFieldOps() {
         return fieldOps;

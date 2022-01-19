@@ -183,13 +183,12 @@ public class DefaultParamResolver implements ParamResolver {
 	protected FieldParam toFieldParam(FieldMeta meta, Set<Integer> indices, Map<String, Object> paraMap) {
 		String field = meta.getName();
 		FieldParam param = getFieldParam(paraMap, field);
-		FieldOp op = toOperator(field, paraMap, param);
-		FieldOp operator = allowedOperator(op, meta.getOnlyOn());
+		FieldOp operator = allowedOperator(toOperator(field, paraMap, param), meta.getOnlyOn());
 		if (operator == null) {
 			// 表示该字段不支持 op 的检索
 			return null;
 		}
-		if (op != null && (operator == Operator.Empty || operator == Operator.NotEmpty)) {
+		if (operator == Operator.Empty || operator == Operator.NotEmpty) {
 			return new FieldParam(field, operator);
 		}
 		if ((indices == null || indices.isEmpty()) && param == null) {
@@ -229,25 +228,25 @@ public class DefaultParamResolver implements ParamResolver {
 
 	private FieldOp toOperator(String field, Map<String, Object> paraMap, FieldParam param) {
 		if (param != null) {
-			FieldOp op = param.getOperator();
+			Object op = param.getOperator();
 			if (op != null) {
-				return op;
+				return fieldOpPool.getFieldOp(op);
 			}
 		}
 		Object value = paraMap.get(field + separator + operatorSuffix);
 		return fieldOpPool.getFieldOp(value);
 	}
 
-	protected FieldOp allowedOperator(FieldOp op, FieldOp[] onlyOn) {
+	protected FieldOp allowedOperator(FieldOp op, Class<FieldOp>[] onlyOn) {
 		if (op == null) {
-			FieldOp tOp = onlyOn.length == 0 ? Operator.Equal : onlyOn[0];
+			Object tOp = onlyOn.length == 0 ? Operator.Equal : onlyOn[0];
 			return fieldOpPool.getFieldOp(tOp);
 		}
 		if (onlyOn.length == 0) {
 			return op;
 		}
-		for (FieldOp o : onlyOn) {
-			if (op.sameTo(o)) {
+		for (Class<FieldOp> opClass : onlyOn) {
+			if (opClass.isAssignableFrom(op.getClass())) {
 				return op;
 			}
 		}

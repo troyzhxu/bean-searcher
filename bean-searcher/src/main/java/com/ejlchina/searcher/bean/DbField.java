@@ -1,13 +1,9 @@
 package com.ejlchina.searcher.bean;
 
 import com.ejlchina.searcher.DbMapping;
-import com.ejlchina.searcher.param.Operator;
+import com.ejlchina.searcher.FieldOp;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
  * 用于注解一个可检索 bean 的属性
@@ -42,7 +38,7 @@ public @interface DbField {
 	 * @since v3.0.0
 	 * @return Operator[]
 	 */
-	Operator[] onlyOn() default {};
+	Class<FieldOp>[] onlyOn() default {};
 
 }
 

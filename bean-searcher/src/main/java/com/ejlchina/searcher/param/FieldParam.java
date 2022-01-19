@@ -3,7 +3,6 @@ package com.ejlchina.searcher.param;
 import com.ejlchina.searcher.FieldOp;
 import com.ejlchina.searcher.util.StringUtils;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -22,7 +21,7 @@ public class FieldParam {
 	/**
 	 * 字段运算符
 	 */
-	private FieldOp operator;
+	private Object operator;
 
 	/**
 	 * 参数值
@@ -94,11 +93,11 @@ public class FieldParam {
 		return ignoreCase;
 	}
 
-	public FieldOp getOperator() {
+	public Object getOperator() {
 		return operator;
 	}
 
-	public void setOperator(FieldOp operator) {
+	public void setOperator(Object operator) {
 		this.operator = operator;
 	}
 

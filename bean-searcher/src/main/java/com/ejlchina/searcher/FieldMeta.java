@@ -35,11 +35,11 @@ public class FieldMeta {
     /**
      * 该字段可作为检索时，被允许的运算符
      */
-    private final FieldOp[] onlyOn;
+    private final Class<FieldOp>[] onlyOn;
 
 
     public FieldMeta(BeanMeta<?> beanMeta, Field field, SqlSnippet fieldSql,
-                     String dbAlias, boolean conditional, FieldOp[] onlyOn) {
+                     String dbAlias, boolean conditional, Class<FieldOp>[] onlyOn) {
         this.beanMeta = beanMeta;
         this.field = field;
         this.fieldSql = fieldSql;
@@ -76,7 +76,7 @@ public class FieldMeta {
         return conditional;
     }
 
-    public FieldOp[] getOnlyOn() {
+    public Class<FieldOp>[] getOnlyOn() {
         return onlyOn;
     }
 
