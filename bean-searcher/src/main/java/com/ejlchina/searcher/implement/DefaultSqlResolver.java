@@ -251,9 +251,6 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		return tableAlias;
 	}
 
-	/**
-	 * @return 查询参数值
-	 */
 	protected List<Object> appendCondition(StringBuilder builder, FieldMeta fieldMeta, FieldParam param) {
 		Class<?> fieldType = fieldMeta.getType();
 		Object[] values = param.getValues();
