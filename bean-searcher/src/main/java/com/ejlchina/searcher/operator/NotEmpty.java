@@ -23,6 +23,11 @@ public class NotEmpty implements FieldOp {
     }
 
     @Override
+    public boolean lonely() {
+        return true;
+    }
+
+    @Override
     public List<Object> operate(StringBuilder sqlBuilder, OpPara opPara) {
         String dbField = opPara.getDbField();
         sqlBuilder.append(dbField).append(" is not null");

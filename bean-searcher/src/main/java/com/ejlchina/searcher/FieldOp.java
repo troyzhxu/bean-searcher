@@ -23,6 +23,11 @@ public interface FieldOp {
     boolean isNamed(String name);
 
     /**
+     * @return 该运算符是否不需要参数即可运算
+     */
+    boolean lonely();
+
+    /**
      * 执行该运算符
      * @param sqlBuilder SQL 构建器
      * @param opPara 运算参数

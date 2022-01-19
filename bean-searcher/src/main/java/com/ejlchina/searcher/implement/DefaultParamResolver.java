@@ -188,7 +188,7 @@ public class DefaultParamResolver implements ParamResolver {
 			// 表示该字段不支持 op 的检索
 			return null;
 		}
-		if (operator == Operator.Empty || operator == Operator.NotEmpty) {
+		if (operator.lonely()) {
 			return new FieldParam(field, operator);
 		}
 		if ((indices == null || indices.isEmpty()) && param == null) {

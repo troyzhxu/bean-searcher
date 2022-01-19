@@ -28,6 +28,11 @@ public class GreaterEqual extends DialectWrapper implements FieldOp {
     }
 
     @Override
+    public boolean lonely() {
+        return false;
+    }
+
+    @Override
     public List<Object> operate(StringBuilder sqlBuilder, OpPara opPara) {
         String dbField = opPara.getDbField();
         Object[] values = opPara.getValues();
