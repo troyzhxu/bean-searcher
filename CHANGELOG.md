@@ -5,6 +5,16 @@
 * Bean Searcher
   * 新增条件分组 与 组逻辑运算功能（TODO）
 
+# v3.2.2 @ 2021-12-18
+
+### 🌻 Better
+
+* Bean Searcher
+  * 优化 `DateValueCorrector`，使其支持 `LocalDateTime` 类型字段
+* Bean Searcher Boot Starter
+  * 优化自动配置机制，使其不依赖于 `DataSourceAutoConfiguration`，只要提供了 `DataSource` 就能自动配置
+* Change LICENSE to Apache-2.0
+
 # v3.2.1 @ 2021-12-18
 
 ### 🌻 Better
