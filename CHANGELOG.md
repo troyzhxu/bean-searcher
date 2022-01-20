@@ -5,6 +5,16 @@
 * Bean Searcher
   * 新增条件分组 与 组逻辑运算功能（TODO）
 
+# v3.2.2 @ 2021-12-20
+
+### 🌻 Better
+
+* Bean Searcher
+  * 优化 `DateValueCorrector`，使其支持 `LocalDateTime` 类型字段
+* Bean Searcher Boot Starter
+  * 优化自动配置机制，使其不依赖于 `DataSourceAutoConfiguration`，只要提供了 `DataSource` 就能自动配置
+* Change LICENSE to Apache-2.0
+
 # v3.3.0 @ 2022-01-19
 
 ### ✨ Features
@@ -20,6 +30,7 @@
   * 新增 `bean-searcher.sql.default-mapping.redundant-suffixes` 配置项，可配置多个冗余后缀
   * 支持直接声明一个 `FieldOp` 类型的 Spring Bean 来扩展一个新的字段运算符
   * 支持直接声明一个 `FieldOpPool` 类型的 Spring Bean 来定制一套全新的字符运算符
+* Change LICENSE to Apache-2.0
 
 # v3.2.1 @ 2021-12-18
 
