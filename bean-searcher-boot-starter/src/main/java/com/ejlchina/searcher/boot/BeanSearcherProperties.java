@@ -263,6 +263,9 @@ public class BeanSearcherProperties {
 
 		private final DefaultMapping defaultMapping = new DefaultMapping();
 
+		// 是否使用 DateValueCorrector
+		private boolean useDateValueCorrector = true;
+
 		public String getDialect() {
 			return dialect;
 		}
@@ -305,6 +308,14 @@ public class BeanSearcherProperties {
 				this.redundantSuffixes = redundantSuffixes;
 			}
 
+		}
+
+		public boolean isUseDateValueCorrector() {
+			return useDateValueCorrector;
+		}
+
+		public void setUseDateValueCorrector(boolean useDateValueCorrector) {
+			this.useDateValueCorrector = useDateValueCorrector;
 		}
 
 	}

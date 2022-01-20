@@ -190,6 +190,13 @@
       "type": "java.lang.String"
     },
     {
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Sql",
+      "defaultValue": "true",
+      "name": "bean-searcher.sql.use-date-value-corrector",
+      "description": "是否使用日期参数值矫正器",
+      "type": "java.lang.Boolean"
+    },
+    {
       "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Sql$DefaultMapping",
       "defaultValue": false,
       "name": "bean-searcher.sql.default-mapping.upper-case",
