@@ -1,9 +1,9 @@
 package com.ejlchina.searcher.implement;
 
-import java.util.regex.Pattern;
-
 import com.ejlchina.searcher.FieldOp;
-import com.ejlchina.searcher.param.Operator;
+import com.ejlchina.searcher.operator.*;
+
+import java.util.regex.Pattern;
 
 /**
  * 日期参数值矫正器
@@ -18,6 +18,13 @@ public class DateValueCorrector {
 	
 	static final Pattern DATE_MINUTE_PATTERN = Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}");
 
+	private FieldOp lt = new LessThan();
+	private FieldOp ge = new GreaterEqual();
+	private FieldOp le = new LessEqual();
+	private FieldOp gt = new GreaterThan();
+	private FieldOp bt = new Between();
+	private FieldOp nb = new NotBetween();
+
 	/**
 	 * 日期参数值矫正处理
 	 * @param dateValues 参数值
@@ -25,17 +32,17 @@ public class DateValueCorrector {
 	 * @return 矫正后的日期参数
 	 */
 	public Object[] correct(Object[] dateValues, FieldOp operator) {
-		if (operator.sameTo(Operator.LessThan) || operator.sameTo(Operator.GreaterEqual)) {
+		if (operator.sameTo(lt) || operator.sameTo(ge)) {
 			for (int i = 0; i < dateValues.length; i++) {
 				dateValues[i] = dateValue(dateValues[i], true);
 			}
 		}
-		if (operator.sameTo(Operator.LessEqual) || operator.sameTo(Operator.GreaterThan)) {
+		if (operator.sameTo(le) || operator.sameTo(gt)) {
 			for (int i = 0; i < dateValues.length; i++) {
 				dateValues[i] = dateValue(dateValues[i], false);
 			}
 		}
-		if (operator.sameTo(Operator.Between) || operator.sameTo(Operator.NotBetween)) {
+		if (operator.sameTo(bt) || operator.sameTo(nb)) {
 			if (dateValues.length > 0) {
 				dateValues[0] = dateValue(dateValues[0], true);
 			}
@@ -73,5 +80,52 @@ public class DateValueCorrector {
 		return value;
 	}
 
-	
+	public FieldOp getLt() {
+		return lt;
+	}
+
+	public void setLt(FieldOp lt) {
+		this.lt = lt;
+	}
+
+	public FieldOp getGe() {
+		return ge;
+	}
+
+	public void setGe(FieldOp ge) {
+		this.ge = ge;
+	}
+
+	public FieldOp getLe() {
+		return le;
+	}
+
+	public void setLe(FieldOp le) {
+		this.le = le;
+	}
+
+	public FieldOp getGt() {
+		return gt;
+	}
+
+	public void setGt(FieldOp gt) {
+		this.gt = gt;
+	}
+
+	public FieldOp getBt() {
+		return bt;
+	}
+
+	public void setBt(FieldOp bt) {
+		this.bt = bt;
+	}
+
+	public FieldOp getNb() {
+		return nb;
+	}
+
+	public void setNb(FieldOp nb) {
+		this.nb = nb;
+	}
+
 }
