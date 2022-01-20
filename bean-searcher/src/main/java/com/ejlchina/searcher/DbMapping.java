@@ -17,6 +17,7 @@ public interface DbMapping {
     /**
      * SearchBean 的继承类型
      * @since v3.2.0
+     * @param beanClass SearchBean 的 Class
      * @return 继承类型
      */
     InheritType inheritType(Class<?> beanClass);
