@@ -3,7 +3,7 @@ package com.ejlchina.searcher;
 import com.ejlchina.searcher.dialect.Dialect;
 import com.ejlchina.searcher.dialect.DialectSensor;
 import com.ejlchina.searcher.implement.DialectWrapper;
-import com.ejlchina.searcher.param.Operator;
+import com.ejlchina.searcher.operator.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,23 +29,23 @@ public class FieldOpPool extends DialectWrapper {
 
     public FieldOpPool() {
         fieldOps = new ArrayList<>();
-        fieldOps.add(Operator.Equal);
-        fieldOps.add(Operator.NotEqual);
-        fieldOps.add(Operator.GreaterThan);
-        fieldOps.add(Operator.GreaterEqual);
-        fieldOps.add(Operator.LessThan);
-        fieldOps.add(Operator.LessEqual);
-        fieldOps.add(Operator.Between);
-        fieldOps.add(Operator.NotBetween);
-        fieldOps.add(Operator.Contain);
-        fieldOps.add(Operator.StartWith);
-        fieldOps.add(Operator.EndWith);
-        fieldOps.add(Operator.InList);
-        fieldOps.add(Operator.NotIn);
-        fieldOps.add(Operator.IsNull);
-        fieldOps.add(Operator.NotNull);
-        fieldOps.add(Operator.Empty);
-        fieldOps.add(Operator.NotEmpty);
+        fieldOps.add(new Equal());
+        fieldOps.add(new NotEqual());
+        fieldOps.add(new GreaterThan());
+        fieldOps.add(new GreaterEqual());
+        fieldOps.add(new LessThan());
+        fieldOps.add(new LessEqual());
+        fieldOps.add(new Between());
+        fieldOps.add(new NotBetween());
+        fieldOps.add(new Contain());
+        fieldOps.add(new StartWith());
+        fieldOps.add(new EndWith());
+        fieldOps.add(new InList());
+        fieldOps.add(new NotIn());
+        fieldOps.add(new IsNull());
+        fieldOps.add(new NotNull());
+        fieldOps.add(new Empty());
+        fieldOps.add(new NotEmpty());
     }
 
 
@@ -74,7 +74,7 @@ public class FieldOpPool extends DialectWrapper {
             return op.isNamed((String) key);
         }
         if (key instanceof Class) {
-            return ((Class<?>) key).isAssignableFrom(op.getClass());
+            return op.getClass() == key;
         }
         return false;
     }

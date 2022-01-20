@@ -245,8 +245,9 @@ public class DefaultParamResolver implements ParamResolver {
 		if (onlyOn.length == 0) {
 			return op;
 		}
-		for (Class<? extends FieldOp> opClass : onlyOn) {
-			if (opClass.isAssignableFrom(op.getClass())) {
+		Class<? extends FieldOp> opCls = op.getClass();
+		for (Class<? extends FieldOp> clazz : onlyOn) {
+			if (clazz == opCls) {
 				return op;
 			}
 		}

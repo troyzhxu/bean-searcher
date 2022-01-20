@@ -47,7 +47,7 @@ public interface FieldOp {
         if (another == this) {
             return true;
         }
-        return isNamed(another.name());
+        return isNamed(another.name()) || another.isNamed(name());
     }
 
     /**
