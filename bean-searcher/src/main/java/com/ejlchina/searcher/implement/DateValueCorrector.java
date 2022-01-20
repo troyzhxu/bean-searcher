@@ -3,6 +3,8 @@ package com.ejlchina.searcher.implement;
 import com.ejlchina.searcher.FieldOp;
 import com.ejlchina.searcher.operator.*;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.regex.Pattern;
 
 /**
@@ -27,11 +29,15 @@ public class DateValueCorrector {
 
 	/**
 	 * 日期参数值矫正处理
+	 * @param fieldType 字段类型
 	 * @param dateValues 参数值
 	 * @param operator 字段运算符
 	 * @return 矫正后的日期参数
 	 */
-	public Object[] correct(Object[] dateValues, FieldOp operator) {
+	public Object[] correct(Class<?> fieldType, Object[] dateValues, FieldOp operator) {
+		if (!Date.class.isAssignableFrom(fieldType) && LocalDateTime.class != fieldType) {
+			return dateValues;
+		}
 		if (operator.sameTo(lt) || operator.sameTo(ge)) {
 			for (int i = 0; i < dateValues.length; i++) {
 				dateValues[i] = dateValue(dateValues[i], true);

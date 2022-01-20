@@ -8,8 +8,6 @@ import com.ejlchina.searcher.param.FieldParam;
 import com.ejlchina.searcher.param.OrderBy;
 import com.ejlchina.searcher.util.StringUtils;
 
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -252,11 +250,10 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 	}
 
 	protected List<Object> appendCondition(StringBuilder builder, FieldMeta fieldMeta, FieldParam param) {
-		Class<?> fieldType = fieldMeta.getType();
 		Object[] values = param.getValues();
 		FieldOp operator = (FieldOp) param.getOperator();
-		if (Date.class.isAssignableFrom(fieldType) || LocalDateTime.class == fieldType) {
-			values = dateValueCorrector.correct(values, operator);
+		if (dateValueCorrector != null) {
+			values = dateValueCorrector.correct(fieldMeta.getType(), values, operator);
 		}
 		FieldOp.OpPara opPara = new FieldOp.OpPara(fieldMeta, param.isIgnoreCase(), values);
 		return operator.operate(builder, opPara);
