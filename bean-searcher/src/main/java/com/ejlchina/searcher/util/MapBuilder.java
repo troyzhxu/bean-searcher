@@ -149,11 +149,16 @@ public class MapBuilder {
      * @return MapBuilder
      */
     public MapBuilder op(String operator) {
-        if (fieldParam == null) {
-            throw new IllegalStateException("the method [ op(...) ] must go after [ field(...) ] method");
-        }
-        fieldParam.setOperator(operator);
-        return this;
+        return fieldOp(operator);
+    }
+
+    /**
+     * 指定上个字段的运算符
+     * @param operator 检索运算符
+     * @return MapBuilder
+     */
+    public MapBuilder op(Class<? extends FieldOp> operator) {
+        return fieldOp(operator);
     }
 
     /**
@@ -162,6 +167,10 @@ public class MapBuilder {
      * @return MapBuilder
      */
     public MapBuilder op(FieldOp operator) {
+        return fieldOp(operator);
+    }
+
+    private MapBuilder fieldOp(Object operator) {
         if (fieldParam == null) {
             throw new IllegalStateException("the method [ op(...) ] must go after [ field(...) ] method");
         }
