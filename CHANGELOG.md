@@ -15,7 +15,7 @@
   * 内置新增 `NotIn` / `ni` 与 `NotBetween` / `nb` 运算符
   * 内置运算符 `MultiValue` / `mv` 重命名为 `InList` / `il` (原运算符仍可使用)
   * `DefaultDbMapping` 新增 `redundantSuffixes` 属性，可配置 在实体类自动映射表名时 统一去除类名中的冗余后缀（比如 VO、DTO 等）
-  
+  * 简化 `Dialect`: 移除 `truncateToDateStr`，`truncateToDateMinuteStr` 与 `truncateToDateSecondStr` 方法
 * Bean Searcher Boot Starter
   * 新增 `bean-searcher.sql.default-mapping.redundant-suffixes` 配置项，可配置多个冗余后缀
   * 支持直接声明一个 `FieldOp` 类型的 Spring Bean 来扩展一个新的字段运算符
