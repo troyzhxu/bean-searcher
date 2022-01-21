@@ -54,12 +54,20 @@ public class FieldOpPool extends DialectWrapper {
             return null;
         }
         FieldOp fOp = cache.get(key);
+        if (fOp == null && key instanceof FieldOp) {
+            fOp = cache.get(((FieldOp) key).name());
+        }
         if (fOp != null) {
             return fOp;
         }
         for (FieldOp op: fieldOps) {
             if (isMatch(op, key)) {
-                cache.put(key, op);
+                if (key instanceof FieldOp) {
+                    // 防止用户对同一个运算符 new 了很多次导致 cache 膨胀
+                    cache.put(((FieldOp) key).name(), op);
+                } else {
+                    cache.put(key, op);
+                }
                 return op;
             }
         }
@@ -112,4 +120,3 @@ public class FieldOpPool extends DialectWrapper {
     }
 
 }
-
