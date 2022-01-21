@@ -92,19 +92,23 @@ public class FieldOpPool extends DialectWrapper {
     }
 
     public synchronized void setFieldOps(List<FieldOp> fieldOps) {
-        this.fieldOps = fieldOps;
+        this.fieldOps = Objects.requireNonNull(fieldOps);
         updateAllOpDialect();
     }
 
     public synchronized void addFieldOp(FieldOp fieldOp) {
-        this.fieldOps.add(fieldOp);
-        updateOpDialect(fieldOp);
+        if (fieldOp != null) {
+            this.fieldOps.add(fieldOp);
+            updateOpDialect(fieldOp);
+        }
     }
 
     @Override
     public synchronized void setDialect(Dialect dialect) {
-        super.setDialect(dialect);
-        updateAllOpDialect();
+        if (dialect != null) {
+            super.setDialect(dialect);
+            updateAllOpDialect();
+        }
     }
 
     private void updateAllOpDialect() {
@@ -115,7 +119,10 @@ public class FieldOpPool extends DialectWrapper {
 
     private void updateOpDialect(FieldOp op) {
         if (op instanceof DialectSensor) {
-            ((DialectSensor) op).setDialect(getDialect());
+            Dialect dialect = getDialect();
+            if (dialect != null) {
+                ((DialectSensor) op).setDialect(dialect);
+            }
         }
     }
 
