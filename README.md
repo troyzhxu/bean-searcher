@@ -40,6 +40,7 @@ English | [中文](./README.zh-CN.md)
 * Support **sql dialect extension**
 * Support **multi datasource and dynamic datasource**
 * Support **annotation omitting and customizing**
+* Support **field operator extension**
 * and so on
 
 ### ⁉️WHY
