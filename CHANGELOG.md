@@ -21,7 +21,7 @@
   * 优化字段运算符的匹配逻辑：使用严格模式
   * 优化 `Operator` 常量，使其可以直接作为 `@DbField.onlyOn` 的值（兼容以前版本，便于升级）
 * Bean Searcher Boot Starter
-  * 优化自动配置机制，使其不依赖于 `DataSourceAutoConfiguration`，只要提供了 `DataSource` 就能自动配置
+  * 优化自动配置机制，支持无 `DataSource` 自动配置
 
 ### 🐛 Bug Fixes
 
