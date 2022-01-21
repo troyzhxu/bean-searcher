@@ -5,6 +5,29 @@
 * Bean Searcher
   * 新增条件分组 与 组逻辑运算功能（TODO）
 
+# v3.3.1 @ 2022-01-21
+
+### ✨ Features
+
+* Bean Searcher
+  * `MapBuilder` 新增 `op(Class<? extends FieldOp> op)` 方法
+  * 优化 `DateValueCorrector`, 可配置支持的运算符
+* Bean Searcher Boot Starter
+  * 新增 `bean-searcher.sql.use-date-value-corrector` 配置项，可配置 是否使用 `DateValueCorrector`
+
+### ✨ Better
+
+* Bean Searcher
+  * 优化字段运算符的匹配逻辑：使用严格模式
+  * 优化 `Operator` 常量，使其可以直接作为 `@DbField.onlyOn` 的值（兼容以前版本，便于升级）
+* Bean Searcher Boot Starter
+  * 优化自动配置机制，使其不依赖于 `DataSourceAutoConfiguration`，只要提供了 `DataSource` 就能自动配置
+
+### 🐛 Bug Fixes
+
+* 修复当用户对同一个运算符 new 了很多次时会导致 `FieldOpPool` 膨胀的问题
+
+
 # v3.2.2 @ 2021-12-20
 
 ### 🌻 Better
