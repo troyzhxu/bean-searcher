@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * [字符串 | 数字 to 布尔] 字段转换器
+ * [ String | Number | Boolean to Boolean | boolean] 字段转换器
  * 与 {@link DefaultBeanReflector } 配合使用
  * @author Troy.Zhou @ 2021-11-01
  * @since v3.0.0
@@ -18,7 +18,7 @@ public class BoolFieldConvertor implements FieldConvertor.BFieldConvertor {
 
 	@Override
 	public boolean supports(FieldMeta meta, Class<?> valueType) {
-		if (valueType == String.class || Number.class.isAssignableFrom(valueType)) {
+		if (valueType == String.class || Number.class.isAssignableFrom(valueType) || Boolean.class == valueType) {
 			Class<?> targetType = meta.getType();
 			return targetType == boolean.class || targetType == Boolean.class;
 		}
@@ -27,6 +27,9 @@ public class BoolFieldConvertor implements FieldConvertor.BFieldConvertor {
 
 	@Override
 	public Object convert(FieldMeta meta, Object value) {
+		if (value instanceof Boolean) {
+			return value;
+		}
 		if (value instanceof String) {
 			String bool = (String) value;
 			for (String t: falseValues) {
