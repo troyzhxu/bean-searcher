@@ -10,7 +10,6 @@ import com.ejlchina.searcher.dialect.MySqlDialect;
 import com.ejlchina.searcher.dialect.OracleDialect;
 import com.ejlchina.searcher.implement.*;
 import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -26,7 +25,6 @@ import java.util.function.Consumer;
 
 
 @Configuration
-@ConditionalOnBean(DataSource.class)
 @EnableConfigurationProperties(BeanSearcherProperties.class)
 public class BeanSearcherAutoConfiguration {
 
@@ -104,8 +102,8 @@ public class BeanSearcherAutoConfiguration {
 
 	@Bean
 	@ConditionalOnMissingBean(SqlExecutor.class)
-	public SqlExecutor sqlExecutor(DataSource dataSource, ObjectProvider<List<NamedDataSource>> namedDataSources) {
-		DefaultSqlExecutor executor = new DefaultSqlExecutor(dataSource);
+	public SqlExecutor sqlExecutor(ObjectProvider<DataSource> dataSource, ObjectProvider<List<NamedDataSource>> namedDataSources) {
+		DefaultSqlExecutor executor = new DefaultSqlExecutor(dataSource.getIfAvailable());
 		ifAvailable(namedDataSources, ndsList -> {
 			for (NamedDataSource nds: ndsList) {
 				executor.setDataSource(nds.getName(), nds.getDataSource());
