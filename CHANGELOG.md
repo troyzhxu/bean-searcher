@@ -5,6 +5,13 @@
 * Bean Searcher
   * 新增条件分组 与 组逻辑运算功能（TODO）
 
+### ✨ Better
+
+* Bean Searcher
+  * 增强 BoolFieldConvertor，使支持 Boolean -> boolean 方向的转换
+  * 支持统一配置全局忽略的字段
+  * 支持在 @SearchBean 注解中配置忽略的字段
+
 # v3.3.1 @ 2022-01-21
 
 ### ✨ Features
