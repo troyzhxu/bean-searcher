@@ -1,9 +1,10 @@
-# Next
+# v3.2.3 @ 2022-01-30
 
-### ✨ Features
+### ✨ Better
 
 * Bean Searcher
-  * 新增条件分组 与 组逻辑运算功能（TODO）
+  * 增强 `BoolFieldConvertor`，使支持 `Boolean` -> `boolean` 方向的转换
+  * 优化 `BeanSearcherAutoConfiguration` 不再强制依赖 `DataSource`
 
 # v3.2.2 @ 2021-12-20
 
