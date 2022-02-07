@@ -12,6 +12,15 @@
   * 支持统一配置全局忽略的字段
   * 支持在 @SearchBean 注解中配置忽略的字段
 
+# v3.2.3 @ 2022-01-30
+
+### ✨ Better
+
+* Bean Searcher
+  * 增强 `BoolFieldConvertor`，使支持 `Boolean` -> `boolean` 方向的转换
+* Bean Searcher Boot Starter
+  * 优化 `BeanSearcherAutoConfiguration` 不再强制依赖 `DataSource`
+  
 # v3.3.1 @ 2022-01-21
 
 ### ✨ Features
