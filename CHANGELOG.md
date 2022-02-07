@@ -26,7 +26,8 @@
   * 增强 `BoolFieldConvertor`，使支持 `Boolean` -> `boolean` 方向的转换
 * Bean Searcher Boot Starter
   * 优化 `BeanSearcherAutoConfiguration` 不再强制依赖 `DataSource`
-  
+  * 支持在 Grails 项目中使用 `bean-searcher-boot-starter` 依赖
+
 # v3.3.1 @ 2022-01-21
 
 ### ✨ Features
@@ -36,6 +37,7 @@
   * 优化 `DateValueCorrector`, 可配置支持的运算符
 * Bean Searcher Boot Starter
   * 新增 `bean-searcher.sql.use-date-value-corrector` 配置项，可配置 是否使用 `DateValueCorrector`
+  * 支持在 Grails 项目中使用 `bean-searcher-boot-starter` 依赖
 
 ### 🌻 Better
 
