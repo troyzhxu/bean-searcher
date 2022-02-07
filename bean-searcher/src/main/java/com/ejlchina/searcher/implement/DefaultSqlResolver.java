@@ -43,48 +43,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		searchSql.setShouldQueryList(fetchType.shouldQueryList());
 
 		String fieldSelectSql = buildFieldSelectSql(beanMeta, searchParam, fetchFields, searchSql);
-
-		StringBuilder fromWhereBuilder = new StringBuilder(" from ")
-				.append(resolveTables(beanMeta.getTableSnippet(), searchParam, searchSql));
-		
-		String joinCond = beanMeta.getJoinCond();
-		boolean hasJoinCond = StringUtils.isNotBlank(joinCond);
-
-		List<FieldParam> fieldParamList = searchParam.getFieldParams();
-
-		if (hasJoinCond || fieldParamList.size() > 0) {
-			fromWhereBuilder.append(" where (");
-			if (hasJoinCond) {
-				List<SqlSnippet.Param> joinCondParams = beanMeta.getJoinCondEmbedParams();
-				if (joinCondParams != null) {
-					for (SqlSnippet.Param param : joinCondParams) {
-						Object sqlParam = searchParam.getPara(param.getName());
-						if (param.isJdbcPara()) {
-							searchSql.addListSqlParam(sqlParam);
-							searchSql.addClusterSqlParam(sqlParam);
-						} else {
-							String strParam = sqlParam != null ? sqlParam.toString() : "";
-							joinCond = joinCond.replace(param.getSqlName(), strParam);
-						}
-					}
-				}
-				fromWhereBuilder.append(joinCond).append(")");
-			}
-		}
-		for (int i = 0; i < fieldParamList.size(); i++) {
-			if (i > 0 || hasJoinCond) {
-				fromWhereBuilder.append(" and (");
-			}
-			FieldParam param = fieldParamList.get(i);
-			// 这里没取字段别名，因为在 count SQL 里，select 语句中可能没这个字段
-			FieldMeta meta = beanMeta.requireFieldMeta(param.getName());
-			List<Object> sqlParams = appendCondition(fromWhereBuilder, meta, param);
-			for (Object sqlParam : sqlParams) {
-				searchSql.addListSqlParam(sqlParam);
-				searchSql.addClusterSqlParam(sqlParam);
-			}
-			fromWhereBuilder.append(")");
-		}
+		String fromWhereSql = buildFromWhereSql(beanMeta, searchParam, searchSql);
 
 		String groupBy = beanMeta.getGroupBy();
 		String[] summaryFields = fetchType.getSummaryFields();
@@ -92,12 +51,11 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		if (StringUtils.isBlank(groupBy)) {
 			if (shouldQueryTotal || summaryFields.length > 0) {
 				if (beanMeta.isDistinct()) {
-					String originalSql = fieldSelectSql + fromWhereBuilder;
+					String originalSql = fieldSelectSql + fromWhereSql;
 					String clusterSelectSql = resolveClusterSelectSql(searchSql, summaryFields, shouldQueryTotal, originalSql);
 					String tableAlias = generateTableAlias(originalSql);
 					searchSql.setClusterSqlString(clusterSelectSql + " from (" + originalSql + ") " + tableAlias);
 				} else {
-					String fromWhereSql = fromWhereBuilder.toString();
 					String clusterSelectSql = resolveClusterSelectSql(searchSql, summaryFields, shouldQueryTotal, fromWhereSql);
 					searchSql.setClusterSqlString(clusterSelectSql + fromWhereSql);
 				}
@@ -116,9 +74,8 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 					}
 				}
 			}
-			fromWhereBuilder.append(" group by ").append(groupBy);
+			fromWhereSql = fromWhereSql + " group by " + groupBy;
 			if (shouldQueryTotal || summaryFields.length > 0) {
-				String fromWhereSql = fromWhereBuilder.toString();
 				if (beanMeta.isDistinct()) {
 					String originalSql = fieldSelectSql + fromWhereSql;
 					String clusterSelectSql = resolveClusterSelectSql(searchSql, summaryFields, shouldQueryTotal, originalSql);
@@ -132,11 +89,53 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 			}
 		}
 		if (fetchType.shouldQueryList()) {
-			PaginateSql paginateSql = buildPaginateSql(beanMeta, searchParam, fromWhereBuilder, fieldSelectSql);
+			PaginateSql paginateSql = buildPaginateSql(beanMeta, searchParam, fromWhereSql, fieldSelectSql);
 			searchSql.setListSqlString(paginateSql.getSql());
 			searchSql.addListSqlParams(paginateSql.getParams());
 		}
 		return searchSql;
+	}
+
+	protected <T> String buildFromWhereSql(BeanMeta<T> beanMeta, SearchParam searchParam, SearchSql<T> searchSql) {
+		String tables = resolveTables(beanMeta.getTableSnippet(), searchParam, searchSql);
+		StringBuilder builder = new StringBuilder(" from ").append(tables);
+		String joinCond = beanMeta.getJoinCond();
+		boolean hasJoinCond = StringUtils.isNotBlank(joinCond);
+		List<FieldParam> fieldParamList = searchParam.getFieldParams();
+		if (hasJoinCond || fieldParamList.size() > 0) {
+			builder.append(" where (");
+			if (hasJoinCond) {
+				List<SqlSnippet.Param> joinCondParams = beanMeta.getJoinCondEmbedParams();
+				if (joinCondParams != null) {
+					for (SqlSnippet.Param param : joinCondParams) {
+						Object sqlParam = searchParam.getPara(param.getName());
+						if (param.isJdbcPara()) {
+							searchSql.addListSqlParam(sqlParam);
+							searchSql.addClusterSqlParam(sqlParam);
+						} else {
+							String strParam = sqlParam != null ? sqlParam.toString() : "";
+							joinCond = joinCond.replace(param.getSqlName(), strParam);
+						}
+					}
+				}
+				builder.append(joinCond).append(")");
+			}
+		}
+		for (int i = 0; i < fieldParamList.size(); i++) {
+			if (i > 0 || hasJoinCond) {
+				builder.append(" and (");
+			}
+			FieldParam param = fieldParamList.get(i);
+			// 这里没取字段别名，因为在 count SQL 里，select 语句中可能没这个字段
+			FieldMeta meta = beanMeta.requireFieldMeta(param.getName());
+			List<Object> sqlParams = appendCondition(builder, meta, param);
+			for (Object sqlParam : sqlParams) {
+				searchSql.addListSqlParam(sqlParam);
+				searchSql.addClusterSqlParam(sqlParam);
+			}
+			builder.append(")");
+		}
+		return builder.toString();
 	}
 
 	protected <T> String buildFieldSelectSql(BeanMeta<T> beanMeta, SearchParam searchParam, List<String> fetchFields, SearchSql<T> searchSql) {
@@ -157,17 +156,16 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		return builder.toString();
 	}
 
-	protected <T> PaginateSql buildPaginateSql(BeanMeta<T> beanMeta, SearchParam searchParam, StringBuilder fromWhereSqlBuilder, String fieldSelectSql) {
+	protected <T> PaginateSql buildPaginateSql(BeanMeta<T> beanMeta, SearchParam searchParam, String fromWhereSql, String fieldSelectSql) {
 		OrderBy orderBy = searchParam.getOrderBy();
 		if (orderBy != null) {
 			FieldMeta meta = beanMeta.requireFieldMeta(orderBy.getSort());
-			fromWhereSqlBuilder.append(" order by ").append(meta.getDbAlias());
+			fromWhereSql = fromWhereSql + " order by " + meta.getDbAlias();
 			String order = orderBy.getOrder();
 			if (order != null) {
-				fromWhereSqlBuilder.append(" ").append(order);
+				fromWhereSql = fromWhereSql + " " + order;
 			}
 		}
-		String fromWhereSql = fromWhereSqlBuilder.toString();
 		return forPaginate(fieldSelectSql, fromWhereSql, searchParam.getPaging());
 	}
 
