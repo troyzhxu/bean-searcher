@@ -5,16 +5,22 @@
 * Bean Searcher
   * 新增条件分组 与 组逻辑运算功能（TODO）
 
-### ✨ Better
+### 🌻 Better
 
 * Bean Searcher
-  * 增强 BoolFieldConvertor，使支持 Boolean -> boolean 方向的转换
   * 支持统一配置全局忽略的字段
   * 支持在 @SearchBean 注解中配置忽略的字段
 
+# v3.3.2 @ 2022-02-07
+
+### 🌻 Better
+
+* Bean Searcher
+  * 增强 `BoolFieldConvertor`，使支持 `Boolean` -> `boolean` 方向的转换
+
 # v3.2.3 @ 2022-01-30
 
-### ✨ Better
+### 🌻 Better
 
 * Bean Searcher
   * 增强 `BoolFieldConvertor`，使支持 `Boolean` -> `boolean` 方向的转换
@@ -31,7 +37,7 @@
 * Bean Searcher Boot Starter
   * 新增 `bean-searcher.sql.use-date-value-corrector` 配置项，可配置 是否使用 `DateValueCorrector`
 
-### ✨ Better
+### 🌻 Better
 
 * Bean Searcher
   * 优化字段运算符的匹配逻辑：使用严格模式
