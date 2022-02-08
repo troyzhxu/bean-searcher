@@ -37,26 +37,6 @@ public class StringUtils {
 	}
 
 	/**
-	 * 首字母大写
-	 * @param str 字符串
-	 * @return String
-	 */
-	public static String firstCharToUpperCase(String str) {
-		if (str == null || str.length() == 0) {
-			return str;
-		}
-		char first = str.charAt(0);
-		if (first >= 'a' && first <= 'z') {
-			first = (char) (first - 32);
-			if (str.length() == 1) {
-				return String.valueOf(first);
-			}
-			return first + str.substring(1);
-		}
-		return str;
-	}
-
-	/**
 	 * 首字母小写
 	 * @param str 字符串
 	 * @return String
