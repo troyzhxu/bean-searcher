@@ -61,9 +61,9 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 				}
 			}
 		} else {
-			List<SqlSnippet.Param> groupParams = beanMeta.getGroupByEmbedParams();
+			List<SqlSnippet.SqlPara> groupParams = beanMeta.getGroupBySqlParas();
 			if (groupParams != null) {
-				for (SqlSnippet.Param param : groupParams) {
+				for (SqlSnippet.SqlPara param : groupParams) {
 					Object sqlParam = searchParam.getPara(param.getName());
 					if (param.isJdbcPara()) {
 						searchSql.addListSqlParam(sqlParam);
@@ -123,9 +123,9 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		if (hasJoinCond || fieldParamList.size() > 0) {
 			builder.append(" where (");
 			if (hasJoinCond) {
-				List<SqlSnippet.Param> joinCondParams = beanMeta.getJoinCondEmbedParams();
+				List<SqlSnippet.SqlPara> joinCondParams = beanMeta.getJoinCondSqlParas();
 				if (joinCondParams != null) {
-					for (SqlSnippet.Param param : joinCondParams) {
+					for (SqlSnippet.SqlPara param : joinCondParams) {
 						Object sqlParam = searchParam.getPara(param.getName());
 						if (param.isJdbcPara()) {
 							searchSql.addListSqlParam(sqlParam);
@@ -171,8 +171,8 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 
 	protected <T> String resolveTables(SqlSnippet tableSnippet, SearchParam searchParam, SearchSql<T> searchSql) {
 		String tables = tableSnippet.getSnippet();
-		List<SqlSnippet.Param> params = tableSnippet.getParams();
-		for (SqlSnippet.Param param : params) {
+		List<SqlSnippet.SqlPara> params = tableSnippet.getParams();
+		for (SqlSnippet.SqlPara param : params) {
 			Object sqlParam = searchParam.getPara(param.getName());
 			if (param.isJdbcPara()) {
 				searchSql.addListSqlParam(sqlParam);
@@ -187,8 +187,8 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 
 	protected <T> String resolveDbField(SqlSnippet dbFieldSnippet, SearchParam searchParam, SearchSql<T> searchSql, boolean distinct) {
 		String dbField = dbFieldSnippet.getSnippet();
-		List<SqlSnippet.Param> params = dbFieldSnippet.getParams();
-		for (SqlSnippet.Param param : params) {
+		List<SqlSnippet.SqlPara> params = dbFieldSnippet.getParams();
+		for (SqlSnippet.SqlPara param : params) {
 			Object sqlParam = searchParam.getPara(param.getName());
 			if (param.isJdbcPara()) {
 				searchSql.addListSqlParam(sqlParam);

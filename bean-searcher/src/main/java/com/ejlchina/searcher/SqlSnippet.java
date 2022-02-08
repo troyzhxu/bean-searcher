@@ -19,7 +19,7 @@ public class SqlSnippet {
 	/**
 	 * 内嵌参数
 	 */
-	private final List<Param> params = new ArrayList<>();
+	private final List<SqlPara> params = new ArrayList<>();
 	
 	public String getSnippet() {
 		return snippet;
@@ -29,11 +29,11 @@ public class SqlSnippet {
 		this.snippet = snippet;
 	}
 
-	public List<Param> getParams() {
+	public List<SqlPara> getParams() {
 		return params;
 	}
 
-	public void addParam(Param param) {
+	public void addParam(SqlPara param) {
 		this.params.add(param);
 	}
 
@@ -42,7 +42,7 @@ public class SqlSnippet {
 	 * @author Troy.Zhou @ 2021-10-30
 	 * @since v3.0.0
 	 */
-	public static class Param {
+	public static class SqlPara {
 
 		/**
 		 * 内嵌参数名
@@ -59,7 +59,7 @@ public class SqlSnippet {
 		 */
 		private boolean jdbcPara = false;
 
-		public Param(String sqlName) {
+		public SqlPara(String sqlName) {
 			this.sqlName = sqlName;
 		}
 

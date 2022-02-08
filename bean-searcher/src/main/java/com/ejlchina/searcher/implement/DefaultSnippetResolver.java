@@ -28,7 +28,7 @@ public class DefaultSnippetResolver implements SnippetResolver {
             if (StringUtils.isBlank(sqlName) || sqlName.length() < 2) {
                 throw new SearchException("There is a syntax error about embed param: " + fragment);
             }
-            SqlSnippet.Param param = newSqlSnippetParam(sqlName);
+            SqlSnippet.SqlPara param = newSqlSnippetParam(sqlName);
             boolean endWithPrefix = sqlName.endsWith(paramPrefix);
             if (endWithPrefix) {
                 param.setName(sqlName.substring(1, sqlName.length() - paramPrefix.length()));
@@ -59,8 +59,8 @@ public class DefaultSnippetResolver implements SnippetResolver {
         return new SqlSnippet();
     }
 
-    protected SqlSnippet.Param newSqlSnippetParam(String sqlName) {
-        return new SqlSnippet.Param(sqlName);
+    protected SqlSnippet.SqlPara newSqlSnippetParam(String sqlName) {
+        return new SqlSnippet.SqlPara(sqlName);
     }
 
     protected String getSqlName(String sqlSnippet, int index1, int index2) {

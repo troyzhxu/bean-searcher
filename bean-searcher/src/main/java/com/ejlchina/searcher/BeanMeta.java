@@ -79,7 +79,7 @@ public class BeanMeta<T> {
 		return joinCondSnippet.getSnippet();
 	}
 
-	public List<SqlSnippet.Param> getJoinCondEmbedParams() {
+	public List<SqlSnippet.SqlPara> getJoinCondSqlParas() {
 		return joinCondSnippet.getParams();
 	}
 
@@ -87,7 +87,7 @@ public class BeanMeta<T> {
 		return groupBySnippet.getSnippet();
 	}
 
-	public List<SqlSnippet.Param> getGroupByEmbedParams() {
+	public List<SqlSnippet.SqlPara> getGroupBySqlParas() {
 		return groupBySnippet.getParams();
 	}
 
