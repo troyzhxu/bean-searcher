@@ -15,14 +15,14 @@ public class OrderBy {
     public static final String ORDER_DESC = "desc";
 
     /**
-     * 排序字段（用于排序）
+     * 排序字段
      */
-    private String sort;
+    private final String sort;
 
     /**
-     * 排序方法：desc, asc（用于排序）
+     * 排序方法：desc 或 asc
      */
-    private String order;
+    private final String order;
 
     public OrderBy(String sort, String order) {
         this.sort = sort;
@@ -33,16 +33,8 @@ public class OrderBy {
         return sort;
     }
 
-    public void setSort(String sort) {
-        this.sort = sort;
-    }
-
     public String getOrder() {
         return order;
-    }
-
-    public void setOrder(String order) {
-        this.order = order;
     }
 
     public boolean isValid(Set<String> fieldSet) {
