@@ -72,5 +72,10 @@ public @interface SearchBean {
 	 */
 	InheritType inheritType() default InheritType.DEFAULT;
 
-}
+	/**
+	 * @since v3.4.0
+	 * @return 需要忽略的属性名
+	 */
+	String[] ignoreFields() default {};
 
+}

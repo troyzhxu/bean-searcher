@@ -138,16 +138,15 @@ public class DefaultDbMapping implements DbMapping {
                 }
                 return fieldSql;
             }
-        }
-        if (dbField == null && ignoreFields != null) {
+        } else if (shouldIgnore(field, ignoreFields)) {
             // 未加 @DbField 注解时，更据 ignoreFields 判断该字段是否应该被忽略
-            for (String ignoreField: ignoreFields) {
-                if (field.getName().equals(ignoreField)) {
-                    return null;
-                }
-            }
+            return null;
         }
         SearchBean bean = getSearchBean(beanClass);
+        if (bean != null && shouldIgnore(field, bean.ignoreFields())) {
+            // 判断是否在 @SearchBean 注解中忽略了该字段
+            return null;
+        }
         // 没加 @SearchBean 注解，或者加了但没给 tables 赋值，则可以自动映射列名，因为此时默认为单表映射
         if (bean == null || StringUtils.isBlank(bean.tables())) {
             // 默认使用下划线风格的字段映射
@@ -158,6 +157,17 @@ public class DefaultDbMapping implements DbMapping {
             return null;
         }
         return tab.trim() + "." + toColumnName(field);
+    }
+
+    protected boolean shouldIgnore(Field field, String[] ignoreFields) {
+        if (ignoreFields != null) {
+            for (String ignoreField : ignoreFields) {
+                if (field.getName().equals(ignoreField)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private String toColumnName(Field field) {

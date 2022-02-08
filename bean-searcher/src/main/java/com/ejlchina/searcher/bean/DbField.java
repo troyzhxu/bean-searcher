@@ -41,4 +41,3 @@ public @interface DbField {
 	Class<? extends FieldOp>[] onlyOn() default {};
 
 }
-
