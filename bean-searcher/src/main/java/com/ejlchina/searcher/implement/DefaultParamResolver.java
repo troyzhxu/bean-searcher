@@ -43,7 +43,14 @@ public class DefaultParamResolver implements ParamResolver {
 	 * 排序方法字段参数名
 	 */
 	private String orderName = "order";
-	
+
+	/**
+	 * @since v3.4.0
+	 * 排序参数名（该参数与 {@link #sortName } 和 {@link #orderName } 指定的参数互斥）
+	 * 该参数可指定多个排序字段，例如：orderBy=age:desc,dateCreate:asc
+	 */
+	private String orderByName = "orderBy";
+
 	/**
 	 * 参数名分割符
 	 * v1.2.0之前默认值是下划线："_"，自 v1.2.0之后默认值更新为中划线："-"
@@ -101,11 +108,11 @@ public class DefaultParamResolver implements ParamResolver {
 		}
 		if (fetchType.shouldQueryList()) {
 			// 只有列表检索，才需要排序
-			Object value = paraMap.get(MapBuilder.ORDER_BY);
-			if (value instanceof OrderBy) {
-				searchParam.addOrderBy((OrderBy) value);
-			} else {
-				searchParam.addOrderBy(resolveOrderBy(beanMeta.getFieldSet(), paraMap));
+			Set<String> fieldSet = beanMeta.getFieldSet();
+			for (OrderBy orderBy: resolveOrderBys(paraMap)) {
+				if (orderBy.isValid(fieldSet)) {
+					searchParam.addOrderBy(orderBy);
+				}
 			}
 		}
 		return searchParam;
@@ -255,19 +262,34 @@ public class DefaultParamResolver implements ParamResolver {
 		return null;
 	}
 
-	private OrderBy resolveOrderBy(Set<String> fieldSet, Map<String, Object> paraMap) {
+	private List<OrderBy> resolveOrderBys(Map<String, Object> paraMap) {
+		@SuppressWarnings("unchecked")
+		List<OrderBy> orderBys = (List<OrderBy>) paraMap.get(MapBuilder.ORDER_BY);
+		if (orderBys != null) {
+			return orderBys;
+		}
+		String string = ObjectUtils.string(paraMap.get(orderByName));
+		if (StringUtils.isNotBlank(string)) {
+			return Arrays.stream(string.split(","))
+					.map(str -> {
+						String[] splits = str.split(":");
+						if (splits.length == 1) {
+							return new OrderBy(splits[0], null);
+						}
+						if (splits.length == 2) {
+							return new OrderBy(splits[0], splits[1]);
+						}
+						return null;
+					})
+					.filter(Objects::nonNull)
+					.collect(Collectors.toList());
+		}
 		String sort = ObjectUtils.string(paraMap.get(sortName));
 		String order = ObjectUtils.string(paraMap.get(orderName));
-		if (sort != null && fieldSet.contains(sort)) {
-			if ("asc".equalsIgnoreCase(order)) {
-				return new OrderBy(sort, "asc");
-			}
-			if ("desc".equalsIgnoreCase(order)) {
-				return new OrderBy(sort, "desc");
-			}
-			return new OrderBy(sort, null);
+		if (sort != null) {
+			return Collections.singletonList(new OrderBy(sort, order));
 		}
-		return null;
+		return Collections.emptyList();
 	}
 
 	public PageExtractor getPageExtractor() {
@@ -308,6 +330,14 @@ public class DefaultParamResolver implements ParamResolver {
 
 	public void setOrderName(String orderName) {
 		this.orderName = Objects.requireNonNull(orderName);
+	}
+
+	public String getOrderByName() {
+		return orderByName;
+	}
+
+	public void setOrderByName(String orderByName) {
+		this.orderByName = orderByName;
 	}
 
 	public String getIgnoreCaseSuffix() {

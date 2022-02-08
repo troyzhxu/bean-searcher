@@ -176,10 +176,10 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		for (int index = 0; index < count; index++) {
 			OrderBy orderBy = orderBys.get(index);
 			FieldMeta meta = beanMeta.requireFieldMeta(orderBy.getSort());
-			builder.append(meta.getDbAlias()).append(' ');
+			builder.append(meta.getDbAlias());
 			String order = orderBy.getOrder();
-			if (order != null) {
-				builder.append(order);
+			if (StringUtils.isNotBlank(order)) {
+				builder.append(' ').append(order);
 			}
 			if (index < count - 1) {
 				builder.append(", ");

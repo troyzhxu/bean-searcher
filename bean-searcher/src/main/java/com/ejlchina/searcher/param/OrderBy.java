@@ -1,11 +1,18 @@
 package com.ejlchina.searcher.param;
 
+import com.ejlchina.searcher.util.StringUtils;
+
+import java.util.Set;
+
 /**
  * 排序参数
  * @author Troy.Zhou @ 2021-10-31
  * @since v3.0.0
  */
 public class OrderBy {
+
+    public static final String ORDER_ASC = "asc";
+    public static final String ORDER_DESC = "desc";
 
     /**
      * 排序字段（用于排序）
@@ -36,6 +43,10 @@ public class OrderBy {
 
     public void setOrder(String order) {
         this.order = order;
+    }
+
+    public boolean isValid(Set<String> fieldSet) {
+        return fieldSet.contains(sort) && (StringUtils.isBlank(order) || ORDER_ASC.equalsIgnoreCase(order) || ORDER_DESC.equalsIgnoreCase(order));
     }
 
 }
