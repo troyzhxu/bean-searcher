@@ -1,6 +1,7 @@
 package com.ejlchina.searcher.util;
 
 import com.ejlchina.searcher.FieldOp;
+import com.ejlchina.searcher.SearchException;
 import com.ejlchina.searcher.SearchParam;
 import com.ejlchina.searcher.param.FieldParam;
 import com.ejlchina.searcher.param.OrderBy;
@@ -9,10 +10,7 @@ import com.ejlchina.searcher.param.Paging;
 import java.io.Serializable;
 import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
@@ -201,6 +199,7 @@ public class MapBuilder {
 
     /**
      * 指定按某个字段排序
+     * v3.4.0 后支持调用多次，来指定多字段排序
      * @param <T> 泛型
      * @param fieldFn 字段表达式
      * @param order 排序方法：asc, desc
@@ -212,13 +211,27 @@ public class MapBuilder {
 
     /**
      * 指定按某个字段排序
-     * @param fieldName 字段名
+     * v3.4.0 后支持调用多次，来指定多字段排序
+     * @param fieldName 属性名
      * @param order 排序方法：asc, desc
      * @return MapBuilder
      */
     public MapBuilder orderBy(String fieldName, String order) {
-        if (fieldName != null && order != null) {
-            map.put(ORDER_BY, new OrderBy(fieldName, order));
+        if (fieldName != null) {
+            @SuppressWarnings("unchecked")
+            List<OrderBy> orderBys = (List<OrderBy>) map.get(ORDER_BY);
+            if (orderBys == null) {
+                orderBys = new ArrayList<>();
+                map.put(ORDER_BY, orderBys);
+            }
+            Optional<OrderBy> orderByOpt = orderBys.stream()
+                    .filter(orderBy -> fieldName.equals(orderBy.getSort()))
+                    .findAny();
+            if (orderByOpt.isPresent()) {
+                throw new SearchException("重复添加排序字段：" + fieldName + " " + order);
+            } else {
+                orderBys.add(new OrderBy(fieldName, order));
+            }
         }
         return this;
     }
