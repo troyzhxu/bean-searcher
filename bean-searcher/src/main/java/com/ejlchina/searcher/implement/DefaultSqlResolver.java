@@ -2,7 +2,6 @@ package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.dialect.Dialect;
-import com.ejlchina.searcher.dialect.Dialect.PaginateSql;
 import com.ejlchina.searcher.param.FetchType;
 import com.ejlchina.searcher.param.FieldParam;
 import com.ejlchina.searcher.param.OrderBy;
@@ -89,9 +88,9 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 			}
 		}
 		if (fetchType.shouldQueryList()) {
-			PaginateSql paginateSql = buildPaginateSql(beanMeta, searchParam, fromWhereSql, fieldSelectSql);
+			SqlWrapper<Object> paginateSql = buildPaginateSql(beanMeta, searchParam, fromWhereSql, fieldSelectSql);
 			searchSql.setListSqlString(paginateSql.getSql());
-			searchSql.addListSqlParams(paginateSql.getParams());
+			searchSql.addListSqlParams(paginateSql.getParas());
 		}
 		return searchSql;
 	}
@@ -156,7 +155,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		return builder.toString();
 	}
 
-	protected <T> PaginateSql buildPaginateSql(BeanMeta<T> beanMeta, SearchParam searchParam, String fromWhereSql, String fieldSelectSql) {
+	protected <T> SqlWrapper<Object> buildPaginateSql(BeanMeta<T> beanMeta, SearchParam searchParam, String fromWhereSql, String fieldSelectSql) {
 		OrderBy orderBy = searchParam.getOrderBy();
 		if (orderBy != null) {
 			FieldMeta meta = beanMeta.requireFieldMeta(orderBy.getSort());

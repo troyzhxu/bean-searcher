@@ -1,9 +1,7 @@
 package com.ejlchina.searcher.dialect;
 
+import com.ejlchina.searcher.SqlWrapper;
 import com.ejlchina.searcher.param.Paging;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 数据库方言
@@ -24,37 +22,8 @@ public interface Dialect {
 	 * @param fieldSelectSql 查询语句
 	 * @param fromWhereSql 条件语句
 	 * @param paging 分页参数
-	 * @return 分页Sql
+	 * @return 分页 Sql
 	 */
-	PaginateSql forPaginate(String fieldSelectSql, String fromWhereSql, Paging paging);
-
-	
-	/**
-	 * 分页 SQL
-	 * @author Troy.Zhou
-	 */
-	class PaginateSql {
-
-		private String sql;
-
-		private final List<Object> params = new ArrayList<>(2);
-
-		public String getSql() {
-			return sql;
-		}
-
-		public void setSql(String sql) {
-			this.sql = sql;
-		}
-
-		public List<Object> getParams() {
-			return params;
-		}
-
-		public void addParam(Object param) {
-			params.add(param);
-		}
-
-	}
+	SqlWrapper<Object> forPaginate(String fieldSelectSql, String fromWhereSql, Paging paging);
 
 }

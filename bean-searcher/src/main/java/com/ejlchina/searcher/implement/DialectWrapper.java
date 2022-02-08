@@ -1,5 +1,6 @@
 package com.ejlchina.searcher.implement;
 
+import com.ejlchina.searcher.SqlWrapper;
 import com.ejlchina.searcher.dialect.Dialect;
 import com.ejlchina.searcher.dialect.DialectSensor;
 import com.ejlchina.searcher.dialect.MySqlDialect;
@@ -32,7 +33,7 @@ public class DialectWrapper implements DialectSensor {
      * @param paging 分页参数
      * @return 分页Sql
      */
-    public Dialect.PaginateSql forPaginate(String fieldSelectSql, String fromWhereSql, Paging paging) {
+    public SqlWrapper<Object> forPaginate(String fieldSelectSql, String fromWhereSql, Paging paging) {
         return dialect.forPaginate(fieldSelectSql, fromWhereSql, paging);
     }
 

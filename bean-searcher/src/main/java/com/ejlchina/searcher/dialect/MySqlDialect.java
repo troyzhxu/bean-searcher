@@ -1,6 +1,7 @@
 package com.ejlchina.searcher.dialect;
 
 
+import com.ejlchina.searcher.SqlWrapper;
 import com.ejlchina.searcher.param.Paging;
 
 /**
@@ -17,17 +18,17 @@ public class MySqlDialect implements Dialect {
 	}
 	
 	@Override
-	public PaginateSql forPaginate(String fieldSelectSql, String fromWhereSql, Paging paging) {
-		PaginateSql paginateSql = new PaginateSql();
+	public SqlWrapper<Object> forPaginate(String fieldSelectSql, String fromWhereSql, Paging paging) {
+		SqlWrapper<Object> wrapper = new SqlWrapper<>();
 		StringBuilder ret = new StringBuilder();
 		ret.append(fieldSelectSql).append(fromWhereSql);
 		if (paging != null) {
 			ret.append(" limit ?, ?");
-			paginateSql.addParam(paging.getOffset());
-			paginateSql.addParam(paging.getSize());
+			wrapper.addPara(paging.getOffset());
+			wrapper.addPara(paging.getSize());
 		}
-		paginateSql.setSql(ret.toString());
-		return paginateSql;
+		wrapper.setSql(ret.toString());
+		return wrapper;
 	}
 
 }
