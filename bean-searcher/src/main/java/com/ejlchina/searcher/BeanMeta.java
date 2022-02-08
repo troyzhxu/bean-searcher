@@ -124,11 +124,8 @@ public class BeanMeta<T> {
 	 * @return SQL 片段
 	 */
 	public String getFieldSql(String field) {
-		FieldMeta meta = getFieldMeta(field);
-		if (meta != null) {
-			return meta.getFieldSql().getSql();
-		}
-		return null;
+		FieldMeta meta = requireFieldMeta(field);
+		return meta.getFieldSql().getSql();
 	}
 
 	public Collection<FieldMeta> getFieldMetas() {

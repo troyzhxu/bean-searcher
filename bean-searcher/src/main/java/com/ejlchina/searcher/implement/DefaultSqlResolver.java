@@ -23,7 +23,6 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 	 */
 	private DateValueCorrector dateValueCorrector = new DateValueCorrector();
 	
-	
 	public DefaultSqlResolver() {
 	}
 
@@ -41,68 +40,57 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		searchSql.setShouldQueryCluster(fetchType.shouldQueryCluster());
 		searchSql.setShouldQueryList(fetchType.shouldQueryList());
 
-		SqlWrapper<Object> fieldSelectSqlWrapper = buildFieldSelectSql(beanMeta, searchParam, fetchFields);
-		searchSql.addListSqlParams(fieldSelectSqlWrapper.getParas());
-		// 只有在 distinct 条件，聚族查询 SQL 里才会出现 字段查询 语句，才需要将 内嵌参数放到 聚族参数里
-		if (beanMeta.isDistinct()) {
-			searchSql.addClusterSqlParams(fieldSelectSqlWrapper.getParas());
+		if (fetchType.shouldQueryTotal()) {
+			searchSql.setCountAlias(getCountAlias(beanMeta));
 		}
-		String fieldSelectSql = fieldSelectSqlWrapper.getSql();
+		String[] summaryFields = fetchType.getSummaryFields();
+		for (String summaryField : summaryFields) {
+			FieldMeta fieldMeta = beanMeta.getFieldMeta(summaryField);
+			if (fieldMeta == null) {
+				throw new SearchException("求和属性【" + summaryField + "】没有和数据库字段做映射，请检查该属性是否被 @DbField 正确注解！");
+			}
+			searchSql.addSummaryAlias(getSummaryAlias(fieldMeta));
+		}
 
+		SqlWrapper<Object> fieldSelectSqlWrapper = buildFieldSelectSql(beanMeta, searchParam, fetchFields);
 		SqlWrapper<Object> fromWhereSqlWrapper = buildFromWhereSql(beanMeta, searchParam);
-		searchSql.addListSqlParams(fromWhereSqlWrapper.getParas());
-		searchSql.addClusterSqlParams(fromWhereSqlWrapper.getParas());
+		String fieldSelectSql = fieldSelectSqlWrapper.getSql();
 		String fromWhereSql = fromWhereSqlWrapper.getSql();
 
-		String groupBy = beanMeta.getGroupBy();
-		String[] summaryFields = fetchType.getSummaryFields();
-		boolean shouldQueryTotal = fetchType.shouldQueryTotal();
-		if (StringUtils.isBlank(groupBy)) {
-			if (shouldQueryTotal || summaryFields.length > 0) {
-				if (beanMeta.isDistinct()) {
-					String originalSql = fieldSelectSql + fromWhereSql;
-					String clusterSelectSql = resolveClusterSelectSql(searchSql, summaryFields, shouldQueryTotal, originalSql);
-					String tableAlias = generateTableAlias(originalSql);
-					searchSql.setClusterSqlString(clusterSelectSql + " from (" + originalSql + ") " + tableAlias);
-				} else {
-					String clusterSelectSql = resolveClusterSelectSql(searchSql, summaryFields, shouldQueryTotal, fromWhereSql);
-					searchSql.setClusterSqlString(clusterSelectSql + fromWhereSql);
-				}
+		if (fetchType.shouldQueryTotal() || summaryFields.length > 0) {
+			List<String> summaryAliases = searchSql.getSummaryAliases();
+			String countAlias = searchSql.getCountAlias();
+			String clusterSql = buildClusterSql(beanMeta, summaryFields, summaryAliases, countAlias, fieldSelectSql, fromWhereSql);
+			searchSql.setClusterSqlString(clusterSql);
+			// 只有在 distinct 条件下，聚族查询 SQL 里才会出现 字段查询 语句，才需要将 字段内嵌参数放到 聚族参数里
+			if (beanMeta.isDistinct()) {
+				searchSql.addClusterSqlParams(fieldSelectSqlWrapper.getParas());
 			}
-		} else {
-			List<SqlSnippet.SqlPara> groupParams = beanMeta.getGroupBySqlParas();
-			if (groupParams != null) {
-				for (SqlSnippet.SqlPara param : groupParams) {
-					Object sqlParam = searchParam.getPara(param.getName());
-					if (param.isJdbcPara()) {
-						searchSql.addListSqlParam(sqlParam);
-						searchSql.addClusterSqlParam(sqlParam);
-					} else {
-						String strParam = sqlParam != null ? sqlParam.toString() : "";
-						groupBy = groupBy.replace(param.getSqlName(), strParam);
-					}
-				}
-			}
-			fromWhereSql = fromWhereSql + " group by " + groupBy;
-			if (shouldQueryTotal || summaryFields.length > 0) {
-				if (beanMeta.isDistinct()) {
-					String originalSql = fieldSelectSql + fromWhereSql;
-					String clusterSelectSql = resolveClusterSelectSql(searchSql, summaryFields, shouldQueryTotal, originalSql);
-					String tableAlias = generateTableAlias(originalSql);
-					searchSql.setClusterSqlString(clusterSelectSql + " from (" + originalSql + ") " + tableAlias);
-				} else {
-					String clusterSelectSql = resolveClusterSelectSql(searchSql, summaryFields, shouldQueryTotal, fromWhereSql);
-					String tableAlias = generateTableAlias(fromWhereSql);
-					searchSql.setClusterSqlString(clusterSelectSql + " from (select count(*) " + fromWhereSql + ") " + tableAlias);
-				}
-			}
+			searchSql.addClusterSqlParams(fromWhereSqlWrapper.getParas());
 		}
 		if (fetchType.shouldQueryList()) {
-			SqlWrapper<Object> listSql = buildListSql(beanMeta, searchParam, fromWhereSql, fieldSelectSql);
+			SqlWrapper<Object> listSql = buildListSql(beanMeta, searchParam, fieldSelectSql, fromWhereSql);
 			searchSql.setListSqlString(listSql.getSql());
+			searchSql.addListSqlParams(fieldSelectSqlWrapper.getParas());
+			searchSql.addListSqlParams(fromWhereSqlWrapper.getParas());
 			searchSql.addListSqlParams(listSql.getParas());
 		}
 		return searchSql;
+	}
+
+	private <T> String buildClusterSql(BeanMeta<T> beanMeta, String[] summaryFields, List<String> summaryAliases, String countAlias, String fieldSelectSql, String fromWhereSql) {
+		if (beanMeta.isDistinct()) {
+			String clusterSelectSql = resolveClusterSelectSql(beanMeta, summaryFields, summaryAliases, countAlias);
+			String originalSql = fieldSelectSql + fromWhereSql;
+			String tableAlias = getTableAlias(beanMeta);
+			return clusterSelectSql + " from (" + originalSql + ") " + tableAlias;
+		}
+		String clusterSelectSql = resolveClusterSelectSql(beanMeta, summaryFields, summaryAliases, countAlias);
+		if (StringUtils.isBlank(beanMeta.getGroupBy())) {
+			return clusterSelectSql + fromWhereSql;
+		}
+		String tableAlias = getTableAlias(beanMeta);
+		return clusterSelectSql + " from (select count(*) " + fromWhereSql + ") " + tableAlias;
 	}
 
 	protected <T> SqlWrapper<Object> buildFieldSelectSql(BeanMeta<T> beanMeta, SearchParam searchParam, List<String> fetchFields) {
@@ -160,11 +148,27 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 			sqlWrapper.addParas(appendCondition(builder, meta, param));
 			builder.append(")");
 		}
+		String groupBy = beanMeta.getGroupBy();
+		if (StringUtils.isNotBlank(groupBy)) {
+			List<SqlSnippet.SqlPara> groupParams = beanMeta.getGroupBySqlParas();
+			if (groupParams != null) {
+				for (SqlSnippet.SqlPara param : groupParams) {
+					Object sqlParam = searchParam.getPara(param.getName());
+					if (param.isJdbcPara()) {
+						sqlWrapper.addPara(sqlParam);
+					} else {
+						String strParam = sqlParam != null ? sqlParam.toString() : "";
+						groupBy = groupBy.replace(param.getSqlName(), strParam);
+					}
+				}
+			}
+			builder.append(" group by ").append(groupBy);
+		}
 		sqlWrapper.setSql(builder.toString());
 		return sqlWrapper;
 	}
 
-	protected <T> SqlWrapper<Object> buildListSql(BeanMeta<T> beanMeta, SearchParam searchParam, String fromWhereSql, String fieldSelectSql) {
+	protected <T> SqlWrapper<Object> buildListSql(BeanMeta<T> beanMeta, SearchParam searchParam, String fieldSelectSql, String fromWhereSql) {
 		OrderBy orderBy = searchParam.getOrderBy();
 		if (orderBy != null) {
 			FieldMeta meta = beanMeta.requireFieldMeta(orderBy.getSort());
@@ -212,53 +216,39 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 	}
 
 
-	protected <T> String resolveClusterSelectSql(SearchSql<T> searchSql, String[] summaryFields,
-				boolean shouldQueryTotal, String originalSql) {
-		StringBuilder clusterSelectSqlBuilder = new StringBuilder("select ");
-		if (shouldQueryTotal) {
-			String countAlias = generateColumnAlias("count", originalSql);
-			clusterSelectSqlBuilder.append("count(*) ").append(countAlias);
-			searchSql.setCountAlias(countAlias);
-		}
-		if (summaryFields != null) {
-			BeanMeta<T> beanMeta = searchSql.getBeanMeta();
-			if (shouldQueryTotal && summaryFields.length > 0) {
-				clusterSelectSqlBuilder.append(", ");
-			}
-			for (int i = 0; i < summaryFields.length; i++) {
-				String summaryField = summaryFields[i];
-				String summaryAlias = generateColumnAlias(summaryField, originalSql);
-				String fieldSql = beanMeta.getFieldSql(summaryField);
-				if (fieldSql == null) {
-					throw new SearchException("求和属性【" + summaryField + "】没有和数据库字段做映射，请检查该属性是否被 @DbField 正确注解！");
-				}
-				clusterSelectSqlBuilder.append("sum(").append(fieldSql)
-					.append(") ").append(summaryAlias);
-				if (i < summaryFields.length - 1) {
-					clusterSelectSqlBuilder.append(", ");
-				}
-				searchSql.addSummaryAlias(summaryAlias);
+	protected <T> String resolveClusterSelectSql(BeanMeta<T> beanMeta, String[] summaryFields, List<String> summaryAliases, String countAlias) {
+		StringBuilder builder = new StringBuilder("select ");
+		if (countAlias != null) {
+			builder.append("count(*) ").append(countAlias);
+			if (summaryFields.length > 0) {
+				builder.append(", ");
 			}
 		}
-		return clusterSelectSqlBuilder.toString();
-	}
-
-	protected String generateTableAlias(String originalSql) {
-		return generateAlias("t_", originalSql);
-	}
-
-	protected String generateColumnAlias(String seed, String originalSql) {
-		// 注意：Oracle 数据库的别名不能以下划线开头
-		return generateAlias("s_" + seed, originalSql);
-	}
-
-	protected String generateAlias(String seed, String originalSql) {
-		int index = 0;
-		String tableAlias = seed;
-		while (originalSql.contains(tableAlias)) {
-			tableAlias = seed + index++;
+		for (int i = 0; i < summaryFields.length; i++) {
+			builder.append("sum(")
+					.append(beanMeta.getFieldSql(summaryFields[i]))
+					.append(") ")
+					.append(summaryAliases.get(i));
+			if (i < summaryFields.length - 1) {
+				builder.append(", ");
+			}
 		}
-		return tableAlias;
+		return builder.toString();
+	}
+
+	protected <T> String getCountAlias(BeanMeta<T> beanMeta) {
+		// 注意：Oracle 数据库的别名不能以下划线开头，留参 beanMeta 方便用户重写该方法
+		return "s_count";
+	}
+
+	protected String getSummaryAlias(FieldMeta fieldMeta) {
+		// 注意：Oracle 数据库的别名不能以下划线开头，留参 fieldMeta 方便用户重写该方法
+		return fieldMeta.getDbAlias() + "_sum_";
+	}
+
+	protected <T> String getTableAlias(BeanMeta<T> beanMeta) {
+		// 注意：Oracle 数据库的别名不能以下划线开头，留参 beanMeta 方便用户重写该方法
+		return "t_";
 	}
 
 	protected List<Object> appendCondition(StringBuilder builder, FieldMeta fieldMeta, FieldParam param) {
