@@ -35,7 +35,6 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 	public <T> SearchSql<T> resolve(BeanMeta<T> beanMeta, SearchParam searchParam) {
 		List<String> fetchFields = searchParam.getFetchFields();
 		SearchSql<T> searchSql = new SearchSql<>(beanMeta, fetchFields);
-
 		FetchType fetchType = searchParam.getFetchType();
 		searchSql.setShouldQueryCluster(fetchType.shouldQueryCluster());
 		searchSql.setShouldQueryList(fetchType.shouldQueryList());
@@ -51,7 +50,6 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 			}
 			searchSql.addSummaryAlias(getSummaryAlias(fieldMeta));
 		}
-
 		SqlWrapper<Object> fieldSelectSqlWrapper = buildFieldSelectSql(beanMeta, searchParam, fetchFields);
 		SqlWrapper<Object> fromWhereSqlWrapper = buildFromWhereSql(beanMeta, searchParam);
 		String fieldSelectSql = fieldSelectSqlWrapper.getSql();
@@ -169,16 +167,25 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 	}
 
 	protected <T> SqlWrapper<Object> buildListSql(BeanMeta<T> beanMeta, SearchParam searchParam, String fieldSelectSql, String fromWhereSql) {
-		OrderBy orderBy = searchParam.getOrderBy();
-		if (orderBy != null) {
+		StringBuilder builder = new StringBuilder(fromWhereSql);
+		List<OrderBy> orderBys = searchParam.getOrderBys();
+		int count = orderBys.size();
+		if (count > 0) {
+			builder.append(" order by ");
+		}
+		for (int index = 0; index < count; index++) {
+			OrderBy orderBy = orderBys.get(index);
 			FieldMeta meta = beanMeta.requireFieldMeta(orderBy.getSort());
-			fromWhereSql = fromWhereSql + " order by " + meta.getDbAlias();
+			builder.append(meta.getDbAlias()).append(' ');
 			String order = orderBy.getOrder();
 			if (order != null) {
-				fromWhereSql = fromWhereSql + " " + order;
+				builder.append(order);
+			}
+			if (index < count - 1) {
+				builder.append(", ");
 			}
 		}
-		return forPaginate(fieldSelectSql, fromWhereSql, searchParam.getPaging());
+		return forPaginate(fieldSelectSql, builder.toString(), searchParam.getPaging());
 	}
 
 	protected SqlWrapper<Object> resolveTableSql(SqlSnippet tableSnippet, SearchParam searchParam) {

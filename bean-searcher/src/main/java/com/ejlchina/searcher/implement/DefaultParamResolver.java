@@ -103,9 +103,9 @@ public class DefaultParamResolver implements ParamResolver {
 			// 只有列表检索，才需要排序
 			Object value = paraMap.get(MapBuilder.ORDER_BY);
 			if (value instanceof OrderBy) {
-				searchParam.setOrderBy((OrderBy) value);
+				searchParam.addOrderBy((OrderBy) value);
 			} else {
-				searchParam.setOrderBy(resolveOrderBy(beanMeta.getFieldSet(), paraMap));
+				searchParam.addOrderBy(resolveOrderBy(beanMeta.getFieldSet(), paraMap));
 			}
 		}
 		return searchParam;

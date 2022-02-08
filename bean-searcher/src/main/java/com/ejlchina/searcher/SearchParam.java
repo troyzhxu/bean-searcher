@@ -5,6 +5,7 @@ import com.ejlchina.searcher.param.FieldParam;
 import com.ejlchina.searcher.param.OrderBy;
 import com.ejlchina.searcher.param.Paging;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -36,14 +37,14 @@ public class SearchParam {
 	private final List<FieldParam> fieldParams;
 
 	/**
+	 * 排序参数
+	 */
+	private final List<OrderBy> orderBys = new ArrayList<>();
+
+	/**
 	 * 分页参数
 	 */
 	private Paging paging;
-
-	/**
-	 * 排序参数
-	 */
-	private OrderBy orderBy;
 
 
 	public SearchParam(Map<String, Object> paraMap, FetchType fetchType, List<String> fetchFields, List<FieldParam> fieldParams) {
@@ -90,12 +91,12 @@ public class SearchParam {
 		this.paging = paging;
 	}
 
-	public OrderBy getOrderBy() {
-		return orderBy;
+	public void addOrderBy(OrderBy orderBy) {
+		orderBys.add(orderBy);
 	}
 
-	public void setOrderBy(OrderBy orderBy) {
-		this.orderBy = orderBy;
+	public List<OrderBy> getOrderBys() {
+		return orderBys;
 	}
 
 }
