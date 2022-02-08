@@ -22,17 +22,20 @@ public class DefaultDbMapping implements DbMapping {
     @SuppressWarnings("unchecked")
     private static final Class<FieldOp>[] EMPTY_OPERATORS = new Class[0];
 
-    // 表名前缀
+    // 表名前缀（since v3.1.0）
     private String tablePrefix;
 
-    // 表与列是否是大写风格
+    // 表与列是否是大写风格（since v3.1.0）
     private boolean upperCase = false;
 
-    // 默认继承类型
+    // 默认继承类型（since v3.2.0）
     private InheritType defaultInheritType = InheritType.ALL;
 
-    // 冗余的后缀（如果类名已这些后缀结尾，将自动去掉这些后缀）
+    // 冗余的后缀（如果类名已这些后缀结尾，将自动去掉这些后缀）（since v3.3.0）
     private String[] redundantSuffixes;
+
+    // 全局忽略的实体类属性名（since v3.4.0）
+    private String[] ignoreFields;
 
     @Override
     public InheritType inheritType(Class<?> beanClass) {
@@ -136,6 +139,14 @@ public class DefaultDbMapping implements DbMapping {
                 return fieldSql;
             }
         }
+        if (dbField == null && ignoreFields != null) {
+            // 未加 @DbField 注解时，更据 ignoreFields 判断该字段是否应该被忽略
+            for (String ignoreField: ignoreFields) {
+                if (field.getName().equals(ignoreField)) {
+                    return null;
+                }
+            }
+        }
         SearchBean bean = getSearchBean(beanClass);
         // 没加 @SearchBean 注解，或者加了但没给 tables 赋值，则可以自动映射列名，因为此时默认为单表映射
         if (bean == null || StringUtils.isBlank(bean.tables())) {
@@ -186,6 +197,14 @@ public class DefaultDbMapping implements DbMapping {
 
     public void setRedundantSuffixes(String[] redundantSuffixes) {
         this.redundantSuffixes = redundantSuffixes;
+    }
+
+    public String[] getIgnoreFields() {
+        return ignoreFields;
+    }
+
+    public void setIgnoreFields(String[] ignoreFields) {
+        this.ignoreFields = ignoreFields;
     }
 
 }
