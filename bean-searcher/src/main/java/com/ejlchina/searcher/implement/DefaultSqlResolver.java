@@ -96,6 +96,24 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		return searchSql;
 	}
 
+	protected <T> String buildFieldSelectSql(BeanMeta<T> beanMeta, SearchParam searchParam, List<String> fetchFields, SearchSql<T> searchSql) {
+		StringBuilder builder = new StringBuilder("select ");
+		if (beanMeta.isDistinct()) {
+			builder.append("distinct ");
+		}
+		int fieldCount = fetchFields.size();
+		for (int i = 0; i < fieldCount; i++) {
+			String field = fetchFields.get(i);
+			FieldMeta meta = beanMeta.requireFieldMeta(field);
+			String dbField = resolveDbField(meta.getFieldSql(), searchParam, searchSql, beanMeta.isDistinct());
+			builder.append(dbField).append(" ").append(meta.getDbAlias());
+			if (i < fieldCount - 1) {
+				builder.append(", ");
+			}
+		}
+		return builder.toString();
+	}
+
 	protected <T> String buildFromWhereSql(BeanMeta<T> beanMeta, SearchParam searchParam, SearchSql<T> searchSql) {
 		String tables = resolveTables(beanMeta.getTableSnippet(), searchParam, searchSql);
 		StringBuilder builder = new StringBuilder(" from ").append(tables);
@@ -134,24 +152,6 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 				searchSql.addClusterSqlParam(sqlParam);
 			}
 			builder.append(")");
-		}
-		return builder.toString();
-	}
-
-	protected <T> String buildFieldSelectSql(BeanMeta<T> beanMeta, SearchParam searchParam, List<String> fetchFields, SearchSql<T> searchSql) {
-		StringBuilder builder = new StringBuilder("select ");
-		if (beanMeta.isDistinct()) {
-			builder.append("distinct ");
-		}
-		int fieldCount = fetchFields.size();
-		for (int i = 0; i < fieldCount; i++) {
-			String field = fetchFields.get(i);
-			FieldMeta meta = beanMeta.requireFieldMeta(field);
-			String dbField = resolveDbField(meta.getFieldSql(), searchParam, searchSql, beanMeta.isDistinct());
-			builder.append(dbField).append(" ").append(meta.getDbAlias());
-			if (i < fieldCount - 1) {
-				builder.append(", ");
-			}
 		}
 		return builder.toString();
 	}
