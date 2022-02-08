@@ -170,8 +170,8 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 	}
 
 	protected <T> String resolveTables(SqlSnippet tableSnippet, SearchParam searchParam, SearchSql<T> searchSql) {
-		String tables = tableSnippet.getSnippet();
-		List<SqlSnippet.SqlPara> params = tableSnippet.getParams();
+		String tables = tableSnippet.getSql();
+		List<SqlSnippet.SqlPara> params = tableSnippet.getParas();
 		for (SqlSnippet.SqlPara param : params) {
 			Object sqlParam = searchParam.getPara(param.getName());
 			if (param.isJdbcPara()) {
@@ -186,8 +186,8 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 	}
 
 	protected <T> String resolveDbField(SqlSnippet dbFieldSnippet, SearchParam searchParam, SearchSql<T> searchSql, boolean distinct) {
-		String dbField = dbFieldSnippet.getSnippet();
-		List<SqlSnippet.SqlPara> params = dbFieldSnippet.getParams();
+		String dbField = dbFieldSnippet.getSql();
+		List<SqlSnippet.SqlPara> params = dbFieldSnippet.getParas();
 		for (SqlSnippet.SqlPara param : params) {
 			Object sqlParam = searchParam.getPara(param.getName());
 			if (param.isJdbcPara()) {

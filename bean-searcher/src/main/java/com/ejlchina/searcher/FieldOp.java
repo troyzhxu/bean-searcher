@@ -70,7 +70,7 @@ public interface FieldOp {
         }
 
         public String getDbField() {
-            return fieldMeta.getFieldSql().getSnippet();
+            return fieldMeta.getFieldSql().getSql();
         }
 
         public boolean isIgnoreCase() {

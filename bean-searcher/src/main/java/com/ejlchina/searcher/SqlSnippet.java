@@ -1,41 +1,11 @@
 package com.ejlchina.searcher;
 
-import java.util.ArrayList;
-import java.util.List;
-
-
 /**
  * SQL 片段
  * @author Troy.Zhou @ 2021-10-30
  * @since v3.0.0
  */
-public class SqlSnippet {
-
-	/**
-	 * SQL 片段
-	 */
-	private String snippet;
-
-	/**
-	 * 内嵌参数
-	 */
-	private final List<SqlPara> params = new ArrayList<>();
-	
-	public String getSnippet() {
-		return snippet;
-	}
-
-	public void setSnippet(String snippet) {
-		this.snippet = snippet;
-	}
-
-	public List<SqlPara> getParams() {
-		return params;
-	}
-
-	public void addParam(SqlPara param) {
-		this.params.add(param);
-	}
+public class SqlSnippet extends SqlWrapper<SqlSnippet.SqlPara> {
 
 	/**
 	 * 内嵌参数

@@ -48,10 +48,10 @@ public class DefaultSnippetResolver implements SnippetResolver {
                 // sqlSnippet 长度变短，寻找下标也该相应提前
                 nextIndex = nextIndex - sqlName.length() + 1;
             }
-            sqlSnippet.addParam(param);
+            sqlSnippet.addPara(param);
             index1 = fragment.indexOf(paramPrefix, nextIndex);
         }
-        sqlSnippet.setSnippet(fragment);
+        sqlSnippet.setSql(fragment);
         return sqlSnippet;
     }
 

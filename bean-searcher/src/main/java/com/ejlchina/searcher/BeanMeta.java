@@ -76,19 +76,19 @@ public class BeanMeta<T> {
 	}
 
 	public String getJoinCond() {
-		return joinCondSnippet.getSnippet();
+		return joinCondSnippet.getSql();
 	}
 
 	public List<SqlSnippet.SqlPara> getJoinCondSqlParas() {
-		return joinCondSnippet.getParams();
+		return joinCondSnippet.getParas();
 	}
 
 	public String getGroupBy() {
-		return groupBySnippet.getSnippet();
+		return groupBySnippet.getSql();
 	}
 
 	public List<SqlSnippet.SqlPara> getGroupBySqlParas() {
-		return groupBySnippet.getParams();
+		return groupBySnippet.getParas();
 	}
 
 	public boolean isDistinct() {
@@ -126,7 +126,7 @@ public class BeanMeta<T> {
 	public String getFieldSql(String field) {
 		FieldMeta meta = getFieldMeta(field);
 		if (meta != null) {
-			return meta.getFieldSql().getSnippet();
+			return meta.getFieldSql().getSql();
 		}
 		return null;
 	}
