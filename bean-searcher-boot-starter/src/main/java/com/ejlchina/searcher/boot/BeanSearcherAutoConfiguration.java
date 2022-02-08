@@ -187,6 +187,7 @@ public class BeanSearcherAutoConfiguration {
 		mapping.setTablePrefix(conf.getTablePrefix());
 		mapping.setUpperCase(conf.isUpperCase());
 		mapping.setRedundantSuffixes(conf.getRedundantSuffixes());
+		mapping.setIgnoreFields(conf.getIgnoreFields());
 		return mapping;
 	}
 

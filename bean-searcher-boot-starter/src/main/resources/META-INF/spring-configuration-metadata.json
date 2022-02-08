@@ -218,6 +218,13 @@
       "type": "java.lang.String[]"
     },
     {
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Sql$DefaultMapping",
+      "defaultValue": null,
+      "name": "bean-searcher.sql.default-mapping.ignore-fields",
+      "description": "全局忽略的实体类属性名列表",
+      "type": "java.lang.String[]"
+    },
+    {
       "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$FieldConvertor",
       "defaultValue": true,
       "name": "bean-searcher.field-convertor.use-number",

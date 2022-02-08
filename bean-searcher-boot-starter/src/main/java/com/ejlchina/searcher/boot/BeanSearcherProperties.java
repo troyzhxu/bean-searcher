@@ -283,6 +283,7 @@ public class BeanSearcherProperties {
 			private boolean upperCase = false;
 			private String tablePrefix = null;
 			private String[] redundantSuffixes;
+			private String[] ignoreFields;
 
 			public boolean isUpperCase() {
 				return upperCase;
@@ -306,6 +307,14 @@ public class BeanSearcherProperties {
 
 			public void setRedundantSuffixes(String[] redundantSuffixes) {
 				this.redundantSuffixes = redundantSuffixes;
+			}
+
+			public String[] getIgnoreFields() {
+				return ignoreFields;
+			}
+
+			public void setIgnoreFields(String[] ignoreFields) {
+				this.ignoreFields = ignoreFields;
 			}
 
 		}
