@@ -38,4 +38,8 @@ public class SqlWrapper<T> {
         this.paras.add(para);
     }
 
+    public void addParas(List<T> paras) {
+        this.paras.addAll(paras);
+    }
+
 }

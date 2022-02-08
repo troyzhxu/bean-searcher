@@ -90,7 +90,7 @@ public class SearchSql<T> {
 	public void addListSqlParam(Object sqlParam) {
 		this.listSqlParams.add(sqlParam);
 	}
-	
+
 	public void addListSqlParams(List<Object> sqlParams) {
 		this.listSqlParams.addAll(sqlParams);
 	}
@@ -110,7 +110,11 @@ public class SearchSql<T> {
 	public void addClusterSqlParam(Object sqlParam) {
 		this.clusterSqlParams.add(sqlParam);
 	}
-	
+
+	public void addClusterSqlParams(List<Object> sqlParams) {
+		this.clusterSqlParams.addAll(sqlParams);
+	}
+
 	public String getCountAlias() {
 		return countAlias;
 	}
