@@ -1,3 +1,16 @@
+# v3.2.4 @ 2022-02-11
+
+### ✨ Better
+
+* Bean Searcher Boot Starter
+  * 去掉无用的配置提示
+
+### 🐛 Bug Fixes
+
+* 修复 `DateFieldConvertor` 无法将 `java.sql.Date` 转换为 `LocalDate / LocalDateTime` 的问题
+* 修复 `DateFieldConvertor` 转换 `LocalDate / LocalDateTime` 时会产生时区偏差的问题
+* 修复 `DateFormatFieldConvertor` 无法格式化 `java.sql.Date/java.sql.Time` 的问题
+
 # v3.1.4 @ 2022-02-11
 
 ### ✨ Better
