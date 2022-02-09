@@ -53,31 +53,6 @@
       "type": "java.lang.Boolean"
     },
     {
-      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$FieldConvertorProps",
-      "name": "bean-searcher.field-convertor.falses",
-      "description": "字段假值（False）映射字符，可配多个",
-      "type": "java.lang.String[]"
-    },
-    {
-      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$FieldConvertorProps",
-      "defaultValue": true,
-      "name": "bean-searcher.field-convertor.ignore-case",
-      "description": "匹配映射字符时，是否忽略大小写",
-      "type": "java.lang.Boolean"
-    },
-    {
-      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$FieldConvertorProps",
-      "name": "bean-searcher.field-convertor.trues",
-      "description": "字段真值（True）映射字符，可配多个",
-      "type": "java.lang.String[]"
-    },
-    {
-      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties",
-      "name": "bean-searcher.packages",
-      "description": "Bean Searcher 需要扫描的包，可多个",
-      "type": "java.lang.String[]"
-    },
-    {
       "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Params",
       "defaultValue": "ic",
       "name": "bean-searcher.params.ignore-case-key",
@@ -103,6 +78,20 @@
       "defaultValue": "selectExclude",
       "name": "bean-searcher.params.select-exclude",
       "description": "用于指定 Select 需要排除的字段的参数名",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Params",
+      "defaultValue": "-",
+      "name": "bean-searcher.params.separator",
+      "description": "字段参数名分隔符",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Params",
+      "defaultValue": "sort",
+      "name": "bean-searcher.params.sort",
+      "description": "排序字段参数名",
       "type": "java.lang.String"
     },
     {
@@ -160,27 +149,6 @@
       "name": "bean-searcher.params.pagination.type",
       "description": "分页类型:page 和  offset",
       "type": "java.lang.String"
-    },
-    {
-      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Params",
-      "defaultValue": "-",
-      "name": "bean-searcher.params.separator",
-      "description": "字段参数名分隔符",
-      "type": "java.lang.String"
-    },
-    {
-      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Params",
-      "defaultValue": "sort",
-      "name": "bean-searcher.params.sort",
-      "description": "排序字段参数名",
-      "type": "java.lang.String"
-    },
-    {
-      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties",
-      "defaultValue": 1,
-      "name": "bean-searcher.prifex-separator-length",
-      "description": "前缀分隔符长度",
-      "type": "java.lang.Integer"
     },
     {
       "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Sql",
