@@ -13,7 +13,6 @@ import java.lang.annotation.*;
  * @author Troy.Zhou @ 2017-03-20
  * @since v1.0.0
  */
-@Inherited
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD})
 public @interface DbField {
