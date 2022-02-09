@@ -91,14 +91,21 @@
       "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Params",
       "defaultValue": "sort",
       "name": "bean-searcher.params.sort",
-      "description": "排序字段参数名",
+      "description": "排序字段参数名（该参数只支持一个字段）",
       "type": "java.lang.String"
     },
     {
       "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Params",
       "defaultValue": "order",
       "name": "bean-searcher.params.order",
-      "description": "排序方法参数名",
+      "description": "排序方法参数名（该参数只支持一个字段）",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Params",
+      "defaultValue": "orderBy",
+      "name": "bean-searcher.params.order-by",
+      "description": "排序参数名（该参数支持多个字段）",
       "type": "java.lang.String"
     },
     {

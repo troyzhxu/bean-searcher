@@ -10,19 +10,13 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "bean-searcher")
 public class BeanSearcherProperties {
 
-	/**
-	 * 参数配置
-	 */
+	// 参数配置
 	private final Params params = new Params();
 
-	/**
-	 * SQL 配置
-	 */
+	// SQL 配置
 	private final Sql sql = new Sql();
 
-	/**
-	 * 字段转换器配置
-	 */
+	// 字段转换器配置
 	private final FieldConvertor fieldConvertor = new FieldConvertor();
 
 	// 使用 MapSearcher 检索器
@@ -46,44 +40,31 @@ public class BeanSearcherProperties {
 
 	public static class Params {
 
-		/**
-		 * 排序字段参数名
-		 */
+		// 排序字段参数名
 		private String sort = "sort";
 
-		/**
-		 * 排序方法参数名
-		 */
+		// 排序方法参数名
 		private String order = "order";
 
-		/**
-		 * 字段参数名分隔符
-		 */
+		// 排序参数名
+		private String orderBy = "orderBy";
+
+		// 字段参数名分隔符
 		private String separator = "-";
 
-		/**
-		 * 是否忽略大小写字段参数名后缀
-		 */
+		// 是否忽略大小写字段参数名后缀
 		private String ignoreCaseKey = "ic";
 
-		/**
-		 * 检索运算符参数名后缀
-		 */
+		// 检索运算符参数名后缀
 		private String operatorKey = "op";
 
-		/**
-		 * 用于指定只 Select 某些字段的参数名
-		 */
+		// 用于指定只 Select 某些字段的参数名
 		private String onlySelect = "onlySelect";
 
-		/**
-		 * 用于指定不需要 Select 的字段的参数名
-		 */
+		// 用于指定不需要 Select 的字段的参数名
 		private String selectExclude = "selectExclude";
 
-		/**
-		 * 分页参数配置
-		 */
+		// 分页参数配置
 		private final PaginationProps pagination = new PaginationProps();
 		
 		
@@ -101,6 +82,14 @@ public class BeanSearcherProperties {
 
 		public void setOrder(String order) {
 			this.order = order;
+		}
+
+		public String getOrderBy() {
+			return orderBy;
+		}
+
+		public void setOrderBy(String orderBy) {
+			this.orderBy = orderBy;
 		}
 
 		public String getSeparator() {
