@@ -218,7 +218,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 				String summaryAlias = generateColumnAlias(summaryField, originalSql);
 				String fieldSql = beanMeta.getFieldSql(summaryField);
 				if (fieldSql == null) {
-					throw new SearchException("求和属性【" + summaryField + "】没有和数据库字段做映射，请检查该属性是否被 @DbField 正确注解！");
+					throw new SearchException("求和属性【" + summaryField + "】没有和数据库字段做映射，请检查该属性是否 已被忽略 或 是否已被 @DbField 正确注解！");
 				}
 				clusterSelectSqlBuilder.append("sum(").append(fieldSql)
 					.append(") ").append(summaryAlias);
