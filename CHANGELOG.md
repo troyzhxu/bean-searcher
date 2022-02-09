@@ -4,12 +4,31 @@
 
 * Bean Searcher
   * 新增条件分组 与 组逻辑运算功能（TODO）
+  
+# v3.4.0 @ 2022-02-09
+
+### ✨ Features
+
+* Bean Searcher
+  * 增强 `MapBuilder.orderBy(..)` 方法，支持多次调用来指定按多个字段进行排序 
+  * 新增 `orderBy` 排序参数，可以类似 `orderBy=age:asc,time:desc` 的形式来指定多个排序字段
+  * 重构 `DefaultSqlResolver`、`Dialect`、`SqlSnippet` 等相关类
+  * 移除 `StringUtils.firstCharToUpperCase(..)` 方法
+  * `DefaultDbMapping` 新增 `ignoreFields` 属性，支持配置全局忽略的属性
+  * `@SearchBean` 新增 `ignoreFields` 属性，可配置单个实体类应该被忽略的属性（可忽略父类中的属性）
+* Bean Searcher Boot Starter
+  * 新增 `bean-searcher.sql.default-mapping.ignore-fields` 配置项，可在配置文件中指定全局忽略的属性
+  * 新增 `bean-searcher.params.order-by` 配置项，可在配置文件中指定排序参数的参数名
 
 ### 🌻 Better
 
 * Bean Searcher
-  * 支持统一配置全局忽略的字段
-  * 支持在 @SearchBean 注解中配置忽略的字段
+  * 优化异常信息
+  * 优化注解声明
+* Bean Searcher Boot Starter
+  * bump spring-boot from 2.6.2 to 2.6.3
+  * bump slf4j-api from 1.7.32 to 1.7.35
+  * 优化配置提示信息
 
 # v3.3.2 @ 2022-02-07
 
