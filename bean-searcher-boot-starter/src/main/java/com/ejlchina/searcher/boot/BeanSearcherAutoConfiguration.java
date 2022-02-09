@@ -93,6 +93,7 @@ public class BeanSearcherAutoConfiguration {
 		paramResolver.setIgnoreCaseSuffix(conf.getIgnoreCaseKey());
 		paramResolver.setOrderName(conf.getOrder());
 		paramResolver.setSortName(conf.getSort());
+		paramResolver.setOrderByName(conf.getOrderBy());
 		paramResolver.setSeparator(conf.getSeparator());
 		paramResolver.setOnlySelectName(conf.getOnlySelect());
 		paramResolver.setSelectExcludeName(conf.getSelectExclude());
