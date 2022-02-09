@@ -130,6 +130,21 @@ public class DefaultDbMapping implements DbMapping {
             }
             throw new SearchException("[" + beanClass.getName() + ": " + field.getName() + "] is annotated by @DbField and @DbIgnore, which are mutually exclusive.");
         }
+        SearchBean bean = getSearchBean(beanClass);
+        // 判断是否在 @SearchBean 注解中忽略了该字段，
+        if (bean != null && shouldIgnore(field, bean.ignoreFields())) {
+            if (dbField == null) {
+                return null;
+            }
+            // 如果该属性同时被 @DbFeild 注解了，则判断 @SearchBean 与 @DbFeild 所在的类层级，子类优先父类
+            int res = compareFieldToBeanAnnotation(field, beanClass);
+            if (res == 0) {
+                throw new SearchException("[" + beanClass.getName() + ": " + field.getName() + "] is annotated by @DbField and listed by @SearchBean.ignoreFields in same class, which are mutually exclusive.");
+            }
+            if (res > 0) {
+                return null;
+            }
+        }
         if (dbField != null) {
             String fieldSql = dbField.value().trim();
             if (StringUtils.isNotBlank(fieldSql)) {
@@ -142,11 +157,6 @@ public class DefaultDbMapping implements DbMapping {
             // 未加 @DbField 注解时，更据 ignoreFields 判断该字段是否应该被忽略
             return null;
         }
-        SearchBean bean = getSearchBean(beanClass);
-        if (bean != null && shouldIgnore(field, bean.ignoreFields())) {
-            // 判断是否在 @SearchBean 注解中忽略了该字段
-            return null;
-        }
         // 没加 @SearchBean 注解，或者加了但没给 tables 赋值，则可以自动映射列名，因为此时默认为单表映射
         if (bean == null || StringUtils.isBlank(bean.tables())) {
             // 默认使用下划线风格的字段映射
@@ -157,6 +167,26 @@ public class DefaultDbMapping implements DbMapping {
             return null;
         }
         return tab.trim() + "." + toColumnName(field);
+    }
+
+    // 比较 Field 的所在类层级是否比 @SearchBean 注解更接近父类
+    // return 0 表示层级相等，
+    // return + 表示 Field 比 @SearchBean 更接近父类
+    // return - 表示 @SearchBean 比 Field 更接近父类
+    protected int compareFieldToBeanAnnotation(Field field, Class<?> beanClass) {
+        int fieldLevel = 0;
+        int beanLevel = 0;
+        Class<?> clazz = beanClass;
+        while (clazz != field.getDeclaringClass() && clazz != Object.class) {
+            clazz = clazz.getSuperclass();
+            fieldLevel++;
+        }
+        clazz = beanClass;
+        while (clazz.getAnnotation(SearchBean.class) == null && clazz != Object.class) {
+            clazz = clazz.getSuperclass();
+            beanLevel++;
+        }
+        return fieldLevel - beanLevel;
     }
 
     protected boolean shouldIgnore(Field field, String[] ignoreFields) {
