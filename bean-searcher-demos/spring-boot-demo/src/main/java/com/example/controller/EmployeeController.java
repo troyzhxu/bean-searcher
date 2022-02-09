@@ -103,7 +103,7 @@ public class EmployeeController {
 				.field(Employee::getDepartment, department).op(department_op).ic(department_ic)
 //				.field(Employee::getEntryDate, entryDate_0, entryDate_1).op(entryDate_op)
 				.orderBy(sort, order)
-				.page(page != null ? page : 0, size != null ? size : 0)
+				.page(page != null ? page : 0, size != null ? size : 15)
 				.build();
 		// 组合检索、排序、分页 和 统计 都在这一句代码中实现了
 		return beanSearcher.search(Employee.class, params, new String[] { "age" });
