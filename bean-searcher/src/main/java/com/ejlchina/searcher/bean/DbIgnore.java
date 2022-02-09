@@ -9,7 +9,6 @@ import java.lang.annotation.*;
  * @author Troy.Zhou @ 2021-11-02
  * @since v3.0.0
  */
-@Inherited
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD})
 public @interface DbIgnore { }
