@@ -25,10 +25,10 @@
 * Bean Searcher
   * 优化异常信息
   * 优化注解声明
-* Bean Searcher Boot Starter
-  * bump spring-boot from 2.6.2 to 2.6.3
   * bump slf4j-api from 1.7.32 to 1.7.35
+* Bean Searcher Boot Starter
   * 优化配置提示信息
+  * bump spring-boot from 2.6.2 to 2.6.3
 
 # v3.3.2 @ 2022-02-07
 
