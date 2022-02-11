@@ -109,6 +109,13 @@
       "type": "java.lang.String"
     },
     {
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Params",
+      "defaultValue": "gexpr",
+      "name": "bean-searcher.params.gexpr",
+      "description": "组表达式参数名",
+      "type": "java.lang.String"
+    },
+    {
       "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Params$PaginationProps",
       "defaultValue": 15,
       "name": "bean-searcher.params.pagination.default-size",

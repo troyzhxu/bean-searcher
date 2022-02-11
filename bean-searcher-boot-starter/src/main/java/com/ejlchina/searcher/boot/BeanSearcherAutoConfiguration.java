@@ -97,6 +97,7 @@ public class BeanSearcherAutoConfiguration {
 		paramResolver.setSeparator(conf.getSeparator());
 		paramResolver.setOnlySelectName(conf.getOnlySelect());
 		paramResolver.setSelectExcludeName(conf.getSelectExclude());
+		paramResolver.setGexprName(conf.getGexpr());
 		return paramResolver;
 	}
 
