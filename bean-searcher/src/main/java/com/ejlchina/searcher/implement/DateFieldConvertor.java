@@ -49,10 +49,22 @@ public class DateFieldConvertor implements FieldConvertor.BFieldConvertor {
                 return new Timestamp(date.getTime());
             }
             if (targetType == LocalDateTime.class) {
+                // 注意：java.sql.Date 的 toInstant() 方法会抛异常
+                if (date instanceof java.sql.Date) {
+                    LocalDate localDate = ((java.sql.Date) date).toLocalDate();
+                    return LocalDateTime.of(localDate, LocalTime.of(0, 0, 0, 0));
+                }
                 return LocalDateTime.ofInstant(date.toInstant(), zoneId);
             }
             if (targetType == LocalDate.class) {
+                // 注意：java.sql.Date 的 toInstant() 方法会抛异常
+                if (date instanceof java.sql.Date) {
+                    return ((java.sql.Date) date).toLocalDate();
+                }
                 return LocalDate.ofInstant(date.toInstant(), zoneId);
+            }
+            if (targetType == Date.class) {
+                return date;
             }
         }
         LocalDateTime dateTime;
@@ -64,7 +76,7 @@ public class DateFieldConvertor implements FieldConvertor.BFieldConvertor {
         if (targetType == LocalDateTime.class) {
             return dateTime;
         }
-        Instant instant = dateTime.toInstant(ZoneOffset.UTC);
+        Instant instant = dateTime.atZone(zoneId).toInstant();
         if (targetType == Date.class) {
             return new Date(instant.toEpochMilli());
         }
@@ -79,6 +91,7 @@ public class DateFieldConvertor implements FieldConvertor.BFieldConvertor {
         }
         throw new UnsupportedOperationException();
     }
+
 
     public ZoneId getZoneId() {
         return zoneId;
