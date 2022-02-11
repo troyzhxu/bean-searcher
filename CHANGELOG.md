@@ -3,6 +3,7 @@
 ### ✨ Features
 
 * Bean Searcher
+  * `DefaultParamResolver` 新增 `gexprName` 属性 
   * 新增条件分组 与 组逻辑运算功能（TODO）
 
 # v3.4.1 @ 2022-02-11

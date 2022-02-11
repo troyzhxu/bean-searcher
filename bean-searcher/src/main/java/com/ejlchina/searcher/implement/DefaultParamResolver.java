@@ -78,6 +78,11 @@ public class DefaultParamResolver implements ParamResolver {
 	 */
 	private String selectExcludeName = "selectExclude";
 
+	/**
+	 * @since v3.5.0
+	 * 用于指定组表达式参数名
+	 */
+	private String gexprName = "gexpr";
 
 	@Override
 	public SearchParam resolve(BeanMeta<?> beanMeta, FetchType fetchType, Map<String, Object> paraMap) {
@@ -378,6 +383,14 @@ public class DefaultParamResolver implements ParamResolver {
 
 	public void setSelectExcludeName(String selectExcludeName) {
 		this.selectExcludeName = Objects.requireNonNull(selectExcludeName);
+	}
+
+	public String getGexprName() {
+		return gexprName;
+	}
+
+	public void setGexprName(String gexprName) {
+		this.gexprName = gexprName;
 	}
 
 }
