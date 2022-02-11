@@ -18,11 +18,14 @@ public class BoolFieldConvertor implements FieldConvertor.BFieldConvertor {
 
 	@Override
 	public boolean supports(FieldMeta meta, Class<?> valueType, Class<?> targetType) {
-		return (valueType == String.class || Number.class.isAssignableFrom(valueType)) && (targetType == boolean.class || targetType == Boolean.class);
+		return (valueType == String.class || Number.class.isAssignableFrom(valueType) || Boolean.class == valueType) && (targetType == boolean.class || targetType == Boolean.class);
 	}
 
 	@Override
 	public Object convert(FieldMeta meta, Object value, Class<?> targetType) {
+		if (value instanceof Boolean) {
+			return value;
+		}
 		if (value instanceof String) {
 			String bool = (String) value;
 			for (String t: falseValues) {
