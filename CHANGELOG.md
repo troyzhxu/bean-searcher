@@ -10,7 +10,7 @@
 ### ✨ Better
 
 * Bean Searcher
-  * 优化 SQL 生成逻辑：当 joinCond 只有一个拼接参数 且 该参数值为空时，使其不参与 where 子句
+  * 优化 SQL 生成逻辑：当 `@SearchBean` 注解的 `joinCond` 属性只有一个拼接参数 且 该参数值为空时，则使其不参与 `where` 子句
 
 ### 🐛 Bug Fixes
 
