@@ -6,6 +6,23 @@
   * 增强 `BoolFieldConvertor`，使支持 `Boolean` -> `boolean` 方向的转换
   * 优化 `BeanSearcherAutoConfiguration` 不再强制依赖 `DataSource`
 
+
+# v3.1.4 @ 2022-02-11
+
+### ✨ Better
+
+* Bean Searcher
+  * 增强 `BoolFieldConvertor`，使支持 `Boolean -> boolean` 方向的转换
+* Bean Searcher Boot Starter
+  * 不再强制依赖 `DataSource`, 支持 Grails 项目
+  * 去掉无用的配置提示
+
+### 🐛 Bug Fixes
+
+* 修复 `DateFieldConvertor` 无法将 `java.sql.Date` 转换为 `LocalDate / LocalDateTime` 的问题
+* 修复 `DateFieldConvertor` 转换 `LocalDate / LocalDateTime` 时会产生时区偏差的问题
+* 修复 `DateFormatFieldConvertor` 无法格式化 `java.sql.Date/java.sql.Time` 的问题
+
 # v3.2.2 @ 2021-12-20
 
 ### 🌻 Better
