@@ -28,8 +28,6 @@ import java.util.function.Consumer;
 
 
 @Configuration
-@ConditionalOnBean(DataSource.class)
-@AutoConfigureAfter({ DataSourceAutoConfiguration.class })
 @EnableConfigurationProperties(BeanSearcherProperties.class)
 public class BeanSearcherAutoConfiguration {
 
@@ -107,8 +105,8 @@ public class BeanSearcherAutoConfiguration {
 
 	@Bean
 	@ConditionalOnMissingBean(SqlExecutor.class)
-	public SqlExecutor sqlExecutor(DataSource dataSource, ObjectProvider<List<NamedDataSource>> namedDataSources) {
-		DefaultSqlExecutor executor = new DefaultSqlExecutor(dataSource);
+	public SqlExecutor sqlExecutor(ObjectProvider<DataSource> dataSource, ObjectProvider<List<NamedDataSource>> namedDataSources) {
+		DefaultSqlExecutor executor = new DefaultSqlExecutor(dataSource.getIfAvailable());
 		ifAvailable(namedDataSources, ndsList -> {
 			for (NamedDataSource nds: ndsList) {
 				executor.setDataSource(nds.getName(), nds.getDataSource());
