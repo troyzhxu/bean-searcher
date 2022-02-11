@@ -97,7 +97,16 @@ public class DateFormatFieldConvertor implements FieldConvertor.MFieldConvertor 
 
         Object format(Object value) {
             if (formatter != null) {
+                if (value instanceof java.sql.Date) {
+                    LocalDate localDate = ((java.sql.Date) value).toLocalDate();
+                    return formatter.format(localDate);
+                }
+                if (value instanceof java.sql.Time) {
+                    LocalTime localTime = ((java.sql.Time) value).toLocalTime();
+                    return formatter.format(localTime);
+                }
                 if (value instanceof Date) {
+                    // 注意 java.sql.Date/Time 的 toInstant 方法会报错
                     Instant instant = ((Date) value).toInstant();
                     LocalDateTime dateTime = LocalDateTime.ofInstant(instant, zoneId);
                     return formatter.format(dateTime);
@@ -114,11 +123,10 @@ public class DateFormatFieldConvertor implements FieldConvertor.MFieldConvertor 
         }
 
         boolean supports(Class<?> dateType) {
-            return pattern == null || (
-                    dateType != LocalTime.class || !DATE_PATTERN.matcher(pattern).matches()
-            ) && (
-                    dateType != LocalDate.class || !TIME_PATTERN.matcher(pattern).matches()
-            );
+            return pattern == null ||
+                    dateType != LocalTime.class && dateType != java.sql.Time.class && dateType != LocalDate.class && dateType != java.sql.Date.class ||
+                            (dateType == LocalTime.class || dateType == java.sql.Time.class) && !DATE_PATTERN.matcher(pattern).find() ||
+                            (dateType == LocalDate.class || dateType == java.sql.Date.class) && !TIME_PATTERN.matcher(pattern).find();
         }
 
     }
