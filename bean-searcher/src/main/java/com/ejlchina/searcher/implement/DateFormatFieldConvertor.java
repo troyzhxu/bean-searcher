@@ -122,11 +122,11 @@ public class DateFormatFieldConvertor implements FieldConvertor.MFieldConvertor 
             return value;
         }
 
-        boolean supports(Class<?> dateType) {
+        public boolean supports(Class<?> dateType) {
             return pattern == null || (
-                    (dateType != LocalTime.class && dateType != java.sql.Time.class) || !DATE_PATTERN.matcher(pattern).matches()
-            ) && (
-                    (dateType != LocalDate.class && dateType != java.sql.Date.class) || !TIME_PATTERN.matcher(pattern).matches()
+                    (dateType != LocalTime.class && dateType != java.sql.Time.class && dateType != LocalDate.class && dateType != java.sql.Date.class) ||
+                    (dateType == LocalTime.class || dateType == java.sql.Time.class) && !DATE_PATTERN.matcher(pattern).find() ||
+                    (dateType == LocalDate.class || dateType == java.sql.Date.class) && !TIME_PATTERN.matcher(pattern).find()
             );
         }
 
