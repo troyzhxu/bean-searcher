@@ -7,6 +7,11 @@
 
 # v3.4.1 @ 2022-02-11
 
+### ✨ Better
+
+* Bean Searcher
+  * 优化 SQL 生成逻辑：当 joinCond 只有一个拼接参数 且 该参数值为空时，使其不参与 where 子句
+
 ### 🐛 Bug Fixes
 
 * 修复 `DateFieldConvertor` 无法将 `java.sql.Date` 转换为 `LocalDate / LocalDateTime` 的问题
