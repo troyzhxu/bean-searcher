@@ -1,13 +1,20 @@
 # Next
 
-### ✨ Features
+# v3.1.4
+
+### ✨ Better
 
 * Bean Searcher
-  * 新增条件分组 与 组逻辑运算功能（TODO）
-  * 优化参数：对于 op = mv / bt 的查询，可用 JSON 数组来传输多个值，例如：age=[20,30] 替代 age-0=20&age-1=30（TODO）
-  * 新增 `EnumFieldConvertor`，用来做枚举字段转换（TODO）
+  * 增强 `BoolFieldConvertor`，使支持 `Boolean -> boolean` 方向的转换
 * Bean Searcher Boot Starter
-  * 默认自动配置添加 `EnumFieldConvertor`（TODO）
+  * 不再强制依赖 `DataSource`, 支持 Grails 项目
+  * 去掉无用的配置提示
+
+### 🐛 Bug Fixes
+
+* 修复 `DateFieldConvertor` 无法将 `java.sql.Date` 转换为 `LocalDate / LocalDateTime` 的问题
+* 修复 `DateFieldConvertor` 转换 `LocalDate / LocalDateTime` 时会产生时区偏差的问题
+* 修复 `DateFormatFieldConvertor` 无法格式化 `java.sql.Date/java.sql.Time` 的问题
 
 # v3.1.2 & v3.0.4
 
