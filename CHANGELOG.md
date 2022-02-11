@@ -5,6 +5,8 @@
 * Bean Searcher
   * `DefaultParamResolver` 新增 `gexprName` 属性 
   * 新增条件分组 与 组逻辑运算功能（TODO）
+* Bean Searcher Boot Starter
+  * 新增 `bean-searcher.params.gexpr` 配置键，可在配置文件中指组表达式参数名
 
 # v3.4.1 @ 2022-02-11
 
