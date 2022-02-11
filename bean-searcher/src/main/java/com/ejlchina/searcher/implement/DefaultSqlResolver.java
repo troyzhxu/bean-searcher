@@ -118,21 +118,24 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		sqlWrapper.addParas(tableSql.getParas());
 		StringBuilder builder = new StringBuilder(" from ").append(tableSql.getSql());
 		String joinCond = beanMeta.getJoinCond();
+		if (StringUtils.isNotBlank(joinCond)) {
+			List<SqlSnippet.SqlPara> joinCondParams = beanMeta.getJoinCondSqlParas();
+			for (SqlSnippet.SqlPara param : joinCondParams) {
+				Object sqlParam = searchParam.getPara(param.getName());
+				if (param.isJdbcPara()) {
+					sqlWrapper.addPara(sqlParam);
+				} else {
+					// 将这部分逻辑提上来，当 joinCond 只有一个拼接参数 且 该参数为空时，使其不参与 where 子句
+					String strParam = sqlParam != null ? sqlParam.toString() : "";
+					joinCond = joinCond.replace(param.getSqlName(), strParam);
+				}
+			}
+		}
 		boolean hasJoinCond = StringUtils.isNotBlank(joinCond);
 		List<FieldParam> fieldParamList = searchParam.getFieldParams();
 		if (hasJoinCond || fieldParamList.size() > 0) {
 			builder.append(" where (");
 			if (hasJoinCond) {
-				List<SqlSnippet.SqlPara> joinCondParams = beanMeta.getJoinCondSqlParas();
-				for (SqlSnippet.SqlPara param : joinCondParams) {
-					Object sqlParam = searchParam.getPara(param.getName());
-					if (param.isJdbcPara()) {
-						sqlWrapper.addPara(sqlParam);
-					} else {
-						String strParam = sqlParam != null ? sqlParam.toString() : "";
-						joinCond = joinCond.replace(param.getSqlName(), strParam);
-					}
-				}
 				builder.append(joinCond).append(")");
 			}
 		}
