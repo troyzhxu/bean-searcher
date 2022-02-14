@@ -362,6 +362,11 @@ public class BeanSearcherProperties {
 		private boolean useDateFormat = true;
 
 		/**
+		 * 使用时间字段转换器
+		 */
+		private boolean useTime = true;
+
+		/**
 		 * 时区
 		 */
 		private ZoneId zoneId = null;
@@ -431,6 +436,14 @@ public class BeanSearcherProperties {
 
 		public void setDateFormats(Map<String, String> dateFormats) {
 			this.dateFormats = dateFormats;
+		}
+
+		public boolean isUseTime() {
+			return useTime;
+		}
+
+		public void setUseTime(boolean useTime) {
+			this.useTime = useTime;
 		}
 
 		public ZoneId getZoneId() {

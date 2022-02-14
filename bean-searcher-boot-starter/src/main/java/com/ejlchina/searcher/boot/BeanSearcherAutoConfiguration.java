@@ -165,6 +165,13 @@ public class BeanSearcherAutoConfiguration {
 	}
 
 	@Bean
+	@ConditionalOnProperty(name = "bean-searcher.field-convertor.use-time", havingValue = "true", matchIfMissing = true)
+	@ConditionalOnMissingBean(TimeFieldConvertor.class)
+	public TimeFieldConvertor timeFieldConvertor() {
+		return new TimeFieldConvertor();
+	}
+
+	@Bean
 	@ConditionalOnProperty(name = "bean-searcher.field-convertor.use-enum", havingValue = "true", matchIfMissing = true)
 	@ConditionalOnMissingBean(EnumFieldConvertor.class)
 	public EnumFieldConvertor enumFieldConvertor() {

@@ -244,6 +244,13 @@
     {
       "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$FieldConvertor",
       "defaultValue": true,
+      "name": "bean-searcher.field-convertor.use-time",
+      "description": "是否使用 TimeFieldConvertor",
+      "type": "java.lang.Boolean"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$FieldConvertor",
+      "defaultValue": true,
       "name": "bean-searcher.field-convertor.use-date-format",
       "description": "是否使用 DateFormatFieldConvertor",
       "type": "java.lang.Boolean"
