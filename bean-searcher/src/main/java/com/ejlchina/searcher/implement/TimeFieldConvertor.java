@@ -7,10 +7,10 @@ import java.sql.Time;
 import java.time.LocalTime;
 
 /**
- * 日期字段转换器
+ * 时间字段转换器: java.sql.Time -> LocalTime
  *
- * @author Troy.Zhou @ 2021-11-12
- * @since v3.1.0
+ * @author Troy.Zhou @ 2022-02-14
+ * @since v3.5.0
  */
 public class TimeFieldConvertor implements FieldConvertor.BFieldConvertor {
 
