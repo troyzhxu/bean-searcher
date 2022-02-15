@@ -1,7 +1,6 @@
 package com.ejlchina.searcher.operator;
 
 import com.ejlchina.searcher.FieldOp;
-import com.ejlchina.searcher.dialect.Dialect;
 import com.ejlchina.searcher.implement.DialectWrapper;
 import com.ejlchina.searcher.util.ObjectUtils;
 
@@ -34,7 +33,7 @@ public class GreaterEqual extends DialectWrapper implements FieldOp {
 
     @Override
     public List<Object> operate(StringBuilder sqlBuilder, OpPara opPara) {
-        String dbField = opPara.getDbField();
+        String dbField = opPara.getDbFieldSql();
         Object[] values = opPara.getValues();
         if (opPara.isIgnoreCase()) {
             toUpperCase(sqlBuilder, dbField);

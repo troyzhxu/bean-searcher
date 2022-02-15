@@ -29,7 +29,7 @@ public class NotEmpty implements FieldOp {
 
     @Override
     public List<Object> operate(StringBuilder sqlBuilder, OpPara opPara) {
-        String dbField = opPara.getDbField();
+        String dbField = opPara.getDbFieldSql();
         sqlBuilder.append(dbField).append(" is not null");
         sqlBuilder.append(" and ").append(dbField).append(" != ''");
         return Collections.emptyList();

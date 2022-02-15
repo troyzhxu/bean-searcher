@@ -65,11 +65,7 @@ public interface FieldOp {
             this.values = values;
         }
 
-        public FieldMeta getFieldMeta() {
-            return fieldMeta;
-        }
-
-        public String getDbField() {
+        public String getDbFieldSql() {
             return fieldMeta.getFieldSql().getSql();
         }
 

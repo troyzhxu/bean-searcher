@@ -29,7 +29,7 @@ public class NotNull implements FieldOp {
 
     @Override
     public List<Object> operate(StringBuilder sqlBuilder, OpPara opPara) {
-        String dbField = opPara.getDbField();
+        String dbField = opPara.getDbFieldSql();
         sqlBuilder.append(dbField).append(" is not null");
         return Collections.emptyList();
     }

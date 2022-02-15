@@ -35,7 +35,7 @@ public class NotBetween extends DialectWrapper implements FieldOp {
 
     @Override
     public List<Object> operate(StringBuilder sqlBuilder, OpPara opPara) {
-        String dbField = opPara.getDbField();
+        String dbField = opPara.getDbFieldSql();
         Object[] values = opPara.getValues();
         if (opPara.isIgnoreCase()) {
             toUpperCase(sqlBuilder, dbField);
