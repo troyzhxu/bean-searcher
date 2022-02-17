@@ -51,11 +51,10 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 			searchSql.addSummaryAlias(getSummaryAlias(fieldMeta));
 		}
 		SqlWrapper<Object> fieldSelectSqlWrapper = buildFieldSelectSql(beanMeta, searchParam, fetchFields);
-		SqlWrapper<Object> fromWhereSqlWrapper = buildFromWhereSql(beanMeta, searchParam);
 		String fieldSelectSql = fieldSelectSqlWrapper.getSql();
-		String fromWhereSql = fromWhereSqlWrapper.getSql();
-
 		if (fetchType.shouldQueryTotal() || summaryFields.length > 0) {
+			SqlWrapper<Object> fromWhereSqlWrapper = buildFromWhereSql(beanMeta, searchParam, beanMeta.isDistinct());
+			String fromWhereSql = fromWhereSqlWrapper.getSql();
 			List<String> summaryAliases = searchSql.getSummaryAliases();
 			String countAlias = searchSql.getCountAlias();
 			String clusterSql = buildClusterSql(beanMeta, summaryFields, summaryAliases, countAlias, fieldSelectSql, fromWhereSql);
@@ -67,6 +66,8 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 			searchSql.addClusterSqlParams(fromWhereSqlWrapper.getParas());
 		}
 		if (fetchType.shouldQueryList()) {
+			SqlWrapper<Object> fromWhereSqlWrapper = buildFromWhereSql(beanMeta, searchParam, true);
+			String fromWhereSql = fromWhereSqlWrapper.getSql();
 			SqlWrapper<Object> listSql = buildListSql(beanMeta, searchParam, fieldSelectSql, fromWhereSql);
 			searchSql.setListSqlString(listSql.getSql());
 			searchSql.addListSqlParams(fieldSelectSqlWrapper.getParas());
@@ -112,7 +113,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		return sqlWrapper;
 	}
 
-	protected <T> SqlWrapper<Object> buildFromWhereSql(BeanMeta<T> beanMeta, SearchParam searchParam) {
+	protected <T> SqlWrapper<Object> buildFromWhereSql(BeanMeta<T> beanMeta, SearchParam searchParam, boolean canUseAlias) {
 		SqlWrapper<Object> sqlWrapper = new SqlWrapper<>();
 		SqlWrapper<Object> tableSql = resolveTableSql(beanMeta.getTableSnippet(), searchParam);
 		sqlWrapper.addParas(tableSql.getParas());
@@ -267,7 +268,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		if (dateValueCorrector != null) {
 			values = dateValueCorrector.correct(fieldMeta.getType(), values, operator);
 		}
-		FieldOp.OpPara opPara = new FieldOp.OpPara(fieldMeta, param.isIgnoreCase(), values);
+		FieldOp.OpPara opPara = new FieldOp.OpPara(fieldMeta.getFieldSql(), param.isIgnoreCase(), values);
 		return operator.operate(builder, opPara);
 	}
 
