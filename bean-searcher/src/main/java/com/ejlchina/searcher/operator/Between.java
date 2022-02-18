@@ -33,7 +33,7 @@ public class Between extends DialectWrapper implements FieldOp {
 
     @Override
     public List<Object> operate(StringBuilder sqlBuilder, OpPara opPara) {
-        SqlWrapper<Object> fieldSql = opPara.getDbFieldSql();
+        SqlWrapper<Object> fieldSql = opPara.getFieldSql();
         Object[] values = opPara.getValues();
         if (opPara.isIgnoreCase()) {
             toUpperCase(sqlBuilder, fieldSql.getSql());
