@@ -57,11 +57,11 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		Map<String, Object> paraMap = searchParam.getParaMap();
 
 		SqlWrapper<Object> fieldSelectSqlWrapper = buildFieldSelectSql(beanMeta, fetchFields, paraMap);
+		SqlWrapper<Object> fromWhereSqlWrapper = buildFromWhereSql(beanMeta, fieldParams, paraMap);
 		String fieldSelectSql = fieldSelectSqlWrapper.getSql();
+		String fromWhereSql = fromWhereSqlWrapper.getSql();
 
 		if (fetchType.shouldQueryTotal() || summaryFields.length > 0) {
-			SqlWrapper<Object> fromWhereSqlWrapper = buildFromWhereSql(beanMeta, fieldParams, paraMap);
-			String fromWhereSql = fromWhereSqlWrapper.getSql();
 			List<String> summaryAliases = searchSql.getSummaryAliases();
 			String countAlias = searchSql.getCountAlias();
 			SqlWrapper<Object> clusterSelectSql = buildClusterSelectSql(beanMeta, summaryFields, summaryAliases, countAlias, paraMap);
@@ -75,8 +75,6 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 			searchSql.addClusterSqlParams(fromWhereSqlWrapper.getParas());
 		}
 		if (fetchType.shouldQueryList()) {
-			SqlWrapper<Object> fromWhereSqlWrapper = buildFromWhereSql(beanMeta, fieldParams, paraMap);
-			String fromWhereSql = fromWhereSqlWrapper.getSql();
 			List<OrderBy> orderBys = searchParam.getOrderBys();
 			Paging paging = searchParam.getPaging();
 			SqlWrapper<Object> listSql = buildListSql(beanMeta, fieldSelectSql, fromWhereSql, orderBys, paging);
@@ -165,13 +163,13 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 				builder.append(" and (");
 			}
 			FieldParam param = fieldParamList.get(i);
-			FieldMeta meta = beanMeta.requireFieldMeta(param.getName());
+			FieldMeta fieldMeta = beanMeta.requireFieldMeta(param.getName());
 			Object[] values = param.getValues();
 			FieldOp operator = (FieldOp) param.getOperator();
 			if (dateValueCorrector != null) {
-				values = dateValueCorrector.correct(meta.getType(), values, operator);
+				values = dateValueCorrector.correct(fieldMeta.getType(), values, operator);
 			}
-			SqlWrapper<Object> fieldSql = resolveDbFieldSql(meta.getFieldSql(), paraMap);
+			SqlWrapper<Object> fieldSql = resolveDbFieldSql(fieldMeta.getFieldSql(), paraMap);
 			FieldOp.OpPara opPara = new FieldOp.OpPara(fieldSql, param.isIgnoreCase(), values);
 			sqlWrapper.addParas(operator.operate(builder, opPara));
 			builder.append(")");
