@@ -21,6 +21,11 @@ public class SqlWrapper<T> {
      */
     private final List<T> paras = new ArrayList<>();
 
+    public SqlWrapper() { }
+
+    public SqlWrapper(String sql) {
+        this.sql = sql;
+    }
 
     public String getSql() {
         return sql;

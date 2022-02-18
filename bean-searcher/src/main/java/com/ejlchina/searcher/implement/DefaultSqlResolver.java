@@ -9,6 +9,7 @@ import com.ejlchina.searcher.util.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 /**
  * 默认 SQL 解析器
@@ -53,7 +54,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		SqlWrapper<Object> fieldSelectSqlWrapper = buildFieldSelectSql(beanMeta, searchParam, fetchFields);
 		String fieldSelectSql = fieldSelectSqlWrapper.getSql();
 		if (fetchType.shouldQueryTotal() || summaryFields.length > 0) {
-			SqlWrapper<Object> fromWhereSqlWrapper = buildFromWhereSql(beanMeta, searchParam, beanMeta.isDistinct());
+			SqlWrapper<Object> fromWhereSqlWrapper = buildFromWhereSql(beanMeta, searchParam, fetchFields, beanMeta.isDistinct());
 			String fromWhereSql = fromWhereSqlWrapper.getSql();
 			List<String> summaryAliases = searchSql.getSummaryAliases();
 			String countAlias = searchSql.getCountAlias();
@@ -66,7 +67,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 			searchSql.addClusterSqlParams(fromWhereSqlWrapper.getParas());
 		}
 		if (fetchType.shouldQueryList()) {
-			SqlWrapper<Object> fromWhereSqlWrapper = buildFromWhereSql(beanMeta, searchParam, true);
+			SqlWrapper<Object> fromWhereSqlWrapper = buildFromWhereSql(beanMeta, searchParam, fetchFields, true);
 			String fromWhereSql = fromWhereSqlWrapper.getSql();
 			SqlWrapper<Object> listSql = buildListSql(beanMeta, searchParam, fieldSelectSql, fromWhereSql);
 			searchSql.setListSqlString(listSql.getSql());
@@ -113,7 +114,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		return sqlWrapper;
 	}
 
-	protected <T> SqlWrapper<Object> buildFromWhereSql(BeanMeta<T> beanMeta, SearchParam searchParam, boolean canUseAlias) {
+	protected <T> SqlWrapper<Object> buildFromWhereSql(BeanMeta<T> beanMeta, SearchParam searchParam, List<String> fetchFields, boolean canUseAlias) {
 		SqlWrapper<Object> sqlWrapper = new SqlWrapper<>();
 		SqlWrapper<Object> tableSql = resolveTableSql(beanMeta.getTableSnippet(), searchParam);
 		sqlWrapper.addParas(tableSql.getParas());
@@ -145,9 +146,16 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 				builder.append(" and (");
 			}
 			FieldParam param = fieldParamList.get(i);
-			// 这里没取字段别名，因为在 count SQL 里，select 语句中可能没这个字段
-			FieldMeta meta = beanMeta.requireFieldMeta(param.getName());
-			sqlWrapper.addParas(appendCondition(builder, meta, param));
+			String fieldName = param.getName();
+			FieldMeta meta = beanMeta.requireFieldMeta(fieldName);
+			// 是否可取字段别名，还需要看 fetchFields 中是否包含该字段
+			sqlWrapper.addParas(appendCondition(builder, meta, param,
+					() -> {
+						if (canUseAlias && fetchFields.contains(fieldName)) {
+							return new SqlWrapper<>(meta.getDbAlias());
+						}
+						return resolveDbFieldSql(meta.getFieldSql(), searchParam);
+					}));
 			builder.append(")");
 		}
 		String groupBy = beanMeta.getGroupBy();
@@ -262,13 +270,13 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		return "t_";
 	}
 
-	protected List<Object> appendCondition(StringBuilder builder, FieldMeta fieldMeta, FieldParam param) {
+	protected List<Object> appendCondition(StringBuilder builder, FieldMeta fieldMeta, FieldParam param, Supplier<SqlWrapper<Object>> dbFieldSupplier) {
 		Object[] values = param.getValues();
 		FieldOp operator = (FieldOp) param.getOperator();
 		if (dateValueCorrector != null) {
 			values = dateValueCorrector.correct(fieldMeta.getType(), values, operator);
 		}
-		FieldOp.OpPara opPara = new FieldOp.OpPara(fieldMeta.getFieldSql(), param.isIgnoreCase(), values);
+		FieldOp.OpPara opPara = new FieldOp.OpPara(dbFieldSupplier, param.isIgnoreCase(), values);
 		return operator.operate(builder, opPara);
 	}
 

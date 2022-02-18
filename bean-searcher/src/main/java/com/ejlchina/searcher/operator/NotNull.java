@@ -1,8 +1,8 @@
 package com.ejlchina.searcher.operator;
 
 import com.ejlchina.searcher.FieldOp;
+import com.ejlchina.searcher.SqlWrapper;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -29,9 +29,9 @@ public class NotNull implements FieldOp {
 
     @Override
     public List<Object> operate(StringBuilder sqlBuilder, OpPara opPara) {
-        String dbField = opPara.getDbFieldSql();
-        sqlBuilder.append(dbField).append(" is not null");
-        return Collections.emptyList();
+        SqlWrapper<Object> fieldSql = opPara.getDbFieldSql();
+        sqlBuilder.append(fieldSql.getSql()).append(" is not null");
+        return fieldSql.getParas();
     }
 
 }
