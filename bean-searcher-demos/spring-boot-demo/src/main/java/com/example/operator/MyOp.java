@@ -1,6 +1,7 @@
 package com.example.operator;
 
 import com.ejlchina.searcher.FieldOp;
+import com.ejlchina.searcher.SqlWrapper;
 
 import java.util.Collections;
 import java.util.List;
@@ -27,7 +28,8 @@ public class MyOp implements FieldOp {
 
     @Override
     public List<Object> operate(StringBuilder sqlBuilder, OpPara opPara) {
-        sqlBuilder.append(opPara.getDbField()).append(" = 25");
-        return Collections.emptyList();
+        SqlWrapper<Object> fieldSql = opPara.getFieldSql();
+        sqlBuilder.append(fieldSql.getSql()).append(" = 25");
+        return fieldSql.getParas();
     }
 }
