@@ -1,6 +1,7 @@
 package com.ejlchina.searcher.operator;
 
 import com.ejlchina.searcher.FieldOp;
+import com.ejlchina.searcher.SqlWrapper;
 import com.ejlchina.searcher.implement.DialectWrapper;
 import com.ejlchina.searcher.util.ObjectUtils;
 
@@ -31,15 +32,15 @@ public class InList extends DialectWrapper implements FieldOp {
 
     @Override
     public List<Object> operate(StringBuilder sqlBuilder, OpPara opPara) {
-        String dbField = opPara.getDbField();
+        SqlWrapper<Object> fieldSql = opPara.getFieldSql();
         Object[] values = opPara.getValues();
         if (opPara.isIgnoreCase()) {
-            toUpperCase(sqlBuilder, dbField);
+            toUpperCase(sqlBuilder, fieldSql.getSql());
             ObjectUtils.upperCase(values);
         } else {
-            sqlBuilder.append(dbField);
+            sqlBuilder.append(fieldSql.getSql());
         }
-        List<Object> params = new ArrayList<>();
+        List<Object> params = new ArrayList<>(fieldSql.getParas());
         sqlBuilder.append(" in (");
         for (int i = 0; i < values.length; i++) {
             sqlBuilder.append("?");

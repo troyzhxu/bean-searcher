@@ -1,8 +1,9 @@
 package com.ejlchina.searcher.operator;
 
 import com.ejlchina.searcher.FieldOp;
+import com.ejlchina.searcher.SqlWrapper;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,10 +30,14 @@ public class NotEmpty implements FieldOp {
 
     @Override
     public List<Object> operate(StringBuilder sqlBuilder, OpPara opPara) {
-        String dbField = opPara.getDbField();
-        sqlBuilder.append(dbField).append(" is not null");
-        sqlBuilder.append(" and ").append(dbField).append(" != ''");
-        return Collections.emptyList();
+        SqlWrapper<Object> fieldSql = opPara.getFieldSql();
+        String sql = fieldSql.getSql();
+        List<Object> paras = fieldSql.getParas();
+        sqlBuilder.append(sql).append(" is not null");
+        sqlBuilder.append(" and ").append(sql).append(" != ''");
+        List<Object> params = new ArrayList<>(paras);
+        params.addAll(paras);
+        return params;
     }
 
 }

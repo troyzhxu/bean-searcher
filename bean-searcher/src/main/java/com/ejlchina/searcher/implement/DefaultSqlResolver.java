@@ -5,9 +5,11 @@ import com.ejlchina.searcher.dialect.Dialect;
 import com.ejlchina.searcher.param.FetchType;
 import com.ejlchina.searcher.param.FieldParam;
 import com.ejlchina.searcher.param.OrderBy;
+import com.ejlchina.searcher.param.Paging;
 import com.ejlchina.searcher.util.StringUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -34,8 +36,9 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 	@Override
 	public <T> SearchSql<T> resolve(BeanMeta<T> beanMeta, SearchParam searchParam) {
 		List<String> fetchFields = searchParam.getFetchFields();
-		SearchSql<T> searchSql = new SearchSql<>(beanMeta, fetchFields);
 		FetchType fetchType = searchParam.getFetchType();
+
+		SearchSql<T> searchSql = new SearchSql<>(beanMeta, fetchFields);
 		searchSql.setShouldQueryCluster(fetchType.shouldQueryCluster());
 		searchSql.setShouldQueryList(fetchType.shouldQueryList());
 
@@ -50,16 +53,21 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 			}
 			searchSql.addSummaryAlias(getSummaryAlias(fieldMeta));
 		}
-		SqlWrapper<Object> fieldSelectSqlWrapper = buildFieldSelectSql(beanMeta, searchParam, fetchFields);
-		SqlWrapper<Object> fromWhereSqlWrapper = buildFromWhereSql(beanMeta, searchParam);
+		List<FieldParam> fieldParams = searchParam.getFieldParams();
+		Map<String, Object> paraMap = searchParam.getParaMap();
+
+		SqlWrapper<Object> fieldSelectSqlWrapper = buildFieldSelectSql(beanMeta, fetchFields, paraMap);
+		SqlWrapper<Object> fromWhereSqlWrapper = buildFromWhereSql(beanMeta, fieldParams, paraMap);
 		String fieldSelectSql = fieldSelectSqlWrapper.getSql();
 		String fromWhereSql = fromWhereSqlWrapper.getSql();
 
 		if (fetchType.shouldQueryTotal() || summaryFields.length > 0) {
 			List<String> summaryAliases = searchSql.getSummaryAliases();
 			String countAlias = searchSql.getCountAlias();
-			String clusterSql = buildClusterSql(beanMeta, summaryFields, summaryAliases, countAlias, fieldSelectSql, fromWhereSql);
+			SqlWrapper<Object> clusterSelectSql = buildClusterSelectSql(beanMeta, summaryFields, summaryAliases, countAlias, paraMap);
+			String clusterSql = buildClusterSql(beanMeta, clusterSelectSql.getSql(), fieldSelectSql, fromWhereSql);
 			searchSql.setClusterSqlString(clusterSql);
+			searchSql.addClusterSqlParams(clusterSelectSql.getParas());
 			// 只有在 distinct 条件下，聚族查询 SQL 里才会出现 字段查询 语句，才需要将 字段内嵌参数放到 聚族参数里
 			if (beanMeta.isDistinct()) {
 				searchSql.addClusterSqlParams(fieldSelectSqlWrapper.getParas());
@@ -67,7 +75,9 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 			searchSql.addClusterSqlParams(fromWhereSqlWrapper.getParas());
 		}
 		if (fetchType.shouldQueryList()) {
-			SqlWrapper<Object> listSql = buildListSql(beanMeta, searchParam, fieldSelectSql, fromWhereSql);
+			List<OrderBy> orderBys = searchParam.getOrderBys();
+			Paging paging = searchParam.getPaging();
+			SqlWrapper<Object> listSql = buildListSql(beanMeta, fieldSelectSql, fromWhereSql, orderBys, paging);
 			searchSql.setListSqlString(listSql.getSql());
 			searchSql.addListSqlParams(fieldSelectSqlWrapper.getParas());
 			searchSql.addListSqlParams(fromWhereSqlWrapper.getParas());
@@ -76,22 +86,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		return searchSql;
 	}
 
-	private <T> String buildClusterSql(BeanMeta<T> beanMeta, String[] summaryFields, List<String> summaryAliases, String countAlias, String fieldSelectSql, String fromWhereSql) {
-		if (beanMeta.isDistinct()) {
-			String clusterSelectSql = resolveClusterSelectSql(beanMeta, summaryFields, summaryAliases, countAlias);
-			String originalSql = fieldSelectSql + fromWhereSql;
-			String tableAlias = getTableAlias(beanMeta);
-			return clusterSelectSql + " from (" + originalSql + ") " + tableAlias;
-		}
-		String clusterSelectSql = resolveClusterSelectSql(beanMeta, summaryFields, summaryAliases, countAlias);
-		if (StringUtils.isBlank(beanMeta.getGroupBy())) {
-			return clusterSelectSql + fromWhereSql;
-		}
-		String tableAlias = getTableAlias(beanMeta);
-		return clusterSelectSql + " from (select count(*) " + fromWhereSql + ") " + tableAlias;
-	}
-
-	protected <T> SqlWrapper<Object> buildFieldSelectSql(BeanMeta<T> beanMeta, SearchParam searchParam, List<String> fetchFields) {
+	protected <T> SqlWrapper<Object> buildFieldSelectSql(BeanMeta<T> beanMeta, List<String> fetchFields, Map<String, Object> paraMap) {
 		SqlWrapper<Object> sqlWrapper = new SqlWrapper<>();
 		StringBuilder builder = new StringBuilder("select ");
 		if (beanMeta.isDistinct()) {
@@ -101,7 +96,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		for (int i = 0; i < fieldCount; i++) {
 			String field = fetchFields.get(i);
 			FieldMeta meta = beanMeta.requireFieldMeta(field);
-			SqlWrapper<Object> dbFieldSql = resolveDbFieldSql(meta.getFieldSql(), searchParam);
+			SqlWrapper<Object> dbFieldSql = resolveDbFieldSql(meta.getFieldSql(), paraMap);
 			builder.append(dbFieldSql.getSql()).append(" ").append(meta.getDbAlias());
 			if (i < fieldCount - 1) {
 				builder.append(", ");
@@ -112,16 +107,41 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		return sqlWrapper;
 	}
 
-	protected <T> SqlWrapper<Object> buildFromWhereSql(BeanMeta<T> beanMeta, SearchParam searchParam) {
+	protected <T> SqlWrapper<Object> buildClusterSelectSql(BeanMeta<T> beanMeta, String[] summaryFields, List<String> summaryAliases, String countAlias, Map<String, Object> paraMap) {
+		StringBuilder builder = new StringBuilder("select ");
+		if (countAlias != null) {
+			builder.append("count(*) ").append(countAlias);
+			if (summaryFields.length > 0) {
+				builder.append(", ");
+			}
+		}
 		SqlWrapper<Object> sqlWrapper = new SqlWrapper<>();
-		SqlWrapper<Object> tableSql = resolveTableSql(beanMeta.getTableSnippet(), searchParam);
+		for (int i = 0; i < summaryFields.length; i++) {
+			FieldMeta fieldMeta = beanMeta.requireFieldMeta(summaryFields[i]);
+			SqlWrapper<Object> fieldSql = resolveDbFieldSql(fieldMeta.getFieldSql(), paraMap);
+			builder.append("sum(")
+					.append(fieldSql.getSql())
+					.append(") ")
+					.append(summaryAliases.get(i));
+			if (i < summaryFields.length - 1) {
+				builder.append(", ");
+			}
+			sqlWrapper.addParas(fieldSql.getParas());
+		}
+		sqlWrapper.setSql(builder.toString());
+		return sqlWrapper;
+	}
+
+	protected <T> SqlWrapper<Object> buildFromWhereSql(BeanMeta<T> beanMeta, List<FieldParam> fieldParamList, Map<String, Object> paraMap) {
+		SqlWrapper<Object> sqlWrapper = new SqlWrapper<>();
+		SqlWrapper<Object> tableSql = resolveTableSql(beanMeta.getTableSnippet(), paraMap);
 		sqlWrapper.addParas(tableSql.getParas());
 		StringBuilder builder = new StringBuilder(" from ").append(tableSql.getSql());
 		String joinCond = beanMeta.getJoinCond();
 		if (StringUtils.isNotBlank(joinCond)) {
 			List<SqlSnippet.SqlPara> joinCondParams = beanMeta.getJoinCondSqlParas();
 			for (SqlSnippet.SqlPara param : joinCondParams) {
-				Object sqlParam = searchParam.getPara(param.getName());
+				Object sqlParam = paraMap.get(param.getName());
 				if (param.isJdbcPara()) {
 					sqlWrapper.addPara(sqlParam);
 				} else {
@@ -132,7 +152,6 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 			}
 		}
 		boolean hasJoinCond = StringUtils.isNotBlank(joinCond);
-		List<FieldParam> fieldParamList = searchParam.getFieldParams();
 		if (hasJoinCond || fieldParamList.size() > 0) {
 			builder.append(" where (");
 			if (hasJoinCond) {
@@ -144,9 +163,15 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 				builder.append(" and (");
 			}
 			FieldParam param = fieldParamList.get(i);
-			// 这里没取字段别名，因为在 count SQL 里，select 语句中可能没这个字段
-			FieldMeta meta = beanMeta.requireFieldMeta(param.getName());
-			sqlWrapper.addParas(appendCondition(builder, meta, param));
+			FieldMeta fieldMeta = beanMeta.requireFieldMeta(param.getName());
+			Object[] values = param.getValues();
+			FieldOp operator = (FieldOp) param.getOperator();
+			if (dateValueCorrector != null) {
+				values = dateValueCorrector.correct(fieldMeta.getType(), values, operator);
+			}
+			SqlWrapper<Object> fieldSql = resolveDbFieldSql(fieldMeta.getFieldSql(), paraMap);
+			FieldOp.OpPara opPara = new FieldOp.OpPara(fieldSql, param.isIgnoreCase(), values);
+			sqlWrapper.addParas(operator.operate(builder, opPara));
 			builder.append(")");
 		}
 		String groupBy = beanMeta.getGroupBy();
@@ -154,7 +179,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 			List<SqlSnippet.SqlPara> groupParams = beanMeta.getGroupBySqlParas();
 			if (groupParams != null) {
 				for (SqlSnippet.SqlPara param : groupParams) {
-					Object sqlParam = searchParam.getPara(param.getName());
+					Object sqlParam = paraMap.get(param.getName());
 					if (param.isJdbcPara()) {
 						sqlWrapper.addPara(sqlParam);
 					} else {
@@ -169,9 +194,21 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		return sqlWrapper;
 	}
 
-	protected <T> SqlWrapper<Object> buildListSql(BeanMeta<T> beanMeta, SearchParam searchParam, String fieldSelectSql, String fromWhereSql) {
+	private <T> String buildClusterSql(BeanMeta<T> beanMeta, String clusterSelectSql, String fieldSelectSql, String fromWhereSql) {
+		if (beanMeta.isDistinct()) {
+			String originalSql = fieldSelectSql + fromWhereSql;
+			String tableAlias = getTableAlias(beanMeta);
+			return clusterSelectSql + " from (" + originalSql + ") " + tableAlias;
+		}
+		if (StringUtils.isBlank(beanMeta.getGroupBy())) {
+			return clusterSelectSql + fromWhereSql;
+		}
+		String tableAlias = getTableAlias(beanMeta);
+		return clusterSelectSql + " from (select count(*) " + fromWhereSql + ") " + tableAlias;
+	}
+
+	protected <T> SqlWrapper<Object> buildListSql(BeanMeta<T> beanMeta, String fieldSelectSql, String fromWhereSql, List<OrderBy> orderBys, Paging paging) {
 		StringBuilder builder = new StringBuilder(fromWhereSql);
-		List<OrderBy> orderBys = searchParam.getOrderBys();
 		int count = orderBys.size();
 		if (count > 0) {
 			builder.append(" order by ");
@@ -188,15 +225,15 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 				builder.append(", ");
 			}
 		}
-		return forPaginate(fieldSelectSql, builder.toString(), searchParam.getPaging());
+		return forPaginate(fieldSelectSql, builder.toString(), paging);
 	}
 
-	protected SqlWrapper<Object> resolveTableSql(SqlSnippet tableSnippet, SearchParam searchParam) {
+	protected SqlWrapper<Object> resolveTableSql(SqlSnippet tableSnippet, Map<String, Object> paraMap) {
 		SqlWrapper<Object> sqlWrapper = new SqlWrapper<>();
 		String tables = tableSnippet.getSql();
 		List<SqlSnippet.SqlPara> params = tableSnippet.getParas();
 		for (SqlSnippet.SqlPara param : params) {
-			Object sqlParam = searchParam.getPara(param.getName());
+			Object sqlParam = paraMap.get(param.getName());
 			if (param.isJdbcPara()) {
 				sqlWrapper.addPara(sqlParam);
 			} else {
@@ -208,12 +245,12 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		return sqlWrapper;
 	}
 
-	protected SqlWrapper<Object> resolveDbFieldSql(SqlSnippet dbFieldSnippet, SearchParam searchParam) {
+	protected SqlWrapper<Object> resolveDbFieldSql(SqlSnippet dbFieldSnippet, Map<String, Object> paraMap) {
 		String dbField = dbFieldSnippet.getSql();
 		List<SqlSnippet.SqlPara> params = dbFieldSnippet.getParas();
 		SqlWrapper<Object> sqlWrapper = new SqlWrapper<>();
 		for (SqlSnippet.SqlPara param : params) {
-			Object sqlParam = searchParam.getPara(param.getName());
+			Object sqlParam = paraMap.get(param.getName());
 			if (param.isJdbcPara()) {
 				sqlWrapper.addPara(sqlParam);
 			} else {
@@ -223,27 +260,6 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		}
 		sqlWrapper.setSql(dbField);
 		return sqlWrapper;
-	}
-
-
-	protected <T> String resolveClusterSelectSql(BeanMeta<T> beanMeta, String[] summaryFields, List<String> summaryAliases, String countAlias) {
-		StringBuilder builder = new StringBuilder("select ");
-		if (countAlias != null) {
-			builder.append("count(*) ").append(countAlias);
-			if (summaryFields.length > 0) {
-				builder.append(", ");
-			}
-		}
-		for (int i = 0; i < summaryFields.length; i++) {
-			builder.append("sum(")
-					.append(beanMeta.getFieldSql(summaryFields[i]))
-					.append(") ")
-					.append(summaryAliases.get(i));
-			if (i < summaryFields.length - 1) {
-				builder.append(", ");
-			}
-		}
-		return builder.toString();
 	}
 
 	protected <T> String getCountAlias(BeanMeta<T> beanMeta) {
@@ -259,16 +275,6 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 	protected <T> String getTableAlias(BeanMeta<T> beanMeta) {
 		// 注意：Oracle 数据库的别名不能以下划线开头，留参 beanMeta 方便用户重写该方法
 		return "t_";
-	}
-
-	protected List<Object> appendCondition(StringBuilder builder, FieldMeta fieldMeta, FieldParam param) {
-		Object[] values = param.getValues();
-		FieldOp operator = (FieldOp) param.getOperator();
-		if (dateValueCorrector != null) {
-			values = dateValueCorrector.correct(fieldMeta.getType(), values, operator);
-		}
-		FieldOp.OpPara opPara = new FieldOp.OpPara(fieldMeta, param.isIgnoreCase(), values);
-		return operator.operate(builder, opPara);
 	}
 
 	public DateValueCorrector getDateValueCorrector() {

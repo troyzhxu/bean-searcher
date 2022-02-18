@@ -1,6 +1,7 @@
 package com.ejlchina.searcher;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * 字段运算符
@@ -55,22 +56,18 @@ public interface FieldOp {
      */
     class OpPara {
 
-        final FieldMeta fieldMeta;
+        final SqlWrapper<Object> fieldSql;
         final boolean ignoreCase;
         final Object[] values;
 
-        public OpPara(FieldMeta fieldMeta, boolean ignoreCase, Object[] values) {
-            this.fieldMeta = fieldMeta;
+        public OpPara(SqlWrapper<Object> fieldSql, boolean ignoreCase, Object[] values) {
+            this.fieldSql = fieldSql;
             this.ignoreCase = ignoreCase;
             this.values = values;
         }
 
-        public FieldMeta getFieldMeta() {
-            return fieldMeta;
-        }
-
-        public String getDbField() {
-            return fieldMeta.getFieldSql().getSql();
+        public SqlWrapper<Object> getFieldSql() {
+            return fieldSql;
         }
 
         public boolean isIgnoreCase() {

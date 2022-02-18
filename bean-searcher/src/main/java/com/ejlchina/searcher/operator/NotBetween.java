@@ -1,15 +1,13 @@
 package com.ejlchina.searcher.operator;
 
 import com.ejlchina.searcher.FieldOp;
+import com.ejlchina.searcher.SqlWrapper;
 import com.ejlchina.searcher.implement.DialectWrapper;
 import com.ejlchina.searcher.util.ObjectUtils;
 import com.ejlchina.searcher.util.StringUtils;
 
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
-
-import static java.util.Collections.singletonList;
 
 /**
  * 区间运算符
@@ -35,13 +33,13 @@ public class NotBetween extends DialectWrapper implements FieldOp {
 
     @Override
     public List<Object> operate(StringBuilder sqlBuilder, OpPara opPara) {
-        String dbField = opPara.getDbField();
+        SqlWrapper<Object> fieldSql = opPara.getFieldSql();
         Object[] values = opPara.getValues();
         if (opPara.isIgnoreCase()) {
-            toUpperCase(sqlBuilder, dbField);
+            toUpperCase(sqlBuilder, fieldSql.getSql());
             ObjectUtils.upperCase(values);
         } else {
-            sqlBuilder.append(dbField);
+            sqlBuilder.append(fieldSql.getSql());
         }
         boolean val1Null = false;
         boolean val2Null = false;
@@ -53,17 +51,19 @@ public class NotBetween extends DialectWrapper implements FieldOp {
         if (value1 == null || (value1 instanceof String && StringUtils.isBlank((String) value1))) {
             val2Null = true;
         }
+        List<Object> params = new ArrayList<>(fieldSql.getParas());
         if (!val1Null && !val2Null) {
             sqlBuilder.append(" not between ? and ? ");
-            return Arrays.asList(value0, value1);
+            params.add(value0);
+            params.add(value1);
         } else if (val1Null && !val2Null) {
             sqlBuilder.append(" > ? ");
-            return singletonList(value1);
+            params.add(value1);
         } else if (!val1Null) {
             sqlBuilder.append(" < ? ");
-            return singletonList(value0);
+            params.add(value0);
         }
-        return Collections.emptyList();
+        return params;
     }
 
 }

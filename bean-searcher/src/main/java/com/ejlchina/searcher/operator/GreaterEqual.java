@@ -1,14 +1,14 @@
 package com.ejlchina.searcher.operator;
 
 import com.ejlchina.searcher.FieldOp;
-import com.ejlchina.searcher.dialect.Dialect;
+import com.ejlchina.searcher.SqlWrapper;
 import com.ejlchina.searcher.implement.DialectWrapper;
 import com.ejlchina.searcher.util.ObjectUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.ejlchina.searcher.util.ObjectUtils.firstNotNull;
-import static java.util.Collections.singletonList;
 
 /**
  * 大于等于运算符
@@ -34,16 +34,18 @@ public class GreaterEqual extends DialectWrapper implements FieldOp {
 
     @Override
     public List<Object> operate(StringBuilder sqlBuilder, OpPara opPara) {
-        String dbField = opPara.getDbField();
+        SqlWrapper<Object> fieldSql = opPara.getFieldSql();
         Object[] values = opPara.getValues();
         if (opPara.isIgnoreCase()) {
-            toUpperCase(sqlBuilder, dbField);
+            toUpperCase(sqlBuilder, fieldSql.getSql());
             ObjectUtils.upperCase(values);
         } else {
-            sqlBuilder.append(dbField);
+            sqlBuilder.append(fieldSql.getSql());
         }
         sqlBuilder.append(" >= ?");
-        return singletonList(firstNotNull(values));
+        List<Object> params = new ArrayList<>(fieldSql.getParas());
+        params.add(firstNotNull(values));
+        return params;
     }
 
 }
