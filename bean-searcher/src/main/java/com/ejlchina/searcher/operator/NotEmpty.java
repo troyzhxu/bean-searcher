@@ -30,7 +30,7 @@ public class NotEmpty implements FieldOp {
 
     @Override
     public List<Object> operate(StringBuilder sqlBuilder, OpPara opPara) {
-        SqlWrapper<Object> fieldSql = opPara.getDbFieldSql();
+        SqlWrapper<Object> fieldSql = opPara.getFieldSql();
         String sql = fieldSql.getSql();
         List<Object> paras = fieldSql.getParas();
         sqlBuilder.append(sql).append(" is not null");

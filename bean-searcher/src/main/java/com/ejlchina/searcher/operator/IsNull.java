@@ -29,7 +29,7 @@ public class IsNull implements FieldOp {
 
     @Override
     public List<Object> operate(StringBuilder sqlBuilder, OpPara opPara) {
-        SqlWrapper<Object> fieldSql = opPara.getDbFieldSql();
+        SqlWrapper<Object> fieldSql = opPara.getFieldSql();
         sqlBuilder.append(fieldSql.getSql()).append(" is null");
         return fieldSql.getParas();
     }

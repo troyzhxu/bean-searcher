@@ -4,7 +4,6 @@ import com.ejlchina.searcher.FieldOp;
 import com.ejlchina.searcher.SqlWrapper;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -31,7 +30,7 @@ public class Empty implements FieldOp {
 
     @Override
     public List<Object> operate(StringBuilder sqlBuilder, OpPara opPara) {
-        SqlWrapper<Object> fieldSql = opPara.getDbFieldSql();
+        SqlWrapper<Object> fieldSql = opPara.getFieldSql();
         String sql = fieldSql.getSql();
         List<Object> paras = fieldSql.getParas();
         sqlBuilder.append(sql).append(" is null").append(" or ").append(sql).append(" = ''");
