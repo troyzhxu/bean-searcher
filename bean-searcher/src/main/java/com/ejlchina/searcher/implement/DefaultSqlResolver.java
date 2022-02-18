@@ -65,9 +65,9 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 			List<String> summaryAliases = searchSql.getSummaryAliases();
 			String countAlias = searchSql.getCountAlias();
 			SqlWrapper<Object> clusterSelectSql = buildClusterSelectSql(beanMeta, summaryFields, summaryAliases, countAlias, paraMap);
-			SqlWrapper<Object> clusterSql = buildClusterSql(beanMeta, clusterSelectSql, fieldSelectSql, fromWhereSql);
-			searchSql.setClusterSqlString(clusterSql.getSql());
-			searchSql.addClusterSqlParams(clusterSql.getParas());
+			String clusterSql = buildClusterSql(beanMeta, clusterSelectSql.getSql(), fieldSelectSql, fromWhereSql);
+			searchSql.setClusterSqlString(clusterSql);
+			searchSql.addClusterSqlParams(clusterSelectSql.getParas());
 			// 只有在 distinct 条件下，聚族查询 SQL 里才会出现 字段查询 语句，才需要将 字段内嵌参数放到 聚族参数里
 			if (beanMeta.isDistinct()) {
 				searchSql.addClusterSqlParams(fieldSelectSqlWrapper.getParas());
@@ -128,7 +128,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 			if (i < summaryFields.length - 1) {
 				builder.append(", ");
 			}
-			sqlWrapper.addPara(fieldSql.getParas());
+			sqlWrapper.addParas(fieldSql.getParas());
 		}
 		sqlWrapper.setSql(builder.toString());
 		return sqlWrapper;
@@ -196,20 +196,17 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		return sqlWrapper;
 	}
 
-	private <T> SqlWrapper<Object> buildClusterSql(BeanMeta<T> beanMeta, SqlWrapper<Object> clusterSelectSql, String fieldSelectSql, String fromWhereSql) {
+	private <T> String buildClusterSql(BeanMeta<T> beanMeta, String clusterSelectSql, String fieldSelectSql, String fromWhereSql) {
 		if (beanMeta.isDistinct()) {
 			String originalSql = fieldSelectSql + fromWhereSql;
 			String tableAlias = getTableAlias(beanMeta);
-			clusterSelectSql.setSql(clusterSelectSql.getSql() + " from (" + originalSql + ") " + tableAlias);
-			return clusterSelectSql;
+			return clusterSelectSql + " from (" + originalSql + ") " + tableAlias;
 		}
 		if (StringUtils.isBlank(beanMeta.getGroupBy())) {
-			clusterSelectSql.setSql(clusterSelectSql.getSql() + fromWhereSql);
-			return clusterSelectSql;
+			return clusterSelectSql + fromWhereSql;
 		}
 		String tableAlias = getTableAlias(beanMeta);
-		clusterSelectSql.setSql(clusterSelectSql.getSql() + " from (select count(*) " + fromWhereSql + ") " + tableAlias);
-		return clusterSelectSql;
+		return clusterSelectSql + " from (select count(*) " + fromWhereSql + ") " + tableAlias;
 	}
 
 	protected <T> SqlWrapper<Object> buildListSql(BeanMeta<T> beanMeta, String fieldSelectSql, String fromWhereSql, List<OrderBy> orderBys, Paging paging) {
