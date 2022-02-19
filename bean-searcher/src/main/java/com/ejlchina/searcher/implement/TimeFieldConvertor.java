@@ -7,7 +7,7 @@ import java.sql.Time;
 import java.time.LocalTime;
 
 /**
- * 时间字段转换器: java.sql.Time -> LocalTime
+ * 时间字段转换器: java.sql.Time、LocalTime 之间的转换
  *
  * @author Troy.Zhou @ 2022-02-14
  * @since v3.5.0
@@ -16,12 +16,23 @@ public class TimeFieldConvertor implements FieldConvertor.BFieldConvertor {
 
     @Override
     public boolean supports(FieldMeta meta, Class<?> valueType) {
-        return valueType == Time.class && meta.getType() == LocalTime.class;
+        if (valueType == Time.class || valueType == LocalTime.class) {
+            Class<?> type = meta.getType();
+            return type == Time.class || type == LocalTime.class;
+        }
+        return false;
     }
 
     @Override
     public Object convert(FieldMeta meta, Object value) {
-        return ((Time) value).toLocalTime();
+        Class<?> type = meta.getType();
+        if (value instanceof Time && type == LocalTime.class) {
+            return ((Time) value).toLocalTime();
+        }
+        if (value instanceof LocalTime && type == Time.class) {
+            return Time.valueOf((LocalTime) value);
+        }
+        return value;
     }
 
 }
