@@ -29,6 +29,11 @@ public class ParamGroup {
     // 原生组有此属性
     private List<FieldParam> params;
 
+    public ParamGroup(int type, List<ParamGroup> groups, List<FieldParam> params) {
+        this.type = type;
+        this.params = params;
+    }
+
     public int getType() {
         return type;
     }

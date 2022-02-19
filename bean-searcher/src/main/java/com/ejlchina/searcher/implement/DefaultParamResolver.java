@@ -101,7 +101,7 @@ public class DefaultParamResolver implements ParamResolver {
 	protected SearchParam doResolve(BeanMeta<?> beanMeta, FetchType fetchType, Map<String, Object> paraMap) {
 		SearchParam searchParam = new SearchParam(paraMap, fetchType,
 				resolveFetchFields(beanMeta, fetchType, paraMap),
-				resolveFieldParams(beanMeta.getFieldMetas(), paraMap)
+				resolveParamGroup(beanMeta.getFieldMetas(), paraMap)
 		);
 		if (fetchType.canPaging()) {
 			Object value = paraMap.get(MapBuilder.PAGING);
@@ -153,31 +153,36 @@ public class DefaultParamResolver implements ParamResolver {
 		return paraMap.get(onlySelectName);
 	}
 
-	protected List<FieldParam> resolveFieldParams(Collection<FieldMeta> fieldMetas, Map<String, Object> paraMap) {
-		Map<String, Set<Integer>> fieldIndicesMap = new HashMap<>();
-		for (String key : paraMap.keySet()) {
-			int index = key.lastIndexOf(separator);
-			if (index > 0 && key.length() > index + 1) {
-				String suffix = key.substring(index + 1);
-				if (INDEX_PATTERN.matcher(suffix).matches()) {
-					String field = key.substring(0, index);
-					mapFieldIndex(fieldIndicesMap, field, Integer.parseInt(suffix));
+	protected ParamGroup resolveParamGroup(Collection<FieldMeta> fieldMetas, Map<String, Object> paraMap) {
+		String gexpr = ObjectUtils.string(paraMap.get(gexprName));
+		if (StringUtils.isBlank(gexpr)) {
+			Map<String, Set<Integer>> fieldIndicesMap = new HashMap<>();
+			for (String key : paraMap.keySet()) {
+				int index = key.lastIndexOf(separator);
+				if (index > 0 && key.length() > index + 1) {
+					String suffix = key.substring(index + 1);
+					if (INDEX_PATTERN.matcher(suffix).matches()) {
+						String field = key.substring(0, index);
+						mapFieldIndex(fieldIndicesMap, field, Integer.parseInt(suffix));
+					}
+				}
+				mapFieldIndex(fieldIndicesMap, key, 0);
+			}
+			List<FieldParam> fieldParams = new ArrayList<>();
+			for (FieldMeta meta : fieldMetas) {
+				if (!meta.isConditional()) {
+					continue;
+				}
+				Set<Integer> indices = fieldIndicesMap.get(meta.getName());
+				FieldParam param = toFieldParam(meta, indices, paraMap);
+				if (param != null) {
+					fieldParams.add(param);
 				}
 			}
-			mapFieldIndex(fieldIndicesMap, key, 0);
+			return new ParamGroup(ParamGroup.TYPE_AND, null, fieldParams);
 		}
-		List<FieldParam> fieldParams = new ArrayList<>();
-		for (FieldMeta meta : fieldMetas) {
-			if (!meta.isConditional()) {
-				continue;
-			}
-			Set<Integer> indices = fieldIndicesMap.get(meta.getName());
-			FieldParam param = toFieldParam(meta, indices, paraMap);
-			if (param != null) {
-				fieldParams.add(param);
-			}
-		}
-		return fieldParams;
+		// TODO:
+		return null;
 	}
 
 	protected void mapFieldIndex(Map<String, Set<Integer>> fieldIndicesKeysMap, String field, int index) {
