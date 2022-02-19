@@ -62,15 +62,6 @@ public class SearchParam {
 		return paraMap;
 	}
 
-	/**
-	 * 获取原始参数值
-	 * @param key 参数名
-	 * @return 参数值
-	 */
-	public Object getPara(String key) {
-		return paraMap.get(key);
-	}
-
 	public List<FieldParam> getFieldParams() {
 		return fieldParams;
 	}
