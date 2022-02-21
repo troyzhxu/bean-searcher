@@ -140,12 +140,7 @@ public class Group<Value> {
         consumer.accept(EVENT_START);
         for (int i = 0; i < groups.size(); i++) {
             if (i > 0) {
-                if (type == TYPE_AND) {
-                    consumer.accept(EVENT_AND);
-                }
-                if (type == TYPE_OR) {
-                    consumer.accept(EVENT_OR);
-                }
+                consumer.accept(type == TYPE_AND ? EVENT_AND : EVENT_OR);
             }
             groups.get(i).readAll(consumer);
         }
@@ -170,6 +165,12 @@ public class Group<Value> {
         return boolWith(TYPE_OR, other);
     }
 
+    /**
+     * 与另一个 Group 进行逻辑运算，并简化表达式
+     * @param opType 运算类型
+     * @param other 另一个 Group
+     * @return Group
+     */
     private Group<Value> boolWith(int opType, Group<Value> other) {
         if (equals(other)) {
             return this;
@@ -182,7 +183,9 @@ public class Group<Value> {
             } else {
                 groups.add(other);
             }
-            return new Group<>(opType, groups.stream().distinct().collect(Collectors.toList()));
+            return new Group<>(opType,
+                    groups.stream().distinct().collect(Collectors.toList())
+            );
         }
         if (otherType == opType) {
             List<Group<Value>> groups = new ArrayList<>(other.getGroups());
