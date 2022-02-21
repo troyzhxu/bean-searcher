@@ -22,7 +22,7 @@ public class ExprParser {
 
     private final char orOp;
 
-    private int index;      // 下一步该读取的下标
+    private int index = 0;      // 下一步该读取的下标
 
     public ExprParser(String expression, char andOp, char orOp) {
         this.expression = expression;
@@ -53,23 +53,20 @@ public class ExprParser {
      * @return 运算符 或 操作数
      */
     protected Object readNext() {
-        int valueEnd = 0;
         int initIndex = index;
         while (index < expression.length()) {
             char ch = expression.charAt(index);
             if (ch == andOp || ch == orOp || ch == '(' || ch == ')') {
-                if (valueEnd == initIndex) {
+                if (index == initIndex) {
                     index++;
                     return ch;
                 }
-                return expression.substring(initIndex, valueEnd).trim();
-            } else {
-                valueEnd++;
+                return expression.substring(initIndex, index).trim();
             }
             index++;
         }
-        if (valueEnd > initIndex) {
-            return expression.substring(initIndex, valueEnd).trim();
+        if (index > initIndex) {
+            return expression.substring(initIndex, index).trim();
         }
         return null;
     }

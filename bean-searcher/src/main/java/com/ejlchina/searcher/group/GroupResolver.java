@@ -24,6 +24,7 @@ public class GroupResolver {
 
     private final Object lock = new Object();
 
+    // LRU 缓存模型
     private final LinkedHashMap<String, Group<String>> cache = new LinkedHashMap<>() {
         @Override
         protected boolean removeEldestEntry(Map.Entry eldest) {
@@ -36,13 +37,13 @@ public class GroupResolver {
         synchronized (lock) {
             gExpr = cache.get(expr);
         }
-        if (gExpr != null) {
-            return gExpr;
+        if (gExpr == null) {
+            gExpr = doResolve(expr);
+            synchronized (lock) {
+                cache.put(expr, gExpr);
+            }
         }
-        gExpr = doResolve(expr);
-        synchronized (lock) {
-            return cache.put(expr, gExpr);
-        }
+        return gExpr;
     }
 
     protected Group<String> doResolve(String expr) {
@@ -57,7 +58,7 @@ public class GroupResolver {
         }
     }
 
-    protected ExprParser createParser(String expr) {
+    public ExprParser createParser(String expr) {
         return new ExprParser(expr, andKey, orKey);
     }
 

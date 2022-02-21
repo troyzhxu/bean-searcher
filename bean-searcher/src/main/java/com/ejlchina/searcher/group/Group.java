@@ -1,9 +1,6 @@
 package com.ejlchina.searcher.group;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -173,6 +170,9 @@ public class Group<Value> {
     }
 
     private Group<Value> boolWith(int opType, Group<Value> other) {
+        if (equals(other)) {
+            return this;
+        }
         int otherType = other.getType();
         if (type == opType) {
             List<Group<Value>> groups = new ArrayList<>(this.groups);
@@ -181,11 +181,13 @@ public class Group<Value> {
             } else {
                 groups.add(other);
             }
-            return new Group<>(opType, groups);
+            return new Group<>(opType, groups.stream().distinct().collect(Collectors.toList()));
         }
         if (otherType == opType) {
             List<Group<Value>> groups = new ArrayList<>(other.getGroups());
-            groups.add(this);
+            if (!groups.contains(this)) {
+                groups.add(this);
+            }
             return new Group<>(opType, groups);
         }
         return new Group<>(opType, Arrays.asList(this, other));
@@ -201,6 +203,41 @@ public class Group<Value> {
 
     public Value getValue() {
         return value;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Group<?> other = (Group<?>) o;
+        if (type != other.type) {
+            return false;
+        }
+        return Objects.equals(groups, other.groups) && Objects.equals(value, other.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, groups, value);
+    }
+
+    @Override
+    public String toString() {
+        if (type == TYPE_AND) {
+            return groups.stream().map(g -> {
+                        if (g.type == TYPE_OR) {
+                            return "(" + g + ")";
+                        }
+                        return g.toString();
+                    })
+                    .collect(Collectors.joining("*"));
+        }
+        if (type == TYPE_OR) {
+            return groups.stream().map(Group::toString)
+                    .collect(Collectors.joining("+"));
+        }
+        return value != null ? value.toString() : "";
     }
 
 }
