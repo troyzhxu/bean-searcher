@@ -16,9 +16,9 @@ public class GroupResolver {
 
     static final Logger log = LoggerFactory.getLogger(GroupResolver.class);
 
-    private char andKey = '*';
+    private char andKey = '+';
 
-    private char orKey = '+';
+    private char orKey = '|';
 
     private int cacheSize = 100;
 

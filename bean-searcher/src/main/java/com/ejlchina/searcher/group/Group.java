@@ -231,11 +231,11 @@ public class Group<Value> {
                         }
                         return g.toString();
                     })
-                    .collect(Collectors.joining("*"));
+                    .collect(Collectors.joining("+"));
         }
         if (type == TYPE_OR) {
             return groups.stream().map(Group::toString)
-                    .collect(Collectors.joining("+"));
+                    .collect(Collectors.joining("|"));
         }
         return value != null ? value.toString() : "";
     }
