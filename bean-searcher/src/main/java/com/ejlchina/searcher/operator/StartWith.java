@@ -44,7 +44,7 @@ public class StartWith extends DialectWrapper implements FieldOp {
         }
         sqlBuilder.append(" like ?");
         List<Object> params = new ArrayList<>(fieldSql.getParas());
-        params.add(firstNotNull(values));
+        params.add(firstNotNull(values) + "%");
         return params;
     }
 
