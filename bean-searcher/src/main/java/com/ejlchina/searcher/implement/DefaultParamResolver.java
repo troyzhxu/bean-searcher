@@ -86,6 +86,12 @@ public class DefaultParamResolver implements ParamResolver {
 
 	/**
 	 * @since v3.5.0
+	 * 组分割符
+	 */
+	private String groupSeparator = ".";
+
+	/**
+	 * @since v3.5.0
 	 * 用于解析组表达式
 	 */
 	private GroupResolver groupResolver = new GroupResolver();
@@ -163,11 +169,13 @@ public class DefaultParamResolver implements ParamResolver {
 		Map<String, List<FieldParam>> holder = new HashMap<>();
 		String groupExpr = ObjectUtils.string(paraMap.get(gexprName));
 		return groupResolver.resolve(groupExpr)
-				.transform(prefix -> {
-					List<FieldParam> params = holder.get(prefix);
+				.transform(gKey -> {
+					List<FieldParam> params = holder.get(gKey);
 					if (params == null) {
-						params = extractFieldParams(fieldMetas, new MapWrapper(paraMap, prefix));
-						holder.put(prefix, params);
+						String prefix = gKey + groupSeparator;
+						MapWrapper mapWrapper = gKey != null ? new MapWrapper(paraMap, prefix) : new MapWrapper(paraMap);
+						params = extractFieldParams(fieldMetas, mapWrapper);
+						holder.put(gKey, params);
 					}
 					return params;
 				})
@@ -420,6 +428,14 @@ public class DefaultParamResolver implements ParamResolver {
 
 	public void setGroupResolver(GroupResolver groupResolver) {
 		this.groupResolver = Objects.requireNonNull(groupResolver);
+	}
+
+	public String getGroupSeparator() {
+		return groupSeparator;
+	}
+
+	public void setGroupSeparator(String groupSeparator) {
+		this.groupSeparator = Objects.requireNonNull(groupSeparator);;
 	}
 
 }

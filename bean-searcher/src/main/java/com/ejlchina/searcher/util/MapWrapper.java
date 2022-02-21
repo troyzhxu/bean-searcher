@@ -8,6 +8,10 @@ public class MapWrapper {
     private final Map<String, Object> map;
     private final String prefix;
 
+    public MapWrapper(Map<String, Object> map) {
+        this(map, null);
+    }
+
     public MapWrapper(Map<String, Object> map, String prefix) {
         this.map = Objects.requireNonNull(map);
         this.prefix = prefix;
@@ -19,7 +23,15 @@ public class MapWrapper {
         Set<String> ks = keySet;
         if (ks == null) {
             if (prefix != null) {
-                ks = map.keySet().stream().map(k -> prefix + k).collect(Collectors.toSet());
+                int index = prefix.length();
+                ks = map.keySet().stream()
+                        .map(k -> {
+                            if (k.startsWith(prefix)) {
+                                return k.substring(index);
+                            }
+                            return k;
+                        })
+                        .collect(Collectors.toSet());
             } else {
                 ks = map.keySet();
             }
