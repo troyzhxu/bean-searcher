@@ -1,7 +1,7 @@
 package com.ejlchina.searcher;
 
+import com.ejlchina.searcher.group.Group;
 import com.ejlchina.searcher.param.*;
-import com.ejlchina.searcher.util.BoolGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ public class SearchParam {
 	private final List<String> fetchFields;
 
 	// 字段参数组
-	private final BoolGroup<List<FieldParam>> fieldParams;
+	private final Group<List<FieldParam>> fieldParamGroup;
 
 	// 排序参数
 	private final List<OrderBy> orderBys = new ArrayList<>();
@@ -33,11 +33,11 @@ public class SearchParam {
 	private Paging paging;
 
 
-	public SearchParam(Map<String, Object> paraMap, FetchType fetchType, List<String> fetchFields, BoolGroup<List<FieldParam>> fieldParams) {
+	public SearchParam(Map<String, Object> paraMap, FetchType fetchType, List<String> fetchFields, Group<List<FieldParam>> fieldParamGroup) {
 		this.paraMap = paraMap;
 		this.fetchType = fetchType;
 		this.fetchFields = fetchFields;
-		this.fieldParams = fieldParams;
+		this.fieldParamGroup = fieldParamGroup;
 	}
 
 	/**
@@ -56,8 +56,8 @@ public class SearchParam {
 		return fetchFields;
 	}
 
-	public BoolGroup<List<FieldParam>> getFieldParams() {
-		return fieldParams;
+	public Group<List<FieldParam>> getFieldParamGroup() {
+		return fieldParamGroup;
 	}
 
 	public Paging getPaging() {

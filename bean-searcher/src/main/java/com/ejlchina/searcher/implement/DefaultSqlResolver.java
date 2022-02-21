@@ -6,6 +6,7 @@ import com.ejlchina.searcher.param.FetchType;
 import com.ejlchina.searcher.param.FieldParam;
 import com.ejlchina.searcher.param.OrderBy;
 import com.ejlchina.searcher.param.Paging;
+import com.ejlchina.searcher.group.Group;
 import com.ejlchina.searcher.util.StringUtils;
 
 import java.util.List;
@@ -53,11 +54,10 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 			}
 			searchSql.addSummaryAlias(getSummaryAlias(fieldMeta));
 		}
-		List<FieldParam> fieldParams = searchParam.getFieldParams();
 		Map<String, Object> paraMap = searchParam.getParaMap();
 
 		SqlWrapper<Object> fieldSelectSqlWrapper = buildFieldSelectSql(beanMeta, fetchFields, paraMap);
-		SqlWrapper<Object> fromWhereSqlWrapper = buildFromWhereSql(beanMeta, fieldParams, paraMap);
+		SqlWrapper<Object> fromWhereSqlWrapper = buildFromWhereSql(beanMeta, searchParam.getFieldParamGroup(), paraMap);
 		String fieldSelectSql = fieldSelectSqlWrapper.getSql();
 		String fromWhereSql = fromWhereSqlWrapper.getSql();
 
@@ -132,7 +132,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		return sqlWrapper;
 	}
 
-	protected <T> SqlWrapper<Object> buildFromWhereSql(BeanMeta<T> beanMeta, List<FieldParam> fieldParamList, Map<String, Object> paraMap) {
+	protected <T> SqlWrapper<Object> buildFromWhereSql(BeanMeta<T> beanMeta, Group<List<FieldParam>> fieldParamGroup, Map<String, Object> paraMap) {
 		SqlWrapper<Object> sqlWrapper = new SqlWrapper<>();
 		SqlWrapper<Object> tableSql = resolveTableSql(beanMeta.getTableSnippet(), paraMap);
 		sqlWrapper.addParas(tableSql.getParas());
@@ -152,28 +152,51 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 			}
 		}
 		boolean hasJoinCond = StringUtils.isNotBlank(joinCond);
-		if (hasJoinCond || fieldParamList.size() > 0) {
-			builder.append(" where (");
+		boolean hasFieldParams = fieldParamGroup.judgeAny(l -> l.size() > 0);
+
+		if (hasJoinCond || hasFieldParams) {
+			builder.append(" where ");
 			if (hasJoinCond) {
-				builder.append(joinCond).append(")");
+				builder.append("(").append(joinCond).append(")");
+				if (hasFieldParams) {
+					builder.append(" and ");
+				}
 			}
 		}
-		for (int i = 0; i < fieldParamList.size(); i++) {
-			if (i > 0 || hasJoinCond) {
-				builder.append(" and (");
+		fieldParamGroup.readAll(event -> {
+			if (event.isGroupStart()) {
+				builder.append("(");
+			} else
+			if (event.isGroupEnd()) {
+				builder.append(")");
+			} else
+			if (event.isGroupAnd()) {
+				builder.append(" and ");
+			} else
+			if (event.isGroupOr()) {
+				builder.append(" or ");
+			} else {
+				List<FieldParam> params = event.getValue();
+				for (int i = 0; i < params.size(); i++) {
+					if (i == 0) {
+						builder.append("(");
+					} else {
+						builder.append(" and (");
+					}
+					FieldParam param = params.get(i);
+					FieldMeta fieldMeta = beanMeta.requireFieldMeta(param.getName());
+					Object[] values = param.getValues();
+					FieldOp operator = (FieldOp) param.getOperator();
+					if (dateValueCorrector != null) {
+						values = dateValueCorrector.correct(fieldMeta.getType(), values, operator);
+					}
+					SqlWrapper<Object> fieldSql = resolveDbFieldSql(fieldMeta.getFieldSql(), paraMap);
+					FieldOp.OpPara opPara = new FieldOp.OpPara(fieldSql, param.isIgnoreCase(), values);
+					sqlWrapper.addParas(operator.operate(builder, opPara));
+					builder.append(")");
+				}
 			}
-			FieldParam param = fieldParamList.get(i);
-			FieldMeta fieldMeta = beanMeta.requireFieldMeta(param.getName());
-			Object[] values = param.getValues();
-			FieldOp operator = (FieldOp) param.getOperator();
-			if (dateValueCorrector != null) {
-				values = dateValueCorrector.correct(fieldMeta.getType(), values, operator);
-			}
-			SqlWrapper<Object> fieldSql = resolveDbFieldSql(fieldMeta.getFieldSql(), paraMap);
-			FieldOp.OpPara opPara = new FieldOp.OpPara(fieldSql, param.isIgnoreCase(), values);
-			sqlWrapper.addParas(operator.operate(builder, opPara));
-			builder.append(")");
-		}
+		});
 		String groupBy = beanMeta.getGroupBy();
 		if (StringUtils.isNotBlank(groupBy)) {
 			List<SqlSnippet.SqlPara> groupParams = beanMeta.getGroupBySqlParas();

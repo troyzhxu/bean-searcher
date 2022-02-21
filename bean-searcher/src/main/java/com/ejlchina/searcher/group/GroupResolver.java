@@ -1,6 +1,5 @@
-package com.ejlchina.searcher.implement;
+package com.ejlchina.searcher.group;
 
-import com.ejlchina.searcher.util.BoolGroup;
 import com.ejlchina.searcher.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,13 +8,13 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * BoolGroup 解析器
+ * Group 解析器
  * @author Troy.Zhou @ 2022-02-20
  * @since v3.5.0
  */
-public class GroupExprResolver {
+public class GroupResolver {
 
-    static final Logger log = LoggerFactory.getLogger(GroupExprResolver.class);
+    static final Logger log = LoggerFactory.getLogger(GroupResolver.class);
 
     private char andKey = '*';
 
@@ -25,15 +24,15 @@ public class GroupExprResolver {
 
     private final Object lock = new Object();
 
-    private final LinkedHashMap<String, BoolGroup<String>> cache = new LinkedHashMap<>() {
+    private final LinkedHashMap<String, Group<String>> cache = new LinkedHashMap<>() {
         @Override
         protected boolean removeEldestEntry(Map.Entry eldest) {
             return this.size() > cacheSize;
         }
     };
 
-    public BoolGroup<String> resolve(String expr) {
-        BoolGroup<String> gExpr;
+    public Group<String> resolve(String expr) {
+        Group<String> gExpr;
         synchronized (lock) {
             gExpr = cache.get(expr);
         }
@@ -46,20 +45,20 @@ public class GroupExprResolver {
         }
     }
 
-    protected BoolGroup<String> doResolve(String expr) {
+    protected Group<String> doResolve(String expr) {
         if (StringUtils.isBlank(expr)) {
-            return new BoolGroup<>(BoolGroup.TYPE_RAW);
+            return new Group<>(Group.TYPE_RAW);
         }
         try {
             return createParser(expr).parse();
         } catch (Exception e) {
             log.warn("can not parse expr: " + expr);
-            return new BoolGroup<>(BoolGroup.TYPE_RAW);
+            return new Group<>(Group.TYPE_RAW);
         }
     }
 
-    protected GroupExprParser createParser(String expr) {
-        return new GroupExprParser(expr, andKey, orKey);
+    protected ExprParser createParser(String expr) {
+        return new ExprParser(expr, andKey, orKey);
     }
 
     public char getAndKey() {

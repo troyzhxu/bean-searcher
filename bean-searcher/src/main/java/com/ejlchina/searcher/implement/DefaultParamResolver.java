@@ -1,6 +1,8 @@
 package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.*;
+import com.ejlchina.searcher.group.Group;
+import com.ejlchina.searcher.group.GroupResolver;
 import com.ejlchina.searcher.param.*;
 import com.ejlchina.searcher.util.*;
 
@@ -86,7 +88,7 @@ public class DefaultParamResolver implements ParamResolver {
 	 * @since v3.5.0
 	 * 用于解析组表达式
 	 */
-	private GroupExprResolver groupExprResolver = new GroupExprResolver();
+	private GroupResolver groupResolver = new GroupResolver();
 
 	@Override
 	public SearchParam resolve(BeanMeta<?> beanMeta, FetchType fetchType, Map<String, Object> paraMap) {
@@ -105,7 +107,7 @@ public class DefaultParamResolver implements ParamResolver {
 	protected SearchParam doResolve(BeanMeta<?> beanMeta, FetchType fetchType, Map<String, Object> paraMap) {
 		SearchParam searchParam = new SearchParam(paraMap, fetchType,
 				resolveFetchFields(beanMeta, fetchType, paraMap),
-				resolveFieldParams(beanMeta.getFieldMetas(), paraMap)
+				resolveFieldParamGroup(beanMeta.getFieldMetas(), paraMap)
 		);
 		if (fetchType.canPaging()) {
 			Object value = paraMap.get(MapBuilder.PAGING);
@@ -157,18 +159,19 @@ public class DefaultParamResolver implements ParamResolver {
 		return paraMap.get(onlySelectName);
 	}
 
-	protected BoolGroup<List<FieldParam>> resolveFieldParams(Collection<FieldMeta> fieldMetas, Map<String, Object> paraMap) {
-		String gExpr = ObjectUtils.string(paraMap.get(gexprName));
-		BoolGroup<String> boolGroup = groupExprResolver.resolve(gExpr);
+	protected Group<List<FieldParam>> resolveFieldParamGroup(Collection<FieldMeta> fieldMetas, Map<String, Object> paraMap) {
 		Map<String, List<FieldParam>> holder = new HashMap<>();
-		return boolGroup.transform(prefix -> {
-			List<FieldParam> params = holder.get(prefix);
-			if (params == null) {
-				params = extractFieldParams(fieldMetas, new MapWrapper(paraMap, prefix));
-				holder.put(prefix, params);
-			}
-			return params;
-		});
+		String groupExpr = ObjectUtils.string(paraMap.get(gexprName));
+		return groupResolver.resolve(groupExpr)
+				.transform(prefix -> {
+					List<FieldParam> params = holder.get(prefix);
+					if (params == null) {
+						params = extractFieldParams(fieldMetas, new MapWrapper(paraMap, prefix));
+						holder.put(prefix, params);
+					}
+					return params;
+				})
+				.filter(list -> list.size() > 0);
 	}
 
 	private List<FieldParam> extractFieldParams(Collection<FieldMeta> fieldMetas, MapWrapper paraMap) {
@@ -411,11 +414,12 @@ public class DefaultParamResolver implements ParamResolver {
 		this.gexprName = gexprName;
 	}
 
-	public GroupExprResolver getGroupExprResolver() {
-		return groupExprResolver;
+	public GroupResolver getGroupResolver() {
+		return groupResolver;
 	}
 
-	public void setGroupExprResolver(GroupExprResolver groupExprResolver) {
-		this.groupExprResolver = Objects.requireNonNull(groupExprResolver);
+	public void setGroupResolver(GroupResolver groupResolver) {
+		this.groupResolver = Objects.requireNonNull(groupResolver);
 	}
+
 }

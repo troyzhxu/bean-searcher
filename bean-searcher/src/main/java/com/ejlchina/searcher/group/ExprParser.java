@@ -1,21 +1,20 @@
-package com.ejlchina.searcher.implement;
+package com.ejlchina.searcher.group;
 
-import com.ejlchina.searcher.util.BoolGroup;
 import com.ejlchina.searcher.util.StringUtils;
 
 import java.util.Stack;
 
 /**
- * BoolGroup 解析器
+ * Group 表达式 解析器
  * @author Troy.Zhou @ 2022-02-21
  * @since v3.5.0
  */
-public class GroupExprParser {
+public class ExprParser {
 
     // 表达式
     private final String expression;
     // 操作数栈
-    private final Stack<BoolGroup<String>> valueStack = new Stack<>();
+    private final Stack<Group<String>> valueStack = new Stack<>();
     // 运算符栈
     private final Stack<Character> opStack = new Stack<>();
 
@@ -25,20 +24,20 @@ public class GroupExprParser {
 
     private int index;      // 下一步该读取的下标
 
-    public GroupExprParser(String expression, char andOp, char orOp) {
+    public ExprParser(String expression, char andOp, char orOp) {
         this.expression = expression;
         this.andOp = andOp;
         this.orOp = orOp;
     }
 
     // a+b*(c+d+e)*d+f
-    public BoolGroup<String> parse() {
+    public Group<String> parse() {
         Object res = readNext();
         while (res != null) {
             if (res instanceof String) {
                 String value = (String) res;
                 if (StringUtils.isNotBlank(value)) {
-                    valueStack.push(new BoolGroup<>(value));
+                    valueStack.push(new Group<>(value));
                 }
             } else if (res instanceof Character) {
                 // 读取到运算符，调用单独的方法处理
@@ -99,13 +98,19 @@ public class GroupExprParser {
 
     protected void updateValueStack(char op) {
         // 弹出两个操作数进行计算
-        BoolGroup<String> value2 = valueStack.pop();
-        BoolGroup<String> value1 = valueStack.pop();
+        Group<String> value2 = valueStack.pop();
+        Group<String> value1 = valueStack.pop();
         // 计算结果压入操作数栈
-        valueStack.push(value1.boolWith(op, value2));
+        if (op == andOp) {
+            valueStack.push(value1.and(value2));
+        } else if (op == orOp) {
+            valueStack.push(value1.or(value2));
+        } else {
+            throw new IllegalStateException("invalid expr");
+        }
     }
 
-    protected BoolGroup<String> getResult() {
+    protected Group<String> getResult() {
         while (opStack.size() > 0) {
             char op = opStack.pop();
             updateValueStack(op);
