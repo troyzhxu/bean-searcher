@@ -64,6 +64,9 @@ public class BeanSearcherProperties {
 		// 用于指定不需要 Select 的字段的参数名
 		private String selectExclude = "selectExclude";
 
+		// 组表达式参数名
+		private String gexpr = "gexpr";
+
 		// 分页参数配置
 		private final PaginationProps pagination = new PaginationProps();
 		
@@ -130,6 +133,14 @@ public class BeanSearcherProperties {
 
 		public void setSelectExclude(String selectExclude) {
 			this.selectExclude = selectExclude;
+		}
+
+		public String getGexpr() {
+			return gexpr;
+		}
+
+		public void setGexpr(String gexpr) {
+			this.gexpr = gexpr;
 		}
 
 		public PaginationProps getPagination() {
@@ -351,6 +362,11 @@ public class BeanSearcherProperties {
 		private boolean useDateFormat = true;
 
 		/**
+		 * 使用时间字段转换器
+		 */
+		private boolean useTime = true;
+
+		/**
 		 * 时区
 		 */
 		private ZoneId zoneId = null;
@@ -420,6 +436,14 @@ public class BeanSearcherProperties {
 
 		public void setDateFormats(Map<String, String> dateFormats) {
 			this.dateFormats = dateFormats;
+		}
+
+		public boolean isUseTime() {
+			return useTime;
+		}
+
+		public void setUseTime(boolean useTime) {
+			this.useTime = useTime;
 		}
 
 		public ZoneId getZoneId() {

@@ -1,9 +1,7 @@
 package com.ejlchina.searcher;
 
-import com.ejlchina.searcher.param.FetchType;
-import com.ejlchina.searcher.param.FieldParam;
-import com.ejlchina.searcher.param.OrderBy;
-import com.ejlchina.searcher.param.Paging;
+import com.ejlchina.searcher.group.Group;
+import com.ejlchina.searcher.param.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,42 +14,30 @@ import java.util.Map;
  */
 public class SearchParam {
 
-	/**
-	 * 原始检索参数
-	 */
+	// 原始检索参数
 	private final Map<String, Object> paraMap;
 
-	/**
-	 * Fetch 类型
-	 */
+	// Fetch 类型
 	private final FetchType fetchType;
 
-	/**
-	 * 需要 Select 的字段
-	 */
+	// 需要 Select 的字段
 	private final List<String> fetchFields;
 
-	/**
-	 * 过滤检索参数列表
-	 */
-	private final List<FieldParam> fieldParams;
+	// 字段参数组
+	private final Group<List<FieldParam>> fieldParamGroup;
 
-	/**
-	 * 排序参数
-	 */
+	// 排序参数
 	private final List<OrderBy> orderBys = new ArrayList<>();
 
-	/**
-	 * 分页参数
-	 */
+	// 分页参数
 	private Paging paging;
 
 
-	public SearchParam(Map<String, Object> paraMap, FetchType fetchType, List<String> fetchFields, List<FieldParam> fieldParams) {
+	public SearchParam(Map<String, Object> paraMap, FetchType fetchType, List<String> fetchFields, Group<List<FieldParam>> fieldParamGroup) {
 		this.paraMap = paraMap;
 		this.fetchType = fetchType;
 		this.fetchFields = fetchFields;
-		this.fieldParams = fieldParams;
+		this.fieldParamGroup = fieldParamGroup;
 	}
 
 	/**
@@ -62,25 +48,16 @@ public class SearchParam {
 		return paraMap;
 	}
 
-	/**
-	 * 获取原始参数值
-	 * @param key 参数名
-	 * @return 参数值
-	 */
-	public Object getPara(String key) {
-		return paraMap.get(key);
-	}
-
-	public List<FieldParam> getFieldParams() {
-		return fieldParams;
-	}
-
 	public FetchType getFetchType() {
 		return fetchType;
 	}
 
 	public List<String> getFetchFields() {
 		return fetchFields;
+	}
+
+	public Group<List<FieldParam>> getFieldParamGroup() {
+		return fieldParamGroup;
 	}
 
 	public Paging getPaging() {

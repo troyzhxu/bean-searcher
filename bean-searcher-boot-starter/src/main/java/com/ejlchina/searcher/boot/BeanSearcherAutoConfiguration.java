@@ -97,6 +97,7 @@ public class BeanSearcherAutoConfiguration {
 		paramResolver.setSeparator(conf.getSeparator());
 		paramResolver.setOnlySelectName(conf.getOnlySelect());
 		paramResolver.setSelectExcludeName(conf.getSelectExclude());
+		paramResolver.setGexprName(conf.getGexpr());
 		return paramResolver;
 	}
 
@@ -161,6 +162,13 @@ public class BeanSearcherAutoConfiguration {
 			convertor.setZoneId(zoneId);
 		}
 		return convertor;
+	}
+
+	@Bean
+	@ConditionalOnProperty(name = "bean-searcher.field-convertor.use-time", havingValue = "true", matchIfMissing = true)
+	@ConditionalOnMissingBean(TimeFieldConvertor.class)
+	public TimeFieldConvertor timeFieldConvertor() {
+		return new TimeFieldConvertor();
 	}
 
 	@Bean

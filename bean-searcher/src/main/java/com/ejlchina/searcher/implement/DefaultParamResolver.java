@@ -1,10 +1,10 @@
 package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.*;
+import com.ejlchina.searcher.group.Group;
+import com.ejlchina.searcher.group.GroupResolver;
 import com.ejlchina.searcher.param.*;
-import com.ejlchina.searcher.util.MapBuilder;
-import com.ejlchina.searcher.util.ObjectUtils;
-import com.ejlchina.searcher.util.StringUtils;
+import com.ejlchina.searcher.util.*;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -78,6 +78,17 @@ public class DefaultParamResolver implements ParamResolver {
 	 */
 	private String selectExcludeName = "selectExclude";
 
+	/**
+	 * @since v3.5.0
+	 * 用于指定组表达式参数名
+	 */
+	private String gexprName = "gexpr";
+
+	/**
+	 * @since v3.5.0
+	 * 用于解析组表达式
+	 */
+	private GroupResolver groupResolver = new GroupResolver();
 
 	@Override
 	public SearchParam resolve(BeanMeta<?> beanMeta, FetchType fetchType, Map<String, Object> paraMap) {
@@ -96,7 +107,7 @@ public class DefaultParamResolver implements ParamResolver {
 	protected SearchParam doResolve(BeanMeta<?> beanMeta, FetchType fetchType, Map<String, Object> paraMap) {
 		SearchParam searchParam = new SearchParam(paraMap, fetchType,
 				resolveFetchFields(beanMeta, fetchType, paraMap),
-				resolveFieldParams(beanMeta.getFieldMetas(), paraMap)
+				resolveFieldParamGroup(beanMeta.getFieldMetas(), paraMap)
 		);
 		if (fetchType.canPaging()) {
 			Object value = paraMap.get(MapBuilder.PAGING);
@@ -148,7 +159,22 @@ public class DefaultParamResolver implements ParamResolver {
 		return paraMap.get(onlySelectName);
 	}
 
-	protected List<FieldParam> resolveFieldParams(Collection<FieldMeta> fieldMetas, Map<String, Object> paraMap) {
+	protected Group<List<FieldParam>> resolveFieldParamGroup(Collection<FieldMeta> fieldMetas, Map<String, Object> paraMap) {
+		Map<String, List<FieldParam>> holder = new HashMap<>();
+		String groupExpr = ObjectUtils.string(paraMap.get(gexprName));
+		return groupResolver.resolve(groupExpr)
+				.transform(prefix -> {
+					List<FieldParam> params = holder.get(prefix);
+					if (params == null) {
+						params = extractFieldParams(fieldMetas, new MapWrapper(paraMap, prefix));
+						holder.put(prefix, params);
+					}
+					return params;
+				})
+				.filter(list -> list.size() > 0);
+	}
+
+	private List<FieldParam> extractFieldParams(Collection<FieldMeta> fieldMetas, MapWrapper paraMap) {
 		Map<String, Set<Integer>> fieldIndicesMap = new HashMap<>();
 		for (String key : paraMap.keySet()) {
 			int index = key.lastIndexOf(separator);
@@ -179,7 +205,7 @@ public class DefaultParamResolver implements ParamResolver {
 		fieldIndicesKeysMap.computeIfAbsent(field, k -> new HashSet<>(2)).add(index);
 	}
 
-	private FieldParam getFieldParam(Map<String, Object> paraMap, String field) {
+	private FieldParam getFieldParam(MapWrapper paraMap, String field) {
 		Object value = paraMap.get(MapBuilder.FIELD_PARAM + "." + field);
 		if (value instanceof FieldParam) {
 			return (FieldParam) value;
@@ -187,7 +213,7 @@ public class DefaultParamResolver implements ParamResolver {
 		return null;
 	}
 
-	protected FieldParam toFieldParam(FieldMeta meta, Set<Integer> indices, Map<String, Object> paraMap) {
+	protected FieldParam toFieldParam(FieldMeta meta, Set<Integer> indices, MapWrapper paraMap) {
 		String field = meta.getName();
 		FieldParam param = getFieldParam(paraMap, field);
 		FieldOp operator = allowedOperator(toOperator(field, paraMap, param), meta.getOnlyOn());
@@ -233,7 +259,7 @@ public class DefaultParamResolver implements ParamResolver {
 		return true;
 	}
 
-	private FieldOp toOperator(String field, Map<String, Object> paraMap, FieldParam param) {
+	private FieldOp toOperator(String field, MapWrapper paraMap, FieldParam param) {
 		if (param != null) {
 			Object op = param.getOperator();
 			if (op != null) {
@@ -378,6 +404,22 @@ public class DefaultParamResolver implements ParamResolver {
 
 	public void setSelectExcludeName(String selectExcludeName) {
 		this.selectExcludeName = Objects.requireNonNull(selectExcludeName);
+	}
+
+	public String getGexprName() {
+		return gexprName;
+	}
+
+	public void setGexprName(String gexprName) {
+		this.gexprName = gexprName;
+	}
+
+	public GroupResolver getGroupResolver() {
+		return groupResolver;
+	}
+
+	public void setGroupResolver(GroupResolver groupResolver) {
+		this.groupResolver = Objects.requireNonNull(groupResolver);
 	}
 
 }

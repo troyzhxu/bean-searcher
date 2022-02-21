@@ -109,6 +109,13 @@
       "type": "java.lang.String"
     },
     {
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Params",
+      "defaultValue": "gexpr",
+      "name": "bean-searcher.params.gexpr",
+      "description": "组表达式参数名",
+      "type": "java.lang.String"
+    },
+    {
       "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Params$PaginationProps",
       "defaultValue": 15,
       "name": "bean-searcher.params.pagination.default-size",
@@ -232,6 +239,13 @@
       "defaultValue": true,
       "name": "bean-searcher.field-convertor.use-date",
       "description": "是否使用 DateFieldConvertor",
+      "type": "java.lang.Boolean"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$FieldConvertor",
+      "defaultValue": true,
+      "name": "bean-searcher.field-convertor.use-time",
+      "description": "是否使用 TimeFieldConvertor",
       "type": "java.lang.Boolean"
     },
     {
