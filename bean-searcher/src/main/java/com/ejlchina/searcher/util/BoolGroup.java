@@ -7,7 +7,12 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class GroupExpr<Value> {
+
+/**
+ * 逻辑组
+ * @author Troy.Zhou @ 2022-02-21
+ */
+public class BoolGroup<Value> {
 
     /**
      * 且组，表示子组 groups 之间都是 且 的关系
@@ -26,70 +31,70 @@ public class GroupExpr<Value> {
     private final int type;
 
     // 子组：且组 与 或组 有此属性
-    private final List<GroupExpr<Value>> groups;
+    private final List<BoolGroup<Value>> groups;
 
-    // 该组的值
+    // 该组的值（原生组才有 该值）
     private final Value value;
 
-    public GroupExpr(int type) {
+    public BoolGroup(int type) {
         this(type, Collections.emptyList());
     }
 
-    public GroupExpr(int type, List<GroupExpr<Value>> groups) {
+    public BoolGroup(int type, List<BoolGroup<Value>> groups) {
         this(type, groups, null);
     }
 
-    public GroupExpr(Value value) {
+    public BoolGroup(Value value) {
         this(TYPE_RAW, Collections.emptyList(), value);
     }
 
-    private GroupExpr(int type, List<GroupExpr<Value>> groups, Value value) {
+    private BoolGroup(int type, List<BoolGroup<Value>> groups, Value value) {
         this.type = type;
         this.groups = groups;
         this.value = value;
     }
 
-    public <R> GroupExpr<R> transform(Function<Value, R> transformer) {
+    public <R> BoolGroup<R> transform(Function<Value, R> transformer) {
         if (type == TYPE_RAW) {
-            return new GroupExpr<>(transformer.apply(value));
+            return new BoolGroup<>(transformer.apply(value));
         }
-        List<GroupExpr<R>> newGroups = groups.stream()
+        List<BoolGroup<R>> newGroups = groups.stream()
                 .map(g -> g.transform(transformer))
                 .collect(Collectors.toList());
-        return new GroupExpr<>(type, newGroups);
+        return new BoolGroup<>(type, newGroups);
     }
 
 
     /**
-     * 与另一个 GroupExpr 做 布尔运算
+     * 与另一个 BoolGroup 做 布尔运算
      * @param opType 运算符 TYPE_AND 或 TYPE_OR
-     * @param other 另一个 GroupExpr
+     * @param other 另一个 BoolGroup
      * @return 运算结果
      */
-    public GroupExpr<Value> boolWith(int opType, GroupExpr<Value> other) {
+    public BoolGroup<Value> boolWith(int opType, BoolGroup<Value> other) {
         int otherType = other.getType();
         if (type == opType) {
-            List<GroupExpr<Value>> groups = new ArrayList<>(this.groups);
+            List<BoolGroup<Value>> groups = new ArrayList<>(this.groups);
             if (otherType == opType) {
                 groups.addAll(other.getGroups());
             } else {
                 groups.add(other);
             }
-            return new GroupExpr<>(opType, groups);
+            return new BoolGroup<>(opType, groups);
         }
         if (otherType == opType) {
-            List<GroupExpr<Value>> groups = new ArrayList<>(other.getGroups());
+            List<BoolGroup<Value>> groups = new ArrayList<>(other.getGroups());
             groups.add(this);
-            return new GroupExpr<>(opType, groups);
+            return new BoolGroup<>(opType, groups);
         }
-        return new GroupExpr<>(opType, Arrays.asList(this, other));
+        return new BoolGroup<>(opType, Arrays.asList(this, other));
     }
 
     public int getType() {
         return type;
     }
 
-    public List<GroupExpr<Value>> getGroups() {
+    public List<BoolGroup<Value>> getGroups() {
         return groups;
     }
 

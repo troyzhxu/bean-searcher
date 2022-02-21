@@ -1,6 +1,6 @@
 package com.ejlchina.searcher.implement;
 
-import com.ejlchina.searcher.util.GroupExpr;
+import com.ejlchina.searcher.util.BoolGroup;
 import com.ejlchina.searcher.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * GroupExpr 解析器
+ * BoolGroup 解析器
  * @author Troy.Zhou @ 2022-02-20
  * @since v3.5.0
  */
@@ -25,15 +25,15 @@ public class GroupExprResolver {
 
     private final Object lock = new Object();
 
-    private final LinkedHashMap<String, GroupExpr<String>> cache = new LinkedHashMap<>() {
+    private final LinkedHashMap<String, BoolGroup<String>> cache = new LinkedHashMap<>() {
         @Override
         protected boolean removeEldestEntry(Map.Entry eldest) {
             return this.size() > cacheSize;
         }
     };
 
-    public GroupExpr<String> resolve(String expr) {
-        GroupExpr<String> gExpr;
+    public BoolGroup<String> resolve(String expr) {
+        BoolGroup<String> gExpr;
         synchronized (lock) {
             gExpr = cache.get(expr);
         }
@@ -46,15 +46,15 @@ public class GroupExprResolver {
         }
     }
 
-    protected GroupExpr<String> doResolve(String expr) {
+    protected BoolGroup<String> doResolve(String expr) {
         if (StringUtils.isBlank(expr)) {
-            return new GroupExpr<>(GroupExpr.TYPE_RAW);
+            return new BoolGroup<>(BoolGroup.TYPE_RAW);
         }
         try {
             return createParser(expr).parse();
         } catch (Exception e) {
             log.warn("can not parse expr: " + expr);
-            return new GroupExpr<>(GroupExpr.TYPE_RAW);
+            return new BoolGroup<>(BoolGroup.TYPE_RAW);
         }
     }
 

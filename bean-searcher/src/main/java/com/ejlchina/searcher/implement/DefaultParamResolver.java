@@ -157,11 +157,11 @@ public class DefaultParamResolver implements ParamResolver {
 		return paraMap.get(onlySelectName);
 	}
 
-	protected GroupExpr<List<FieldParam>> resolveFieldParams(Collection<FieldMeta> fieldMetas, Map<String, Object> paraMap) {
+	protected BoolGroup<List<FieldParam>> resolveFieldParams(Collection<FieldMeta> fieldMetas, Map<String, Object> paraMap) {
 		String gExpr = ObjectUtils.string(paraMap.get(gexprName));
-		GroupExpr<String> groupExpr = groupExprResolver.resolve(gExpr);
+		BoolGroup<String> boolGroup = groupExprResolver.resolve(gExpr);
 		Map<String, List<FieldParam>> holder = new HashMap<>();
-		return groupExpr.transform(prefix -> {
+		return boolGroup.transform(prefix -> {
 			List<FieldParam> params = holder.get(prefix);
 			if (params == null) {
 				params = extractFieldParams(fieldMetas, new MapWrapper(paraMap, prefix));

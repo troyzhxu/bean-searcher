@@ -1,12 +1,12 @@
 package com.ejlchina.searcher.implement;
 
-import com.ejlchina.searcher.util.GroupExpr;
+import com.ejlchina.searcher.util.BoolGroup;
 import com.ejlchina.searcher.util.StringUtils;
 
 import java.util.Stack;
 
 /**
- * GroupExpr 解析器
+ * BoolGroup 解析器
  * @author Troy.Zhou @ 2022-02-21
  * @since v3.5.0
  */
@@ -15,7 +15,7 @@ public class GroupExprParser {
     // 表达式
     private final String expression;
     // 操作数栈
-    private final Stack<GroupExpr<String>> valueStack = new Stack<>();
+    private final Stack<BoolGroup<String>> valueStack = new Stack<>();
     // 运算符栈
     private final Stack<Character> opStack = new Stack<>();
 
@@ -32,13 +32,13 @@ public class GroupExprParser {
     }
 
     // a+b*(c+d+e)*d+f
-    public GroupExpr<String> parse() {
+    public BoolGroup<String> parse() {
         Object res = readNext();
         while (res != null) {
             if (res instanceof String) {
                 String value = (String) res;
                 if (StringUtils.isNotBlank(value)) {
-                    valueStack.push(new GroupExpr<>(value));
+                    valueStack.push(new BoolGroup<>(value));
                 }
             } else if (res instanceof Character) {
                 // 读取到运算符，调用单独的方法处理
@@ -99,13 +99,13 @@ public class GroupExprParser {
 
     protected void updateValueStack(char op) {
         // 弹出两个操作数进行计算
-        GroupExpr<String> value2 = valueStack.pop();
-        GroupExpr<String> value1 = valueStack.pop();
+        BoolGroup<String> value2 = valueStack.pop();
+        BoolGroup<String> value1 = valueStack.pop();
         // 计算结果压入操作数栈
         valueStack.push(value1.boolWith(op, value2));
     }
 
-    protected GroupExpr<String> getResult() {
+    protected BoolGroup<String> getResult() {
         while (opStack.size() > 0) {
             char op = opStack.pop();
             updateValueStack(op);
