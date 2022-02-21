@@ -38,7 +38,7 @@ public class Event<Value> {
     }
 
     public boolean isGroupEnd() {
-        return type == TYPE_GROUP_START;
+        return type == TYPE_GROUP_END;
     }
 
     public boolean isGroupAnd() {
