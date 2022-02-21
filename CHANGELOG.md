@@ -4,10 +4,11 @@
 
 * Bean Searcher
   * `DefaultParamResolver` 新增 `gexprName` 属性 
-  * 新增条件分组 与 组逻辑运算功能（TODO）
+  * 新增 `GroupResolver`、`ExprParser` 等组件，实现 字段条件分组 与 组逻辑运算的功能
   * 新增 `TimeFieldConvertor`，支持 `java.sql.Time` 与 `LocalTime` 之间的转换 
 * Bean Searcher Boot Starter
   * 新增 `bean-searcher.params.gexpr` 配置键，可在配置文件中指组表达式参数名
+  * 新增 `bean-searcher.field-convertor.use-time` 配置项，表示是否自动添加 `TimeFieldConvertor`，默认 `true`
 
 # v3.4.2 @ 2022-02-18
 
