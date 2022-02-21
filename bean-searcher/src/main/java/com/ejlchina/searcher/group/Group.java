@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 /**
  * 逻辑组
  * @author Troy.Zhou @ 2022-02-21
+ * @since v3.5.0
  */
 public class Group<Value> {
 
