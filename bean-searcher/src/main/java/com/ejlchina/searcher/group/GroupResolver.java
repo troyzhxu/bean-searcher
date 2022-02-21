@@ -25,7 +25,7 @@ public class GroupResolver {
     private final Object lock = new Object();
 
     // LRU 缓存模型
-    private final LinkedHashMap<String, Group<String>> cache = new LinkedHashMap<>() {
+    private final LinkedHashMap<String, Group<String>> cache = new LinkedHashMap<String, Group<String>>() {
         @Override
         protected boolean removeEldestEntry(Map.Entry eldest) {
             return this.size() > cacheSize;

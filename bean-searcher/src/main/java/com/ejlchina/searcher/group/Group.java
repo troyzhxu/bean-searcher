@@ -57,7 +57,7 @@ public class Group<Value> {
      * 值转换
      * @param transformer 转换器
      * @param <R> 转换后的类型
-     * @return Group<R>
+     * @return Group
      */
     public <R> Group<R> transform(Function<Value, R> transformer) {
         if (type == TYPE_RAW) {
