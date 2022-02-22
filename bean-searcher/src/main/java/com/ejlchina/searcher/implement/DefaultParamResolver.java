@@ -2,6 +2,7 @@ package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.group.Group;
+import com.ejlchina.searcher.group.DefaultGroupResolver;
 import com.ejlchina.searcher.group.GroupResolver;
 import com.ejlchina.searcher.param.*;
 import com.ejlchina.searcher.util.*;
@@ -94,7 +95,7 @@ public class DefaultParamResolver implements ParamResolver {
 	 * @since v3.5.0
 	 * 用于解析组表达式
 	 */
-	private GroupResolver groupResolver = new GroupResolver();
+	private GroupResolver groupResolver = new DefaultGroupResolver();
 
 	@Override
 	public SearchParam resolve(BeanMeta<?> beanMeta, FetchType fetchType, Map<String, Object> paraMap) {
