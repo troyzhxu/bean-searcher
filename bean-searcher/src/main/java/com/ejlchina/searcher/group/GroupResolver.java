@@ -1,11 +1,11 @@
 package com.ejlchina.searcher.group;
 
+import com.ejlchina.searcher.util.LRUCache;
 import com.ejlchina.searcher.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.Objects;
 
 /**
  * Group 解析器
@@ -20,17 +20,10 @@ public class GroupResolver {
 
     private char orKey = '|';
 
-    private int cacheSize = 100;
-
     private final Object lock = new Object();
 
     // LRU 缓存模型
-    private final LinkedHashMap<String, Group<String>> cache = new LinkedHashMap<String, Group<String>>() {
-        @Override
-        protected boolean removeEldestEntry(Map.Entry eldest) {
-            return this.size() > cacheSize;
-        }
-    };
+    private LRUCache<Group<String>> cache = new LRUCache<>(100);
 
     public Group<String> resolve(String expr) {
         Group<String> gExpr;
@@ -78,12 +71,12 @@ public class GroupResolver {
         this.orKey = orKey;
     }
 
-    public int getCacheSize() {
-        return cacheSize;
+    public LRUCache<Group<String>> getCache() {
+        return cache;
     }
 
-    public void setCacheSize(int cacheSize) {
-        this.cacheSize = cacheSize;
+    public void setCache(LRUCache<Group<String>> cache) {
+        this.cache = Objects.requireNonNull(cache);
     }
 
 }
