@@ -19,6 +19,12 @@
       "type": "com.ejlchina.searcher.boot.BeanSearcherProperties$Params$PaginationProps"
     },
     {
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Params",
+      "name": "bean-searcher.params.group",
+      "sourceMethod": "getGroup()",
+      "type": "com.ejlchina.searcher.boot.BeanSearcherProperties$Params$Group"
+    },
+    {
       "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties",
       "name": "bean-searcher.sql",
       "sourceMethod": "getSql()",
@@ -109,10 +115,24 @@
       "type": "java.lang.String"
     },
     {
-      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Params",
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Params$Group",
+      "defaultValue": true,
+      "name": "bean-searcher.params.group.enable",
+      "description": "是否启用参数组功能",
+      "type": "java.lang.Boolean"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Params$Group",
       "defaultValue": "gexpr",
-      "name": "bean-searcher.params.gexpr",
+      "name": "bean-searcher.params.group.expr-name",
       "description": "组表达式参数名",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Params$Group",
+      "defaultValue": ".",
+      "name": "bean-searcher.params.group.separator",
+      "description": "组参数分隔符",
       "type": "java.lang.String"
     },
     {

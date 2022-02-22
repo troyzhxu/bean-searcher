@@ -64,13 +64,49 @@ public class BeanSearcherProperties {
 		// 用于指定不需要 Select 的字段的参数名
 		private String selectExclude = "selectExclude";
 
-		// 组表达式参数名
-		private String gexpr = "gexpr";
+		// 参数组
+		private final Group group = new Group();
+
+		public static class Group {
+
+			// 是否启用参数组功能
+			private boolean enable = true;
+
+			// 组表达式参数名
+			private String exprName = "gexpr";
+
+			// 组参数分隔符
+			private String separator = ".";
+
+			public boolean isEnable() {
+				return enable;
+			}
+
+			public void setEnable(boolean enable) {
+				this.enable = enable;
+			}
+
+			public String getExprName() {
+				return exprName;
+			}
+
+			public void setExprName(String exprName) {
+				this.exprName = exprName;
+			}
+
+			public String getSeparator() {
+				return separator;
+			}
+
+			public void setSeparator(String separator) {
+				this.separator = separator;
+			}
+
+		}
 
 		// 分页参数配置
 		private final PaginationProps pagination = new PaginationProps();
-		
-		
+
 		public String getSort() {
 			return sort;
 		}
@@ -135,12 +171,8 @@ public class BeanSearcherProperties {
 			this.selectExclude = selectExclude;
 		}
 
-		public String getGexpr() {
-			return gexpr;
-		}
-
-		public void setGexpr(String gexpr) {
-			this.gexpr = gexpr;
+		public Group getGroup() {
+			return group;
 		}
 
 		public PaginationProps getPagination() {

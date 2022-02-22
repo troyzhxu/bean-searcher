@@ -8,6 +8,10 @@ import com.ejlchina.searcher.boot.BeanSearcherProperties.Sql;
 import com.ejlchina.searcher.dialect.Dialect;
 import com.ejlchina.searcher.dialect.MySqlDialect;
 import com.ejlchina.searcher.dialect.OracleDialect;
+import com.ejlchina.searcher.group.DefaultGroupResolver;
+import com.ejlchina.searcher.group.DefaultParserFactory;
+import com.ejlchina.searcher.group.ExprParser;
+import com.ejlchina.searcher.group.GroupResolver;
 import com.ejlchina.searcher.implement.*;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -79,10 +83,26 @@ public class BeanSearcherAutoConfiguration {
 	}
 
 	@Bean
+	@ConditionalOnMissingBean(ExprParser.Factory.class)
+	public ExprParser.Factory parserFactory() {
+		return new DefaultParserFactory();
+	}
+
+	@Bean
+	@ConditionalOnMissingBean(GroupResolver.class)
+	public GroupResolver groupResolver(BeanSearcherProperties config, ExprParser.Factory parserFactory) {
+		DefaultGroupResolver groupResolver = new DefaultGroupResolver();
+		groupResolver.setEnabled(config.getParams().getGroup().isEnable());
+		groupResolver.setParserFactory(parserFactory);
+		return groupResolver;
+	}
+
+	@Bean
 	@ConditionalOnMissingBean(ParamResolver.class)
 	public ParamResolver paramResolver(PageExtractor pageExtractor,
 									   FieldOpPool fieldOpPool,
 									   ObjectProvider<ParamFilter[]> paramFilters,
+									   GroupResolver groupResolver,
 									   BeanSearcherProperties config) {
 		DefaultParamResolver paramResolver = new DefaultParamResolver();
 		paramResolver.setPageExtractor(pageExtractor);
@@ -97,7 +117,10 @@ public class BeanSearcherAutoConfiguration {
 		paramResolver.setSeparator(conf.getSeparator());
 		paramResolver.setOnlySelectName(conf.getOnlySelect());
 		paramResolver.setSelectExcludeName(conf.getSelectExclude());
-		paramResolver.setGexprName(conf.getGexpr());
+		Params.Group group = conf.getGroup();
+		paramResolver.setGexprName(group.getExprName());
+		paramResolver.setGroupSeparator(group.getSeparator());
+		paramResolver.setGroupResolver(groupResolver);
 		return paramResolver;
 	}
 
