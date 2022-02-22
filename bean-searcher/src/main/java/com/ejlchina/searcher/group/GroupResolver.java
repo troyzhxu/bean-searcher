@@ -55,8 +55,8 @@ public class GroupResolver {
             return createParser(expr).parse();
         } catch (Exception e) {
             log.warn("can not parse expr: [{}], fallback to DEFAULT_RAW_GROUP", expr);
-            return DEFAULT_RAW_GROUP;
         }
+        return DEFAULT_RAW_GROUP;
     }
 
     public ExprParser createParser(String expr) {
