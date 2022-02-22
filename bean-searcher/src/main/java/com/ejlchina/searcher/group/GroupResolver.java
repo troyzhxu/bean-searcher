@@ -16,6 +16,8 @@ public class GroupResolver {
 
     static final Logger log = LoggerFactory.getLogger(GroupResolver.class);
 
+    static final Group<String> DEFAULT_RAW_GROUP = new Group<>(Group.TYPE_RAW);
+
     private char andKey = '&';
 
     private char orKey = '|';
@@ -25,29 +27,35 @@ public class GroupResolver {
     // LRU 缓存模型
     private LRUCache<Group<String>> cache = new LRUCache<>(100);
 
+    // 是否启用
+    private boolean enabled = true;
+
     public Group<String> resolve(String expr) {
-        Group<String> gExpr;
-        synchronized (lock) {
-            gExpr = cache.get(expr);
-        }
-        if (gExpr == null) {
-            gExpr = doResolve(expr);
+        if (enabled) {
+            Group<String> gExpr;
             synchronized (lock) {
-                cache.put(expr, gExpr);
+                gExpr = cache.get(expr);
             }
+            if (gExpr == null) {
+                gExpr = doResolve(expr);
+                synchronized (lock) {
+                    cache.put(expr, gExpr);
+                }
+            }
+            return gExpr;
         }
-        return gExpr;
+        return DEFAULT_RAW_GROUP;
     }
 
     protected Group<String> doResolve(String expr) {
         if (StringUtils.isBlank(expr)) {
-            return new Group<>(Group.TYPE_RAW);
+            return DEFAULT_RAW_GROUP;
         }
         try {
             return createParser(expr).parse();
         } catch (Exception e) {
-            log.warn("can not parse expr: " + expr);
-            return new Group<>(Group.TYPE_RAW);
+            log.warn("can not parse expr: [{}], fallback to DEFAULT_RAW_GROUP", expr);
+            return DEFAULT_RAW_GROUP;
         }
     }
 
@@ -77,6 +85,14 @@ public class GroupResolver {
 
     public void setCache(LRUCache<Group<String>> cache) {
         this.cache = Objects.requireNonNull(cache);
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
 }
