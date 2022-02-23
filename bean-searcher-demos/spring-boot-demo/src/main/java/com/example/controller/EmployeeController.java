@@ -36,6 +36,22 @@ public class EmployeeController {
 		return beanSearcher.search(Employee.class, params, new String[] { "age" });
 	}
 
+	@GetMapping("/builder")
+	public Object index() {
+		// 参数组
+		Map<String, Object> params = MapUtils.builder()
+				.group("a")
+				.field(Employee::getName, "Jack")
+				.field(Employee::getGender, "Male")
+				.group("b")
+				.field(Employee::getName, "Tom")
+				.group("c")
+				.field(Employee::getAge, 20)
+				.groupExpr("a|b&c")
+				.build();
+		return beanSearcher.searchCount(Employee.class, params);
+	}
+
 	/**
 	 * 测试带冗余后缀的实体类
 	 */
