@@ -3,15 +3,16 @@
 ### ✨ Features
 
 * Bean Searcher
-  * 新增 `GroupResolver`、`ExprParser` 等组件，实现 字段参数分组 与 组间的逻辑关系的 解析与运算能力
+  * 新增 `GroupResolver`、`ExprParser` 等组件，实现参数分组与逻辑关系的表达、运算、智能化简与解析的能力
   * `DefaultParamResolver` 新增 `gexprName`、`groupSeparator` 属性，用于指定组参数名的形式
   * `MapBuilder`（参数构建器）新增 `group(String group)` 方法，用于构建字段参数组
   * `MapBuilder` 新增 `groupExpr(String expr)` 方法，用于指定参数组间的逻辑关系
   * 新增 `TimeFieldConvertor`，支持 `java.sql.Time` 与 `LocalTime` 之间的转换 
-  * 注解 `@DbField` 注解新增 `alias` 属性，支持手动指定字段别名
+  * 注解 `@DbField` 注解新增 `alias` 属性，支持手动指定字段别名（不指定则自动生成）
 * Bean Searcher Boot Starter
   * 新增 `bean-searcher.params.group.enable` 配置键，可在配置文件中指定是否使用参数组功能，默认为 `true`
   * 新增 `bean-searcher.params.group.expr-name` 配置键，可在配置文件中指定组表达式参数名，默认为 `gexpr`
+  * 新增 `bean-searcher.params.group.expr-cache-size` 配置键，可在配置文件中指定组表达式解析缓存的大小，默认为 `50` 个
   * 新增 `bean-searcher.params.group.separator` 配置键，可在配置文件中指定参数组分隔符，默认为 `.`
   * 新增 `bean-searcher.field-convertor.use-time` 配置项，表示是否自动添加 `TimeFieldConvertor`，默认 `true`
 
