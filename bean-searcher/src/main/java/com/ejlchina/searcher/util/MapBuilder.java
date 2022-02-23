@@ -24,6 +24,7 @@ public class MapBuilder {
     public static final String FIELD_PARAM = FieldParam.class.getName();
     public static final String ONLY_SELECT = SearchParam.class.getName() + ".ONLY_SELECT";
     public static final String SELECT_EXCLUDE = SearchParam.class.getName() + ".SELECT_EXCLUDE";
+    public static final String GROUP_EXPR = SearchParam.class.getName() + ".GROUP_EXPR";
 
     @FunctionalInterface
     public interface FieldFn<T, R> extends Function<T, R>, Serializable {  }
@@ -33,6 +34,8 @@ public class MapBuilder {
     private final Map<String, Object> map;
 
     private FieldParam fieldParam = null;
+
+    private String group = null;
 
     public MapBuilder(Map<String, Object> map) {
         this.map = map;
@@ -112,6 +115,29 @@ public class MapBuilder {
     }
 
     /**
+     * 开始一个分组（只对字段参数进行分组）
+     * 在 {@link #field(String, Object...) } 方法之前使用 }
+     * @since v3.5.0
+     * @param group 组名
+     * @return MapBuilder
+     */
+    public MapBuilder group(String group) {
+        this.group = group;
+        return this;
+    }
+
+    /**
+     * 设置组表达式（用于表达参数组之间的逻辑关系）
+     * @since v3.5.0
+     * @param gExpr 表达式
+     * @return MapBuilder
+     */
+    public MapBuilder groupExpr(String gExpr) {
+        map.put(GROUP_EXPR, gExpr);
+        return this;
+    }
+
+    /**
      * 指定某个字段的检索值
      * @param fieldFn 字段表达式
      * @param values 检索值，可多个
@@ -136,7 +162,11 @@ public class MapBuilder {
             }
             String field = fieldName.trim();
             fieldParam = new FieldParam(field, pValues);
-            map.put(FIELD_PARAM + "." + field, fieldParam);
+            if (group != null) {
+                map.put(group + FIELD_PARAM + field, fieldParam);
+            } else {
+                map.put(FIELD_PARAM + field, fieldParam);
+            }
         }
         return this;
     }

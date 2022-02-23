@@ -168,19 +168,30 @@ public class DefaultParamResolver implements ParamResolver {
 
 	protected Group<List<FieldParam>> resolveFieldParamGroup(Collection<FieldMeta> fieldMetas, Map<String, Object> paraMap) {
 		Map<String, List<FieldParam>> holder = new HashMap<>();
-		String groupExpr = ObjectUtils.string(paraMap.get(gexprName));
-		return groupResolver.resolve(groupExpr)
+		return groupResolver.resolve(getGroupExpr(paraMap))
 				.transform(gKey -> {
 					List<FieldParam> params = holder.get(gKey);
 					if (params == null) {
-						String prefix = gKey + groupSeparator;
-						MapWrapper mapWrapper = gKey != null ? new MapWrapper(paraMap, prefix) : new MapWrapper(paraMap);
+						MapWrapper mapWrapper;
+						if (gKey != null) {
+							mapWrapper = new MapWrapper(paraMap, gKey, groupSeparator);
+						} else {
+							mapWrapper = new MapWrapper(paraMap);
+						}
 						params = extractFieldParams(fieldMetas, mapWrapper);
 						holder.put(gKey, params);
 					}
 					return params;
 				})
 				.filter(list -> list.size() > 0);
+	}
+
+	private String getGroupExpr(Map<String, Object> paraMap) {
+		String expr = ObjectUtils.string(paraMap.get(MapBuilder.GROUP_EXPR));
+		if (expr != null) {
+			return expr;
+		}
+		return ObjectUtils.string(paraMap.get(gexprName));
 	}
 
 	private List<FieldParam> extractFieldParams(Collection<FieldMeta> fieldMetas, MapWrapper paraMap) {
@@ -215,7 +226,7 @@ public class DefaultParamResolver implements ParamResolver {
 	}
 
 	private FieldParam getFieldParam(MapWrapper paraMap, String field) {
-		Object value = paraMap.get(MapBuilder.FIELD_PARAM + "." + field);
+		Object value = paraMap.get0(MapBuilder.FIELD_PARAM + field);
 		if (value instanceof FieldParam) {
 			return (FieldParam) value;
 		}
@@ -239,9 +250,9 @@ public class DefaultParamResolver implements ParamResolver {
 		List<FieldParam.Value> values = param != null ? param.getValueList() : new ArrayList<>();
 		if (values.isEmpty() && indices != null) {
 			for (int index : indices) {
-				Object value = paraMap.get(field + separator + index);
+				Object value = paraMap.get1(field + separator + index);
 				if (index == 0 && value == null) {
-					value = paraMap.get(field);
+					value = paraMap.get1(field);
 				}
 				values.add(new FieldParam.Value(value, index));
 			}
@@ -254,7 +265,7 @@ public class DefaultParamResolver implements ParamResolver {
 			ignoreCase = param.isIgnoreCase();
 		}
 		if (ignoreCase == null) {
-			ignoreCase = ObjectUtils.toBoolean(paraMap.get(field + separator + ignoreCaseSuffix));
+			ignoreCase = ObjectUtils.toBoolean(paraMap.get1(field + separator + ignoreCaseSuffix));
 		}
 		return new FieldParam(field, operator, values, ignoreCase);
 	}
@@ -275,7 +286,7 @@ public class DefaultParamResolver implements ParamResolver {
 				return fieldOpPool.getFieldOp(op);
 			}
 		}
-		Object value = paraMap.get(field + separator + operatorSuffix);
+		Object value = paraMap.get1(field + separator + operatorSuffix);
 		return fieldOpPool.getFieldOp(value);
 	}
 

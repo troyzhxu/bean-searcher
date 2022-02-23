@@ -7,14 +7,16 @@ public class MapWrapper {
 
     private final Map<String, Object> map;
     private final String prefix;
+    private final String gKey;
 
     public MapWrapper(Map<String, Object> map) {
-        this(map, null);
+        this(map, null, null);
     }
 
-    public MapWrapper(Map<String, Object> map, String prefix) {
+    public MapWrapper(Map<String, Object> map, String gKey, String separator) {
         this.map = Objects.requireNonNull(map);
-        this.prefix = prefix;
+        this.prefix = gKey != null ? gKey + separator : null;
+        this.gKey = gKey;
     }
 
     transient Set<String> keySet;
@@ -40,7 +42,14 @@ public class MapWrapper {
         return ks;
     }
 
-    public Object get(String key) {
+    public Object get0(String key) {
+        if (gKey != null) {
+            return map.get(gKey + key);
+        }
+        return map.get(key);
+    }
+
+    public Object get1(String key) {
         if (prefix != null) {
             return map.get(prefix + key);
         }
