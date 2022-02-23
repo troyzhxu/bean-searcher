@@ -21,7 +21,7 @@ public class DefaultGroupResolver implements GroupResolver {
     private final Object lock = new Object();
 
     // LRU 缓存模型
-    private LRUCache<Group<String>> cache = new LRUCache<>(100);
+    private LRUCache<Group<String>> cache = new LRUCache<>(50);
 
     // 是否启用
     private boolean enabled = true;

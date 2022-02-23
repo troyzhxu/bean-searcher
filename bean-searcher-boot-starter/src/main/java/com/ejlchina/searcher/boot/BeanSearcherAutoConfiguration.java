@@ -13,6 +13,7 @@ import com.ejlchina.searcher.group.DefaultParserFactory;
 import com.ejlchina.searcher.group.ExprParser;
 import com.ejlchina.searcher.group.GroupResolver;
 import com.ejlchina.searcher.implement.*;
+import com.ejlchina.searcher.util.LRUCache;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -92,7 +93,9 @@ public class BeanSearcherAutoConfiguration {
 	@ConditionalOnMissingBean(GroupResolver.class)
 	public GroupResolver groupResolver(BeanSearcherProperties config, ExprParser.Factory parserFactory) {
 		DefaultGroupResolver groupResolver = new DefaultGroupResolver();
-		groupResolver.setEnabled(config.getParams().getGroup().isEnable());
+		Params.Group conf = config.getParams().getGroup();
+		groupResolver.setEnabled(conf.isEnable());
+		groupResolver.setCache(new LRUCache<>(conf.getCacheSize()));
 		groupResolver.setParserFactory(parserFactory);
 		return groupResolver;
 	}

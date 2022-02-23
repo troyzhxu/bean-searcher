@@ -78,6 +78,9 @@ public class BeanSearcherProperties {
 			// 组参数分隔符
 			private String separator = ".";
 
+			// 缓存大小
+			private int cacheSize = 50;
+
 			public boolean isEnable() {
 				return enable;
 			}
@@ -102,6 +105,13 @@ public class BeanSearcherProperties {
 				this.separator = separator;
 			}
 
+			public int getCacheSize() {
+				return cacheSize;
+			}
+
+			public void setCacheSize(int cacheSize) {
+				this.cacheSize = cacheSize;
+			}
 		}
 
 		// 分页参数配置

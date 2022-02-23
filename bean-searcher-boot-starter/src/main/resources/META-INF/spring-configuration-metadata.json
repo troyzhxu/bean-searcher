@@ -130,6 +130,13 @@
     },
     {
       "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Params$Group",
+      "defaultValue": 50,
+      "name": "bean-searcher.params.group.expr-cache-size",
+      "description": "表达式缓存大小",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Params$Group",
       "defaultValue": ".",
       "name": "bean-searcher.params.group.separator",
       "description": "组参数分隔符",
