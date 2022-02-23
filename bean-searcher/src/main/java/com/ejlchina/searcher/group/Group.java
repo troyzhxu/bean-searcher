@@ -166,49 +166,75 @@ public class Group<Value> {
     }
 
     /**
-     * 与另一个 Group 进行逻辑运算，并简化表达式
+     * 与另一个 Group 进行逻辑运算，并会自动简化表达式
+     * 简化依据为以下 5 组逻辑关系：
+     *   (1)、A | A             = A                 A & A             = A
+     *   (2)、A | (A & B)       = A                 A & (A | B)       = A
+     *   (3)、A | ((A | C) & B) = (A | C) & B       A & ((A & C) | B) = (A & C) | B
+     *   (4)、A | (B | C)       = A | B | C         A & (B & C)       = A & B & C
+     *   (5)、若 A | B = A，则 A | B | C = A | C ;   若 A & B = A，则 A & B & C = A & C ;
      * @param opType 运算类型
      * @param other 另一个 Group
      * @return Group
      */
     private Group<Value> boolWith(int opType, Group<Value> other) {
         if (equals(other)) {
-            return this;
+            return this;                // 化简：根据逻辑等式 (1)
         }
-        int otherType = other.getType();
+        if (type != TYPE_RAW && groups.contains(other)) {
+            // 根据逻辑等式 (2) / (1) (4)
+            return type == opType ? this : other;
+        }
+        if (other.type != TYPE_RAW && other.groups.contains(this)) {
+            // 根据逻辑等式 (2) / (1) (4)
+            return other.type == opType ? other : this;
+        }
+        if (type != TYPE_RAW && type != opType) {
+            for (Group<Value> g: groups) {
+                if (g.type == opType && g.groups.contains(other)) {
+                    return this;        // 化简：根据逻辑等式 (3)
+                }
+            }
+        }
+        if (other.type != TYPE_RAW && other.type != opType) {
+            for (Group<Value> g: other.groups) {
+                if (g.type == opType && g.groups.contains(this)) {
+                    return other;       // 化简：根据逻辑等式 (3)
+                }
+            }
+        }
         if (type == opType) {
-            List<Group<Value>> groups = new ArrayList<>(this.groups);
-            if (otherType == opType) {
-                groups.addAll(other.getGroups());
-            } else {
-                groups.add(other);
+            List<Group<Value>> groups = new ArrayList<>();
+            for (Group<Value> group: this.groups) {
+                // 化简：根据逻辑关系 (5)
+                Group<Value> res = group.boolWith(opType, other);
+                if (res.equals(group)) {
+                    return this;
+                }
+                if (!other.equals(res)) {
+                    groups.add(group);
+                }
             }
-            return new Group<>(opType,
-                    groups.stream().distinct().collect(Collectors.toList())
-            );
+            groups.add(other);
+            return new Group<>(opType, groups);
         }
-        if (otherType == opType) {
-            List<Group<Value>> groups = new ArrayList<>(other.getGroups());
-            if (!groups.contains(this)) {
-                groups.add(this);
+        if (other.type == opType) {
+            List<Group<Value>> groups = new ArrayList<>();
+            for (Group<Value> group: other.groups) {
+                // 化简：根据逻辑关系 (5)
+                Group<Value> res = group.boolWith(opType, this);
+                if (res.equals(group)) {
+                    return other;
+                }
+                if (!equals(res)) {
+                    groups.add(group);
+                }
             }
+            groups.add(this);
             return new Group<>(opType, groups);
         }
         return new Group<>(opType, Arrays.asList(this, other));
     }
-
-    public int getType() {
-        return type;
-    }
-
-    public List<Group<Value>> getGroups() {
-        return groups;
-    }
-
-    public Value getValue() {
-        return value;
-    }
-
 
     @Override
     public boolean equals(Object o) {

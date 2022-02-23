@@ -2,8 +2,6 @@ package com.ejlchina.searcher;
 
 import com.ejlchina.searcher.group.DefaultParserFactory;
 import com.ejlchina.searcher.group.ExprParser;
-import com.ejlchina.searcher.group.Group;
-import com.ejlchina.searcher.group.DefaultGroupResolver;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -62,12 +60,12 @@ public class ExprParserTests {
 
     @Test
     public void test_09() {
-        Assert.assertEquals("a|b&(c|d|e)&d|f", parse("a|b&(c|d|e)&d|f"));
+        Assert.assertEquals("a|b&d|f", parse("a|b&(c|d|e)&d|f"));
     }
 
     @Test
     public void test_10() {
-        Assert.assertEquals("a|b&(d|e|c)&d|f", parse("(a|b&((c|(d|e)))&d)|(f)"));
+        Assert.assertEquals("a|b&d|f", parse("(a|b&((c|(d|e)))&d)|(f)"));
     }
 
     @Test
@@ -77,7 +75,52 @@ public class ExprParserTests {
 
     @Test
     public void test_12() {
-        Assert.assertEquals("a", parse("((a))"));
+        Assert.assertEquals("a", parse("a&a"));
+    }
+
+    @Test
+    public void test_13() {
+        Assert.assertEquals("a", parse("a|a&b"));
+    }
+
+    @Test
+    public void test_14() {
+        Assert.assertEquals("a", parse("a|(a&b)"));
+    }
+
+    @Test
+    public void test_15() {
+        Assert.assertEquals("a", parse("a&(a|b)"));
+    }
+
+    @Test
+    public void test_16() {
+        Assert.assertEquals("(A|C)&B", parse("A|((A|C)&B)"));
+    }
+
+    @Test
+    public void test_17() {
+        Assert.assertEquals("A&C|B", parse("A&((A&C)|B)"));
+    }
+
+    @Test
+    public void test_18() {
+        Assert.assertEquals("A&C|B", parse("A&(A&C|B)"));
+    }
+
+    @Test
+    public void test_19() {
+        Assert.assertEquals("B|C|A", parse("A | (B | C)"));
+    }
+
+    @Test
+    public void test_20() {
+        Assert.assertEquals("B&C&A", parse("A & (B & C)"));
+    }
+
+    @Test
+    public void test_21() {
+        Assert.assertEquals("(A|C)&B|D", parse("A | (((A | C) & B) | D)"));
     }
 
 }
