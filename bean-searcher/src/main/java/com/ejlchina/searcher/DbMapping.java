@@ -124,10 +124,21 @@ public interface DbMapping {
          */
         private final Class<? extends FieldOp>[] onlyOn;
 
+        /**
+         * 字段别名
+         * @since v3.5.0
+         */
+        private final String alias;
+
         public Column(String fieldSql, boolean conditional, Class<? extends FieldOp>[] onlyOn) {
+            this(fieldSql, conditional, onlyOn, null);
+        }
+
+        public Column(String fieldSql, boolean conditional, Class<? extends FieldOp>[] onlyOn, String alias) {
             this.fieldSql = fieldSql;
             this.conditional = conditional;
             this.onlyOn = onlyOn;
+            this.alias = alias;
         }
 
         public String getFieldSql() {
@@ -140,6 +151,10 @@ public interface DbMapping {
 
         public Class<? extends FieldOp>[] getOnlyOn() {
             return onlyOn;
+        }
+
+        public String getAlias() {
+            return alias;
         }
 
     }

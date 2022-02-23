@@ -71,7 +71,7 @@ public class DefaultDbMapping implements DbMapping {
         }
         DbField dbField = field.getAnnotation(DbField.class);
         if (dbField != null) {
-            return new Column(fieldSql, dbField.conditional(), dbField.onlyOn());
+            return new Column(fieldSql, dbField.conditional(), dbField.onlyOn(), dbField.alias());
         }
         return new Column(fieldSql, true, EMPTY_OPERATORS);
     }

@@ -8,6 +8,7 @@
   * `MapBuilder`（参数构建器）新增 `group(String group)` 方法，用于构建字段参数组
   * `MapBuilder` 新增 `groupExpr(String expr)` 方法，用于指定参数组间的逻辑关系
   * 新增 `TimeFieldConvertor`，支持 `java.sql.Time` 与 `LocalTime` 之间的转换 
+  * 注解 `@DbField` 注解新增 `alias` 属性，支持手动指定字段别名
 * Bean Searcher Boot Starter
   * 新增 `bean-searcher.params.group.enable` 配置键，可在配置文件中指定是否使用参数组功能，默认为 `true`
   * 新增 `bean-searcher.params.group.expr-name` 配置键，可在配置文件中指定组表达式参数名，默认为 `gexpr`

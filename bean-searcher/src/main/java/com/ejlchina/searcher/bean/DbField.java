@@ -39,4 +39,11 @@ public @interface DbField {
 	 */
 	Class<? extends FieldOp>[] onlyOn() default {};
 
+	/**
+	 * 用于指定字段别名，不指定时将自动生成
+	 * @since v3.5.0
+	 * @return 字段别名
+	 */
+	String alias() default "";
+
 }
