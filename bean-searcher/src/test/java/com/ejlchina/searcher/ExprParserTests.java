@@ -94,18 +94,19 @@ public class ExprParserTests {
     }
 
     @Test
-    public void test_16() {
-        Assert.assertEquals("(A|C)&B", parse("A|((A|C)&B)"));
+    public void
+    test_16() {
+        Assert.assertEquals("C&B|A", parse("A|((A|C)&B)"));
     }
 
     @Test
     public void test_17() {
-        Assert.assertEquals("A&C|B", parse("A&((A&C)|B)"));
+        Assert.assertEquals("(C|B)&A", parse("A&((A&C)|B)"));
     }
 
     @Test
     public void test_18() {
-        Assert.assertEquals("A&C|B", parse("A&(A&C|B)"));
+        Assert.assertEquals("(C|B)&A", parse("A&(A&C|B)"));
     }
 
     @Test
@@ -119,8 +120,19 @@ public class ExprParserTests {
     }
 
     @Test
+
     public void test_21() {
-        Assert.assertEquals("(A|C)&B|D", parse("A | (((A | C) & B) | D)"));
+        Assert.assertEquals("D|C&B|A", parse("A | (((A | C) & B) | D)"));
+    }
+
+    @Test
+    public void test_22() {
+        Assert.assertEquals("D&C&B|A", parse("A | (A | C) & B & (A | D)"));
+    }
+
+    @Test
+    public void test_23() {
+        Assert.assertEquals("E|D&C&B|A", parse("A | ((A | C) & B & (A | D) | E)"));
     }
 
 }
