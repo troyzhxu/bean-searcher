@@ -252,9 +252,10 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 面向接口设计，用户可自定义扩展 Bean Searcher 中的任何组件！
 
 比如你可以：
+* 自定义 [`FieldOp`](/bean-searcher/src/main/java/com/ejlchina/searcher/FieldOp.java) 来支持更多的字段运算符
+* 自定义 [`FieldConvertor`](/bean-searcher/src/main/java/com/ejlchina/searcher/FieldConvertor.java) 来支持任意的 特殊字段类型
 * 自定义 [`DbMapping`](/bean-searcher/src/main/java/com/ejlchina/searcher/DbMapping.java) 来实现自定义注解，或让 Bean Searcher 识别其它 ORM 的注解
-* 自定义 [`ParamResolver`](/bean-searcher/src/main/java/com/ejlchina/searcher/ParamResolver.java) 来支持 JSON 形式的检索参数
-* 自定义 [`FieldConvertor`](/bean-searcher/src/main/java/com/ejlchina/searcher/FieldConvertor.java) 来支持任意的 字段类型
+* 自定义 [`ParamResolver`](/bean-searcher/src/main/java/com/ejlchina/searcher/ParamResolver.java) 来支持其它形式的检索参数
 * 自定义 [`Dialect`](/bean-searcher/src/main/java/com/ejlchina/searcher/Dialect.java) 来支持更多的数据库
 * 等等..
 

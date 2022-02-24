@@ -261,7 +261,7 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 You can customize and extend any component in Bean Searcher .
 
 For example:
-
+* Customizing [`FieldOp`](/bean-searcher/src/main/java/com/ejlchina/searcher/FieldOp.java) to support other field operator
 * Customizing [`DbMapping`](/bean-searcher/src/main/java/com/ejlchina/searcher/DbMapping.java) to support other ORM‘s annotations
 * Customizing [`ParamResolver`](/bean-searcher/src/main/java/com/ejlchina/searcher/ParamResolver.java) to support JSON query params
 * Customizing [`FieldConvertor`](/bean-searcher/src/main/java/com/ejlchina/searcher/FieldConvertor.java) to support any type of field
