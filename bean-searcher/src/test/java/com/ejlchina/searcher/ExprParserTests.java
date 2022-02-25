@@ -135,4 +135,9 @@ public class ExprParserTests {
         Assert.assertEquals("E|D&C&B|A", parse("A | ((A | C) & B & (A | D) | E)"));
     }
 
+    @Test
+    public void test_24() {
+        Assert.assertEquals("(D|C|B)&A", parse("A & (A & C | B | A & D)"));
+    }
+
 }
