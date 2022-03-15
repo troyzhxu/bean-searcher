@@ -77,7 +77,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		if (fetchType.shouldQueryList()) {
 			List<OrderBy> orderBys = searchParam.getOrderBys();
 			Paging paging = searchParam.getPaging();
-			SqlWrapper<Object> listSql = buildListSql(beanMeta, fieldSelectSql, fromWhereSql, orderBys, paging);
+			SqlWrapper<Object> listSql = buildListSql(beanMeta, fieldSelectSql, fromWhereSql, orderBys, paging, fetchFields);
 			searchSql.setListSqlString(listSql.getSql());
 			searchSql.addListSqlParams(fieldSelectSqlWrapper.getParas());
 			searchSql.addListSqlParams(fromWhereSqlWrapper.getParas());
@@ -217,7 +217,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		return sqlWrapper;
 	}
 
-	private <T> String buildClusterSql(BeanMeta<T> beanMeta, String clusterSelectSql, String fieldSelectSql, String fromWhereSql) {
+	protected <T> String buildClusterSql(BeanMeta<T> beanMeta, String clusterSelectSql, String fieldSelectSql, String fromWhereSql) {
 		if (beanMeta.isDistinct()) {
 			String originalSql = fieldSelectSql + fromWhereSql;
 			String tableAlias = getTableAlias(beanMeta);
@@ -230,7 +230,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		return clusterSelectSql + " from (select count(*) " + fromWhereSql + ") " + tableAlias;
 	}
 
-	protected <T> SqlWrapper<Object> buildListSql(BeanMeta<T> beanMeta, String fieldSelectSql, String fromWhereSql, List<OrderBy> orderBys, Paging paging) {
+	protected <T> SqlWrapper<Object> buildListSql(BeanMeta<T> beanMeta, String fieldSelectSql, String fromWhereSql, List<OrderBy> orderBys, Paging paging, List<String> fetchFields) {
 		StringBuilder builder = new StringBuilder(fromWhereSql);
 		int count = orderBys.size();
 		if (count > 0) {
@@ -239,7 +239,11 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		for (int index = 0; index < count; index++) {
 			OrderBy orderBy = orderBys.get(index);
 			FieldMeta meta = beanMeta.requireFieldMeta(orderBy.getSort());
-			builder.append(meta.getDbAlias());
+			if (fetchFields.contains(meta.getName())) {
+				builder.append(meta.getDbAlias());
+			} else {
+				builder.append(meta.getFieldSql().getSql());
+			}
 			String order = orderBy.getOrder();
 			if (StringUtils.isNotBlank(order)) {
 				builder.append(' ').append(order);
