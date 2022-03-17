@@ -140,6 +140,18 @@ public class MapBuilder {
     /**
      * 指定某个字段的检索值
      * @param fieldFn 字段表达式
+     * @param values 检索值，集合
+     * @param <T> 泛型
+     * @return MapBuilder
+     * @since 3.5.2
+     */
+    public <T> MapBuilder field(FieldFn<T, ?> fieldFn, Collection<?> values) {
+        return field(fieldFn, values.toArray());
+    }
+
+    /**
+     * 指定某个字段的检索值
+     * @param fieldFn 字段表达式
      * @param values 检索值，可多个
      * @param <T> 泛型
      * @return MapBuilder
@@ -150,7 +162,19 @@ public class MapBuilder {
 
     /**
      * 指定某个字段的检索值
-     * @param fieldName 字段名
+     * @param fieldName 实体类属性名
+     * @param values 检索值，集合
+     * @param <T> 泛型
+     * @return MapBuilder
+     * @since 3.5.2
+     */
+    public <T> MapBuilder field(String fieldName, Collection<?> values) {
+        return field(fieldName, values.toArray());
+    }
+
+    /**
+     * 指定某个字段的检索值
+     * @param fieldName 实体类属性名
      * @param values 检索值，可多个
      * @return MapBuilder
      */
