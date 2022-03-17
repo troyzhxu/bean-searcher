@@ -1,3 +1,17 @@
+# v3.5.2 @ 2022-03-17
+
+### ✨ Features
+
+* Bean Searcher: 参数构建器新增 `field(FieldFn<T, ?> fieldFn, Collection<?> values)` 与 `field(String fieldName, Collection<?> values)` 方法，支持字段值集合参数
+
+### ✨ Better
+
+* Bean Searcher Boot Starter: 升级 spring-boot -> 2.6.4
+
+### 🐛 Bug Fixes
+
+* 修复字段不在 SELECT 子句中时 ORDER BY 子句仍然会使用该字段的别名的问题
+
 # v3.5.1 @ 2022-02-24
 
 ### ✨ Better
