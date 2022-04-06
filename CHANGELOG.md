@@ -6,7 +6,7 @@
 
 ### 🐛 Bug Fixes
 
-* 修复：对应 `Boolean` 类型的字段，当检索时该字段传入的参数值为 `空串` 时，`BoolValueFilter` 会将其转换为 `true` 的问题：https://github.com/ejlchina/bean-searcher/issues/29
+* 修复：对于 `Boolean` 类型的字段，当检索时该字段传入的参数值为 `空串` 时，`BoolValueFilter` 会将其转换为 `true` 的问题：https://github.com/ejlchina/bean-searcher/issues/29
 
 # v3.5.2 @ 2022-03-17
 
