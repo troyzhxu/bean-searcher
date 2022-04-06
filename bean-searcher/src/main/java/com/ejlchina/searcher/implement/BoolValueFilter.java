@@ -3,6 +3,7 @@ package com.ejlchina.searcher.implement;
 import com.ejlchina.searcher.FieldMeta;
 import com.ejlchina.searcher.BeanMeta;
 import com.ejlchina.searcher.ParamFilter;
+import com.ejlchina.searcher.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -110,8 +111,12 @@ public class BoolValueFilter implements ParamFilter {
 			return (Boolean) value;
 		}
 		if (value instanceof String) {
-			for (String v: falseValues) {
-				if (((String) value).equalsIgnoreCase(v)) {
+			String tv = ((String) value).trim();
+			if (StringUtils.isBlank(tv)) {
+				return null;
+			}
+			for (String fv: falseValues) {
+				if (tv.equalsIgnoreCase(fv)) {
 					return Boolean.FALSE;
 				}
 			}
