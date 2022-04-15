@@ -26,7 +26,7 @@ public class DefaultSnippetResolver implements SnippetResolver {
         int idx1 = fragment.indexOf(paramPrefix);
         while (idx1 >= 0) {
             if (idx1 > 0 && fragment.charAt(idx1 - 1) == '\\') {
-                // 转义处理
+                // 转义处理 since v3.6.0
                 if (idx1 == 1) {
                     fragment = fragment.substring(idx1);
                 } else {
