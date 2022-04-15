@@ -57,7 +57,7 @@ public class DefaultSnippetResolver implements SnippetResolver {
                 throw new SearchException("There is a syntax error (quotations mismatch): " + fragment);
             }
             int nIdx = idx1 + sqlName.length();
-            // 判断虚拟参数是否不在引号内部，并且不是以 :name: 的形式
+            // 判断嵌入参数是否不在引号内部，并且不是以 :name: 的形式
             if (quotationCount1 % 2 == 0 && !endWithPrefix) {
                 param.setJdbcPara(true);
                 fragment = fragment.replaceFirst(sqlName, "?");

@@ -20,7 +20,7 @@ public class SqlSnippet extends SqlWrapper<SqlSnippet.SqlPara> {
 		private String name;
 
 		/**
-		 * 在 Sql 里的参数名（待前后缀）
+		 * 在 Sql 里的参数名（带前后缀）
 		 */
 		private String sqlName;
 
