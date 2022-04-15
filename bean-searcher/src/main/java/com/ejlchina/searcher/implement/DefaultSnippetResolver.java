@@ -5,6 +5,8 @@ import com.ejlchina.searcher.SqlSnippet;
 import com.ejlchina.searcher.SearchException;
 import com.ejlchina.searcher.util.StringUtils;
 
+import java.util.Objects;
+
 /**
  * 默认内嵌参数解析器
  * @author Troy.Zhou @ 2017-03-20
@@ -21,10 +23,24 @@ public class DefaultSnippetResolver implements SnippetResolver {
     @Override
     public SqlSnippet resolve(String fragment) {
         SqlSnippet sqlSnippet = newSqlSnippet();
-        int index1 = fragment.indexOf(paramPrefix);
-        while (index1 >= 0) {
-            int index2 = findParamEndIndex(fragment, index1);
-            String sqlName = getSqlName(fragment, index1, index2);
+        int idx1 = fragment.indexOf(paramPrefix);
+        while (idx1 >= 0) {
+            if (idx1 > 0 && fragment.charAt(idx1 - 1) == '\\') {
+                // 转义处理
+                if (idx1 == 1) {
+                    fragment = fragment.substring(idx1);
+                } else {
+                    fragment = fragment.substring(0, idx1 - 1) + fragment.substring(idx1);
+                }
+                int nIdx = idx1 + paramPrefix.length() - 1;
+                if (nIdx >= fragment.length()) {
+                    break;
+                }
+                idx1 = fragment.indexOf(paramPrefix, nIdx);
+                continue;
+            }
+            int idx2 = findParamEndIndex(fragment, idx1);
+            String sqlName = getSqlName(fragment, idx1, idx2);
             if (StringUtils.isBlank(sqlName) || sqlName.length() < 2) {
                 throw new SearchException("There is a syntax error about embed param: " + fragment);
             }
@@ -35,21 +51,21 @@ public class DefaultSnippetResolver implements SnippetResolver {
             } else {
                 param.setName(sqlName.substring(1));
             }
-            int quotationCount1 = StringUtils.containCount(fragment, 0, index1, quotations);
-            int quotationCount2 = StringUtils.containCount(fragment, Math.max(index1, index2), fragment.length(), quotations);
+            int quotationCount1 = StringUtils.containCount(fragment, 0, idx1, quotations);
+            int quotationCount2 = StringUtils.containCount(fragment, Math.max(idx1, idx2), fragment.length(), quotations);
             if ((quotationCount1 + quotationCount2) % 2 != 0) {
                 throw new SearchException("There is a syntax error (quotations mismatch): " + fragment);
             }
-            int nextIndex = index1 + sqlName.length();
+            int nIdx = idx1 + sqlName.length();
             // 判断虚拟参数是否不在引号内部，并且不是以 :name: 的形式
             if (quotationCount1 % 2 == 0 && !endWithPrefix) {
                 param.setJdbcPara(true);
                 fragment = fragment.replaceFirst(sqlName, "?");
                 // sqlSnippet 长度变短，寻找下标也该相应提前
-                nextIndex = nextIndex - sqlName.length() + 1;
+                nIdx = nIdx - sqlName.length() + 1;
             }
             sqlSnippet.addPara(param);
-            index1 = fragment.indexOf(paramPrefix, nextIndex);
+            idx1 = fragment.indexOf(paramPrefix, nIdx);
         }
         sqlSnippet.setSql(fragment);
         return sqlSnippet;
@@ -89,7 +105,7 @@ public class DefaultSnippetResolver implements SnippetResolver {
     }
 
     public void setParamPrefix(String paramPrefix) {
-        this.paramPrefix = paramPrefix;
+        this.paramPrefix = Objects.requireNonNull(paramPrefix);
     }
 
     public String[] getParamEndFlags() {
@@ -97,7 +113,7 @@ public class DefaultSnippetResolver implements SnippetResolver {
     }
 
     public void setParamEndFlags(String[] paramEndFlags) {
-        this.paramEndFlags = paramEndFlags;
+        this.paramEndFlags = Objects.requireNonNull(paramEndFlags);
     }
 
     public char[] getQuotations() {
