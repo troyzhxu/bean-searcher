@@ -76,4 +76,17 @@ public @interface SearchBean {
 	 */
 	String[] ignoreFields() default {};
 
+	/**
+	 * @since v3.6.0
+	 * @return 默认排序字段信息
+	 */
+	String orderBy() default "";
+
+	/**
+	 * @since v3.6.0
+	 * @return 默认的排序信息是否可被修改
+	 * orderParameterized
+	 */
+	boolean orderModifiable() default true;
+
 }
