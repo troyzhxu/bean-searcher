@@ -77,7 +77,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		if (fetchType.shouldQueryList()) {
 			List<OrderBy> orderBys = searchParam.getOrderBys();
 			Paging paging = searchParam.getPaging();
-			SqlWrapper<Object> listSql = buildListSql(beanMeta, fieldSelectSql, fromWhereSql, orderBys, paging, fetchFields);
+			SqlWrapper<Object> listSql = buildListSql(beanMeta, fieldSelectSql, fromWhereSql, orderBys, paging, fetchFields, paraMap);
 			searchSql.setListSqlString(listSql.getSql());
 			searchSql.addListSqlParams(fieldSelectSqlWrapper.getParas());
 			searchSql.addListSqlParams(fromWhereSqlWrapper.getParas());
@@ -230,10 +230,13 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		return clusterSelectSql + " from (select count(*) " + fromWhereSql + ") " + tableAlias;
 	}
 
-	protected <T> SqlWrapper<Object> buildListSql(BeanMeta<T> beanMeta, String fieldSelectSql, String fromWhereSql, List<OrderBy> orderBys, Paging paging, List<String> fetchFields) {
+	protected <T> SqlWrapper<Object> buildListSql(BeanMeta<T> beanMeta, String fieldSelectSql, String fromWhereSql,
+				List<OrderBy> orderBys, Paging paging, List<String> fetchFields, Map<String, Object> paraMap) {
+		SqlSnippet orderBySnippet = beanMeta.getOrderBySnippet();
+		boolean defaultOrderBy = StringUtils.isNotBlank(orderBySnippet.getSql());
 		StringBuilder builder = new StringBuilder(fromWhereSql);
 		int count = orderBys.size();
-		if (count > 0) {
+		if (count > 0 || defaultOrderBy) {
 			builder.append(" order by ");
 		}
 		for (int index = 0; index < count; index++) {
@@ -251,6 +254,15 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 			if (index < count - 1) {
 				builder.append(", ");
 			}
+		}
+		if (count == 0 && defaultOrderBy) {
+			SqlWrapper<Object> dbFieldSql = resolveDbFieldSql(orderBySnippet, paraMap);
+			builder.append(dbFieldSql.getSql());
+			SqlWrapper<Object> sqlWrapper = forPaginate(fieldSelectSql, builder.toString(), paging);
+			SqlWrapper<Object> listSql = new SqlWrapper<>(sqlWrapper.getSql());
+			listSql.addParas(dbFieldSql.getParas());
+			listSql.addParas(sqlWrapper.getParas());
+			return listSql;
 		}
 		return forPaginate(fieldSelectSql, builder.toString(), paging);
 	}
