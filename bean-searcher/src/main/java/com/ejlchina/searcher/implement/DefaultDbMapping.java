@@ -57,10 +57,12 @@ public class DefaultDbMapping implements DbMapping {
                     tables(beanClass, bean),
                     bean.joinCond().trim(),
                     bean.groupBy().trim(),
-                    bean.distinct()
+                    bean.distinct(),
+                    bean.orderBy(),
+                    bean.sortable()
             );
         }
-        return new Table(null, toTableName(beanClass), "", "", false);
+        return new Table(toTableName(beanClass));
     }
 
     @Override

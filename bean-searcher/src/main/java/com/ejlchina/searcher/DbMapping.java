@@ -82,8 +82,8 @@ public interface DbMapping {
          */
         private final boolean sortable;
 
-        public Table(String dataSource, String tables, String joinCond, String groupBy, boolean distinct) {
-            this(dataSource, tables, joinCond, groupBy, distinct, null, true);
+        public Table(String tables) {
+            this("", tables, "", "", false, "", true);
         }
 
         public Table(String dataSource, String tables, String joinCond, String groupBy, boolean distinct,
