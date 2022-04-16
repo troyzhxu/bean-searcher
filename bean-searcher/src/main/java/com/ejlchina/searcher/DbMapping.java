@@ -72,13 +72,29 @@ public interface DbMapping {
          * */
         private final boolean distinct;
 
+        /**
+         * 默认排序信息
+         */
+        private final String orderBy;
+
+        /**
+         * 是否允许使用检索参数指定排序参数
+         */
+        private final boolean sortable;
 
         public Table(String dataSource, String tables, String joinCond, String groupBy, boolean distinct) {
+            this(dataSource, tables, joinCond, groupBy, distinct, null, true);
+        }
+
+        public Table(String dataSource, String tables, String joinCond, String groupBy, boolean distinct,
+                     String orderBy, boolean sortable) {
             this.dataSource = dataSource;
             this.tables = tables;
             this.joinCond = joinCond;
             this.groupBy = groupBy;
             this.distinct = distinct;
+            this.orderBy = orderBy;
+            this.sortable = sortable;
         }
 
         public String getDataSource() {
@@ -99,6 +115,14 @@ public interface DbMapping {
 
         public boolean isDistinct() {
             return distinct;
+        }
+
+        public String getOrderBy() {
+            return orderBy;
+        }
+
+        public boolean isSortable() {
+            return sortable;
         }
 
     }
