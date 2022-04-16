@@ -124,10 +124,10 @@ public class DefaultParamResolver implements ParamResolver {
 			}
 			searchParam.setPaging(paging);
 		}
-		if (fetchType.shouldQueryList()) {
+		if (fetchType.shouldQueryList() && beanMeta.isSortable()) {
 			// 只有列表检索，才需要排序
 			Set<String> fieldSet = beanMeta.getFieldSet();
-			for (OrderBy orderBy: resolveOrderBys(paraMap)) {
+			for (OrderBy orderBy : resolveOrderBys(paraMap)) {
 				if (orderBy.isValid(fieldSet)) {
 					searchParam.addOrderBy(orderBy);
 				}
