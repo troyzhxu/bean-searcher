@@ -34,7 +34,17 @@ public class BeanMeta<T> {
 	 * 分组字段
 	 * */
 	private final SqlSnippet groupBySnippet;
-	
+
+	/**
+	 * 排序字段
+	 */
+	private final SqlSnippet orderBySnippet;
+
+	/**
+	 * 是否允许使用检索参数指定排序参数
+	 */
+	private final boolean sortable;
+
 	/**
 	 * 是否 distinct 结果
 	 * */
@@ -46,13 +56,16 @@ public class BeanMeta<T> {
 	private final Map<String, FieldMeta> fieldMetaMap = new HashMap<>();
 
 
-	public BeanMeta(Class<T> beanClass, String dataSource, SqlSnippet tableSnippet, SqlSnippet joinCondSnippet,
-					SqlSnippet groupBySnippet, boolean distinct) {
+	public BeanMeta(Class<T> beanClass, String dataSource, SqlSnippet tableSnippet,
+					SqlSnippet joinCondSnippet, SqlSnippet groupBySnippet, SqlSnippet orderBySnippet,
+					boolean sortable, boolean distinct) {
 		this.beanClass = beanClass;
 		this.dataSource = dataSource;
 		this.tableSnippet = tableSnippet;
 		this.joinCondSnippet = joinCondSnippet;
 		this.groupBySnippet = groupBySnippet;
+		this.orderBySnippet = orderBySnippet;
+		this.sortable = sortable;
 		this.distinct = distinct;
 	}
 
@@ -131,5 +144,13 @@ public class BeanMeta<T> {
 	public Collection<FieldMeta> getFieldMetas() {
 		return Collections.unmodifiableCollection(fieldMetaMap.values());
 	}
-	
+
+	public SqlSnippet getOrderBySnippet() {
+		return orderBySnippet;
+	}
+
+	public boolean isSortable() {
+		return sortable;
+	}
+
 }
