@@ -83,10 +83,11 @@ public @interface SearchBean {
 	String orderBy() default "";
 
 	/**
+	 * 为 true 表示可通过 检索参数 重新指定排序信息，为 false 表示将忽略 检索参数中的排序信息
 	 * @since v3.6.0
 	 * @return 默认的排序信息是否可被修改
 	 * orderParameterized
 	 */
-	boolean orderModifiable() default true;
+	boolean sortable() default true;
 
 }
