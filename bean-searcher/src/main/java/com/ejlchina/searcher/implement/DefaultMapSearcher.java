@@ -17,6 +17,8 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 
 	private List<MFieldConvertor> convertors = new ArrayList<>();
 
+	private List<PostProcessor> postProcessors = new ArrayList<>();
+
 	public DefaultMapSearcher() {
 	}
 
@@ -30,7 +32,8 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 	}
 
 	@Override
-	public <T> SearchResult<Map<String, Object>> search(Class<T> beanClass, Map<String, Object> paraMap, String[] summaryFields) {
+	public <T> SearchResult<Map<String, Object>> search(Class<T> beanClass, Map<String, Object> paraMap,
+														String[] summaryFields) {
 		return search(beanClass, paraMap, new FetchType(FetchType.ALL, summaryFields));
 	}
 
@@ -54,14 +57,15 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 		return search(beanClass, paraMap, new FetchType(FetchType.LIST_ALL)).getDataList();
 	}
 
-	protected <T> SearchResult<Map<String, Object>> search(Class<T> beanClass, Map<String, Object> paraMap, FetchType fetchType) {
+	protected <T> SearchResult<Map<String, Object>> search(Class<T> beanClass, Map<String, Object> paraMap,
+														   FetchType fetchType) {
 		try (SqlResult<T> sqlResult = doSearch(beanClass, paraMap, fetchType)) {
+			SearchSql<T> searchSql = sqlResult.getSearchSql();
+			BeanMeta<T> beanMeta = searchSql.getBeanMeta();
 			ResultSet listResult = sqlResult.getListResult();
 			ResultSet clusterResult = sqlResult.getAlreadyClusterResult();
 			SearchResult<Map<String, Object>> result = new SearchResult<>();
 			if (listResult != null) {
-				SearchSql<T> searchSql = sqlResult.getSearchSql();
-				BeanMeta<T> beanMeta = searchSql.getBeanMeta();
 				List<String> fetchFields = searchSql.getFetchFields();
 				while (listResult.next()) {
 					Map<String, Object> dataMap = new HashMap<>();
@@ -77,7 +81,7 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 				result.setTotalCount(getCountFromSqlResult(sqlResult));
 				result.setSummaries(getSummaryFromSqlResult(sqlResult));
 			}
-			return result;
+			return process(result, beanMeta, fetchType, paraMap);
 		} catch (SQLException e) {
 			throw new SearchException("A exception occurred when collecting sql result!", e);
 		}
@@ -95,6 +99,13 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 		return value;
 	}
 
+	protected <T> SearchResult<Map<String, Object>> process(SearchResult<Map<String, Object>> result,
+				BeanMeta<T> beanMeta, FetchType fetchType, Map<String, Object> paraMap) {
+		for (PostProcessor processor: postProcessors) {
+			result = processor.mapProcess(result, beanMeta, fetchType, paraMap);
+		}
+		return result;
+	}
 
 	public List<MFieldConvertor> getConvertors() {
 		return convertors;
@@ -107,6 +118,20 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 	public void addConvertor(MFieldConvertor convertor) {
 		if (convertor != null) {
 			convertors.add(convertor);
+		}
+	}
+
+	public List<PostProcessor> getPostProcessors() {
+		return postProcessors;
+	}
+
+	public void setPostProcessors(List<PostProcessor> postProcessors) {
+		this.postProcessors = Objects.requireNonNull(postProcessors);
+	}
+
+	public void addPostProcessor(PostProcessor postProcessor) {
+		if (postProcessor != null) {
+			this.postProcessors.add(postProcessor);
 		}
 	}
 

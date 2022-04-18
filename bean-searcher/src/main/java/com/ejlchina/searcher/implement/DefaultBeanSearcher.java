@@ -21,6 +21,8 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 
 	private BeanReflector beanReflector = new DefaultBeanReflector();
 
+	private List<PostProcessor> postProcessors = new ArrayList<>();
+
 	public DefaultBeanSearcher() {
 	}
 
@@ -60,12 +62,12 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 
 	protected <T> SearchResult<T> search(Class<T> beanClass, Map<String, Object> paraMap, FetchType fetchType) {
 		try (SqlResult<T> sqlResult = doSearch(beanClass, paraMap, fetchType)) {
+			SearchSql<T> searchSql = sqlResult.getSearchSql();
+			BeanMeta<T> beanMeta = searchSql.getBeanMeta();
 			ResultSet listResult = sqlResult.getListResult();
 			ResultSet clusterResult = sqlResult.getAlreadyClusterResult();
 			SearchResult<T> result;
 			if (listResult != null) {
-				SearchSql<T> searchSql = sqlResult.getSearchSql();
-				BeanMeta<T> beanMeta = searchSql.getBeanMeta();
 				List<String> fetchFields = searchSql.getFetchFields();
 				result = new SearchResult<>(toBeanList(listResult, beanMeta, fetchFields, paraMap));
 			} else {
@@ -75,13 +77,14 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 				result.setTotalCount(getCountFromSqlResult(sqlResult));
 				result.setSummaries(getSummaryFromSqlResult(sqlResult));
 			}
-			return result;
+			return process(result, beanMeta, fetchType, paraMap);
 		} catch (SQLException e) {
 			throw new SearchException("A exception occurred when collecting sql result!", e);
 		}
 	}
 
-	protected <T> List<T> toBeanList(ResultSet listResult, BeanMeta<T> beanMeta, List<String> fetchFields, Map<String, Object> paraMap) throws SQLException {
+	protected <T> List<T> toBeanList(ResultSet listResult, BeanMeta<T> beanMeta, List<String> fetchFields,
+									 Map<String, Object> paraMap) throws SQLException {
 		List<T> dataList = new ArrayList<>();
 		while (listResult.next()) {
 			T bean = beanReflector.reflect(beanMeta, fetchFields, dbAlias -> {
@@ -102,12 +105,34 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 		return dataList;
 	}
 
+	protected <T> SearchResult<T> process(SearchResult<T> result, BeanMeta<T> beanMeta, FetchType fetchType,
+										  Map<String, Object> paraMap) {
+		for (PostProcessor processor: postProcessors) {
+			result = processor.beanProcess(result, beanMeta, fetchType, paraMap);
+		}
+		return result;
+	}
+
 	public BeanReflector getBeanReflector() {
 		return beanReflector;
 	}
 
 	public void setBeanReflector(BeanReflector beanReflector) {
 		this.beanReflector = Objects.requireNonNull(beanReflector);
+	}
+
+	public List<PostProcessor> getPostProcessors() {
+		return postProcessors;
+	}
+
+	public void setPostProcessors(List<PostProcessor> postProcessors) {
+		this.postProcessors = Objects.requireNonNull(postProcessors);
+	}
+
+	public void addPostProcessor(PostProcessor postProcessor) {
+		if (postProcessor != null) {
+			this.postProcessors.add(postProcessor);
+		}
 	}
 
 }
