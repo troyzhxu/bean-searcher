@@ -13,27 +13,27 @@ public interface PostProcessor {
 
     /**
      * 对 {@link BeanSearcher } 的检索结果做进一步转换处理
+     * @param result 检索结果
      * @param beanMeta 检索实体类的元信息
      * @param fetchType 检索类型
      * @param paraMap 检索参数
-     * @param result 检索结果
      * @param <T> 泛型
      * @return 转换后的检索结果
      */
-    default <T> SearchResult<T> beanProcess(BeanMeta<T> beanMeta, FetchType fetchType, Map<String, Object> paraMap, SearchResult<T> result) {
+    default <T> SearchResult<T> beanProcess(SearchResult<T> result, BeanMeta<T> beanMeta, FetchType fetchType, Map<String, Object> paraMap) {
         return result;
     }
 
     /**
      * 对 {@link MapSearcher } 的检索结果做进一步转换处理
+     * @param result 检索结果
      * @param beanMeta 检索实体类的元信息
      * @param fetchType 检索类型
      * @param paraMap 检索参数
-     * @param result 检索结果
      * @param <T> 泛型
      * @return 转换后的检索结果
      */
-    default <T> SearchResult<Map<String, Object>> mapProcess(BeanMeta<T> beanMeta, FetchType fetchType, Map<String, Object> paraMap, SearchResult<Map<String, Object>> result) {
+    default <T> SearchResult<Map<String, Object>> mapProcess(SearchResult<Map<String, Object>> result, BeanMeta<T> beanMeta, FetchType fetchType, Map<String, Object> paraMap) {
         return result;
     }
 
