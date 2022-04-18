@@ -1,3 +1,16 @@
+# v3.6.0 @ Next
+
+### ✨ Features
+
+* Bean Searcher
+  * 实体类 `@SearchBean` 注解内的 SQL 片段支持 `:` 的转义处理：`\\:`
+  * 实体类 `@SearchBean` 注解新增 `orderBy` 属性，可指定默认的排序字段
+  * 实体类 `@SearchBean` 注解新增 `sortType` 属性，可指定排序约束类型
+  * 检索器 新增 `PostProcessor` 机制，可让用户对检索结果统一做进一步的自定义转换处理
+* Bean Searcher Boot Starter
+  * 新增 `bean-searcher.sql.default-mapping.inherit-type` 配置键，可在配置文件中指定默认的实体类继承类型，默认为 `ALL`
+  * 新增 `bean-searcher.sql.default-mapping.sort-type` 配置键，可在配置文件中指定默认的排序约束类型，默认为 `ALLOW_PARAM`
+
 # v3.5.3 @ 2022-04-06
 
 ### ✨ Better
