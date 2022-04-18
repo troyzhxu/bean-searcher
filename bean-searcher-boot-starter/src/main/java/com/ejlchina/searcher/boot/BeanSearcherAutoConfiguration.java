@@ -223,6 +223,8 @@ public class BeanSearcherAutoConfiguration {
 		mapping.setUpperCase(conf.isUpperCase());
 		mapping.setRedundantSuffixes(conf.getRedundantSuffixes());
 		mapping.setIgnoreFields(conf.getIgnoreFields());
+		mapping.setDefaultInheritType(conf.getInheritType());
+		mapping.setDefaultSortType(conf.getSortType());
 		return mapping;
 	}
 

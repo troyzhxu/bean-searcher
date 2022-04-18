@@ -1,5 +1,7 @@
 package com.ejlchina.searcher.boot;
 
+import com.ejlchina.searcher.bean.InheritType;
+import com.ejlchina.searcher.bean.SortType;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.time.ZoneId;
@@ -326,6 +328,8 @@ public class BeanSearcherProperties {
 			private String tablePrefix = null;
 			private String[] redundantSuffixes;
 			private String[] ignoreFields;
+			private InheritType inheritType;
+			private SortType sortType;
 
 			public boolean isUpperCase() {
 				return upperCase;
@@ -357,6 +361,22 @@ public class BeanSearcherProperties {
 
 			public void setIgnoreFields(String[] ignoreFields) {
 				this.ignoreFields = ignoreFields;
+			}
+
+			public InheritType getInheritType() {
+				return inheritType;
+			}
+
+			public void setInheritType(InheritType inheritType) {
+				this.inheritType = inheritType;
+			}
+
+			public SortType getSortType() {
+				return sortType;
+			}
+
+			public void setSortType(SortType sortType) {
+				this.sortType = sortType;
 			}
 
 		}
