@@ -235,14 +235,14 @@
     },
     {
       "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Sql$DefaultMapping",
-      "defaultValue": null,
+      "defaultValue": "ALL",
       "name": "bean-searcher.sql.default-mapping.inherit-type",
       "description": "检索实体类的默认继承类型",
       "type": "com.ejlchina.searcher.bean.InheritType"
     },
     {
       "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Sql$DefaultMapping",
-      "defaultValue": null,
+      "defaultValue": "ALLOW_PARAM",
       "name": "bean-searcher.sql.default-mapping.sort-type",
       "description": "默认排序约束类型",
       "type": "com.ejlchina.searcher.bean.SortType"
