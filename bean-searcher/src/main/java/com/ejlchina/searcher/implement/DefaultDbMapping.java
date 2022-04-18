@@ -3,10 +3,7 @@ package com.ejlchina.searcher.implement;
 import com.ejlchina.searcher.DbMapping;
 import com.ejlchina.searcher.FieldOp;
 import com.ejlchina.searcher.SearchException;
-import com.ejlchina.searcher.bean.DbField;
-import com.ejlchina.searcher.bean.DbIgnore;
-import com.ejlchina.searcher.bean.InheritType;
-import com.ejlchina.searcher.bean.SearchBean;
+import com.ejlchina.searcher.bean.*;
 import com.ejlchina.searcher.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -30,6 +27,9 @@ public class DefaultDbMapping implements DbMapping {
 
     // 默认继承类型（since v3.2.0）
     private InheritType defaultInheritType = InheritType.ALL;
+
+    // 默认的排序约束类型
+    private SortType defaultSortType = SortType.ALLOW_PARAM;
 
     // 冗余的后缀（如果类名已这些后缀结尾，将自动去掉这些后缀）（since v3.3.0）
     private String[] redundantSuffixes;
@@ -59,10 +59,20 @@ public class DefaultDbMapping implements DbMapping {
                     bean.groupBy().trim(),
                     bean.distinct(),
                     bean.orderBy(),
-                    bean.sortable()
+                    sortable(bean.sortType())
             );
         }
         return new Table(toTableName(beanClass));
+    }
+
+    protected boolean sortable(SortType sortType) {
+        if (sortType == SortType.ALLOW_PARAM) {
+            return true;
+        }
+        if (sortType == SortType.ONLY_ENTITY) {
+            return false;
+        }
+        return defaultSortType == SortType.ALLOW_PARAM;
     }
 
     @Override
@@ -213,6 +223,14 @@ public class DefaultDbMapping implements DbMapping {
 
     public void setDefaultInheritType(InheritType inheritType) {
         this.defaultInheritType = Objects.requireNonNull(inheritType);
+    }
+
+    public SortType getDefaultSortType() {
+        return defaultSortType;
+    }
+
+    public void setDefaultSortType(SortType defaultSortType) {
+        this.defaultSortType = Objects.requireNonNull(defaultSortType);
     }
 
     public String getTablePrefix() {

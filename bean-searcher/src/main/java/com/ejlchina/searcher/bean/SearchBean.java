@@ -1,6 +1,7 @@
 package com.ejlchina.searcher.bean;
 
 import com.ejlchina.searcher.DbMapping;
+import com.ejlchina.searcher.implement.DefaultDbMapping;
 import com.ejlchina.searcher.implement.DefaultSqlExecutor;
 
 import javax.sql.DataSource;
@@ -83,11 +84,12 @@ public @interface SearchBean {
 	String orderBy() default "";
 
 	/**
-	 * 为 true 表示可通过 检索参数 重新指定排序信息，为 false 表示将忽略 检索参数中的排序信息
+	 * 为 {@link SortType#ALLOW_PARAM } 时，表示：允许使用 检索参数 重新指定排序字段，
+	 * 为 {@link SortType#ONLY_ENTITY } 时，表示：只可以 使用本注解的 {@link #orderBy()} 属性指定排序字段，并会忽略 检索参数中的排序信息
+	 * 为 {@link SortType#DEFAULT } 时，表示：根据检索器的实例级配置 {@link DefaultDbMapping#getDefaultSortType()} 来决定 是否允许使用 检索参数 重新指定排序字段
 	 * @since v3.6.0
 	 * @return 默认的排序信息是否可被修改
-	 * orderParameterized
 	 */
-	boolean sortable() default true;
+	SortType sortType() default SortType.DEFAULT;
 
 }
