@@ -297,8 +297,10 @@ public class BeanSearcherProperties {
 
 	public static class Sql {
 
-		public static final String DIALECT_MYSQL = "mysql";
-		public static final String DIALECT_ORACLE = "oracle";
+		public static final String DIALECT_MYSQL = "MYSQL";
+		public static final String DIALECT_ORACLE = "ORACLE";
+		public static final String DIALECT_POSTGRESQL = "POSTGRESQL";
+		public static final String DIALECT_PGSQL = "PGSQL";		// alias for POSTGRESQL
 
 		/**
 		 * 数据库方言，默认MySQL，可选：Oracle、PostgreSql、SqlServer

@@ -195,7 +195,7 @@
       "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$Sql",
       "defaultValue": "MySQL",
       "name": "bean-searcher.sql.dialect",
-      "description": "数据库方言，默认 MySQL，可选：Oracle",
+      "description": "数据库方言，默认 MySQL，可选：Oracle, PostgreSQL",
       "type": "java.lang.String"
     },
     {
