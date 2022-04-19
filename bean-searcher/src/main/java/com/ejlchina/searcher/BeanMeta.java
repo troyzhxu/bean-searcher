@@ -1,5 +1,7 @@
 package com.ejlchina.searcher;
 
+import com.ejlchina.searcher.util.StringUtils;
+
 import java.util.*;
 
 /**
@@ -131,5 +133,9 @@ public class BeanMeta<T> {
 	public Collection<FieldMeta> getFieldMetas() {
 		return Collections.unmodifiableCollection(fieldMetaMap.values());
 	}
-	
+
+	public boolean isDistinctOrGroupBy() {
+		return distinct || StringUtils.isNotBlank(groupBySnippet.getSql());
+	}
+
 }
