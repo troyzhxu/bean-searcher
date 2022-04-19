@@ -1,5 +1,7 @@
 package com.ejlchina.searcher;
 
+import com.ejlchina.searcher.util.StringUtils;
+
 import java.util.*;
 
 /**
@@ -151,6 +153,10 @@ public class BeanMeta<T> {
 
 	public boolean isSortable() {
 		return sortable;
+	}
+
+	public boolean isDistinctOrGroupBy() {
+		return distinct || StringUtils.isNotBlank(groupBySnippet.getSql());
 	}
 
 }

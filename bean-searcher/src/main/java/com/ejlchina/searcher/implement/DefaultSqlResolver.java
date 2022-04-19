@@ -116,17 +116,21 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 			}
 		}
 		SqlWrapper<Object> sqlWrapper = new SqlWrapper<>();
+		boolean distinctOrGroupBy = beanMeta.isDistinctOrGroupBy();
 		for (int i = 0; i < summaryFields.length; i++) {
 			FieldMeta fieldMeta = beanMeta.requireFieldMeta(summaryFields[i]);
-			SqlWrapper<Object> fieldSql = resolveDbFieldSql(fieldMeta.getFieldSql(), paraMap);
-			builder.append("sum(")
-					.append(fieldSql.getSql())
-					.append(") ")
-					.append(summaryAliases.get(i));
+			builder.append("sum(");
+			if (distinctOrGroupBy) {
+				builder.append(fieldMeta.getDbAlias());
+			} else {
+				SqlWrapper<Object> fieldSql = resolveDbFieldSql(fieldMeta.getFieldSql(), paraMap);
+				builder.append(fieldSql.getSql());
+				sqlWrapper.addParas(fieldSql.getParas());
+			}
+			builder.append(") ").append(summaryAliases.get(i));
 			if (i < summaryFields.length - 1) {
 				builder.append(", ");
 			}
-			sqlWrapper.addParas(fieldSql.getParas());
 		}
 		sqlWrapper.setSql(builder.toString());
 		return sqlWrapper;
@@ -218,16 +222,11 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 	}
 
 	protected <T> String buildClusterSql(BeanMeta<T> beanMeta, String clusterSelectSql, String fieldSelectSql, String fromWhereSql) {
-		if (beanMeta.isDistinct()) {
-			String originalSql = fieldSelectSql + fromWhereSql;
+		if (beanMeta.isDistinctOrGroupBy()) {
 			String tableAlias = getTableAlias(beanMeta);
-			return clusterSelectSql + " from (" + originalSql + ") " + tableAlias;
+			return clusterSelectSql + " from (" + fieldSelectSql + fromWhereSql + ") " + tableAlias;
 		}
-		if (StringUtils.isBlank(beanMeta.getGroupBy())) {
-			return clusterSelectSql + fromWhereSql;
-		}
-		String tableAlias = getTableAlias(beanMeta);
-		return clusterSelectSql + " from (select count(*) " + fromWhereSql + ") " + tableAlias;
+		return clusterSelectSql + fromWhereSql;
 	}
 
 	protected <T> SqlWrapper<Object> buildListSql(BeanMeta<T> beanMeta, String fieldSelectSql, String fromWhereSql,
