@@ -9,7 +9,7 @@ import java.sql.SQLException;
 public class SqlResult<T> implements Closeable {
 
     /**
-     * 结果
+     * 结果（单条记录）
      * @since v3.6.0
      */
     public interface Result {
@@ -30,7 +30,7 @@ public class SqlResult<T> implements Closeable {
     }
 
     /**
-     * 结果集
+     * 结果集（多条记录）
      * @since v3.6.0
      */
     public interface ResultSet extends Result {
