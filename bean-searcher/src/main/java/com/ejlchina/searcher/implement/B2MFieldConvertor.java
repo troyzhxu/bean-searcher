@@ -72,7 +72,10 @@ public class B2MFieldConvertor implements FieldConvertor.MFieldConvertor {
     public Object convert(FieldMeta meta, Object value) {
         Key key = new Key(meta, value.getClass());
         BFieldConvertor convertor = cache.get(key);
-        return convertor.convert(meta, value);
+        if (convertor != null) {
+            return convertor.convert(meta, value);
+        }
+        throw new IllegalStateException("必须先调用 supports 方法，并且返回 true 后才能调用该方法");
     }
 
 }
