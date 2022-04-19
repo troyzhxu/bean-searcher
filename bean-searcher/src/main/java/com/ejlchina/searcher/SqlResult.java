@@ -25,7 +25,7 @@ public class SqlResult<T> implements Closeable {
          * 关闭结果
          * @throws SQLException 异常
          */
-        void close() throws SQLException;
+        default void close() throws SQLException {}
 
     }
 
