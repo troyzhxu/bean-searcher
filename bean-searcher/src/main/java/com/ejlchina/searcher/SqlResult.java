@@ -22,7 +22,7 @@ public class SqlResult<T> implements Closeable {
         Object get(String columnLabel) throws SQLException;
 
         /**
-         * 关闭结果
+         * 释放资源
          * @throws SQLException 异常
          */
         default void close() throws SQLException {}
