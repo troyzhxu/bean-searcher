@@ -1,12 +1,13 @@
 package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.*;
-import com.ejlchina.searcher.SearchParam;
 import com.ejlchina.searcher.param.FetchType;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /***
  * 自动检索器 根据 Bean 的 Class 和请求参数，自动检索 Bean
@@ -62,16 +63,16 @@ public abstract class AbstractSearcher implements Searcher {
 	}
 
 	protected Number getCountFromSqlResult(SqlResult<?> sqlResult) throws SQLException {
-		return (Number) sqlResult.getAlreadyClusterResult().getObject(sqlResult.getSearchSql().getCountAlias());
+		return (Number) sqlResult.getClusterResult().get(sqlResult.getSearchSql().getCountAlias());
 	}
 
 	protected Number[] getSummaryFromSqlResult(SqlResult<?> sqlResult) throws SQLException {
 		List<String> summaryAliases = sqlResult.getSearchSql().getSummaryAliases();
-		ResultSet countResultSet = sqlResult.getAlreadyClusterResult();
+		SqlResult.Result clusterResult = sqlResult.getClusterResult();
 		Number[] summaries = new Number[summaryAliases.size()];
 		for (int i = 0; i < summaries.length; i++) {
 			String summaryAlias = summaryAliases.get(i);
-			summaries[i] = (Number) countResultSet.getObject(summaryAlias);
+			summaries[i] = (Number) clusterResult.get(summaryAlias);
 		}
 		return summaries;
 	}

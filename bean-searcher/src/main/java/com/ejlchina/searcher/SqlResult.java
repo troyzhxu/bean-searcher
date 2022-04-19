@@ -1,14 +1,48 @@
 package com.ejlchina.searcher;
 
 import java.io.Closeable;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 /**
  * SQL 执行结果
  */
 public class SqlResult<T> implements Closeable {
+
+    /**
+     * 结果
+     * @since v3.6.0
+     */
+    public interface Result {
+
+        /**
+         * 获取当前记录的某一列的值
+         * @param columnLabel 列名（别名）
+         * @return 指定列的值
+         */
+        Object get(String columnLabel) throws SQLException;
+
+        /**
+         * 关闭结果
+         * @throws SQLException 异常
+         */
+        void close() throws SQLException;
+
+    }
+
+    /**
+     * 结果集
+     * @since v3.6.0
+     */
+    public interface ResultSet extends Result {
+
+        /**
+         * 游标移动到下一条记录
+         * @return 下一条记录是否存在
+         */
+        boolean next() throws SQLException;
+
+    }
+
 
     /**
      * 检索 SQL 信息
@@ -23,20 +57,7 @@ public class SqlResult<T> implements Closeable {
     /**
      * 聚合查询结果集
      */
-    private ResultSet clusterResult;
-
-    // clusterResult 是否已未执行过 next 方法
-    private boolean clusterNotReady = true;
-
-    /**
-     * 列表查询语句
-     */
-    private Statement listStatement;
-
-    /**
-     * 聚合查询语句
-     */
-    private Statement clusterStatement;
+    private Result clusterResult;
 
 
     public SqlResult(SearchSql<T> searchSql) {
@@ -55,14 +76,8 @@ public class SqlResult<T> implements Closeable {
             if (clusterResult != null) {
                 clusterResult.close();
             }
-            if (listStatement != null) {
-                listStatement.close();
-            }
-            if (clusterStatement != null) {
-                clusterStatement.close();
-            }
         } catch (SQLException e) {
-            throw new SearchException("Can not close statement or resultSet!", e);
+            throw new SearchException("Can not close result or resultSet!", e);
         }
     }
 
@@ -74,25 +89,16 @@ public class SqlResult<T> implements Closeable {
         return listResult;
     }
 
-    public void setListResult(ResultSet listResult, Statement listStatement) {
+    public void setListResult(ResultSet listResult) {
         this.listResult = listResult;
-        this.listStatement = listStatement;
     }
 
-    public ResultSet getAlreadyClusterResult() throws SQLException {
-        if (clusterResult != null) {
-            // 为了兼容 ShardingSphere，这里不能使用 ResultSet#isBeforeFirst() 方法，因为 ShardingSphere 没有实现它
-            if (clusterNotReady) {
-                clusterResult.next();
-                clusterNotReady = false;
-            }
-        }
+    public Result getClusterResult() throws SQLException {
         return clusterResult;
     }
 
-    public void setClusterResult(ResultSet clusterResult, Statement clusterStatement) {
+    public void setClusterResult(Result clusterResult) {
         this.clusterResult = clusterResult;
-        this.clusterStatement = clusterStatement;
     }
 
 }

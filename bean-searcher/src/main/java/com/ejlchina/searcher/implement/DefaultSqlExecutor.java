@@ -142,7 +142,28 @@ public class DefaultSqlExecutor implements SqlExecutor {
 		PreparedStatement statement = connection.prepareStatement(sql);
 		setStatementParams(statement, params);
 		ResultSet resultSet = statement.executeQuery();
-		sqlResult.setListResult(resultSet, statement);
+		sqlResult.setListResult(new SqlResult.ResultSet() {
+
+			@Override
+			public boolean next() throws SQLException {
+				return resultSet.next();
+			}
+
+			@Override
+			public Object get(String columnLabel) throws SQLException {
+				return resultSet.getObject(columnLabel);
+			}
+
+			@Override
+			public void close() throws SQLException {
+				try {
+					resultSet.close();
+				} finally {
+					statement.close();
+				}
+			}
+
+		});
 	}
 
 	protected void executeClusterSqlAndCollectResult(Connection connection, String sqlString, List<Object> sqlParams,
@@ -150,7 +171,27 @@ public class DefaultSqlExecutor implements SqlExecutor {
 		PreparedStatement statement = connection.prepareStatement(sqlString);
 		setStatementParams(statement, sqlParams);
 		ResultSet resultSet = statement.executeQuery();
-		sqlResult.setClusterResult(resultSet, statement);
+		boolean hasValue = resultSet.next();
+		sqlResult.setClusterResult(new SqlResult.Result() {
+
+			@Override
+			public Object get(String columnLabel) throws SQLException {
+				if (hasValue) {
+					return resultSet.getObject(columnLabel);
+				}
+				return null;
+			}
+
+			@Override
+			public void close() throws SQLException {
+				try {
+					resultSet.close();
+				} finally {
+					statement.close();
+				}
+			}
+
+		});
 	}
 
 	protected void setStatementParams(PreparedStatement statement, List<Object> params) throws SQLException {

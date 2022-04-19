@@ -5,7 +5,6 @@ import com.ejlchina.searcher.bean.BeanAware;
 import com.ejlchina.searcher.bean.ParamAware;
 import com.ejlchina.searcher.param.FetchType;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,8 +63,7 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 		try (SqlResult<T> sqlResult = doSearch(beanClass, paraMap, fetchType)) {
 			SearchSql<T> searchSql = sqlResult.getSearchSql();
 			BeanMeta<T> beanMeta = searchSql.getBeanMeta();
-			ResultSet listResult = sqlResult.getListResult();
-			ResultSet clusterResult = sqlResult.getAlreadyClusterResult();
+			SqlResult.ResultSet listResult = sqlResult.getListResult();
 			SearchResult<T> result;
 			if (listResult != null) {
 				List<String> fetchFields = searchSql.getFetchFields();
@@ -73,7 +71,7 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 			} else {
 				result = new SearchResult<>();
 			}
-			if (clusterResult != null) {
+			if (searchSql.isShouldQueryCluster()) {
 				result.setTotalCount(getCountFromSqlResult(sqlResult));
 				result.setSummaries(getSummaryFromSqlResult(sqlResult));
 			}
@@ -83,13 +81,13 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 		}
 	}
 
-	protected <T> List<T> toBeanList(ResultSet listResult, BeanMeta<T> beanMeta, List<String> fetchFields,
+	protected <T> List<T> toBeanList(SqlResult.ResultSet listResult, BeanMeta<T> beanMeta, List<String> fetchFields,
 									 Map<String, Object> paraMap) throws SQLException {
 		List<T> dataList = new ArrayList<>();
 		while (listResult.next()) {
 			T bean = beanReflector.reflect(beanMeta, fetchFields, dbAlias -> {
 				try {
-					return listResult.getObject(dbAlias);
+					return listResult.get(dbAlias);
 				} catch (SQLException e) {
 					throw new SearchException("A exception occurred when collecting sql result!", e);
 				}
