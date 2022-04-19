@@ -30,7 +30,9 @@ public interface FieldConvertor {
 	 * @param value 从数据库取出的待转换的值（非空）
 	 * @return 转换目标值
 	 * */
-	Object convert(FieldMeta meta, Object value);
+	default Object convert(FieldMeta meta, Object value) {
+		return value;
+	}
 
 	/**
 	 * 只在 {@link DefaultBeanReflector } 中使用

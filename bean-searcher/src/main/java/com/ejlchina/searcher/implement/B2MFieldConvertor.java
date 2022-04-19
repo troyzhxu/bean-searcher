@@ -20,6 +20,8 @@ public class B2MFieldConvertor implements FieldConvertor.MFieldConvertor {
 
     private final Map<Key, BFieldConvertor> cache = new ConcurrentHashMap<>();
 
+    static final BFieldConvertor NULL_CONVERTOR = (meta, valueType) -> false;
+
     public B2MFieldConvertor(List<BFieldConvertor> convertors) {
         this.convertors = convertors;
     }
@@ -52,11 +54,11 @@ public class B2MFieldConvertor implements FieldConvertor.MFieldConvertor {
     public boolean supports(FieldMeta meta, Class<?> valueType) {
         Key key = new Key(meta, valueType);
         BFieldConvertor convertor = cache.get(key);
+        if (convertor == NULL_CONVERTOR) {
+            return false;
+        }
         if (convertor != null) {
             return true;
-        }
-        if (cache.containsKey(key)) {
-            return false;
         }
         for (BFieldConvertor c: convertors) {
             if (c.supports(meta, valueType)) {
@@ -64,7 +66,7 @@ public class B2MFieldConvertor implements FieldConvertor.MFieldConvertor {
                 return true;
             }
         }
-        cache.put(key, null);
+        cache.put(key, NULL_CONVERTOR);
         return false;
     }
 
