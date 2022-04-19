@@ -33,14 +33,14 @@ public interface FieldConvertor {
 	Object convert(FieldMeta meta, Object value);
 
 	/**
-	 * 只使用在 {@link DefaultBeanReflector } 中的字段转换器
+	 * 只在 {@link DefaultBeanReflector } 中使用
 	 * @author Troy.Zhou @ 2021-11-09
 	 * @since v3.1.0
 	 */
 	interface BFieldConvertor extends FieldConvertor { }
 
 	/**
-	 * 只使用在 {@link DefaultMapSearcher } 中的字段转换器
+	 * 只在 {@link DefaultMapSearcher } 中使用
 	 * @author Troy.Zhou @ 2021-11-09
 	 * @since v3.1.0
 	 */
