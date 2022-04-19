@@ -100,7 +100,28 @@ public class DefaultSqlExecutor implements SqlExecutor {
 			connection.setTransactionIsolation(transactionIsolation);
 			connection.setReadOnly(true);
 		}
-		SqlResult<T> result = new SqlResult<T>(searchSql) {
+		SqlResult.ResultSet listResult = null;
+		SqlResult.Result clusterResult = null;
+		try {
+			if (searchSql.isShouldQueryList()) {
+				String sql = searchSql.getListSqlString();
+				List<Object> params = searchSql.getListSqlParams();
+				writeLog(sql, params);
+				listResult = executeListSql(connection, sql, params);
+			}
+			if (searchSql.isShouldQueryCluster()) {
+				String sql = searchSql.getClusterSqlString();
+				List<Object> params = searchSql.getClusterSqlParams();
+				writeLog(sql, params);
+				clusterResult = executeClusterSql(connection, sql, params);
+			}
+		} finally {
+			if (transactional) {
+				connection.commit();
+				connection.setReadOnly(false);
+			}
+		}
+		return new SqlResult<T>(searchSql, listResult, clusterResult) {
 			@Override
 			public void close() {
 				try {
@@ -110,26 +131,6 @@ public class DefaultSqlExecutor implements SqlExecutor {
 				}
 			}
 		};
-		try {
-			if (searchSql.isShouldQueryList()) {
-				String sql = searchSql.getListSqlString();
-				List<Object> params = searchSql.getListSqlParams();
-				writeLog(sql, params);
-				executeListSqlAndCollectResult(connection, sql, params, result);
-			}
-			if (searchSql.isShouldQueryCluster()) {
-				String sql = searchSql.getClusterSqlString();
-				List<Object> params = searchSql.getClusterSqlParams();
-				writeLog(sql, params);
-				executeClusterSqlAndCollectResult(connection, sql, params, result);
-			}
-		} finally {
-			if (transactional) {
-				connection.commit();
-				connection.setReadOnly(false);
-			}
-		}
-		return result;
 	}
 
 	protected void writeLog(String sql, List<Object> params) {
@@ -137,12 +138,11 @@ public class DefaultSqlExecutor implements SqlExecutor {
 		log.debug("bean-searcher - params - {}", params);
 	}
 
-	protected void executeListSqlAndCollectResult(Connection connection, String sql, List<Object> params,
-				SqlResult<?> sqlResult) throws SQLException {
+	protected SqlResult.ResultSet executeListSql(Connection connection, String sql, List<Object> params) throws SQLException {
 		PreparedStatement statement = connection.prepareStatement(sql);
 		setStatementParams(statement, params);
 		ResultSet resultSet = statement.executeQuery();
-		sqlResult.setListResult(new SqlResult.ResultSet() {
+		return new SqlResult.ResultSet() {
 
 			@Override
 			public boolean next() throws SQLException {
@@ -163,16 +163,15 @@ public class DefaultSqlExecutor implements SqlExecutor {
 				}
 			}
 
-		});
+		};
 	}
 
-	protected void executeClusterSqlAndCollectResult(Connection connection, String sqlString, List<Object> sqlParams,
-				SqlResult<?> sqlResult) throws SQLException {
-		PreparedStatement statement = connection.prepareStatement(sqlString);
-		setStatementParams(statement, sqlParams);
+	protected SqlResult.Result executeClusterSql(Connection connection, String sql, List<Object> params) throws SQLException {
+		PreparedStatement statement = connection.prepareStatement(sql);
+		setStatementParams(statement, params);
 		ResultSet resultSet = statement.executeQuery();
 		boolean hasValue = resultSet.next();
-		sqlResult.setClusterResult(new SqlResult.Result() {
+		return new SqlResult.Result() {
 
 			@Override
 			public Object get(String columnLabel) throws SQLException {
@@ -191,11 +190,12 @@ public class DefaultSqlExecutor implements SqlExecutor {
 				}
 			}
 
-		});
+		};
 	}
 
 	protected void setStatementParams(PreparedStatement statement, List<Object> params) throws SQLException {
-		for (int i = 0; i < params.size(); i++) {
+		int size = params.size();
+		for (int i = 0; i < size; i++) {
 			statement.setObject(i + 1, params.get(i));
 		}
 	}

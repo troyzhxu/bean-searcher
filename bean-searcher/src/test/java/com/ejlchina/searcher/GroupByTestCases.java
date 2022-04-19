@@ -37,9 +37,7 @@ public class GroupByTestCases {
                 Assert.assertTrue(searchSql.getListSqlParams().isEmpty());
                 Assert.assertEquals("select count(*) s_count from (select avg(score) c_2, sum(score) c_1, course_id c_0 from student_course group by course_id) t_", searchSql.getClusterSqlString());
                 Assert.assertTrue(searchSql.getClusterSqlParams().isEmpty());
-                SqlResult<T> sqlResult = new SqlResult<>(searchSql);
-                sqlResult.setClusterResult(columnLabel -> 100);
-                return sqlResult;
+                return new SqlResult<>(searchSql, null, columnLabel -> 100);
             }
         };
 
@@ -61,9 +59,7 @@ public class GroupByTestCases {
                 Assert.assertTrue(searchSql.getListSqlParams().isEmpty());
                 Assert.assertEquals("select sum(c_1) c_1_sum_ from (select avg(score) c_2, sum(score) c_1, course_id c_0 from student_course group by course_id) t_", searchSql.getClusterSqlString());
                 Assert.assertTrue(searchSql.getClusterSqlParams().isEmpty());
-                SqlResult<T> sqlResult = new SqlResult<>(searchSql);
-                sqlResult.setClusterResult(columnLabel -> 100);
-                return sqlResult;
+                return new SqlResult<>(searchSql, null, columnLabel -> 100);
             }
         };
 

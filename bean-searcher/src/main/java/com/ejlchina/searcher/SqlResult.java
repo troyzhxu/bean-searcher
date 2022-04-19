@@ -52,16 +52,22 @@ public class SqlResult<T> implements Closeable {
     /**
      * 列表查询结果集
      */
-    private ResultSet listResult;
+    private final ResultSet listResult;
 
     /**
      * 聚合查询结果集
      */
-    private Result clusterResult;
+    private final Result clusterResult;
 
 
     public SqlResult(SearchSql<T> searchSql) {
+        this(searchSql, null, null);
+    }
+
+    public SqlResult(SearchSql<T> searchSql, ResultSet listResult, Result clusterResult) {
         this.searchSql = searchSql;
+        this.listResult = listResult;
+        this.clusterResult = clusterResult;
     }
 
     /**
@@ -89,16 +95,8 @@ public class SqlResult<T> implements Closeable {
         return listResult;
     }
 
-    public void setListResult(ResultSet listResult) {
-        this.listResult = listResult;
-    }
-
     public Result getClusterResult() {
         return clusterResult;
-    }
-
-    public void setClusterResult(Result clusterResult) {
-        this.clusterResult = clusterResult;
     }
 
 }
