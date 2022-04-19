@@ -7,10 +7,12 @@
   * 实体类 `@SearchBean` 注解新增 `orderBy` 属性，可指定默认的排序字段
   * 实体类 `@SearchBean` 注解新增 `sortType` 属性，可指定排序约束类型
   * 检索器 新增 `PostProcessor` 机制，可让用户对检索结果统一做进一步的自定义转换处理
+  * 新增 `PostgreSqlDialect` 方言实现
 * Bean Searcher Boot Starter
   * 新增 `bean-searcher.sql.default-mapping.inherit-type` 配置键，可在配置文件中指定默认的实体类继承类型，默认为 `ALL`
   * 新增 `bean-searcher.sql.default-mapping.sort-type` 配置键，可在配置文件中指定默认的排序约束类型，默认为 `ALLOW_PARAM`
-  * 支持 `Spring Bean` 的方式为 `BeanSearcher` 与 `MapSearcher` 检索器添加 `PostProcessor` 处理器 
+  * 支持 `Spring Bean` 的方式为 `BeanSearcher` 与 `MapSearcher` 检索器添加 `PostProcessor` 处理器
+  * 配置 `bean-searcher.sql.dialect` 支持指定为 `PostgreSQL` 或 `PgSQL` 来使用 PostgreSql 方言
 
 # v3.5.3 @ 2022-04-06
 
