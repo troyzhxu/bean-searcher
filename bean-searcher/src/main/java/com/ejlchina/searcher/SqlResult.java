@@ -93,7 +93,7 @@ public class SqlResult<T> implements Closeable {
         this.listResult = listResult;
     }
 
-    public Result getClusterResult() throws SQLException {
+    public Result getClusterResult() {
         return clusterResult;
     }
 
