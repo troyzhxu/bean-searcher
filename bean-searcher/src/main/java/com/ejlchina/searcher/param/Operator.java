@@ -97,6 +97,7 @@ public class Operator {
 	/**
 	 * 多值
 	 * in (...)
+	 * Deprecated from v3.3.0
 	 * @see #InList
 	 */
 	@Deprecated
