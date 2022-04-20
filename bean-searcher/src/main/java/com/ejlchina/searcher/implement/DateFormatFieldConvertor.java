@@ -2,6 +2,7 @@ package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.FieldConvertor;
 import com.ejlchina.searcher.FieldMeta;
+import com.ejlchina.searcher.util.ObjKey2;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -11,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
 /**
- * 日期格式化字段转换器
+ * 日期/时间格式化字段转换器
  * 该转换器可将数据库取出的 Date 对象字段 转换为 格式化的日期字符串
  * 与 {@link DefaultMapSearcher } 配合使用
  *
@@ -27,9 +28,6 @@ public class DateFormatFieldConvertor implements FieldConvertor.MFieldConvertor 
     public static final Pattern TIME_PATTERN = Pattern.compile("[HhmsS]+");
 
     private final Map<String, Formatter> formatMap = new ConcurrentHashMap<>();
-
-    private final Map<Class<?>, List<String>> typeNameMap = new ConcurrentHashMap<>();
-
 
     /**
      * 时区
@@ -63,22 +61,46 @@ public class DateFormatFieldConvertor implements FieldConvertor.MFieldConvertor 
      * Deprecated from v3.0.1
      * 请使用 {@link #setFormat(String scope, String format) } 方法
      * @param scope 生效范围（越精确，优先级越高）
-     * @param format 日期格式，如：yyyy-MM-dd，传入 null 时表示该 scope 下的日期字段不进行格式化
+     * @param format 日期/时间格式，如：yyyy-MM-dd，传入 null 时表示该 scope 下的日期字段不进行格式化
      */
     @Deprecated
     public void addFormat(String scope, String format) {
         setFormat(scope, format);
     }
 
+    private final Map<ObjKey2, Formatter> cache = new ConcurrentHashMap<>();
+
+    private final Formatter NULL_FORMATTER = new Formatter(null);
+
     @Override
     public boolean supports(FieldMeta meta, Class<?> valueType) {
-        return Date.class.isAssignableFrom(valueType) || Temporal.class.isAssignableFrom(valueType);
+        ObjKey2 key = new ObjKey2(meta, valueType);
+        Formatter formatter = cache.get(key);
+        if (formatter == NULL_FORMATTER) {
+            return false;
+        }
+        if (formatter != null) {
+            return formatter.pattern != null;
+        }
+        if (Date.class.isAssignableFrom(valueType) || Temporal.class.isAssignableFrom(valueType)) {
+            Formatter f = findFormatter(meta, valueType);
+            if (f != null) {
+                cache.put(key, f);
+                return f.pattern != null;
+            }
+        }
+        cache.put(key, NULL_FORMATTER);
+        return false;
     }
 
     @Override
     public Object convert(FieldMeta meta, Object value) {
-        Formatter formatter = findFormatter(meta, value.getClass());
-        return formatter != null ? formatter.format(value) : value;
+        ObjKey2 key = new ObjKey2(meta, value.getClass());
+        Formatter formatter = cache.get(key);
+        if (formatter != null) {
+            return formatter.format(value);
+        }
+        throw new IllegalStateException("The supports(FieldMeta, Class<?>) method must be called first and return true before convert(FieldMeta, Object) method can be called");
     }
 
     public class Formatter {
@@ -162,6 +184,8 @@ public class DateFormatFieldConvertor implements FieldConvertor.MFieldConvertor 
             }
         }
     }
+
+    private final Map<Class<?>, List<String>> typeNameMap = new ConcurrentHashMap<>();
 
     private List<String> getTypeNames(Class<?> type) {
         List<String> names = typeNameMap.computeIfAbsent(type, k -> new ArrayList<>(3));
