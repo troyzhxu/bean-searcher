@@ -12,6 +12,10 @@
   * 重构 `SqlResult`，与 JDBC 解耦，便于使用其它 ORM 重写 `SqlExecutor`
   * 重构 `SqlInterceptor`，它的 `intercept(..)` 方法新增 `FetchType` 参数
   * 新增 `B2MFieldConvertor`，可让 `BFieldConvertor` 也适用于 `MapSearcher` 检索器
+  * 移除 `DefaultSqlExecutor` 的 `addDataSource(..)` 方法，该方法在 `v3.0.0` 被标记为过时
+  * 移除 `DateFormatFieldConvertor` 的 `addFormat(..)` 方法，该方法在 `v3.0.1` 被标记为过时
+  * 当使用 `in/Include` 运算符时，输出警告，提示使用 `ct/Contain` 运算符
+  * 当使用 `mv/MultiValue` 运算符时，输出警告，提示使用 `il/InList` 运算符
 * Bean Searcher Boot Starter
   * 新增 `bean-searcher.sql.default-mapping.inherit-type` 配置键，可在配置文件中指定默认的实体类继承类型，默认为 `ALL`
   * 新增 `bean-searcher.sql.default-mapping.sort-type` 配置键，可在配置文件中指定默认的排序约束类型，默认为 `ALLOW_PARAM`
