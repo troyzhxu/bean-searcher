@@ -94,7 +94,6 @@ public class Group<V> {
         return new Group<>(type, newGroups);
     }
 
-
     /**
      * 判断是否存在一个 V 满足 evaluator
      * @param evaluator 评估器
@@ -125,11 +124,11 @@ public class Group<V> {
     private static final Event EVENT_OR = new Event<>(Event.TYPE_OR);
 
     /**
-     * 遍历所有
+     * 遍历组
      * @param consumer 消费者
      */
     @SuppressWarnings("unchecked")
-    public void readAll(Consumer<Event<V>> consumer) {
+    public void forEach(Consumer<Event<V>> consumer) {
         if (type == TYPE_RAW) {
             consumer.accept(new Event<>(Event.TYPE_VALUE, value));
             return;
@@ -138,11 +137,12 @@ public class Group<V> {
             return;
         }
         consumer.accept(EVENT_START);
-        for (int i = 0; i < groups.size(); i++) {
+        int size = groups.size();
+        for (int i = 0; i < size; i++) {
             if (i > 0) {
                 consumer.accept(type == TYPE_AND ? EVENT_AND : EVENT_OR);
             }
-            groups.get(i).readAll(consumer);
+            groups.get(i).forEach(consumer);
         }
         consumer.accept(EVENT_END);
     }

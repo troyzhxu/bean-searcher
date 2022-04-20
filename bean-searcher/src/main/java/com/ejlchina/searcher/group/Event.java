@@ -5,7 +5,7 @@ package com.ejlchina.searcher.group;
  * @author Troy.Zhou @ 2022-02-21
  * @since v3.5.0
  */
-public class Event<Value> {
+public class Event<V> {
 
     public static final int TYPE_VALUE = 1;
     public static final int TYPE_GROUP_START = 2;
@@ -14,18 +14,18 @@ public class Event<Value> {
     public static final int TYPE_OR = 5;
 
     private final int type;
-    private final Value value;
+    private final V value;
 
     public Event(int type) {
         this(type, null);
     }
 
-    public Event(int type, Value value) {
+    public Event(int type, V value) {
         this.type = type;
         this.value = value;
     }
 
-    public Value getValue() {
+    public V getValue() {
         return value;
     }
 

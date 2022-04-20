@@ -167,7 +167,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 				}
 			}
 		}
-		fieldParamGroup.readAll(event -> {
+		fieldParamGroup.forEach(event -> {
 			if (event.isGroupStart()) {
 				builder.append("(");
 			} else
