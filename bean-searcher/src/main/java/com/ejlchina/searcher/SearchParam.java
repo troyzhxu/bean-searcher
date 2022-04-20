@@ -30,14 +30,15 @@ public class SearchParam {
 	private final List<OrderBy> orderBys = new ArrayList<>();
 
 	// 分页参数
-	private Paging paging;
+	private final Paging paging;
 
-
-	public SearchParam(Map<String, Object> paraMap, FetchType fetchType, List<String> fetchFields, Group<List<FieldParam>> paramsGroup) {
+	public SearchParam(Map<String, Object> paraMap, FetchType fetchType, List<String> fetchFields,
+					   Group<List<FieldParam>> paramsGroup, Paging paging) {
 		this.paraMap = paraMap;
 		this.fetchType = fetchType;
 		this.fetchFields = fetchFields;
 		this.paramsGroup = paramsGroup;
+		this.paging = paging;
 	}
 
 	/**
@@ -62,10 +63,6 @@ public class SearchParam {
 
 	public Paging getPaging() {
 		return paging;
-	}
-
-	public void setPaging(Paging paging) {
-		this.paging = paging;
 	}
 
 	public void addOrderBy(OrderBy orderBy) {

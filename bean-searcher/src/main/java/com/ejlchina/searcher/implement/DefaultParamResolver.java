@@ -112,18 +112,17 @@ public class DefaultParamResolver implements ParamResolver {
 	}
 
 	protected SearchParam doResolve(BeanMeta<?> beanMeta, FetchType fetchType, Map<String, Object> paraMap) {
-		SearchParam searchParam = new SearchParam(paraMap, fetchType,
-				resolveFetchFields(beanMeta, fetchType, paraMap),
-				resolveParamsGroup(beanMeta.getFieldMetas(), paraMap)
-		);
+		List<String> fetchFields = resolveFetchFields(beanMeta, fetchType, paraMap);
+		Group<List<FieldParam>> paramsGroup = resolveParamsGroup(beanMeta.getFieldMetas(), paraMap);
+		Paging paging = null;
 		if (fetchType.canPaging()) {
 			Object value = paraMap.get(MapBuilder.PAGING);
-			Paging paging = value instanceof Paging ? (Paging) value : pageExtractor.extract(paraMap);
+			paging = value instanceof Paging ? (Paging) value : pageExtractor.extract(paraMap);
 			if (fetchType.isFetchFirst()) {
 				paging.setSize(1);
 			}
-			searchParam.setPaging(paging);
 		}
+		SearchParam searchParam = new SearchParam(paraMap, fetchType, fetchFields, paramsGroup, paging);
 		if (fetchType.shouldQueryList() && beanMeta.isSortable()) {
 			// 只有列表检索，才需要排序
 			Set<String> fieldSet = beanMeta.getFieldSet();
