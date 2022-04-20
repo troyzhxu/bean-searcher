@@ -2,7 +2,9 @@ package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.FieldConvertor;
 import com.ejlchina.searcher.FieldMeta;
+import com.ejlchina.searcher.SearchException;
 import com.ejlchina.searcher.util.ObjKey2;
+import com.ejlchina.searcher.util.StringUtils;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -50,11 +52,19 @@ public class DateFormatFieldConvertor implements FieldConvertor.MFieldConvertor 
      * </pre>
      *
      * @param scope 生效范围，可以是 全类名.字段名、全类名:字段类型名、包名:字段类型名 或 包名，范围越小，使用优先级越高
-     * @param format 日期格式，如：yyyy-MM-dd，传入 null 时表示该 scope 下的日期字段不进行格式化
+     * @param format 日期格式，如：yyyy-MM-dd，传入 null / '' 时表示该 scope 下的日期字段不进行格式化
      * @since v3.0.1
      */
     public void setFormat(String scope, String format) {
-        formatMap.put(scope, new Formatter(format));
+        if (StringUtils.isBlank(format) || "NULL".equalsIgnoreCase(format.trim())) {
+            formatMap.put(scope, new Formatter(null));
+            return;
+        }
+        try {
+            formatMap.put(scope, new Formatter(format));
+        } catch (IllegalArgumentException e) {
+            throw new SearchException("您配置了一个错误的日期/时间格式：[scope: " + scope + ", format: " + format + "]", e);
+        }
     }
 
     private final Map<ObjKey2, Formatter> cache = new ConcurrentHashMap<>();
