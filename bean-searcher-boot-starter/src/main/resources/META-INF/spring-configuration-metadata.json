@@ -320,7 +320,7 @@
     {
       "sourceType": "com.ejlchina.searcher.boot.BeanSearcherProperties$FieldConvertor",
       "defaultValue": false,
-      "name": "bean-searcher.field-convertor.use-b2m",
+      "name": "bean-searcher.field-convertor.use-b2-m",
       "description": "是否启用 B2MFieldConvertor, 启用后 BFieldConvertor 也将作用在 MapSearcher 检索器上",
       "type": "java.lang.Boolean"
     }
