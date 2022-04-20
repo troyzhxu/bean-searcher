@@ -65,7 +65,7 @@ public class DefaultBeanReflector implements BeanReflector {
 				return convertor.convert(meta, value);
 			}
 		}
-		throw new SearchException("不能把【" + valueType + "】类型的数据库值转换为【" + targetType + "】类型的字段值，你可以添加一个 FieldConvertor 来转换它！");
+		throw new SearchException("不能把【" + valueType + "】类型的数据库值转换为【" + targetType + "】类型的字段值，你可以添加一个 BFieldConvertor 来转换它！");
 	}
 
 	protected <T> T newInstance(Class<T> beanClass) {
