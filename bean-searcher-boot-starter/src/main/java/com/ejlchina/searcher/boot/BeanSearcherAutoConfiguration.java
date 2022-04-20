@@ -306,12 +306,12 @@ public class BeanSearcherAutoConfiguration {
 		List<MFieldConvertor> list = convertors.getIfAvailable();
 		if (list != null) {
 			List<MFieldConvertor> newList = new ArrayList<>(list);
-			// 让 B2MFieldConvertor 排在前面
+			// 让 DateFormatFieldConvertor 排在前面
 			newList.sort((o1, o2) -> {
-				if (o1 instanceof B2MFieldConvertor) {
+				if (o1 instanceof DateFormatFieldConvertor) {
 					return -1;
 				}
-				if (o2 instanceof B2MFieldConvertor) {
+				if (o2 instanceof DateFormatFieldConvertor) {
 					return 1;
 				}
 				return 0;
