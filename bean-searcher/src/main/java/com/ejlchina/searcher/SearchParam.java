@@ -24,7 +24,7 @@ public class SearchParam {
 	private final List<String> fetchFields;
 
 	// 字段参数组
-	private final Group<List<FieldParam>> fieldParamGroup;
+	private final Group<List<FieldParam>> paramsGroup;
 
 	// 排序参数
 	private final List<OrderBy> orderBys = new ArrayList<>();
@@ -33,11 +33,11 @@ public class SearchParam {
 	private Paging paging;
 
 
-	public SearchParam(Map<String, Object> paraMap, FetchType fetchType, List<String> fetchFields, Group<List<FieldParam>> fieldParamGroup) {
+	public SearchParam(Map<String, Object> paraMap, FetchType fetchType, List<String> fetchFields, Group<List<FieldParam>> paramsGroup) {
 		this.paraMap = paraMap;
 		this.fetchType = fetchType;
 		this.fetchFields = fetchFields;
-		this.fieldParamGroup = fieldParamGroup;
+		this.paramsGroup = paramsGroup;
 	}
 
 	/**
@@ -56,8 +56,8 @@ public class SearchParam {
 		return fetchFields;
 	}
 
-	public Group<List<FieldParam>> getFieldParamGroup() {
-		return fieldParamGroup;
+	public Group<List<FieldParam>> getParamsGroup() {
+		return paramsGroup;
 	}
 
 	public Paging getPaging() {

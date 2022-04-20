@@ -57,7 +57,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		Map<String, Object> paraMap = searchParam.getParaMap();
 
 		SqlWrapper<Object> fieldSelectSqlWrapper = buildFieldSelectSql(beanMeta, fetchFields, paraMap);
-		SqlWrapper<Object> fromWhereSqlWrapper = buildFromWhereSql(beanMeta, searchParam.getFieldParamGroup(), paraMap);
+		SqlWrapper<Object> fromWhereSqlWrapper = buildFromWhereSql(beanMeta, searchParam.getParamsGroup(), paraMap);
 		String fieldSelectSql = fieldSelectSqlWrapper.getSql();
 		String fromWhereSql = fromWhereSqlWrapper.getSql();
 
@@ -68,8 +68,8 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 			String clusterSql = buildClusterSql(beanMeta, clusterSelectSql.getSql(), fieldSelectSql, fromWhereSql);
 			searchSql.setClusterSqlString(clusterSql);
 			searchSql.addClusterSqlParams(clusterSelectSql.getParas());
-			// 只有在 distinct 条件下，聚族查询 SQL 里才会出现 字段查询 语句，才需要将 字段内嵌参数放到 聚族参数里
-			if (beanMeta.isDistinct()) {
+			// 只有在 DistinctOrGroupBy 条件下，聚族查询 SQL 里才会出现 字段查询 语句，才需要将 字段内嵌参数放到 聚族参数里
+			if (beanMeta.isDistinctOrGroupBy()) {
 				searchSql.addClusterSqlParams(fieldSelectSqlWrapper.getParas());
 			}
 			searchSql.addClusterSqlParams(fromWhereSqlWrapper.getParas());
@@ -136,7 +136,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		return sqlWrapper;
 	}
 
-	protected <T> SqlWrapper<Object> buildFromWhereSql(BeanMeta<T> beanMeta, Group<List<FieldParam>> fieldParamGroup, Map<String, Object> paraMap) {
+	protected <T> SqlWrapper<Object> buildFromWhereSql(BeanMeta<T> beanMeta, Group<List<FieldParam>> paramsGroup, Map<String, Object> paraMap) {
 		SqlWrapper<Object> sqlWrapper = new SqlWrapper<>();
 		SqlWrapper<Object> tableSql = resolveTableSql(beanMeta.getTableSnippet(), paraMap);
 		sqlWrapper.addParas(tableSql.getParas());
@@ -156,7 +156,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 			}
 		}
 		boolean hasJoinCond = StringUtils.isNotBlank(joinCond);
-		boolean hasFieldParams = fieldParamGroup.judgeAny(l -> l.size() > 0);
+		boolean hasFieldParams = paramsGroup.judgeAny(l -> l.size() > 0);
 
 		if (hasJoinCond || hasFieldParams) {
 			builder.append(" where ");
@@ -167,7 +167,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 				}
 			}
 		}
-		fieldParamGroup.forEach(event -> {
+		paramsGroup.forEach(event -> {
 			if (event.isGroupStart()) {
 				builder.append("(");
 			} else

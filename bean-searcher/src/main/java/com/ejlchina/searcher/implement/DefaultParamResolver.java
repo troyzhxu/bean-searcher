@@ -114,7 +114,7 @@ public class DefaultParamResolver implements ParamResolver {
 	protected SearchParam doResolve(BeanMeta<?> beanMeta, FetchType fetchType, Map<String, Object> paraMap) {
 		SearchParam searchParam = new SearchParam(paraMap, fetchType,
 				resolveFetchFields(beanMeta, fetchType, paraMap),
-				resolveFieldParamGroup(beanMeta.getFieldMetas(), paraMap)
+				resolveParamsGroup(beanMeta.getFieldMetas(), paraMap)
 		);
 		if (fetchType.canPaging()) {
 			Object value = paraMap.get(MapBuilder.PAGING);
@@ -137,7 +137,7 @@ public class DefaultParamResolver implements ParamResolver {
 	}
 
 	protected List<String> resolveFetchFields(BeanMeta<?> beanMeta, FetchType fetchType, Map<String, Object> paraMap) {
-		if (fetchType.shouldQueryList() || beanMeta.isDistinct() || StringUtils.isNotBlank(beanMeta.getGroupBy())) {
+		if (fetchType.shouldQueryList() || beanMeta.isDistinctOrGroupBy()) {
 			Set<String> fieldList = beanMeta.getFieldSet();
 			List<String> onlySelect = ObjectUtils.toList(getOnlySelect(paraMap))
 					.stream().filter(fieldList::contains)
@@ -166,7 +166,7 @@ public class DefaultParamResolver implements ParamResolver {
 		return paraMap.get(onlySelectName);
 	}
 
-	protected Group<List<FieldParam>> resolveFieldParamGroup(Collection<FieldMeta> fieldMetas, Map<String, Object> paraMap) {
+	protected Group<List<FieldParam>> resolveParamsGroup(Collection<FieldMeta> fieldMetas, Map<String, Object> paraMap) {
 		Map<String, List<FieldParam>> holder = new HashMap<>();
 		return groupResolver.resolve(getGroupExpr(paraMap))
 				.transform(gKey -> {
@@ -447,7 +447,7 @@ public class DefaultParamResolver implements ParamResolver {
 	}
 
 	public void setGroupSeparator(String groupSeparator) {
-		this.groupSeparator = Objects.requireNonNull(groupSeparator);;
+		this.groupSeparator = Objects.requireNonNull(groupSeparator);
 	}
 
 }
