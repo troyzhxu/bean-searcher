@@ -17,7 +17,7 @@
   * 新增 `bean-searcher.sql.default-mapping.sort-type` 配置键，可在配置文件中指定默认的排序约束类型，默认为 `ALLOW_PARAM`
   * 支持 `Spring Bean` 的方式为 `BeanSearcher` 与 `MapSearcher` 检索器添加 `PostProcessor` 处理器
   * 配置 `bean-searcher.sql.dialect` 支持指定为 `PostgreSQL` 或 `PgSQL` 来使用 PostgreSql 方言
-  * 新增 `bean-searcher.field-convertor.use-b2m` 配置键，可在配置文件中指定是否启用 `B2MFieldConvertor`, 默认 `false`
+  * 新增 `bean-searcher.field-convertor.use-b2-m` 配置键，可在配置文件中指定是否启用 `B2MFieldConvertor`, 默认 `false`
 
 # v3.5.3 @ 2022-04-06
 
