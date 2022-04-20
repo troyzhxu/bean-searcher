@@ -279,7 +279,7 @@ public class BeanSearcherAutoConfiguration {
 
 	@Bean
 	@ConditionalOnProperty(name = "bean-searcher.field-convertor.use-b2-m", havingValue = "true")
-	@ConditionalOnMissingBean(DateFormatFieldConvertor.class)
+	@ConditionalOnMissingBean(B2MFieldConvertor.class)
 	public B2MFieldConvertor b2mFieldConvertor(ObjectProvider<List<BFieldConvertor>> convertors) {
 		List<BFieldConvertor> list = convertors.getIfAvailable();
 		if (list != null) {
