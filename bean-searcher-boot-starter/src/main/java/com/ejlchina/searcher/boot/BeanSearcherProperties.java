@@ -445,6 +445,10 @@ public class BeanSearcherProperties {
 		 */
 		private boolean useEnum = true;
 
+		/**
+		 * 是否使用 B2M 字段转换器
+		 */
+		private boolean useB2M = false;
 
 		public boolean isUseNumber() {
 			return useNumber;
@@ -524,6 +528,14 @@ public class BeanSearcherProperties {
 
 		public void setUseEnum(boolean useEnum) {
 			this.useEnum = useEnum;
+		}
+
+		public boolean isUseB2M() {
+			return useB2M;
+		}
+
+		public void setUseB2M(boolean useB2M) {
+			this.useB2M = useB2M;
 		}
 
 	}
