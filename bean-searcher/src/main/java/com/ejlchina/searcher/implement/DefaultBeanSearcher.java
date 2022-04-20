@@ -75,7 +75,7 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 				result.setTotalCount(getCountFromSqlResult(sqlResult));
 				result.setSummaries(getSummaryFromSqlResult(sqlResult));
 			}
-			return process(result, beanMeta, fetchType, paraMap);
+			return process(result, beanMeta, paraMap, fetchType);
 		} catch (SQLException e) {
 			throw new SearchException("A exception occurred when collecting sql result!", e);
 		}
@@ -103,10 +103,9 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 		return dataList;
 	}
 
-	protected <T> SearchResult<T> process(SearchResult<T> result, BeanMeta<T> beanMeta, FetchType fetchType,
-										  Map<String, Object> paraMap) {
+	protected <T> SearchResult<T> process(SearchResult<T> result, BeanMeta<T> beanMeta, Map<String, Object> paraMap, FetchType fetchType) {
 		for (PostProcessor processor: postProcessors) {
-			result = processor.beanProcess(result, beanMeta, fetchType, paraMap);
+			result = processor.beanProcess(result, beanMeta, paraMap, fetchType);
 		}
 		return result;
 	}

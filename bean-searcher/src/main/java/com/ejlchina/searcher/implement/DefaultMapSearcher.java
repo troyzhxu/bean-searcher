@@ -56,8 +56,7 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 		return search(beanClass, paraMap, new FetchType(FetchType.LIST_ALL)).getDataList();
 	}
 
-	protected <T> SearchResult<Map<String, Object>> search(Class<T> beanClass, Map<String, Object> paraMap,
-														   FetchType fetchType) {
+	protected <T> SearchResult<Map<String, Object>> search(Class<T> beanClass, Map<String, Object> paraMap, FetchType fetchType) {
 		try (SqlResult<T> sqlResult = doSearch(beanClass, paraMap, fetchType)) {
 			SearchSql<T> searchSql = sqlResult.getSearchSql();
 			BeanMeta<T> beanMeta = searchSql.getBeanMeta();
@@ -79,7 +78,7 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 				result.setTotalCount(getCountFromSqlResult(sqlResult));
 				result.setSummaries(getSummaryFromSqlResult(sqlResult));
 			}
-			return process(result, beanMeta, fetchType, paraMap);
+			return process(result, beanMeta, paraMap, fetchType);
 		} catch (SQLException e) {
 			throw new SearchException("A exception occurred when collecting sql result!", e);
 		}
@@ -97,10 +96,10 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 		return value;
 	}
 
-	protected <T> SearchResult<Map<String, Object>> process(SearchResult<Map<String, Object>> result,
-				BeanMeta<T> beanMeta, FetchType fetchType, Map<String, Object> paraMap) {
+	protected <T> SearchResult<Map<String, Object>> process(SearchResult<Map<String, Object>> result, BeanMeta<T> beanMeta,
+				Map<String, Object> paraMap, FetchType fetchType) {
 		for (PostProcessor processor: postProcessors) {
-			result = processor.mapProcess(result, beanMeta, fetchType, paraMap);
+			result = processor.mapProcess(result, beanMeta, paraMap, fetchType);
 		}
 		return result;
 	}
