@@ -84,12 +84,12 @@ public abstract class AbstractSearcher implements Searcher {
 		BeanMeta<T> beanMeta = metaResolver.resolve(beanClass);
 		SearchParam searchParam = paramResolver.resolve(beanMeta, fetchType, paraMap);
 		SearchSql<T> searchSql = sqlResolver.resolve(beanMeta, searchParam);
-		return sqlExecutor.execute(intercept(searchSql, paraMap));
+		return sqlExecutor.execute(intercept(searchSql, paraMap, fetchType));
 	}
 
-	protected <T> SearchSql<T> intercept(SearchSql<T> searchSql, Map<String, Object> paraMap) {
+	protected <T> SearchSql<T> intercept(SearchSql<T> searchSql, Map<String, Object> paraMap, FetchType fetchType) {
 		for (SqlInterceptor interceptor : interceptors) {
-			searchSql = interceptor.intercept(searchSql, paraMap);
+			searchSql = interceptor.intercept(searchSql, paraMap, fetchType);
 		}
 		return searchSql;
 	}

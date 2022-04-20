@@ -1,5 +1,7 @@
 package com.ejlchina.searcher;
 
+import com.ejlchina.searcher.param.FetchType;
+
 import java.util.Map;
 
 /**
@@ -14,8 +16,9 @@ public interface SqlInterceptor {
      * @param <T> 泛型
      * @param searchSql 检索 SQL 信息（非空）
      * @param paraMap 原始检索参数（非空）
+     * @param fetchType 检索类型（v3.6.0 新增参数）
      * @return 新的检索 SQL（非空）
      */
-    <T> SearchSql<T> intercept(SearchSql<T> searchSql, Map<String, Object> paraMap);
+    <T> SearchSql<T> intercept(SearchSql<T> searchSql, Map<String, Object> paraMap, FetchType fetchType);
 
 }
