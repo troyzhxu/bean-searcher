@@ -25,8 +25,7 @@ import org.springframework.context.annotation.Primary;
 
 import javax.sql.DataSource;
 import java.time.ZoneId;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 
 
@@ -278,6 +277,17 @@ public class BeanSearcherAutoConfiguration {
 		return convertor;
 	}
 
+	@Bean
+	@ConditionalOnProperty(name = "bean-searcher.field-convertor.use-b2m", havingValue = "true")
+	@ConditionalOnMissingBean(DateFormatFieldConvertor.class)
+	public B2MFieldConvertor b2mFieldConvertor(ObjectProvider<List<BFieldConvertor>> convertors) {
+		List<BFieldConvertor> list = convertors.getIfAvailable();
+		if (list != null) {
+			return new B2MFieldConvertor(list);
+		}
+		return new B2MFieldConvertor(Collections.emptyList());
+	}
+
 	@Bean @Primary
 	@ConditionalOnMissingBean(MapSearcher.class)
 	@ConditionalOnProperty(name = "bean-searcher.use-map-searcher", havingValue = "true", matchIfMissing = true)
@@ -285,16 +295,30 @@ public class BeanSearcherAutoConfiguration {
 								   ParamResolver paramResolver,
 								   SqlResolver sqlResolver,
 								   SqlExecutor sqlExecutor,
-								   ObjectProvider<List<SqlInterceptor>> interceptors,
 								   ObjectProvider<List<MFieldConvertor>> convertors,
+								   ObjectProvider<List<SqlInterceptor>> interceptors,
 								   ObjectProvider<List<PostProcessor>> processors) {
 		DefaultMapSearcher searcher = new DefaultMapSearcher();
 		searcher.setMetaResolver(metaResolver);
 		searcher.setParamResolver(paramResolver);
 		searcher.setSqlResolver(sqlResolver);
 		searcher.setSqlExecutor(sqlExecutor);
+		List<MFieldConvertor> list = convertors.getIfAvailable();
+		if (list != null) {
+			List<MFieldConvertor> newList = new ArrayList<>(list);
+			// 让 B2MFieldConvertor 排在前面
+			newList.sort((o1, o2) -> {
+				if (o1 instanceof B2MFieldConvertor) {
+					return -1;
+				}
+				if (o2 instanceof B2MFieldConvertor) {
+					return 1;
+				}
+				return 0;
+			});
+			searcher.setConvertors(newList);
+		}
 		ifAvailable(interceptors, searcher::setInterceptors);
-		ifAvailable(convertors, searcher::setConvertors);
 		ifAvailable(processors, searcher::setPostProcessors);
 		return searcher;
 	}
