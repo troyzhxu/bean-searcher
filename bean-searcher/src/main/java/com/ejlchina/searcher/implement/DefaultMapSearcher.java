@@ -65,13 +65,13 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 			if (listResult != null) {
 				List<String> fetchFields = searchSql.getFetchFields();
 				while (listResult.next()) {
-					Map<String, Object> dataMap = new HashMap<>();
+					Map<String, Object> data = new HashMap<>(fetchFields.size());
 					for (String field : fetchFields) {
 						FieldMeta meta = beanMeta.requireFieldMeta(field);
 						Object value = listResult.get(meta.getDbAlias());
-						dataMap.put(meta.getName(), convert(meta, value));
+						data.put(meta.getName(), convert(meta, value));
 					}
-					result.addData(dataMap);
+					result.addData(data);
 				}
 			}
 			if (searchSql.isShouldQueryCluster()) {
