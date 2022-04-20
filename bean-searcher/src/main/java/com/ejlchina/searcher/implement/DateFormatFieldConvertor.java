@@ -35,7 +35,7 @@ public class DateFormatFieldConvertor implements FieldConvertor.MFieldConvertor 
     private ZoneId zoneId = ZoneId.systemDefault();
 
     /**
-     * 添加一个日期格式，例如（优先级以此递减）：
+     * 添加一个日期/时间格式，例如（优先级以此递减）：
      * <pre>
      * setFormat("demo.User.dateCreated", "yyyy-MM-dd");
      *  指定 demo.User 的 dateCreated 字段的格式
@@ -55,17 +55,6 @@ public class DateFormatFieldConvertor implements FieldConvertor.MFieldConvertor 
      */
     public void setFormat(String scope, String format) {
         formatMap.put(scope, new Formatter(format));
-    }
-
-    /**
-     * Deprecated from v3.0.1
-     * 请使用 {@link #setFormat(String scope, String format) } 方法
-     * @param scope 生效范围（越精确，优先级越高）
-     * @param format 日期/时间格式，如：yyyy-MM-dd，传入 null 时表示该 scope 下的日期字段不进行格式化
-     */
-    @Deprecated
-    public void addFormat(String scope, String format) {
-        setFormat(scope, format);
     }
 
     private final Map<ObjKey2, Formatter> cache = new ConcurrentHashMap<>();
