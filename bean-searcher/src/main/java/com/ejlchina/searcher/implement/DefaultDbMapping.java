@@ -143,7 +143,7 @@ public class DefaultDbMapping implements DbMapping {
             throw new SearchException("[" + beanClass.getName() + ": " + field.getName() + "] is annotated by @DbField and @DbIgnore, which are mutually exclusive.");
         }
         SearchBean bean = getSearchBean(beanClass);
-        // 判断是否在 @SearchBean 注解中忽略了该字段，
+        // 判断是否在 @SearchBean 注解中忽略了该字段
         if (bean != null && shouldIgnore(field, bean.ignoreFields())) {
             if (dbField == null) {
                 return null;
