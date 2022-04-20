@@ -2,10 +2,10 @@ package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.FieldConvertor;
 import com.ejlchina.searcher.FieldMeta;
+import com.ejlchina.searcher.util.ObjKey2;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -18,7 +18,7 @@ public class B2MFieldConvertor implements FieldConvertor.MFieldConvertor {
 
     private final List<BFieldConvertor> convertors;
 
-    private final Map<Key, BFieldConvertor> cache = new ConcurrentHashMap<>();
+    private final Map<ObjKey2, BFieldConvertor> cache = new ConcurrentHashMap<>();
 
     static final BFieldConvertor NULL_CONVERTOR = (meta, valueType) -> false;
 
@@ -26,33 +26,9 @@ public class B2MFieldConvertor implements FieldConvertor.MFieldConvertor {
         this.convertors = convertors;
     }
 
-    static class Key {
-
-        FieldMeta meta;
-        Class<?> valueType;
-
-        public Key(FieldMeta meta, Class<?> valueType) {
-            this.meta = meta;
-            this.valueType = valueType;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Key key = (Key) o;
-            return Objects.equals(meta, key.meta) && Objects.equals(valueType, key.valueType);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(meta, valueType);
-        }
-    }
-
     @Override
     public boolean supports(FieldMeta meta, Class<?> valueType) {
-        Key key = new Key(meta, valueType);
+        ObjKey2 key = new ObjKey2(meta, valueType);
         BFieldConvertor convertor = cache.get(key);
         if (convertor == NULL_CONVERTOR) {
             return false;
@@ -72,12 +48,12 @@ public class B2MFieldConvertor implements FieldConvertor.MFieldConvertor {
 
     @Override
     public Object convert(FieldMeta meta, Object value) {
-        Key key = new Key(meta, value.getClass());
+        ObjKey2 key = new ObjKey2(meta, value.getClass());
         BFieldConvertor convertor = cache.get(key);
         if (convertor != null) {
             return convertor.convert(meta, value);
         }
-        throw new IllegalStateException("必须先调用 supports 方法，并且返回 true 后才能调用该方法");
+        throw new IllegalStateException("The supports(FieldMeta, Class<?>) method must be called first and return true before convert(FieldMeta, Object) method can be called");
     }
 
 }
