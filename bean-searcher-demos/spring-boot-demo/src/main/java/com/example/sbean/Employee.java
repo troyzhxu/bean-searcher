@@ -2,6 +2,7 @@ package com.example.sbean;
 
 import com.ejlchina.searcher.bean.DbField;
 import com.ejlchina.searcher.bean.SearchBean;
+import com.ejlchina.searcher.bean.SortType;
 import com.ejlchina.searcher.operator.Contain;
 import com.ejlchina.searcher.operator.StartWith;
 import com.example.enums.Gender;
@@ -12,7 +13,9 @@ import java.time.LocalDateTime;
 @SearchBean(
 		tables = "employee e, department d",
 		joinCond = "e.department_id = d.id",
-		autoMapTo = "e"							// 字段没使用 DbField 注解时，自动映射到 employee 表
+		autoMapTo = "e",							// 字段没使用 DbField 注解时，自动映射到 employee 表
+		orderBy = "e.entry_date desc",
+		sortType = SortType.ALLOW_PARAM
 )
 public class Employee extends BaseBean {
 
