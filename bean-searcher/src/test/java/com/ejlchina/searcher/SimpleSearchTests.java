@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SearchTestCases {
+public class SimpleSearchTests {
 
     public static class SearchBean {
         private long id;

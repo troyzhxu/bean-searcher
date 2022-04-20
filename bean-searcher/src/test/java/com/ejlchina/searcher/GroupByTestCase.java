@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-public class GroupByTestCases {
+public class GroupByTestCase {
 
     @SearchBean(groupBy = "course_id")
     public static class StudentCourse {
