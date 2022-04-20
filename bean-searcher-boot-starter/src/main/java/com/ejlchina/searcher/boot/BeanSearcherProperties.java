@@ -1,7 +1,15 @@
 package com.ejlchina.searcher.boot;
 
+import com.ejlchina.searcher.BeanSearcher;
+import com.ejlchina.searcher.FieldConvertor.BFieldConvertor;
+import com.ejlchina.searcher.MapSearcher;
+import com.ejlchina.searcher.Searcher;
+import com.ejlchina.searcher.bean.DbField;
 import com.ejlchina.searcher.bean.InheritType;
+import com.ejlchina.searcher.bean.SearchBean;
 import com.ejlchina.searcher.bean.SortType;
+import com.ejlchina.searcher.implement.*;
+import com.ejlchina.searcher.util.MapBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.time.ZoneId;
@@ -12,19 +20,29 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "bean-searcher")
 public class BeanSearcherProperties {
 
-	// 参数配置
+	/**
+	 * 检索参数相关配置
+	 */
 	private final Params params = new Params();
 
-	// SQL 配置
+	/**
+	 * SQL 相关配置
+	 */
 	private final Sql sql = new Sql();
 
-	// 字段转换器配置
+	/**
+	 * 字段转换器相关配置
+	 */
 	private final FieldConvertor fieldConvertor = new FieldConvertor();
 
-	// 使用 MapSearcher 检索器
+	/**
+	 * 是否使用 {@link MapSearcher } 检索器，默认为 true
+	 */
 	private boolean useMapSearcher = true;
 
-	// 使用 BeanSearcher 检索器
+	/**
+	 * 是否使用 {@link BeanSearcher } 检索器，默认为 true
+	 */
 	private boolean useBeanSearcher = true;
 
 
@@ -42,45 +60,81 @@ public class BeanSearcherProperties {
 
 	public static class Params {
 
-		// 排序字段参数名
+		/**
+		 * 排序字段参数名，默认为 `sort`
+		 * @see DefaultParamResolver#setSortName(String)
+		 */
 		private String sort = "sort";
 
-		// 排序方法参数名
+		/**
+		 * 排序方法参数名，默认为 `order`
+		 * @see DefaultParamResolver#setOrderName(String)
+		 */
 		private String order = "order";
 
-		// 排序参数名
+		/**
+		 * 排序参数名，默认为 `orderBy`
+		 * @see DefaultParamResolver#setOrderByName(String)
+ 		 */
 		private String orderBy = "orderBy";
 
-		// 字段参数名分隔符
+		/**
+		 * 字段参数名分隔符，默认为 `-`
+		 * @see DefaultParamResolver#setSeparator(String)
+		 */
 		private String separator = "-";
 
-		// 是否忽略大小写字段参数名后缀
+		/**
+		 * 是否忽略大小写字段参数名的后缀，默认为 `ic`
+		 * @see DefaultParamResolver#setIgnoreCaseSuffix(String)
+		 */
 		private String ignoreCaseKey = "ic";
 
-		// 检索运算符参数名后缀
+		/**
+		 * 检索运算符参数名后缀，默认为 `op`
+		 * @see DefaultParamResolver#setOperatorSuffix(String)
+		 */
 		private String operatorKey = "op";
 
-		// 用于指定只 Select 某些字段的参数名
+		/**
+		 * 指定只 Select 某些字段的参数名，默认为 `onlySelect`
+		 * @see DefaultParamResolver#setOnlySelectName(String)
+		 */
 		private String onlySelect = "onlySelect";
 
-		// 用于指定不需要 Select 的字段的参数名
+		/**
+		 * 指定 Select 排除某些字段的参数名，默认为 `selectExclude`
+		 * @see DefaultParamResolver#setSelectExcludeName(String)
+		 */
 		private String selectExclude = "selectExclude";
 
-		// 参数组
+		/**
+		 * 参数组相关配置
+		 */
 		private final Group group = new Group();
 
 		public static class Group {
 
-			// 是否启用参数组功能
+			/**
+			 * 是否启用参数组功能，默认为 true
+			 */
 			private boolean enable = true;
 
-			// 组表达式参数名
+			/**
+			 * 组表达式参数名，默认为 `gexpr`
+			 * @see DefaultParamResolver#setGexprName(String)
+			 */
 			private String exprName = "gexpr";
 
-			// 组参数分隔符
+			/**
+			 * 组参数分隔符，默认为 `.`
+			 * @see DefaultParamResolver#setGroupSeparator(String)
+			 */
 			private String separator = ".";
 
-			// 缓存大小
+			/**
+			 * 组表达式缓存大小，默认为 50
+			 */
 			private int cacheSize = 50;
 
 			public boolean isEnable() {
@@ -116,7 +170,9 @@ public class BeanSearcherProperties {
 			}
 		}
 
-		// 分页参数配置
+		/**
+		 * 分页相关配置
+		 */
 		private final PaginationProps pagination = new PaginationProps();
 
 		public String getSort() {
@@ -198,42 +254,41 @@ public class BeanSearcherProperties {
 			public static final String TYPE_OFFSET = "offset";
 
 			/**
-			 * 默认分页大小
+			 * 默认分页大小，默认为 15
 			 */
 			private int defaultSize = 15;
 
 			/**
-			 * 分页类型: page 和 offset
+			 * 分页类型，可选：`page` 和 `offset`，默认为 `page`
 			 * */
 			private String type = TYPE_PAGE;
 
 			/**
-			 * 默认分页大小参数名
+			 * 分页大小参数名，默认为 `size`
 			 */
 			private String size = "size";
 
 			/**
-			 * 页数参数名
-			 * 在 type = page 时有效
+			 * 页码参数名（仅在 type = `page` 时有效），默认为 `page`
 			 */
 			private String page = "page";
 
 			/**
-			 * 偏移分页参数名
-			 * 在 type = offset 时有效
+			 * 页偏移参数名（仅在 type = `offset` 时有效），默认为 `offset`
 			 */
 			private String offset = "offset";
 
 			/**
-			 * 起始页码或起始偏移量
+			 * 起始页码 或 起始页偏移，默认为 0
+			 * 注意：该配置对方法 {@link MapBuilder#page(long, int)} } 与 {@link MapBuilder#limit(long, int)} 无效
 			 */
 			private int start = 0;
 
 			/**
-			 * 最大允许每页大小
+			 * 分页保护，每页最大允许查询条数，默认为 100
+			 * 注意：该配置对方法 {@link Searcher#searchAll(Class, Map)} 无效
 			 */
 			private int maxAllowedSize = 100;
-
 
 			public int getDefaultSize() {
 				return defaultSize;
@@ -303,13 +358,18 @@ public class BeanSearcherProperties {
 		public static final String DIALECT_PGSQL = "PGSQL";		// alias for POSTGRESQL
 
 		/**
-		 * 数据库方言，默认MySQL，可选：Oracle、PostgreSql、SqlServer
+		 * 数据库方言，可选：MySQL、Oracle、PostgreSql，默认为 MySQL，另可通过声明 Spring Bean 来使用其它自定义方言
 		 */
 		private String dialect = DIALECT_MYSQL;
 
+		/**
+		 * 默认映射配置
+		 */
 		private final DefaultMapping defaultMapping = new DefaultMapping();
 
-		// 是否使用 DateValueCorrector
+		/**
+		 * 是否起用 DateValueCorrector，默认为 true
+		 */
 		private boolean useDateValueCorrector = true;
 
 		public String getDialect() {
@@ -326,12 +386,36 @@ public class BeanSearcherProperties {
 
 		public static class DefaultMapping {
 
+			/**
+			 * 是否启动大写映射，启用后，自动映射出的表名与列表都是大写形式，默认为 false
+			 * 注意：使用 {@link SearchBean#tables() } 与 {@link DbField#value() } 指定的表名与列表仍保持原有大小写形式
+			 */
 			private boolean upperCase = false;
+
+			/**
+			 * 表名前缀，在自动映射表名时使用（即：当实体类没有用 {@link SearchBean#tables() } 指定表名时，框架会用该前缀与实体类名称自动生成一个表名），无默认值
+			 */
 			private String tablePrefix = null;
+
+			/**
+			 * 实体类的冗余后缀，在自动映射表名时使用，即：当框架用实体类名称自动生成一个表名时，会自动忽略实体类的后缀，如 VO，DTO 等，无默认值
+			 */
 			private String[] redundantSuffixes;
+
+			/**
+			 * 需要全局忽略的实体类属性名列表，无默认值，注意：如果属性添加的 {@link DbField } 注解，则不受该配置影响
+			 */
 			private String[] ignoreFields;
-			private InheritType inheritType;
-			private SortType sortType;
+
+			/**
+			 * 全局实体类继承机制，可选：`NONE`、`TABLE`、`FIELD`、`ALL`，默认为 `ALL`，注意：该配置的优先级比 {@link SearchBean#inheritType()} 低
+			 */
+			private InheritType inheritType = InheritType.ALL;
+
+			/**
+			 * 全局排序策略，可选：`ONLY_ENTITY`、`ALLOW_PARAM`，默认为 `ALLOW_PARAM`，注意：该配置的优先级比 {@link SearchBean#sortType()} 低
+			 */
+			private SortType sortType = SortType.ALLOW_PARAM;
 
 			public boolean isUpperCase() {
 				return upperCase;
@@ -396,57 +480,66 @@ public class BeanSearcherProperties {
 	public static class FieldConvertor {
 
 		/**
-		 * 使用 Number to Number 的字段转换器
+		 * 是否启用 {@link NumberFieldConvertor }，默认为 true
 		 */
 		private boolean useNumber = true;
 
 		/**
-		 * 使用 String to Number 的字段转换器
+		 * 是否启用 {@link StrNumFieldConvertor }，默认为 true
 		 */
 		private boolean useStrNum = true;
 
 		/**
-		 * 使用 String | Number to Boolean 的字段转换器
+		 * 是否启用 {@link BoolFieldConvertor }，默认为 true
 		 */
 		private boolean useBool = true;
 
 		/**
-		 * BoolFieldConvertor 的假值
+		 * 可转换为 false 的值，可配多个，默认为：`0,OFF,FALSE,N,NO,F`，将作为 {@link BoolFieldConvertor } 的参数
+		 * @see BoolFieldConvertor#setFalseValues(String[])
 		 */
 		private String[] boolFalseValues;
 
 		/**
-		 * 使用日期字段转换器
+		 * 是否启用 {@link DateFieldConvertor }，默认为 true
 		 */
 		private boolean useDate = true;
 
 		/**
-		 * 使用日期格式化字段转换器
+		 * 是否启用 {@link DateFormatFieldConvertor }，启用后，它会把 {@link MapSearcher } 检索结果中的日期字段格式化为指定格式的字符串，默认为 true
+		 * 注意：并不是所有实体类中的日期字段都会被转换，它只转换 {@link #dateFormats } 指定的范围内的实体类与字段
 		 */
 		private boolean useDateFormat = true;
 
 		/**
-		 * 使用时间字段转换器
+		 * 是否启用 {@link TimeFieldConvertor }，默认为 true
 		 */
 		private boolean useTime = true;
 
 		/**
-		 * 时区
+		 * 时区 ID，将作为 {@link DateFieldConvertor } 与 {@link DateFormatFieldConvertor } 的参数，默认取值：{@link ZoneId#systemDefault() }
+		 * @see DateFieldConvertor#setZoneId(ZoneId)
+		 * @see DateFormatFieldConvertor#setZoneId(ZoneId)
 		 */
 		private ZoneId zoneId = null;
 
 		/**
-		 * 使用日期格式化字段转换器的格式
+		 * 日期/时间格式，{@link Map} 形式，键为 scope（生效范围，可以是 全类名.字段名、全类名:字段类型名、包名:字段类型名 或 包名，范围越小，使用优先级越高）, 值为 format（日期格式）
+		 * 它将作为 {@link DateFormatFieldConvertor } 的参数
+		 * @see DateFormatFieldConvertor#setFormat(String, String)
 		 */
 		private Map<String, String> dateFormats = new HashMap<>();
 
 		/**
-		 * 使用枚举字段转换器
+		 * 是否启用 {@link EnumFieldConvertor }，默认为 true
 		 */
 		private boolean useEnum = true;
 
 		/**
-		 * 是否使用 B2M 字段转换器
+		 * 是否启用 {@link B2MFieldConvertor }，默认为 false
+		 * 未启用时，{@link MapSearcher } 检索结果的字段值 未经过 {@link BFieldConvertor } 的转换，所以字段类型都是原始类，可能与实体类声明的类型不一致；
+		 * 启用后，将与 {@link BeanSearcher } 一样，检索结果的值类型 将被转换为 实体类中声明的类型。
+		 * 注意，当 {@link #useDateFormat } 为 true 时，日期时间类型的字段可能仍会被 {@link DateFormatFieldConvertor } 格式化为字符串。
 		 */
 		private boolean useB2M = false;
 

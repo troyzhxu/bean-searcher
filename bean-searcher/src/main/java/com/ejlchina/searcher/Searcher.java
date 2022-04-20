@@ -50,7 +50,7 @@ public interface Searcher {
 	<T> List<?> searchList(Class<T> beanClass, Map<String, Object> paraMap);
 
 	/**
-	 * 检索满足条件的所有Bean，不支持偏移
+	 * 检索满足条件的所有 Bean，不支持偏移
 	 * @param <T> bean 类型
 	 * @param beanClass 要检索的 bean 类型
 	 * @param paraMap 检索参数（包括排序分页参数）
