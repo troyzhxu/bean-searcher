@@ -223,7 +223,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
 	}
 
 	/**
-	 * 添加具名数据源
+	 * 设置具名数据源
 	 * @see SearchBean#dataSource()
 	 * @param name 数据源名称
 	 * @param dataSource 数据源
@@ -233,19 +233,6 @@ public class DefaultSqlExecutor implements SqlExecutor {
 		if (name != null && dataSource != null) {
 			dataSourceMap.put(name.trim(), dataSource);
 		}
-	}
-
-	/**
-	 * 添加数据源
-	 * Deprecated from v3.1.0
-	 * 请使用 {@link #setDataSource(String scope, DataSource dataSource) } 方法
-	 * @since v3.0.0
-	 * @param name 数据源名称
-	 * @param dataSource 数据源
-	 */
-	@Deprecated
-	public void addDataSource(String name, DataSource dataSource) {
-		setDataSource(name, dataSource);
 	}
 
 	public Map<String, DataSource> getDataSourceMap() {
