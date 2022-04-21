@@ -1,7 +1,6 @@
 package com.ejlchina.searcher;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.function.Function;
 
 /**
