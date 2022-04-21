@@ -7,7 +7,7 @@
   * 实体类 `@SearchBean` 注解新增 `orderBy` 属性，可指定默认的排序字段
   * 实体类 `@SearchBean` 注解新增 `sortType` 属性，可指定排序约束类型
   * 实体类 `@SearchBean` 注解指定 `orderBy` 属性时，支持 字段求和 查询
-  * 检索器 新增 `PostProcessor` 机制，可让用户对检索结果统一做进一步的自定义转换处理
+  * 检索器 新增 `ResultFilter` 机制，可让用户对检索结果统一做进一步的自定义处理
   * 新增 `PostgreSqlDialect` 方言实现，可用于 PostgreSql 数据库
   * 重构 `SqlResult`，与 JDBC 解耦，便于使用其它 ORM 重写 `SqlExecutor`
   * 重构 `SqlInterceptor`，它的 `intercept(..)` 方法新增 `FetchType` 参数
