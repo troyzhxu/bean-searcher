@@ -1,5 +1,6 @@
 package com.ejlchina.searcher;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 
@@ -18,6 +19,6 @@ public interface BeanReflector {
 	 * @param valueGetter 数据库字段值获取器（根据字段别名获取）
 	 * @return 反射的对象
 	 */
-	<T> T reflect(BeanMeta<T> beanMeta, List<String> fetchFields, Function<String, Object> valueGetter);
+	<T> T reflect(BeanMeta<T> beanMeta, Collection<String> fetchFields, Function<String, Object> valueGetter);
 
 }

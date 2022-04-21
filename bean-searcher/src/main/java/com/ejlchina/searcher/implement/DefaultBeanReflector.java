@@ -4,6 +4,7 @@ import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.FieldConvertor.BFieldConvertor;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
@@ -26,7 +27,7 @@ public class DefaultBeanReflector implements BeanReflector {
 	}
 	
 	@Override
-	public <T> T reflect(BeanMeta<T> beanMeta, List<String> fetchFields, Function<String, Object> valueGetter) {
+	public <T> T reflect(BeanMeta<T> beanMeta, Collection<String> fetchFields, Function<String, Object> valueGetter) {
 		Class<T> beanClass = beanMeta.getBeanClass();
 		T bean = newInstance(beanClass);
 		for (String field : fetchFields) {
