@@ -20,7 +20,7 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 
 	private BeanReflector beanReflector = new DefaultBeanReflector();
 
-	private List<PostProcessor> postProcessors = new ArrayList<>();
+	private List<ResultFilter> resultFilters = new ArrayList<>();
 
 	public DefaultBeanSearcher() {
 	}
@@ -75,7 +75,7 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 				result.setTotalCount(getCountFromSqlResult(sqlResult));
 				result.setSummaries(getSummaryFromSqlResult(sqlResult));
 			}
-			return process(result, beanMeta, paraMap, fetchType);
+			return doFilter(result, beanMeta, paraMap, fetchType);
 		} catch (SQLException e) {
 			throw new SearchException("A exception occurred when collecting sql result!", e);
 		}
@@ -103,9 +103,10 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 		return dataList;
 	}
 
-	protected <T> SearchResult<T> process(SearchResult<T> result, BeanMeta<T> beanMeta, Map<String, Object> paraMap, FetchType fetchType) {
-		for (PostProcessor processor: postProcessors) {
-			result = processor.beanProcess(result, beanMeta, paraMap, fetchType);
+	protected <T> SearchResult<T> doFilter(SearchResult<T> result, BeanMeta<T> beanMeta, Map<String, Object> paraMap,
+										   FetchType fetchType) {
+		for (ResultFilter filter: resultFilters) {
+			result = filter.doBeanFilter(result, beanMeta, paraMap, fetchType);
 		}
 		return result;
 	}
@@ -118,17 +119,17 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 		this.beanReflector = Objects.requireNonNull(beanReflector);
 	}
 
-	public List<PostProcessor> getPostProcessors() {
-		return postProcessors;
+	public List<ResultFilter> getResultFilters() {
+		return resultFilters;
 	}
 
-	public void setPostProcessors(List<PostProcessor> postProcessors) {
-		this.postProcessors = Objects.requireNonNull(postProcessors);
+	public void setResultFilters(List<ResultFilter> resultFilters) {
+		this.resultFilters = Objects.requireNonNull(resultFilters);
 	}
 
-	public void addPostProcessor(PostProcessor postProcessor) {
-		if (postProcessor != null) {
-			this.postProcessors.add(postProcessor);
+	public void addResultFilter(ResultFilter resultFilter) {
+		if (resultFilter != null) {
+			this.resultFilters.add(resultFilter);
 		}
 	}
 

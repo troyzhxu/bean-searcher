@@ -248,7 +248,7 @@ public class BeanSearcherAutoConfiguration {
 									 SqlExecutor sqlExecutor,
 									 BeanReflector beanReflector,
 									 ObjectProvider<List<SqlInterceptor>> interceptors,
-									 ObjectProvider<List<PostProcessor>> processors) {
+									 ObjectProvider<List<ResultFilter>> processors) {
 		DefaultBeanSearcher searcher = new DefaultBeanSearcher();
 		searcher.setMetaResolver(metaResolver);
 		searcher.setParamResolver(paramResolver);
@@ -256,7 +256,7 @@ public class BeanSearcherAutoConfiguration {
 		searcher.setSqlExecutor(sqlExecutor);
 		searcher.setBeanReflector(beanReflector);
 		ifAvailable(interceptors, searcher::setInterceptors);
-		ifAvailable(processors, searcher::setPostProcessors);
+		ifAvailable(processors, searcher::setResultFilters);
 		return searcher;
 	}
 
@@ -297,7 +297,7 @@ public class BeanSearcherAutoConfiguration {
 								   SqlExecutor sqlExecutor,
 								   ObjectProvider<List<MFieldConvertor>> convertors,
 								   ObjectProvider<List<SqlInterceptor>> interceptors,
-								   ObjectProvider<List<PostProcessor>> processors) {
+								   ObjectProvider<List<ResultFilter>> resultFilters) {
 		DefaultMapSearcher searcher = new DefaultMapSearcher();
 		searcher.setMetaResolver(metaResolver);
 		searcher.setParamResolver(paramResolver);
@@ -319,7 +319,7 @@ public class BeanSearcherAutoConfiguration {
 			searcher.setConvertors(newList);
 		}
 		ifAvailable(interceptors, searcher::setInterceptors);
-		ifAvailable(processors, searcher::setPostProcessors);
+		ifAvailable(resultFilters, searcher::setResultFilters);
 		return searcher;
 	}
 

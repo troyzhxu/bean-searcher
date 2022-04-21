@@ -16,7 +16,7 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 
 	private List<MFieldConvertor> convertors = new ArrayList<>();
 
-	private List<PostProcessor> postProcessors = new ArrayList<>();
+	private List<ResultFilter> resultFilters = new ArrayList<>();
 
 	public DefaultMapSearcher() {
 	}
@@ -78,7 +78,7 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 				result.setTotalCount(getCountFromSqlResult(sqlResult));
 				result.setSummaries(getSummaryFromSqlResult(sqlResult));
 			}
-			return process(result, beanMeta, paraMap, fetchType);
+			return doFilter(result, beanMeta, paraMap, fetchType);
 		} catch (SQLException e) {
 			throw new SearchException("A exception occurred when collecting sql result!", e);
 		}
@@ -96,10 +96,10 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 		return value;
 	}
 
-	protected <T> SearchResult<Map<String, Object>> process(SearchResult<Map<String, Object>> result, BeanMeta<T> beanMeta,
-				Map<String, Object> paraMap, FetchType fetchType) {
-		for (PostProcessor processor: postProcessors) {
-			result = processor.mapProcess(result, beanMeta, paraMap, fetchType);
+	protected <T> SearchResult<Map<String, Object>> doFilter(SearchResult<Map<String, Object>> result, BeanMeta<T> beanMeta,
+															 Map<String, Object> paraMap, FetchType fetchType) {
+		for (ResultFilter filter: resultFilters) {
+			result = filter.doMapFilter(result, beanMeta, paraMap, fetchType);
 		}
 		return result;
 	}
@@ -118,17 +118,17 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 		}
 	}
 
-	public List<PostProcessor> getPostProcessors() {
-		return postProcessors;
+	public List<ResultFilter> getResultFilters() {
+		return resultFilters;
 	}
 
-	public void setPostProcessors(List<PostProcessor> postProcessors) {
-		this.postProcessors = Objects.requireNonNull(postProcessors);
+	public void setResultFilters(List<ResultFilter> resultFilters) {
+		this.resultFilters = Objects.requireNonNull(resultFilters);
 	}
 
-	public void addPostProcessor(PostProcessor postProcessor) {
-		if (postProcessor != null) {
-			this.postProcessors.add(postProcessor);
+	public void addResultFilter(ResultFilter resultFilter) {
+		if (resultFilter != null) {
+			this.resultFilters.add(resultFilter);
 		}
 	}
 
