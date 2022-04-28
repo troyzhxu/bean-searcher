@@ -20,8 +20,6 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 
 	private BeanReflector beanReflector = new DefaultBeanReflector();
 
-	private List<ResultFilter> resultFilters = new ArrayList<>();
-
 	public DefaultBeanSearcher() {
 	}
 
@@ -105,7 +103,7 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 
 	protected <T> SearchResult<T> doFilter(SearchResult<T> result, BeanMeta<T> beanMeta, Map<String, Object> paraMap,
 										   FetchType fetchType) {
-		for (ResultFilter filter: resultFilters) {
+		for (ResultFilter filter: getResultFilters()) {
 			result = filter.doBeanFilter(result, beanMeta, paraMap, fetchType);
 		}
 		return result;
@@ -117,20 +115,6 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 
 	public void setBeanReflector(BeanReflector beanReflector) {
 		this.beanReflector = Objects.requireNonNull(beanReflector);
-	}
-
-	public List<ResultFilter> getResultFilters() {
-		return resultFilters;
-	}
-
-	public void setResultFilters(List<ResultFilter> resultFilters) {
-		this.resultFilters = Objects.requireNonNull(resultFilters);
-	}
-
-	public void addResultFilter(ResultFilter resultFilter) {
-		if (resultFilter != null) {
-			this.resultFilters.add(resultFilter);
-		}
 	}
 
 }

@@ -26,6 +26,8 @@ public abstract class AbstractSearcher implements Searcher {
 
 	private List<SqlInterceptor> interceptors = new ArrayList<>();
 
+	private List<ResultFilter> resultFilters = new ArrayList<>();
+
 	public AbstractSearcher() {
 	}
 
@@ -132,6 +134,20 @@ public abstract class AbstractSearcher implements Searcher {
 
 	public void setInterceptors(List<SqlInterceptor> interceptors) {
 		this.interceptors = Objects.requireNonNull(interceptors);
+	}
+
+	public List<ResultFilter> getResultFilters() {
+		return resultFilters;
+	}
+
+	public void setResultFilters(List<ResultFilter> resultFilters) {
+		this.resultFilters = Objects.requireNonNull(resultFilters);
+	}
+
+	public void addResultFilter(ResultFilter resultFilter) {
+		if (resultFilter != null) {
+			this.resultFilters.add(resultFilter);
+		}
 	}
 
 }

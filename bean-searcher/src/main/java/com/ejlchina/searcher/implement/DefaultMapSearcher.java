@@ -16,8 +16,6 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 
 	private List<MFieldConvertor> convertors = new ArrayList<>();
 
-	private List<ResultFilter> resultFilters = new ArrayList<>();
-
 	public DefaultMapSearcher() {
 	}
 
@@ -98,7 +96,7 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 
 	protected <T> SearchResult<Map<String, Object>> doFilter(SearchResult<Map<String, Object>> result, BeanMeta<T> beanMeta,
 															 Map<String, Object> paraMap, FetchType fetchType) {
-		for (ResultFilter filter: resultFilters) {
+		for (ResultFilter filter: getResultFilters()) {
 			result = filter.doMapFilter(result, beanMeta, paraMap, fetchType);
 		}
 		return result;
@@ -115,20 +113,6 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 	public void addConvertor(MFieldConvertor convertor) {
 		if (convertor != null) {
 			convertors.add(convertor);
-		}
-	}
-
-	public List<ResultFilter> getResultFilters() {
-		return resultFilters;
-	}
-
-	public void setResultFilters(List<ResultFilter> resultFilters) {
-		this.resultFilters = Objects.requireNonNull(resultFilters);
-	}
-
-	public void addResultFilter(ResultFilter resultFilter) {
-		if (resultFilter != null) {
-			this.resultFilters.add(resultFilter);
 		}
 	}
 
