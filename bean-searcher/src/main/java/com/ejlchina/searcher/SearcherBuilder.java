@@ -33,7 +33,7 @@ public class SearcherBuilder {
 	}
 
 	@SuppressWarnings("unchecked")
-	static class DefaultSearcherBuilder<Builder extends DefaultSearcherBuilder<?>> {
+	static class BaseSearcherBuilder<Builder extends BaseSearcherBuilder<?>> {
 
 		private ParamResolver paramResolver;
 
@@ -44,6 +44,8 @@ public class SearcherBuilder {
 		private MetaResolver metaResolver;
 
 		private final List<SqlInterceptor> interceptors = new ArrayList<>();
+
+		private final List<ResultFilter> resultFilters = new ArrayList<>();
 
 		public Builder paramResolver(ParamResolver paramResolver) {
 			this.paramResolver = paramResolver;
@@ -72,6 +74,18 @@ public class SearcherBuilder {
 			return (Builder) this;
 		}
 
+		/**
+		 * @since v3.6.1
+		 * @param resultFilter 结果过滤器
+		 * @return Builder
+		 */
+		public Builder addResultFilter(ResultFilter resultFilter) {
+			if (resultFilter != null) {
+				resultFilters.add(resultFilter);
+			}
+			return (Builder) this;
+		}
+
 		protected void buildInternal(AbstractSearcher mainSearcher) {
 			if (paramResolver != null) {
 				mainSearcher.setParamResolver(paramResolver);
@@ -88,12 +102,13 @@ public class SearcherBuilder {
 				mainSearcher.setMetaResolver(metaResolver);
 			}
 			mainSearcher.setInterceptors(interceptors);
+			mainSearcher.setResultFilters(resultFilters);
 		}
 
 	}
 
 
-	public static class BeanSearcherBuilder extends DefaultSearcherBuilder<BeanSearcherBuilder> {
+	public static class BeanSearcherBuilder extends BaseSearcherBuilder<BeanSearcherBuilder> {
 
 		private BeanReflector beanReflector;
 
@@ -113,7 +128,7 @@ public class SearcherBuilder {
 
 	}
 
-	public static class MapSearcherBuilder extends DefaultSearcherBuilder<MapSearcherBuilder> {
+	public static class MapSearcherBuilder extends BaseSearcherBuilder<MapSearcherBuilder> {
 
 		private final List<MFieldConvertor> convertors = new ArrayList<>();
 
