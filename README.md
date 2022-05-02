@@ -25,7 +25,7 @@ English | [中文](./README.zh-CN.md)
   - Combined filter by any field 
   - Sorting by any field 
   - Summaries with multi field
-  - Return VO directly instead of DTO
+  - Return VO directly
 
 * Design thinking: [Bean Searcher's thinking](https://searcher.ejlchina.com/guide/latest/introduction.html#%E8%AE%BE%E8%AE%A1%E5%93%B2%E5%AD%A6)
 
