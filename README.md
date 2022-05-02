@@ -14,8 +14,8 @@ English | [中文](./README.zh-CN.md)
 * Documentation：https://searcher.ejlchina.com/
 
 * JueJin blogs：
-  - [Writing code like this is 100 times more efficient than using mybatis directly!](https://juejin.cn/post/7027733039299952676)
-  - [What's the difference between bean seracher and mybatis plus?](https://juejin.cn/post/7092411551507808264)
+  - [Writing code like this is 100 times more efficient than using MyBatis directly!](https://juejin.cn/post/7027733039299952676)
+  - [What's the difference between Bean Seracher and MyBatis Plus?](https://juejin.cn/post/7092411551507808264)
 
 * Change log：[CHANGELOG](./CHANGELOG.md)
 
