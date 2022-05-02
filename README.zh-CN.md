@@ -22,6 +22,8 @@
   - **任意字段组合过滤**
   - **任意字段排序**
   - **多字段统计**
+  - **直接得到 VO，而非 DTO**
+* 设计思想：[Bean Searcher 的设计思想](https://searcher.ejlchina.com/guide/latest/introduction.html#%E8%AE%BE%E8%AE%A1%E5%93%B2%E5%AD%A6)
 * 架构图：
 
 ![](./assets/architecture.jpg)

@@ -26,6 +26,8 @@ English | [中文](./README.zh-CN.md)
   - Sorting by any field 
   - Summaries with multi field
 
+* Design thinking: [Bean Searcher's thinking](https://searcher.ejlchina.com/guide/latest/introduction.html#%E8%AE%BE%E8%AE%A1%E5%93%B2%E5%AD%A6)
+
 * Architecture:
 
 ![](./assets/architecture.jpg)
