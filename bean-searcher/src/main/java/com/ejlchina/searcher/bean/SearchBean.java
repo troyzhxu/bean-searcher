@@ -58,7 +58,7 @@ public @interface SearchBean {
 	/**
 	 * 字段未加 {@link DbField } 注解时，指定它自动映射到那张表
 	 * 只有在 {@link #tables()} 属性不空时起作用，当 {@link #tables()} 为空时，并且没有添加 {@link DbIgnore } 注解时，则字段自动映射到 {@link DbMapping } 决定的那张表）
-	 * 如果 autoMapping 为空，则表示未被 @DbField 注解的字段不需要映射
+	 * 如果该属性为空，则表示 未被 @DbField 注解的字段不需要映射
 	 * @since v3.0.0
 	 * @return 自动映射的表名 或 别名
 	 */
