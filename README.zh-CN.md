@@ -12,7 +12,9 @@
 中文 | [English](./README.md)
 
 * 文档：https://searcher.ejlchina.com/
-* 掘金手把手入门：https://juejin.cn/post/7027733039299952676
+* 掘金博客：
+  - [这样写代码，比直接使用 MyBatis 效率提高了 100 倍！](https://juejin.cn/post/7027733039299952676)
+  - [最近火起的 Bean Seracher 与 MyBatis Plus 倒底有啥区别？](https://juejin.cn/post/7092411551507808264)
 * 更新日志：[CHANGELOG](./CHANGELOG.md)
 * 框架目的：只一行代码实现：
   - **多表联查**
