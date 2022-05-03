@@ -11,69 +11,69 @@ import java.util.List;
  * */
 public class SearchResult<T> {
 
-	private Number totalCount;
-	
-	private final List<T> dataList;
-	
-	private Number[] summaries;
+    private static final Number[] EMPTY_SUMMARIES = new Number[]{};
 
-	public SearchResult() {
-		this(0, new Number[]{});
-	}
+    private Number totalCount = 0;
+    
+    private final List<T> dataList;
+    
+    private Number[] summaries = EMPTY_SUMMARIES;
 
-	public SearchResult(Number totalCount) {
-		this(totalCount, new Number[]{});
-	}
-	
-	public SearchResult(Number totalCount, Number[] summaries) {
-		this(new ArrayList<>());
-		this.totalCount = totalCount;
-		this.summaries = summaries;
-	}
+    public SearchResult() {
+        this(0, EMPTY_SUMMARIES);
+    }
 
-	public SearchResult(List<T> dataList) {
-		this.dataList = dataList;
-	}
+    public SearchResult(Number totalCount) {
+        this(totalCount, EMPTY_SUMMARIES);
+    }
 
-	public Number getTotalCount() {
-		return totalCount;
-	}
+    public SearchResult(Number totalCount, Number[] summaries) {
+        this(new ArrayList<>());
+        this.totalCount = totalCount;
+        this.summaries = summaries;
+    }
 
-	public void setTotalCount(Number totalCount) {
-		this.totalCount = totalCount;
-	}
+    public SearchResult(List<T> dataList) {
+        this.dataList = dataList;
+    }
 
-	public List<T> getDataList() {
-		return dataList;
-	}
-	
-	public void addData(T data) {
-		dataList.add(data);
-	}
-	
-	public Number[] getSummaries() {
-		return summaries;
-	}
+    public Number getTotalCount() {
+        return totalCount;
+    }
 
-	public void setSummaries(Number[] summaries) {
-		if (summaries != null) {
-			for (int i = 0; i < summaries.length; i++) {
-				if (summaries[i] == null) {
-					summaries[i] = 0;
-				}
-			}
-			this.summaries = summaries;
-		} else {
-			this.summaries = new Number[] {};
-		}
-	}
+    public void setTotalCount(Number totalCount) {
+        this.totalCount = totalCount;
+    }
 
-	public String toString() {
-		StringBuilder str = new StringBuilder("totalCount = " + totalCount + "\n");
-		for (T data: dataList) {
-			str.append("\t").append(data.toString());
-		}
-		return str.toString();
-	}
-	
+    public List<T> getDataList() {
+        return dataList;
+    }
+    
+    public void addData(T data) {
+        dataList.add(data);
+    }
+    
+    public Number[] getSummaries() {
+        return summaries;
+    }
+
+    public void setSummaries(Number[] summaries) {
+        if (summaries != null) {
+            for (int i = 0; i < summaries.length; i++) {
+                if (summaries[i] == null) {
+                    summaries[i] = 0;
+                }
+            }
+            this.summaries = summaries;
+        }
+    }
+
+    public String toString() {
+        StringBuilder str = new StringBuilder("totalCount = " + totalCount + "\n");
+        for (T data: dataList) {
+            str.append("\t").append(data.toString());
+        }
+        return str.toString();
+    }
+    
 }
