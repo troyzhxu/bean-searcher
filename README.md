@@ -16,9 +16,7 @@ English | [中文](./README.zh-CN.md)
 * JueJin blogs：
   - [Writing code like this is 100 times more efficient than using MyBatis directly!](https://juejin.cn/post/7027733039299952676)
   - [What's the difference between Bean Seracher and MyBatis Plus?](https://juejin.cn/post/7092411551507808264)
-
-* Change log：[CHANGELOG](./CHANGELOG.md)
-
+  
 * Only one line of code to achieve:
   - Retrieval from multi tables
   - Pagination by any field
@@ -32,6 +30,8 @@ English | [中文](./README.zh-CN.md)
 * Architecture:
 
 ![](./assets/architecture.jpg)
+
+* Change log：[CHANGELOG](./CHANGELOG.md)
 
 ### ✨ Features
 
