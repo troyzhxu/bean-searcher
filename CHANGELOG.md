@@ -1,3 +1,11 @@
+# Next
+
+### ✨ Features
+
+* Bean Searcher
+  * 新增 `Bool2NumFieldConvertor` 支持 `Boolean | boolean` -> `Number` 方向的转换（TODO）
+  * 新增 慢 SQL 日志以及 相关实体类 快速定位 功能（TODO）
+
 # v3.6.0 @ 2022-04-21
 
 ### ✨ Features
