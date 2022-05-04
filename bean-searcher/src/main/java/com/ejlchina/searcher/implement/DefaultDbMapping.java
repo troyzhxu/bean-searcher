@@ -212,7 +212,7 @@ public class DefaultDbMapping implements DbMapping {
         return false;
     }
 
-    private String toColumnName(Field field) {
+    protected String toColumnName(Field field) {
         String column = StringUtils.toUnderline(field.getName());
         return upperCase ? column.toUpperCase() : column;
     }
