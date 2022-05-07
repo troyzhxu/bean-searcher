@@ -16,7 +16,7 @@
                     <el-col :span="5">姓名</el-col>
                     <el-col :span="5">
                         <el-select v-model="params['name-op']" style="width: 95%" size="small">
-                            <el-option v-for="item in strOps" :key="item.key" :label="item.label" :value="item.key" />
+                            <el-option v-for="item in nameOps" :key="item.key" :label="item.label" :value="item.key" :disabled="item.disabled" />
                         </el-select>
                     </el-col>
                     <el-col :span="7">

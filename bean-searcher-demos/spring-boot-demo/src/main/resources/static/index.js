@@ -40,6 +40,12 @@ new Vue({
             { key: 'sw', label: '以...开始'},
             { key: 'ew', label: '以...结束'}
         ],
+        nameOps: [
+            { key: 'eq', label: '等于' , disabled: true},
+            { key: 'in', label: '包含'},
+            { key: 'sw', label: '以...开始'},
+            { key: 'ew', label: '以...结束', disabled: true}
+        ],
         numOps: [
             { key: 'eq', label: '等于'},
             { key: 'gt', label: '大于'},
