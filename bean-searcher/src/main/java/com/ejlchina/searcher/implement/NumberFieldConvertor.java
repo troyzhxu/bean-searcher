@@ -49,7 +49,7 @@ public class NumberFieldConvertor implements FieldConvertor.BFieldConvertor {
         if (targetType == byte.class || targetType == Byte.class) {
             return number.byteValue();
         }
-        throw new UnsupportedOperationException();
+        throw new IllegalStateException("Unsupported targetType: " + targetType);
     }
 
 }

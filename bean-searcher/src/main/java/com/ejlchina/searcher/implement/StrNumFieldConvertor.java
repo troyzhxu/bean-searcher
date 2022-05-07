@@ -59,7 +59,7 @@ public class StrNumFieldConvertor implements FieldConvertor.BFieldConvertor {
         if (targetType == BigInteger.class) {
             return new BigInteger(number);
         }
-        throw new UnsupportedOperationException();
+        throw new IllegalStateException("Unsupported targetType: " + targetType);
     }
 
 }
