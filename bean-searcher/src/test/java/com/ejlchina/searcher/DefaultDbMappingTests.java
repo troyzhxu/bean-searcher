@@ -64,4 +64,19 @@ public class DefaultDbMappingTests {
         Assert.assertEquals("NICKNAME", mapping.column(UserEntity.class, UserEntity.class.getDeclaredField("nickName")).getFieldSql());
     }
 
+    @Test
+    public void test_06() {
+        DefaultDbMapping mapping = new DefaultDbMapping();
+        mapping.setTablePrefix("t_");
+        Assert.assertEquals("t_user_entity", mapping.table(UserEntity.class).getTables());
+    }
+
+    @Test
+    public void test_07() {
+        DefaultDbMapping mapping = new DefaultDbMapping();
+        mapping.setTablePrefix("t_");
+        mapping.setRedundantSuffixes(new String[]{"VO", "Entity"});
+        Assert.assertEquals("t_user", mapping.table(UserEntity.class).getTables());
+    }
+
 }
