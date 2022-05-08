@@ -140,8 +140,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
 
 	protected SqlResult.ResultSet executeListSql(Connection connection, String sql, List<Object> params) throws SQLException {
 		PreparedStatement statement = connection.prepareStatement(sql);
-		setStatementParams(statement, params);
-		ResultSet resultSet = statement.executeQuery();
+		ResultSet resultSet = executeQuery(statement, params);
 		return new SqlResult.ResultSet() {
 
 			@Override
@@ -168,8 +167,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
 
 	protected SqlResult.Result executeClusterSql(Connection connection, String sql, List<Object> params) throws SQLException {
 		PreparedStatement statement = connection.prepareStatement(sql);
-		setStatementParams(statement, params);
-		ResultSet resultSet = statement.executeQuery();
+		ResultSet resultSet = executeQuery(statement, params);
 		boolean hasValue = resultSet.next();
 		return new SqlResult.Result() {
 
@@ -193,11 +191,12 @@ public class DefaultSqlExecutor implements SqlExecutor {
 		};
 	}
 
-	protected void setStatementParams(PreparedStatement statement, List<Object> params) throws SQLException {
+	protected ResultSet executeQuery(PreparedStatement statement, List<Object> params) throws SQLException {
 		int size = params.size();
 		for (int i = 0; i < size; i++) {
 			statement.setObject(i + 1, params.get(i));
 		}
+		return statement.executeQuery();
 	}
 
 	protected void closeConnection(Connection connection) {
