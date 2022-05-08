@@ -170,6 +170,13 @@ public class BeanSearcherAutoConfiguration {
 	}
 
 	@Bean
+	@ConditionalOnProperty(name = "bean-searcher.field-convertor.use-bool-num", havingValue = "true", matchIfMissing = true)
+	@ConditionalOnMissingBean(BoolNumFieldConvertor.class)
+	public BoolNumFieldConvertor boolNumFieldConvertor() {
+		return new BoolNumFieldConvertor();
+	}
+
+	@Bean
 	@ConditionalOnProperty(name = "bean-searcher.field-convertor.use-bool", havingValue = "true", matchIfMissing = true)
 	@ConditionalOnMissingBean(BoolFieldConvertor.class)
 	public BoolFieldConvertor boolFieldConvertor(BeanSearcherProperties config) {

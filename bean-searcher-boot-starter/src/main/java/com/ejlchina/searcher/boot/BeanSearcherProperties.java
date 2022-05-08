@@ -490,6 +490,11 @@ public class BeanSearcherProperties {
 		private boolean useStrNum = true;
 
 		/**
+		 * 是否启用 {@link BoolNumFieldConvertor }，默认为 true
+		 */
+		private boolean useBoolNum = true;
+
+		/**
 		 * 是否启用 {@link BoolFieldConvertor }，默认为 true
 		 */
 		private boolean useBool = true;
@@ -557,6 +562,14 @@ public class BeanSearcherProperties {
 
 		public void setUseStrNum(boolean useStrNum) {
 			this.useStrNum = useStrNum;
+		}
+
+		public boolean isUseBoolNum() {
+			return useBoolNum;
+		}
+
+		public void setUseBoolNum(boolean useBoolNum) {
+			this.useBoolNum = useBoolNum;
 		}
 
 		public boolean isUseBool() {
