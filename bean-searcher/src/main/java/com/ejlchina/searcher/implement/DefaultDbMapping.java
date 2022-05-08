@@ -25,6 +25,9 @@ public class DefaultDbMapping implements DbMapping {
     // 表与列是否是大写风格（since v3.1.0）
     private boolean upperCase = false;
 
+    // 驼峰是否转下划线（since v3.7.0）
+    private boolean underlineCase = true;
+
     // 默认继承类型（since v3.2.0）
     private InheritType defaultInheritType = InheritType.ALL;
 
@@ -112,26 +115,28 @@ public class DefaultDbMapping implements DbMapping {
 
     protected String toTableName(Class<?> beanClass) {
         String name = simplify(beanClass.getSimpleName());
-        String tables = StringUtils.toUnderline(name);
+        if (underlineCase) {
+            name = StringUtils.toUnderline(name);
+        }
         if (upperCase) {
-            tables = tables.toUpperCase();
+            name = name.toUpperCase();
         }
         if (tablePrefix != null) {
-            return tablePrefix + tables;
+            return tablePrefix + name;
         }
-        return tables;
+        return name;
     }
 
-    protected String simplify(String clazzName) {
+    protected String simplify(String className) {
         if (redundantSuffixes != null) {
-            int length = clazzName.length();
+            int length = className.length();
             for (String suffix: redundantSuffixes) {
-                if (length > suffix.length() && clazzName.endsWith(suffix)) {
-                    return clazzName.substring(0, length - suffix.length());
+                if (length > suffix.length() && className.endsWith(suffix)) {
+                    return className.substring(0, length - suffix.length());
                 }
             }
         }
-        return clazzName;
+        return className;
     }
 
     protected String dbFieldSql(Class<?> beanClass, Field field) {
@@ -213,8 +218,11 @@ public class DefaultDbMapping implements DbMapping {
     }
 
     protected String toColumnName(Field field) {
-        String column = StringUtils.toUnderline(field.getName());
-        return upperCase ? column.toUpperCase() : column;
+        String name = field.getName();
+        if (underlineCase) {
+            name = StringUtils.toUnderline(name);
+        }
+        return upperCase ? name.toUpperCase() : name;
     }
 
     public InheritType getDefaultInheritType() {
@@ -249,6 +257,14 @@ public class DefaultDbMapping implements DbMapping {
 
     public void setUpperCase(boolean upperCase) {
         this.upperCase = upperCase;
+    }
+
+    public boolean isUnderlineCase() {
+        return underlineCase;
+    }
+
+    public void setUnderlineCase(boolean underlineCase) {
+        this.underlineCase = underlineCase;
     }
 
     public String[] getRedundantSuffixes() {
