@@ -387,10 +387,16 @@ public class BeanSearcherProperties {
 		public static class DefaultMapping {
 
 			/**
-			 * 是否启动大写映射，启用后，自动映射出的表名与列表都是大写形式，默认为 false，
-			 * 注意：使用 {@link SearchBean#tables() } 与 {@link DbField#value() } 指定的表名与列表仍保持原有大小写形式
+			 * 是否启动大写映射，启用后，自动映射出的表名与列名都是大写形式，默认为 false，
+			 * 注意：使用 {@link SearchBean#tables() } 与 {@link DbField#value() } 显示指定的表名与列表仍保持原有大小写形式
 			 */
 			private boolean upperCase = false;
+
+			/**
+			 * 驼峰是否转下划线，启用后，自动映射出的表名与列名都是下划线风格，默认为 true，
+			 * 注意：使用 {@link SearchBean#tables() } 与 {@link DbField#value() } 显示指定的表名与列表仍保持原有大小写形式
+			 */
+			private boolean underlineCase = true;
 
 			/**
 			 * 表名前缀，在自动映射表名时使用（即：当实体类没有用 {@link SearchBean#tables() } 指定表名时，框架会用该前缀与实体类名称自动生成一个表名），无默认值
@@ -423,6 +429,14 @@ public class BeanSearcherProperties {
 
 			public void setUpperCase(boolean upperCase) {
 				this.upperCase = upperCase;
+			}
+
+			public boolean isUnderlineCase() {
+				return underlineCase;
+			}
+
+			public void setUnderlineCase(boolean underlineCase) {
+				this.underlineCase = underlineCase;
 			}
 
 			public String getTablePrefix() {
