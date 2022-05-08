@@ -50,9 +50,14 @@ public class DefaultSqlExecutor implements SqlExecutor {
 	 */
 	private int transactionIsolation = Connection.TRANSACTION_READ_COMMITTED;
 
+	/**
+	 * 慢 SQL 阈值：1000 毫秒
+	 * @since v3.7.0
+	 */
+	private long slowSqlThreshold = 1000;
 
-	public DefaultSqlExecutor() {
-	}
+
+	public DefaultSqlExecutor() { }
 	
 	public DefaultSqlExecutor(DataSource dataSource) {
 		this.dataSource = dataSource;
@@ -104,16 +109,10 @@ public class DefaultSqlExecutor implements SqlExecutor {
 		SqlResult.Result clusterResult = null;
 		try {
 			if (searchSql.isShouldQueryList()) {
-				String sql = searchSql.getListSqlString();
-				List<Object> params = searchSql.getListSqlParams();
-				writeLog(sql, params);
-				listResult = executeListSql(connection, sql, params);
+				listResult = executeListSql(searchSql, connection);
 			}
 			if (searchSql.isShouldQueryCluster()) {
-				String sql = searchSql.getClusterSqlString();
-				List<Object> params = searchSql.getClusterSqlParams();
-				writeLog(sql, params);
-				clusterResult = executeClusterSql(connection, sql, params);
+				clusterResult = executeClusterSql(searchSql, connection);
 			}
 		} finally {
 			if (transactional) {
@@ -133,26 +132,21 @@ public class DefaultSqlExecutor implements SqlExecutor {
 		};
 	}
 
-	protected void writeLog(String sql, List<Object> params) {
-		log.debug("bean-searcher - sql ---- {}", sql);
-		log.debug("bean-searcher - params - {}", params);
-	}
 
-	protected SqlResult.ResultSet executeListSql(Connection connection, String sql, List<Object> params) throws SQLException {
-		PreparedStatement statement = connection.prepareStatement(sql);
-		ResultSet resultSet = executeQuery(statement, params);
+	protected SqlResult.ResultSet executeListSql(SearchSql<?> searchSql, Connection connection) throws SQLException {
+		Result result = executeQuery(connection, searchSql.getListSqlString(),
+				searchSql.getListSqlParams(), searchSql);
+		ResultSet resultSet = result.resultSet;
+		PreparedStatement statement = result.statement;
 		return new SqlResult.ResultSet() {
-
 			@Override
 			public boolean next() throws SQLException {
 				return resultSet.next();
 			}
-
 			@Override
 			public Object get(String columnLabel) throws SQLException {
 				return resultSet.getObject(columnLabel);
 			}
-
 			@Override
 			public void close() throws SQLException {
 				try {
@@ -161,16 +155,16 @@ public class DefaultSqlExecutor implements SqlExecutor {
 					statement.close();
 				}
 			}
-
 		};
 	}
 
-	protected SqlResult.Result executeClusterSql(Connection connection, String sql, List<Object> params) throws SQLException {
-		PreparedStatement statement = connection.prepareStatement(sql);
-		ResultSet resultSet = executeQuery(statement, params);
+	protected SqlResult.Result executeClusterSql(SearchSql<?> searchSql, Connection connection) throws SQLException {
+		Result result = executeQuery(connection, searchSql.getClusterSqlString(),
+				searchSql.getClusterSqlParams(), searchSql);
+		ResultSet resultSet = result.resultSet;
+		PreparedStatement statement = result.statement;
 		boolean hasValue = resultSet.next();
 		return new SqlResult.Result() {
-
 			@Override
 			public Object get(String columnLabel) throws SQLException {
 				if (hasValue) {
@@ -178,7 +172,6 @@ public class DefaultSqlExecutor implements SqlExecutor {
 				}
 				return null;
 			}
-
 			@Override
 			public void close() throws SQLException {
 				try {
@@ -187,16 +180,44 @@ public class DefaultSqlExecutor implements SqlExecutor {
 					statement.close();
 				}
 			}
-
 		};
 	}
 
-	protected ResultSet executeQuery(PreparedStatement statement, List<Object> params) throws SQLException {
+	protected static class Result {
+
+		final PreparedStatement statement;
+		final ResultSet resultSet;
+
+		public Result(PreparedStatement statement, ResultSet resultSet) {
+			this.statement = statement;
+			this.resultSet = resultSet;
+		}
+	}
+
+	protected Result executeQuery(Connection connection, String sql, List<Object> params,
+								  SearchSql<?> searchSql) throws SQLException {
+		PreparedStatement statement = connection.prepareStatement(sql);
 		int size = params.size();
 		for (int i = 0; i < size; i++) {
 			statement.setObject(i + 1, params.get(i));
 		}
-		return statement.executeQuery();
+		long t0 = System.currentTimeMillis();
+		try {
+			ResultSet resultSet = statement.executeQuery();
+			return new Result(statement, resultSet);
+		} finally {
+			long cost = System.currentTimeMillis() - t0;
+			writeLog(searchSql, sql, params, cost);
+		}
+	}
+
+	protected void writeLog(SearchSql<?> searchSql, String sql, List<Object> params, long timeCost) {
+		if (timeCost >= slowSqlThreshold) {
+			Class<?> beanClass = searchSql.getBeanMeta().getBeanClass();
+			log.warn("bean-searcher [{}ms] slow-sql: [{}] params: {} on {}", timeCost, sql, params, beanClass);
+		} else {
+			log.debug("bean-searcher [{}ms] sql: [{}] params: {}", timeCost, sql, params);
+		}
 	}
 
 	protected void closeConnection(Connection connection) {
@@ -265,6 +286,19 @@ public class DefaultSqlExecutor implements SqlExecutor {
 	 */
 	public void setTransactionIsolation(int level) {
 		this.transactionIsolation = level;
+	}
+
+	public long getSlowSqlThreshold() {
+		return slowSqlThreshold;
+	}
+
+	/**
+	 * 设置慢 SQL 阈值（最小慢 SQL 执行时间）
+	 * @param slowSqlThreshold 慢 SQL 阈值，单位：毫秒
+	 * @since v3.7.0
+	 */
+	public void setSlowSqlThreshold(long slowSqlThreshold) {
+		this.slowSqlThreshold = slowSqlThreshold;
 	}
 
 }
