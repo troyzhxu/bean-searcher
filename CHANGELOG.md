@@ -14,8 +14,8 @@
 ### ✨ Features
 
 * Bean Searcher
-  * 优化 `SearcherBuilder` 新增 `addResultFilter` 方法
   * 新增 `Bool2NumFieldConvertor` 字段转换器：支持 `Boolean -> Number` 方向的转换
+  * 优化 `SearcherBuilder` 新增 `addResultFilter(..)` 方法
 * Bean Searcher Boot Starter
   * 新增 `bean-searcher.field-convertor.use-bool-num` 配置键，可自动配置 `BoolNumFieldConvertor`，默认为 `true`
 
