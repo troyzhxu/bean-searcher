@@ -5,7 +5,8 @@
 * Bean Searcher
   * 新增 `BoolNumFieldConvertor`，支持 `Boolean -> Number` 方向的转换
   * `DefaultDbMapping` 新增 `underlineCase` 属性，可配置自动映射时是否开启 驼峰->下划线 的风格转换
-  * 新增 慢 SQL 记录与以及追踪定位的功能
+  * 优化 SQL 日志：新增 慢 SQL 日志与以及追踪定位的功能
+  * 新增 `SqlExecutor.SlowListener` 接口，可让用户在代码中监听慢 SQL
 * Bean Searcher Boot Starter
   * 新增 `bean-searcher.field-convertor.use-bool-num` 配置键，可自动配置 `BoolNumFieldConvertor`，默认为 `true`
   * 新增 `bean-searcher.sql.default-mapping.underline-case` 配置键，可配置自动映射时是否开始 驼峰->下划线 的风格转换，默认为 `true`
