@@ -114,14 +114,7 @@ public class DefaultParamResolver implements ParamResolver {
 	protected SearchParam doResolve(BeanMeta<?> beanMeta, FetchType fetchType, Map<String, Object> paraMap) {
 		List<String> fetchFields = resolveFetchFields(beanMeta, fetchType, paraMap);
 		Group<List<FieldParam>> paramsGroup = resolveParamsGroup(beanMeta.getFieldMetas(), paraMap);
-		Paging paging = null;
-		if (fetchType.canPaging()) {
-			Object value = paraMap.get(MapBuilder.PAGING);
-			paging = value instanceof Paging ? (Paging) value : pageExtractor.extract(paraMap);
-			if (fetchType.isFetchFirst()) {
-				paging.setSize(1);
-			}
-		}
+		Paging paging = resolvePaging(fetchType, paraMap);
 		SearchParam searchParam = new SearchParam(paraMap, fetchType, fetchFields, paramsGroup, paging);
 		if (fetchType.shouldQueryList() && beanMeta.isSortable()) {
 			// 只有列表检索，才需要排序
@@ -133,6 +126,23 @@ public class DefaultParamResolver implements ParamResolver {
 			}
 		}
 		return searchParam;
+	}
+
+	private Paging resolvePaging(FetchType fetchType, Map<String, Object> paraMap) {
+		if (fetchType.canPaging()) {
+			Object value = paraMap.get(MapBuilder.PAGING);
+			Paging paging;
+			if (value instanceof Paging) {
+				paging = pageExtractor.correct((Paging) value);
+			} else {
+				paging = pageExtractor.extract(paraMap);
+			}
+			if (fetchType.isFetchFirst()) {
+				paging.setSize(1);
+			}
+			return paging;
+		}
+		return null;
 	}
 
 	protected List<String> resolveFetchFields(BeanMeta<?> beanMeta, FetchType fetchType, Map<String, Object> paraMap) {
