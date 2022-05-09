@@ -9,6 +9,14 @@
 * Bean Searcher Boot Starter
   * 新增 `bean-searcher.field-convertor.use-bool-num` 配置键，可自动配置 `BoolNumFieldConvertor`，默认为 `true`
 
+# v3.6.1 @ 2022-05-09
+
+* Bean Searcher
+  * 新增 `Bool2NumFieldConvertor` 支持 `Boolean -> Number` 方向的转换
+  * 
+* Bean Searcher Boot Starter
+  * 新增 `bean-searcher.field-convertor.use-bool-num` 配置键，可自动配置 `BoolNumFieldConvertor`，默认为 `true`
+
 # v3.6.0 @ 2022-04-21
 
 ### ✨ Features
