@@ -4,7 +4,7 @@ import com.ejlchina.searcher.FieldConvertor;
 import com.ejlchina.searcher.FieldMeta;
 
 /**
- * [Boolean -> Integer | Long | Short | Byte] 字段转换器
+ * [Boolean to Integer | Long | Short | Byte] 字段转换器
  *
  * @author Troy.Zhou @ 2021-11-03
  * @since v3.6.1
