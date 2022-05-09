@@ -10,6 +10,18 @@ import java.util.Map;
 
 public class SimpleSearchTests {
 
+    public static final SqlResult.ResultSet EMPTY_RESULT_SET = new SqlResult.ResultSet() {
+        @Override
+        public boolean next() {
+            return false;
+        }
+
+        @Override
+        public Object get(String columnLabel) {
+            return null;
+        }
+    };
+
     public static class SearchBean {
         private long id;
         private String name;
@@ -41,7 +53,7 @@ public class SimpleSearchTests {
                 Assert.assertEquals(0, searchSql.getClusterSqlParams().size());
                 Assert.assertEquals("s_count", searchSql.getCountAlias());
                 Assert.assertEquals(0, searchSql.getSummaryAliases().size());
-                return new SqlResult<>(searchSql);
+                return new SqlResult<>(searchSql, EMPTY_RESULT_SET, columnLabel -> null);
             }
         };
 
@@ -84,7 +96,7 @@ public class SimpleSearchTests {
                 System.out.println(searchSql.getSummaryAliases());
 
                 Assert.assertEquals(0, searchSql.getSummaryAliases().size());
-                return new SqlResult<>(searchSql);
+                return new SqlResult<>(searchSql, EMPTY_RESULT_SET, columnLabel -> null);
             }
         };
         MapSearcher mapSearcher = SearcherBuilder.mapSearcher().sqlExecutor(sqlExecutor).build();
@@ -116,7 +128,7 @@ public class SimpleSearchTests {
                 Assert.assertEquals(0, clusterSqlParams.size());
                 Assert.assertNull(searchSql.getCountAlias());
                 Assert.assertEquals(0, searchSql.getSummaryAliases().size());
-                return new SqlResult<>(searchSql);
+                return new SqlResult<>(searchSql, EMPTY_RESULT_SET, columnLabel -> null);
             }
         };
         MapSearcher mapSearcher = SearcherBuilder.mapSearcher().sqlExecutor(sqlExecutor).build();
