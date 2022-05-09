@@ -11,11 +11,17 @@
 
 # v3.6.1 @ 2022-05-09
 
+### ✨ Features
+
 * Bean Searcher
-  * 新增 `Bool2NumFieldConvertor` 支持 `Boolean -> Number` 方向的转换
-  * 
+  * 优化 `SearcherBuilder` 新增 `addResultFilter` 方法
+  * 新增 `Bool2NumFieldConvertor` 字段转换器：支持 `Boolean -> Number` 方向的转换
 * Bean Searcher Boot Starter
   * 新增 `bean-searcher.field-convertor.use-bool-num` 配置键，可自动配置 `BoolNumFieldConvertor`，默认为 `true`
+
+### 🐛 Bug Fixes
+
+* 修复 `MapUtils.builder(..)` 的 `page(..)` 与 `limit(..)` 方法不受 `max-allowed-size` 配置约束的问题
 
 # v3.6.0 @ 2022-04-21
 
