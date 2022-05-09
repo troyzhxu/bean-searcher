@@ -12,7 +12,7 @@ import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.Date;
 
-public class DateFormatterTests {
+public class DateFormatterTestCase {
 
     DateFormatFieldConvertor.Formatter dateFormatter = new DateFormatFieldConvertor().new Formatter("yyyy-MM-dd");
     DateFormatFieldConvertor.Formatter dateTimeFormatter = new DateFormatFieldConvertor().new Formatter("yyyy-MM-dd HH:mm:ss");

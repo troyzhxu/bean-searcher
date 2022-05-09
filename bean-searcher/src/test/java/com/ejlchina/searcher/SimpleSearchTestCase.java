@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SimpleSearchTests {
+public class SimpleSearchTestCase {
 
     public static final SqlResult.ResultSet EMPTY_RESULT_SET = new SqlResult.ResultSet() {
         @Override

@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-public class PageResolverTests {
+public class PageResolverTestCase {
 
     @Test
     public void test_page_01() {

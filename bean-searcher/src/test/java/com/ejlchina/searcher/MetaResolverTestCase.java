@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
-public class MetaResolverTests {
+public class MetaResolverTestCase {
 
     static final MetaResolver metaResolver = new DefaultMetaResolver();
 

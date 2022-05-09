@@ -5,7 +5,7 @@ import com.ejlchina.searcher.group.ExprParser;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class ExprParserTests {
+public class ExprParserTestCase {
 
     ExprParser.Factory parserFactory = new DefaultParserFactory();
 

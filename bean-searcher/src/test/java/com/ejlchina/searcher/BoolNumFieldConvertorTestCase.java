@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import java.util.Collection;
 
-public class BoolNumFieldConvertorTests {
+public class BoolNumFieldConvertorTestCase {
 
     private final FieldConvertor convertor = new BoolNumFieldConvertor();
 
@@ -31,6 +31,7 @@ public class BoolNumFieldConvertorTests {
         Collection<FieldMeta> fieldMetas = beanMeta.getFieldMetas();
         Assert.assertEquals(8, fieldMetas.size());
         fieldMetas.forEach(meta -> Assert.assertTrue(convertor.supports(meta, Boolean.class)));
+        System.out.println("BoolNumFieldConvertorTests 01 OK!");
     }
 
     @Test
@@ -41,6 +42,7 @@ public class BoolNumFieldConvertorTests {
         Assert.assertEquals(Integer.valueOf(1), entity.vI);
         meta.getField().set(entity, convertor.convert(meta, false));
         Assert.assertEquals(Integer.valueOf(0), entity.vI);
+        System.out.println("BoolNumFieldConvertorTests 02 OK!");
     }
 
     @Test
