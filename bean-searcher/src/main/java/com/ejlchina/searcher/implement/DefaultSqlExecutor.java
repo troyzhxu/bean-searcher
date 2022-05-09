@@ -25,8 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class DefaultSqlExecutor implements SqlExecutor {
 
-
-	protected Logger log = LoggerFactory.getLogger(DefaultSqlExecutor.class);
+	protected static final Logger log = LoggerFactory.getLogger(DefaultSqlExecutor.class);
 
 	/**
 	 * 默认数据源
@@ -55,6 +54,12 @@ public class DefaultSqlExecutor implements SqlExecutor {
 	 * @since v3.7.0
 	 */
 	private long slowSqlThreshold = 1000;
+
+	/**
+	 * 慢 SQL 监听器
+	 * @since v3.7.0
+	 */
+	private SlowListener slowListener;
 
 
 	public DefaultSqlExecutor() { }
@@ -149,6 +154,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
 			}
 			@Override
 			public void close() throws SQLException {
+				//noinspection TryFinallyCanBeTryWithResources
 				try {
 					resultSet.close();
 				} finally {
@@ -207,13 +213,17 @@ public class DefaultSqlExecutor implements SqlExecutor {
 			return new Result(statement, resultSet);
 		} finally {
 			long cost = System.currentTimeMillis() - t0;
-			writeLog(searchSql, sql, params, cost);
+			afterExecute(searchSql, sql, params, cost);
 		}
 	}
 
-	protected void writeLog(SearchSql<?> searchSql, String sql, List<Object> params, long timeCost) {
+	protected void afterExecute(SearchSql<?> searchSql, String sql, List<Object> params, long timeCost) {
 		if (timeCost >= slowSqlThreshold) {
 			Class<?> beanClass = searchSql.getBeanMeta().getBeanClass();
+			SlowListener listener = slowListener;
+			if (listener != null) {
+				listener.onSlowSql(beanClass, sql, params, timeCost);
+			}
 			log.warn("bean-searcher [{}ms] slow-sql: [{}] params: {} on {}", timeCost, sql, params, beanClass);
 		} else {
 			log.debug("bean-searcher [{}ms] sql: [{}] params: {}", timeCost, sql, params);
@@ -299,6 +309,14 @@ public class DefaultSqlExecutor implements SqlExecutor {
 	 */
 	public void setSlowSqlThreshold(long slowSqlThreshold) {
 		this.slowSqlThreshold = slowSqlThreshold;
+	}
+
+	public SlowListener getSlowListener() {
+		return slowListener;
+	}
+
+	public void setSlowListener(SlowListener slowListener) {
+		this.slowListener = slowListener;
 	}
 
 }
