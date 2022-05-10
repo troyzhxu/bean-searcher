@@ -46,6 +46,14 @@ public abstract class BasePageExtractor implements PageExtractor {
 	}
 
 	@Override
+	public Paging correct(Paging paging) {
+		if (paging.getSize() > maxAllowedSize) {
+			paging.setSize(maxAllowedSize);
+		}
+		return paging;
+	}
+
+	@Override
 	public String getSizeName() {
 		return sizeName;
 	}

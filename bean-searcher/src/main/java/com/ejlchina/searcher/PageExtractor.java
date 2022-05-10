@@ -17,7 +17,15 @@ public interface PageExtractor {
 	 * @return 分页信息
 	 */
 	Paging extract(Map<String, Object> paraMap);
-	
+
+	/**
+	 * 分页参数纠正
+	 * @param paging 原始分页参数
+	 * @return 纠正后的分页参数
+	 * @since v3.6.1
+	 */
+	Paging correct(Paging paging);
+
 	/**
 	 * @return 最大条数的参数名
 	 * */

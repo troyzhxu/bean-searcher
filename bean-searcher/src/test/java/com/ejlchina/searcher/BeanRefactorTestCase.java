@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class BeanRefactorTests {
+public class BeanRefactorTestCase {
 
     public static class TestBean {
         @DbField(alias = "id")
@@ -93,6 +93,7 @@ public class BeanRefactorTests {
         values2.put("dateCreated", LocalDateTime.now());
 
         beanReflector.reflect(beanMeta, fieldSet, values2::get).assertEqual(values2);
+        System.out.println("BeanRefactorTests OK!");
     }
 
 

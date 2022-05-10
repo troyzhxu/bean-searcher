@@ -111,17 +111,10 @@ public class DefaultParamResolver implements ParamResolver {
 		return doResolve(beanMeta, fetchType, paraMap);
 	}
 
-	protected SearchParam doResolve(BeanMeta<?> beanMeta, FetchType fetchType, Map<String, Object> paraMap) {
+	public SearchParam doResolve(BeanMeta<?> beanMeta, FetchType fetchType, Map<String, Object> paraMap) {
 		List<String> fetchFields = resolveFetchFields(beanMeta, fetchType, paraMap);
 		Group<List<FieldParam>> paramsGroup = resolveParamsGroup(beanMeta.getFieldMetas(), paraMap);
-		Paging paging = null;
-		if (fetchType.canPaging()) {
-			Object value = paraMap.get(MapBuilder.PAGING);
-			paging = value instanceof Paging ? (Paging) value : pageExtractor.extract(paraMap);
-			if (fetchType.isFetchFirst()) {
-				paging.setSize(1);
-			}
-		}
+		Paging paging = resolvePaging(fetchType, paraMap);
 		SearchParam searchParam = new SearchParam(paraMap, fetchType, fetchFields, paramsGroup, paging);
 		if (fetchType.shouldQueryList() && beanMeta.isSortable()) {
 			// 只有列表检索，才需要排序
@@ -135,7 +128,24 @@ public class DefaultParamResolver implements ParamResolver {
 		return searchParam;
 	}
 
-	protected List<String> resolveFetchFields(BeanMeta<?> beanMeta, FetchType fetchType, Map<String, Object> paraMap) {
+	public Paging resolvePaging(FetchType fetchType, Map<String, Object> paraMap) {
+		if (fetchType.canPaging()) {
+			Object value = paraMap.get(MapBuilder.PAGING);
+			Paging paging;
+			if (value instanceof Paging) {
+				paging = pageExtractor.correct((Paging) value);
+			} else {
+				paging = pageExtractor.extract(paraMap);
+			}
+			if (fetchType.isFetchFirst()) {
+				paging.setSize(1);
+			}
+			return paging;
+		}
+		return null;
+	}
+
+	public List<String> resolveFetchFields(BeanMeta<?> beanMeta, FetchType fetchType, Map<String, Object> paraMap) {
 		if (fetchType.shouldQueryList() || beanMeta.isDistinctOrGroupBy()) {
 			Set<String> fieldList = beanMeta.getFieldSet();
 			List<String> onlySelect = ObjectUtils.toList(getOnlySelect(paraMap))
@@ -149,7 +159,7 @@ public class DefaultParamResolver implements ParamResolver {
 		return Collections.emptyList();
 	}
 
-	private Object getSelectExclude(Map<String, Object> paraMap) {
+	protected Object getSelectExclude(Map<String, Object> paraMap) {
 		Object value = paraMap.get(MapBuilder.SELECT_EXCLUDE);
 		if (value != null) {
 			return value;
@@ -157,7 +167,7 @@ public class DefaultParamResolver implements ParamResolver {
 		return paraMap.get(selectExcludeName);
 	}
 
-	private Object getOnlySelect(Map<String, Object> paraMap) {
+	protected Object getOnlySelect(Map<String, Object> paraMap) {
 		Object value = paraMap.get(MapBuilder.ONLY_SELECT);
 		if (value != null) {
 			return value;
@@ -165,7 +175,7 @@ public class DefaultParamResolver implements ParamResolver {
 		return paraMap.get(onlySelectName);
 	}
 
-	protected Group<List<FieldParam>> resolveParamsGroup(Collection<FieldMeta> fieldMetas, Map<String, Object> paraMap) {
+	public Group<List<FieldParam>> resolveParamsGroup(Collection<FieldMeta> fieldMetas, Map<String, Object> paraMap) {
 		Map<String, List<FieldParam>> holder = new HashMap<>();
 		return groupResolver.resolve(getGroupExpr(paraMap))
 				.transform(gKey -> {
@@ -185,7 +195,7 @@ public class DefaultParamResolver implements ParamResolver {
 				.filter(list -> list.size() > 0);
 	}
 
-	private String getGroupExpr(Map<String, Object> paraMap) {
+	protected String getGroupExpr(Map<String, Object> paraMap) {
 		String expr = ObjectUtils.string(paraMap.get(MapBuilder.GROUP_EXPR));
 		if (expr != null) {
 			return expr;
@@ -224,7 +234,7 @@ public class DefaultParamResolver implements ParamResolver {
 		fieldIndicesKeysMap.computeIfAbsent(field, k -> new HashSet<>(2)).add(index);
 	}
 
-	private FieldParam getFieldParam(MapWrapper paraMap, String field) {
+	protected FieldParam getFieldParam(MapWrapper paraMap, String field) {
 		Object value = paraMap.get0(MapBuilder.FIELD_PARAM + field);
 		if (value instanceof FieldParam) {
 			return (FieldParam) value;
@@ -269,7 +279,7 @@ public class DefaultParamResolver implements ParamResolver {
 		return new FieldParam(field, operator, values, ignoreCase);
 	}
 
-	private boolean isAllEmpty(List<FieldParam.Value> values) {
+	protected boolean isAllEmpty(List<FieldParam.Value> values) {
 		for (FieldParam.Value value : values) {
 			if (!value.isEmptyValue()) {
 				return false;
@@ -278,7 +288,7 @@ public class DefaultParamResolver implements ParamResolver {
 		return true;
 	}
 
-	private FieldOp toOperator(String field, MapWrapper paraMap, FieldParam param) {
+	protected FieldOp toOperator(String field, MapWrapper paraMap, FieldParam param) {
 		if (param != null) {
 			Object op = param.getOperator();
 			if (op != null) {
@@ -307,7 +317,7 @@ public class DefaultParamResolver implements ParamResolver {
 		return null;
 	}
 
-	private List<OrderBy> resolveOrderBys(Map<String, Object> paraMap) {
+	public List<OrderBy> resolveOrderBys(Map<String, Object> paraMap) {
 		@SuppressWarnings("unchecked")
 		List<OrderBy> orderBys = (List<OrderBy>) paraMap.get(MapBuilder.ORDER_BY);
 		if (orderBys != null) {
