@@ -69,7 +69,7 @@ public class DateFieldConvertor implements FieldConvertor.BFieldConvertor {
                 if (date instanceof java.sql.Date) {
                     return ((java.sql.Date) date).toLocalDate();
                 }
-                return LocalDate.ofInstant(date.toInstant(), zoneId);
+                return toLocalDate(date.toInstant());
             }
             if (targetType == Date.class) {
                 return date;
@@ -95,9 +95,17 @@ public class DateFieldConvertor implements FieldConvertor.BFieldConvertor {
             return new Timestamp(instant.toEpochMilli());
         }
         if (targetType == LocalDate.class) {
-            return LocalDate.ofInstant(instant, zoneId);
+            return toLocalDate(instant);
         }
         throw new UnsupportedOperationException();
+    }
+
+    // 该方法用于兼容 JDK8, 因为 JDK8 没有 LocalDate.ofInstant() 方法
+    protected LocalDate toLocalDate(Instant instant) {
+        ZoneOffset offset = zoneId.getRules().getOffset(instant);
+        long localSecond = instant.getEpochSecond() + offset.getTotalSeconds();
+        long localEpochDay = Math.floorDiv(localSecond, 86400);
+        return LocalDate.ofEpochDay(localEpochDay);
     }
 
     public ZoneId getZoneId() {
