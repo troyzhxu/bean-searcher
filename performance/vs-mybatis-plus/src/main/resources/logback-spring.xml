@@ -11,9 +11,9 @@
     </appender>
 
     <!-- 打开 Bean Searcher 的 SQL 日志 -->
-    <logger name="com.ejlchina.searcher.implement.DefaultSqlExecutor" level="DEBUG" additivity="false">
-        <appender-ref ref="console" />
-    </logger>
+<!--    <logger name="com.ejlchina.searcher.implement.DefaultSqlExecutor" level="DEBUG" additivity="false">-->
+<!--        <appender-ref ref="console" />-->
+<!--    </logger>-->
 
     <root level="INFO">
         <appender-ref ref="console" />
