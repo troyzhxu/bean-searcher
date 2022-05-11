@@ -105,9 +105,8 @@
 						<id>default-compile</id>
 						<configuration>
 							<jdkToolchain>
-								<version>11</version>
+								<version>8</version>
 							</jdkToolchain>
-							<release>11</release>
 						</configuration>
 					</execution>
 					<execution>
