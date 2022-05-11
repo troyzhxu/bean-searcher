@@ -1,13 +1,24 @@
-# Next
+# v3.6.2 @ 2022-05-11
 
-### ✨ Features
+### ✨ Better
 
-* Bean Searcher
-  * 新增 `Bool2NumFieldConvertor` 支持 `Boolean -> Number` 方向的转换
-  * 新增 慢 SQL 日志以及 相关实体类 快速定位 功能（TODO）
-  * 可配置关闭默认的驼峰转下划线映射规则（TODO）
-* Bean Searcher Boot Starter
-  * 新增 `bean-searcher.field-convertor.use-bool-num` 配置键，可自动配置 `BoolNumFieldConvertor`，默认为 `true`
+* Bean Searcher Boot Starter: 升级 `spring-boot -> 2.6.7`
+
+### 🐛 Bug Fixes
+
+* 修复 JDK8 上当实体类有 `LocalDate` 类型的字段时会报 `NoSuchMethodError` 的问题: https://github.com/ejlchina/bean-searcher/issues/43
+
+# v3.5.4 @ 2022-05-11
+
+### ✨ Better
+
+* Bean Searcher Boot Starter: 升级 `spring-boot -> 2.6.7`
+
+### 🐛 Bug Fixes
+
+* 修复：当实体类 `@SearchBean` 注解内指定 `groupBy` 属性时，不支持 字段求和 的问题
+* 修复 `MapUtils.builder(..)` 的 `page(..)` 与 `limit(..)` 方法不受 `max-allowed-size` 配置约束的问题
+* 修复 JDK8 上当实体类有 `LocalDate` 类型的字段时会报 `NoSuchMethodError` 的问题: https://github.com/ejlchina/bean-searcher/issues/43
 
 # v3.6.1 @ 2022-05-09
 
