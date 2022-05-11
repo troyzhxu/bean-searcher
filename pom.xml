@@ -9,7 +9,7 @@
 
 	<groupId>com.ejlchina</groupId>
 	<artifactId>bean-searcher-parent</artifactId>
-	<version>3.5.4</version>
+	<version>3.5.5</version>
 
 	<packaging>pom</packaging>
 
