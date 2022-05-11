@@ -1,3 +1,15 @@
+# v3.5.4 @ 2022-05-11
+
+### ✨ Better
+
+* Bean Searcher Boot Starter: 升级 spring-boot -> 2.6.7
+
+### 🐛 Bug Fixes
+
+* 修复：当实体类 `@SearchBean` 注解内指定 `groupBy` 属性时，不支持 字段求和 的问题
+* 修复 `MapUtils.builder(..)` 的 `page(..)` 与 `limit(..)` 方法不受 `max-allowed-size` 配置约束的问题
+* 修复 JDK8 上当实体类有 `LocalDate` 类型的字段时会报 NoSuchMethodError 的问题
+
 # v3.5.3 @ 2022-04-06
 
 ### ✨ Better
