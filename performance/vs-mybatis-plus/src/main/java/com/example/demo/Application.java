@@ -1,17 +1,14 @@
 package com.example.demo;
 
-import com.ejlchina.searcher.implement.DateFieldConvertor;
 import com.example.demo.entity.Department;
 import com.example.demo.entity.Gender;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 
-import java.sql.Timestamp;
-import java.time.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.Random;
 
 
@@ -20,76 +17,9 @@ import java.util.Random;
 public class Application {
 
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
-    }
-    
-    @Bean
-    public DateFieldConvertor dateFieldConvertor() {
-        return new DateFieldConvertor() {
-    
-            @Override
-            public Object convert(Class<?> targetType, Object value) {
-                Class<?> valueType = value.getClass();
-                if (Date.class.isAssignableFrom(valueType)) {
-                    Date date = (Date) value;
-                    if (targetType == java.sql.Date.class) {
-                        return new java.sql.Date(date.getTime());
-                    }
-                    if (targetType == Timestamp.class) {
-                        return new Timestamp(date.getTime());
-                    }
-                    if (targetType == LocalDateTime.class) {
-                        // 注意：java.sql.Date 的 toInstant() 方法会抛异常
-                        if (date instanceof java.sql.Date) {
-                            LocalDate localDate = ((java.sql.Date) date).toLocalDate();
-                            return LocalDateTime.of(localDate, LocalTime.of(0, 0, 0, 0));
-                        }
-                        return LocalDateTime.ofInstant(date.toInstant(), getZoneId());
-                    }
-                    if (targetType == LocalDate.class) {
-                        // 注意：java.sql.Date 的 toInstant() 方法会抛异常
-                        if (date instanceof java.sql.Date) {
-                            return ((java.sql.Date) date).toLocalDate();
-                        }
-                        return toLocalDate(date.toInstant());
-                    }
-                    if (targetType == Date.class) {
-                        return date;
-                    }
-                }
-                LocalDateTime dateTime;
-                if (valueType == LocalDateTime.class) {
-                    dateTime = (LocalDateTime) value;
-                } else {
-                    dateTime = LocalDateTime.of((LocalDate) value, LocalTime.of(0, 0));
-                }
-                if (targetType == LocalDateTime.class) {
-                    return dateTime;
-                }
-                Instant instant = dateTime.atZone(getZoneId()).toInstant();
-                if (targetType == Date.class) {
-                    return new Date(instant.toEpochMilli());
-                }
-                if (targetType == java.sql.Date.class) {
-                    return new java.sql.Date(instant.toEpochMilli());
-                }
-                if (targetType == Timestamp.class) {
-                    return new Timestamp(instant.toEpochMilli());
-                }
-                if (targetType == LocalDate.class) {
-                    return toLocalDate(instant);
-                }
-                throw new UnsupportedOperationException();
-            }
-    
-            private LocalDate toLocalDate(Instant instant) {
-                ZoneOffset offset = getZoneId().getRules().getOffset(instant);
-                long localSecond = instant.getEpochSecond() + offset.getTotalSeconds();
-                long localEpochDay = Math.floorDiv(localSecond, 86400);
-                return LocalDate.ofEpochDay(localEpochDay);
-            }
-    
-        };
+        System.out.println(Math.floorDiv(System.currentTimeMillis(), 86400));
+
+//        SpringApplication.run(Application.class, args);
     }
 
     // 生成数据

@@ -13,7 +13,7 @@ repositories {
 }
 
 dependencies {
-	implementation 'com.ejlchina:bean-searcher-boot-starter:3.6.1'
+	implementation 'com.ejlchina:bean-searcher-boot-starter:3.6.2'
 	implementation 'org.springframework.boot:spring-boot-starter-jooq'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	runtimeOnly 'com.h2database:h2'
