@@ -104,7 +104,7 @@ public class DateFieldConvertor implements FieldConvertor.BFieldConvertor {
     protected LocalDate toLocalDate(Instant instant) {
         ZoneOffset offset = zoneId.getRules().getOffset(instant);
         long localSecond = instant.getEpochSecond() + offset.getTotalSeconds();
-        long localEpochDay = Math.floorDiv(localSecond, 86400);
+        long localEpochDay = Math.floorDiv(localSecond, 86400L);
         return LocalDate.ofEpochDay(localEpochDay);
     }
 
