@@ -11,11 +11,11 @@
 	<parent>
 		<groupId>com.ejlchina</groupId>
 		<artifactId>bean-searcher-parent</artifactId>
-		<version>3.6.1</version>
+		<version>3.6.2</version>
 	</parent>
 
 	<properties>
-		<spring.boot.version>2.6.6</spring.boot.version>
+		<spring.boot.version>2.6.7</spring.boot.version>
 	</properties>
 
 	<dependencies>
