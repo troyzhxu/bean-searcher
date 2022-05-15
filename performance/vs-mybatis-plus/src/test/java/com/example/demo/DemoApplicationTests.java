@@ -1,13 +1,11 @@
 package com.example.demo;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ejlchina.searcher.BeanSearcher;
 import com.ejlchina.searcher.MapSearcher;
 import com.ejlchina.searcher.util.MapUtils;
 import com.example.demo.entity.Employee;
 import com.example.demo.mapper.EmployeeMapper;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -49,7 +47,7 @@ class DemoApplicationTests {
 		System.out.println("MapSearcher 执行 10000 次...");
 		long t0 = System.currentTimeMillis();
 		int totalCount = 0;
-		for (int i = 0; i < 10000; i++) {
+		for (int i = 0; i < 1000; i++) {
 			List<Map<String, Object>> list = mapSearcher.searchAll(Employee.class, MapUtils.builder()
 					.field(Employee::getAge, 30)
 					.build());
@@ -65,7 +63,7 @@ class DemoApplicationTests {
 		System.out.println("BeanSearcher 执行 10000 次...");
 		long t0 = System.currentTimeMillis();
 		int totalCount = 0;
-		for (int i = 0; i < 10000; i++) {
+		for (int i = 0; i < 1000; i++) {
 			List<Employee> list = beanSearcher.searchAll(Employee.class, MapUtils.builder()
 					.field(Employee::getAge, 30)
 					.build());
