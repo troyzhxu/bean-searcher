@@ -32,6 +32,8 @@ English | [中文](./README.zh-CN.md)
 ![](./assets/architecture.jpg)
 
 * Change log：[CHANGELOG](./CHANGELOG.md)
+* Performance：[see the report](./performance/README.md)
+
 
 ### ✨ Features
 

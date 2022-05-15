@@ -1,5 +1,7 @@
 # 性能对比测试
 
+> Bean Searcher 专为效率而生，性能并不是它的主要目的。虽然如此，但性能上也不输其它 ORM，甚至会更强。
+
 ## vs Spring Data Jdbc
 
 对比结果：
