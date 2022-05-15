@@ -6,7 +6,7 @@
 
 ![](../assets/vs_data_jdbc.png)
 
-[点击查看测试代码](./vs-data-jdbc/src/test/java/com/example/demo/DemoApplicationTests.java)
+[查看测试代码](./vs-data-jdbc/src/test/java/com/example/demo/DemoApplicationTests.java)
 
 ## vs Spring Data JPA
 
@@ -14,7 +14,7 @@
 
 ![](../assets/vs_data_jpa.png)
 
-[点击查看测试代码](./vs-data-jpa/src/test/java/com/example/demo/DemoApplicationTests.java)
+[查看测试代码](./vs-data-jpa/src/test/java/com/example/demo/DemoApplicationTests.java)
 
 ## vs 原生 MyBatis
 
@@ -22,7 +22,7 @@
 
 ![](../assets/vs_mybatis.png)
 
-[点击查看测试代码](./vs-mybatis/src/test/java/com/example/demo/DemoApplicationTests.java)
+[查看测试代码](./vs-mybatis/src/test/java/com/example/demo/DemoApplicationTests.java)
 
 ## vs MyBatis Plus
 
@@ -30,5 +30,5 @@
 
 ![](../assets/vs_mybatis_plus.png)
 
-[点击查看测试代码](./vs-mybatis-plus/src/test/java/com/example/demo/DemoApplicationTests.java)
+[查看测试代码](./vs-mybatis-plus/src/test/java/com/example/demo/DemoApplicationTests.java)
 
