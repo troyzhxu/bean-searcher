@@ -44,7 +44,7 @@ class DemoApplicationTests {
 
 	@Test
 	void testMapSearcher() {
-		System.out.println("MapSearcher 执行 10000 次...");
+		System.out.println("MapSearcher 执行 1000 次...");
 		long t0 = System.currentTimeMillis();
 		int totalCount = 0;
 		for (int i = 0; i < 1000; i++) {
@@ -60,7 +60,7 @@ class DemoApplicationTests {
 
 	@Test
 	void testBeanSearcher() {
-		System.out.println("BeanSearcher 执行 10000 次...");
+		System.out.println("BeanSearcher 执行 1000 次...");
 		long t0 = System.currentTimeMillis();
 		int totalCount = 0;
 		for (int i = 0; i < 1000; i++) {
@@ -76,10 +76,10 @@ class DemoApplicationTests {
 
 	@Test
 	void testMyBatisPlus() {
-		System.out.println("MyBatisPlus 执行 10000 次 ...");
+		System.out.println("MyBatisPlus 执行 1000 次 ...");
 		long t0 = System.currentTimeMillis();
 		int totalCount = 0;
-		for (int i = 0; i < 10000; i++) {
+		for (int i = 0; i < 1000; i++) {
 			List<Employee> list = employeeMapper.selectList(new LambdaQueryWrapper<>(Employee.class).eq(Employee::getAge, 30));
 			totalCount += list.size();
 		}
@@ -87,7 +87,5 @@ class DemoApplicationTests {
 		System.out.println("累计 Select 数量：" + totalCount);
 		System.out.println("MyBatisPlus 耗时：" + cost + "ms");
 	}
-
-
 
 }
