@@ -1,10 +1,15 @@
 package com.example.demo.entity;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+@Table
 public class Employee {
 
+    @Id
     private int id;
     private String jobNo;
     private String name;
