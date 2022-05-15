@@ -1,14 +1,21 @@
 package com.example.demo.entity;
 
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+@Entity
 public class Employee {
 
+    @Id
     private int id;
     private String jobNo;
     private String name;
     private int age;
+    @Enumerated(EnumType.STRING)
     private Gender gender;
     private LocalDate entryDate;
     private int departmentId;
