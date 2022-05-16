@@ -28,7 +28,7 @@
 ![](./assets/architecture.jpg)
 
 * 更新日志：[CHANGELOG](./CHANGELOG.md)
-* 性能如何：[直接说同样一骑绝尘你可能觉得是 Tree New Bee, 还是看报告好了](./performance/README.md)
+* 性能如何：[直接说一骑绝尘你可能觉得是 Tree New Bee, 还是看报告好了](./performance/README.md)
 
 ### ✨ 特性
 
