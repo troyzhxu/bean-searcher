@@ -313,8 +313,8 @@ public class DefaultParamResolver implements ParamResolver {
 				return op;
 			}
 		}
-		// op 不在 onlyOn 的允许范围内，返回 null
-		return null;
+		// 不在 onlyOn 的允许范围内时，则使用 onlyOn 中的第一个
+		return fieldOpPool.getFieldOp(onlyOn[0]);
 	}
 
 	public List<OrderBy> resolveOrderBys(Map<String, Object> paraMap) {
