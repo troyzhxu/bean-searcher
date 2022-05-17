@@ -263,7 +263,10 @@ public class DefaultParamResolver implements ParamResolver {
 				if (index == 0 && value == null) {
 					value = paraMap.get1(field);
 				}
-				values.add(new FieldParam.Value(value, index));
+				value = fieldValue(meta, value);
+				if (value != null) {
+					values.add(new FieldParam.Value(value, index));
+				}
 			}
 		}
 		if (isAllEmpty(values)) {
@@ -277,6 +280,21 @@ public class DefaultParamResolver implements ParamResolver {
 			ignoreCase = ObjectUtils.toBoolean(paraMap.get1(field + separator + ignoreCaseSuffix));
 		}
 		return new FieldParam(field, operator, values, ignoreCase);
+	}
+
+	protected Object fieldValue(FieldMeta meta, Object value) {
+		if (value == null) {
+			return null;
+		}
+		if (value instanceof String) {
+			String str = (String) value;
+			if (StringUtils.isBlank(str)) {
+				return null;
+			}
+			// TODO: 根据配置与字段在实体类中声明的类型转换 value 的值
+
+		}
+		return value;
 	}
 
 	protected boolean isAllEmpty(List<FieldParam.Value> values) {
