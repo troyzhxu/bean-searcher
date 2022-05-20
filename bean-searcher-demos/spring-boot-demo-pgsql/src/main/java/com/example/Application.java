@@ -6,6 +6,7 @@ import com.ejlchina.searcher.group.GroupResolver;
 import com.ejlchina.searcher.implement.DefaultParamResolver;
 import com.ejlchina.searcher.param.FieldParam;
 import com.ejlchina.searcher.util.MapWrapper;
+import com.ejlchina.searcher.util.StringUtils;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,6 +14,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalQueries;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -33,6 +38,9 @@ public class Application implements WebMvcConfigurer {
     private Object convertValue(Class<?> fieldType, Object value) {
         if (value instanceof String) {
             String str = (String) value;
+            if (StringUtils.isBlank(str)) {
+                return null;
+            }
             if (fieldType == int.class || fieldType == Integer.class) {
                 // 将字符串的参数值转换成 Integer
                 return Integer.valueOf(str);
@@ -40,6 +48,11 @@ public class Application implements WebMvcConfigurer {
             if (fieldType == long.class || fieldType == Long.class) {
                 // 将字符串的参数值转换成 Long
                 return Long.valueOf(str);
+            }
+            if (fieldType == LocalDateTime.class) {
+                // 将字符串的参数值转换成 Long
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                return formatter.parse(str, TemporalQueries.localDate());
             }
             // 等等 其它类型转换，按需添加即可
 
