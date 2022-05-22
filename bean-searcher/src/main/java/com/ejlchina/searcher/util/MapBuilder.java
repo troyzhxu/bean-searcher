@@ -297,7 +297,8 @@ public class MapBuilder {
      * @return MapBuilder
      */
     public MapBuilder page(long page, int size) {
-        return limit(page * size, size);
+        map.put(PAGING, new Page(size, page));
+        return this;
     }
 
     /**
@@ -307,7 +308,7 @@ public class MapBuilder {
      * @return MapBuilder
      */
     public MapBuilder limit(long offset, int size) {
-        map.put(PAGING, new Paging(size, offset));
+        map.put(PAGING, new Limit(size, offset));
         return this;
     }
 
@@ -348,6 +349,45 @@ public class MapBuilder {
             throw new IllegalStateException("can not convert method [" + methodName + "] to field name");
         } catch (ReflectiveOperationException e) {
             throw new IllegalStateException("无法反射出字段名", e);
+        }
+    }
+
+    public static class Page {
+
+        private final int size;
+        private final long page;
+
+        public Page(int size, long page) {
+            this.size = size;
+            this.page = page;
+        }
+
+        public int getSize() {
+            return size;
+        }
+
+        public long getPage() {
+            return page;
+        }
+
+    }
+
+    public static class Limit {
+
+        private final int size;
+        private final long offset;
+
+        public Limit(int size, long offset) {
+            this.size = size;
+            this.offset = offset;
+        }
+
+        public int getSize() {
+            return size;
+        }
+
+        public long getOffset() {
+            return offset;
         }
     }
 

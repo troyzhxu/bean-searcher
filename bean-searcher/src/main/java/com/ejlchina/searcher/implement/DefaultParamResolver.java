@@ -130,13 +130,7 @@ public class DefaultParamResolver implements ParamResolver {
 
 	public Paging resolvePaging(FetchType fetchType, Map<String, Object> paraMap) {
 		if (fetchType.canPaging()) {
-			Object value = paraMap.get(MapBuilder.PAGING);
-			Paging paging;
-			if (value instanceof Paging) {
-				paging = pageExtractor.correct((Paging) value);
-			} else {
-				paging = pageExtractor.extract(paraMap);
-			}
+			Paging paging = pageExtractor.extract(paraMap);
 			if (fetchType.isFetchFirst()) {
 				paging.setSize(1);
 			}
