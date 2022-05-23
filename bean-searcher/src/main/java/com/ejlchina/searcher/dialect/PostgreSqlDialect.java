@@ -30,4 +30,9 @@ public class PostgreSqlDialect implements Dialect {
 		return wrapper;
 	}
 
+	@Override
+	public boolean hasILike() {
+		return true;
+	}
+	
 }

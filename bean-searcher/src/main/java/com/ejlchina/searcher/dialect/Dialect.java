@@ -26,4 +26,12 @@ public interface Dialect {
 	 */
 	SqlWrapper<Object> forPaginate(String fieldSelectSql, String fromWhereSql, Paging paging);
 
+	/**
+	 * @return 是否支持 ilike 语法
+	 * @since v3.7.0
+	 */
+	default boolean hasILike() {
+		return false;
+	}
+
 }
