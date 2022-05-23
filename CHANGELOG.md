@@ -4,8 +4,12 @@
 
 * Bean Searcher
   * `DefaultDbMapping` 新增 `underlineCase` 属性，可配置自动映射时是否开启 驼峰->下划线 的风格转换
-  * 优化 SQL 日志：新增 慢 SQL 日志与以及追踪定位的功能
   * 新增 `SqlExecutor.SlowListener` 接口，可让用户在代码中监听慢 SQL
+  * 优化 SQL 日志：正常 SQL 显示耗时，慢 SQL 级别为 `WARN` 并显示关联的实体类
+  * 新增 `SqlServerDialect` 方言实现，支持 SqlServer 2012+
+  * 优化 参数构建器的 `page(..)` 与 `limit(..)` 方法，它们起始页码也受页码配置约束
+  * 新增 `OrLike` 运算符，参见：https://github.com/ejlchina/bean-searcher/issues/38
+  * 方言 `Dialect` 新增 `hasILike()` 方法，当忽略大小写查询时，可利用数据库的索引提升性能
 * Bean Searcher Boot Starter
   * 新增 `bean-searcher.sql.default-mapping.underline-case` 配置键，可配置自动映射时是否开始 驼峰->下划线 的风格转换，默认为 `true`
 
