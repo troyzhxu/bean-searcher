@@ -40,6 +40,7 @@ public class FieldOpPool extends DialectWrapper {
         fieldOps.add(new Contain());
         fieldOps.add(new StartWith());
         fieldOps.add(new EndWith());
+        fieldOps.add(new OrLike());
         fieldOps.add(new InList());
         fieldOps.add(new NotIn());
         fieldOps.add(new IsNull());
