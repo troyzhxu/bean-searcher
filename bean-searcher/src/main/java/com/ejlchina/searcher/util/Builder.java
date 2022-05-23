@@ -30,12 +30,17 @@ public class Builder<B extends Builder<B>> {
 
     protected final Map<String, Object> map;
 
-    protected String group = null;
+    protected String group;
 
     private FieldParam fieldParam = null;
 
     public Builder(Map<String, Object> map) {
+        this(map, null);
+    }
+
+    public Builder(Map<String, Object> map, String group) {
         this.map = map;
+        this.group = group;
     }
 
     /**
