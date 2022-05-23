@@ -6,7 +6,7 @@ import com.ejlchina.searcher.param.Paging;
 
 /**
  * SqlServer (v2012+) 方言实现
- * @author Troy.Zhou
+ * @author Troy.Zhou @ 2022-05-22
  * @since v3.7.0
  * */
 public class SqlServerDialect implements Dialect {

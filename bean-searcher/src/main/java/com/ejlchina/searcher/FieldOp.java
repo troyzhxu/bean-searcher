@@ -1,7 +1,6 @@
 package com.ejlchina.searcher;
 
 import java.util.List;
-import java.util.function.Supplier;
 
 /**
  * 字段运算符
