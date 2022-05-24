@@ -94,12 +94,12 @@ public class BetweenTestCase {
     @Test
     public void test_08() {
         StringBuilder sb = new StringBuilder();
-        SqlWrapper<Object> fieldSql = new SqlWrapper<>("(select name from user where id = ?)");
+        SqlWrapper<Object> fieldSql = new SqlWrapper<>("(select age from user where id = ?)");
         fieldSql.addPara(120);
         List<Object> params = between.operate(sb, new FieldOp.OpPara(
                 fieldSql, false, new Object[]{ 10, 20 }
         ));
-        Assert.assertEquals("(select name from user where id = ?) between ? and ?", sb.toString());
+        Assert.assertEquals("(select age from user where id = ?) between ? and ?", sb.toString());
         Assert.assertArrayEquals(new Object[]{ 120, 10, 20 }, params.toArray());
         System.out.println("BetweenTestCase test_08 passed");
     }
