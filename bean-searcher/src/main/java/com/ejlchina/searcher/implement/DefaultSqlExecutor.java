@@ -84,7 +84,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
 			return doExecute(searchSql, connection);
 		} catch (SQLException e) {
 			// 如果有异常，则立马关闭，否则与 SqlResult 一起关闭
-			closeConnection(connection);
+			closeQuietly(connection);
 			throw new SearchException("A exception occurred when query!", e);
 		}
 	}
@@ -119,6 +119,9 @@ public class DefaultSqlExecutor implements SqlExecutor {
 			if (searchSql.isShouldQueryCluster()) {
 				clusterResult = executeClusterSql(searchSql, connection);
 			}
+		} catch (SQLException e) {
+			closeQuietly(listResult);
+			throw e;
 		} finally {
 			if (transactional) {
 				connection.commit();
@@ -131,18 +134,16 @@ public class DefaultSqlExecutor implements SqlExecutor {
 				try {
 					super.close();
 				} finally {
-					closeConnection(connection);
+					closeQuietly(connection);
 				}
 			}
 		};
 	}
 
-
 	protected SqlResult.ResultSet executeListSql(SearchSql<?> searchSql, Connection connection) throws SQLException {
 		Result result = executeQuery(connection, searchSql.getListSqlString(),
 				searchSql.getListSqlParams(), searchSql);
 		ResultSet resultSet = result.resultSet;
-		PreparedStatement statement = result.statement;
 		return new SqlResult.ResultSet() {
 			@Override
 			public boolean next() throws SQLException {
@@ -153,13 +154,8 @@ public class DefaultSqlExecutor implements SqlExecutor {
 				return resultSet.getObject(columnLabel);
 			}
 			@Override
-			public void close() throws SQLException {
-				//noinspection TryFinallyCanBeTryWithResources
-				try {
-					resultSet.close();
-				} finally {
-					statement.close();
-				}
+			public void close() {
+				result.close();
 			}
 		};
 	}
@@ -168,8 +164,13 @@ public class DefaultSqlExecutor implements SqlExecutor {
 		Result result = executeQuery(connection, searchSql.getClusterSqlString(),
 				searchSql.getClusterSqlParams(), searchSql);
 		ResultSet resultSet = result.resultSet;
-		PreparedStatement statement = result.statement;
-		boolean hasValue = resultSet.next();
+		boolean hasValue;
+		try {
+			hasValue = resultSet.next();
+		} catch (SQLException e) {
+			result.close();
+			throw e;
+		}
 		return new SqlResult.Result() {
 			@Override
 			public Object get(String columnLabel) throws SQLException {
@@ -179,12 +180,8 @@ public class DefaultSqlExecutor implements SqlExecutor {
 				return null;
 			}
 			@Override
-			public void close() throws SQLException {
-				try {
-					resultSet.close();
-				} finally {
-					statement.close();
-				}
+			public void close() {
+				result.close();
 			}
 		};
 	}
@@ -194,10 +191,16 @@ public class DefaultSqlExecutor implements SqlExecutor {
 		final PreparedStatement statement;
 		final ResultSet resultSet;
 
-		public Result(PreparedStatement statement, ResultSet resultSet) {
+		Result(PreparedStatement statement, ResultSet resultSet) {
 			this.statement = statement;
 			this.resultSet = resultSet;
 		}
+
+		void close() {
+			closeQuietly(resultSet);
+			closeQuietly(statement);
+		}
+
 	}
 
 	protected Result executeQuery(Connection connection, String sql, List<Object> params,
@@ -211,6 +214,9 @@ public class DefaultSqlExecutor implements SqlExecutor {
 		try {
 			ResultSet resultSet = statement.executeQuery();
 			return new Result(statement, resultSet);
+		} catch (SQLException e) {
+			closeQuietly(statement);
+			throw e;
 		} finally {
 			long cost = System.currentTimeMillis() - t0;
 			afterExecute(searchSql, sql, params, cost);
@@ -230,13 +236,13 @@ public class DefaultSqlExecutor implements SqlExecutor {
 		}
 	}
 
-	protected void closeConnection(Connection connection) {
+	protected static void closeQuietly(AutoCloseable resource) {
 		try {
-			if (connection != null) {
-				connection.close();
+			if (resource != null) {
+				resource.close();
 			}
-		} catch (SQLException e) {
-			throw new SearchException("Can not close connection!", e);
+		} catch (Exception e) {
+			log.error("Can not close {}", resource.getClass().getSimpleName(), e);
 		}
 	}
 

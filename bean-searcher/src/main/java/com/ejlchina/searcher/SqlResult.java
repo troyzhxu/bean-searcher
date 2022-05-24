@@ -12,7 +12,7 @@ public class SqlResult<T> implements Closeable {
      * 结果（单条记录）
      * @since v3.6.0
      */
-    public interface Result {
+    public interface Result extends AutoCloseable {
 
         /**
          * 获取当前记录的某一列的值
