@@ -14,6 +14,7 @@
   * 增强 `EnumFieldConvertor`：新增属性 `failOnError`, 可配置在遇到非法值无法转换时是否报错，默认 `true`
 * Bean Searcher Boot Starter
   * 新增 `bean-searcher.sql.default-mapping.underline-case` 配置键，可配置自动映射时是否开始 驼峰->下划线 的风格转换，默认为 `true`
+  * 升级 `spring-boot` -> `v2.6.8`
 
 # v3.6.3 v3.5.5 @ 2022-05-11
 
