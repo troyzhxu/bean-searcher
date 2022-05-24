@@ -3,16 +3,17 @@
 ### ✨ Features
 
 * Bean Searcher
-  * `DefaultDbMapping` 新增 `underlineCase` 属性，可配置自动映射时是否开启 `驼峰->下划线` 的风格转换
+  * `DefaultDbMapping` 新增 `underlineCase` 属性，可配置自动映射时是否开启 `驼峰->下划线` 的风格转换（已单测）
   * 新增 `SqlExecutor.SlowListener` 接口，可让用户在代码中监听慢 SQL
   * 优化 SQL 日志：正常 SQL 显示耗时，慢 SQL 级别为 `WARN` 并显示关联的实体类
   * 新增 `SqlServerDialect` 方言实现，支持 SqlServer 2012+
   * 优化 参数构建器的 `page(..)` 与 `limit(..)` 方法，它们起始页码也受页码配置约束
-  * 新增 `OrLike` 运算符，参见：https://github.com/ejlchina/bean-searcher/issues/38
+  * 新增 `OrLike` 运算符，参见：https://github.com/ejlchina/bean-searcher/issues/38（已单测）
   * 方言 `Dialect` 新增 `hasILike()` 方法，当忽略大小写查询时，可利用数据库的索引提升性能
-  * 增强 `EnumFieldConvertor`：支持 `整型` 转换为枚举（按枚举序号转换）
-  * 增强 `EnumFieldConvertor`：新增属性 `failOnError`, 可配置在遇到非法值无法转换时是否报错，默认 `true`
-  * 增强 `EnumFieldConvertor`：新增属性 `ignoreCase`, 可配置字符串值匹配枚举时是否忽略大小写，默认 `false`
+  * 增强 `EnumFieldConvertor`：支持 `整型` 转换为枚举（按枚举序号转换）（已单测）
+  * 增强 `EnumFieldConvertor`：新增属性 `failOnError`, 可配置在遇到非法值无法转换时是否报错，默认 `true`（已单测）
+  * 增强 `EnumFieldConvertor`：新增属性 `ignoreCase`, 可配置字符串值匹配枚举时是否忽略大小写，默认 `false`（已单测）
+  * 重构 `Dialect`：为 `toUpperCase(..)` 添加默认实现，用户自定义方言时，只有一个 `forPaginate(..)` 方法必须实现
 * Bean Searcher Boot Starter
   * 新增 `bean-searcher.sql.default-mapping.underline-case` 配置键，可配置自动映射时是否开始 驼峰->下划线 的风格转换，默认为 `true`
   * 升级 `spring-boot` -> `v2.6.8`
