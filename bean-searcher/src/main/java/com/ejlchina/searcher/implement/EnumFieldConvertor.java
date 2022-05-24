@@ -20,6 +20,12 @@ public class EnumFieldConvertor implements FieldConvertor.BFieldConvertor {
      */
     private boolean failOnError = true;
 
+    /**
+     * @since v3.7.0
+     * 当数据库值为字符串，匹配枚举时是否忽略大小写
+     */
+    private boolean ignoreCase = false;
+
     @Override
     public boolean supports(FieldMeta meta, Class<?> valueType) {
         if (valueType == String.class || valueType == int.class || valueType == Integer.class) {
@@ -31,28 +37,37 @@ public class EnumFieldConvertor implements FieldConvertor.BFieldConvertor {
     @Override
     public Object convert(FieldMeta meta, Object value) {
         if (value instanceof String) {
-            return convertToEnum(meta.getType(), (String) value);
+            return doConvert(meta.getType(), (String) value);
         }
         if (value instanceof Integer) {
-            return convertToEnum(meta.getType(), (Integer) value);
+            return doConvert(meta.getType(), (Integer) value);
         }
         throw new IllegalStateException("The supports(FieldMeta, Class<?>) method must be called first and return true before convert(FieldMeta, Object) method can be called");
     }
 
-    @SuppressWarnings("unchecked")
-    protected <T extends Enum<T>> T convertToEnum(Class<?> targetType, String name) {
-        if (failOnError) {
-            return Enum.valueOf((Class<T>) targetType, name);
+    @SuppressWarnings("all")
+    protected Object doConvert(Class<?> targetType, String name) {
+        if (ignoreCase) {
+            for (Object v : targetType.getEnumConstants()) {
+                if (((Enum<?>) v).name().equalsIgnoreCase(name)) {
+                    return v;
+                }
+            }
+            if (failOnError) {
+                throw new IllegalArgumentException("can not convert [" + name + "] to " + targetType);
+            }
+        } else {
+            try {
+                return Enum.valueOf((Class<? extends Enum>) targetType, name);
+            } catch (IllegalArgumentException e) {
+                if (failOnError) throw e;
+            }
         }
-        try {
-            return Enum.valueOf((Class<T>) targetType, name);
-        } catch (IllegalArgumentException e) {
-            log.warn("can not convert [{}] to {}", name, targetType);
-        }
+        log.warn("can not convert [{}] to {}", name, targetType);
         return null;
     }
 
-    protected Object convertToEnum(Class<?> targetType, int ordinal) {
+    protected Object doConvert(Class<?> targetType, int ordinal) {
         for (Object v : targetType.getEnumConstants()) {
             if (((Enum<?>) v).ordinal() == ordinal) {
                 return v;
@@ -71,6 +86,14 @@ public class EnumFieldConvertor implements FieldConvertor.BFieldConvertor {
 
     public void setFailOnError(boolean failOnError) {
         this.failOnError = failOnError;
+    }
+
+    public boolean isIgnoreCase() {
+        return ignoreCase;
+    }
+
+    public void setIgnoreCase(boolean ignoreCase) {
+        this.ignoreCase = ignoreCase;
     }
 
 }

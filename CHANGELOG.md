@@ -12,6 +12,7 @@
   * 方言 `Dialect` 新增 `hasILike()` 方法，当忽略大小写查询时，可利用数据库的索引提升性能
   * 增强 `EnumFieldConvertor`：支持 `整型` 转换为枚举（按枚举序号转换）
   * 增强 `EnumFieldConvertor`：新增属性 `failOnError`, 可配置在遇到非法值无法转换时是否报错，默认 `true`
+  * 增强 `EnumFieldConvertor`：新增属性 `ignoreCase`, 可配置字符串值匹配枚举时是否忽略大小写，默认 `false`
 * Bean Searcher Boot Starter
   * 新增 `bean-searcher.sql.default-mapping.underline-case` 配置键，可配置自动映射时是否开始 驼峰->下划线 的风格转换，默认为 `true`
   * 升级 `spring-boot` -> `v2.6.8`
