@@ -10,11 +10,6 @@ import com.ejlchina.searcher.param.Paging;
  * @since v3.6.0
  * */
 public class PostgreSqlDialect implements Dialect {
-
-	@Override
-	public void toUpperCase(StringBuilder builder, String dbField) {
-		builder.append("upper").append("(").append(dbField).append(")");
-	}
 	
 	@Override
 	public SqlWrapper<Object> forPaginate(String fieldSelectSql, String fromWhereSql, Paging paging) {

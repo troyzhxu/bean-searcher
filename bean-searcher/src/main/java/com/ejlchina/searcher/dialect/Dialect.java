@@ -15,7 +15,9 @@ public interface Dialect {
 	 * @param builder sql builder
 	 * @param dbField 数据库字段
 	 */
-	void toUpperCase(StringBuilder builder, String dbField);
+	default void toUpperCase(StringBuilder builder, String dbField) {
+		builder.append("upper").append("(").append(dbField).append(")");
+	}
 
 	/**
 	 * 分页
