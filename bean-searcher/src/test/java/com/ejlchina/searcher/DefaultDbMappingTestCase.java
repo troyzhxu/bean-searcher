@@ -4,7 +4,7 @@ import com.ejlchina.searcher.implement.DefaultDbMapping;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class DefaultDbMappingTests {
+public class DefaultDbMappingTestCase {
 
     public static class UserEntity {
 
