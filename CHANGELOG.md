@@ -3,7 +3,7 @@
 ### ✨ Features
 
 * Bean Searcher
-  * `DefaultDbMapping` 新增 `underlineCase` 属性，可配置自动映射时是否开启 驼峰->下划线 的风格转换
+  * `DefaultDbMapping` 新增 `underlineCase` 属性，可配置自动映射时是否开启 `驼峰->下划线` 的风格转换
   * 新增 `SqlExecutor.SlowListener` 接口，可让用户在代码中监听慢 SQL
   * 优化 SQL 日志：正常 SQL 显示耗时，慢 SQL 级别为 `WARN` 并显示关联的实体类
   * 新增 `SqlServerDialect` 方言实现，支持 SqlServer 2012+
