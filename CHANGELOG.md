@@ -14,6 +14,7 @@
   * 增强 `EnumFieldConvertor`：新增属性 `failOnError`, 可配置在遇到非法值无法转换时是否报错，默认 `true`（已单测）
   * 增强 `EnumFieldConvertor`：新增属性 `ignoreCase`, 可配置字符串值匹配枚举时是否忽略大小写，默认 `false`（已单测）
   * 重构 `Dialect`：为 `toUpperCase(..)` 添加默认实现，用户自定义方言时，只有一个 `forPaginate(..)` 方法必须实现
+  * 优化 `DefaultParamResolver`： `PageExtractor` 默认使用 `PageSizeExtractor` 实现
 * Bean Searcher Boot Starter
   * 新增 `bean-searcher.sql.default-mapping.underline-case` 配置键，可配置自动映射时是否开始 驼峰->下划线 的风格转换，默认为 `true`
   * 升级 `spring-boot` -> `v2.6.8`
