@@ -25,13 +25,13 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 
 	@Override
 	public <T> SearchResult<Map<String, Object>> search(Class<T> beanClass, Map<String, Object> paraMap) {
-		return search(beanClass, paraMap, new FetchType(FetchType.ALL));
+		return search(beanClass, paraMap, new FetchType(FetchType.DEFAULT));
 	}
 
 	@Override
 	public <T> SearchResult<Map<String, Object>> search(Class<T> beanClass, Map<String, Object> paraMap,
 														String[] summaryFields) {
-		return search(beanClass, paraMap, new FetchType(FetchType.ALL, summaryFields));
+		return search(beanClass, paraMap, new FetchType(FetchType.DEFAULT, summaryFields));
 	}
 
 	@Override
