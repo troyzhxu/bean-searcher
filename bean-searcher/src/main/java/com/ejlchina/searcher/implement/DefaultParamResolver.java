@@ -23,7 +23,7 @@ public class DefaultParamResolver implements ParamResolver {
 	/**
 	 * 分页参数提取器
 	 */
-	private PageExtractor pageExtractor = new PageOffsetExtractor();
+	private PageExtractor pageExtractor = new PageSizeExtractor();
 
 	/**
 	 * 参数过滤器
