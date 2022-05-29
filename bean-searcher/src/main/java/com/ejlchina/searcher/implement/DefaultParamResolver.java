@@ -258,9 +258,7 @@ public class DefaultParamResolver implements ParamResolver {
 					value = paraMap.get1(field);
 				}
 				value = fieldValue(meta, value);
-				if (value != null) {
-					values.add(new FieldParam.Value(value, index));
-				}
+				values.add(new FieldParam.Value(value, index));
 			}
 		}
 		if (isAllEmpty(values)) {
