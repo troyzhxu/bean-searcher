@@ -555,6 +555,20 @@ public class BeanSearcherProperties {
 		private boolean useEnum = true;
 
 		/**
+		 * 当数据库值不能转换为对应的枚举时，是否抛出异常
+		 * @see EnumFieldConvertor#setFailOnError(boolean)
+		 * @since v3.7.0
+		 */
+		private boolean enumFailOnError = true;
+
+		/**
+		 * 当数据库值为字符串，匹配枚举时是否忽略大小写
+		 * @see EnumFieldConvertor#setIgnoreCase(boolean)
+		 * @since v3.7.0
+		 */
+		private boolean enumIgnoreCase = false;
+
+		/**
 		 * 是否启用 {@link B2MFieldConvertor }，默认为 false。
 		 * 未启用时，{@link MapSearcher } 检索结果的字段值 未经过 {@link BFieldConvertor } 的转换，所以字段类型都是原始类，可能与实体类声明的类型不一致；
 		 * 启用后，将与 {@link BeanSearcher } 一样，检索结果的值类型 将被转换为 实体类中声明的类型。
@@ -648,6 +662,22 @@ public class BeanSearcherProperties {
 
 		public void setUseEnum(boolean useEnum) {
 			this.useEnum = useEnum;
+		}
+
+		public boolean isEnumFailOnError() {
+			return enumFailOnError;
+		}
+
+		public void setEnumFailOnError(boolean enumFailOnError) {
+			this.enumFailOnError = enumFailOnError;
+		}
+
+		public boolean isEnumIgnoreCase() {
+			return enumIgnoreCase;
+		}
+
+		public void setEnumIgnoreCase(boolean enumIgnoreCase) {
+			this.enumIgnoreCase = enumIgnoreCase;
 		}
 
 		public boolean isUseB2M() {
