@@ -1,4 +1,4 @@
-INSERT INTO `department` VALUES
+INSERT INTO department VALUES
 (1,'Finance','2018-05-01 10:00:00'),
 (2,'Technical','2018-05-02 10:00:00'),
 (3,'Market','2018-05-03 10:00:00'),
@@ -6,7 +6,7 @@ INSERT INTO `department` VALUES
 (5,'Engineering','2018-07-01 10:00:00'),
 (6,'Maintenance','2018-08-01 10:00:00');
 
-INSERT INTO `employee` VALUES
+INSERT INTO employee VALUES
 (1,'Jack',22,'Male','2019-06-23 12:01:01',1),
 (2,'Tom',21,'Male','2019-06-24 12:01:01',2),
 (3,'Alice',23,'Female','2019-06-25 12:01:01',3),
