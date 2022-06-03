@@ -22,6 +22,7 @@
   * 新增 `bean-searcher.sql.default-mapping.underline-case` 配置键，可配置自动映射时是否开始 驼峰->下划线 的风格转换，默认为 `true`
   * 新增 `bean-searcher.field-convertor.enum-fail-on-error` 配置键，可配置在遇到非法值无法转换时是否报错，默认 `true`
   * 新增 `bean-searcher.field-convertor.enum-ignore-case` 配置键，可配置字符串值匹配枚举时是否忽略大小写，默认 `false`
+  * 支持 用户配置一个 `SqlExecutor.SlowListener` 的 Spring Bean 来监听慢 SQL
   * 升级 `spring-boot` -> `v2.6.8`
 
 # v3.6.3 v3.5.5 @ 2022-05-11
