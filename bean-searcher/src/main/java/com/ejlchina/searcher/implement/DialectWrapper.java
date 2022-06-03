@@ -27,6 +27,14 @@ public class DialectWrapper implements DialectSensor {
     }
 
     /**
+     * @return 是否支持 ilike 语法
+     * @since v3.7.0
+     */
+    public boolean hasILike() {
+        return dialect.hasILike();
+    }
+
+    /**
      * 分页
      * @param fieldSelectSql 查询语句
      * @param fromWhereSql 条件语句

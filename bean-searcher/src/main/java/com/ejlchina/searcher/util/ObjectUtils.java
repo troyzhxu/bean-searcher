@@ -87,11 +87,20 @@ public class ObjectUtils {
 		return Collections.emptyList();
 	}
 
+	static final int CASE_DIFF = 'a' - 'A';
+
 	public static void upperCase(Object[] params) {
 		for (int i = 0; i < params.length; i++) {
 			Object val = params[i];
 			if (val instanceof String) {
 				params[i] = ((String) val).toUpperCase();
+			}
+			if (val instanceof Character) {
+				char ch = (Character) val;
+				if (ch >= 'a' && ch <= 'z') {
+					ch = (char) (ch - CASE_DIFF);
+				}
+				params[i] = String.valueOf(ch);
 			}
 		}
 	}

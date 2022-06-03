@@ -53,14 +53,14 @@ public class Between extends DialectWrapper implements FieldOp {
         }
         List<Object> params = new ArrayList<>(fieldSql.getParas());
         if (!val1Null && !val2Null) {
-            sqlBuilder.append(" between ? and ? ");
+            sqlBuilder.append(" between ? and ?");
             params.add(value0);
             params.add(value1);
         } else if (val1Null && !val2Null) {
-            sqlBuilder.append(" <= ? ");
+            sqlBuilder.append(" <= ?");
             params.add(value1);
         } else if (!val1Null) {
-            sqlBuilder.append(" >= ? ");
+            sqlBuilder.append(" >= ?");
             params.add(value0);
         }
         return params;

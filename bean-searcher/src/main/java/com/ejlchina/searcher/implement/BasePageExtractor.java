@@ -2,6 +2,7 @@ package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.PageExtractor;
 import com.ejlchina.searcher.param.Paging;
+import com.ejlchina.searcher.util.MapBuilder;
 import com.ejlchina.searcher.util.ObjectUtils;
 
 import java.util.Map;
@@ -31,6 +32,13 @@ public abstract class BasePageExtractor implements PageExtractor {
 
 	@Override
 	public Paging extract(Map<String, Object> paraMap) {
+		Object value = paraMap.get(MapBuilder.PAGING);
+		if (value instanceof MapBuilder.Page) {
+			return toPaging((MapBuilder.Page) value);
+		}
+		if (value instanceof MapBuilder.Limit) {
+			return toPaging((MapBuilder.Limit) value);
+		}
 		int size = toSize(paraMap.get(getSizeName()));
 		return new Paging(size, toOffset(paraMap, size));
 	}
@@ -42,15 +50,23 @@ public abstract class BasePageExtractor implements PageExtractor {
 		if (size == null) {
 			return defaultSize;
 		}
+		return allowSize(size);
+	}
+
+	protected int allowSize(int size) {
 		return Math.min(Math.max(size, 0), maxAllowedSize);
 	}
 
-	@Override
-	public Paging correct(Paging paging) {
-		if (paging.getSize() > maxAllowedSize) {
-			paging.setSize(maxAllowedSize);
-		}
-		return paging;
+	protected Paging toPaging(MapBuilder.Page page) {
+		int size = allowSize(page.getSize());
+		long pageNo = Math.max(page.getPage() - start, 0);
+		return new Paging(size, size * pageNo);
+	}
+
+	protected Paging toPaging(MapBuilder.Limit limit) {
+		int size = allowSize(limit.getSize());
+		long offset = Math.max(limit.getOffset() - start, 0);
+		return new Paging(size, offset);
 	}
 
 	@Override

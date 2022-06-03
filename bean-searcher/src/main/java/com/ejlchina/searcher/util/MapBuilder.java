@@ -1,23 +1,17 @@
 package com.ejlchina.searcher.util;
 
-import com.ejlchina.searcher.FieldOp;
 import com.ejlchina.searcher.SearchException;
 import com.ejlchina.searcher.SearchParam;
 import com.ejlchina.searcher.param.FieldParam;
 import com.ejlchina.searcher.param.OrderBy;
 import com.ejlchina.searcher.param.Paging;
 
-import java.io.Serializable;
-import java.lang.invoke.SerializedLambda;
-import java.lang.reflect.Method;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
 
 /**
- * 检索参数构建起
+ * 检索参数构建器
  */
-public class MapBuilder {
+public class MapBuilder extends Builder<MapBuilder> {
 
     public static final String ORDER_BY = OrderBy.class.getName();
     public static final String PAGING = Paging.class.getName();
@@ -26,19 +20,8 @@ public class MapBuilder {
     public static final String SELECT_EXCLUDE = SearchParam.class.getName() + ".SELECT_EXCLUDE";
     public static final String GROUP_EXPR = SearchParam.class.getName() + ".GROUP_EXPR";
 
-    @FunctionalInterface
-    public interface FieldFn<T, R> extends Function<T, R>, Serializable {  }
-
-    private final Map<FieldFn<?, ?>, String> cache = new ConcurrentHashMap<>();
-
-    private final Map<String, Object> map;
-
-    private FieldParam fieldParam = null;
-
-    private String group = null;
-
     public MapBuilder(Map<String, Object> map) {
-        this.map = map;
+        super(map);
     }
 
     /**
@@ -138,120 +121,6 @@ public class MapBuilder {
     }
 
     /**
-     * 指定某个字段的检索值
-     * @param fieldFn 字段表达式
-     * @param values 检索值，集合
-     * @param <T> 泛型
-     * @return MapBuilder
-     * @since 3.5.2
-     */
-    public <T> MapBuilder field(FieldFn<T, ?> fieldFn, Collection<?> values) {
-        return field(fieldFn, values.toArray());
-    }
-
-    /**
-     * 指定某个字段的检索值
-     * @param fieldFn 字段表达式
-     * @param values 检索值，可多个
-     * @param <T> 泛型
-     * @return MapBuilder
-     */
-    public <T> MapBuilder field(FieldFn<T, ?> fieldFn, Object... values) {
-        return field(toFieldName(fieldFn), values);
-    }
-
-    /**
-     * 指定某个字段的检索值
-     * @param fieldName 实体类属性名
-     * @param values 检索值，集合
-     * @param <T> 泛型
-     * @return MapBuilder
-     * @since 3.5.2
-     */
-    public <T> MapBuilder field(String fieldName, Collection<?> values) {
-        return field(fieldName, values.toArray());
-    }
-
-    /**
-     * 指定某个字段的检索值
-     * @param fieldName 实体类属性名
-     * @param values 检索值，可多个
-     * @return MapBuilder
-     */
-    public MapBuilder field(String fieldName, Object... values) {
-        if (fieldName != null) {
-            List<FieldParam.Value> pValues = new ArrayList<>();
-            for (int index = 0; index < values.length; index++) {
-                pValues.add(new FieldParam.Value(values[index], index));
-            }
-            String field = fieldName.trim();
-            fieldParam = new FieldParam(field, pValues);
-            if (group != null) {
-                map.put(group + FIELD_PARAM + field, fieldParam);
-            } else {
-                map.put(FIELD_PARAM + field, fieldParam);
-            }
-        }
-        return this;
-    }
-
-    /**
-     * 指定上个字段的运算符
-     * @param operator 检索运算符
-     * @return MapBuilder
-     */
-    public MapBuilder op(String operator) {
-        return fieldOp(operator);
-    }
-
-    /**
-     * 指定上个字段的运算符
-     * @param operator 检索运算符
-     * @return MapBuilder
-     */
-    public MapBuilder op(Class<? extends FieldOp> operator) {
-        return fieldOp(operator);
-    }
-
-    /**
-     * 指定上个字段的运算符
-     * @param operator 检索运算符
-     * @return MapBuilder
-     */
-    public MapBuilder op(FieldOp operator) {
-        return fieldOp(operator);
-    }
-
-    private MapBuilder fieldOp(Object operator) {
-        if (fieldParam == null) {
-            throw new IllegalStateException("the method [ op(...) ] must go after [ field(...) ] method");
-        }
-        fieldParam.setOperator(operator);
-        return this;
-    }
-
-    /**
-     * 指定上个字段检索时忽略大小写
-     * @return MapBuilder
-     */
-    public MapBuilder ic() {
-        return ic(true);
-    }
-
-    /**
-     * 指定上个字段检索时是否忽略大小写
-     * @param ignoreCase 是否忽略大小写
-     * @return MapBuilder
-     */
-    public MapBuilder ic(boolean ignoreCase) {
-        if (fieldParam == null) {
-            throw new IllegalStateException("the method [ ic(...) ] must go after [ field(...) ] method");
-        }
-        fieldParam.setIgnoreCase(ignoreCase);
-        return this;
-    }
-
-    /**
      * 指定按某个字段排序
      * v3.4.0 后支持调用多次，来指定多字段排序
      * @param <T> 泛型
@@ -297,7 +166,8 @@ public class MapBuilder {
      * @return MapBuilder
      */
     public MapBuilder page(long page, int size) {
-        return limit(page * size, size);
+        map.put(PAGING, new Page(size, page));
+        return this;
     }
 
     /**
@@ -307,7 +177,7 @@ public class MapBuilder {
      * @return MapBuilder
      */
     public MapBuilder limit(long offset, int size) {
-        map.put(PAGING, new Paging(size, offset));
+        map.put(PAGING, new Limit(size, offset));
         return this;
     }
 
@@ -319,36 +189,44 @@ public class MapBuilder {
         return map;
     }
 
-    private String toFieldName(FieldFn<?, ?> fieldFn) {
-        String fieldName = cache.get(fieldFn);
-        if (fieldName != null) {
-            return fieldName;
+    public static class Page {
+
+        private final int size;
+        private final long page;
+
+        public Page(int size, long page) {
+            this.size = size;
+            this.page = page;
         }
-        try {
-            Method wrMethod = fieldFn.getClass().getDeclaredMethod("writeReplace");
-            boolean isInaccessible = !wrMethod.isAccessible();
-            if (isInaccessible) {
-                wrMethod.setAccessible(true);
-            }
-            SerializedLambda sLambda = (SerializedLambda) wrMethod.invoke(fieldFn);
-            if (isInaccessible) {
-                wrMethod.setAccessible(false);
-            }
-            String methodName = sLambda.getImplMethodName();
-            if (methodName.startsWith("get") && methodName.length() > 3) {
-                fieldName = StringUtils.firstCharToLoweCase(methodName.substring(3));
-            }
-            if (methodName.startsWith("is") && methodName.length() > 2) {
-                fieldName = StringUtils.firstCharToLoweCase(methodName.substring(2));
-            }
-            if (fieldName != null) {
-                cache.put(fieldFn, fieldName);
-                return fieldName;
-            }
-            throw new IllegalStateException("can not convert method [" + methodName + "] to field name");
-        } catch (ReflectiveOperationException e) {
-            throw new IllegalStateException("无法反射出字段名", e);
+
+        public int getSize() {
+            return size;
         }
+
+        public long getPage() {
+            return page;
+        }
+
+    }
+
+    public static class Limit {
+
+        private final int size;
+        private final long offset;
+
+        public Limit(int size, long offset) {
+            this.size = size;
+            this.offset = offset;
+        }
+
+        public int getSize() {
+            return size;
+        }
+
+        public long getOffset() {
+            return offset;
+        }
+
     }
 
 }

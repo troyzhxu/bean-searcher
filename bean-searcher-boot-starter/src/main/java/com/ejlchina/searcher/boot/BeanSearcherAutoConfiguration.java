@@ -210,8 +210,12 @@ public class BeanSearcherAutoConfiguration {
 	@Bean
 	@ConditionalOnProperty(name = "bean-searcher.field-convertor.use-enum", havingValue = "true", matchIfMissing = true)
 	@ConditionalOnMissingBean(EnumFieldConvertor.class)
-	public EnumFieldConvertor enumFieldConvertor() {
-		return new EnumFieldConvertor();
+	public EnumFieldConvertor enumFieldConvertor(BeanSearcherProperties config) {
+		BeanSearcherProperties.FieldConvertor conf = config.getFieldConvertor();
+		EnumFieldConvertor convertor = new EnumFieldConvertor();
+		convertor.setFailOnError(conf.isEnumFailOnError());
+		convertor.setIgnoreCase(conf.isEnumIgnoreCase());
+		return convertor;
 	}
 
 	@Bean

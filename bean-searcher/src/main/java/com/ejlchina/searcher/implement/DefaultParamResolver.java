@@ -23,7 +23,7 @@ public class DefaultParamResolver implements ParamResolver {
 	/**
 	 * 分页参数提取器
 	 */
-	private PageExtractor pageExtractor = new PageOffsetExtractor();
+	private PageExtractor pageExtractor = new PageSizeExtractor();
 
 	/**
 	 * 参数过滤器
@@ -130,13 +130,7 @@ public class DefaultParamResolver implements ParamResolver {
 
 	public Paging resolvePaging(FetchType fetchType, Map<String, Object> paraMap) {
 		if (fetchType.canPaging()) {
-			Object value = paraMap.get(MapBuilder.PAGING);
-			Paging paging;
-			if (value instanceof Paging) {
-				paging = pageExtractor.correct((Paging) value);
-			} else {
-				paging = pageExtractor.extract(paraMap);
-			}
+			Paging paging = pageExtractor.extract(paraMap);
 			if (fetchType.isFetchFirst()) {
 				paging.setSize(1);
 			}
@@ -264,9 +258,7 @@ public class DefaultParamResolver implements ParamResolver {
 					value = paraMap.get1(field);
 				}
 				value = fieldValue(meta, value);
-				if (value != null) {
-					values.add(new FieldParam.Value(value, index));
-				}
+				values.add(new FieldParam.Value(value, index));
 			}
 		}
 		if (isAllEmpty(values)) {

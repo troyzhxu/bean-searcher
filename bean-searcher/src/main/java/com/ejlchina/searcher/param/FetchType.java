@@ -10,7 +10,7 @@ public class FetchType {
     /**
      * 列表、总条数与统计都查询
      */
-    public static final int ALL = 0;
+    public static final int DEFAULT = 0;
 
     /**
      * 只查询第一条列表数据
@@ -44,7 +44,7 @@ public class FetchType {
 
     /**
      * Fetch 类型
-     *   @see #ALL
+     *   @see #DEFAULT
      *   @see #LIST_FIRST
      *   @see #LIST_ONLY
      *   @see #LIST_ALL
@@ -81,7 +81,7 @@ public class FetchType {
     }
 
     public boolean shouldQueryTotal() {
-        return type == ALL || type == ONLY_TOTAL;
+        return type == DEFAULT || type == ONLY_TOTAL;
     }
 
     public boolean shouldQueryCluster() {

@@ -1,4 +1,4 @@
-package com.ejlchina.searcher;
+package com.ejlchina.searcher.convertor;
 
 import com.ejlchina.searcher.implement.DateFieldConvertor;
 import com.ejlchina.searcher.implement.DateFormatFieldConvertor;

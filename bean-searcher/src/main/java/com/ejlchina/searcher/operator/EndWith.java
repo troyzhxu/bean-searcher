@@ -37,12 +37,16 @@ public class EndWith extends DialectWrapper implements FieldOp {
         SqlWrapper<Object> fieldSql = opPara.getFieldSql();
         Object[] values = opPara.getValues();
         if (opPara.isIgnoreCase()) {
-            toUpperCase(sqlBuilder, fieldSql.getSql());
-            ObjectUtils.upperCase(values);
+            if (hasILike()) {
+                sqlBuilder.append(fieldSql.getSql()).append(" ilike ?");
+            } else {
+                toUpperCase(sqlBuilder, fieldSql.getSql());
+                sqlBuilder.append(" like ?");
+                ObjectUtils.upperCase(values);
+            }
         } else {
-            sqlBuilder.append(fieldSql.getSql());
+            sqlBuilder.append(fieldSql.getSql()).append(" like ?");
         }
-        sqlBuilder.append(" like ?");
         List<Object> params = new ArrayList<>(fieldSql.getParas());
         params.add("%" + firstNotNull(values));
         return params;

@@ -15,7 +15,9 @@ public interface Dialect {
 	 * @param builder sql builder
 	 * @param dbField 数据库字段
 	 */
-	void toUpperCase(StringBuilder builder, String dbField);
+	default void toUpperCase(StringBuilder builder, String dbField) {
+		builder.append("upper").append("(").append(dbField).append(")");
+	}
 
 	/**
 	 * 分页
@@ -25,5 +27,13 @@ public interface Dialect {
 	 * @return 分页 Sql
 	 */
 	SqlWrapper<Object> forPaginate(String fieldSelectSql, String fromWhereSql, Paging paging);
+
+	/**
+	 * @return 是否支持 ilike 语法
+	 * @since v3.7.0
+	 */
+	default boolean hasILike() {
+		return false;
+	}
 
 }

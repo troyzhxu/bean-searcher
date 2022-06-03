@@ -12,7 +12,7 @@ public class SqlResult<T> implements Closeable {
      * 结果（单条记录）
      * @since v3.6.0
      */
-    public interface Result {
+    public interface Result extends AutoCloseable {
 
         /**
          * 获取当前记录的某一列的值
@@ -34,6 +34,17 @@ public class SqlResult<T> implements Closeable {
      * @since v3.6.0
      */
     public interface ResultSet extends Result {
+
+        /**
+         * 空结果集
+         * @since v3.7.0
+         */
+        ResultSet EMPTY = new ResultSet() {
+            @Override
+            public boolean next() { return false; }
+            @Override
+            public Object get(String columnLabel) { return null; }
+        };
 
         /**
          * 游标移动到下一条记录
