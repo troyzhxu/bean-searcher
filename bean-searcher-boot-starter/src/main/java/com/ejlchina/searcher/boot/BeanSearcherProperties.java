@@ -373,10 +373,10 @@ public class BeanSearcherProperties {
 		private boolean useDateValueCorrector = true;
 
 		/**
-		 * 慢 SQL 阈值：1000 毫秒
+		 * 慢 SQL 阈值（单位：毫秒），默认：500 毫秒
 		 * @since v3.7.0
 		 */
-		private long slowSqlThreshold = 1000;
+		private long slowSqlThreshold = 500;
 
 		public String getDialect() {
 			return dialect;

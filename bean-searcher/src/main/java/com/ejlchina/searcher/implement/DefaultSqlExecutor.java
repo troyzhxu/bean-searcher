@@ -50,10 +50,10 @@ public class DefaultSqlExecutor implements SqlExecutor {
 	private int transactionIsolation = Connection.TRANSACTION_READ_COMMITTED;
 
 	/**
-	 * 慢 SQL 阈值：1000 毫秒
+	 * 慢 SQL 阈值（单位：毫秒），默认：500 毫秒
 	 * @since v3.7.0
 	 */
-	private long slowSqlThreshold = 1000;
+	private long slowSqlThreshold = 500;
 
 	/**
 	 * 慢 SQL 监听器
