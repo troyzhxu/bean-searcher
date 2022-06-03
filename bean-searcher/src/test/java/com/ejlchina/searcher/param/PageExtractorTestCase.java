@@ -1,10 +1,12 @@
-package com.ejlchina.searcher;
+package com.ejlchina.searcher.param;
 
+import com.ejlchina.searcher.BeanMeta;
+import com.ejlchina.searcher.PageExtractor;
+import com.ejlchina.searcher.SearchParam;
 import com.ejlchina.searcher.implement.DefaultMetaResolver;
 import com.ejlchina.searcher.implement.DefaultParamResolver;
+import com.ejlchina.searcher.implement.PageOffsetExtractor;
 import com.ejlchina.searcher.implement.PageSizeExtractor;
-import com.ejlchina.searcher.param.FetchType;
-import com.ejlchina.searcher.param.Paging;
 import com.ejlchina.searcher.util.MapUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -12,7 +14,7 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DefaultParamResolverTestCase {
+public class PageExtractorTestCase {
 
     final DefaultParamResolver paramResolver = new DefaultParamResolver();
 
@@ -35,18 +37,26 @@ public class DefaultParamResolverTestCase {
         }
     }
 
-    private SearchParam resolve(FetchType fetchType, Map<String, Object> paraMap) {
-        return paramResolver.resolve(beanMeta, fetchType, paraMap);
+    private SearchParam resolve(Map<String, Object> paraMap) {
+        return paramResolver.resolve(beanMeta, new FetchType(FetchType.DEFAULT), paraMap);
     }
 
     @Test
     public void test_01() {
-        assert_01(resolve(new FetchType(FetchType.DEFAULT), null));
-        assert_01(resolve(new FetchType(FetchType.DEFAULT), new HashMap<>()));
-        assert_01(resolve(new FetchType(FetchType.DEFAULT), MapUtils.builder().build()));
-        assert_01(resolve(new FetchType(FetchType.DEFAULT), MapUtils.builder(new HashMap<>()).build()));
-        assert_01(resolve(new FetchType(FetchType.DEFAULT), MapUtils.flatBuilder(new HashMap<>()).build()));
-        assert_01(resolve(new FetchType(FetchType.DEFAULT), MapUtils.flat(new HashMap<>())));
+        test_01_do();
+        PageExtractor oldPageExtractor = paramResolver.getPageExtractor();
+        paramResolver.setPageExtractor(new PageOffsetExtractor());
+        test_01_do();
+        paramResolver.setPageExtractor(oldPageExtractor);
+    }
+
+    private void test_01_do() {
+        assert_01(resolve(null));
+        assert_01(resolve(new HashMap<>()));
+        assert_01(resolve(MapUtils.builder().build()));
+        assert_01(resolve(MapUtils.builder(new HashMap<>()).build()));
+        assert_01(resolve(MapUtils.flatBuilder(new HashMap<>()).build()));
+        assert_01(resolve(MapUtils.flat(new HashMap<>())));
     }
 
     private void assert_01(SearchParam param) {
@@ -61,16 +71,16 @@ public class DefaultParamResolverTestCase {
 
     @Test
     public void test_02() {
-        assert_02(resolve(new FetchType(FetchType.DEFAULT), MapUtils.builder()
+        assert_02(resolve(MapUtils.builder()
                 .page(2, 10)
                 .build()));
-        assert_02(resolve(new FetchType(FetchType.DEFAULT), MapUtils.builder()
+        assert_02(resolve(MapUtils.builder()
                 .limit(20, 10)
                 .build()));
         Map<String, Object> params = new HashMap<>();
         params.put("page", 2);
         params.put("size", 10);
-        assert_02(resolve(new FetchType(FetchType.DEFAULT), params));
+        assert_02(resolve(params));
     }
 
     private void assert_02(SearchParam param) {
@@ -86,16 +96,13 @@ public class DefaultParamResolverTestCase {
     public void test_03() {
         PageSizeExtractor pageExtractor = (PageSizeExtractor) paramResolver.getPageExtractor();
         pageExtractor.setStart(1);
-        assert_03(resolve(new FetchType(FetchType.DEFAULT), MapUtils.builder()
+        assert_03(resolve(MapUtils.builder()
                 .page(2, 10)
-                .build()));
-        assert_03(resolve(new FetchType(FetchType.DEFAULT), MapUtils.builder()
-                .limit(20, 10)
                 .build()));
         Map<String, Object> params = new HashMap<>();
         params.put("page", 2);
         params.put("size", 10);
-        assert_03(resolve(new FetchType(FetchType.DEFAULT), params));
+        assert_03(resolve(params));
         pageExtractor.setStart(0);
     }
 
@@ -105,6 +112,31 @@ public class DefaultParamResolverTestCase {
         Paging paging = param.getPaging();
         Assert.assertEquals(10, paging.getSize());
         Assert.assertEquals(10, paging.getOffset());
+        Assert.assertEquals("[]", param.getParamsGroup().toString());
+    }
+
+    @Test
+    public void test_04() {
+        PageExtractor oldPageExtractor = paramResolver.getPageExtractor();
+        PageOffsetExtractor offsetExtractor = new PageOffsetExtractor();
+        offsetExtractor.setStart(1);
+        paramResolver.setPageExtractor(offsetExtractor);
+        assert_04(resolve(MapUtils.builder()
+                .limit(20, 10)
+                .build()));
+        Map<String, Object> params = new HashMap<>();
+        params.put("offset", 20);
+        params.put("size", 10);
+        assert_04(resolve(params));
+        paramResolver.setPageExtractor(oldPageExtractor);
+    }
+
+    private void assert_04(SearchParam param) {
+        Assert.assertEquals(FetchType.DEFAULT, param.getFetchType().getType());
+        Assert.assertArrayEquals(new Object[]{ "name", "age"}, param.getFetchFields().toArray());
+        Paging paging = param.getPaging();
+        Assert.assertEquals(10, paging.getSize());
+        Assert.assertEquals(19, paging.getOffset());
         Assert.assertEquals("[]", param.getParamsGroup().toString());
     }
 
