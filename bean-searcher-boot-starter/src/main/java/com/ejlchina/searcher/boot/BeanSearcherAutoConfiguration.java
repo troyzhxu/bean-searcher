@@ -5,10 +5,7 @@ import com.ejlchina.searcher.FieldConvertor.BFieldConvertor;
 import com.ejlchina.searcher.FieldConvertor.MFieldConvertor;
 import com.ejlchina.searcher.boot.BeanSearcherProperties.Params;
 import com.ejlchina.searcher.boot.BeanSearcherProperties.Sql;
-import com.ejlchina.searcher.dialect.Dialect;
-import com.ejlchina.searcher.dialect.MySqlDialect;
-import com.ejlchina.searcher.dialect.OracleDialect;
-import com.ejlchina.searcher.dialect.PostgreSqlDialect;
+import com.ejlchina.searcher.dialect.*;
 import com.ejlchina.searcher.group.DefaultGroupResolver;
 import com.ejlchina.searcher.group.DefaultParserFactory;
 import com.ejlchina.searcher.group.ExprParser;
@@ -61,18 +58,20 @@ public class BeanSearcherAutoConfiguration {
 	@Bean
 	@ConditionalOnMissingBean(Dialect.class)
 	public Dialect dialect(BeanSearcherProperties config) {
-		String dialect = config.getSql().getDialect();
+		Sql.Dialect dialect = config.getSql().getDialect();
 		if (dialect == null) {
 			throw new SearchException("配置项【bean-searcher.sql.dialect】不能为空");
 		}
-		switch (dialect.toUpperCase()) {
-			case Sql.DIALECT_MYSQL:
+		switch (dialect) {
+			case MySQL:
 				return new MySqlDialect();
-			case Sql.DIALECT_ORACLE:
+			case Oracle:
 				return new OracleDialect();
-			case Sql.DIALECT_POSTGRESQL:
-			case Sql.DIALECT_PGSQL:
+			case PostgreSQL:
+			case PgSQL:
 				return new PostgreSqlDialect();
+			case SqlServer:
+				return new SqlServerDialect();
 		}
 		throw new SearchException("配置项【bean-searcher.sql.dialect】只能为  MySql | Oracle 中的一个，若需支持其它方言，可自己注入一个 com.ejlchina.searcher.dialect.Dialect 类型的 Bean！");
 	}

@@ -352,15 +352,21 @@ public class BeanSearcherProperties {
 
 	public static class Sql {
 
-		public static final String DIALECT_MYSQL = "MYSQL";
-		public static final String DIALECT_ORACLE = "ORACLE";
-		public static final String DIALECT_POSTGRESQL = "POSTGRESQL";
-		public static final String DIALECT_PGSQL = "PGSQL";		// alias for POSTGRESQL
+		enum Dialect {
+			MySQL,
+			Oracle,
+			PostgreSQL,
+			/**
+			 * alias for PostgreSQL
+			 */
+			PgSQL,
+			SqlServer
+		}
 
 		/**
 		 * 数据库方言，可选：MySQL、Oracle、PostgreSql，默认为 MySQL，另可通过声明 Spring Bean 来使用其它自定义方言
 		 */
-		private String dialect = DIALECT_MYSQL;
+		private Dialect dialect = Dialect.MySQL;
 
 		/**
 		 * 默认映射配置
@@ -378,11 +384,11 @@ public class BeanSearcherProperties {
 		 */
 		private long slowSqlThreshold = 500;
 
-		public String getDialect() {
+		public Dialect getDialect() {
 			return dialect;
 		}
 
-		public void setDialect(String dialect) {
+		public void setDialect(Dialect dialect) {
 			this.dialect = dialect;
 		}
 
