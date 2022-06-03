@@ -239,7 +239,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
 			if (listener != null) {
 				listener.onSlowSql(beanClass, sql, params, timeCost);
 			}
-			log.warn("bean-searcher [{}ms] slow-sql: [{}] params: {} on {}", timeCost, sql, params, beanClass);
+			log.warn("bean-searcher [{}ms] slow-sql: [{}] params: {} on [{}]", timeCost, sql, params, beanClass.getName());
 		} else {
 			log.debug("bean-searcher [{}ms] sql: [{}] params: {}", timeCost, sql, params);
 		}
