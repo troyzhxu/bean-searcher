@@ -11,7 +11,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static com.ejlchina.searcher.util.MapBuilder.FIELD_PARAM;
@@ -160,17 +159,17 @@ public class Builder<B extends Builder<B>> {
         return (B) this;
     }
 
-    @SuppressWarnings("unchecked")
-    public B and(Consumer<Builder<?>> condition) {
-        // TODO:
-        return (B) this;
-    }
-
-    @SuppressWarnings("unchecked")
-    public B or(Consumer<Builder<?>> condition) {
-        // TODO:
-        return (B) this;
-    }
+//    @SuppressWarnings("unchecked")
+//    public B and(Consumer<Builder<?>> condition) {
+//        // TODO:
+//        return (B) this;
+//    }
+//
+//    @SuppressWarnings("unchecked")
+//    public B or(Consumer<Builder<?>> condition) {
+//        // TODO:
+//        return (B) this;
+//    }
 
     protected String toFieldName(FieldFn<?, ?> fieldFn) {
         String fieldName = cache.get(fieldFn);
