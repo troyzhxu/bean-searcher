@@ -145,13 +145,18 @@ public class BeanSearcherAutoConfiguration {
 
 	@Bean
 	@ConditionalOnMissingBean(SqlExecutor.class)
-	public SqlExecutor sqlExecutor(ObjectProvider<DataSource> dataSource, ObjectProvider<List<NamedDataSource>> namedDataSources) {
+	public SqlExecutor sqlExecutor(ObjectProvider<DataSource> dataSource,
+								   ObjectProvider<List<NamedDataSource>> namedDataSources,
+								   ObjectProvider<SqlExecutor.SlowListener> slowListener,
+								   BeanSearcherProperties config) {
 		DefaultSqlExecutor executor = new DefaultSqlExecutor(dataSource.getIfAvailable());
 		ifAvailable(namedDataSources, ndsList -> {
 			for (NamedDataSource nds: ndsList) {
 				executor.setDataSource(nds.getName(), nds.getDataSource());
 			}
 		});
+		ifAvailable(slowListener, executor::setSlowListener);
+		executor.setSlowSqlThreshold(config.getSql().getSlowSqlThreshold());
 		return executor;
 	}
 

@@ -372,6 +372,12 @@ public class BeanSearcherProperties {
 		 */
 		private boolean useDateValueCorrector = true;
 
+		/**
+		 * 慢 SQL 阈值：1000 毫秒
+		 * @since v3.7.0
+		 */
+		private long slowSqlThreshold = 1000;
+
 		public String getDialect() {
 			return dialect;
 		}
@@ -487,6 +493,14 @@ public class BeanSearcherProperties {
 
 		public void setUseDateValueCorrector(boolean useDateValueCorrector) {
 			this.useDateValueCorrector = useDateValueCorrector;
+		}
+
+		public long getSlowSqlThreshold() {
+			return slowSqlThreshold;
+		}
+
+		public void setSlowSqlThreshold(long slowSqlThreshold) {
+			this.slowSqlThreshold = slowSqlThreshold;
 		}
 
 	}
