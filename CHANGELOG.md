@@ -6,6 +6,7 @@
   * `DefaultDbMapping` 新增 `underlineCase` 属性，可配置自动映射时是否开启 `驼峰->下划线` 的风格转换（已单测）
   * 新增 `SqlExecutor.SlowListener` 接口，可让用户在代码中监听慢 SQL
   * 优化 SQL 日志：正常 SQL 显示耗时，慢 SQL 级别为 `WARN` 并显示关联的实体类
+  * 优化 `DefaultSqlExecutor`，当执行 count sql 且查询结果为 `0` 时，则不再执行 list sql
   * 新增 `SqlServerDialect` 方言实现，支持 SqlServer 2012+
   * 优化 参数构建器的 `page(..)` 与 `limit(..)` 方法，它们起始页码也受页码配置约束
   * 新增 `OrLike` 运算符，参见：https://github.com/ejlchina/bean-searcher/issues/38（已单测）
