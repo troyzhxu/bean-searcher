@@ -18,7 +18,7 @@
   * 优化 `DefaultParamResolver`：默认使用 `page` 分页参数提取器
   * 重构 `FetchType#ALL` 重命名为 `FetchType#DEFAULT`
 * Bean Searcher Boot Starter
-  * 新增 `bean-searcher.sql.slow-sql-threshold` 配置键，可配置慢 SQL 阈值（单位毫秒），默认为 `1000`
+  * 新增 `bean-searcher.sql.slow-sql-threshold` 配置键，可配置慢 SQL 阈值（单位毫秒），默认为 `500`
   * 新增 `bean-searcher.sql.default-mapping.underline-case` 配置键，可配置自动映射时是否开始 驼峰->下划线 的风格转换，默认为 `true`
   * 新增 `bean-searcher.field-convertor.enum-fail-on-error` 配置键，可配置在遇到非法值无法转换时是否报错，默认 `true`
   * 新增 `bean-searcher.field-convertor.enum-ignore-case` 配置键，可配置字符串值匹配枚举时是否忽略大小写，默认 `false`
