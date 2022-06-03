@@ -36,6 +36,17 @@ public class SqlResult<T> implements Closeable {
     public interface ResultSet extends Result {
 
         /**
+         * 空结果集
+         * @since v3.7.0
+         */
+        ResultSet EMPTY = new ResultSet() {
+            @Override
+            public boolean next() { return false; }
+            @Override
+            public Object get(String columnLabel) { return null; }
+        };
+
+        /**
          * 游标移动到下一条记录
          * @return 下一条记录是否存在
          */

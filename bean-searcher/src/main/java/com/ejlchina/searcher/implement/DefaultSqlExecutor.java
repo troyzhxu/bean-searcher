@@ -113,14 +113,23 @@ public class DefaultSqlExecutor implements SqlExecutor {
 		SqlResult.ResultSet listResult = null;
 		SqlResult.Result clusterResult = null;
 		try {
-			if (searchSql.isShouldQueryList()) {
-				listResult = executeListSql(searchSql, connection);
-			}
+			Number totalCount = null;
 			if (searchSql.isShouldQueryCluster()) {
 				clusterResult = executeClusterSql(searchSql, connection);
+				String countAlias = searchSql.getCountAlias();
+				if (countAlias != null) {
+					totalCount = (Number) clusterResult.get(countAlias);
+				}
+			}
+			if (searchSql.isShouldQueryList()) {
+				if (totalCount == null || totalCount.longValue() > 0) {
+					listResult = executeListSql(searchSql, connection);
+				} else {
+					listResult = SqlResult.ResultSet.EMPTY;
+				}
 			}
 		} catch (SQLException e) {
-			closeQuietly(listResult);
+			closeQuietly(clusterResult);
 			throw e;
 		} finally {
 			if (transactional) {
