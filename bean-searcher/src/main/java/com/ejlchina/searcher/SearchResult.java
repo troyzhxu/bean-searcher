@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/***
+/**
  * 检索结果
  * 
  * @author Troy.Zhou @ 2017-03-20

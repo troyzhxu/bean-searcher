@@ -8,7 +8,7 @@ import com.ejlchina.searcher.implement.DefaultMapSearcher;
 import java.util.ArrayList;
 import java.util.List;
 
-/***
+/**
  * 检索器 Builder
  * 
  * @author Troy.Zhou @ 2017-03-20

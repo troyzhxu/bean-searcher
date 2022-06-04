@@ -9,7 +9,7 @@ import com.ejlchina.searcher.util.StringUtils;
 import java.lang.reflect.Field;
 import java.util.Objects;
 
-/***
+/**
  * 默认的数据库映射解析器
  * @author Troy.Zhou @ 2021-10-30
  * @since v3.1.0 从 DefaultMetaResolver 里分离出来

@@ -4,7 +4,7 @@ import com.ejlchina.searcher.param.FetchType;
 
 import java.util.Map;
 
-/***
+/**
  * 请求参数解析器接口
  * 
  * @author Troy.Zhou @ 2017-03-20

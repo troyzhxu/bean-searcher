@@ -3,7 +3,7 @@ package com.ejlchina.searcher;
 import com.ejlchina.searcher.implement.DefaultBeanReflector;
 import com.ejlchina.searcher.implement.DefaultMapSearcher;
 
-/***
+/**
  * @author Troy.Zhou @ 2017-04-07
  * 
  * 数据库字段值转换接口

@@ -1,6 +1,6 @@
 package com.ejlchina.searcher;
 
-/***
+/**
  * @author Troy.Zhou @ 2017-03-20
  * 
  * SQL 解析器
