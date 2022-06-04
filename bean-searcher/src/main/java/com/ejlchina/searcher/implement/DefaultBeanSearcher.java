@@ -84,8 +84,6 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 	protected <T> void collectList(List<T> dataList, SqlResult.ResultSet listResult,
 								   BeanMeta<T> beanMeta, List<FieldMeta> fieldMetas,
 								   Map<String, Object> paraMap) throws SQLException {
-
-
 		while (listResult.next()) {
 			T bean = beanReflector.reflect(beanMeta, fieldMetas, dbAlias -> {
 				try {
