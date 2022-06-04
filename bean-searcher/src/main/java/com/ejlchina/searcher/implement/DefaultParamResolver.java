@@ -11,7 +11,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-/***
+/**
  * @author Troy.Zhou @ 2017-03-20
  * 
  * 默认查询参数解析器
