@@ -76,7 +76,7 @@ public class BeanRefactorTestCase {
     @Test
     public void test() {
         BeanMeta<TestBean> beanMeta = metaResolver.resolve(TestBean.class);
-        Set<String> fieldSet = beanMeta.getFieldSet();
+        Collection<FieldMeta> fieldSet = beanMeta.getFieldMetas();
 
         Map<String, Object> values1 = new HashMap<>();
         values1.put("id", 1);

@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * 自动检索器 根据 SearcherBean 的 Class 和 请求参数，自动检索，数据以 Bean 对象呈现
@@ -69,8 +70,10 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 			BeanMeta<T> beanMeta = searchSql.getBeanMeta();
 			SqlResult.ResultSet listResult = sqlResult.getListResult();
 			if (listResult != null) {
-				List<String> fetchFields = searchSql.getFetchFields();
-				collectList(result, listResult, beanMeta, fetchFields, paraMap);
+				List<FieldMeta> fieldMetas = searchSql.getFetchFields().stream()
+						.map(beanMeta::requireFieldMeta)
+						.collect(Collectors.toList());
+				collectList(result.getDataList(), listResult, beanMeta, fieldMetas, paraMap);
 			}
 			return doFilter(result, beanMeta, paraMap, fetchType);
 		} catch (SQLException e) {
@@ -78,11 +81,13 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 		}
 	}
 
-	protected <T> void collectList(SearchResult<T> result, SqlResult.ResultSet listResult,
-								   BeanMeta<T> beanMeta, List<String> fetchFields,
+	protected <T> void collectList(List<T> dataList, SqlResult.ResultSet listResult,
+								   BeanMeta<T> beanMeta, List<FieldMeta> fieldMetas,
 								   Map<String, Object> paraMap) throws SQLException {
+
+
 		while (listResult.next()) {
-			T bean = beanReflector.reflect(beanMeta, fetchFields, dbAlias -> {
+			T bean = beanReflector.reflect(beanMeta, fieldMetas, dbAlias -> {
 				try {
 					return listResult.get(dbAlias);
 				} catch (SQLException e) {
@@ -95,7 +100,7 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 			if (bean instanceof ParamAware) {
 				((ParamAware) bean).afterAssembly(paraMap);
 			}
-			result.addData(bean);
+			dataList.add(bean);
 		}
 	}
 

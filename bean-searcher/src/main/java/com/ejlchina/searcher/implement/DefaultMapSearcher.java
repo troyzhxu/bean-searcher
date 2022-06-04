@@ -6,6 +6,7 @@ import com.ejlchina.searcher.param.FetchType;
 
 import java.sql.SQLException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 自动检索器 根据 SearcherBean 的 Class 和 请求参数，自动检索，数据以 Map 对象呈现
@@ -67,15 +68,17 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 			BeanMeta<T> beanMeta = searchSql.getBeanMeta();
 			SqlResult.ResultSet listResult = sqlResult.getListResult();
 			if (listResult != null) {
-				List<String> fetchFields = searchSql.getFetchFields();
+				List<FieldMeta> fieldMetas = searchSql.getFetchFields().stream()
+						.map(beanMeta::requireFieldMeta)
+						.collect(Collectors.toList());
+				List<Map<String, Object>> dataList = result.getDataList();
 				while (listResult.next()) {
-					Map<String, Object> data = new HashMap<>(fetchFields.size());
-					for (String field : fetchFields) {
-						FieldMeta meta = beanMeta.requireFieldMeta(field);
+					Map<String, Object> data = new HashMap<>(fieldMetas.size());
+					for (FieldMeta meta : fieldMetas) {
 						Object value = listResult.get(meta.getDbAlias());
 						data.put(meta.getName(), convert(meta, value));
 					}
-					result.addData(data);
+					dataList.add(data);
 				}
 			}
 			return doFilter(result, beanMeta, paraMap, fetchType);
