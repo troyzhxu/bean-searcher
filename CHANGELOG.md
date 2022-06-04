@@ -13,9 +13,10 @@
   * 增强 `EnumFieldConvertor`：新增 `ignoreCase` 属性, 可配置字符串值匹配枚举时是否忽略大小写，默认 `false`（已单测）
   * 优化 `SQL 日志`：普通 SQL 显示执行耗时，慢 SQL 日志级别调整为 `WARN` 并输出关联的实体类
   * 优化 `DefaultSqlExecutor`，当执行 count sql 且查询结果为 `0` 时，则不再执行 list sql
-  * 优化 参数构建器的 `page(..)` 与 `limit(..)` 方法，它们起始页码也受页码配置约束（**破坏性更新**）
+  * 优化 `参数构建器` 的 `page(..)` 与 `limit(..)` 方法，它们起始页码也受页码配置约束（**破坏性更新**）
   * 优化 `Dialect`：为 `toUpperCase(..)` 添加默认实现，用户自定义方言时，只有一个 `forPaginate(..)` 方法必须实现
   * 优化 `DefaultParamResolver`：默认使用 `page` 分页参数提取器
+  * 优化 `检索器` 的 count 与 sum 检索, 当无记录统计时，返回 `0` 而非 `null`, 并再次优化检索性能
   * 重构 `FetchType#ALL` 重命名为 `FetchType#DEFAULT`
 * Bean Searcher Boot Starter
   * 新增 `bean-searcher.sql.slow-sql-threshold` 配置键，可配置慢 SQL 阈值（单位毫秒），默认为 `500`
