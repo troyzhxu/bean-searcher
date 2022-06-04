@@ -12,7 +12,7 @@ import java.util.Objects;
  * */
 public class SearchResult<T> {
 
-    private static final Number[] EMPTY_SUMMARIES = new Number[]{};
+    public static final Number[] EMPTY_SUMMARIES = new Number[]{};
 
     private Number totalCount = 0;
     
@@ -29,7 +29,7 @@ public class SearchResult<T> {
     }
 
     public SearchResult(Number totalCount, Number[] summaries) {
-        this(new ArrayList<>());
+        this(new ArrayList<>(totalCount.intValue()));
         this.totalCount = totalCount;
         this.summaries = summaries;
     }

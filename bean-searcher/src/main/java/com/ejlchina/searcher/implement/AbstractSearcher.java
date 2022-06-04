@@ -71,6 +71,9 @@ public abstract class AbstractSearcher implements Searcher {
 
 	protected Number[] getSummaryFromSqlResult(SqlResult<?> sqlResult) throws SQLException {
 		List<String> summaryAliases = sqlResult.getSearchSql().getSummaryAliases();
+		if (summaryAliases.isEmpty()) {
+			return SearchResult.EMPTY_SUMMARIES;
+		}
 		SqlResult.Result clusterResult = sqlResult.getClusterResult();
 		Number[] summaries = new Number[summaryAliases.size()];
 		for (int i = 0; i < summaries.length; i++) {

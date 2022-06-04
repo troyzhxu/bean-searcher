@@ -6,7 +6,6 @@ import com.ejlchina.searcher.bean.ParamAware;
 import com.ejlchina.searcher.param.FetchType;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -60,18 +59,18 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 	protected <T> SearchResult<T> search(Class<T> beanClass, Map<String, Object> paraMap, FetchType fetchType) {
 		try (SqlResult<T> sqlResult = doSearch(beanClass, paraMap, fetchType)) {
 			SearchSql<T> searchSql = sqlResult.getSearchSql();
+			Number totalCount = 0L;
+			Number[] summaries = SearchResult.EMPTY_SUMMARIES;
+			if (searchSql.isShouldQueryCluster()) {
+				totalCount = getCountFromSqlResult(sqlResult);
+				summaries = getSummaryFromSqlResult(sqlResult);
+			}
+			SearchResult<T> result = new SearchResult<>(totalCount, summaries);
 			BeanMeta<T> beanMeta = searchSql.getBeanMeta();
 			SqlResult.ResultSet listResult = sqlResult.getListResult();
-			SearchResult<T> result;
 			if (listResult != null) {
 				List<String> fetchFields = searchSql.getFetchFields();
-				result = new SearchResult<>(toBeanList(listResult, beanMeta, fetchFields, paraMap));
-			} else {
-				result = new SearchResult<>();
-			}
-			if (searchSql.isShouldQueryCluster()) {
-				result.setTotalCount(getCountFromSqlResult(sqlResult));
-				result.setSummaries(getSummaryFromSqlResult(sqlResult));
+				collectList(result, listResult, beanMeta, fetchFields, paraMap);
 			}
 			return doFilter(result, beanMeta, paraMap, fetchType);
 		} catch (SQLException e) {
@@ -79,9 +78,9 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 		}
 	}
 
-	protected <T> List<T> toBeanList(SqlResult.ResultSet listResult, BeanMeta<T> beanMeta, List<String> fetchFields,
-									 Map<String, Object> paraMap) throws SQLException {
-		List<T> dataList = new ArrayList<>();
+	protected <T> void collectList(SearchResult<T> result, SqlResult.ResultSet listResult,
+								   BeanMeta<T> beanMeta, List<String> fetchFields,
+								   Map<String, Object> paraMap) throws SQLException {
 		while (listResult.next()) {
 			T bean = beanReflector.reflect(beanMeta, fetchFields, dbAlias -> {
 				try {
@@ -96,9 +95,8 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 			if (bean instanceof ParamAware) {
 				((ParamAware) bean).afterAssembly(paraMap);
 			}
-			dataList.add(bean);
+			result.addData(bean);
 		}
-		return dataList;
 	}
 
 	protected <T> SearchResult<T> doFilter(SearchResult<T> result, BeanMeta<T> beanMeta, Map<String, Object> paraMap,

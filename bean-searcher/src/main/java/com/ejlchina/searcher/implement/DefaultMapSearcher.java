@@ -57,9 +57,15 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 	protected <T> SearchResult<Map<String, Object>> search(Class<T> beanClass, Map<String, Object> paraMap, FetchType fetchType) {
 		try (SqlResult<T> sqlResult = doSearch(beanClass, paraMap, fetchType)) {
 			SearchSql<T> searchSql = sqlResult.getSearchSql();
+			Number totalCount = 0L;
+			Number[] summaries = SearchResult.EMPTY_SUMMARIES;
+			if (searchSql.isShouldQueryCluster()) {
+				totalCount = getCountFromSqlResult(sqlResult);
+				summaries = getSummaryFromSqlResult(sqlResult);
+			}
+			SearchResult<Map<String, Object>> result = new SearchResult<>(totalCount, summaries);
 			BeanMeta<T> beanMeta = searchSql.getBeanMeta();
 			SqlResult.ResultSet listResult = sqlResult.getListResult();
-			SearchResult<Map<String, Object>> result = new SearchResult<>();
 			if (listResult != null) {
 				List<String> fetchFields = searchSql.getFetchFields();
 				while (listResult.next()) {
@@ -71,10 +77,6 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 					}
 					result.addData(data);
 				}
-			}
-			if (searchSql.isShouldQueryCluster()) {
-				result.setTotalCount(getCountFromSqlResult(sqlResult));
-				result.setSummaries(getSummaryFromSqlResult(sqlResult));
 			}
 			return doFilter(result, beanMeta, paraMap, fetchType);
 		} catch (SQLException e) {
