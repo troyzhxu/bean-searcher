@@ -1,16 +1,16 @@
-# Next
+# v3.7.0 @ 2022-06-04
 
 ### ✨ Features
 
 * Bean Searcher
   * 新增 `SqlServerDialect` 方言实现，支持 SqlServer 2012+
-  * 新增 `OrLike` 运算符，参见：https://github.com/ejlchina/bean-searcher/issues/38（已单测）
+  * 新增 `OrLike` 运算符，参见：https://github.com/ejlchina/bean-searcher/issues/38
   * 增强 `SqlExecutor`：新增 `SlowListener` 接口，可让用户在代码中监听慢 SQL
-  * 增强 `DefaultDbMapping`：新增 `underlineCase` 属性，可配置自动映射时是否开启 `驼峰->下划线` 的风格转换（已单测）
+  * 增强 `DefaultDbMapping`：新增 `underlineCase` 属性，可配置自动映射时是否开启 `驼峰->下划线` 的风格转换
   * 增强 `Dialect`：新增 `hasILike()` 方法，当忽略大小写查询时，可利用数据库的 `ilike` 关键字提升查询性能
-  * 增强 `EnumFieldConvertor`：支持 `整型` 转换为枚举（按枚举序号转换）（已单测）
-  * 增强 `EnumFieldConvertor`：新增 `failOnError` 属性, 可配置在遇到非法值无法转换时是否报错，默认 `true`（已单测）
-  * 增强 `EnumFieldConvertor`：新增 `ignoreCase` 属性, 可配置字符串值匹配枚举时是否忽略大小写，默认 `false`（已单测）
+  * 增强 `EnumFieldConvertor`：支持 `整型` 转换为枚举（按枚举序号转换）
+  * 增强 `EnumFieldConvertor`：新增 `failOnError` 属性, 可配置在遇到非法值无法转换时是否报错，默认 `true`
+  * 增强 `EnumFieldConvertor`：新增 `ignoreCase` 属性, 可配置字符串值匹配枚举时是否忽略大小写，默认 `false`
   * 优化 `SQL 日志`：普通 SQL 显示执行耗时，慢 SQL 日志级别调整为 `WARN` 并输出关联的实体类
   * 优化 `DefaultSqlExecutor`，当执行 count sql 且查询结果为 `0` 时，则不再执行 list sql
   * 优化 `参数构建器` 的 `page(..)` 与 `limit(..)` 方法，它们起始页码也受页码配置约束（**破坏性更新**）
