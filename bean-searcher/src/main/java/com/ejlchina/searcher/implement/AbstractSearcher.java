@@ -65,7 +65,8 @@ public abstract class AbstractSearcher implements Searcher {
 	}
 
 	protected Number getCountFromSqlResult(SqlResult<?> sqlResult) throws SQLException {
-		return (Number) sqlResult.getClusterResult().get(sqlResult.getSearchSql().getCountAlias());
+		Number count = (Number) sqlResult.getClusterResult().get(sqlResult.getSearchSql().getCountAlias());
+		return count != null ? count : 0L;
 	}
 
 	protected Number[] getSummaryFromSqlResult(SqlResult<?> sqlResult) throws SQLException {
@@ -74,7 +75,8 @@ public abstract class AbstractSearcher implements Searcher {
 		Number[] summaries = new Number[summaryAliases.size()];
 		for (int i = 0; i < summaries.length; i++) {
 			String summaryAlias = summaryAliases.get(i);
-			summaries[i] = (Number) clusterResult.get(summaryAlias);
+			Number sum = (Number) clusterResult.get(summaryAlias);
+			summaries[i] = sum != null ? sum : 0L;
 		}
 		return summaries;
 	}

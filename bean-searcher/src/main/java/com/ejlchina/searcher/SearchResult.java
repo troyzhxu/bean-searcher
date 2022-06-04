@@ -2,6 +2,7 @@ package com.ejlchina.searcher;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /***
  * 检索结果
@@ -42,7 +43,7 @@ public class SearchResult<T> {
     }
 
     public void setTotalCount(Number totalCount) {
-        this.totalCount = totalCount;
+        this.totalCount = Objects.requireNonNull(totalCount);
     }
 
     public List<T> getDataList() {
@@ -58,14 +59,7 @@ public class SearchResult<T> {
     }
 
     public void setSummaries(Number[] summaries) {
-        if (summaries != null) {
-            for (int i = 0; i < summaries.length; i++) {
-                if (summaries[i] == null) {
-                    summaries[i] = 0;
-                }
-            }
-            this.summaries = summaries;
-        }
+        this.summaries = Objects.requireNonNull(summaries);
     }
 
     public String toString() {
