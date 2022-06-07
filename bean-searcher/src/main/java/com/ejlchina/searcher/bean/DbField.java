@@ -46,4 +46,11 @@ public @interface DbField {
 	 */
 	String alias() default "";
 
+	/**
+	 * 数据库字段类型，当被该注解标记的字段作为检索条件时，该属性用于对用户传入的字段值进行转换
+	 * @since v3.8.0
+	 * @return DbType
+	 */
+	DbType type() default DbType.UNKNOWN;
+
 }
