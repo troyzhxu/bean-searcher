@@ -54,8 +54,7 @@ public abstract class AbstractSearcher implements Searcher {
 	@Override
 	public <T> Number[] searchSum(Class<T> beanClass, Map<String, Object> paraMap, String[] fields) {
 		if (fields == null || fields.length == 0) {
-			throw new SearchException("检索该 Bean【" + beanClass.getName()
-			+ "】的统计信息时，必须要指定需要统计的属性！");
+			throw new SearchException("检索该 Bean【" + beanClass.getName() + "】的统计信息时，必须要指定需要统计的属性！");
 		}
 		try (SqlResult<T> result = doSearch(beanClass, paraMap, new FetchType(FetchType.ONLY_SUMMARY, fields))) {
 			return getSummaryFromSqlResult(result);
