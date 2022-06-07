@@ -1,6 +1,7 @@
 package com.ejlchina.searcher;
 
 import com.ejlchina.searcher.bean.DbField;
+import com.ejlchina.searcher.bean.DbType;
 import com.ejlchina.searcher.bean.InheritType;
 import com.ejlchina.searcher.bean.SearchBean;
 
@@ -154,15 +155,22 @@ public interface DbMapping {
          */
         private final String alias;
 
-        public Column(String fieldSql, boolean conditional, Class<? extends FieldOp>[] onlyOn) {
-            this(fieldSql, conditional, onlyOn, null);
+        /**
+         * 数据库字段类型
+         * @since v3.8.0
+         */
+        private final DbType dbType;
+
+        public Column(String fieldSql, boolean conditional, Class<? extends FieldOp>[] onlyOn, DbType dbType) {
+            this(fieldSql, conditional, onlyOn, null, dbType);
         }
 
-        public Column(String fieldSql, boolean conditional, Class<? extends FieldOp>[] onlyOn, String alias) {
+        public Column(String fieldSql, boolean conditional, Class<? extends FieldOp>[] onlyOn, String alias, DbType dbType) {
             this.fieldSql = fieldSql;
             this.conditional = conditional;
             this.onlyOn = onlyOn;
             this.alias = alias;
+            this.dbType = dbType;
         }
 
         public String getFieldSql() {
@@ -179,6 +187,10 @@ public interface DbMapping {
 
         public String getAlias() {
             return alias;
+        }
+
+        public DbType getDbType() {
+            return dbType;
         }
 
     }

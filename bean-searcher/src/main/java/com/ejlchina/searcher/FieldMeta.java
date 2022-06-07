@@ -37,15 +37,21 @@ public class FieldMeta {
      */
     private final Class<? extends FieldOp>[] onlyOn;
 
+    /**
+     * 数据库中该字段的类型，用于转换用户传入的检索参数值，为 null 表示不需要转换
+     * @since v3.8.0
+     */
+    private final Class<?> dbType;
 
-    public FieldMeta(BeanMeta<?> beanMeta, Field field, SqlSnippet fieldSql,
-                     String dbAlias, boolean conditional, Class<? extends FieldOp>[] onlyOn) {
+    public FieldMeta(BeanMeta<?> beanMeta, Field field, SqlSnippet fieldSql, String dbAlias, boolean conditional,
+                     Class<? extends FieldOp>[] onlyOn, Class<?> dbType) {
         this.beanMeta = beanMeta;
         this.field = field;
         this.fieldSql = fieldSql;
         this.dbAlias = dbAlias;
         this.conditional = conditional;
         this.onlyOn = onlyOn;
+        this.dbType = dbType;
     }
 
     public BeanMeta<?> getBeanMeta() {
@@ -78,6 +84,10 @@ public class FieldMeta {
 
     public Class<? extends FieldOp>[] getOnlyOn() {
         return onlyOn;
+    }
+
+    public Class<?> getDbType() {
+        return dbType;
     }
 
 }

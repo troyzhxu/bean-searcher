@@ -5,8 +5,8 @@ import com.ejlchina.searcher.bean.InheritType;
 import com.ejlchina.searcher.util.StringUtils;
 
 import java.lang.reflect.Field;
-import java.util.*;
 import java.lang.reflect.Modifier;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -21,7 +21,6 @@ public class DefaultMetaResolver implements MetaResolver {
     private SnippetResolver snippetResolver = new DefaultSnippetResolver();
 
     private DbMapping dbMapping;
-
 
     public DefaultMetaResolver() {
         this(new DefaultDbMapping());
@@ -45,10 +44,10 @@ public class DefaultMetaResolver implements MetaResolver {
         }
     }
 
-    static class FieldWrapper {
+    public static class FieldWrapper {
 
-        private final Field field;
-        private final DbMapping.Column column;
+        public final Field field;
+        public final DbMapping.Column column;
 
         public FieldWrapper(Field field, DbMapping.Column column) {
             this.field = field;
@@ -96,7 +95,8 @@ public class DefaultMetaResolver implements MetaResolver {
             FieldMeta fieldMeta = new FieldMeta(
                     beanMeta, wrapper.field, fieldSql, fieldAlias,
                     wrapper.column.isConditional(),
-                    wrapper.column.getOnlyOn()
+                    wrapper.column.getOnlyOn(),
+                    wrapper.column.getDbType().getType()
             );
             beanMeta.addFieldMeta(wrapper.field.getName(), fieldMeta);
         }

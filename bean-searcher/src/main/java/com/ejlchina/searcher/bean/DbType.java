@@ -63,14 +63,14 @@ public enum DbType {
     DATE(Date.class),
 
     /**
-     * 日期+时间
-     */
-    DATETIME(Timestamp.class),
-
-    /**
      * 时间（没有日期）
      */
     TIME(Time.class),
+
+    /**
+     * 日期+时间
+     */
+    DATETIME(Timestamp.class),
 
     /**
      * 未知（自动推断）
