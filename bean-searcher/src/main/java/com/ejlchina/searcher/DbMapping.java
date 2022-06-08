@@ -195,4 +195,18 @@ public interface DbMapping {
 
     }
 
+    /**
+     * 数据库字段类型识别器
+     * @since v3.8.0
+     */
+    interface DbTypeMapper {
+
+        /**
+         * @param fieldType 实体类字段类型
+         * @return 对应的数据库字段类型（非空）
+         */
+        DbType map(Class<?> fieldType);
+
+    }
+
 }

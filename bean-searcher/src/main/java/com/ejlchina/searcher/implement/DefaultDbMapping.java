@@ -1,7 +1,6 @@
 package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.DbMapping;
-import com.ejlchina.searcher.DbTypeResolver;
 import com.ejlchina.searcher.FieldOp;
 import com.ejlchina.searcher.SearchException;
 import com.ejlchina.searcher.bean.*;
@@ -21,7 +20,7 @@ public class DefaultDbMapping implements DbMapping {
     private static final Class<FieldOp>[] EMPTY_OPERATORS = new Class[0];
 
     // since v3.8.0
-    private DbTypeResolver dbTypeResolver = new DefaultDbTypeResolver();
+    private DbTypeMapper dbTypeMapper = new DefaultDbTypeMapper();
 
     // 表名前缀（since v3.1.0）
     private String tablePrefix;
@@ -92,11 +91,12 @@ public class DefaultDbMapping implements DbMapping {
         if (dbField != null) {
             DbType dbType = dbField.type();
             if (dbType == DbType.UNKNOWN) {
-                dbType = dbTypeResolver.resolve(field);
+                dbType = dbTypeMapper.map(field.getType());
             }
             return new Column(fieldSql, dbField.conditional(), dbField.onlyOn(), dbField.alias(), dbType);
         }
-        return new Column(fieldSql, true, EMPTY_OPERATORS, dbTypeResolver.resolve(field));
+        DbType dbType = dbTypeMapper.map(field.getType());
+        return new Column(fieldSql, true, EMPTY_OPERATORS, dbType);
     }
 
     protected SearchBean getSearchBean(Class<?> beanClass) {
@@ -233,12 +233,12 @@ public class DefaultDbMapping implements DbMapping {
         return upperCase ? name.toUpperCase() : name;
     }
 
-    public DbTypeResolver getDbTypeResolver() {
-        return dbTypeResolver;
+    public DbTypeMapper getDbTypeMapper() {
+        return dbTypeMapper;
     }
 
-    public void setDbTypeResolver(DbTypeResolver dbTypeResolver) {
-        this.dbTypeResolver = Objects.requireNonNull(dbTypeResolver);
+    public void setDbTypeMapper(DbTypeMapper dbTypeMapper) {
+        this.dbTypeMapper = Objects.requireNonNull(dbTypeMapper);
     }
 
     public InheritType getDefaultInheritType() {
