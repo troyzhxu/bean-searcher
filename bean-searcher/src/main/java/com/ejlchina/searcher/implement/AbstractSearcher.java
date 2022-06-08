@@ -48,7 +48,7 @@ public abstract class AbstractSearcher implements Searcher {
 	public <T> Number searchSum(Class<T> beanClass, Map<String, Object> paraMap, String field) {
 		String[] fields = { Objects.requireNonNull(field) };
 		Number[] results = searchSum(beanClass, paraMap, fields);
-		return results != null && results.length > 0 ? results[0] : null;
+		return results != null && results.length > 0 ? results[0] : 0L;
 	}
 
 	@Override
