@@ -5,7 +5,7 @@
 </p>
 <p align="center">
   <a href="https://maven-badges.herokuapp.com/maven-central/com.ejlchina/bean-searcher/"><img src="https://maven-badges.herokuapp.com/maven-central/com.ejlchina/bean-searcher/badge.svg" alt="Maven Central"></a>
-  <a href="https://gitee.com/ejlchina-zhxu/bean-searcher/blob/master/LICENSE"><img src="https://img.shields.io/hexpm/l/plug.svg" alt="License"></a>
+  <a href="https://gitee.com/troyzhxu/bean-searcher/blob/master/LICENSE"><img src="https://img.shields.io/hexpm/l/plug.svg" alt="License"></a>
   <a href="https://github.com/ejlchina"><img src="https://img.shields.io/badge/%E4%BD%9C%E8%80%85-ejlchina-orange.svg" alt="Troy.Zhou"></a>
 </p>
 
@@ -193,7 +193,7 @@ List<User> users = beanSearcher.searchList(User.class, params);
 **DEMO 快速体验**：
 
 * [v3.x 的 demos](./bean-searcher-demos)
-* [v2.x 的 demo](https://gitee.com/ejlchina-zhxu/bean-searcher-demo)
+* [v2.x 的 demo](https://gitee.com/troyzhxu/bean-searcher-demo)
 
 ### 🚀 快速开发
 
@@ -277,11 +277,11 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 
 [**[ Fluent MyBatis ]** MyBatis 语法增强框架, 综合了 MyBatisPlus, DynamicSql,Jpa 等框架的特性和优点，利用注解处理器生成代码](https://gitee.com/fluent-mybatis/fluent-mybatis)
 
-[**[ OkHttps ]** 轻量却强大的 HTTP 客户端，前后端通用，支持 WebSocket 与 Stomp 协议](https://gitee.com/ejlchina-zhxu/okhttps)
+[**[ OkHttps ]** 轻量却强大的 HTTP 客户端，前后端通用，支持 WebSocket 与 Stomp 协议](https://gitee.com/troyzhxu/okhttps)
 
 [**[ hrun4j ]** 接口自动化测试解决方案 --工具选得好，下班回家早；测试用得对，半夜安心睡 ](https://github.com/lematechvip/hrun4j)
 
-[**[ JsonKit ]** 超轻量级 JSON 门面工具，用法简单，不依赖具体实现，让业务代码与 Jackson、Gson、Fastjson 等解耦！](https://gitee.com/ejlchina-zhxu/jsonkit)
+[**[ JsonKit ]** 超轻量级 JSON 门面工具，用法简单，不依赖具体实现，让业务代码与 Jackson、Gson、Fastjson 等解耦！](https://gitee.com/troyzhxu/jsonkit)
 
 [**[ Free UI ]** 基于 Vue3 + TypeScript，一个非常轻量炫酷的 UI 组件库 ！](https://gitee.com/phoeon/free-ui)
 

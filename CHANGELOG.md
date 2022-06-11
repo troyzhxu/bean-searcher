@@ -315,7 +315,7 @@
 ### 🐛 Bug Fixes
 
 * Bean Searcher
-  * 修复非字符串字段使用 Empty/NotEmpty 运算符时会报错的问题：https://gitee.com/ejlchina-zhxu/bean-searcher/issues/I4N1MG
+  * 修复非字符串字段使用 Empty/NotEmpty 运算符时会报错的问题：https://gitee.com/troyzhxu/bean-searcher/issues/I4N1MG
 
 # v3.1.3 @ 2021-12-14
 
