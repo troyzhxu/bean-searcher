@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://searcher.ejlchina.com/" target="_blank">
+  <a href="https://bs.zhxu.cn/" target="_blank">
     <img width="128" src="./assets/logo.png" alt="logo">
   </a>
 </p>
@@ -25,7 +25,7 @@ English | [中文](./README.zh-CN.md)
   - Summaries with multi field
   - Return VO directly
 
-* Design thinking: [Bean Searcher's thinking](https://searcher.ejlchina.com/guide/latest/introduction.html#%E8%AE%BE%E8%AE%A1%E5%93%B2%E5%AD%A6)
+* Design thinking: [Bean Searcher's thinking](https://bs.zhxu.cn/guide/latest/introduction.html#%E8%AE%BE%E8%AE%A1%E5%93%B2%E5%AD%A6)
 
 * Architecture:
 

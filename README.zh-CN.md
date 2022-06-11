@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://searcher.ejlchina.com/" target="_blank">
+  <a href="https://bs.zhxu.cn/" target="_blank">
     <img width="128" src="./assets/logo.png" alt="logo">
   </a>
 </p>
@@ -11,7 +11,7 @@
 
 中文 | [English](./README.md)
 
-* 文档：https://searcher.ejlchina.com/
+* 文档：https://bs.zhxu.cn/
 * 掘金博客：
   - [这样写代码，比直接使用 MyBatis 效率提高了 100 倍！](https://juejin.cn/post/7027733039299952676)
   - [最近火起的 Bean Searcher 与 MyBatis Plus 倒底有啥区别？](https://juejin.cn/post/7092411551507808264)
@@ -22,7 +22,7 @@
   - **任意字段排序**
   - **多字段统计**
   - **直接得到 VO**
-* 设计思想：[Bean Searcher 的设计思想](https://searcher.ejlchina.com/guide/latest/introduction.html#%E8%AE%BE%E8%AE%A1%E5%93%B2%E5%AD%A6)
+* 设计思想：[Bean Searcher 的设计思想](https://bs.zhxu.cn/guide/latest/introduction.html#%E8%AE%BE%E8%AE%A1%E5%93%B2%E5%AD%A6)
 * 架构图：
 
 ![](./assets/architecture.jpg)
@@ -267,7 +267,7 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 
 ### 📚 详细文档
 
-参阅：https://searcher.ejlchina.com/
+参阅：https://bs.zhxu.cn/
 
 文档已完善！
 

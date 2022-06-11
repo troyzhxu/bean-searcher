@@ -153,7 +153,7 @@ class EmployeeBean {
 ### 总结
 
 - [Bean Searcher](https://gitee.com/troyzhxu/bean-searcher) 设计的目标并不是替代某个ORM框架，它只是为了弥补现有ORM框架在复杂列表检索中的不便，实际项目中，配合使用它们，效果或会更好。
-- 本例只是 [Bean Searcher](https://gitee.com/troyzhxu/bean-searcher) 在联表检索中的一个简单的演示，更多用法，请参阅: [https://searcher.ejlchina.com](https://searcher.ejlchina.com)
+- 本例只是 [Bean Searcher](https://gitee.com/troyzhxu/bean-searcher) 在联表检索中的一个简单的演示，更多用法，请参阅: [https://bs.zhxu.cn](https://bs.zhxu.cn)
 - 看完这些，大家有没有觉得 [Bean Searcher](https://gitee.com/troyzhxu/bean-searcher) 正好可以帮到你呢？如果是，就点个 Star 吧 ^_^
 
 ### 参与贡献
