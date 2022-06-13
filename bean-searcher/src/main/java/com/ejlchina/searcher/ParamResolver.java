@@ -1,5 +1,6 @@
 package com.ejlchina.searcher;
 
+import com.ejlchina.searcher.bean.DbType;
 import com.ejlchina.searcher.param.FetchType;
 
 import java.util.Map;
@@ -18,5 +19,17 @@ public interface ParamResolver {
 	 * @return SearchParam
 	 * */
 	SearchParam resolve(BeanMeta<?> beanMeta, FetchType fetchType, Map<String, Object> paraMap);
-	
+
+	/**
+	 * 参数值转换器
+	 * @since v3.8.0
+	 */
+	interface Convertor {
+
+		boolean supports(DbType dbType, Class<?> valueType);
+
+		Object convert(Object value);
+
+	}
+
 }

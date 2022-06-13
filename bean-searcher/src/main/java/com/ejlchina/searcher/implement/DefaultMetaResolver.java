@@ -96,7 +96,7 @@ public class DefaultMetaResolver implements MetaResolver {
                     beanMeta, wrapper.field, fieldSql, fieldAlias,
                     wrapper.column.isConditional(),
                     wrapper.column.getOnlyOn(),
-                    wrapper.column.getDbType().getType()
+                    wrapper.column.getDbType()
             );
             beanMeta.addFieldMeta(wrapper.field.getName(), fieldMeta);
         }

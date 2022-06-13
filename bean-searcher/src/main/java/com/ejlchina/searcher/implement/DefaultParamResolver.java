@@ -1,6 +1,7 @@
 package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.*;
+import com.ejlchina.searcher.bean.DbType;
 import com.ejlchina.searcher.group.Group;
 import com.ejlchina.searcher.group.DefaultGroupResolver;
 import com.ejlchina.searcher.group.GroupResolver;
@@ -96,6 +97,12 @@ public class DefaultParamResolver implements ParamResolver {
 	 * 用于解析组表达式
 	 */
 	private GroupResolver groupResolver = new DefaultGroupResolver();
+
+	/**
+	 * @since v3.8.0
+	 * 用于对参数值进行转换
+	 */
+	private List<Convertor> convertors = new ArrayList<>();
 
 	@Override
 	public SearchParam resolve(BeanMeta<?> beanMeta, FetchType fetchType, Map<String, Object> paraMap) {
@@ -278,13 +285,14 @@ public class DefaultParamResolver implements ParamResolver {
 		if (value == null) {
 			return null;
 		}
-		if (value instanceof String) {
-			String str = (String) value;
-			if (StringUtils.isBlank(str)) {
-				return null;
+		DbType dbType = meta.getDbType();
+		if (dbType != DbType.UNKNOWN) {
+			Class<?> vType = value.getClass();
+			for (Convertor convertor: convertors) {
+				if (convertor.supports(dbType, vType)) {
+					return convertor.convert(value);
+				}
 			}
-			// TODO: 根据配置与字段在实体类中声明的类型转换 value 的值
-
 		}
 		return value;
 	}
@@ -467,6 +475,18 @@ public class DefaultParamResolver implements ParamResolver {
 
 	public void setGroupSeparator(String groupSeparator) {
 		this.groupSeparator = Objects.requireNonNull(groupSeparator);
+	}
+
+	public List<Convertor> getConvertors() {
+		return convertors;
+	}
+
+	public void setConvertors(List<Convertor> convertors) {
+		this.convertors = Objects.requireNonNull(convertors) ;
+	}
+
+	public void addConvertor(Convertor convertor) {
+		this.convertors.add(convertor);
 	}
 
 }
