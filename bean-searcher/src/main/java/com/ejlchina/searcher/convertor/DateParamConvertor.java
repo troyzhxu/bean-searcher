@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalQueries;
+import java.time.temporal.TemporalQuery;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -40,13 +41,14 @@ public class DateParamConvertor implements ParamResolver.Convertor {
             if (StringUtils.isBlank(s)) {
                 return null;
             }
+            TemporalQuery<LocalDate> query = TemporalQueries.localDate();
             Matcher matcher1 = DATE_PATTERN_1.matcher(s);
             if (matcher1.find()) {
-                return toDate(FORMATTER_1.parse(matcher1.group(), TemporalQueries.localDate()));
+                return toDate(FORMATTER_1.parse(matcher1.group(), query));
             }
             Matcher matcher2 = DATE_PATTERN_2.matcher(s);
             if (matcher2.find()) {
-                return toDate(FORMATTER_2.parse(matcher2.group(), TemporalQueries.localDate()));
+                return toDate(FORMATTER_2.parse(matcher2.group(), query));
             }
         }
         if (value instanceof Date) {
