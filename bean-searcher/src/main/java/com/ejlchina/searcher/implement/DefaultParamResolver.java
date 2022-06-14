@@ -353,9 +353,10 @@ public class DefaultParamResolver implements ParamResolver {
 	}
 
 	public List<OrderBy> resolveOrderBys(Map<String, Object> paraMap) {
-		@SuppressWarnings("unchecked")
-		List<OrderBy> orderBys = (List<OrderBy>) paraMap.get(MapBuilder.ORDER_BY);
-		if (orderBys != null) {
+		Object list = paraMap.get(MapBuilder.ORDER_BY);
+		if (list instanceof List) {
+			@SuppressWarnings("all")
+			List<OrderBy> orderBys = (List<OrderBy>) list;
 			return orderBys;
 		}
 		String string = ObjectUtils.string(paraMap.get(orderByName));
