@@ -7,7 +7,7 @@ import com.ejlchina.searcher.util.StringUtils;
 import java.math.BigDecimal;
 
 /**
- * [String | Number to Boolean] 参数值转换器
+ * [String | Number to Number] 参数值转换器
  *
  * @author Troy.Zhou @ 2022-06-14
  * @since v3.8.0

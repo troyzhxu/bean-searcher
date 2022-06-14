@@ -293,7 +293,7 @@ public class DefaultParamResolver implements ParamResolver {
 			Class<?> vType = value.getClass();
 			for (Convertor convertor: convertors) {
 				if (convertor.supports(dbType, vType)) {
-					return convertor.convert(value);
+					return convertor.convert(dbType, value);
 				}
 			}
 		}
