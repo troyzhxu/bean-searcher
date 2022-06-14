@@ -287,6 +287,9 @@ public class DefaultParamResolver implements ParamResolver {
 		}
 		DbType dbType = meta.getDbType();
 		if (dbType != DbType.UNKNOWN) {
+			if (dbType.getType().isInstance(value)) {
+				return value;
+			}
 			Class<?> vType = value.getClass();
 			for (Convertor convertor: convertors) {
 				if (convertor.supports(dbType, vType)) {

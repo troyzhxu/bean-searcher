@@ -26,8 +26,17 @@ public interface ParamResolver {
 	 */
 	interface Convertor {
 
+		/**
+		 * @param dbType 需转换的目标类型
+		 * @param valueType 值类型
+		 * @return 是否支持
+		 */
 		boolean supports(DbType dbType, Class<?> valueType);
 
+		/**
+		 * @param value 待转换的值
+		 * @return 转换后的值
+		 */
 		Object convert(Object value);
 
 	}
