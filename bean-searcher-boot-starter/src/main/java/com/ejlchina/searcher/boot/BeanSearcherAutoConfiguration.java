@@ -119,12 +119,14 @@ public class BeanSearcherAutoConfiguration {
 	public ParamResolver paramResolver(PageExtractor pageExtractor,
 									   FieldOpPool fieldOpPool,
 									   ObjectProvider<ParamFilter[]> paramFilters,
+									   ObjectProvider<List<ParamResolver.Convertor>> convertors,
 									   GroupResolver groupResolver,
 									   BeanSearcherProperties config) {
 		DefaultParamResolver paramResolver = new DefaultParamResolver();
 		paramResolver.setPageExtractor(pageExtractor);
 		paramResolver.setFieldOpPool(fieldOpPool);
 		ifAvailable(paramFilters, paramResolver::setParamFilters);
+		ifAvailable(convertors, l -> l.forEach(paramResolver::addConvertor));
 		Params conf = config.getParams();
 		paramResolver.setOperatorSuffix(conf.getOperatorKey());
 		paramResolver.setIgnoreCaseSuffix(conf.getIgnoreCaseKey());
