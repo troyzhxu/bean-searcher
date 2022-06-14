@@ -20,8 +20,8 @@ import java.util.regex.Pattern;
  */
 public class TimeParamConvertor implements ParamResolver.Convertor {
 
-    static final Pattern DATE_PATTERN_1 = Pattern.compile("[0-9]{2}:[0-9]{2}:[0-9]{2}");
-    static final Pattern DATE_PATTERN_2 = Pattern.compile("[0-9]{2}:[0-9]{2}");
+    static final Pattern TIME_PATTERN_1 = Pattern.compile("[0-9]{2}:[0-9]{2}:[0-9]{2}");
+    static final Pattern TIME_PATTERN_2 = Pattern.compile("[0-9]{2}:[0-9]{2}");
 
     static final DateTimeFormatter FORMATTER_1 = DateTimeFormatter.ofPattern("HH:mm:ss");
     static final DateTimeFormatter FORMATTER_2 = DateTimeFormatter.ofPattern("HH:mm");
@@ -34,16 +34,16 @@ public class TimeParamConvertor implements ParamResolver.Convertor {
     @Override
     public Object convert(DbType dbType, Object value) {
         if (value instanceof String) {
-            String s = (String) value;
+            String s = ((String) value).trim();
             if (StringUtils.isBlank(s)) {
                 return null;
             }
             TemporalQuery<LocalTime> query = TemporalQueries.localTime();
-            Matcher matcher1 = DATE_PATTERN_1.matcher(s);
+            Matcher matcher1 = TIME_PATTERN_1.matcher(s);
             if (matcher1.find()) {
                 return toTime(FORMATTER_1.parse(matcher1.group(), query));
             }
-            Matcher matcher2 = DATE_PATTERN_2.matcher(s);
+            Matcher matcher2 = TIME_PATTERN_2.matcher(s);
             if (matcher2.find()) {
                 return toTime(FORMATTER_2.parse(matcher2.group(), query));
             }

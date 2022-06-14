@@ -23,11 +23,9 @@ import java.util.regex.Pattern;
  */
 public class DateParamConvertor implements ParamResolver.Convertor {
 
-    static final Pattern DATE_PATTERN_1 = Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{2}");
-    static final Pattern DATE_PATTERN_2 = Pattern.compile("[0-9]{4}/[0-9]{2}/[0-9]{2}");
+    static final Pattern DATE_PATTERN = Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{2}");
 
-    static final DateTimeFormatter FORMATTER_1 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    static final DateTimeFormatter FORMATTER_2 = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+    static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @Override
     public boolean supports(DbType dbType, Class<?> valueType) {
@@ -37,18 +35,14 @@ public class DateParamConvertor implements ParamResolver.Convertor {
     @Override
     public Object convert(DbType dbType, Object value) {
         if (value instanceof String) {
-            String s = (String) value;
+            String s = ((String) value).trim().replaceAll("/", "-");
             if (StringUtils.isBlank(s)) {
                 return null;
             }
             TemporalQuery<LocalDate> query = TemporalQueries.localDate();
-            Matcher matcher1 = DATE_PATTERN_1.matcher(s);
-            if (matcher1.find()) {
-                return toDate(FORMATTER_1.parse(matcher1.group(), query));
-            }
-            Matcher matcher2 = DATE_PATTERN_2.matcher(s);
-            if (matcher2.find()) {
-                return toDate(FORMATTER_2.parse(matcher2.group(), query));
+            Matcher matcher = DATE_PATTERN.matcher(s);
+            if (matcher.find()) {
+                return toDate(FORMATTER.parse(matcher.group(), query));
             }
         }
         if (value instanceof Date) {
