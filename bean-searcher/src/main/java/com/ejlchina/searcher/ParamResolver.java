@@ -34,10 +34,11 @@ public interface ParamResolver {
 		boolean supports(DbType dbType, Class<?> valueType);
 
 		/**
+		 * @param dbType 目标类型
 		 * @param value 待转换的值
 		 * @return 转换后的值
 		 */
-		Object convert(Object value);
+		Object convert(DbType dbType, Object value);
 
 	}
 

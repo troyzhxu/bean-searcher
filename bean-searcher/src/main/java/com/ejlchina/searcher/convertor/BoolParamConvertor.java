@@ -22,7 +22,7 @@ public class BoolParamConvertor implements ParamResolver.Convertor {
     }
 
     @Override
-    public Object convert(Object value) {
+    public Object convert(DbType dbType, Object value) {
         if (value instanceof Boolean) {
             return value;
         }
