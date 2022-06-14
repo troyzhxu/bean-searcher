@@ -3,7 +3,6 @@ package com.ejlchina.searcher.convertor;
 import com.ejlchina.searcher.BeanMeta;
 import com.ejlchina.searcher.FieldConvertor;
 import com.ejlchina.searcher.FieldMeta;
-import com.ejlchina.searcher.implement.BoolNumFieldConvertor;
 import com.ejlchina.searcher.implement.DefaultMetaResolver;
 import org.junit.Assert;
 import org.junit.Test;

@@ -1,7 +1,9 @@
 package com.ejlchina.searcher;
 
 import com.ejlchina.searcher.bean.DbField;
-import com.ejlchina.searcher.implement.*;
+import com.ejlchina.searcher.convertor.*;
+import com.ejlchina.searcher.implement.DefaultBeanReflector;
+import com.ejlchina.searcher.implement.DefaultMetaResolver;
 import org.junit.Assert;
 import org.junit.Test;
 

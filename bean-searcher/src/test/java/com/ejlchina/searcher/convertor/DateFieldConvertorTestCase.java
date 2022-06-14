@@ -1,7 +1,5 @@
 package com.ejlchina.searcher.convertor;
 
-import com.ejlchina.searcher.implement.DateFieldConvertor;
-import com.ejlchina.searcher.implement.DateFormatFieldConvertor;
 import org.junit.Assert;
 import org.junit.Test;
 

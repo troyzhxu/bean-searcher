@@ -5,6 +5,15 @@ import com.ejlchina.searcher.FieldConvertor.BFieldConvertor;
 import com.ejlchina.searcher.FieldConvertor.MFieldConvertor;
 import com.ejlchina.searcher.boot.BeanSearcherProperties.Params;
 import com.ejlchina.searcher.boot.BeanSearcherProperties.Sql;
+import com.ejlchina.searcher.convertor.B2MFieldConvertor;
+import com.ejlchina.searcher.convertor.BoolFieldConvertor;
+import com.ejlchina.searcher.convertor.BoolNumFieldConvertor;
+import com.ejlchina.searcher.convertor.DateFieldConvertor;
+import com.ejlchina.searcher.convertor.DateFormatFieldConvertor;
+import com.ejlchina.searcher.convertor.EnumFieldConvertor;
+import com.ejlchina.searcher.convertor.NumberFieldConvertor;
+import com.ejlchina.searcher.convertor.StrNumFieldConvertor;
+import com.ejlchina.searcher.convertor.TimeFieldConvertor;
 import com.ejlchina.searcher.dialect.*;
 import com.ejlchina.searcher.group.DefaultGroupResolver;
 import com.ejlchina.searcher.group.DefaultParserFactory;
@@ -22,7 +31,10 @@ import org.springframework.context.annotation.Primary;
 
 import javax.sql.DataSource;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 

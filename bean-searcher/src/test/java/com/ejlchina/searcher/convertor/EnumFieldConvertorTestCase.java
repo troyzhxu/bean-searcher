@@ -2,7 +2,6 @@ package com.ejlchina.searcher.convertor;
 
 import com.ejlchina.searcher.FieldMeta;
 import com.ejlchina.searcher.implement.DefaultMetaResolver;
-import com.ejlchina.searcher.implement.EnumFieldConvertor;
 import org.junit.Assert;
 import org.junit.Test;
 
