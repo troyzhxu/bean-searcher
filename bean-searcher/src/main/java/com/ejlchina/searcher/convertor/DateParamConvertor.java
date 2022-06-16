@@ -5,6 +5,7 @@ import com.ejlchina.searcher.ParamResolver;
 import com.ejlchina.searcher.bean.DbType;
 import com.ejlchina.searcher.util.StringUtils;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
@@ -29,7 +30,7 @@ public class DateParamConvertor implements ParamResolver.Convertor {
 
     @Override
     public boolean supports(DbType dbType, Class<?> valueType) {
-        return dbType == DbType.DATE && (String.class == valueType || Date.class == valueType || LocalDate.class == valueType);
+        return dbType == DbType.DATE && (String.class == valueType || Date.class == valueType || LocalDate.class == valueType) || Timestamp.class == valueType;
     }
 
     @Override

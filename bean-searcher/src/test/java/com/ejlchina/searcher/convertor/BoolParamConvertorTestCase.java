@@ -6,7 +6,7 @@ import org.junit.Test;
 
 public class BoolParamConvertorTestCase {
 
-    BoolParamConvertor convertor = new BoolParamConvertor();
+    final BoolParamConvertor convertor = new BoolParamConvertor();
 
     @Test
     public void test_support() {
