@@ -32,7 +32,7 @@ public class BoolParamConvertor implements ParamResolver.Convertor {
                 return null;
             }
             for (String f : falseValues) {
-                if (s.equals(f)) {
+                if (s.equalsIgnoreCase(f)) {
                     return Boolean.FALSE;
                 }
             }
