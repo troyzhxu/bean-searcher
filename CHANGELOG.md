@@ -1,3 +1,18 @@
+# v3.8.0
+
+### ✨ Features
+
+* Bean Searcher
+  * 增强 `DbField` 注解：新增 `type` 属性，允许用户手动指定该属性对应的数据库字段类型
+  * 增强 `ParamResolver`: 新增 `Convertor` 参数转换器，可对检索参数的值类型转换为数据库字段匹配的类型（更好的兼容 Oracle、PgSQL 等数据库）
+  * 新增 `BoolParamConvertor`、`NumberParamConvertor`、`DateParamConvertor`、`TimeParamConvertor` 与 `DateTimeParamConvertor` 参数转换器
+  * 重构 `FieldConvertor`: 字段转换器的 9 个实现类 从 `com.ejlchina.searcher.implement` 包迁移到 `com.ejlchina.searcher.convertor` 包
+
+
+* Bean Searcher Boot Starter
+  * 支持 用户配置一个 `ParamResolver.Convertor` 的 Spring Bean 扩展参数值转换能力
+
+
 # v3.7.0 @ 2022-06-04
 
 ### ✨ Features
