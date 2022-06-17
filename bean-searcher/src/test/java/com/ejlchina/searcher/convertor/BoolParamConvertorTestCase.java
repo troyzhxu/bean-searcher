@@ -10,7 +10,6 @@ public class BoolParamConvertorTestCase {
 
     @Test
     public void test_support() {
-        assertSupports(DbType.DATE, false);
         assertSupports(DbType.BOOL, true);
         assertSupports(DbType.BYTE, false);
         assertSupports(DbType.SHORT, false);
@@ -20,6 +19,7 @@ public class BoolParamConvertorTestCase {
         assertSupports(DbType.DOUBLE, false);
         assertSupports(DbType.DECIMAL, false);
         assertSupports(DbType.STRING, false);
+        assertSupports(DbType.DATE, false);
         assertSupports(DbType.TIME, false);
         assertSupports(DbType.DATETIME, false);
         assertSupports(DbType.UNKNOWN, false);

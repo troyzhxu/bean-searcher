@@ -17,7 +17,6 @@ public class DateParamConvertorTestCase {
 
     @Test
     public void test_support() {
-        assertSupports(DbType.DATE, true);
         assertSupports(DbType.BOOL, false);
         assertSupports(DbType.BYTE, false);
         assertSupports(DbType.SHORT, false);
@@ -27,6 +26,7 @@ public class DateParamConvertorTestCase {
         assertSupports(DbType.DOUBLE, false);
         assertSupports(DbType.DECIMAL, false);
         assertSupports(DbType.STRING, false);
+        assertSupports(DbType.DATE, true);
         assertSupports(DbType.TIME, false);
         assertSupports(DbType.DATETIME, false);
         assertSupports(DbType.UNKNOWN, false);
