@@ -10,9 +10,29 @@ public class BoolParamConvertorTestCase {
 
     @Test
     public void test_support() {
-        Assert.assertTrue(convertor.supports(DbType.BOOL, Integer.class));
-        Assert.assertTrue(convertor.supports(DbType.BOOL, String.class));
+        assertSupports(DbType.DATE, false);
+        assertSupports(DbType.BOOL, true);
+        assertSupports(DbType.BYTE, false);
+        assertSupports(DbType.SHORT, false);
+        assertSupports(DbType.INT, false);
+        assertSupports(DbType.LONG, false);
+        assertSupports(DbType.FLOAT, false);
+        assertSupports(DbType.DOUBLE, false);
+        assertSupports(DbType.DECIMAL, false);
+        assertSupports(DbType.STRING, false);
+        assertSupports(DbType.TIME, false);
+        assertSupports(DbType.DATETIME, false);
+        assertSupports(DbType.UNKNOWN, false);
     }
+
+    void assertSupports(DbType dbType, boolean supports) {
+        Assert.assertEquals(supports, convertor.supports(dbType, Byte.class));
+        Assert.assertEquals(supports, convertor.supports(dbType, Short.class));
+        Assert.assertEquals(supports, convertor.supports(dbType, Integer.class));
+        Assert.assertEquals(supports, convertor.supports(dbType, Long.class));
+        Assert.assertEquals(supports, convertor.supports(dbType, String.class));
+    }
+
 
     @Test
     public void test_convert() {
