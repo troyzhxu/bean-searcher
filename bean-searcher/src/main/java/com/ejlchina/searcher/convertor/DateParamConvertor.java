@@ -7,6 +7,7 @@ import com.ejlchina.searcher.util.StringUtils;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalQueries;
@@ -30,7 +31,10 @@ public class DateParamConvertor implements ParamResolver.Convertor {
 
     @Override
     public boolean supports(DbType dbType, Class<?> valueType) {
-        return dbType == DbType.DATE && (String.class == valueType || Date.class == valueType || LocalDate.class == valueType) || Timestamp.class == valueType;
+        return dbType == DbType.DATE && (
+                String.class == valueType || Date.class == valueType || LocalDate.class == valueType ||
+                        Timestamp.class == valueType || LocalDateTime.class == valueType
+        );
     }
 
     @Override
@@ -51,6 +55,9 @@ public class DateParamConvertor implements ParamResolver.Convertor {
         }
         if (value instanceof LocalDate) {
             return toDate((LocalDate) value);
+        }
+        if (value instanceof LocalDateTime) {
+            return toDate(((LocalDateTime) value).toLocalDate());
         }
         return null;
     }
