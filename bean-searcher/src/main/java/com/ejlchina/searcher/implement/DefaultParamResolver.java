@@ -278,8 +278,16 @@ public class DefaultParamResolver implements ParamResolver {
 				if (index == 0 && value == null) {
 					value = paraMap.get1(field);
 				}
-				value = fieldValue(meta, value);
+				value = convertParamValue(meta, value);
 				values.add(new FieldParam.Value(value, index));
+			}
+		} else if (values.size() > 0) {
+			for (int index = 0; index < values.size(); index++) {
+				FieldParam.Value value = values.get(index);
+				if (value != null) {
+					Object v = convertParamValue(meta, value.getValue());
+					values.set(index, new FieldParam.Value(v, index));
+				}
 			}
 		}
 		if (isAllEmpty(values)) {
@@ -295,7 +303,7 @@ public class DefaultParamResolver implements ParamResolver {
 		return new FieldParam(field, operator, values, ignoreCase);
 	}
 
-	protected Object fieldValue(FieldMeta meta, Object value) {
+	protected Object convertParamValue(FieldMeta meta, Object value) {
 		if (value == null) {
 			return null;
 		}
