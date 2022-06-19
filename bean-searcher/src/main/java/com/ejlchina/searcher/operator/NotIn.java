@@ -26,11 +26,6 @@ public class NotIn extends DialectWrapper implements FieldOp {
     }
 
     @Override
-    public boolean lonely() {
-        return false;
-    }
-
-    @Override
     public List<Object> operate(StringBuilder sqlBuilder, OpPara opPara) {
         SqlWrapper<Object> fieldSql = opPara.getFieldSql();
         Object[] values = opPara.getValues();

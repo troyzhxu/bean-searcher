@@ -25,7 +25,9 @@ public interface FieldOp {
     /**
      * @return 该运算符是否不需要参数即可运算
      */
-    boolean lonely();
+    default boolean lonely() {
+        return false;
+    }
 
     /**
      * 执行该运算符
