@@ -77,7 +77,7 @@ public class SimpleSearchTestCase {
                 Assert.assertEquals("select name c_1, id c_0 from search_bean where (id = ?) limit ?, ?", searchSql.getListSqlString());
                 List<Object> listParams = searchSql.getListSqlParams();
                 Assert.assertEquals(3, listParams.size());
-                Assert.assertEquals(1, listParams.get(0));
+                Assert.assertEquals(1L, listParams.get(0));
                 Assert.assertEquals(0L, listParams.get(1));
                 Assert.assertEquals(15, listParams.get(2));
 
@@ -87,7 +87,7 @@ public class SimpleSearchTestCase {
                 List<Object> clusterSqlParams = searchSql.getClusterSqlParams();
                 System.out.println(clusterSqlParams);
                 Assert.assertEquals(1, clusterSqlParams.size());
-                Assert.assertEquals(1, clusterSqlParams.get(0));
+                Assert.assertEquals(1L, clusterSqlParams.get(0));
 
                 System.out.println(searchSql.getCountAlias());
 
