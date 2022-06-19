@@ -14,4 +14,10 @@ public interface GroupResolver {
      */
     Group<String> resolve(String gExpr);
 
+    /**
+     * @since v3.8.0
+     * @return ExprParser.Factory
+     */
+    ExprParser.Factory getParserFactory();
+
 }

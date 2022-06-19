@@ -16,6 +16,7 @@ public class DefaultParserFactory implements ExprParser.Factory {
         return new DefaultExprParser(expr, andKey, orKey);
     }
 
+    @Override
     public char getAndKey() {
         return andKey;
     }
@@ -24,6 +25,7 @@ public class DefaultParserFactory implements ExprParser.Factory {
         this.andKey = andKey;
     }
 
+    @Override
     public char getOrKey() {
         return orKey;
     }

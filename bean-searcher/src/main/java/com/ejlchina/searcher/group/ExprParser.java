@@ -25,6 +25,18 @@ public interface ExprParser {
          */
         ExprParser create(String expr);
 
+        /**
+         * @since v3.8.0
+         * @return 且逻辑符
+         */
+        char getAndKey();
+
+        /**
+         * @since v3.8.0
+         * @return 或逻辑符
+         */
+        char getOrKey();
+
     }
 
 }
