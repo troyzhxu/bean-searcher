@@ -25,21 +25,21 @@ public class Builder<B extends Builder<B>> {
     @FunctionalInterface
     public interface FieldFn<T, R> extends Function<T, R>, Serializable {  }
 
+    /**
+     * 根组，根组的条件总是会被用到
+     */
+    public static final String ROOT_GROUP = "$";
+
     private final Map<FieldFn<?, ?>, String> cache = new ConcurrentHashMap<>();
 
     protected final Map<String, Object> map;
 
-    protected String group;
+    protected String group = ROOT_GROUP;
 
     private FieldParam fieldParam = null;
 
     public Builder(Map<String, Object> map) {
-        this(map, null);
-    }
-
-    public Builder(Map<String, Object> map, String group) {
         this.map = map;
-        this.group = group;
     }
 
     /**
@@ -94,7 +94,9 @@ public class Builder<B extends Builder<B>> {
             fieldParam = new FieldParam(field, pValues);
             if (group != null) {
                 map.put(group + FIELD_PARAM + field, fieldParam);
-            } else {
+            }
+            // 如果是 根组，则向 Map 里放入两个 key, 以保证该条件总是被用到
+            if (ROOT_GROUP.equals(group)) {
                 map.put(FIELD_PARAM + field, fieldParam);
             }
         }

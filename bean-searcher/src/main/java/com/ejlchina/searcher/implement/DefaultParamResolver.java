@@ -212,10 +212,14 @@ public class DefaultParamResolver implements ParamResolver {
 
 	protected String getGroupExpr(Map<String, Object> paraMap) {
 		String expr = ObjectUtils.string(paraMap.get(MapBuilder.GROUP_EXPR));
-		if (expr != null) {
-			return expr;
+		if (expr == null) {
+			expr = ObjectUtils.string(paraMap.get(gexprName));
 		}
-		return ObjectUtils.string(paraMap.get(gexprName));
+		if (StringUtils.isNotBlank(expr) && !expr.contains(Builder.ROOT_GROUP)) {
+			char andKey = groupResolver.getParserFactory().getAndKey();
+			expr = Builder.ROOT_GROUP + andKey + "(" + expr + ")";
+		}
+		return expr;
 	}
 
 	private List<FieldParam> extractFieldParams(Collection<FieldMeta> fieldMetas, MapWrapper paraMap) {

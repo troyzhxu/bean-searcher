@@ -101,11 +101,11 @@ public class MapBuilder extends Builder<MapBuilder> {
      * 开始一个分组（只对字段参数进行分组）
      * 在 {@link #field(String, Object...) } 方法之前使用 }
      * @since v3.5.0
-     * @param group 组名
+     * @param group 组名（非空）
      * @return MapBuilder
      */
     public MapBuilder group(String group) {
-        this.group = group;
+        this.group = Objects.requireNonNull(group);
         return this;
     }
 
