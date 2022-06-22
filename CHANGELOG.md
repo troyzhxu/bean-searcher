@@ -2,6 +2,8 @@
 
 ### ✨ Better
 
+* Bean Searcher
+  * 参数构建器新增 `orderBy(FieldFn<T, ?> fieldFn)`、`orderBy(String fieldName)`、`asc()` 与 `desc()` 方法
 * Bean Searcher Boot Starter
   * 优化：添加自定义参数过滤器时，不覆盖内置的参数过滤器
 
