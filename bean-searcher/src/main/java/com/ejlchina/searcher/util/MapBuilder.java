@@ -56,13 +56,7 @@ public class MapBuilder extends Builder<MapBuilder> {
      * @return MapBuilder
      */
     public MapBuilder onlySelect(String... fields) {
-        @SuppressWarnings("unchecked")
-        List<String> list = (List<String>) map.get(ONLY_SELECT);
-        if (list == null) {
-            list = new ArrayList<>();
-            map.put(ONLY_SELECT, list);
-        }
-        Collections.addAll(list, fields);
+        Collections.addAll(obtainList(ONLY_SELECT), fields);
         return this;
     }
 
@@ -87,13 +81,7 @@ public class MapBuilder extends Builder<MapBuilder> {
      * @return MapBuilder
      */
     public MapBuilder selectExclude(String... fields) {
-        @SuppressWarnings("unchecked")
-        List<String> list = (List<String>) map.get(SELECT_EXCLUDE);
-        if (list == null) {
-            list = new ArrayList<>();
-            map.put(SELECT_EXCLUDE, list);
-        }
-        Collections.addAll(list, fields);
+        Collections.addAll(obtainList(SELECT_EXCLUDE), fields);
         return this;
     }
 
@@ -141,7 +129,7 @@ public class MapBuilder extends Builder<MapBuilder> {
      */
     public MapBuilder orderBy(String fieldName, String order) {
         if (fieldName != null) {
-            List<OrderBy> orderBys = orderBys();
+            List<OrderBy> orderBys = obtainList(ORDER_BY);
             Optional<OrderBy> orderByOpt = orderBys.stream()
                     .filter(orderBy -> fieldName.equals(orderBy.getSort()))
                     .findAny();
@@ -152,21 +140,6 @@ public class MapBuilder extends Builder<MapBuilder> {
             }
         }
         return this;
-    }
-
-    private List<OrderBy> orderBys() {
-        Object object = map.get(ORDER_BY);
-        List<OrderBy> orderBys = null;
-        if (object instanceof List) {
-            @SuppressWarnings("unchecked")
-            List<OrderBy> list = (List<OrderBy>) object;
-            orderBys = list;
-        }
-        if (orderBys == null) {
-            orderBys = new ArrayList<>();
-            map.put(ORDER_BY, orderBys);
-        }
-        return orderBys;
     }
 
     /**
@@ -196,7 +169,7 @@ public class MapBuilder extends Builder<MapBuilder> {
      * @return MapBuilder
      */
     public MapBuilder asc() {
-        List<OrderBy> orderBys = orderBys();
+        List<OrderBy> orderBys = obtainList(ORDER_BY);
         if (orderBys.isEmpty()) {
             throw new IllegalStateException("asc() must call after orderBy(..) method.");
         }
@@ -214,7 +187,7 @@ public class MapBuilder extends Builder<MapBuilder> {
      * @return MapBuilder
      */
     public MapBuilder desc() {
-        List<OrderBy> orderBys = orderBys();
+        List<OrderBy> orderBys = obtainList(ORDER_BY);
         if (orderBys.isEmpty()) {
             throw new IllegalStateException("desc() must call after orderBy(..) method.");
         }
