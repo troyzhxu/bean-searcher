@@ -42,11 +42,11 @@ public class OrderBy {
     }
 
     public boolean isAsc() {
-        return ORDER_ASC.equalsIgnoreCase(sort);
+        return ORDER_ASC.equalsIgnoreCase(order);
     }
 
     public boolean isDesc() {
-        return ORDER_DESC.equalsIgnoreCase(sort);
+        return ORDER_DESC.equalsIgnoreCase(order);
     }
 
     public OrderBy asc() {
