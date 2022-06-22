@@ -141,12 +141,7 @@ public class MapBuilder extends Builder<MapBuilder> {
      */
     public MapBuilder orderBy(String fieldName, String order) {
         if (fieldName != null) {
-            @SuppressWarnings("unchecked")
-            List<OrderBy> orderBys = (List<OrderBy>) map.get(ORDER_BY);
-            if (orderBys == null) {
-                orderBys = new ArrayList<>();
-                map.put(ORDER_BY, orderBys);
-            }
+            List<OrderBy> orderBys = orderBys();
             Optional<OrderBy> orderByOpt = orderBys.stream()
                     .filter(orderBy -> fieldName.equals(orderBy.getSort()))
                     .findAny();
@@ -155,6 +150,78 @@ public class MapBuilder extends Builder<MapBuilder> {
             } else {
                 orderBys.add(new OrderBy(fieldName, order));
             }
+        }
+        return this;
+    }
+
+    private List<OrderBy> orderBys() {
+        Object object = map.get(ORDER_BY);
+        List<OrderBy> orderBys = null;
+        if (object instanceof List) {
+            @SuppressWarnings("unchecked")
+            List<OrderBy> list = (List<OrderBy>) object;
+            orderBys = list;
+        }
+        if (orderBys == null) {
+            orderBys = new ArrayList<>();
+            map.put(ORDER_BY, orderBys);
+        }
+        return orderBys;
+    }
+
+    /**
+     * 指定按某个字段排序（默认升序）可再次调用 {@link #desc()} 或 {@link #asc()} 方法指定排序方法
+     * @since v3.7.1
+     * @param <T> 泛型
+     * @param fieldFn 字段表达式
+     * @return MapBuilder
+     */
+    public <T> MapBuilder orderBy(FieldFn<T, ?> fieldFn) {
+        return orderBy(toFieldName(fieldFn), OrderBy.ORDER_ASC);
+    }
+
+    /**
+     * 指定按某个字段排序（默认升序）可再次调用 {@link #desc()} 或 {@link #asc()} 方法指定排序方法
+     * @since v3.7.1
+     * @param fieldName 属性名
+     * @return MapBuilder
+     */
+    public MapBuilder orderBy(String fieldName) {
+        return orderBy(fieldName, OrderBy.ORDER_ASC);
+    }
+
+    /**
+     * 升序，在 {@link #orderBy(FieldFn)} 方法之后调用
+     * @since v3.7.1
+     * @return MapBuilder
+     */
+    public MapBuilder asc() {
+        List<OrderBy> orderBys = orderBys();
+        if (orderBys.isEmpty()) {
+            throw new IllegalStateException("asc() must call after orderBy(..) method.");
+        }
+        int index = orderBys.size() - 1;
+        OrderBy last = orderBys.get(index);
+        if (last.isDesc()) {
+            orderBys.set(index, last.asc());
+        }
+        return this;
+    }
+
+    /**
+     * 降序，在 {@link #orderBy(FieldFn)} 方法之后调用
+     * @since v3.7.1
+     * @return MapBuilder
+     */
+    public MapBuilder desc() {
+        List<OrderBy> orderBys = orderBys();
+        if (orderBys.isEmpty()) {
+            throw new IllegalStateException("desc() must call after orderBy(..) method.");
+        }
+        int index = orderBys.size() - 1;
+        OrderBy last = orderBys.get(index);
+        if (last.isAsc()) {
+            orderBys.set(index, last.desc());
         }
         return this;
     }
