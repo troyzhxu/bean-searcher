@@ -30,7 +30,7 @@ public class DefaultParamResolver implements ParamResolver {
 	/**
 	 * 参数过滤器
 	 */
-	private ParamFilter[] paramFilters = new ParamFilter[] { new BoolValueFilter() };
+	private List<ParamFilter> paramFilters = new ArrayList<>();
 
 	/**
 	 * 字段运算符池
@@ -403,11 +403,15 @@ public class DefaultParamResolver implements ParamResolver {
 		this.pageExtractor = Objects.requireNonNull(pageExtractor);
 	}
 
-	public void setParamFilters(ParamFilter[] paramFilters) {
+	public void addParamFilter(ParamFilter paramFilter) {
+		paramFilters.add(Objects.requireNonNull(paramFilter));
+	}
+
+	public void setParamFilters(List<ParamFilter> paramFilters) {
 		this.paramFilters = Objects.requireNonNull(paramFilters);
 	}
 
-	public ParamFilter[] getParamFilters() {
+	public List<ParamFilter> getParamFilters() {
 		return paramFilters;
 	}
 

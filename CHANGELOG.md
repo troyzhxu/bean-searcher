@@ -12,6 +12,13 @@
 * Bean Searcher Boot Starter
   * 支持 用户配置一个 `ParamResolver.Convertor` 的 Spring Bean 扩展参数值转换能力
 
+# v3.7.1 @ 2022-06-04
+
+### ✨ Better
+
+* Bean Searcher Boot Starter
+  * 优化：添加自定义参数过滤器时，不覆盖内置的参数过滤器
+
 
 # v3.7.0 @ 2022-06-04
 
