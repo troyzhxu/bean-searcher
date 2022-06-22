@@ -41,4 +41,20 @@ public class OrderBy {
         return fieldSet.contains(sort) && (StringUtils.isBlank(order) || ORDER_ASC.equalsIgnoreCase(order) || ORDER_DESC.equalsIgnoreCase(order));
     }
 
+    public boolean isAsc() {
+        return ORDER_ASC.equalsIgnoreCase(sort);
+    }
+
+    public boolean isDesc() {
+        return ORDER_DESC.equalsIgnoreCase(sort);
+    }
+
+    public OrderBy asc() {
+        return new OrderBy(sort, ORDER_ASC);
+    }
+
+    public OrderBy desc() {
+        return new OrderBy(sort, ORDER_DESC);
+    }
+
 }
