@@ -3,7 +3,8 @@
 ### ✨ Better
 
 * Bean Searcher
-  * 参数构建器新增 `orderBy(FieldFn<T, ?> fieldFn)`、`orderBy(String fieldName)`、`asc()` 与 `desc()` 方法
+  * 优化 `参数构建器`：新增 `orderBy(FieldFn<T, ?> fieldFn)`、`orderBy(String fieldName)`、`asc()` 与 `desc()` 方法
+  * 优化 `参数构建器`：使 `onlySelect(..)` 与 `selectExclude(..)` 方法支持传入形如 `age,name` 这样以 `,` 分隔的字符串参数
 * Bean Searcher Boot Starter
   * 优化：添加自定义参数过滤器时，不覆盖内置的参数过滤器
 
