@@ -9,8 +9,10 @@
   * 新增 `NotLike` 运算符（`nk`）：https://github.com/ejlchina/bean-searcher/issues/50
   * 新增 `根参数` 机制，可以不被逻辑组过滤掉，与组之间是且的关系，参数构建器默认使用 根参数
   * 重构 `FieldConvertor`: 字段转换器的 9 个实现类 从 `com.ejlchina.searcher.implement` 包迁移到 `com.ejlchina.searcher.convertor` 包
+  * 移除 `DateValueCorrector`（因为已经有了参数转换器了）
 * Bean Searcher Boot Starter
   * 支持 用户配置一个 `ParamResolver.Convertor` 的 Spring Bean 扩展参数值转换能力
+  * 移除 `bean-searcher.sql.use-date-value-corrector` 配置项
 
 # v3.7.1 @ 2022-06-22
 

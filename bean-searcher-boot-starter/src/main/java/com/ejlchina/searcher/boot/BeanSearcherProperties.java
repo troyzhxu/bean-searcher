@@ -375,11 +375,6 @@ public class BeanSearcherProperties {
 		private final DefaultMapping defaultMapping = new DefaultMapping();
 
 		/**
-		 * 是否起用 DateValueCorrector，默认为 true
-		 */
-		private boolean useDateValueCorrector = true;
-
-		/**
 		 * 慢 SQL 阈值（单位：毫秒），默认：500 毫秒
 		 * @since v3.7.0
 		 */
@@ -492,14 +487,6 @@ public class BeanSearcherProperties {
 				this.sortType = sortType;
 			}
 
-		}
-
-		public boolean isUseDateValueCorrector() {
-			return useDateValueCorrector;
-		}
-
-		public void setUseDateValueCorrector(boolean useDateValueCorrector) {
-			this.useDateValueCorrector = useDateValueCorrector;
 		}
 
 		public long getSlowSqlThreshold() {

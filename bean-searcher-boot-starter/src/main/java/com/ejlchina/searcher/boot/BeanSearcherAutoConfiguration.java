@@ -136,16 +136,9 @@ public class BeanSearcherAutoConfiguration {
 	}
 
 	@Bean
-	@ConditionalOnMissingBean(DateValueCorrector.class)
-	@ConditionalOnProperty(name = "bean-searcher.sql.use-date-value-corrector", havingValue = "true", matchIfMissing = true)
-	public DateValueCorrector dateValueCorrector() {
-		return new DateValueCorrector();
-	}
-
-	@Bean
 	@ConditionalOnMissingBean(SqlResolver.class)
-	public SqlResolver sqlResolver(Dialect dialect, ObjectProvider<DateValueCorrector> dateValueCorrector) {
-		return new DefaultSqlResolver(dialect, dateValueCorrector.getIfAvailable());
+	public SqlResolver sqlResolver(Dialect dialect) {
+		return new DefaultSqlResolver(dialect);
 	}
 
 	@Bean

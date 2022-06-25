@@ -2,16 +2,15 @@ package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.dialect.Dialect;
+import com.ejlchina.searcher.group.Group;
 import com.ejlchina.searcher.param.FetchType;
 import com.ejlchina.searcher.param.FieldParam;
 import com.ejlchina.searcher.param.OrderBy;
 import com.ejlchina.searcher.param.Paging;
-import com.ejlchina.searcher.group.Group;
 import com.ejlchina.searcher.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * 默认 SQL 解析器
@@ -21,17 +20,12 @@ import java.util.Objects;
  */
 public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 
-	/**
-	 * 日期参数矫正器
-	 */
-	private DateValueCorrector dateValueCorrector = new DateValueCorrector();
-	
+
 	public DefaultSqlResolver() {
 	}
 
-	public DefaultSqlResolver(Dialect dialect, DateValueCorrector dateValueCorrector) {
+	public DefaultSqlResolver(Dialect dialect) {
 		super(dialect);
-		this.dateValueCorrector = dateValueCorrector;
 	}
 
 	@Override
@@ -189,13 +183,9 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 					}
 					FieldParam param = params.get(i);
 					FieldMeta fieldMeta = beanMeta.requireFieldMeta(param.getName());
-					Object[] values = param.getValues();
-					FieldOp operator = (FieldOp) param.getOperator();
-					if (dateValueCorrector != null) {
-						values = dateValueCorrector.correct(fieldMeta.getType(), values, operator);
-					}
 					SqlWrapper<Object> fieldSql = resolveDbFieldSql(fieldMeta.getFieldSql(), paraMap);
-					FieldOp.OpPara opPara = new FieldOp.OpPara(fieldSql, param.isIgnoreCase(), values);
+					FieldOp.OpPara opPara = new FieldOp.OpPara(fieldSql, param.isIgnoreCase(), param.getValues());
+					FieldOp operator = (FieldOp) param.getOperator();
 					sqlWrapper.addParas(operator.operate(builder, opPara));
 					builder.append(")");
 				}
@@ -313,14 +303,6 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 	protected <T> String getTableAlias(BeanMeta<T> beanMeta) {
 		// 注意：Oracle 数据库的别名不能以下划线开头，留参 beanMeta 方便用户重写该方法
 		return "t_";
-	}
-
-	public DateValueCorrector getDateValueCorrector() {
-		return dateValueCorrector;
-	}
-
-	public void setDateValueCorrector(DateValueCorrector dateValueCorrector) {
-		this.dateValueCorrector = Objects.requireNonNull(dateValueCorrector);
 	}
 
 }
