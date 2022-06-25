@@ -138,17 +138,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		String joinCond = beanMeta.getJoinCond();
 
 		if (StringUtils.isNotBlank(joinCond)) {
-			List<SqlSnippet.SqlPara> joinCondParams = beanMeta.getJoinCondSqlParas();
-			for (SqlSnippet.SqlPara param : joinCondParams) {
-				Object sqlParam = paraMap.get(param.getName());
-				if (param.isJdbcPara()) {
-					sqlWrapper.addPara(sqlParam);
-				} else {
-					// 将这部分逻辑提上来，当 joinCond 只有一个拼接参数 且 该参数为空时，使其不参与 where 子句
-					String strParam = sqlParam != null ? sqlParam.toString() : "";
-					joinCond = joinCond.replace(param.getSqlName(), strParam);
-				}
-			}
+			joinCond = buildCondition(sqlWrapper, beanMeta.getJoinCondSqlParas(), paraMap, joinCond);
 		}
 		boolean hasJoinCond = StringUtils.isNotBlank(joinCond);
 		boolean hasFieldParams = paramsGroup.judgeAny(l -> l.size() > 0);
@@ -194,25 +184,36 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		});
 		String groupBy = beanMeta.getGroupBy();
 		if (StringUtils.isNotBlank(groupBy)) {
-			List<SqlSnippet.SqlPara> groupParams = beanMeta.getGroupBySqlParas();
-			if (groupParams != null) {
-				for (SqlSnippet.SqlPara param : groupParams) {
-					Object sqlParam = paraMap.get(param.getName());
-					if (param.isJdbcPara()) {
-						sqlWrapper.addPara(sqlParam);
-					} else {
-						String strParam = sqlParam != null ? sqlParam.toString() : "";
-						groupBy = groupBy.replace(param.getSqlName(), strParam);
-					}
-				}
-			}
+			groupBy = buildCondition(sqlWrapper, beanMeta.getGroupBySqlParas(), paraMap, groupBy);
 			if (StringUtils.isNotBlank(groupBy)) {
 				builder.append(" group by ").append(groupBy);
+			}
+			String having = beanMeta.getHaving();
+			if (StringUtils.isNotBlank(having)) {
+				having = buildCondition(sqlWrapper, beanMeta.getHavingSqlParas(), paraMap, having);
+				if (StringUtils.isNotBlank(having)) {
+					builder.append(" having ").append(having);
+				}
 			}
 		}
 		sqlWrapper.setSql(builder.toString());
 		return sqlWrapper;
 	}
+
+	protected String buildCondition(SqlWrapper<Object> sqlWrapper, List<SqlSnippet.SqlPara> sqlParas, Map<String, Object> paraMap, String condition) {
+		for (SqlSnippet.SqlPara sqlPara : sqlParas) {
+			Object para = paraMap.get(sqlPara.getName());
+			if (sqlPara.isJdbcPara()) {
+				sqlWrapper.addPara(para);
+			} else {
+				// 将这部分逻辑提上来，当 condition 只有一个拼接参数 且 该参数为空时，使其不参与 where 子句
+				String strParam = para != null ? para.toString() : "";
+				condition = condition.replace(sqlPara.getSqlName(), strParam);
+			}
+		}
+		return condition;
+	}
+
 
 	protected <T> String buildClusterSql(BeanMeta<T> beanMeta, String clusterSelectSql, String fieldSelectSql, String fromWhereSql) {
 		if (beanMeta.isDistinctOrGroupBy()) {
@@ -263,15 +264,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		SqlWrapper<Object> sqlWrapper = new SqlWrapper<>();
 		String tables = tableSnippet.getSql();
 		List<SqlSnippet.SqlPara> params = tableSnippet.getParas();
-		for (SqlSnippet.SqlPara param : params) {
-			Object sqlParam = paraMap.get(param.getName());
-			if (param.isJdbcPara()) {
-				sqlWrapper.addPara(sqlParam);
-			} else {
-				String strParam = sqlParam != null ? sqlParam.toString() : "";
-				tables = tables.replace(param.getSqlName(), strParam);
-			}
-		}
+		tables = buildCondition(sqlWrapper, params, paraMap, tables);
 		sqlWrapper.setSql(tables);
 		return sqlWrapper;
 	}
@@ -280,15 +273,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		String dbField = dbFieldSnippet.getSql();
 		List<SqlSnippet.SqlPara> params = dbFieldSnippet.getParas();
 		SqlWrapper<Object> sqlWrapper = new SqlWrapper<>();
-		for (SqlSnippet.SqlPara param : params) {
-			Object sqlParam = paraMap.get(param.getName());
-			if (param.isJdbcPara()) {
-				sqlWrapper.addPara(sqlParam);
-			} else {
-				String strParam = sqlParam != null ? sqlParam.toString() : "";
-				dbField = dbField.replace(param.getSqlName(), strParam);
-			}
-		}
+		dbField = buildCondition(sqlWrapper, params, paraMap, dbField);
 		sqlWrapper.setSql(dbField);
 		return sqlWrapper;
 	}

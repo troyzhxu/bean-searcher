@@ -38,6 +38,11 @@ public class BeanMeta<T> {
 	private final SqlSnippet groupBySnippet;
 
 	/**
+	 * 分组过滤
+	 * */
+	private final SqlSnippet havingSnippet;
+
+	/**
 	 * 排序字段
 	 */
 	private final SqlSnippet orderBySnippet;
@@ -59,13 +64,14 @@ public class BeanMeta<T> {
 
 
 	public BeanMeta(Class<T> beanClass, String dataSource, SqlSnippet tableSnippet,
-					SqlSnippet joinCondSnippet, SqlSnippet groupBySnippet, SqlSnippet orderBySnippet,
-					boolean sortable, boolean distinct) {
+					SqlSnippet joinCondSnippet, SqlSnippet groupBySnippet, SqlSnippet havingSnippet,
+					SqlSnippet orderBySnippet, boolean sortable, boolean distinct) {
 		this.beanClass = beanClass;
 		this.dataSource = dataSource;
 		this.tableSnippet = tableSnippet;
 		this.joinCondSnippet = joinCondSnippet;
 		this.groupBySnippet = groupBySnippet;
+		this.havingSnippet = havingSnippet;
 		this.orderBySnippet = orderBySnippet;
 		this.sortable = sortable;
 		this.distinct = distinct;
@@ -104,6 +110,14 @@ public class BeanMeta<T> {
 
 	public List<SqlSnippet.SqlPara> getGroupBySqlParas() {
 		return groupBySnippet.getParas();
+	}
+
+	public String getHaving() {
+		return havingSnippet.getSql();
+	}
+
+	public List<SqlSnippet.SqlPara> getHavingSqlParas() {
+		return havingSnippet.getParas();
 	}
 
 	public boolean isDistinct() {

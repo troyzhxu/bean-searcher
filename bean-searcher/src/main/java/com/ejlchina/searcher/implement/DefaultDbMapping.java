@@ -63,6 +63,7 @@ public class DefaultDbMapping implements DbMapping {
                     tables(beanClass, bean),
                     bean.joinCond().trim(),
                     bean.groupBy().trim(),
+                    bean.having().trim(),
                     bean.distinct(),
                     bean.orderBy(),
                     sortable(bean.sortType())

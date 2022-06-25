@@ -69,6 +69,11 @@ public interface DbMapping {
         private final String groupBy;
 
         /**
+         * Having 字句
+         */
+        private final String having;
+
+        /**
          * 是否 distinct 结果
          * */
         private final boolean distinct;
@@ -84,15 +89,16 @@ public interface DbMapping {
         private final boolean sortable;
 
         public Table(String tables) {
-            this("", tables, "", "", false, "", true);
+            this("", tables, "", "", "", false, "", true);
         }
 
-        public Table(String dataSource, String tables, String joinCond, String groupBy, boolean distinct,
-                     String orderBy, boolean sortable) {
+        public Table(String dataSource, String tables, String joinCond, String groupBy, String having,
+                     boolean distinct, String orderBy, boolean sortable) {
             this.dataSource = dataSource;
             this.tables = tables;
             this.joinCond = joinCond;
             this.groupBy = groupBy;
+            this.having = having;
             this.distinct = distinct;
             this.orderBy = orderBy;
             this.sortable = sortable;
@@ -112,6 +118,10 @@ public interface DbMapping {
 
         public String getGroupBy() {
             return groupBy;
+        }
+
+        public String getHaving() {
+            return having;
         }
 
         public boolean isDistinct() {

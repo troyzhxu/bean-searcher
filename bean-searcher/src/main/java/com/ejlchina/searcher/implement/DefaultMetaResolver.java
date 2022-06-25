@@ -64,6 +64,7 @@ public class DefaultMetaResolver implements MetaResolver {
                 snippetResolver.resolve(table.getTables()),
                 snippetResolver.resolve(table.getJoinCond()),
                 snippetResolver.resolve(table.getGroupBy()),
+                snippetResolver.resolve(table.getHaving()),
                 snippetResolver.resolve(table.getOrderBy()),
                 table.isSortable(), table.isDistinct());
         // 解析实体类字段
