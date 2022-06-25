@@ -7,6 +7,7 @@ import com.ejlchina.searcher.util.MapUtils;
 import com.example.demo.entity.Employee;
 import com.example.demo.mapper.EmployeeMapper;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @SpringBootTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class DemoApplicationTests {
 
 	@Autowired
@@ -26,16 +28,19 @@ class DemoApplicationTests {
 	private EmployeeMapper employeeMapper;
 
 	@Test
+	@Order(1)
 	void warmup() {
 		System.out.println("热身...");
-		System.out.println("Bean Searcher 与 MyBatis Plus 各执行 100 次...");
+		System.out.println("Bean Searcher 与 MyBatis Plus 各执行 1000 次...");
 		long t0 = System.currentTimeMillis();
-		for (int i = 0; i < 100; i++) {
-			employeeMapper.selectList(null);
-		}
-		for (int i = 0; i < 50; i++) {
-			beanSearcher.searchAll(Employee.class, null);
-			mapSearcher.searchAll(Employee.class, null);
+		for (int i = 0; i < 1000; i++) {
+			mapSearcher.searchAll(Employee.class, MapUtils.builder()
+					.field(Employee::getAge, 30)
+					.build());
+			beanSearcher.searchAll(Employee.class, MapUtils.builder()
+					.field(Employee::getAge, 30)
+					.build());
+			employeeMapper.selectList(new LambdaQueryWrapper<>(Employee.class).eq(Employee::getAge, 30));
 		}
 		long cost = System.currentTimeMillis() - t0;
 		System.out.println("热身完毕，耗时：" + cost + "ms");
@@ -43,6 +48,7 @@ class DemoApplicationTests {
 
 
 	@Test
+	@Order(2)
 	void testMapSearcher() {
 		System.out.println("MapSearcher 执行 1000 次...");
 		long t0 = System.currentTimeMillis();
@@ -59,6 +65,22 @@ class DemoApplicationTests {
 	}
 
 	@Test
+	@Order(3)
+	void testMyBatisPlus() {
+		System.out.println("MyBatisPlus 执行 1000 次 ...");
+		long t0 = System.currentTimeMillis();
+		int totalCount = 0;
+		for (int i = 0; i < 1000; i++) {
+			List<Employee> list = employeeMapper.selectList(new LambdaQueryWrapper<>(Employee.class).eq(Employee::getAge, 30));
+			totalCount += list.size();
+		}
+		long cost = System.currentTimeMillis() - t0;
+		System.out.println("累计 Select 数量：" + totalCount);
+		System.out.println("MyBatisPlus 耗时：" + cost + "ms");
+	}
+
+	@Test
+	@Order(4)
 	void testBeanSearcher() {
 		System.out.println("BeanSearcher 执行 1000 次...");
 		long t0 = System.currentTimeMillis();
@@ -72,20 +94,6 @@ class DemoApplicationTests {
 		long cost = System.currentTimeMillis() - t0;
 		System.out.println("累计 Select 数量：" + totalCount);
 		System.out.println("BeanSearcher 耗时：" + cost + "ms");
-	}
-
-	@Test
-	void testMyBatisPlus() {
-		System.out.println("MyBatisPlus 执行 1000 次 ...");
-		long t0 = System.currentTimeMillis();
-		int totalCount = 0;
-		for (int i = 0; i < 1000; i++) {
-			List<Employee> list = employeeMapper.selectList(new LambdaQueryWrapper<>(Employee.class).eq(Employee::getAge, 30));
-			totalCount += list.size();
-		}
-		long cost = System.currentTimeMillis() - t0;
-		System.out.println("累计 Select 数量：" + totalCount);
-		System.out.println("MyBatisPlus 耗时：" + cost + "ms");
 	}
 
 }

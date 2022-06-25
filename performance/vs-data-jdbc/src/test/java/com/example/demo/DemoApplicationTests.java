@@ -32,19 +32,20 @@ class DemoApplicationTests {
 	@Order(1)
 	void warmup() {
 		System.out.println("热身...");
-		System.out.println("Bean Searcher 与 Data Jdbc 各执行 100 次...");
+		System.out.println("Bean Searcher 与 Data Jdbc 各执行 1000 次...");
 		long t0 = System.currentTimeMillis();
-		for (int i = 0; i < 100; i++) {
-			employeeRepository.findAll();
-		}
-		for (int i = 0; i < 50; i++) {
-			beanSearcher.searchAll(Employee.class, null);
-			mapSearcher.searchAll(Employee.class, null);
+		for (int i = 0; i < 1000; i++) {
+			mapSearcher.searchAll(Employee.class, MapUtils.builder()
+					.field(Employee::getAge, 30)
+					.build());
+			beanSearcher.searchAll(Employee.class, MapUtils.builder()
+					.field(Employee::getAge, 30)
+					.build());
+			employeeRepository.findAllByAge(30);
 		}
 		long cost = System.currentTimeMillis() - t0;
 		System.out.println("热身完毕，耗时：" + cost + "ms");
 	}
-
 
 	@Test
 	@Order(2)
