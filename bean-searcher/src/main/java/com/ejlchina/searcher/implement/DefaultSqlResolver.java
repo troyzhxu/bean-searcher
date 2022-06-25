@@ -136,6 +136,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		sqlWrapper.addParas(tableSql.getParas());
 		StringBuilder builder = new StringBuilder(" from ").append(tableSql.getSql());
 		String joinCond = beanMeta.getJoinCond();
+
 		if (StringUtils.isNotBlank(joinCond)) {
 			List<SqlSnippet.SqlPara> joinCondParams = beanMeta.getJoinCondSqlParas();
 			for (SqlSnippet.SqlPara param : joinCondParams) {
@@ -205,7 +206,9 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 					}
 				}
 			}
-			builder.append(" group by ").append(groupBy);
+			if (StringUtils.isNotBlank(groupBy)) {
+				builder.append(" group by ").append(groupBy);
+			}
 		}
 		sqlWrapper.setSql(builder.toString());
 		return sqlWrapper;
