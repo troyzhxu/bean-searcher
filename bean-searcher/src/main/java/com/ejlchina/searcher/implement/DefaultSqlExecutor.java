@@ -200,12 +200,12 @@ public class DefaultSqlExecutor implements SqlExecutor {
 		final PreparedStatement statement;
 		final ResultSet resultSet;
 
-		Result(PreparedStatement statement, ResultSet resultSet) {
+		public Result(PreparedStatement statement, ResultSet resultSet) {
 			this.statement = statement;
 			this.resultSet = resultSet;
 		}
 
-		void close() {
+		public void close() {
 			closeQuietly(resultSet);
 			closeQuietly(statement);
 		}

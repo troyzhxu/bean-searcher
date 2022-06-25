@@ -106,7 +106,7 @@ public class DefaultParamResolver implements ParamResolver {
 	private List<Convertor> convertors;
 
 	public DefaultParamResolver() {
-		convertors = new ArrayList<>();
+		this(new ArrayList<>());
 		convertors.add(new BoolParamConvertor());
 		convertors.add(new NumberParamConvertor());
 		convertors.add(new DateParamConvertor());
