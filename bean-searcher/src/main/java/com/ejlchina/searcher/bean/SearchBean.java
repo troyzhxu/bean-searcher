@@ -36,7 +36,7 @@ public @interface SearchBean {
 	String tables() default "";
 	
 	/**
-	 * 参与检索的数据表的连接条件，例如：
+	 * 参与检索的数据表的连接条件（Where 条件），例如：
 	 * u.id = ur.user_id and ur.role_id = r.id 
 	 * @return join condition
 	 * */
@@ -48,7 +48,14 @@ public @interface SearchBean {
 	 * @return group information
 	 */
 	String groupBy() default "";
-	
+
+	/**
+	 * 分组过滤条件，有 {@link #groupBy()} 时才会生效
+	 * @return having clause
+	 * @since v3.8.0
+	 */
+	String having() default "";
+
 	/**
 	 * 是否 distinct 结果
 	 * @return distinct
