@@ -1,6 +1,6 @@
 # Bean Searcher 在各框架内的使用案例
 
-* [SpringBoot 案例](./spring-boot-demo)
+* [SpringBoot 案例](./bs-demo-springboot)
   - 使用 H2 数据库，无需任何配置即可启动体验
   - JDK 8+
 * [SpringBoot 案例（使用 JDK9+ 的模块系统）](./bs-demo-jdkmods)

@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.ejlchina</groupId>
-	<artifactId>spring-boot-demo</artifactId>
+	<artifactId>bs-demo-sqlserver</artifactId>
 	<name>demo</name>
 	<description>Demo project for Bean Searcher</description>
 
