@@ -12,14 +12,14 @@ import static com.ejlchina.searcher.util.ObjectUtils.firstNotNull;
 
 /**
  * NotLike 运算符，用法：
- * <pre>
+ * <pre>{@code
  * Map<String, Object> params = MapUtils.builder()
  *     .field(User::getName, "张%").op(NotLike.class)
  *     .build();
  * List<User> users = beanSearcher.searchList(User.class, params);
  * // 生成的 SQL：
  * select * from user where name not like '张%'
- * </pre>
+ * }</pre>
  * @author Troy.Zhou @ 2022-06-19
  * @since v3.8.0
  */
