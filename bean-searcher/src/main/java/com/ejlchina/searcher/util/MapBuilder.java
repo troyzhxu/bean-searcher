@@ -43,11 +43,7 @@ public class MapBuilder extends Builder<MapBuilder> {
      */
     @SafeVarargs
     public final <T> MapBuilder onlySelect(FieldFn<T, ?>... fieldFns) {
-        String[] fields = new String[fieldFns.length];
-        for (int i = 0; i < fields.length; i++) {
-            fields[i] = toFieldName(fieldFns[i]);
-        }
-        return onlySelect(fields);
+        return onlySelect(toFields(fieldFns));
     }
 
     /**
@@ -56,8 +52,7 @@ public class MapBuilder extends Builder<MapBuilder> {
      * @return MapBuilder
      */
     public MapBuilder onlySelect(String... fields) {
-        Collections.addAll(obtainList(ONLY_SELECT), fields);
-        return this;
+        return appendFields(obtainList(ONLY_SELECT), fields);
     }
 
     /**
@@ -68,11 +63,7 @@ public class MapBuilder extends Builder<MapBuilder> {
      */
     @SafeVarargs
     public final <T> MapBuilder selectExclude(FieldFn<T, ?>... fieldFns) {
-        String[] fields = new String[fieldFns.length];
-        for (int i = 0; i < fields.length; i++) {
-            fields[i] = toFieldName(fieldFns[i]);
-        }
-        return selectExclude(fields);
+        return selectExclude(toFields(fieldFns));
     }
 
     /**
@@ -81,7 +72,24 @@ public class MapBuilder extends Builder<MapBuilder> {
      * @return MapBuilder
      */
     public MapBuilder selectExclude(String... fields) {
-        Collections.addAll(obtainList(SELECT_EXCLUDE), fields);
+        return appendFields(obtainList(SELECT_EXCLUDE), fields);
+    }
+
+    @SafeVarargs
+    private final <T> String[] toFields(FieldFn<T, ?>... fieldFns) {
+        String[] fields = new String[fieldFns.length];
+        for (int i = 0; i < fields.length; i++) {
+            fields[i] = toFieldName(fieldFns[i]);
+        }
+        return fields;
+    }
+
+    private MapBuilder appendFields(List<String> list, String... fields) {
+        if (fields.length == 1) {
+            Collections.addAll(list, fields[0].split(","));
+        } else {
+            Collections.addAll(list, fields);
+        }
         return this;
     }
 

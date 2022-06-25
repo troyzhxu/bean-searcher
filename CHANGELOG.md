@@ -7,20 +7,19 @@
   * 增强 `ParamResolver`: 新增 `Convertor` 参数转换器，可对检索参数的值类型转换为数据库字段匹配的类型（更好的兼容 Oracle、PgSQL 等数据库）
   * 新增 `BoolParamConvertor`、`NumberParamConvertor`、`DateParamConvertor`、`TimeParamConvertor` 与 `DateTimeParamConvertor` 参数转换器
   * 重构 `FieldConvertor`: 字段转换器的 9 个实现类 从 `com.ejlchina.searcher.implement` 包迁移到 `com.ejlchina.searcher.convertor` 包
-
-
+  
 * Bean Searcher Boot Starter
   * 支持 用户配置一个 `ParamResolver.Convertor` 的 Spring Bean 扩展参数值转换能力
 
-# v3.7.1 @ 2022-06-04
+# v3.7.1 @ 2022-06-22
 
 ### ✨ Better
 
 * Bean Searcher
-  * 参数构建器新增 `orderBy(FieldFn<T, ?> fieldFn)`、`orderBy(String fieldName)`、`asc()` 与 `desc()` 方法
+  * 优化 `参数构建器`：新增 `orderBy(FieldFn<T, ?> fieldFn)`、`orderBy(String fieldName)`、`asc()` 与 `desc()` 方法
+  * 优化 `参数构建器`：使 `onlySelect(..)` 与 `selectExclude(..)` 方法支持传入形如 `age,name` 这样以 `,` 分隔的字符串参数
 * Bean Searcher Boot Starter
   * 优化：添加自定义参数过滤器时，不覆盖内置的参数过滤器
-
 
 # v3.7.0 @ 2022-06-04
 
