@@ -3,13 +3,17 @@
 ### ✨ Features
 
 * Bean Searcher
-  * 增强 `DbField` 注解：新增 `type` 属性，允许用户手动指定该属性对应的数据库字段类型
+  * 增强 `@SearchBean` 注解：新增 `having` 属性，用于指定分组条件 
+  * 增强 `@DbField` 注解：新增 `type` 属性，允许用户手动指定该属性对应的数据库字段类型
   * 增强 `ParamResolver`: 新增 `Convertor` 参数转换器，可对检索参数的值类型转换为数据库字段匹配的类型（更好的兼容 Oracle、PgSQL 等数据库）
   * 新增 `BoolParamConvertor`、`NumberParamConvertor`、`DateParamConvertor`、`TimeParamConvertor` 与 `DateTimeParamConvertor` 参数转换器
   * 新增 `NotLike` 运算符（`nk`）：https://github.com/ejlchina/bean-searcher/issues/50
+  * [TODO] 增强 `参数构建起`：可为字段 自定义 SQL 条件：https://github.com/ejlchina/bean-searcher/issues/51
   * 新增 `根参数` 机制，可以不被逻辑组过滤掉，与组之间是且的关系，参数构建器默认使用 根参数
   * 重构 `FieldConvertor`: 字段转换器的 9 个实现类 从 `com.ejlchina.searcher.implement` 包迁移到 `com.ejlchina.searcher.convertor` 包
+  * 重构 `@SearchBean` 注解：新增 `where` 替换原来的 `joinCond` 属性，并将 `joinCond` 标记为过时
   * 移除 `DateValueCorrector`（因为已经有了参数转换器了）
+  * [TODO] 优化 分组动态查询条件生成机制：https://github.com/ejlchina/bean-searcher/issues/56
 * Bean Searcher Boot Starter
   * 支持 用户配置一个 `ParamResolver.Convertor` 的 Spring Bean 扩展参数值转换能力
   * 移除 `bean-searcher.sql.use-date-value-corrector` 配置项
