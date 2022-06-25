@@ -135,18 +135,18 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		SqlWrapper<Object> tableSql = resolveTableSql(beanMeta.getTableSnippet(), paraMap);
 		sqlWrapper.addParas(tableSql.getParas());
 		StringBuilder builder = new StringBuilder(" from ").append(tableSql.getSql());
-		String joinCond = beanMeta.getJoinCond();
 
-		if (StringUtils.isNotBlank(joinCond)) {
-			joinCond = buildCondition(sqlWrapper, beanMeta.getJoinCondSqlParas(), paraMap, joinCond);
+		String where = beanMeta.getWhere();
+		if (StringUtils.isNotBlank(where)) {
+			where = buildCondition(sqlWrapper, beanMeta.getWhereSqlParas(), paraMap, where);
 		}
-		boolean hasJoinCond = StringUtils.isNotBlank(joinCond);
+		boolean hasWhere = StringUtils.isNotBlank(where);
 		boolean hasFieldParams = paramsGroup.judgeAny(l -> l.size() > 0);
 
-		if (hasJoinCond || hasFieldParams) {
+		if (hasWhere || hasFieldParams) {
 			builder.append(" where ");
-			if (hasJoinCond) {
-				builder.append("(").append(joinCond).append(")");
+			if (hasWhere) {
+				builder.append("(").append(where).append(")");
 				if (hasFieldParams) {
 					builder.append(" and ");
 				}

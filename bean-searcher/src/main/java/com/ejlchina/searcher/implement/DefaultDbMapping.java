@@ -5,6 +5,8 @@ import com.ejlchina.searcher.FieldOp;
 import com.ejlchina.searcher.SearchException;
 import com.ejlchina.searcher.bean.*;
 import com.ejlchina.searcher.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.util.Objects;
@@ -15,6 +17,8 @@ import java.util.Objects;
  * @since v3.1.0 从 DefaultMetaResolver 里分离出来
  */
 public class DefaultDbMapping implements DbMapping {
+
+    private static final Logger log = LoggerFactory.getLogger(DefaultDbMapping.class);
 
     @SuppressWarnings("unchecked")
     private static final Class<FieldOp>[] EMPTY_OPERATORS = new Class[0];
@@ -59,9 +63,16 @@ public class DefaultDbMapping implements DbMapping {
     public Table table(Class<?> beanClass) {
         SearchBean bean = getSearchBean(beanClass);
         if (bean != null) {
+            String where = bean.where().trim();
+            if (StringUtils.isBlank(where)) {
+                where = bean.joinCond().trim();
+                if (StringUtils.isNotBlank(where)) {
+                    log.warn("@SearchBean.joinCond was deprecated, please use @SearchBean.where instead.");
+                }
+            }
             return new Table(bean.dataSource().trim(),
                     tables(beanClass, bean),
-                    bean.joinCond().trim(),
+                    where,
                     bean.groupBy().trim(),
                     bean.having().trim(),
                     bean.distinct(),

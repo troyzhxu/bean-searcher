@@ -36,12 +36,20 @@ public @interface SearchBean {
 	String tables() default "";
 	
 	/**
-	 * 参与检索的数据表的连接条件（Where 条件），例如：
-	 * u.id = ur.user_id and ur.role_id = r.id 
-	 * @return join condition
+	 * 请使用 {@link #where() } 替代
+	 * @return where condition
 	 * */
+	@Deprecated
 	String joinCond() default "";
-	
+
+	/**
+	 * Where 条件，例如：
+	 * u.id = ur.user_id and ur.role_id = r.id
+	 * @return where condition
+	 * @since v3.8.0
+	 */
+	String where() default "";
+
 	/**
 	 * 分组字段，例如
 	 * u.id,r.name

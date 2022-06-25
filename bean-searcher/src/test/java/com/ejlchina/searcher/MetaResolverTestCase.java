@@ -34,8 +34,8 @@ public class MetaResolverTestCase {
         Assert.assertEquals("user01", beanMeta.getTableSnippet().getSql());
         Assert.assertTrue(beanMeta.getTableSnippet().getParas().isEmpty());
 
-        Assert.assertTrue(StringUtils.isBlank(beanMeta.getJoinCond()));
-        Assert.assertTrue(beanMeta.getJoinCondSqlParas().isEmpty());
+        Assert.assertTrue(StringUtils.isBlank(beanMeta.getWhere()));
+        Assert.assertTrue(beanMeta.getWhereSqlParas().isEmpty());
 
         Assert.assertTrue(StringUtils.isBlank(beanMeta.getGroupBy()));
         Assert.assertTrue(beanMeta.getGroupBySqlParas().isEmpty());
@@ -196,8 +196,8 @@ public class MetaResolverTestCase {
         Assert.assertEquals("user u, role r", beanMeta.getTableSnippet().getSql());
         Assert.assertTrue(beanMeta.getTableSnippet().getParas().isEmpty());
 
-        Assert.assertEquals("u.role_id = r.id", beanMeta.getJoinCond());
-        Assert.assertTrue(beanMeta.getJoinCondSqlParas().isEmpty());
+        Assert.assertEquals("u.role_id = r.id", beanMeta.getWhere());
+        Assert.assertTrue(beanMeta.getWhereSqlParas().isEmpty());
 
         Assert.assertTrue(StringUtils.isBlank(beanMeta.getGroupBy()));
         Assert.assertTrue(beanMeta.getGroupBySqlParas().isEmpty());
@@ -250,8 +250,8 @@ public class MetaResolverTestCase {
         Assert.assertEquals(":t_name:", tablePara.getSqlName());
         Assert.assertFalse(tablePara.isJdbcPara());
 
-        Assert.assertTrue(StringUtils.isBlank(beanMeta.getJoinCond()));
-        Assert.assertTrue(beanMeta.getJoinCondSqlParas().isEmpty());
+        Assert.assertTrue(StringUtils.isBlank(beanMeta.getWhere()));
+        Assert.assertTrue(beanMeta.getWhereSqlParas().isEmpty());
 
         Assert.assertTrue(StringUtils.isBlank(beanMeta.getGroupBy()));
         Assert.assertTrue(beanMeta.getGroupBySqlParas().isEmpty());
@@ -312,8 +312,8 @@ public class MetaResolverTestCase {
     @Test
     public void test08() {
         BeanMeta<User08> beanMeta = metaResolver.resolve(User08.class);
-        Assert.assertEquals("age = ? and :ext_cond:", beanMeta.getJoinCond());
-        List<SqlSnippet.SqlPara> jsonCondParas = beanMeta.getJoinCondSqlParas();
+        Assert.assertEquals("age = ? and :ext_cond:", beanMeta.getWhere());
+        List<SqlSnippet.SqlPara> jsonCondParas = beanMeta.getWhereSqlParas();
         Assert.assertEquals(2, jsonCondParas.size());
 
         SqlSnippet.SqlPara para1 = jsonCondParas.get(0);

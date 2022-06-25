@@ -59,9 +59,9 @@ public interface DbMapping {
         private final String tables;
 
         /**
-         * 连表条件
+         * Where 条件
          * */
-        private final String joinCond;
+        private final String where;
 
         /**
          * 分组字段
@@ -92,11 +92,11 @@ public interface DbMapping {
             this("", tables, "", "", "", false, "", true);
         }
 
-        public Table(String dataSource, String tables, String joinCond, String groupBy, String having,
+        public Table(String dataSource, String tables, String where, String groupBy, String having,
                      boolean distinct, String orderBy, boolean sortable) {
             this.dataSource = dataSource;
             this.tables = tables;
-            this.joinCond = joinCond;
+            this.where = where;
             this.groupBy = groupBy;
             this.having = having;
             this.distinct = distinct;
@@ -112,8 +112,8 @@ public interface DbMapping {
             return tables;
         }
 
-        public String getJoinCond() {
-            return joinCond;
+        public String getWhere() {
+            return where;
         }
 
         public String getGroupBy() {

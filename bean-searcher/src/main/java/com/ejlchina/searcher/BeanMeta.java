@@ -28,9 +28,9 @@ public class BeanMeta<T> {
 	private final SqlSnippet tableSnippet;
 
 	/**
-	 * 连表条件
+	 * Where 条件
 	 * */
-	private final SqlSnippet joinCondSnippet;
+	private final SqlSnippet whereSnippet;
 	
 	/**
 	 * 分组字段
@@ -64,12 +64,12 @@ public class BeanMeta<T> {
 
 
 	public BeanMeta(Class<T> beanClass, String dataSource, SqlSnippet tableSnippet,
-					SqlSnippet joinCondSnippet, SqlSnippet groupBySnippet, SqlSnippet havingSnippet,
+					SqlSnippet whereSnippet, SqlSnippet groupBySnippet, SqlSnippet havingSnippet,
 					SqlSnippet orderBySnippet, boolean sortable, boolean distinct) {
 		this.beanClass = beanClass;
 		this.dataSource = dataSource;
 		this.tableSnippet = tableSnippet;
-		this.joinCondSnippet = joinCondSnippet;
+		this.whereSnippet = whereSnippet;
 		this.groupBySnippet = groupBySnippet;
 		this.havingSnippet = havingSnippet;
 		this.orderBySnippet = orderBySnippet;
@@ -96,12 +96,12 @@ public class BeanMeta<T> {
 		return tableSnippet;
 	}
 
-	public String getJoinCond() {
-		return joinCondSnippet.getSql();
+	public String getWhere() {
+		return whereSnippet.getSql();
 	}
 
-	public List<SqlSnippet.SqlPara> getJoinCondSqlParas() {
-		return joinCondSnippet.getParas();
+	public List<SqlSnippet.SqlPara> getWhereSqlParas() {
+		return whereSnippet.getParas();
 	}
 
 	public String getGroupBy() {

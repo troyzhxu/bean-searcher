@@ -62,7 +62,7 @@ public class DefaultMetaResolver implements MetaResolver {
         }
         BeanMeta<T> beanMeta = new BeanMeta<>(beanClass, table.getDataSource(),
                 snippetResolver.resolve(table.getTables()),
-                snippetResolver.resolve(table.getJoinCond()),
+                snippetResolver.resolve(table.getWhere()),
                 snippetResolver.resolve(table.getGroupBy()),
                 snippetResolver.resolve(table.getHaving()),
                 snippetResolver.resolve(table.getOrderBy()),
