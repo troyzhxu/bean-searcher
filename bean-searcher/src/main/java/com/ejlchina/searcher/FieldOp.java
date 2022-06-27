@@ -67,18 +67,28 @@ public interface FieldOp {
      */
     class OpPara {
 
-        final SqlWrapper<Object> fieldSql;
+        final FieldSqlGetter fieldSqlGetter;
         final boolean ignoreCase;
         final Object[] values;
 
-        public OpPara(SqlWrapper<Object> fieldSql, boolean ignoreCase, Object[] values) {
-            this.fieldSql = fieldSql;
+        public OpPara(FieldSqlGetter fieldSqlGetter, boolean ignoreCase, Object[] values) {
+            this.fieldSqlGetter = fieldSqlGetter;
             this.ignoreCase = ignoreCase;
             this.values = values;
         }
 
+        public interface FieldSqlGetter {
+
+            SqlWrapper<Object> get(String fieldName);
+
+        }
+
         public SqlWrapper<Object> getFieldSql() {
-            return fieldSql;
+            return fieldSqlGetter.get(null);
+        }
+
+        public SqlWrapper<Object> getFieldSql(String field) {
+            return fieldSqlGetter.get(field);
         }
 
         public boolean isIgnoreCase() {

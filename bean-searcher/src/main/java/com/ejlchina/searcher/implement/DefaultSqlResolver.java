@@ -173,9 +173,15 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 						builder.append(" and (");
 					}
 					FieldParam param = params.get(i);
-					FieldMeta fieldMeta = beanMeta.requireFieldMeta(param.getName());
-					SqlWrapper<Object> fieldSql = resolveDbFieldSql(fieldMeta.getFieldSql(), paraMap);
-					FieldOp.OpPara opPara = new FieldOp.OpPara(fieldSql, param.isIgnoreCase(), param.getValues());
+					FieldOp.OpPara opPara = new FieldOp.OpPara(
+							(name) -> {
+								String field = name != null ? name : param.getName();
+								FieldMeta meta = beanMeta.requireFieldMeta(field);
+								return resolveDbFieldSql(meta.getFieldSql(), paraMap);
+							},
+							param.isIgnoreCase(),
+							param.getValues()
+					);
 					FieldOp operator = (FieldOp) param.getOperator();
 					sqlWrapper.addParas(operator.operate(builder, opPara));
 					builder.append(")");
