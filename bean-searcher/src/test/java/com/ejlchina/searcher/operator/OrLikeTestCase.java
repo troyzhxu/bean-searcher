@@ -27,7 +27,7 @@ public class OrLikeTestCase {
         orLike.setDialect(new MySqlDialect());
         StringBuilder sb = new StringBuilder();
         List<Object> params = orLike.operate(sb, new FieldOp.OpPara(
-                new SqlWrapper<>("name"), false, new Object[]{ "a", "B", "c" }
+                name -> new SqlWrapper<>("name"), false, new Object[]{ "a", "B", "c" }
         ));
         Assert.assertEquals("name like ? or name like ? or name like ?", sb.toString());
         Assert.assertArrayEquals(new Object[]{ "a", "B", "c" }, params.toArray());
@@ -39,7 +39,7 @@ public class OrLikeTestCase {
         orLike.setDialect(new MySqlDialect());
         StringBuilder sb = new StringBuilder();
         List<Object> params = orLike.operate(sb, new FieldOp.OpPara(
-                new SqlWrapper<>("name"), true, new Object[]{ "a", "B", "c" }
+                name -> new SqlWrapper<>("name"), true, new Object[]{ "a", "B", "c" }
         ));
         Assert.assertEquals("upper(name) like ? or upper(name) like ? or upper(name) like ?", sb.toString());
         Assert.assertArrayEquals(new Object[]{ "A", "B", "C" }, params.toArray());
@@ -53,7 +53,7 @@ public class OrLikeTestCase {
         SqlWrapper<Object> fieldSql = new SqlWrapper<>("(select name from user where id = ?)");
         fieldSql.addPara(12);
         List<Object> params = orLike.operate(sb, new FieldOp.OpPara(
-                fieldSql, false, new Object[]{ "a", "B", "c" }
+                name -> fieldSql, false, new Object[]{ "a", "B", "c" }
         ));
         Assert.assertEquals("(select name from user where id = ?) like ? or " +
                 "(select name from user where id = ?) like ? or " +
@@ -69,7 +69,7 @@ public class OrLikeTestCase {
         SqlWrapper<Object> fieldSql = new SqlWrapper<>("(select name from user where id = ?)");
         fieldSql.addPara(12);
         List<Object> params = orLike.operate(sb, new FieldOp.OpPara(
-                fieldSql, true, new Object[]{ "a", "B", "c" }
+                name -> fieldSql, true, new Object[]{ "a", "B", "c" }
         ));
         Assert.assertEquals("upper((select name from user where id = ?)) like ? or " +
                 "upper((select name from user where id = ?)) like ? or " +
@@ -83,7 +83,7 @@ public class OrLikeTestCase {
         orLike.setDialect(new PostgreSqlDialect());
         StringBuilder sb = new StringBuilder();
         List<Object> params = orLike.operate(sb, new FieldOp.OpPara(
-                new SqlWrapper<>("name"), false, new Object[]{ "a", "B", "c" }
+                name -> new SqlWrapper<>("name"), false, new Object[]{ "a", "B", "c" }
         ));
         Assert.assertEquals("name like ? or name like ? or name like ?", sb.toString());
         Assert.assertArrayEquals(new Object[]{ "a", "B", "c" }, params.toArray());
@@ -95,7 +95,7 @@ public class OrLikeTestCase {
         orLike.setDialect(new PostgreSqlDialect());
         StringBuilder sb = new StringBuilder();
         List<Object> params = orLike.operate(sb, new FieldOp.OpPara(
-                new SqlWrapper<>("name"), true, new Object[]{ "a", "B", "c" }
+                name -> new SqlWrapper<>("name"), true, new Object[]{ "a", "B", "c" }
         ));
         Assert.assertEquals("name ilike ? or name ilike ? or name ilike ?", sb.toString());
         Assert.assertArrayEquals(new Object[]{ "a", "B", "c" }, params.toArray());
@@ -109,7 +109,7 @@ public class OrLikeTestCase {
         SqlWrapper<Object> fieldSql = new SqlWrapper<>("(select name from user where id = ?)");
         fieldSql.addPara(12);
         List<Object> params = orLike.operate(sb, new FieldOp.OpPara(
-                fieldSql, false, new Object[]{ "a", "B", "c" }
+                name -> fieldSql, false, new Object[]{ "a", "B", "c" }
         ));
         Assert.assertEquals("(select name from user where id = ?) like ? or " +
                 "(select name from user where id = ?) like ? or " +
@@ -125,7 +125,7 @@ public class OrLikeTestCase {
         SqlWrapper<Object> fieldSql = new SqlWrapper<>("(select name from user where id = ?)");
         fieldSql.addPara(12);
         List<Object> params = orLike.operate(sb, new FieldOp.OpPara(
-                fieldSql, true, new Object[]{ "a", "B", "c" }
+                name -> fieldSql, true, new Object[]{ "a", "B", "c" }
         ));
         Assert.assertEquals("(select name from user where id = ?) ilike ? or " +
                 "(select name from user where id = ?) ilike ? or " +

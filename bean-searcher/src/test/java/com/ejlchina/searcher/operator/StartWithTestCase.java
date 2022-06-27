@@ -27,7 +27,7 @@ public class StartWithTestCase {
         startWith.setDialect(new MySqlDialect());
         StringBuilder sb = new StringBuilder();
         List<Object> params = startWith.operate(sb, new FieldOp.OpPara(
-                new SqlWrapper<>("name"), false, new Object[]{ "abc" }
+                name -> new SqlWrapper<>("name"), false, new Object[]{ "abc" }
         ));
         Assert.assertEquals("name like ?", sb.toString());
         Assert.assertArrayEquals(new Object[] { "abc%" }, params.toArray());
@@ -39,7 +39,7 @@ public class StartWithTestCase {
         startWith.setDialect(new MySqlDialect());
         StringBuilder sb = new StringBuilder();
         List<Object> params = startWith.operate(sb, new FieldOp.OpPara(
-                new SqlWrapper<>("name"), true, new Object[]{ "abc" }
+                name -> new SqlWrapper<>("name"), true, new Object[]{ "abc" }
         ));
         Assert.assertEquals("upper(name) like ?", sb.toString());
         Assert.assertArrayEquals(new Object[] { "ABC%" }, params.toArray());
@@ -53,7 +53,7 @@ public class StartWithTestCase {
         SqlWrapper<Object> fieldSql = new SqlWrapper<>("(select name from user where id = ?)");
         fieldSql.addPara(12);
         List<Object> params = startWith.operate(sb, new FieldOp.OpPara(
-                fieldSql, false, new Object[]{ "abc" }
+                name -> fieldSql, false, new Object[]{ "abc" }
         ));
         Assert.assertEquals("(select name from user where id = ?) like ?", sb.toString());
         Assert.assertArrayEquals(new Object[] { 12, "abc%" }, params.toArray());
@@ -67,7 +67,7 @@ public class StartWithTestCase {
         SqlWrapper<Object> fieldSql = new SqlWrapper<>("(select name from user where id = ?)");
         fieldSql.addPara(12);
         List<Object> params = startWith.operate(sb, new FieldOp.OpPara(
-                fieldSql, true, new Object[]{ "abc" }
+                name -> fieldSql, true, new Object[]{ "abc" }
         ));
         Assert.assertEquals("upper((select name from user where id = ?)) like ?", sb.toString());
         Assert.assertArrayEquals(new Object[] { 12, "ABC%" }, params.toArray());
@@ -79,7 +79,7 @@ public class StartWithTestCase {
         startWith.setDialect(new PostgreSqlDialect());
         StringBuilder sb = new StringBuilder();
         List<Object> params = startWith.operate(sb, new FieldOp.OpPara(
-                new SqlWrapper<>("name"), false, new Object[]{ "abc" }
+                name -> new SqlWrapper<>("name"), false, new Object[]{ "abc" }
         ));
         Assert.assertEquals("name like ?", sb.toString());
         Assert.assertArrayEquals(new Object[] { "abc%" }, params.toArray());
@@ -91,7 +91,7 @@ public class StartWithTestCase {
         startWith.setDialect(new PostgreSqlDialect());
         StringBuilder sb = new StringBuilder();
         List<Object> params = startWith.operate(sb, new FieldOp.OpPara(
-                new SqlWrapper<>("name"), true, new Object[]{ "abc" }
+                name -> new SqlWrapper<>("name"), true, new Object[]{ "abc" }
         ));
         Assert.assertEquals("name ilike ?", sb.toString());
         Assert.assertArrayEquals(new Object[] { "abc%" }, params.toArray());
@@ -105,7 +105,7 @@ public class StartWithTestCase {
         SqlWrapper<Object> fieldSql = new SqlWrapper<>("(select name from user where id = ?)");
         fieldSql.addPara(12);
         List<Object> params = startWith.operate(sb, new FieldOp.OpPara(
-                fieldSql, false, new Object[] { "abc" }
+                name -> fieldSql, false, new Object[] { "abc" }
         ));
         Assert.assertEquals("(select name from user where id = ?) like ?", sb.toString());
         Assert.assertArrayEquals(new Object[]{ 12, "abc%" }, params.toArray());
@@ -119,7 +119,7 @@ public class StartWithTestCase {
         SqlWrapper<Object> fieldSql = new SqlWrapper<>("(select name from user where id = ?)");
         fieldSql.addPara(12);
         List<Object> params = startWith.operate(sb, new FieldOp.OpPara(
-                fieldSql, true, new Object[] { "abc" }
+                name -> fieldSql, true, new Object[] { "abc" }
         ));
         Assert.assertEquals("(select name from user where id = ?) ilike ?", sb.toString());
         Assert.assertArrayEquals(new Object[]{ 12, "abc%" }, params.toArray());
