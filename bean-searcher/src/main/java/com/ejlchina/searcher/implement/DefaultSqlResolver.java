@@ -155,37 +155,40 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		paramsGroup.forEach(event -> {
 			if (event.isGroupStart()) {
 				builder.append("(");
-			} else
+				return;
+			}
 			if (event.isGroupEnd()) {
 				builder.append(")");
-			} else
+				return;
+			}
 			if (event.isGroupAnd()) {
 				builder.append(" and ");
-			} else
+				return;
+			}
 			if (event.isGroupOr()) {
 				builder.append(" or ");
-			} else {
-				List<FieldParam> params = event.getValue();
-				for (int i = 0; i < params.size(); i++) {
-					if (i == 0) {
-						builder.append("(");
-					} else {
-						builder.append(" and (");
-					}
-					FieldParam param = params.get(i);
-					FieldOp.OpPara opPara = new FieldOp.OpPara(
-							(name) -> {
-								String field = name != null ? name : param.getName();
-								FieldMeta meta = beanMeta.requireFieldMeta(field);
-								return resolveDbFieldSql(meta.getFieldSql(), paraMap);
-							},
-							param.isIgnoreCase(),
-							param.getValues()
-					);
-					FieldOp operator = (FieldOp) param.getOperator();
-					sqlWrapper.addParas(operator.operate(builder, opPara));
-					builder.append(")");
+				return;
+			}
+			List<FieldParam> params = event.getValue();
+			for (int i = 0; i < params.size(); i++) {
+				if (i == 0) {
+					builder.append("(");
+				} else {
+					builder.append(" and (");
 				}
+				FieldParam param = params.get(i);
+				FieldOp.OpPara opPara = new FieldOp.OpPara(
+						(name) -> {
+							String field = name != null ? name : param.getName();
+							FieldMeta meta = beanMeta.requireFieldMeta(field);
+							return resolveDbFieldSql(meta.getFieldSql(), paraMap);
+						},
+						param.isIgnoreCase(),
+						param.getValues()
+				);
+				FieldOp operator = (FieldOp) param.getOperator();
+				sqlWrapper.addParas(operator.operate(builder, opPara));
+				builder.append(")");
 			}
 		});
 		String groupBy = beanMeta.getGroupBy();
