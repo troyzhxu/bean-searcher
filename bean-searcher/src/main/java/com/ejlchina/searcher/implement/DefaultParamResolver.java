@@ -338,6 +338,12 @@ public class DefaultParamResolver implements ParamResolver {
 	protected FieldOp toOperator(String field, MapWrapper paraMap, FieldParam param) {
 		if (param != null) {
 			Object op = param.getOperator();
+			if (op instanceof FieldOp) {
+				FieldOp fieldOp = (FieldOp) op;
+				if (fieldOp.isNonPublic()) {
+					return fieldOp;
+				}
+			}
 			if (op != null) {
 				return fieldOpPool.getFieldOp(op);
 			}

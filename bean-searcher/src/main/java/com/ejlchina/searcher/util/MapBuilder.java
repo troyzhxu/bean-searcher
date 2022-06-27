@@ -15,7 +15,8 @@ public class MapBuilder extends Builder<MapBuilder> {
 
     public static final String ORDER_BY = OrderBy.class.getName();
     public static final String PAGING = Paging.class.getName();
-    public static final String FIELD_PARAM = FieldParam.class.getName();
+    // 因为存在非开放的自定义 SQL 运算符，所有这里加一个 UUID，杜绝前端 SQL 注入的可能
+    public static final String FIELD_PARAM = FieldParam.class.getName() + UUID.randomUUID();
     public static final String ONLY_SELECT = SearchParam.class.getName() + ".ONLY_SELECT";
     public static final String SELECT_EXCLUDE = SearchParam.class.getName() + ".SELECT_EXCLUDE";
     public static final String GROUP_EXPR = SearchParam.class.getName() + ".GROUP_EXPR";
@@ -73,15 +74,6 @@ public class MapBuilder extends Builder<MapBuilder> {
      */
     public MapBuilder selectExclude(String... fields) {
         return appendFields(obtainList(SELECT_EXCLUDE), fields);
-    }
-
-    @SafeVarargs
-    private final <T> String[] toFields(FieldFn<T, ?>... fieldFns) {
-        String[] fields = new String[fieldFns.length];
-        for (int i = 0; i < fields.length; i++) {
-            fields[i] = toFieldName(fieldFns[i]);
-        }
-        return fields;
     }
 
     private MapBuilder appendFields(List<String> list, String... fields) {

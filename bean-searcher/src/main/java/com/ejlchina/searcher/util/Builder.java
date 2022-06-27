@@ -1,6 +1,7 @@
 package com.ejlchina.searcher.util;
 
 import com.ejlchina.searcher.FieldOp;
+import com.ejlchina.searcher.operator.SqlCond;
 import com.ejlchina.searcher.param.FieldParam;
 
 import java.io.Serializable;
@@ -104,6 +105,24 @@ public class Builder<B extends Builder<B>> {
     }
 
     /**
+     * 指定某个（多个）字段，一般配和 {@link #sql(String)} 一起使用，例如
+     * <pre>{@code
+     * Map<String, Object> params = MapUtils.builder()
+     *     // 生成 SQL 条件：username = nickname or username = 'Jack'
+     *     .field(User::getUserName, User::getNickName).sql("$1 = $2 or $1 = 'Jack'")
+     *     .build();
+     * }</pre>
+     * @param fieldFns 字段表达式
+     * @param <T> 泛型
+     * @return MapBuilder
+     * @since 3.8.0
+     */
+    @SafeVarargs
+    public final <T> B field(FieldFn<T, ?> fieldFn, FieldFn<T, ?>... fieldFns) {
+        return field(toFieldName(fieldFn), (Object[]) toFields(fieldFns));
+    }
+
+    /**
      * 指定上个字段的运算符
      * @param operator 检索运算符
      * @return MapBuilder
@@ -161,6 +180,22 @@ public class Builder<B extends Builder<B>> {
         return (B) this;
     }
 
+    /**
+     * 自定义 SQL 条件，一般配和 {@link #field(FieldFn, FieldFn[])} 一起使用，例如：
+     * <pre>{@code
+     * Map<String, Object> params = MapUtils.builder()
+     *     // 生成 SQL 条件：username = nickname or username = 'Jack'
+     *     .field(User::getUserName, User::getNickName).sql("$1 = $2 or $1 = 'Jack'")
+     *     .build();
+     * }</pre>
+     * @param sqlCond Sql 条件片段（支持占位符：$n 表示方法 field(..) 中指定的第 n 个字段）
+     * @return MapBuilder
+     * @since v3.8.0
+     */
+    public B sql(String sqlCond) {
+        return fieldOp(new SqlCond(sqlCond));
+    }
+
 //    @SuppressWarnings("unchecked")
 //    public B and(Consumer<Builder<?>> condition) {
 //        // TODO:
@@ -203,6 +238,15 @@ public class Builder<B extends Builder<B>> {
         } catch (ReflectiveOperationException e) {
             throw new IllegalStateException("无法反射出字段名", e);
         }
+    }
+
+    @SafeVarargs
+    protected final <T> String[] toFields(FieldFn<T, ?>... fieldFns) {
+        String[] fields = new String[fieldFns.length];
+        for (int i = 0; i < fields.length; i++) {
+            fields[i] = toFieldName(fieldFns[i]);
+        }
+        return fields;
     }
 
     protected <T> List<T> obtainList(String key) {
