@@ -30,6 +30,16 @@ public interface FieldOp {
     }
 
     /**
+     * 该运算符是否非公开的，若是非公开的，则只能在参数构建器中使用它
+     * 只有公开的运算符才能加入运算符池 {@link FieldOpPool}
+     * @return 是否非公开的
+     * @since v3.8.0
+     */
+    default boolean isNonPublic() {
+        return false;
+    }
+
+    /**
      * 执行该运算符
      * @param sqlBuilder SQL 构建器
      * @param opPara 运算参数

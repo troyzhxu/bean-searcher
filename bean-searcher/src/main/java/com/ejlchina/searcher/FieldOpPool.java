@@ -24,29 +24,30 @@ public class FieldOpPool extends DialectWrapper {
 
 
     public FieldOpPool(List<FieldOp> fieldOps) {
-        this.fieldOps = Objects.requireNonNull(fieldOps);
+        this.fieldOps = checkFieldOps(fieldOps);
     }
 
     public FieldOpPool() {
         fieldOps = new ArrayList<>();
-        fieldOps.add(new Equal());
-        fieldOps.add(new NotEqual());
-        fieldOps.add(new GreaterThan());
-        fieldOps.add(new GreaterEqual());
-        fieldOps.add(new LessThan());
-        fieldOps.add(new LessEqual());
-        fieldOps.add(new Between());
-        fieldOps.add(new NotBetween());
-        fieldOps.add(new Contain());
-        fieldOps.add(new StartWith());
-        fieldOps.add(new EndWith());
-        fieldOps.add(new OrLike());
-        fieldOps.add(new InList());
-        fieldOps.add(new NotIn());
-        fieldOps.add(new IsNull());
-        fieldOps.add(new NotNull());
-        fieldOps.add(new Empty());
-        fieldOps.add(new NotEmpty());
+        checkAdd(new Equal());
+        checkAdd(new NotEqual());
+        checkAdd(new GreaterThan());
+        checkAdd(new GreaterEqual());
+        checkAdd(new LessThan());
+        checkAdd(new LessEqual());
+        checkAdd(new Between());
+        checkAdd(new NotBetween());
+        checkAdd(new Contain());
+        checkAdd(new StartWith());
+        checkAdd(new EndWith());
+        checkAdd(new OrLike());
+        checkAdd(new NotLike());
+        checkAdd(new InList());
+        checkAdd(new NotIn());
+        checkAdd(new IsNull());
+        checkAdd(new NotNull());
+        checkAdd(new Empty());
+        checkAdd(new NotEmpty());
     }
 
 
@@ -93,14 +94,31 @@ public class FieldOpPool extends DialectWrapper {
     }
 
     public synchronized void setFieldOps(List<FieldOp> fieldOps) {
-        this.fieldOps = Objects.requireNonNull(fieldOps);
+        this.fieldOps = checkFieldOps(fieldOps);
         updateAllOpDialect();
     }
 
     public synchronized void addFieldOp(FieldOp fieldOp) {
         if (fieldOp != null) {
-            this.fieldOps.add(fieldOp);
+            checkAdd(fieldOp);
             updateOpDialect(fieldOp);
+        }
+    }
+
+    private List<FieldOp> checkFieldOps(List<FieldOp> fieldOps) {
+        List<FieldOp> ops = Objects.requireNonNull(fieldOps);
+        ops.forEach(this::checkFieldOp);
+        return ops;
+    }
+
+    private void checkAdd(FieldOp fieldOp) {
+        checkFieldOp(fieldOp);
+        this.fieldOps.add(fieldOp);
+    }
+
+    private void checkFieldOp(FieldOp fieldOp) {
+        if (fieldOp.isNonPublic()) {
+            throw new IllegalStateException("Only public FieldOp can add into FieldOpPool, and " + fieldOp + " is non public.");
         }
     }
 
