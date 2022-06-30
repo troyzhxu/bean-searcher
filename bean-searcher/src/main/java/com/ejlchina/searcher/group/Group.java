@@ -282,6 +282,37 @@ public class Group<V> {
         return null;
     }
 
+    /**
+     * @return 是否是原始组
+     * @since v3.8.0
+     */
+    public boolean isRaw() {
+        return type == TYPE_RAW;
+    }
+
+    /**
+     * @return 是否是且组
+     * @since v3.8.0
+     */
+    public boolean isAnd() {
+        return type == TYPE_AND;
+    }
+
+    /**
+     * @return 是否是或组
+     * @since v3.8.0
+     */
+    public boolean isOr() {
+        return type == TYPE_OR;
+    }
+
+    /**
+     * @return 值
+     * @since v3.8.0
+     */
+    public V getValue() {
+        return value;
+    }
 
     @Override
     public boolean equals(Object o) {

@@ -9,6 +9,7 @@ import com.ejlchina.searcher.param.OrderBy;
 import com.ejlchina.searcher.param.Paging;
 import com.ejlchina.searcher.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -141,18 +142,46 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 			where = buildCondition(sqlWrapper, beanMeta.getWhereSqlParas(), paraMap, where);
 		}
 		boolean hasWhere = StringUtils.isNotBlank(where);
-		boolean hasFieldParams = paramsGroup.judgeAny(l -> l.size() > 0);
 
-		if (hasWhere || hasFieldParams) {
+		SqlWrapper<Object> groupBy = resolveGroupBy(beanMeta, paraMap);
+
+		GroupPair groupPair = resolveGroupPair(paramsGroup, groupBy);
+		Group<List<FieldParam>> whereGroup = groupPair.getWhereGroup();
+
+		boolean hasWhereParams = whereGroup != null && whereGroup.judgeAny(l -> l.size() > 0);
+
+		if (hasWhere || hasWhereParams) {
 			builder.append(" where ");
 			if (hasWhere) {
 				builder.append("(").append(where).append(")");
-				if (hasFieldParams) {
+				if (hasWhereParams) {
 					builder.append(" and ");
 				}
 			}
 		}
-		paramsGroup.forEach(event -> {
+		if (whereGroup != null) {
+			sqlWrapper.addParas(buildWithParamGroup(beanMeta, builder, whereGroup, paraMap));
+		}
+		if (groupBy != null) {
+			builder.append(" group by ").append(groupBy.getSql());
+			sqlWrapper.addParas(groupBy.getParas());
+			String having = beanMeta.getHaving();
+			if (StringUtils.isNotBlank(having)) {
+				having = buildCondition(sqlWrapper, beanMeta.getHavingSqlParas(), paraMap, having);
+				if (StringUtils.isNotBlank(having)) {
+					builder.append(" having ").append(having);
+				}
+			}
+			Group<List<FieldParam>> havingGroup = groupPair.getHavingGroup();
+			// TODO:
+		}
+		sqlWrapper.setSql(builder.toString());
+		return sqlWrapper;
+	}
+
+	private <T> List<Object> buildWithParamGroup(BeanMeta<T> beanMeta, StringBuilder builder, Group<List<FieldParam>> paramGroup, Map<String, Object> paraMap) {
+		List<Object> paraList = new ArrayList<>();
+		paramGroup.forEach(event -> {
 			if (event.isGroupStart()) {
 				builder.append("(");
 				return;
@@ -187,26 +216,79 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 						param.getValues()
 				);
 				FieldOp operator = (FieldOp) param.getOperator();
-				sqlWrapper.addParas(operator.operate(builder, opPara));
+				paraList.addAll(operator.operate(builder, opPara));
 				builder.append(")");
 			}
 		});
-		String groupBy = beanMeta.getGroupBy();
-		if (StringUtils.isNotBlank(groupBy)) {
-			groupBy = buildCondition(sqlWrapper, beanMeta.getGroupBySqlParas(), paraMap, groupBy);
-			if (StringUtils.isNotBlank(groupBy)) {
-				builder.append(" group by ").append(groupBy);
-			}
-			String having = beanMeta.getHaving();
-			if (StringUtils.isNotBlank(having)) {
-				having = buildCondition(sqlWrapper, beanMeta.getHavingSqlParas(), paraMap, having);
-				if (StringUtils.isNotBlank(having)) {
-					builder.append(" having ").append(having);
+		return paraList;
+	}
+
+	private GroupPair resolveGroupPair(Group<List<FieldParam>> paramsGroup, SqlWrapper<Object> groupBy) {
+		if (groupBy == null) {
+			return new GroupPair(paramsGroup, null);
+		}
+		String groupBySql = groupBy.getSql();
+		if (paramsGroup.isRaw()) {
+			List<FieldParam> where = new ArrayList<>();
+			List<FieldParam> having = new ArrayList<>();
+			for (FieldParam param: paramsGroup.getValue()) {
+				if (StringUtils.sqlContains(groupBySql, param.getName())) {
+					where.add(param);
+				} else {
+					having.add(param);
 				}
 			}
+			return new GroupPair(
+					where.isEmpty() ? null : new Group<>(where),
+					having.isEmpty() ? null : new Group<>(having)
+			);
 		}
-		sqlWrapper.setSql(builder.toString());
-		return sqlWrapper;
+		// 复杂的组，都作为 having 条件
+		return new GroupPair(null, paramsGroup);
+	}
+
+	protected static class GroupPair {
+
+		final Group<List<FieldParam>> whereGroup;
+		final Group<List<FieldParam>> havingGroup;
+
+		public GroupPair(Group<List<FieldParam>> whereGroup, Group<List<FieldParam>> havingGroup) {
+			this.whereGroup = whereGroup;
+			this.havingGroup = havingGroup;
+		}
+
+		public Group<List<FieldParam>> getWhereGroup() {
+			return whereGroup;
+		}
+
+		public Group<List<FieldParam>> getHavingGroup() {
+			return havingGroup;
+		}
+	}
+
+	protected boolean hasGroupParam(Group<List<FieldParam>> paramsGroup, SqlWrapper<Object> groupBy) {
+		String groupBySql = groupBy.getSql();
+		return paramsGroup.judgeAny(list -> {
+			for (FieldParam param: list) {
+				if (StringUtils.sqlContains(groupBySql, param.getName())) {
+					return true;
+				}
+			}
+			return false;
+		});
+	}
+
+	protected <T> SqlWrapper<Object> resolveGroupBy(BeanMeta<T> beanMeta, Map<String, Object> paraMap) {
+		String groupBy = beanMeta.getGroupBy();
+		if (StringUtils.isNotBlank(groupBy)) {
+			SqlWrapper<Object> sqlWrapper = new SqlWrapper<>();
+			groupBy = buildCondition(sqlWrapper, beanMeta.getGroupBySqlParas(), paraMap, groupBy);
+			if (StringUtils.isNotBlank(groupBy)) {
+				sqlWrapper.setSql(groupBy);
+				return sqlWrapper;
+			}
+		}
+		return null;
 	}
 
 	protected String buildCondition(SqlWrapper<Object> sqlWrapper, List<SqlSnippet.SqlPara> sqlParas, Map<String, Object> paraMap, String condition) {

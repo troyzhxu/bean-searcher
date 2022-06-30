@@ -112,5 +112,37 @@ public class StringUtils {
 	public static String toUnderline(String src) {
 		return toHyphenation(src, "_");
 	}
-	
+
+	/**
+	 * 快速判断 SQL 片段中是否包含某个列
+	 * @param sql SQL 片段
+	 * @param column 列名
+	 * @return sql 中是否包含 column
+	 */
+	public static boolean sqlContains(String sql, String column) {
+		int cLen = column.length();
+		int idx = sql.indexOf(column);
+		while (idx >= 0) {
+			if (idx > 0) {
+				if (isSqlColumnChar(sql.charAt(idx - 1))) {
+					idx = sql.indexOf(column, idx + cLen);
+					continue;
+				}
+			}
+			int endIdx = idx + cLen;
+			if (endIdx < sql.length()) {
+				if (isSqlColumnChar(sql.charAt(endIdx))) {
+					idx = sql.indexOf(column, idx + cLen);
+					continue;
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean isSqlColumnChar(char c) {
+		return 'A' <= c && c <= 'Z' || 'a' <= c && c <= 'z' || '0' <= c && c <= '9' || c == '_';
+	}
+
 }
