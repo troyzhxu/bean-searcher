@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  */
 public class SqlCond extends DialectWrapper implements FieldOp {
 
-    public static final Pattern PLACEHOLDER_PATTERN = Pattern.compile("\\$[0-9]+");
+    public static final Pattern PLACEHOLDER_PATTERN = Pattern.compile("\\$\\d+");
 
     private final String sqlCond;
 
