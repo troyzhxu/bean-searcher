@@ -10,6 +10,7 @@ import com.ejlchina.searcher.param.Paging;
 import com.ejlchina.searcher.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -21,9 +22,9 @@ import java.util.Map;
  */
 public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 
+	private static final Group<List<FieldParam>> EMPTY_GROUP = new Group<>(Collections.emptyList());
 
-	public DefaultSqlResolver() {
-	}
+	public DefaultSqlResolver() { }
 
 	public DefaultSqlResolver(Dialect dialect) {
 		super(dialect);
@@ -139,71 +140,75 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 
 		String where = beanMeta.getWhere();
 		if (StringUtils.isNotBlank(where)) {
-			where = buildCondition(sqlWrapper, beanMeta.getWhereSqlParas(), paraMap, where);
+			where = buildSqlSnippet(where, beanMeta.getWhereSqlParas(), paraMap, sqlWrapper.getParas());
 		}
-		boolean hasWhere = StringUtils.isNotBlank(where);
-
 		SqlWrapper<Object> groupBy = resolveGroupBy(beanMeta, paraMap);
 
 		GroupPair groupPair = resolveGroupPair(paramsGroup, groupBy);
 		Group<List<FieldParam>> whereGroup = groupPair.getWhereGroup();
 
-		boolean hasWhereParams = whereGroup != null && whereGroup.judgeAny(l -> l.size() > 0);
-
+		boolean hasWhere = StringUtils.isNotBlank(where);
+		boolean hasWhereParams = whereGroup.judgeAny(l -> l.size() > 0);
 		if (hasWhere || hasWhereParams) {
 			builder.append(" where ");
 			if (hasWhere) {
 				builder.append("(").append(where).append(")");
 				if (hasWhereParams) {
 					builder.append(" and ");
+					useGroup(whereGroup, beanMeta, paraMap, builder, sqlWrapper.getParas());
 				}
 			}
-		}
-		if (whereGroup != null) {
-			sqlWrapper.addParas(buildWithParamGroup(beanMeta, builder, whereGroup, paraMap));
 		}
 		if (groupBy != null) {
 			builder.append(" group by ").append(groupBy.getSql());
 			sqlWrapper.addParas(groupBy.getParas());
 			String having = beanMeta.getHaving();
 			if (StringUtils.isNotBlank(having)) {
-				having = buildCondition(sqlWrapper, beanMeta.getHavingSqlParas(), paraMap, having);
-				if (StringUtils.isNotBlank(having)) {
-					builder.append(" having ").append(having);
-				}
+				having = buildSqlSnippet(having, beanMeta.getHavingSqlParas(), paraMap, sqlWrapper.getParas());
 			}
 			Group<List<FieldParam>> havingGroup = groupPair.getHavingGroup();
-			// TODO:
+			boolean hasHaving = StringUtils.isNotBlank(having);
+			boolean hasHavingParams = havingGroup.judgeAny(l -> l.size() > 0);
+			if (hasHaving || hasHavingParams) {
+				builder.append(" having ");
+				if (hasHaving) {
+					builder.append("(").append(having).append(")");
+					if (hasHavingParams) {
+						builder.append(" and ");
+						useGroup(havingGroup, beanMeta, paraMap, builder, sqlWrapper.getParas());
+					}
+				}
+			}
 		}
 		sqlWrapper.setSql(builder.toString());
 		return sqlWrapper;
 	}
 
-	private <T> List<Object> buildWithParamGroup(BeanMeta<T> beanMeta, StringBuilder builder, Group<List<FieldParam>> paramGroup, Map<String, Object> paraMap) {
-		List<Object> paraList = new ArrayList<>();
-		paramGroup.forEach(event -> {
+	protected <T> void useGroup(Group<List<FieldParam>> group, BeanMeta<T> beanMeta, Map<String, Object> paraMap,
+								StringBuilder sqlBuilder, List<Object> paraReceiver) {
+		group.forEach(event -> {
 			if (event.isGroupStart()) {
-				builder.append("(");
+				sqlBuilder.append("(");
 				return;
 			}
 			if (event.isGroupEnd()) {
-				builder.append(")");
+				sqlBuilder.append(")");
 				return;
 			}
 			if (event.isGroupAnd()) {
-				builder.append(" and ");
+				sqlBuilder.append(" and ");
 				return;
 			}
 			if (event.isGroupOr()) {
-				builder.append(" or ");
+				sqlBuilder.append(" or ");
 				return;
 			}
 			List<FieldParam> params = event.getValue();
 			for (int i = 0; i < params.size(); i++) {
 				if (i == 0) {
-					builder.append("(");
+					sqlBuilder.append("(");
 				} else {
-					builder.append(" and (");
+					sqlBuilder.append(" and (");
 				}
 				FieldParam param = params.get(i);
 				FieldOp.OpPara opPara = new FieldOp.OpPara(
@@ -216,16 +221,28 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 						param.getValues()
 				);
 				FieldOp operator = (FieldOp) param.getOperator();
-				paraList.addAll(operator.operate(builder, opPara));
-				builder.append(")");
+				paraReceiver.addAll(operator.operate(sqlBuilder, opPara));
+				sqlBuilder.append(")");
 			}
 		});
-		return paraList;
+	}
+
+	protected <T> SqlWrapper<Object> resolveGroupBy(BeanMeta<T> beanMeta, Map<String, Object> paraMap) {
+		String groupBy = beanMeta.getGroupBy();
+		if (StringUtils.isNotBlank(groupBy)) {
+			SqlWrapper<Object> sqlWrapper = new SqlWrapper<>();
+			groupBy = buildSqlSnippet(groupBy, beanMeta.getGroupBySqlParas(), paraMap, sqlWrapper.getParas());
+			if (StringUtils.isNotBlank(groupBy)) {
+				sqlWrapper.setSql(groupBy);
+				return sqlWrapper;
+			}
+		}
+		return null;
 	}
 
 	private GroupPair resolveGroupPair(Group<List<FieldParam>> paramsGroup, SqlWrapper<Object> groupBy) {
 		if (groupBy == null) {
-			return new GroupPair(paramsGroup, null);
+			return new GroupPair(paramsGroup, EMPTY_GROUP);
 		}
 		String groupBySql = groupBy.getSql();
 		if (paramsGroup.isRaw()) {
@@ -238,13 +255,10 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 					having.add(param);
 				}
 			}
-			return new GroupPair(
-					where.isEmpty() ? null : new Group<>(where),
-					having.isEmpty() ? null : new Group<>(having)
-			);
+			return new GroupPair(new Group<>(where), new Group<>(having));
 		}
 		// 复杂的组，都作为 having 条件
-		return new GroupPair(null, paramsGroup);
+		return new GroupPair(EMPTY_GROUP, paramsGroup);
 	}
 
 	protected static class GroupPair {
@@ -266,45 +280,19 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		}
 	}
 
-	protected boolean hasGroupParam(Group<List<FieldParam>> paramsGroup, SqlWrapper<Object> groupBy) {
-		String groupBySql = groupBy.getSql();
-		return paramsGroup.judgeAny(list -> {
-			for (FieldParam param: list) {
-				if (StringUtils.sqlContains(groupBySql, param.getName())) {
-					return true;
-				}
-			}
-			return false;
-		});
-	}
-
-	protected <T> SqlWrapper<Object> resolveGroupBy(BeanMeta<T> beanMeta, Map<String, Object> paraMap) {
-		String groupBy = beanMeta.getGroupBy();
-		if (StringUtils.isNotBlank(groupBy)) {
-			SqlWrapper<Object> sqlWrapper = new SqlWrapper<>();
-			groupBy = buildCondition(sqlWrapper, beanMeta.getGroupBySqlParas(), paraMap, groupBy);
-			if (StringUtils.isNotBlank(groupBy)) {
-				sqlWrapper.setSql(groupBy);
-				return sqlWrapper;
-			}
-		}
-		return null;
-	}
-
-	protected String buildCondition(SqlWrapper<Object> sqlWrapper, List<SqlSnippet.SqlPara> sqlParas, Map<String, Object> paraMap, String condition) {
+	protected String buildSqlSnippet(String sqlSnippet, List<SqlSnippet.SqlPara> sqlParas, Map<String, Object> paraMap, List<Object> paraReceiver) {
 		for (SqlSnippet.SqlPara sqlPara : sqlParas) {
 			Object para = paraMap.get(sqlPara.getName());
 			if (sqlPara.isJdbcPara()) {
-				sqlWrapper.addPara(para);
+				paraReceiver.add(para);
 			} else {
-				// 将这部分逻辑提上来，当 condition 只有一个拼接参数 且 该参数为空时，使其不参与 where 子句
+				// 将这部分逻辑提上来，当 sqlSnippet 只有一个拼接参数 且 该参数为空时，使其不参与 where 子句
 				String strParam = para != null ? para.toString() : "";
-				condition = condition.replace(sqlPara.getSqlName(), strParam);
+				sqlSnippet = sqlSnippet.replace(sqlPara.getSqlName(), strParam);
 			}
 		}
-		return condition;
+		return sqlSnippet;
 	}
-
 
 	protected <T> String buildClusterSql(BeanMeta<T> beanMeta, String clusterSelectSql, String fieldSelectSql, String fromWhereSql) {
 		if (beanMeta.isDistinctOrGroupBy()) {
@@ -355,7 +343,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		SqlWrapper<Object> sqlWrapper = new SqlWrapper<>();
 		String tables = tableSnippet.getSql();
 		List<SqlSnippet.SqlPara> params = tableSnippet.getParas();
-		tables = buildCondition(sqlWrapper, params, paraMap, tables);
+		tables = buildSqlSnippet(tables, params, paraMap, sqlWrapper.getParas());
 		sqlWrapper.setSql(tables);
 		return sqlWrapper;
 	}
@@ -364,7 +352,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		String dbField = dbFieldSnippet.getSql();
 		List<SqlSnippet.SqlPara> params = dbFieldSnippet.getParas();
 		SqlWrapper<Object> sqlWrapper = new SqlWrapper<>();
-		dbField = buildCondition(sqlWrapper, params, paraMap, dbField);
+		dbField = buildSqlSnippet(dbField, params, paraMap, sqlWrapper.getParas());
 		sqlWrapper.setSql(dbField);
 		return sqlWrapper;
 	}
