@@ -143,7 +143,6 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 			where = buildSqlSnippet(where, beanMeta.getWhereSqlParas(), paraMap, sqlWrapper.getParas());
 		}
 		SqlWrapper<Object> groupBy = resolveGroupBy(beanMeta, paraMap);
-
 		GroupPair groupPair = resolveGroupPair(paramsGroup, groupBy);
 		Group<List<FieldParam>> whereGroup = groupPair.getWhereGroup();
 
@@ -155,8 +154,10 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 				builder.append("(").append(where).append(")");
 				if (hasWhereParams) {
 					builder.append(" and ");
-					useGroup(whereGroup, beanMeta, paraMap, builder, sqlWrapper.getParas());
 				}
+			}
+			if (hasWhereParams) {
+				useGroup(whereGroup, beanMeta, paraMap, builder, sqlWrapper.getParas());
 			}
 		}
 		if (groupBy != null) {
@@ -175,8 +176,10 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 					builder.append("(").append(having).append(")");
 					if (hasHavingParams) {
 						builder.append(" and ");
-						useGroup(havingGroup, beanMeta, paraMap, builder, sqlWrapper.getParas());
 					}
+				}
+				if (hasHavingParams) {
+					useGroup(havingGroup, beanMeta, paraMap, builder, sqlWrapper.getParas());
 				}
 			}
 		}
