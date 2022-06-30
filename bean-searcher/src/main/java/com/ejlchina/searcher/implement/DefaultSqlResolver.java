@@ -132,7 +132,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		return sqlWrapper;
 	}
 
-	protected <T> SqlWrapper<Object> buildFromWhereSql(BeanMeta<T> beanMeta, Group<List<FieldParam>> paramsGroup, Map<String, Object> paraMap) {
+	protected SqlWrapper<Object> buildFromWhereSql(BeanMeta<?> beanMeta, Group<List<FieldParam>> paramsGroup, Map<String, Object> paraMap) {
 		SqlWrapper<Object> sqlWrapper = new SqlWrapper<>();
 		SqlWrapper<Object> tableSql = resolveTableSql(beanMeta.getTableSnippet(), paraMap);
 		sqlWrapper.addParas(tableSql.getParas());
@@ -143,7 +143,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 			where = buildSqlSnippet(where, beanMeta.getWhereSqlParas(), paraMap, sqlWrapper.getParas());
 		}
 		SqlWrapper<Object> groupBy = resolveGroupBy(beanMeta, paraMap);
-		GroupPair groupPair = resolveGroupPair(paramsGroup, groupBy);
+		GroupPair groupPair = resolveGroupPair(beanMeta, paramsGroup, groupBy == null);
 		Group<List<FieldParam>> whereGroup = groupPair.getWhereGroup();
 
 		boolean hasWhere = StringUtils.isNotBlank(where);
@@ -187,7 +187,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		return sqlWrapper;
 	}
 
-	protected <T> void useGroup(Group<List<FieldParam>> group, BeanMeta<T> beanMeta, Map<String, Object> paraMap,
+	protected void useGroup(Group<List<FieldParam>> group, BeanMeta<?> beanMeta, Map<String, Object> paraMap,
 								StringBuilder sqlBuilder, List<Object> paraReceiver) {
 		group.forEach(event -> {
 			if (event.isGroupStart()) {
@@ -230,7 +230,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		});
 	}
 
-	protected <T> SqlWrapper<Object> resolveGroupBy(BeanMeta<T> beanMeta, Map<String, Object> paraMap) {
+	protected SqlWrapper<Object> resolveGroupBy(BeanMeta<?> beanMeta, Map<String, Object> paraMap) {
 		String groupBy = beanMeta.getGroupBy();
 		if (StringUtils.isNotBlank(groupBy)) {
 			SqlWrapper<Object> sqlWrapper = new SqlWrapper<>();
@@ -243,16 +243,16 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		return null;
 	}
 
-	private GroupPair resolveGroupPair(Group<List<FieldParam>> paramsGroup, SqlWrapper<Object> groupBy) {
-		if (groupBy == null) {
+	private GroupPair resolveGroupPair(BeanMeta<?> beanMeta, Group<List<FieldParam>> paramsGroup, boolean nonGroupBy) {
+		if (nonGroupBy) {
 			return new GroupPair(paramsGroup, EMPTY_GROUP);
 		}
-		String groupBySql = groupBy.getSql();
+		String groupBy = beanMeta.getGroupBy();
 		if (paramsGroup.isRaw()) {
 			List<FieldParam> where = new ArrayList<>();
 			List<FieldParam> having = new ArrayList<>();
 			for (FieldParam param: paramsGroup.getValue()) {
-				if (StringUtils.sqlContains(groupBySql, param.getName())) {
+				if (StringUtils.sqlContains(groupBy, beanMeta.getFieldSql(param.getName()))) {
 					where.add(param);
 				} else {
 					having.add(param);
