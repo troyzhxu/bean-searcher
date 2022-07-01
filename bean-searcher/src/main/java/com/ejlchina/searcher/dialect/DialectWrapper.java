@@ -1,9 +1,6 @@
-package com.ejlchina.searcher.implement;
+package com.ejlchina.searcher.dialect;
 
 import com.ejlchina.searcher.SqlWrapper;
-import com.ejlchina.searcher.dialect.Dialect;
-import com.ejlchina.searcher.dialect.DialectSensor;
-import com.ejlchina.searcher.dialect.MySqlDialect;
 import com.ejlchina.searcher.param.Paging;
 
 public class DialectWrapper implements DialectSensor {

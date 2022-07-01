@@ -2,7 +2,7 @@ package com.ejlchina.searcher;
 
 import com.ejlchina.searcher.dialect.Dialect;
 import com.ejlchina.searcher.dialect.DialectSensor;
-import com.ejlchina.searcher.implement.DialectWrapper;
+import com.ejlchina.searcher.dialect.DialectWrapper;
 import com.ejlchina.searcher.operator.*;
 
 import java.util.ArrayList;
@@ -21,7 +21,6 @@ public class FieldOpPool extends DialectWrapper {
     private List<FieldOp> fieldOps;
 
     private final Map<Object, FieldOp> cache = new ConcurrentHashMap<>();
-
 
     public FieldOpPool(List<FieldOp> fieldOps) {
         this.fieldOps = checkFieldOps(fieldOps);

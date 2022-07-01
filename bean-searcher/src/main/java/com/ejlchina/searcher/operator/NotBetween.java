@@ -2,7 +2,7 @@ package com.ejlchina.searcher.operator;
 
 import com.ejlchina.searcher.FieldOp;
 import com.ejlchina.searcher.SqlWrapper;
-import com.ejlchina.searcher.implement.DialectWrapper;
+import com.ejlchina.searcher.dialect.DialectWrapper;
 import com.ejlchina.searcher.util.ObjectUtils;
 import com.ejlchina.searcher.util.StringUtils;
 

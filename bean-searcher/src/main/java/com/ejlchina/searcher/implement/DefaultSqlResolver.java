@@ -2,6 +2,7 @@ package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.dialect.Dialect;
+import com.ejlchina.searcher.dialect.DialectWrapper;
 import com.ejlchina.searcher.group.Group;
 import com.ejlchina.searcher.param.FetchType;
 import com.ejlchina.searcher.param.FieldParam;
