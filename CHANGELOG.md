@@ -68,6 +68,7 @@ from (
 * Bean Searcher Boot Starter
   * 支持 用户配置一个 `ParamResolver.Convertor` 的 Spring Bean 扩展参数值转换能力
   * 移除 `bean-searcher.sql.use-date-value-corrector` 配置项
+  * 升级 `spring-boot` -> `v2.6.9`
 
 # v3.7.1 @ 2022-06-22
 
