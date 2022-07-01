@@ -62,9 +62,10 @@ from (
   * 新增 `根参数` 机制，可以不被逻辑组过滤掉，与组之间是且的关系，参数构建器默认使用 根参数
   * 重构 `FieldConvertor`: 字段转换器的 9 个实现类 从 `com.ejlchina.searcher.implement` 包迁移到 `com.ejlchina.searcher.convertor` 包
   * 重构 `@SearchBean` 注解：新增 `where` 替换原来的 `joinCond` 属性，并将 `joinCond` 标记为过时
-  * 移除 `DateValueCorrector`（因为已经有了参数转换器了）
+  * 移除 `DateValueCorrector`，已被 `DateParamConvertor` 与 `DateTimeParamConvertor` 替代
+  * 移除 `NullValueFilter` 与 `BoolValueFilter`（已被 `BoolParamConvertor` 替代）
   * 优化 分组动态查询条件生成机制：https://github.com/ejlchina/bean-searcher/issues/56
-  * 优化 异常信息
+  * 优化 异常提示信息
 * Bean Searcher Boot Starter
   * 支持 用户配置一个 `ParamResolver.Convertor` 的 Spring Bean 扩展参数值转换能力
   * 移除 `bean-searcher.sql.use-date-value-corrector` 配置项
