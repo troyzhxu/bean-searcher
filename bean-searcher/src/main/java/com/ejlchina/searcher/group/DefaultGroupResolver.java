@@ -53,7 +53,7 @@ public class DefaultGroupResolver implements GroupResolver {
         try {
             return parserFactory.create(expr).parse();
         } catch (Exception e) {
-            log.warn("can not parse expr: [{}], fallback to DEFAULT_RAW_GROUP", expr);
+            log.warn("Can not parse expr: [{}], fallback to DEFAULT_RAW_GROUP", expr);
         }
         return DEFAULT_RAW_GROUP;
     }

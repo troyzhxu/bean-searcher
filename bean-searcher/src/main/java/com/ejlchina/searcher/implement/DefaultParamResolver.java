@@ -8,6 +8,8 @@ import com.ejlchina.searcher.group.DefaultGroupResolver;
 import com.ejlchina.searcher.group.GroupResolver;
 import com.ejlchina.searcher.param.*;
 import com.ejlchina.searcher.util.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -20,7 +22,9 @@ import java.util.stream.Collectors;
  */
 public class DefaultParamResolver implements ParamResolver {
 
-	public static final Pattern INDEX_PATTERN = Pattern.compile("[0-9]+");
+	static final Logger log = LoggerFactory.getLogger(DefaultParamResolver.class);
+
+	public static final Pattern INDEX_PATTERN = Pattern.compile("\\d+");
 
 	/**
 	 * 分页参数提取器
@@ -215,7 +219,14 @@ public class DefaultParamResolver implements ParamResolver {
 		if (expr == null) {
 			expr = ObjectUtils.string(paraMap.get(gexprName));
 		}
-		if (StringUtils.isNotBlank(expr) && !expr.contains(Builder.ROOT_GROUP)) {
+		if (expr != null) {
+			expr = expr.trim();
+		}
+		if (StringUtils.isNotBlank(expr)) {
+			if (expr.contains(Builder.ROOT_GROUP)) {
+				log.warn("Invalid group expr [{}] because of containing '$', it will fallback to null", expr);
+				return null;
+			}
 			char andKey = groupResolver.getParserFactory().getAndKey();
 			expr = Builder.ROOT_GROUP + andKey + "(" + expr + ")";
 		}
