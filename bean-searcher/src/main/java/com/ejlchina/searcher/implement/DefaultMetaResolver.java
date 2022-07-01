@@ -102,7 +102,8 @@ public class DefaultMetaResolver implements MetaResolver {
             beanMeta.addFieldMeta(wrapper.field.getName(), fieldMeta);
         }
         if (beanMeta.getFieldCount() == 0) {
-            throw new SearchException("[" + beanClass.getName() + "] is not a valid SearchBean, because there is no field mapping to database.");
+            throw new SearchException("[" + beanClass.getName() + "] is not a valid SearchBean, because there is no field mapping to database.\n" +
+                    "Please refer https://bs.zhxu.cn/guide/latest/bean.html#%E7%9C%81%E7%95%A5-dbfield for help.");
         }
         return beanMeta;
     }

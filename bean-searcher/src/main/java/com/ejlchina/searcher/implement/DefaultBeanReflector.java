@@ -71,8 +71,12 @@ public class DefaultBeanReflector implements BeanReflector {
 	protected <T> T newInstance(Class<T> beanClass) {
 		try {
 			return beanClass.getDeclaredConstructor().newInstance();
+		} catch (NoSuchMethodException e) {
+			throw new SearchException("Can not instantiate [" + beanClass.getName() +
+					"], please check whether there is a constructor without parameters in the class.", e);
 		} catch (Exception e) {
-			throw new SearchException("为【" + beanClass.getName() + "】创建对象时报错，请检查该类中是否有无参构造方法！", e);
+			throw new SearchException("Can not instantiate [" + beanClass.getName() +
+					"], please check whether the constructor without parameters can be invoked without errors.", e);
 		}
 	}
 
