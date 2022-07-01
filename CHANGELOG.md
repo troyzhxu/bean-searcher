@@ -57,12 +57,14 @@ from (
   * 新增 `BoolParamConvertor`、`NumberParamConvertor`、`DateParamConvertor`、`TimeParamConvertor` 与 `DateTimeParamConvertor` 参数转换器
   * 新增 `NotLike` 运算符（`nk`）：https://github.com/ejlchina/bean-searcher/issues/50
   * 增强 `FieldOp.OpPara` ：新增 `getFieldSql(String field)` 方法，可以自定义运算符内获得其它字段的信息
+  * 增强 `DefaultDbMapping`，当 `@SearchBean.tables` 的值是单表时，则省略 `@DbField` 的属性也自动映射
   * 增强 `参数构建器`：新增 `sql(..)` 方法，可为用于自定义 SQL 条件：https://github.com/ejlchina/bean-searcher/issues/51
   * 新增 `根参数` 机制，可以不被逻辑组过滤掉，与组之间是且的关系，参数构建器默认使用 根参数
   * 重构 `FieldConvertor`: 字段转换器的 9 个实现类 从 `com.ejlchina.searcher.implement` 包迁移到 `com.ejlchina.searcher.convertor` 包
   * 重构 `@SearchBean` 注解：新增 `where` 替换原来的 `joinCond` 属性，并将 `joinCond` 标记为过时
   * 移除 `DateValueCorrector`（因为已经有了参数转换器了）
   * 优化 分组动态查询条件生成机制：https://github.com/ejlchina/bean-searcher/issues/56
+  * 优化 异常信息
 * Bean Searcher Boot Starter
   * 支持 用户配置一个 `ParamResolver.Convertor` 的 Spring Bean 扩展参数值转换能力
   * 移除 `bean-searcher.sql.use-date-value-corrector` 配置项
