@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 默认的数据库映射解析器
@@ -18,10 +20,12 @@ import java.util.Objects;
  */
 public class DefaultDbMapping implements DbMapping {
 
-    private static final Logger log = LoggerFactory.getLogger(DefaultDbMapping.class);
+    protected static final Logger log = LoggerFactory.getLogger(DefaultDbMapping.class);
 
     @SuppressWarnings("unchecked")
-    private static final Class<FieldOp>[] EMPTY_OPERATORS = new Class[0];
+    protected static final Class<FieldOp>[] EMPTY_OPERATORS = new Class[0];
+
+    protected static final Pattern SINGLE_TABLE_PATTERN = Pattern.compile("\\w+|\\w+\\s+\\w+");
 
     // since v3.8.0
     private DbTypeMapper dbTypeMapper = new DefaultDbTypeMapper();
@@ -194,16 +198,26 @@ public class DefaultDbMapping implements DbMapping {
             // 未加 @DbField 注解时，更据 ignoreFields 判断该字段是否应该被忽略
             return null;
         }
-        // 没加 @SearchBean 注解，或者加了但没给 tables 赋值，则可以自动映射列名，因为此时默认为单表映射
-        if (bean == null || StringUtils.isBlank(bean.tables())) {
-            // 默认使用下划线风格的字段映射
+        if (bean == null) {
+            // 省略了 @SearchBean 注解，此时默认为单表映射
             return toColumnName(field);
         }
-        String tab = bean.autoMapTo();
-        if (StringUtils.isBlank(tab)) {
-            return null;
+        String tables = bean.tables().trim();
+        if (StringUtils.isBlank(tables)) {
+            // 注解 @SearchBean 的 tables 没有赋值，此时默认为单表映射
+            return toColumnName(field);
         }
-        return tab.trim() + "." + toColumnName(field);
+        String tab = bean.autoMapTo().trim();
+        if (StringUtils.isNotBlank(tab)) {
+            // 指定了 autoMapTo, 则映射它指定的表
+            return tab + "." + toColumnName(field);
+        }
+        Matcher matcher = SINGLE_TABLE_PATTERN.matcher(tables);
+        if (matcher.matches()) {
+            // @SearchBean.tables 是单表
+            return toColumnName(field);
+        }
+        return null;
     }
 
     // 比较 Field 的所在类层级是否比 @SearchBean 注解更接近父类
@@ -228,8 +242,9 @@ public class DefaultDbMapping implements DbMapping {
 
     protected boolean shouldIgnore(Field field, String[] ignoreFields) {
         if (ignoreFields != null) {
-            for (String ignoreField : ignoreFields) {
-                if (field.getName().equals(ignoreField)) {
+            String name = field.getName();
+            for (String igField : ignoreFields) {
+                if (name.equals(igField)) {
                     return true;
                 }
             }
