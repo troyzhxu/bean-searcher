@@ -4,10 +4,12 @@ import com.ejlchina.searcher.FieldOp;
 import com.ejlchina.searcher.SqlWrapper;
 import com.ejlchina.searcher.dialect.DialectWrapper;
 import com.ejlchina.searcher.util.MapUtils;
+import com.ejlchina.searcher.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,12 +20,23 @@ import java.util.regex.Pattern;
  */
 public class SqlCond extends DialectWrapper implements FieldOp {
 
-    public static final Pattern PLACEHOLDER_PATTERN = Pattern.compile("\\$\\d+");
+    public static final Pattern PLACEHOLDER_PATTERN = Pattern.compile("\\$\\d+|\\?");
+
+    public static final Object[] EMPTY_ARGS = new Object[0];
 
     private final String sqlCond;
+    private final Object[] args;
 
     public SqlCond(String sqlCond) {
-        this.sqlCond = sqlCond;
+        this(sqlCond, EMPTY_ARGS);
+    }
+
+    public SqlCond(String sqlCond, Object[] args) {
+        this.sqlCond = Objects.requireNonNull(sqlCond);
+        this.args = Objects.requireNonNull(args);
+        if (StringUtils.countOf(sqlCond, '?') != args.length) {
+            throw new IllegalStateException("The count of '?' in [" + sqlCond + "] is not equal to the count of args: " + Arrays.toString(args));
+        }
     }
 
     @Override
@@ -51,8 +64,13 @@ public class SqlCond extends DialectWrapper implements FieldOp {
         List<Object> params = new ArrayList<>();
         Matcher matcher = PLACEHOLDER_PATTERN.matcher(sqlCond);
         int lastIndex = 0;
+        int argIndex = 0;
         while (matcher.find()) {
             String placeholder = matcher.group();
+            if ("?".equals(placeholder)) {
+                params.add(args[argIndex++]);
+                continue;
+            }
             int index = Integer.parseInt(placeholder.substring(1));
             SqlWrapper<Object> fieldSql = getFieldSql(opPara, index);
             int start = matcher.start();

@@ -145,4 +145,20 @@ public class StringUtils {
 		return 'A' <= c && c <= 'Z' || 'a' <= c && c <= 'z' || '0' <= c && c <= '9' || c == '_';
 	}
 
+	public static int countOf(String str, char target) {
+		if (str == null) {
+			return 0;
+		}
+		int count = 0;
+		int index = str.indexOf(target);
+		while (index >= 0) {
+			if (index >= str.length()) {
+				break;
+			}
+			index = str.indexOf(target, index + 1);
+			count++;
+		}
+		return count;
+	}
+
 }

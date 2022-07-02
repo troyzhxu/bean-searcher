@@ -196,6 +196,22 @@ public class Builder<B extends Builder<B>> {
         return fieldOp(new SqlCond(sqlCond));
     }
 
+    /**
+     * 自定义 SQL 条件，一般配和 {@link #field(FieldFn, FieldFn[])} 一起使用，例如：
+     * <pre>{@code
+     * Map<String, Object> params = MapUtils.builder()
+     *     // 生成 SQL 条件：id < ? or age > ?，两个占位符参数分别为：100，20
+     *     .field(User::getId, User::getAge).sql("$1 < ? or $2 > ?", 100, 20)
+     *     .build();
+     * }</pre>
+     * @param sqlCond Sql 条件片段（支持占位符：$n 表示方法 field(..) 中指定的第 n 个字段）
+     * @return MapBuilder
+     * @since v3.8.0
+     */
+    public B sql(String sqlCond, Object... args) {
+        return fieldOp(new SqlCond(sqlCond, args));
+    }
+
 //    @SuppressWarnings("unchecked")
 //    public B and(Consumer<Builder<?>> condition) {
 //        // TODO:
