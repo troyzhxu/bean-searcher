@@ -281,7 +281,10 @@ public class DefaultParamResolver implements ParamResolver {
 			return null;
 		}
 		if (operator.lonely()) {
-			return new FieldParam(field, operator);
+			if (param == null) {
+				return new FieldParam(field, operator);
+			}
+			return new FieldParam(field, operator, param.getValueList(), param.isIgnoreCase());
 		}
 		if ((indices == null || indices.isEmpty()) && param == null) {
 			return null;

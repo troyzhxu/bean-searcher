@@ -37,6 +37,11 @@ public class SqlCond extends DialectWrapper implements FieldOp {
     }
 
     @Override
+    public boolean lonely() {
+        return true;
+    }
+
+    @Override
     public boolean isNonPublic() {
         return true;
     }
@@ -58,6 +63,7 @@ public class SqlCond extends DialectWrapper implements FieldOp {
             params.addAll(fieldSql.getParas());
             lastIndex = start + placeholder.length();
         }
+        sqlBuilder.append(sqlCond, lastIndex, sqlCond.length());
         return params;
     }
 
