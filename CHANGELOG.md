@@ -51,7 +51,7 @@ from (
 ### ✨ Features
 
 * Bean Searcher
-  * 增强 `@SearchBean` 注解：新增 `having` 属性，用于指定分组条件 
+  * 增强 `@SearchBean` 注解：新增 `having` 属性，用于指定分组条件
   * 增强 `@DbField` 注解：新增 `type` 属性，允许用户手动指定该属性对应的数据库字段类型
   * 增强 `ParamResolver`: 新增 `Convertor` 参数转换器，可对检索参数的值类型转换为数据库字段匹配的类型（更好的兼容 Oracle、PgSQL 等数据库）
   * 新增 `BoolParamConvertor`、`NumberParamConvertor`、`DateParamConvertor`、`TimeParamConvertor` 与 `DateTimeParamConvertor` 参数转换器
@@ -59,8 +59,9 @@ from (
   * 增强 `FieldOp.OpPara` ：新增 `getFieldSql(String field)` 方法，可以自定义运算符内获得其它字段的信息
   * 增强 `DefaultDbMapping`，当 `@SearchBean.tables` 的值是单表时，则省略 `@DbField` 的属性也自动映射
   * 增强 `参数构建器`：新增 `sql(..)` 方法，可为用于自定义 SQL 条件：https://github.com/ejlchina/bean-searcher/issues/51
-  * 新增 `根参数` 机制，可以不被逻辑组过滤掉，与组之间是且的关系，参数构建器默认使用 根参数
-  * 重构 `FieldConvertor`: 字段转换器的 9 个实现类 从 `com.ejlchina.searcher.implement` 包迁移到 `com.ejlchina.searcher.convertor` 包
+  * 新增 `根参数` 机制（用 `$` 表示根组，并且用户构造的组表达式不可以包含 `$`），参数构建器默认使用 根参数
+  * 重构 `FieldConvertor`: 字段转换器的 9 个实现类 从 `com.ejlchina.searcher.implement` 包迁移到 `com.ejlchina.searcher.convertor` 包下
+  * 重构 `DialectWrapper`：从 `com.ejlchina.searcher.implement` 包迁移到 `com.ejlchina.searcher.dialect` 包下
   * 重构 `@SearchBean` 注解：新增 `where` 替换原来的 `joinCond` 属性，并将 `joinCond` 标记为过时
   * 移除 `DateValueCorrector`，已被 `DateParamConvertor` 与 `DateTimeParamConvertor` 替代
   * 移除 `NullValueFilter` 与 `BoolValueFilter`（已被 `BoolParamConvertor` 替代）
