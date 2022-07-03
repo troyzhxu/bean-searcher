@@ -59,7 +59,7 @@ from (
   * 增强 `FieldOp.OpPara` ：新增 `getFieldSql(String field)` 方法，可以自定义运算符内获得其它字段的信息
   * 增强 `DefaultDbMapping`，当 `@SearchBean.tables` 的值是单表时，则省略 `@DbField` 的属性也自动映射
   * 增强 `参数构建器`：新增 `sql(..)` 方法，可为用于自定义 SQL 条件：https://github.com/ejlchina/bean-searcher/issues/51
-  * 新增 `根参数` 机制（用 `$` 表示根组，并且用户构造的组表达式不可以包含 `$`），参数构建器默认使用 根参数
+  * 新增 `根参数` 机制（用 `$` 表示根组，用户构造的组表达式不可以包含 `$`），参数构建器默认使用 根参数
   * 重构 `FieldConvertor`: 字段转换器的 9 个实现类 从 `com.ejlchina.searcher.implement` 包迁移到 `com.ejlchina.searcher.convertor` 包下
   * 重构 `DialectWrapper`：从 `com.ejlchina.searcher.implement` 包迁移到 `com.ejlchina.searcher.dialect` 包下
   * 重构 `@SearchBean` 注解：新增 `where` 替换原来的 `joinCond` 属性，并将 `joinCond` 标记为过时
