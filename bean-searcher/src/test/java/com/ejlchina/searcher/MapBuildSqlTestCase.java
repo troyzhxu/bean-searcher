@@ -58,4 +58,22 @@ public class MapBuildSqlTestCase {
         mapSearcher.searchAll(User.class, params);
     }
 
+    @Test
+    public void test_03() {
+        MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
+                .sqlExecutor(new SqlExecutor() {
+                    @Override
+                    public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
+                        Assert.assertEquals("select name c_1, id c_0, age c_2 from user where (age = ? and 10 = id)", searchSql.getListSqlString());
+                        Assert.assertArrayEquals(new Object[] {15}, searchSql.getListSqlParams().toArray(new Object[0]));
+                        return new SqlResult<>(searchSql);
+                    }
+                })
+                .build();
+        Map<String, Object> params = MapUtils.builder()
+                .field(User::getId, User::getAge).sql("$2 = ? and 10 = $1", 15)
+                .build();
+        mapSearcher.searchAll(User.class, params);
+    }
+
 }
