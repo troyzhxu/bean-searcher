@@ -668,4 +668,33 @@ public class MetaResolverTestCase {
         Assert.assertEquals(1, metaResolver.resolve(User23_2.class).getFieldCount());
     }
 
+    @SearchBean(tables = "user")
+    public static class User24_1 {
+        private int age;
+    }
+
+    @SearchBean(tables = "user u")
+    public static class User24_2 {
+        private int age;
+    }
+
+    @SearchBean(tables = "user, role")
+    public static class User24_3 {
+        private int age;
+    }
+
+    @Test
+    public void test24() {
+        Assert.assertEquals(1, metaResolver.resolve(User24_1.class).getFieldCount());
+        Assert.assertEquals(1, metaResolver.resolve(User24_2.class).getFieldCount());
+        SearchException ex = null;
+        try {
+            metaResolver.resolve(User24_3.class);
+        } catch (SearchException e) {
+            ex = e;
+        }
+        Assert.assertNotNull(ex);
+        Assert.assertTrue(ex.getMessage().contains("is not a valid SearchBean, because there is no field mapping to database"));
+    }
+
 }
