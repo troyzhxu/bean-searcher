@@ -1,6 +1,7 @@
 package com.ejlchina.searcher.bean;
 
 import com.ejlchina.searcher.DbMapping;
+import com.ejlchina.searcher.FieldConvertor;
 import com.ejlchina.searcher.FieldOp;
 
 import java.lang.annotation.*;
@@ -52,5 +53,12 @@ public @interface DbField {
 	 * @return DbType
 	 */
 	DbType type() default DbType.UNKNOWN;
+
+	/**
+	 * 绑定FieldConvertor，该Convertor只用于确定场景下的数值转换，不会与其他Convertor冲突
+	 * @since v3.8.1
+	 * @return Class<? extends FieldConvertor>
+	 */
+	Class<? extends FieldConvertor> converter() default FieldConvertor.class;
 
 }

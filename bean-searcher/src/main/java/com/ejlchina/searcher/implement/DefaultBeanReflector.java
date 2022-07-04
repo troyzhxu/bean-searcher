@@ -3,10 +3,8 @@ package com.ejlchina.searcher.implement;
 import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.FieldConvertor.BFieldConvertor;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 /**
@@ -17,6 +15,7 @@ import java.util.function.Function;
 public class DefaultBeanReflector implements BeanReflector {
 
 	private List<BFieldConvertor> convertors;
+	private Map<Class<?>, FieldConvertor> onCallConvertors;
 
 	public DefaultBeanReflector() {
 		this(new ArrayList<>());
@@ -24,6 +23,7 @@ public class DefaultBeanReflector implements BeanReflector {
 	
 	public DefaultBeanReflector(List<BFieldConvertor> convertors) {
 		this.convertors = convertors;
+		this.onCallConvertors = new ConcurrentHashMap<>();
 	}
 	
 	@Override
@@ -60,6 +60,10 @@ public class DefaultBeanReflector implements BeanReflector {
 			// 如果 targetType 是 valueType 的父类，则直接返回
 			return value;
 		}
+		if (meta.getConvClazz() != null) {
+			FieldConvertor convertor = getFieldConvertor(meta.getConvClazz());
+			return convertor.convert(meta, value);
+		}
 		for (FieldConvertor convertor: convertors) {
 			if (convertor.supports(meta, valueType)) {
 				return convertor.convert(meta, value);
@@ -80,6 +84,14 @@ public class DefaultBeanReflector implements BeanReflector {
 		}
 	}
 
+	protected FieldConvertor getFieldConvertor(Class<? extends FieldConvertor> convClazz) {
+		if (!onCallConvertors.containsKey(convClazz)) {
+			FieldConvertor convertor = newInstance(convClazz);
+			onCallConvertors.put(convClazz, convertor);
+		}
+		return onCallConvertors.get(convClazz);
+	}
+
 	public List<BFieldConvertor> getConvertors() {
 		return convertors;
 	}
@@ -91,6 +103,20 @@ public class DefaultBeanReflector implements BeanReflector {
 	public void addConvertor(BFieldConvertor convertor) {
 		if (convertor != null) {
 			convertors.add(convertor);
+		}
+	}
+
+	public Map<Class<?>, FieldConvertor> getOnCallConvertors() {
+		return onCallConvertors;
+	}
+
+	public void setOnCallConvertors(Map<Class<?>, FieldConvertor> convertors) {
+		this.onCallConvertors = Objects.requireNonNull(convertors);
+	}
+
+	public void addOnCallConvertor(BFieldConvertor convertor) {
+		if (convertor != null) {
+			onCallConvertors.put(convertor.getClass(), convertor);
 		}
 	}
 

@@ -45,8 +45,14 @@ public class FieldMeta {
      */
     private final DbType dbType;
 
+    /**
+     * 专门为该字段绑定的 FieldConvertor，为空则会从公用 convertors 匹配查找
+     * @since v3.8.1
+     */
+    private final Class<? extends FieldConvertor> convClazz;
+
     public FieldMeta(BeanMeta<?> beanMeta, Field field, SqlSnippet fieldSql, String dbAlias, boolean conditional,
-                     Class<? extends FieldOp>[] onlyOn, DbType dbType) {
+                     Class<? extends FieldOp>[] onlyOn, DbType dbType, Class<? extends FieldConvertor> convClazz) {
         this.beanMeta = beanMeta;
         this.field = field;
         this.fieldSql = fieldSql;
@@ -54,6 +60,7 @@ public class FieldMeta {
         this.conditional = conditional;
         this.onlyOn = onlyOn;
         this.dbType = dbType;
+        this.convClazz = convClazz;
     }
 
     public BeanMeta<?> getBeanMeta() {
@@ -90,6 +97,10 @@ public class FieldMeta {
 
     public DbType getDbType() {
         return dbType;
+    }
+
+    public Class<? extends FieldConvertor> getConvClazz() {
+        return convClazz;
     }
 
 }
