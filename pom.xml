@@ -5,7 +5,7 @@
 
 	<name>Bean Searcher</name>
 	<description>比 MyBatis 效率快 100 倍的条件检索引擎，使一行代码实现复杂列表检索成为可能！</description>
-	<url>https://github.com/ejlchina/bean-searcher</url>
+	<url>https://github.com/troyzhxu/bean-searcher</url>
 
 	<groupId>com.ejlchina</groupId>
 	<artifactId>bean-searcher-parent</artifactId>
@@ -42,9 +42,9 @@
 	</developers>
 	
 	<scm>
-		<connection>scm:git:https://github.com/ejlchina/bean-searcher.git</connection>
-		<developerConnection>scm:git:https://github.com/ejlchina/bean-searcher.git</developerConnection>
-		<url>https://github.com/ejlchina/bean-searcher</url>
+		<connection>scm:git:https://github.com/troyzhxu/bean-searcher.git</connection>
+		<developerConnection>scm:git:https://github.com/troyzhxu/bean-searcher.git</developerConnection>
+		<url>https://github.com/troyzhxu/bean-searcher</url>
 		<tag>v3.8.0</tag>
 	</scm>
 

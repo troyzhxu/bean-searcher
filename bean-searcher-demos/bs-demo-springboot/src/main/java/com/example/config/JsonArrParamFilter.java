@@ -10,7 +10,7 @@ import java.util.Map;
 
 /**
  * 为了简化多值参数传递
- * 参考：https://github.com/ejlchina/bean-searcher/issues/10
+ * 参考：https://github.com/troyzhxu/bean-searcher/issues/10
  */
 public class JsonArrParamFilter implements ParamFilter {
 

@@ -29,7 +29,7 @@ public class Application implements WebMvcConfigurer {
 
 	/**
 	 * 为了简化多值参数传递
-	 * 参考：https://github.com/ejlchina/bean-searcher/issues/10
+	 * 参考：https://github.com/troyzhxu/bean-searcher/issues/10
 	 * @return 参数过滤器
 	 */
 	@Bean

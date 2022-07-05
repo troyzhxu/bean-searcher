@@ -14,7 +14,7 @@
 ### 四步运行 DEMO
 
 ```bash
-> git clone https://github.com/ejlchina/bean-searcher.git
+> git clone https://github.com/troyzhxu/bean-searcher.git
 > cd bean-searcher/bean-searcher-demos/grails-demo
 > grails
 > run-app

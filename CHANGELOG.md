@@ -55,17 +55,17 @@ from (
   * 增强 `@DbField` 注解：新增 `type` 属性，允许用户手动指定该属性对应的数据库字段类型
   * 增强 `ParamResolver`: 新增 `Convertor` 参数转换器，可对检索参数的值类型转换为数据库字段匹配的类型（更好的兼容 Oracle、PgSQL 等数据库）
   * 新增 `BoolParamConvertor`、`NumberParamConvertor`、`DateParamConvertor`、`TimeParamConvertor` 与 `DateTimeParamConvertor` 参数转换器
-  * 新增 `NotLike` 运算符（`nk`）：https://github.com/ejlchina/bean-searcher/issues/50
+  * 新增 `NotLike` 运算符（`nk`）：https://github.com/troyzhxu/bean-searcher/issues/50
   * 增强 `FieldOp.OpPara` ：新增 `getFieldSql(String field)` 方法，可以自定义运算符内获得其它字段的信息
   * 增强 `DefaultDbMapping`，当 `@SearchBean.tables` 的值是单表时，则省略 `@DbField` 的属性也自动映射
-  * 增强 `参数构建器`：新增 `sql(..)` 方法，可为用于自定义 SQL 条件：https://github.com/ejlchina/bean-searcher/issues/51
+  * 增强 `参数构建器`：新增 `sql(..)` 方法，可为用于自定义 SQL 条件：https://github.com/troyzhxu/bean-searcher/issues/51
   * 新增 `根参数` 机制（用 `$` 表示根组，用户构造的组表达式不可以包含 `$`），参数构建器默认使用 根参数
   * 重构 `FieldConvertor`: 字段转换器的 9 个实现类 从 `com.ejlchina.searcher.implement` 包迁移到 `com.ejlchina.searcher.convertor` 包下
   * 重构 `DialectWrapper`：从 `com.ejlchina.searcher.implement` 包迁移到 `com.ejlchina.searcher.dialect` 包下
   * 重构 `@SearchBean` 注解：新增 `where` 替换原来的 `joinCond` 属性，并将 `joinCond` 标记为过时
   * 移除 `DateValueCorrector`，已被 `DateParamConvertor` 与 `DateTimeParamConvertor` 替代
   * 移除 `NullValueFilter` 与 `BoolValueFilter`（已被 `BoolParamConvertor` 替代）
-  * 优化 分组动态查询条件生成机制：https://github.com/ejlchina/bean-searcher/issues/56
+  * 优化 分组动态查询条件生成机制：https://github.com/troyzhxu/bean-searcher/issues/56
   * 优化 当 `@SearchBean.tables` 的值是单表时，则省略注解的字段属性也自动映射
   * 优化 异常提示信息
 * Bean Searcher Boot Starter
@@ -89,7 +89,7 @@ from (
 
 * Bean Searcher
   * 新增 `SqlServerDialect` 方言实现，支持 SqlServer 2012+
-  * 新增 `OrLike` 运算符，参见：https://github.com/ejlchina/bean-searcher/issues/38
+  * 新增 `OrLike` 运算符，参见：https://github.com/troyzhxu/bean-searcher/issues/38
   * 增强 `SqlExecutor`：新增 `SlowListener` 接口，可让用户在代码中监听慢 SQL
   * 增强 `DefaultDbMapping`：新增 `underlineCase` 属性，可配置自动映射时是否开启 `驼峰->下划线` 的风格转换
   * 增强 `Dialect`：新增 `hasILike()` 方法，当忽略大小写查询时，可利用数据库的 `ilike` 关键字提升查询性能
@@ -116,7 +116,7 @@ from (
 
 ### 🐛 Bug Fixes
 
-* 修复 JDK8 上当实体类有 `LocalDate` 类型的字段时会报 `NoSuchMethodError` 的问题: https://github.com/ejlchina/bean-searcher/issues/43
+* 修复 JDK8 上当实体类有 `LocalDate` 类型的字段时会报 `NoSuchMethodError` 的问题: https://github.com/troyzhxu/bean-searcher/issues/43
 
 # v3.6.2 @ 2022-05-11
 
@@ -182,7 +182,7 @@ from (
 
 ### 🐛 Bug Fixes
 
-* 修复：对于 `Boolean` 类型的字段，当检索时该字段传入的参数值为 `空串` 时，`BoolValueFilter` 会将其转换为 `true` 的问题：https://github.com/ejlchina/bean-searcher/issues/29
+* 修复：对于 `Boolean` 类型的字段，当检索时该字段传入的参数值为 `空串` 时，`BoolValueFilter` 会将其转换为 `true` 的问题：https://github.com/troyzhxu/bean-searcher/issues/29
 
 # v3.5.2 @ 2022-03-17
 
