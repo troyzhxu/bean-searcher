@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class LRUCacheTestCase {
 
-    LRUCache<String> lruCache = new LRUCache<>(50);
+    Cache<String> lruCache = new LRUCache<>(50);
 
     Random random = new Random();
 
@@ -25,7 +25,7 @@ public class LRUCacheTestCase {
                     String key = String.valueOf(random.nextInt(50));
                     String value = lruCache.get(key);
                     if (value == null) {
-                        lruCache.put(key, key);
+                        lruCache.cache(key, key);
                         putCount.incrementAndGet();
                     } else {
                         Assert.assertEquals(key, value);
