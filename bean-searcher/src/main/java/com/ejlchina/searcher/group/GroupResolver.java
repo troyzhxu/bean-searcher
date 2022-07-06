@@ -12,7 +12,7 @@ public interface GroupResolver {
      * @param gExpr 组表达式
      * @return Group
      */
-    Group<String> resolve(String gExpr);
+    Group<String> resolve(String gExpr) throws IllegalArgumentException;
 
     /**
      * @since v3.8.0

@@ -104,7 +104,7 @@ public class DefaultExprParser implements ExprParser {
         } else if (op == orOp) {
             valueStack.push(value1.or(value2));
         } else {
-            throw new IllegalStateException("invalid expr");
+            throw new IllegalStateException("invalid expr: " + expression);
         }
     }
 

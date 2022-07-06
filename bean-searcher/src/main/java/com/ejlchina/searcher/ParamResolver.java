@@ -18,7 +18,7 @@ public interface ParamResolver {
 	 * @param paraMap 原始检索参数
 	 * @return SearchParam
 	 * */
-	SearchParam resolve(BeanMeta<?> beanMeta, FetchType fetchType, Map<String, Object> paraMap);
+	SearchParam resolve(BeanMeta<?> beanMeta, FetchType fetchType, Map<String, Object> paraMap) throws IllegalArgumentException;
 
 	/**
 	 * 参数值转换器

@@ -1,5 +1,6 @@
 package com.ejlchina.searcher.group;
 
+import com.ejlchina.searcher.util.Cache;
 import com.ejlchina.searcher.util.LRUCache;
 import com.ejlchina.searcher.util.StringUtils;
 import org.slf4j.Logger;
@@ -18,28 +19,30 @@ public class DefaultGroupResolver implements GroupResolver {
 
     static final Group<String> DEFAULT_RAW_GROUP = new Group<>(Group.TYPE_RAW);
 
-    private final Object lock = new Object();
-
-    // LRU 缓存模型
-    private LRUCache<Group<String>> cache = new LRUCache<>(50);
+    // LRU 缓存模型（因为逻辑表达式可能是前端传来的，具有无限可能，不能来者不拒）
+    private Cache<Group<String>> cache = new LRUCache<>(50);
 
     // 是否启用
     private boolean enabled = true;
+
+    // 表达式最大允许长度
+    private int maxExprLength = 50;
 
     private ExprParser.Factory parserFactory = new DefaultParserFactory();
 
     @Override
     public Group<String> resolve(String gExpr) {
+        if (StringUtils.isBlank(gExpr)) {
+            return DEFAULT_RAW_GROUP;
+        }
+        if (gExpr.length() > maxExprLength) {
+            throw new IllegalArgumentException("gExpr is too long: " + gExpr.length() + ", max allowed length is " + maxExprLength);
+        }
         if (enabled) {
-            Group<String> group;
-            synchronized (lock) {
-                group = cache.get(gExpr);
-            }
+            Group<String> group = cache.get(gExpr);
             if (group == null) {
                 group = doResolve(gExpr);
-                synchronized (lock) {
-                    cache.put(gExpr, group);
-                }
+                cache.cache(gExpr, group);
             }
             return group;
         }
@@ -47,15 +50,11 @@ public class DefaultGroupResolver implements GroupResolver {
     }
 
     protected Group<String> doResolve(String expr) {
-        if (StringUtils.isBlank(expr)) {
-            return DEFAULT_RAW_GROUP;
-        }
         try {
             return parserFactory.create(expr).parse();
         } catch (Exception e) {
-            log.warn("Can not parse expr: [{}], fallback to DEFAULT_RAW_GROUP", expr);
+            throw new IllegalArgumentException(e.getMessage(), e);
         }
-        return DEFAULT_RAW_GROUP;
     }
 
     @Override
@@ -67,11 +66,11 @@ public class DefaultGroupResolver implements GroupResolver {
         this.parserFactory = parserFactory;
     }
 
-    public LRUCache<Group<String>> getCache() {
+    public Cache<Group<String>> getCache() {
         return cache;
     }
 
-    public void setCache(LRUCache<Group<String>> cache) {
+    public void setCache(Cache<Group<String>> cache) {
         this.cache = Objects.requireNonNull(cache);
     }
 
@@ -81,6 +80,14 @@ public class DefaultGroupResolver implements GroupResolver {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public int getMaxExprLength() {
+        return maxExprLength;
+    }
+
+    public void setMaxExprLength(int maxExprLength) {
+        this.maxExprLength = maxExprLength;
     }
 
 }
