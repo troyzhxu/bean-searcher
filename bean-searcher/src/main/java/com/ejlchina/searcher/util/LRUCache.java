@@ -11,7 +11,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author Troy.Zhou @ 2022-02-22
  * @since v3.5.0
  */
-public class LRUCache<T> extends LinkedHashMap<String, T> {
+public class LRUCache<T> extends LinkedHashMap<String, T> implements Cache<T> {
 
     private int maxCacheCount;
 
@@ -19,6 +19,26 @@ public class LRUCache<T> extends LinkedHashMap<String, T> {
 
     public LRUCache(int maxCacheCount) {
         this.maxCacheCount = maxCacheCount;
+    }
+
+    @Override
+    public T get(String key) {
+        lock.lock();
+        try {
+            return super.get(key);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    @Override
+    public void cache(String key, T value) {
+        lock.lock();
+        try {
+            put(key, value);
+        } finally {
+            lock.unlock();
+        }
     }
 
     @Override
@@ -32,66 +52,6 @@ public class LRUCache<T> extends LinkedHashMap<String, T> {
 
     public void setMaxCacheCount(int maxCacheCount) {
         this.maxCacheCount = maxCacheCount;
-    }
-
-    @Override
-    public T get(Object key) {
-        lock.lock();
-        try {
-            return super.get(key);
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    @Override
-    public T put(String key, T value) {
-        lock.lock();
-        try {
-            return super.put(key, value);
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    @Override
-    public void putAll(Map<? extends String, ? extends T> m) {
-        lock.lock();
-        try {
-            super.putAll(m);
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    @Override
-    public T putIfAbsent(String key, T value) {
-        lock.lock();
-        try {
-            return super.putIfAbsent(key, value);
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    @Override
-    public boolean remove(Object key, Object value) {
-        lock.lock();
-        try {
-            return super.remove(key, value);
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    @Override
-    public T replace(String key, T value) {
-        lock.lock();
-        try {
-            return super.replace(key, value);
-        } finally {
-            lock.unlock();
-        }
     }
 
 }
