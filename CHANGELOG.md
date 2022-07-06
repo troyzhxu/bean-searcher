@@ -46,6 +46,16 @@ from (
 ) t_
 ```
 
+# v3.8.1
+
+### ✨ Features
+
+* Bean Searcher
+
+  * 优化 参数非法的情况下，不做数据库查询，直接返回空数据
+  * 提升参数构建器性能，将 Builder.toFieldName 方法标记为过时，新增 FieldFns 工具类
+  * 增加风控配置：逻辑组表达式的最大允许长度
+
 # v3.8.0
 
 ### ✨ Features
