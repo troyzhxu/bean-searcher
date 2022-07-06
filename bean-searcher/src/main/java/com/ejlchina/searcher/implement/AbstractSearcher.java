@@ -2,12 +2,11 @@ package com.ejlchina.searcher.implement;
 
 import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.param.FetchType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * 自动检索器 根据 Bean 的 Class 和请求参数，自动检索 Bean
@@ -15,6 +14,8 @@ import java.util.Objects;
  * @since v3.0.0
  */
 public abstract class AbstractSearcher implements Searcher {
+
+	protected static final Logger log = LoggerFactory.getLogger(AbstractSearcher.class);
 
 	private SqlExecutor sqlExecutor;
 
@@ -88,9 +89,24 @@ public abstract class AbstractSearcher implements Searcher {
 			throw new SearchException("you must set a sqlExecutor before search.");
 		}
 		BeanMeta<T> beanMeta = metaResolver.resolve(beanClass);
-		SearchParam searchParam = paramResolver.resolve(beanMeta, fetchType, paraMap);
+		SearchParam searchParam;
+		try {
+			searchParam = paramResolver.resolve(beanMeta, fetchType, paraMap);
+		} catch (IllegalArgumentException e) {
+			log.warn("非法检索参数 [{}] 本次检索直接返回空数据！", e.getMessage());
+			// 参数非法的情况下，直接返回空数据
+			return emptyResult(beanMeta, fetchType);
+		}
 		SearchSql<T> searchSql = sqlResolver.resolve(beanMeta, searchParam);
 		return sqlExecutor.execute(intercept(searchSql, paraMap, fetchType));
+	}
+
+	private <T> SqlResult<T> emptyResult(BeanMeta<T> beanMeta, FetchType fetchType) {
+		SearchSql<T> searchSql = new SearchSql<>(beanMeta, Collections.emptyList());
+		for (String summaryField : fetchType.getSummaryFields()) {
+			searchSql.addSummaryAlias(summaryField);
+		}
+		return new SqlResult<>(searchSql, SqlResult.ResultSet.EMPTY, col -> null);
 	}
 
 	protected <T> SearchSql<T> intercept(SearchSql<T> searchSql, Map<String, Object> paraMap, FetchType fetchType) {
