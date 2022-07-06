@@ -3,16 +3,12 @@ package com.ejlchina.searcher.util;
 import com.ejlchina.searcher.FieldOp;
 import com.ejlchina.searcher.operator.SqlCond;
 import com.ejlchina.searcher.param.FieldParam;
+import com.ejlchina.searcher.util.FieldFns.FieldFn;
 
-import java.io.Serializable;
-import java.lang.invoke.SerializedLambda;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
 
 import static com.ejlchina.searcher.util.MapBuilder.FIELD_PARAM;
 
@@ -23,15 +19,10 @@ import static com.ejlchina.searcher.util.MapBuilder.FIELD_PARAM;
  */
 public class Builder<B extends Builder<B>> {
 
-    @FunctionalInterface
-    public interface FieldFn<T, R> extends Function<T, R>, Serializable {  }
-
     /**
      * 根组，根组的条件总是会被用到
      */
     public static final String ROOT_GROUP = "$";
-
-    private final Map<FieldFn<?, ?>, String> cache = new ConcurrentHashMap<>();
 
     protected final Map<String, Object> map;
 
@@ -63,7 +54,7 @@ public class Builder<B extends Builder<B>> {
      * @return MapBuilder
      */
     public <T> B field(FieldFn<T, ?> fieldFn, Object... values) {
-        return field(toFieldName(fieldFn), values);
+        return field(FieldFns.name(fieldFn), values);
     }
 
     /**
@@ -119,7 +110,7 @@ public class Builder<B extends Builder<B>> {
      */
     @SafeVarargs
     public final <T> B field(FieldFn<T, ?> fieldFn, FieldFn<T, ?>... fieldFns) {
-        return field(toFieldName(fieldFn), (Object[]) toFields(fieldFns));
+        return field(FieldFns.name(fieldFn), (Object[]) toFields(fieldFns));
     }
 
     /**
@@ -224,43 +215,22 @@ public class Builder<B extends Builder<B>> {
 //        return (B) this;
 //    }
 
+    /**
+     * Deprecated from v3.8.1
+     * Please use {@link FieldFns#name(FieldFn)} directly
+     * @param fieldFn 方法引用
+     * @return 属性名
+     */
+    @Deprecated
     protected String toFieldName(FieldFn<?, ?> fieldFn) {
-        String fieldName = cache.get(fieldFn);
-        if (fieldName != null) {
-            return fieldName;
-        }
-        try {
-            Method wrMethod = fieldFn.getClass().getDeclaredMethod("writeReplace");
-            boolean isInaccessible = !wrMethod.isAccessible();
-            if (isInaccessible) {
-                wrMethod.setAccessible(true);
-            }
-            SerializedLambda sLambda = (SerializedLambda) wrMethod.invoke(fieldFn);
-            if (isInaccessible) {
-                wrMethod.setAccessible(false);
-            }
-            String methodName = sLambda.getImplMethodName();
-            if (methodName.startsWith("get") && methodName.length() > 3) {
-                fieldName = StringUtils.firstCharToLoweCase(methodName.substring(3));
-            }
-            if (methodName.startsWith("is") && methodName.length() > 2) {
-                fieldName = StringUtils.firstCharToLoweCase(methodName.substring(2));
-            }
-            if (fieldName != null) {
-                cache.put(fieldFn, fieldName);
-                return fieldName;
-            }
-            throw new IllegalStateException("can not convert method [" + methodName + "] to field name");
-        } catch (ReflectiveOperationException e) {
-            throw new IllegalStateException("无法反射出字段名", e);
-        }
+        return FieldFns.name(fieldFn);
     }
 
     @SafeVarargs
     protected final <T> String[] toFields(FieldFn<T, ?>... fieldFns) {
         String[] fields = new String[fieldFns.length];
         for (int i = 0; i < fields.length; i++) {
-            fields[i] = toFieldName(fieldFns[i]);
+            fields[i] = FieldFns.name(fieldFns[i]);
         }
         return fields;
     }

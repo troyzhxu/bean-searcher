@@ -5,6 +5,7 @@ import com.ejlchina.searcher.SearchParam;
 import com.ejlchina.searcher.param.FieldParam;
 import com.ejlchina.searcher.param.OrderBy;
 import com.ejlchina.searcher.param.Paging;
+import com.ejlchina.searcher.util.FieldFns.FieldFn;
 
 import java.util.*;
 
@@ -117,7 +118,7 @@ public class MapBuilder extends Builder<MapBuilder> {
      * @return MapBuilder
      */
     public <T> MapBuilder orderBy(FieldFn<T, ?> fieldFn, String order) {
-        return orderBy(toFieldName(fieldFn), order);
+        return orderBy(FieldFns.name(fieldFn), order);
     }
 
     /**
@@ -150,7 +151,7 @@ public class MapBuilder extends Builder<MapBuilder> {
      * @return MapBuilder
      */
     public <T> MapBuilder orderBy(FieldFn<T, ?> fieldFn) {
-        return orderBy(toFieldName(fieldFn), OrderBy.ORDER_ASC);
+        return orderBy(FieldFns.name(fieldFn), OrderBy.ORDER_ASC);
     }
 
     /**
