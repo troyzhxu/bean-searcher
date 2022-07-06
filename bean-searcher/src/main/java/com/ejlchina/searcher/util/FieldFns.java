@@ -22,7 +22,13 @@ public class FieldFns {
 
     private static final Map<FieldFn<?, ?>, String> cache = new ConcurrentHashMap<>();
 
-    public static String name(FieldFn<?, ?> fieldFn) {
+    /**
+     * @param fieldFn 方法引用
+     * @param <T> 泛型
+     * @return 该方法对应的属性名
+     */
+    public static <T> String name(FieldFn<T, ?> fieldFn) {
+        // 虽然同一个方法在不同地方引用都是不同的 lambda 实例，但同一个地方方法引用在被多次执行时，是同一个 lambda 实例，所以缓存还是有用的
         String name = cache.get(fieldFn);
         if (name != null) {
             return name;
