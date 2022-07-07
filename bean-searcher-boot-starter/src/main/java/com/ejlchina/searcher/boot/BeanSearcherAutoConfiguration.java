@@ -51,13 +51,17 @@ public class BeanSearcherAutoConfiguration {
 			p.setOffsetName(conf.getOffset());
 			extractor = p;
 		} else {
-			throw new SearchException("配置项 [bean-searcher.params.pagination.type] 只能为 page 或 offset！");
+			throw new IllegalConfigException("配置项 [bean-searcher.params.pagination.type] 只能为 page 或 offset！");
 		}
 		int defaultSize = conf.getDefaultSize();
 		int maxAllowedSize = conf.getMaxAllowedSize();
 		if (defaultSize > maxAllowedSize) {
-			throw new SearchException("配置项 [bean-searcher.params.pagination.default-size: " + defaultSize +
+			throw new IllegalConfigException("配置项 [bean-searcher.params.pagination.default-size: " + defaultSize +
 					"] 不能比 [bean-searcher.params.pagination.max-allowed-size: " + maxAllowedSize + "] 的值大！");
+		}
+		if (defaultSize < 1) {
+			throw new IllegalConfigException("配置项 [bean-searcher.params.pagination.default-size: " + defaultSize +
+					"] 的值大必须大于等于 1");
 		}
 		extractor.setMaxAllowedSize(maxAllowedSize);
 		extractor.setDefaultSize(defaultSize);
@@ -71,7 +75,7 @@ public class BeanSearcherAutoConfiguration {
 	public Dialect dialect(BeanSearcherProperties config) {
 		Sql.Dialect dialect = config.getSql().getDialect();
 		if (dialect == null) {
-			throw new SearchException("配置项【bean-searcher.sql.dialect】不能为空");
+			throw new IllegalConfigException("配置项【bean-searcher.sql.dialect】不能为空");
 		}
 		switch (dialect) {
 			case MySQL:
@@ -84,7 +88,7 @@ public class BeanSearcherAutoConfiguration {
 			case SqlServer:
 				return new SqlServerDialect();
 		}
-		throw new SearchException("配置项【bean-searcher.sql.dialect】只能为  MySql | Oracle 中的一个，若需支持其它方言，可自己注入一个 com.ejlchina.searcher.dialect.Dialect 类型的 Bean！");
+		throw new IllegalConfigException("配置项【bean-searcher.sql.dialect】只能为  MySql | Oracle 中的一个，若需支持其它方言，可自己注入一个 com.ejlchina.searcher.dialect.Dialect 类型的 Bean！");
 	}
 
 	@Bean
