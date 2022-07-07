@@ -211,7 +211,7 @@ public class BeanSearcherProperties {
 		/**
 		 * 分页相关配置
 		 */
-		private final PaginationProps pagination = new PaginationProps();
+		private final Pagination pagination = new Pagination();
 
 		public String getSort() {
 			return sort;
@@ -281,11 +281,11 @@ public class BeanSearcherProperties {
 			return group;
 		}
 
-		public PaginationProps getPagination() {
+		public Pagination getPagination() {
 			return pagination;
 		}
 
-		public static class PaginationProps {
+		public static class Pagination {
 
 			public static final String TYPE_PAGE = "page";
 
@@ -323,10 +323,15 @@ public class BeanSearcherProperties {
 			private int start = 0;
 
 			/**
-			 * 分页保护，每页最大允许查询条数，默认为 100，
+			 * 分页保护：每页最大允许查询条数，默认为 100，
 			 * 注意：该配置对方法 {@link Searcher#searchAll(Class, Map)} 无效
 			 */
 			private int maxAllowedSize = 100;
+
+			/**
+			 * 分页保护：最大允许偏移量，如果是 page 分页，则最大允许页码是 maxAllowedOffset / size
+			 */
+			private long maxAllowedOffset = 20000;
 
 			public int getDefaultSize() {
 				return defaultSize;
@@ -382,6 +387,14 @@ public class BeanSearcherProperties {
 
 			public void setMaxAllowedSize(int maxAllowedSize) {
 				this.maxAllowedSize = maxAllowedSize;
+			}
+
+			public long getMaxAllowedOffset() {
+				return maxAllowedOffset;
+			}
+
+			public void setMaxAllowedOffset(long maxAllowedOffset) {
+				this.maxAllowedOffset = maxAllowedOffset;
 			}
 
 		}

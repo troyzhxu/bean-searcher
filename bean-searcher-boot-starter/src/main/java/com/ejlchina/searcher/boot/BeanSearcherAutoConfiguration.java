@@ -38,15 +38,15 @@ public class BeanSearcherAutoConfiguration {
 	@Bean
 	@ConditionalOnMissingBean(PageExtractor.class)
 	public PageExtractor pageExtractor(BeanSearcherProperties config) {
-		Params.PaginationProps conf = config.getParams().getPagination();
+		Params.Pagination conf = config.getParams().getPagination();
 		String type = conf.getType();
 		BasePageExtractor extractor;
-		if (Params.PaginationProps.TYPE_PAGE.equals(type)) {
+		if (Params.Pagination.TYPE_PAGE.equals(type)) {
 			PageSizeExtractor p = new PageSizeExtractor();
 			p.setPageName(conf.getPage());
 			extractor = p;
 		}  else
-		if (Params.PaginationProps.TYPE_OFFSET.equals(type)) {
+		if (Params.Pagination.TYPE_OFFSET.equals(type)) {
 			PageOffsetExtractor p = new PageOffsetExtractor();
 			p.setOffsetName(conf.getOffset());
 			extractor = p;
@@ -55,6 +55,7 @@ public class BeanSearcherAutoConfiguration {
 		}
 		int defaultSize = conf.getDefaultSize();
 		int maxAllowedSize = conf.getMaxAllowedSize();
+		long maxAllowedOffset = conf.getMaxAllowedOffset();
 		if (defaultSize > maxAllowedSize) {
 			throw new IllegalConfigException("配置项 [bean-searcher.params.pagination.default-size: " + defaultSize +
 					"] 不能比 [bean-searcher.params.pagination.max-allowed-size: " + maxAllowedSize + "] 的值大！");
@@ -63,7 +64,12 @@ public class BeanSearcherAutoConfiguration {
 			throw new IllegalConfigException("配置项 [bean-searcher.params.pagination.default-size: " + defaultSize +
 					"] 的值大必须大于等于 1");
 		}
+		if (maxAllowedOffset < 1) {
+			throw new IllegalConfigException("配置项 [bean-searcher.params.pagination.max-allowed-offset: " + maxAllowedOffset +
+					"] 的值大必须大于等于 1");
+		}
 		extractor.setMaxAllowedSize(maxAllowedSize);
+		extractor.setMaxAllowedOffset(maxAllowedOffset);
 		extractor.setDefaultSize(defaultSize);
 		extractor.setSizeName(conf.getSize());
 		extractor.setStart(conf.getStart());
