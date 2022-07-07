@@ -175,13 +175,13 @@ public interface DbMapping {
          * 绑定于该字段的FieldConvertor
          * @since v3.8.1
          */
-        private final Class<? extends FieldConvertor> convClazz;
+        private final Class<? extends Convertor> convClazz;
 
         public Column(String fieldSql, boolean conditional, Class<? extends FieldOp>[] onlyOn, DbType dbType) {
             this(fieldSql, conditional, onlyOn, null, dbType, null);
         }
 
-        public Column(String fieldSql, boolean conditional, Class<? extends FieldOp>[] onlyOn, String alias, DbType dbType, Class<? extends FieldConvertor> convClazz) {
+        public Column(String fieldSql, boolean conditional, Class<? extends FieldOp>[] onlyOn, String alias, DbType dbType, Class<? extends Convertor> convClazz) {
             this.fieldSql = fieldSql;
             this.conditional = conditional;
             this.onlyOn = onlyOn;
@@ -210,7 +210,7 @@ public interface DbMapping {
             return dbType;
         }
 
-        public Class<? extends FieldConvertor> getConvClazz() {
+        public Class<? extends Convertor> getConvClazz() {
             return convClazz;
         }
 

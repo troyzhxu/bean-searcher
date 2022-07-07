@@ -15,7 +15,7 @@ import java.util.function.Function;
 public class DefaultBeanReflector implements BeanReflector {
 
 	private List<BFieldConvertor> convertors;
-	private Map<Class<?>, FieldConvertor> onCallConvertors;
+	private Map<Class<?>, Convertor> onCallConvertors;
 
 	public DefaultBeanReflector() {
 		this(new ArrayList<>());
@@ -61,7 +61,7 @@ public class DefaultBeanReflector implements BeanReflector {
 			return value;
 		}
 		if (meta.getConvClazz() != null) {
-			FieldConvertor convertor = getFieldConvertor(meta.getConvClazz());
+			Convertor convertor = getOnCallConvertor(meta.getConvClazz());
 			return convertor.convert(meta, value);
 		}
 		for (FieldConvertor convertor: convertors) {
@@ -84,9 +84,9 @@ public class DefaultBeanReflector implements BeanReflector {
 		}
 	}
 
-	protected FieldConvertor getFieldConvertor(Class<? extends FieldConvertor> convClazz) {
+	protected Convertor getOnCallConvertor(Class<? extends Convertor> convClazz) {
 		if (!onCallConvertors.containsKey(convClazz)) {
-			FieldConvertor convertor = newInstance(convClazz);
+			Convertor convertor = newInstance(convClazz);
 			onCallConvertors.put(convClazz, convertor);
 		}
 		return onCallConvertors.get(convClazz);
@@ -106,11 +106,11 @@ public class DefaultBeanReflector implements BeanReflector {
 		}
 	}
 
-	public Map<Class<?>, FieldConvertor> getOnCallConvertors() {
+	public Map<Class<?>, Convertor> getOnCallConvertors() {
 		return onCallConvertors;
 	}
 
-	public void setOnCallConvertors(Map<Class<?>, FieldConvertor> convertors) {
+	public void setOnCallConvertors(Map<Class<?>, Convertor> convertors) {
 		this.onCallConvertors = Objects.requireNonNull(convertors);
 	}
 

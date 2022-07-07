@@ -25,7 +25,7 @@ public class BeanRefactorTestCase {
         private String name;
         @DbField(alias = "age")
         private int age;
-        @DbField(alias = "attrs", conditional = false, converter = Json2MapConverter.class)
+        @DbField(alias = "attrs", conditional = false, converter = Json2MapConvertor.class)
         private Map<String,String> attrs;
         @DbField(alias = "dateCreated")
         private Date dateCreated;
@@ -50,7 +50,7 @@ public class BeanRefactorTestCase {
         private void assertEquals(Object expect, Object value) throws Exception {
             if (expect instanceof String) {
                 if (value instanceof Map) {
-                    Assert.assertEquals(expect, Json2MapConverter.OBJECT_MAPPER.writeValueAsString(value));
+                    Assert.assertEquals(expect, Json2MapConvertor.OBJECT_MAPPER.writeValueAsString(value));
                 } else {
                     Assert.assertEquals(expect, String.valueOf(value));
                 }
@@ -109,7 +109,7 @@ public class BeanRefactorTestCase {
         values2.put("id", "100");
         values2.put("name", "Tom");
         values2.put("age", 20L);
-        values2.put("attrs", Json2MapConverter.OBJECT_MAPPER.writeValueAsString(attrs));
+        values2.put("attrs", Json2MapConvertor.OBJECT_MAPPER.writeValueAsString(attrs));
         values2.put("dateCreated", LocalDateTime.now());
 
         beanReflector.reflect(beanMeta, fieldSet, values2::get).assertEqual(values2);
@@ -118,16 +118,11 @@ public class BeanRefactorTestCase {
 
     //--
 
-    public static class Json2MapConverter implements FieldConvertor.BFieldConvertor {
+    public static class Json2MapConvertor implements Convertor {
         private static final TypeReference<Map<String,String>> MAP_STRING_TYPE = new TypeReference<Map<String,String>>() {};
         private static final TypeReference<Map<String,Object>> MAP_OBJECT_TYPE = new TypeReference<Map<String,Object>>() {};
 
         private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
-
-        @Override
-        public boolean supports(FieldMeta meta, Class<?> valueType) {
-            throw new UnsupportedOperationException(""); //无需实现
-        }
 
         @Override
         public Object convert(FieldMeta meta, Object value) {

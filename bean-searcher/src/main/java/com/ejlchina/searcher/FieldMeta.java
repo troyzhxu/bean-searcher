@@ -49,10 +49,10 @@ public class FieldMeta {
      * 专门为该字段绑定的 FieldConvertor，为空则会从公用 convertors 匹配查找
      * @since v3.8.1
      */
-    private final Class<? extends FieldConvertor> convClazz;
+    private final Class<? extends Convertor> convClazz;
 
     public FieldMeta(BeanMeta<?> beanMeta, Field field, SqlSnippet fieldSql, String dbAlias, boolean conditional,
-                     Class<? extends FieldOp>[] onlyOn, DbType dbType, Class<? extends FieldConvertor> convClazz) {
+                     Class<? extends FieldOp>[] onlyOn, DbType dbType, Class<? extends Convertor> convClazz) {
         this.beanMeta = beanMeta;
         this.field = field;
         this.fieldSql = fieldSql;
@@ -99,7 +99,7 @@ public class FieldMeta {
         return dbType;
     }
 
-    public Class<? extends FieldConvertor> getConvClazz() {
+    public Class<? extends Convertor> getConvClazz() {
         return convClazz;
     }
 
