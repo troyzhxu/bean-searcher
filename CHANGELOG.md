@@ -57,9 +57,11 @@ from (
   * 优化：提升参数构建器性能，并将 `Builder.toFieldName` 方法标记为过时，新增 `FieldFns` 工具类
   * 优化：参数构建器新增 `asc(boolean sure)` 与 `desc(boolean sure)` 方法
   * 优化：当分页尺寸小于等于 `0` 时，不执行 list sql 查询
+  * 优化：新增分页大深度保护，默认最大允许分页偏移 `20000` 条
 * Bean Searcher Boot Starter
-  * 新增 `bean-searcher.params.filter.max-allowed-size` 配置项，默认 150
-  * 新增 `bean-searcher.params.group.max-expr-length` 配置项，默认 50
+  * 新增 `bean-searcher.params.filter.max-allowed-size` 配置项，默认 `150`
+  * 新增 `bean-searcher.params.group.max-expr-length` 配置项，默认 `50`
+  * 新增 `bean-searcher.params.pagination.max-allowed-offset` 配置项，默认 `20000`
   * 新增配置项校验：`bean-searcher.params.pagination.default-size` 的值不能比 `bean-searcher.params.pagination.max-allowed-size` 大，且都必须大于 `0`
 
 # v3.8.0
