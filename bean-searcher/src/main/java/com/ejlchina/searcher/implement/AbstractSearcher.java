@@ -93,8 +93,7 @@ public abstract class AbstractSearcher implements Searcher {
 		try {
 			searchParam = paramResolver.resolve(beanMeta, fetchType, paraMap);
 		} catch (IllegalArgumentException e) {
-			log.warn("检测到非法检索参数 [{}] 本次检索直接返回空数据！", e.getMessage());
-			// 参数非法的情况下，直接返回空数据
+			log.warn("检测到非法参数 [{}] 本次检索直接返回空数据！", e.getMessage());
 			return emptyResult(beanMeta, fetchType);
 		}
 		SearchSql<T> searchSql = sqlResolver.resolve(beanMeta, searchParam);
@@ -106,7 +105,7 @@ public abstract class AbstractSearcher implements Searcher {
 		for (String summaryField : fetchType.getSummaryFields()) {
 			searchSql.addSummaryAlias(summaryField);
 		}
-		return new SqlResult<>(searchSql, SqlResult.ResultSet.EMPTY, col -> null);
+		return new SqlResult<>(searchSql, SqlResult.ResultSet.EMPTY, SqlResult.ResultSet.EMPTY);
 	}
 
 	protected <T> SearchSql<T> intercept(SearchSql<T> searchSql, Map<String, Object> paraMap, FetchType fetchType) {
