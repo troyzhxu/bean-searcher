@@ -35,7 +35,6 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 	public <T> SearchSql<T> resolve(BeanMeta<T> beanMeta, SearchParam searchParam) {
 		List<String> fetchFields = searchParam.getFetchFields();
 		FetchType fetchType = searchParam.getFetchType();
-
 		SearchSql<T> searchSql = new SearchSql<>(beanMeta, fetchFields);
 		searchSql.setShouldQueryCluster(fetchType.shouldQueryCluster());
 		searchSql.setShouldQueryList(fetchType.shouldQueryList());
@@ -52,7 +51,6 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 			searchSql.addSummaryAlias(getSummaryAlias(fieldMeta));
 		}
 		Map<String, Object> paraMap = searchParam.getParaMap();
-
 		SqlWrapper<Object> fieldSelectSqlWrapper = buildFieldSelectSql(beanMeta, fetchFields, paraMap);
 		SqlWrapper<Object> fromWhereSqlWrapper = buildFromWhereSql(beanMeta, searchParam.getParamsGroup(), paraMap);
 		String fieldSelectSql = fieldSelectSqlWrapper.getSql();
@@ -72,13 +70,16 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 			searchSql.addClusterSqlParams(fromWhereSqlWrapper.getParas());
 		}
 		if (fetchType.shouldQueryList()) {
-			List<OrderBy> orderBys = searchParam.getOrderBys();
 			Paging paging = searchParam.getPaging();
-			SqlWrapper<Object> listSql = buildListSql(beanMeta, fieldSelectSql, fromWhereSql, orderBys, paging, fetchFields, paraMap);
-			searchSql.setListSqlString(listSql.getSql());
-			searchSql.addListSqlParams(fieldSelectSqlWrapper.getParas());
-			searchSql.addListSqlParams(fromWhereSqlWrapper.getParas());
-			searchSql.addListSqlParams(listSql.getParas());
+			// 如果分页 size <= 0，则不生成 listSql
+			if (paging == null || paging.getSize() > 0) {
+				List<OrderBy> orderBys = searchParam.getOrderBys();
+				SqlWrapper<Object> listSql = buildListSql(beanMeta, fieldSelectSql, fromWhereSql, orderBys, paging, fetchFields, paraMap);
+				searchSql.setListSqlString(listSql.getSql());
+				searchSql.addListSqlParams(fieldSelectSqlWrapper.getParas());
+				searchSql.addListSqlParams(fromWhereSqlWrapper.getParas());
+				searchSql.addListSqlParams(listSql.getParas());
+			}
 		}
 		return searchSql;
 	}

@@ -132,7 +132,7 @@ public class SearchSql<T> {
 	}
 
 	public boolean isShouldQueryCluster() {
-		return shouldQueryCluster;
+		return shouldQueryCluster && clusterSqlString != null;
 	}
 
 	public void setShouldQueryCluster(boolean shouldQueryCluster) {
@@ -140,7 +140,7 @@ public class SearchSql<T> {
 	}
 
 	public boolean isShouldQueryList() {
-		return shouldQueryList;
+		return shouldQueryList && listSqlString != null;
 	}
 
 	public void setShouldQueryList(boolean shouldQueryList) {
