@@ -7,7 +7,6 @@ import com.ejlchina.searcher.util.ObjectUtils;
 
 import java.util.Map;
 
-
 public abstract class BasePageExtractor implements PageExtractor {
 
 	/**
@@ -21,17 +20,36 @@ public abstract class BasePageExtractor implements PageExtractor {
 	private String sizeName = "size";
 
 	/**
+	 * 默认分页大小
+	 */
+	private int defaultSize = 15;
+
+	/**
 	 * 最大允许查询条数
 	 */
 	private int maxAllowedSize = 100;
 
 	/**
-	 * 默认分页大小
+	 * 分页保护：最大允许偏移量，如果是 page 分页，则最大允许页码是 maxAllowedOffset / size
+	 * @since v3.8.1
 	 */
-	private int defaultSize = 15;
+	private long maxAllowedOffset = 20000;
 
 	@Override
 	public Paging extract(Map<String, Object> paraMap) {
+		Paging paging = doExtract(paraMap);
+		int size = paging.getSize();
+		if (size < 0 || size > maxAllowedSize) {
+			throw new IllegalArgumentException("Invalid page size: " + size + ", it must between 0 and " + maxAllowedSize);
+		}
+		long offset = paging.getOffset();
+		if (offset < 0 || offset > maxAllowedOffset) {
+			throw new IllegalArgumentException("Invalid page offset: " + offset + ", it must between 0 and " + maxAllowedOffset);
+		}
+		return paging;
+	}
+
+	private Paging doExtract(Map<String, Object> paraMap) {
 		Object value = paraMap.get(MapBuilder.PAGING);
 		if (value instanceof MapBuilder.Page) {
 			return toPaging((MapBuilder.Page) value);
@@ -50,24 +68,17 @@ public abstract class BasePageExtractor implements PageExtractor {
 		if (size == null) {
 			return defaultSize;
 		}
-		return allowSize(size);
-	}
-
-	protected int allowSize(int size) {
-		if (size < 0 || size > maxAllowedSize) {
-			throw new IllegalArgumentException("Invalid page size: " + size + ", it must between 0 and " + maxAllowedSize);
-		}
 		return size;
 	}
 
 	protected Paging toPaging(MapBuilder.Page page) {
-		int size = allowSize(page.getSize());
+		int size = page.getSize();
 		long pageNo = Math.max(page.getPage() - start, 0);
 		return new Paging(size, size * pageNo);
 	}
 
 	protected Paging toPaging(MapBuilder.Limit limit) {
-		int size = allowSize(limit.getSize());
+		int size = limit.getSize();
 		long offset = Math.max(limit.getOffset() - start, 0);
 		return new Paging(size, offset);
 	}
@@ -103,6 +114,14 @@ public abstract class BasePageExtractor implements PageExtractor {
 
 	public void setDefaultSize(int defaultSize) {
 		this.defaultSize = defaultSize;
+	}
+
+	public long getMaxAllowedOffset() {
+		return maxAllowedOffset;
+	}
+
+	public void setMaxAllowedOffset(long maxAllowedOffset) {
+		this.maxAllowedOffset = maxAllowedOffset;
 	}
 
 }
