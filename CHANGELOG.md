@@ -1,70 +1,22 @@
-# Next
-
-优化带 `groupBy` 的统计查询，例如：
-
-```sql
-select count(*) s_count 
-from (
-    select avg(score) c_2, sum(score) c_1, course_id c_0 
-    from student_course2 
-    group by course_id 
-    having (sum(score) > 100)
-) t_
-```
-
-可优化为：
-
-```sql
-select count(*) s_count 
-from (
-    select 1 from student_course2 
-    group by course_id 
-    having (sum(score) > 100)
-) t_
-```
-
-再如：
-
-```sql
-select count(*) s_count, sum(c_2) s_sum_c_2
-from (
-    select avg(score) c_2, sum(score) c_1, course_id c_0 
-    from student_course2 
-    group by course_id 
-    having (sum(score) > 100)
-) t_
-```
-
-可优化为：
-
-```sql
-select count(*) s_count, sum(c_2) s_sum_c_2
-from (
-    select avg(score) c_2 from student_course2 
-    group by course_id 
-    having (sum(score) > 100)
-) t_
-```
-
 # v3.8.1
 
 ### ✨ Features
 
 * Bean Searcher
+  * 新增：分页大深度保护，默认最大允许分页偏移 `20000` 条
   * 优化：当检索参数过于庞大（阈值可配置）时，不执行查询，直接返回空数据
   * 优化：当逻辑分组表达式过于复杂（阈值可配置）或非法时，不执行查询，直接返回空数据
-  * 优化：当指定的排序参数非法时，也不执行查询（之前是忽略排序）
+  * 优化：当指定的排序参数非法时，也不执行查询（之前是忽略排序），返回空数据
   * 优化：提升参数构建器性能，并将 `Builder.toFieldName` 方法标记为过时，新增 `FieldFns` 工具类
   * 优化：参数构建器新增 `asc(boolean sure)` 与 `desc(boolean sure)` 方法
-  * 优化：当分页尺寸小于等于 `0` 时，不执行 list sql 查询
-  * 优化：新增分页大深度保护，默认最大允许分页偏移 `20000` 条
+  * 优化：当分页尺寸小于等于 `0` 时，不执行列表查询
 * Bean Searcher Boot Starter
   * 新增 `bean-searcher.params.filter.max-para-map-size` 配置项，默认 `150`
   * 新增 `bean-searcher.params.group.max-expr-length` 配置项，默认 `50`
   * 新增 `bean-searcher.params.pagination.max-allowed-offset` 配置项，默认 `20000`
   * 新增配置项校验：`bean-searcher.params.pagination.default-size` 的值不能比 `bean-searcher.params.pagination.max-allowed-size` 大，且都必须大于 `0`
 
-# v3.8.0
+# v3.8.0 @ 2022-07-23
 
 ### ✨ Features
 
