@@ -54,7 +54,10 @@ public abstract class BasePageExtractor implements PageExtractor {
 	}
 
 	protected int allowSize(int size) {
-		return Math.min(Math.max(size, 0), maxAllowedSize);
+		if (size < 0 || size > maxAllowedSize) {
+			throw new IllegalArgumentException("Invalid page size: " + size + ", it must between 0 and " + maxAllowedSize);
+		}
+		return size;
 	}
 
 	protected Paging toPaging(MapBuilder.Page page) {
