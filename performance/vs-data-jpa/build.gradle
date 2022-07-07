@@ -14,7 +14,7 @@ repositories {
 }
 
 dependencies {
-	implementation 'com.ejlchina:bean-searcher-boot-starter:3.8.0'
+	implementation 'com.ejlchina:bean-searcher-boot-starter:3.8.1'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	runtimeOnly 'com.h2database:h2'
