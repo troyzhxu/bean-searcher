@@ -23,8 +23,6 @@ import java.util.stream.Collectors;
  */
 public class DefaultParamResolver implements ParamResolver {
 
-	static final Logger log = LoggerFactory.getLogger(DefaultParamResolver.class);
-
 	public static final Pattern INDEX_PATTERN = Pattern.compile("\\d+");
 
 	/**
@@ -226,8 +224,7 @@ public class DefaultParamResolver implements ParamResolver {
 		}
 		if (StringUtils.isNotBlank(expr)) {
 			if (expr.contains(Builder.ROOT_GROUP)) {
-				log.warn("Invalid group expr [{}] because of containing '$', it will fallback to null", expr);
-				return null;
+				throw new IllegalArgumentException("Invalid groupExpr [" + expr + "] because of containing '" + Builder.ROOT_GROUP + "'.");
 			}
 			char andKey = groupResolver.getParserFactory().getAndKey();
 			expr = Builder.ROOT_GROUP + andKey + "(" + expr + ")";
