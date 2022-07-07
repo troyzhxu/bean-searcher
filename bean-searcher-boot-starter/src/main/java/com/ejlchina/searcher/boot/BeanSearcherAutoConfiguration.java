@@ -7,6 +7,7 @@ import com.ejlchina.searcher.boot.BeanSearcherProperties.Params;
 import com.ejlchina.searcher.boot.BeanSearcherProperties.Sql;
 import com.ejlchina.searcher.convertor.*;
 import com.ejlchina.searcher.dialect.*;
+import com.ejlchina.searcher.filter.SizeLimitParamFilter;
 import com.ejlchina.searcher.group.DefaultGroupResolver;
 import com.ejlchina.searcher.group.DefaultParserFactory;
 import com.ejlchina.searcher.group.ExprParser;
@@ -102,23 +103,58 @@ public class BeanSearcherAutoConfiguration {
 		Params.Group conf = config.getParams().getGroup();
 		groupResolver.setEnabled(conf.isEnable());
 		groupResolver.setCache(new LRUCache<>(conf.getCacheSize()));
+		groupResolver.setMaxExprLength(conf.getMaxExprLength());
 		groupResolver.setParserFactory(parserFactory);
 		return groupResolver;
+	}
+
+	@Bean
+	@ConditionalOnMissingBean(BoolParamConvertor.class)
+	public BoolParamConvertor boolParamConvertor() {
+		return new BoolParamConvertor();
+	}
+
+	@Bean
+	@ConditionalOnMissingBean(NumberParamConvertor.class)
+	public NumberParamConvertor numberParamConvertor() {
+		return new NumberParamConvertor();
+	}
+
+	@Bean
+	@ConditionalOnMissingBean(DateParamConvertor.class)
+	public DateParamConvertor dateParamConvertor() {
+		return new DateParamConvertor();
+	}
+
+	@Bean
+	@ConditionalOnMissingBean(TimeParamConvertor.class)
+	public TimeParamConvertor timeParamConvertor() {
+		return new TimeParamConvertor();
+	}
+
+	@Bean
+	@ConditionalOnMissingBean(DateTimeParamConvertor.class)
+	public DateTimeParamConvertor dateTimeParamConvertor() {
+		return new DateTimeParamConvertor();
+	}
+
+	@Bean
+	@ConditionalOnMissingBean(SizeLimitParamFilter.class)
+	public SizeLimitParamFilter sizeLimitParamFilter(BeanSearcherProperties config) {
+		return new SizeLimitParamFilter(config.getParams().getFilter().getMaxAllowedSize());
 	}
 
 	@Bean
 	@ConditionalOnMissingBean(ParamResolver.class)
 	public ParamResolver paramResolver(PageExtractor pageExtractor,
 									   FieldOpPool fieldOpPool,
-									   ObjectProvider<List<ParamFilter>> paramFilters,
-									   ObjectProvider<List<ParamResolver.Convertor>> convertors,
+									   List<ParamFilter> paramFilters,
+									   List<ParamResolver.Convertor> convertors,
 									   GroupResolver groupResolver,
 									   BeanSearcherProperties config) {
-		DefaultParamResolver paramResolver = new DefaultParamResolver();
+		DefaultParamResolver paramResolver = new DefaultParamResolver(convertors, paramFilters);
 		paramResolver.setPageExtractor(pageExtractor);
 		paramResolver.setFieldOpPool(fieldOpPool);
-		ifAvailable(paramFilters, l -> l.forEach(paramResolver::addParamFilter));
-		ifAvailable(convertors, l -> l.forEach(paramResolver::addConvertor));
 		Params conf = config.getParams();
 		paramResolver.setOperatorSuffix(conf.getOperatorKey());
 		paramResolver.setIgnoreCaseSuffix(conf.getIgnoreCaseKey());

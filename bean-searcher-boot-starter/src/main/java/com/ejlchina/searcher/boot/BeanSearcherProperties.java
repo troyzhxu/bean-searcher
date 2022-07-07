@@ -110,6 +110,28 @@ public class BeanSearcherProperties {
 		private String selectExclude = "selectExclude";
 
 		/**
+		 * 过滤器配置
+		 */
+		private final Filter filter = new Filter();
+
+		public static class Filter {
+
+			/**
+			 * 检索参数的最大尺寸，用于风险控制，避免前端恶意传参生成过于复杂的 SQL
+			 * @see com.ejlchina.searcher.filter.SizeLimitParamFilter#setMaxAllowedSize(int)
+			 */
+			private int maxAllowedSize = 150;
+
+			public int getMaxAllowedSize() {
+				return maxAllowedSize;
+			}
+
+			public void setMaxAllowedSize(int maxAllowedSize) {
+				this.maxAllowedSize = maxAllowedSize;
+			}
+		}
+
+		/**
 		 * 参数组相关配置
 		 */
 		private final Group group = new Group();
@@ -137,6 +159,12 @@ public class BeanSearcherProperties {
 			 * 组表达式缓存大小，默认为 50
 			 */
 			private int cacheSize = 50;
+
+			/**
+			 * 表达式最大允许长度，风险控制，用于避免前端恶意传参生成过于复杂的 SQL
+			 * @see com.ejlchina.searcher.group.DefaultGroupResolver#setMaxExprLength(int)
+			 */
+			private int maxExprLength = 50;
 
 			public boolean isEnable() {
 				return enable;
@@ -169,6 +197,15 @@ public class BeanSearcherProperties {
 			public void setCacheSize(int cacheSize) {
 				this.cacheSize = cacheSize;
 			}
+
+			public int getMaxExprLength() {
+				return maxExprLength;
+			}
+
+			public void setMaxExprLength(int maxExprLength) {
+				this.maxExprLength = maxExprLength;
+			}
+
 		}
 
 		/**
@@ -347,6 +384,10 @@ public class BeanSearcherProperties {
 				this.maxAllowedSize = maxAllowedSize;
 			}
 
+		}
+
+		public Filter getFilter() {
+			return filter;
 		}
 
 	}

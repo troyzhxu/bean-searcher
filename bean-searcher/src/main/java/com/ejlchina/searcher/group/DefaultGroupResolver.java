@@ -3,8 +3,6 @@ package com.ejlchina.searcher.group;
 import com.ejlchina.searcher.util.Cache;
 import com.ejlchina.searcher.util.LRUCache;
 import com.ejlchina.searcher.util.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
@@ -15,8 +13,6 @@ import java.util.Objects;
  */
 public class DefaultGroupResolver implements GroupResolver {
 
-    static final Logger log = LoggerFactory.getLogger(DefaultGroupResolver.class);
-
     static final Group<String> DEFAULT_RAW_GROUP = new Group<>(Group.TYPE_RAW);
 
     // LRU 缓存模型（因为逻辑表达式可能是前端传来的，具有无限可能，不能来者不拒）
@@ -25,7 +21,7 @@ public class DefaultGroupResolver implements GroupResolver {
     // 是否启用
     private boolean enabled = true;
 
-    // 表达式最大允许长度
+    // 表达式最大允许长度，风险控制，用于避免前端恶意传参生成过于复杂的 SQL
     private int maxExprLength = 50;
 
     private ExprParser.Factory parserFactory = new DefaultParserFactory();

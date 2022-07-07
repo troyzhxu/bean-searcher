@@ -3,6 +3,7 @@ package com.ejlchina.searcher.implement;
 import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.bean.DbType;
 import com.ejlchina.searcher.convertor.*;
+import com.ejlchina.searcher.filter.SizeLimitParamFilter;
 import com.ejlchina.searcher.group.Group;
 import com.ejlchina.searcher.group.DefaultGroupResolver;
 import com.ejlchina.searcher.group.GroupResolver;
@@ -35,6 +36,12 @@ public class DefaultParamResolver implements ParamResolver {
 	 * 参数过滤器
 	 */
 	private List<ParamFilter> paramFilters = new ArrayList<>();
+
+	/**
+	 * @since v3.8.0
+	 * 用于对参数值进行转换
+	 */
+	private List<Convertor> convertors = new ArrayList<>();
 
 	/**
 	 * 字段运算符池
@@ -103,23 +110,18 @@ public class DefaultParamResolver implements ParamResolver {
 	 */
 	private GroupResolver groupResolver = new DefaultGroupResolver();
 
-	/**
-	 * @since v3.8.0
-	 * 用于对参数值进行转换
-	 */
-	private List<Convertor> convertors;
-
 	public DefaultParamResolver() {
-		this(new ArrayList<>());
 		convertors.add(new BoolParamConvertor());
 		convertors.add(new NumberParamConvertor());
 		convertors.add(new DateParamConvertor());
 		convertors.add(new TimeParamConvertor());
 		convertors.add(new DateTimeParamConvertor());
+		paramFilters.add(new SizeLimitParamFilter());
 	}
 
-	public DefaultParamResolver(List<Convertor> convertors) {
+	public DefaultParamResolver(List<Convertor> convertors, List<ParamFilter> paramFilters) {
 		setConvertors(convertors);
+		setParamFilters(paramFilters);
 	}
 
 	@Override
