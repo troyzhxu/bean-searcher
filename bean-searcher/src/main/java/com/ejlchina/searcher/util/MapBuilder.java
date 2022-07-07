@@ -172,12 +172,24 @@ public class MapBuilder extends Builder<MapBuilder> {
     public MapBuilder asc() {
         List<OrderBy> orderBys = obtainList(ORDER_BY);
         if (orderBys.isEmpty()) {
-            throw new IllegalStateException("asc() must call after orderBy(..) method.");
+            throw new IllegalStateException("asc(..) must call after orderBy(..) method.");
         }
         int index = orderBys.size() - 1;
         OrderBy last = orderBys.get(index);
         if (last.isDesc()) {
             orderBys.set(index, last.asc());
+        }
+        return this;
+    }
+
+    /**
+     * @since v3.8.1
+     * @param sure 是否确定升序
+     * @return MapBuilder
+     */
+    public MapBuilder asc(boolean sure) {
+        if (sure) {
+            return asc();
         }
         return this;
     }
@@ -190,12 +202,24 @@ public class MapBuilder extends Builder<MapBuilder> {
     public MapBuilder desc() {
         List<OrderBy> orderBys = obtainList(ORDER_BY);
         if (orderBys.isEmpty()) {
-            throw new IllegalStateException("desc() must call after orderBy(..) method.");
+            throw new IllegalStateException("desc(..) must call after orderBy(..) method.");
         }
         int index = orderBys.size() - 1;
         OrderBy last = orderBys.get(index);
         if (last.isAsc()) {
             orderBys.set(index, last.desc());
+        }
+        return this;
+    }
+
+    /**
+     * @since v3.8.1
+     * @param sure 是否确定降序
+     * @return MapBuilder
+     */
+    public MapBuilder desc(boolean sure) {
+        if (sure) {
+            return desc();
         }
         return this;
     }
