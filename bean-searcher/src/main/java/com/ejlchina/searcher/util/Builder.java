@@ -239,7 +239,7 @@ public class Builder<B extends Builder<B>> {
         Object value = map.get(key);
         List<T> list = null;
         if (value instanceof List) {
-            @SuppressWarnings("unchecked")
+            @SuppressWarnings("all")
             List<T> l = (List<T>) value;
             list = l;
         }

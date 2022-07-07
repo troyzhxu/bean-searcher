@@ -23,7 +23,7 @@ public interface Dialect {
 	 * 分页
 	 * @param fieldSelectSql 查询语句
 	 * @param fromWhereSql 条件语句
-	 * @param paging 分页参数
+	 * @param paging 分页参数（可空，为空时表示不分页）
 	 * @return 分页 Sql
 	 */
 	SqlWrapper<Object> forPaginate(String fieldSelectSql, String fromWhereSql, Paging paging);
