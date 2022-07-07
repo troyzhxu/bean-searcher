@@ -1,5 +1,6 @@
 package com.ejlchina.searcher.implement;
 
+import com.ejlchina.searcher.IllegalParamException;
 import com.ejlchina.searcher.PageExtractor;
 import com.ejlchina.searcher.param.Paging;
 import com.ejlchina.searcher.util.MapBuilder;
@@ -36,15 +37,15 @@ public abstract class BasePageExtractor implements PageExtractor {
 	private long maxAllowedOffset = 20000;
 
 	@Override
-	public Paging extract(Map<String, Object> paraMap) {
+	public Paging extract(Map<String, Object> paraMap) throws IllegalParamException {
 		Paging paging = doExtract(paraMap);
 		int size = paging.getSize();
 		if (size < 0 || size > maxAllowedSize) {
-			throw new IllegalArgumentException("Invalid page size: " + size + ", it must between 0 and " + maxAllowedSize);
+			throw new IllegalParamException("Invalid page size: " + size + ", it must between 0 and " + maxAllowedSize);
 		}
 		long offset = paging.getOffset();
 		if (offset < 0 || offset > maxAllowedOffset) {
-			throw new IllegalArgumentException("Invalid page offset: " + offset + ", it must between 0 and " + maxAllowedOffset);
+			throw new IllegalParamException("Invalid page offset: " + offset + ", it must between 0 and " + maxAllowedOffset);
 		}
 		return paging;
 	}

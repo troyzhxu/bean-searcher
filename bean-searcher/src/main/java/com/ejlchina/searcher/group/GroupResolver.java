@@ -1,5 +1,7 @@
 package com.ejlchina.searcher.group;
 
+import com.ejlchina.searcher.IllegalParamException;
+
 /**
  * Group 解析器
  * @author Troy.Zhou @ 2022-02-22
@@ -11,8 +13,9 @@ public interface GroupResolver {
      * 将组表达式解析为 Group 对象
      * @param gExpr 组表达式
      * @return Group
+     * @throws IllegalParamException 抛出非法参数异常后将终止 SQL 查询
      */
-    Group<String> resolve(String gExpr) throws IllegalArgumentException;
+    Group<String> resolve(String gExpr) throws IllegalParamException;
 
     /**
      * @since v3.8.0

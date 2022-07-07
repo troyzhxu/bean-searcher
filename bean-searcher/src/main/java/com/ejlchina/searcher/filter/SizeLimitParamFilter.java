@@ -1,6 +1,7 @@
 package com.ejlchina.searcher.filter;
 
 import com.ejlchina.searcher.BeanMeta;
+import com.ejlchina.searcher.IllegalParamException;
 import com.ejlchina.searcher.ParamFilter;
 
 import java.util.Map;
@@ -22,10 +23,11 @@ public class SizeLimitParamFilter implements ParamFilter {
     }
 
     @Override
-    public <T> Map<String, Object> doFilter(BeanMeta<T> beanMeta, Map<String, Object> paraMap) {
+    public <T> Map<String, Object> doFilter(BeanMeta<T> beanMeta, Map<String, Object> paraMap)
+            throws IllegalParamException {
         int size = paraMap.size();
         if (size > maxParaMapSize) {
-            throw new IllegalArgumentException("paraMap's size is too large: " + size + ", the max allowed size is: " + maxParaMapSize);
+            throw new IllegalParamException("paraMap's size is too large: " + size + ", the max allowed size is: " + maxParaMapSize);
         }
         return paraMap;
     }

@@ -1,5 +1,6 @@
 package com.ejlchina.searcher.group;
 
+import com.ejlchina.searcher.IllegalParamException;
 import com.ejlchina.searcher.util.Cache;
 import com.ejlchina.searcher.util.LRUCache;
 import com.ejlchina.searcher.util.StringUtils;
@@ -27,12 +28,12 @@ public class DefaultGroupResolver implements GroupResolver {
     private ExprParser.Factory parserFactory = new DefaultParserFactory();
 
     @Override
-    public Group<String> resolve(String gExpr) {
+    public Group<String> resolve(String gExpr) throws IllegalParamException {
         if (StringUtils.isBlank(gExpr)) {
             return DEFAULT_RAW_GROUP;
         }
         if (gExpr.length() > maxExprLength) {
-            throw new IllegalArgumentException("gExpr is too long: " + gExpr.length() + ", max allowed length is " + maxExprLength);
+            throw new IllegalParamException("gExpr is too long: " + gExpr.length() + ", max allowed length is " + maxExprLength);
         }
         if (enabled) {
             Group<String> group = cache.get(gExpr);
@@ -45,11 +46,11 @@ public class DefaultGroupResolver implements GroupResolver {
         return DEFAULT_RAW_GROUP;
     }
 
-    protected Group<String> doResolve(String expr) {
+    protected Group<String> doResolve(String expr) throws IllegalParamException {
         try {
             return parserFactory.create(expr).parse();
         } catch (Exception e) {
-            throw new IllegalArgumentException(e.getMessage(), e);
+            throw new IllegalParamException(e.getMessage(), e);
         }
     }
 

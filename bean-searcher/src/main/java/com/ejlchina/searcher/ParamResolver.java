@@ -17,9 +17,9 @@ public interface ParamResolver {
 	 * @param fetchType Fetch 类型
 	 * @param paraMap 原始检索参数
 	 * @return SearchParam
-	 * @throws IllegalArgumentException 抛出非法参数异常后将不进行 SQL 查询
+	 * @throws IllegalParamException 抛出非法参数异常后将终止 SQL 查询
 	 * */
-	SearchParam resolve(BeanMeta<?> beanMeta, FetchType fetchType, Map<String, Object> paraMap) throws IllegalArgumentException;
+	SearchParam resolve(BeanMeta<?> beanMeta, FetchType fetchType, Map<String, Object> paraMap) throws IllegalParamException;
 
 	/**
 	 * 参数值转换器

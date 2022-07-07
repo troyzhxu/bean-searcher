@@ -15,7 +15,7 @@ import java.util.HashMap;
 public class PageResolverTestCase {
 
     @Test
-    public void test_page_01() {
+    public void test_page_01() throws IllegalParamException {
         BasePageExtractor pageExtractor = new PageSizeExtractor();
         DefaultParamResolver paramResolver = new DefaultParamResolver();
         paramResolver.setPageExtractor(pageExtractor);
@@ -25,7 +25,7 @@ public class PageResolverTestCase {
     }
 
     @Test
-    public void test_page_02() {
+    public void test_page_02() throws IllegalParamException {
         PageOffsetExtractor pageExtractor = new PageOffsetExtractor();
         DefaultParamResolver paramResolver = new DefaultParamResolver();
         paramResolver.setPageExtractor(pageExtractor);
@@ -35,7 +35,7 @@ public class PageResolverTestCase {
     }
 
     @Test
-    public void test_page_03() {
+    public void test_page_03() throws IllegalParamException {
         BasePageExtractor pageExtractor = new PageSizeExtractor();
         DefaultParamResolver paramResolver = new DefaultParamResolver();
         paramResolver.setPageExtractor(pageExtractor);
@@ -50,7 +50,7 @@ public class PageResolverTestCase {
     }
 
     @Test
-    public void test_page_04() {
+    public void test_page_04() throws IllegalParamException {
         PageOffsetExtractor pageExtractor = new PageOffsetExtractor();
         DefaultParamResolver paramResolver = new DefaultParamResolver();
         paramResolver.setPageExtractor(pageExtractor);
@@ -65,7 +65,7 @@ public class PageResolverTestCase {
     }
 
     @Test
-    public void test_page_05() {
+    public void test_page_05() throws IllegalParamException {
         PageSizeExtractor pageExtractor = new PageSizeExtractor();
         DefaultParamResolver paramResolver = new DefaultParamResolver();
         paramResolver.setPageExtractor(pageExtractor);
@@ -81,7 +81,7 @@ public class PageResolverTestCase {
     }
 
     @Test
-    public void test_page_06() {
+    public void test_page_06() throws IllegalParamException {
         PageOffsetExtractor pageExtractor = new PageOffsetExtractor();
         DefaultParamResolver paramResolver = new DefaultParamResolver();
         paramResolver.setPageExtractor(pageExtractor);

@@ -92,7 +92,7 @@ public abstract class AbstractSearcher implements Searcher {
 		SearchParam searchParam;
 		try {
 			searchParam = paramResolver.resolve(beanMeta, fetchType, paraMap);
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalParamException e) {
 			log.warn("检测到非法参数 [{}] 本次检索直接返回空数据！", e.getMessage());
 			return emptyResult(beanMeta, fetchType);
 		}

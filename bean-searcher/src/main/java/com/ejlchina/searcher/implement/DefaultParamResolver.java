@@ -121,7 +121,7 @@ public class DefaultParamResolver implements ParamResolver {
 	}
 
 	@Override
-	public SearchParam resolve(BeanMeta<?> beanMeta, FetchType fetchType, Map<String, Object> paraMap) {
+	public SearchParam resolve(BeanMeta<?> beanMeta, FetchType fetchType, Map<String, Object> paraMap) throws IllegalParamException {
 		for (ParamFilter filter: paramFilters) {
 			if (paraMap == null) {
 				break;
@@ -134,7 +134,7 @@ public class DefaultParamResolver implements ParamResolver {
 		return doResolve(beanMeta, fetchType, paraMap);
 	}
 
-	public SearchParam doResolve(BeanMeta<?> beanMeta, FetchType fetchType, Map<String, Object> paraMap) {
+	public SearchParam doResolve(BeanMeta<?> beanMeta, FetchType fetchType, Map<String, Object> paraMap) throws IllegalParamException {
 		List<String> fetchFields = resolveFetchFields(beanMeta, fetchType, paraMap);
 		Group<List<FieldParam>> paramsGroup = resolveParamsGroup(beanMeta.getFieldMetas(), paraMap);
 		Paging paging = resolvePaging(fetchType, paraMap);
@@ -146,14 +146,14 @@ public class DefaultParamResolver implements ParamResolver {
 				if (orderBy.isValid(fieldSet)) {
 					searchParam.addOrderBy(orderBy);
 				} else {
-					throw new IllegalArgumentException("Invalid " + orderBy + ", No such field in " + beanMeta.getBeanClass());
+					throw new IllegalParamException("Invalid " + orderBy + ", No such field in " + beanMeta.getBeanClass());
 				}
 			}
 		}
 		return searchParam;
 	}
 
-	public Paging resolvePaging(FetchType fetchType, Map<String, Object> paraMap) {
+	public Paging resolvePaging(FetchType fetchType, Map<String, Object> paraMap) throws IllegalParamException {
 		if (fetchType.canPaging()) {
 			Paging paging = pageExtractor.extract(paraMap);
 			if (fetchType.isFetchFirst()) {
@@ -194,7 +194,7 @@ public class DefaultParamResolver implements ParamResolver {
 		return paraMap.get(onlySelectName);
 	}
 
-	public Group<List<FieldParam>> resolveParamsGroup(Collection<FieldMeta> fieldMetas, Map<String, Object> paraMap) {
+	public Group<List<FieldParam>> resolveParamsGroup(Collection<FieldMeta> fieldMetas, Map<String, Object> paraMap) throws IllegalParamException {
 		Map<String, List<FieldParam>> holder = new HashMap<>();
 		return groupResolver.resolve(getGroupExpr(paraMap))
 				.transform(gKey -> {
@@ -214,7 +214,7 @@ public class DefaultParamResolver implements ParamResolver {
 				.filter(list -> list.size() > 0);
 	}
 
-	protected String getGroupExpr(Map<String, Object> paraMap) {
+	protected String getGroupExpr(Map<String, Object> paraMap) throws IllegalParamException {
 		String expr = ObjectUtils.string(paraMap.get(MapBuilder.GROUP_EXPR));
 		if (expr == null) {
 			expr = ObjectUtils.string(paraMap.get(gexprName));
@@ -224,7 +224,7 @@ public class DefaultParamResolver implements ParamResolver {
 		}
 		if (StringUtils.isNotBlank(expr)) {
 			if (expr.contains(Builder.ROOT_GROUP)) {
-				throw new IllegalArgumentException("Invalid groupExpr [" + expr + "] because of containing '" + Builder.ROOT_GROUP + "'.");
+				throw new IllegalParamException("Invalid groupExpr [" + expr + "] because of containing '" + Builder.ROOT_GROUP + "'.");
 			}
 			char andKey = groupResolver.getParserFactory().getAndKey();
 			expr = Builder.ROOT_GROUP + andKey + "(" + expr + ")";

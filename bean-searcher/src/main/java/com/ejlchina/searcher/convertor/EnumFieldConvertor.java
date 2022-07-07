@@ -2,6 +2,7 @@ package com.ejlchina.searcher.convertor;
 
 import com.ejlchina.searcher.FieldConvertor;
 import com.ejlchina.searcher.FieldMeta;
+import com.ejlchina.searcher.SearchException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,7 +55,7 @@ public class EnumFieldConvertor implements FieldConvertor.BFieldConvertor {
                 }
             }
             if (failOnError) {
-                throw new IllegalArgumentException("can not convert [" + name + "] to " + targetType);
+                throw new SearchException("can not convert [" + name + "] to " + targetType);
             }
         } else {
             try {
