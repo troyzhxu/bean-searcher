@@ -56,6 +56,10 @@ from (
   * 提升参数构建器性能，将 Builder.toFieldName 方法标记为过时，新增 FieldFns 工具类
   * 增加风控配置：逻辑组表达式的最大允许长度
 
+* Bean Searcher Boot Starter
+  * 新增 `bean-searcher.params.filter.max-allowed-size` 配置项，默认 150
+  * 新增 `bean-searcher.params.group.max-expr-length` 配置项，默认 50
+
 # v3.8.0
 
 ### ✨ Features
