@@ -53,10 +53,16 @@ public class BeanSearcherAutoConfiguration {
 		} else {
 			throw new SearchException("配置项 [bean-searcher.params.pagination.type] 只能为 page 或 offset！");
 		}
-		extractor.setMaxAllowedSize(conf.getMaxAllowedSize());
+		int defaultSize = conf.getDefaultSize();
+		int maxAllowedSize = conf.getMaxAllowedSize();
+		if (defaultSize > maxAllowedSize) {
+			throw new SearchException("配置项 [bean-searcher.params.pagination.default-size: " + defaultSize +
+					"] 不能比 [bean-searcher.params.pagination.max-allowed-size: " + maxAllowedSize + "] 的值大！");
+		}
+		extractor.setMaxAllowedSize(maxAllowedSize);
+		extractor.setDefaultSize(defaultSize);
 		extractor.setSizeName(conf.getSize());
 		extractor.setStart(conf.getStart());
-		extractor.setDefaultSize(conf.getDefaultSize());
 		return extractor;
 	}
 
