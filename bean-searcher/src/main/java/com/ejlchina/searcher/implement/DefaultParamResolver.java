@@ -4,13 +4,11 @@ import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.bean.DbType;
 import com.ejlchina.searcher.convertor.*;
 import com.ejlchina.searcher.filter.SizeLimitParamFilter;
-import com.ejlchina.searcher.group.Group;
 import com.ejlchina.searcher.group.DefaultGroupResolver;
+import com.ejlchina.searcher.group.Group;
 import com.ejlchina.searcher.group.GroupResolver;
 import com.ejlchina.searcher.param.*;
 import com.ejlchina.searcher.util.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -147,6 +145,8 @@ public class DefaultParamResolver implements ParamResolver {
 			for (OrderBy orderBy : resolveOrderBys(paraMap)) {
 				if (orderBy.isValid(fieldSet)) {
 					searchParam.addOrderBy(orderBy);
+				} else {
+					throw new IllegalArgumentException("Invalid " + orderBy + ", No such field in " + beanMeta.getBeanClass());
 				}
 			}
 		}

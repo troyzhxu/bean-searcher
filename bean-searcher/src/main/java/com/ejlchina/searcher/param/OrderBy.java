@@ -57,4 +57,9 @@ public class OrderBy {
         return new OrderBy(sort, ORDER_DESC);
     }
 
+    @Override
+    public String toString() {
+        return "OrderBy{ sort='" + sort + "', order='" + order + "'}";
+    }
+
 }
