@@ -157,7 +157,7 @@ public class BeanSearcherAutoConfiguration {
 	@Bean
 	@ConditionalOnMissingBean(SizeLimitParamFilter.class)
 	public SizeLimitParamFilter sizeLimitParamFilter(BeanSearcherProperties config) {
-		return new SizeLimitParamFilter(config.getParams().getFilter().getMaxAllowedSize());
+		return new SizeLimitParamFilter(config.getParams().getFilter().getMaxParaMapSize());
 	}
 
 	@Bean

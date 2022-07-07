@@ -118,16 +118,16 @@ public class BeanSearcherProperties {
 
 			/**
 			 * 检索参数的最大尺寸，用于风险控制，避免前端恶意传参生成过于复杂的 SQL
-			 * @see com.ejlchina.searcher.filter.SizeLimitParamFilter#setMaxAllowedSize(int)
+			 * @see com.ejlchina.searcher.filter.SizeLimitParamFilter#setMaxParaMapSize(int)
 			 */
-			private int maxAllowedSize = 150;
+			private int maxParaMapSize = 150;
 
-			public int getMaxAllowedSize() {
-				return maxAllowedSize;
+			public int getMaxParaMapSize() {
+				return maxParaMapSize;
 			}
 
-			public void setMaxAllowedSize(int maxAllowedSize) {
-				this.maxAllowedSize = maxAllowedSize;
+			public void setMaxParaMapSize(int maxParaMapSize) {
+				this.maxParaMapSize = maxParaMapSize;
 			}
 		}
 

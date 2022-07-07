@@ -13,29 +13,29 @@ import java.util.Map;
  */
 public class SizeLimitParamFilter implements ParamFilter {
 
-    private int maxAllowedSize = 150;
+    private int maxParaMapSize = 150;
 
     public SizeLimitParamFilter() { }
 
-    public SizeLimitParamFilter(int maxAllowedSize) {
-        this.maxAllowedSize = maxAllowedSize;
+    public SizeLimitParamFilter(int maxParaMapSize) {
+        this.maxParaMapSize = maxParaMapSize;
     }
 
     @Override
     public <T> Map<String, Object> doFilter(BeanMeta<T> beanMeta, Map<String, Object> paraMap) {
         int size = paraMap.size();
-        if (size > maxAllowedSize) {
-            throw new IllegalArgumentException("paraMap's size is too large: " + size + ", the max allowed size is: " + maxAllowedSize);
+        if (size > maxParaMapSize) {
+            throw new IllegalArgumentException("paraMap's size is too large: " + size + ", the max allowed size is: " + maxParaMapSize);
         }
         return paraMap;
     }
 
-    public int getMaxAllowedSize() {
-        return maxAllowedSize;
+    public int getMaxParaMapSize() {
+        return maxParaMapSize;
     }
 
-    public void setMaxAllowedSize(int maxAllowedSize) {
-        this.maxAllowedSize = maxAllowedSize;
+    public void setMaxParaMapSize(int maxParaMapSize) {
+        this.maxParaMapSize = maxParaMapSize;
     }
 
 }
