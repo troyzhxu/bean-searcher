@@ -9,6 +9,7 @@
   * 优化：当指定的排序参数非法时，也不执行查询（之前是忽略排序），返回空数据
   * 优化：提升参数构建器性能，并将 `Builder.toFieldName` 方法标记为过时，新增 `FieldFns` 工具类
   * 优化：参数构建器新增 `asc(boolean sure)` 与 `desc(boolean sure)` 方法
+  * 优化：参数构建器新增 `putAll(Map<String, ?> params)` 方法
   * 优化：当分页尺寸小于等于 `0` 时，不执行列表查询
 * Bean Searcher Boot Starter
   * 新增 `bean-searcher.params.filter.max-para-map-size` 配置项，默认 `150`
