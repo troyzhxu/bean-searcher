@@ -60,9 +60,8 @@ public class DefaultBeanReflector implements BeanReflector {
 			// 如果 targetType 是 valueType 的父类，则直接返回
 			return value;
 		}
-		if (meta.getConvClazz() != null) {
-			Convertor convertor = getOnCallConvertor(meta.getConvClazz());
-			return convertor.convert(meta, value);
+		if (meta.getConvertor() != null) {
+			return meta.getConvertor().convert(meta, value);
 		}
 		for (FieldConvertor convertor: convertors) {
 			if (convertor.supports(meta, valueType)) {
@@ -84,14 +83,6 @@ public class DefaultBeanReflector implements BeanReflector {
 		}
 	}
 
-	protected Convertor getOnCallConvertor(Class<? extends Convertor> convClazz) {
-		if (!onCallConvertors.containsKey(convClazz)) {
-			Convertor convertor = newInstance(convClazz);
-			onCallConvertors.put(convClazz, convertor);
-		}
-		return onCallConvertors.get(convClazz);
-	}
-
 	public List<BFieldConvertor> getConvertors() {
 		return convertors;
 	}
@@ -103,20 +94,6 @@ public class DefaultBeanReflector implements BeanReflector {
 	public void addConvertor(BFieldConvertor convertor) {
 		if (convertor != null) {
 			convertors.add(convertor);
-		}
-	}
-
-	public Map<Class<?>, Convertor> getOnCallConvertors() {
-		return onCallConvertors;
-	}
-
-	public void setOnCallConvertors(Map<Class<?>, Convertor> convertors) {
-		this.onCallConvertors = Objects.requireNonNull(convertors);
-	}
-
-	public void addOnCallConvertor(BFieldConvertor convertor) {
-		if (convertor != null) {
-			onCallConvertors.put(convertor.getClass(), convertor);
 		}
 	}
 

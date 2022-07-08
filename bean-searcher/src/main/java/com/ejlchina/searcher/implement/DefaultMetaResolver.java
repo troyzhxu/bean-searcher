@@ -18,6 +18,8 @@ public class DefaultMetaResolver implements MetaResolver {
 
     private final Map<Class<?>, BeanMeta<?>> cache = new ConcurrentHashMap<>();
 
+    private Map<Class<?>, Convertor> onCallConvertors = new ConcurrentHashMap<>();
+
     private SnippetResolver snippetResolver = new DefaultSnippetResolver();
 
     private DbMapping dbMapping;
@@ -93,12 +95,15 @@ public class DefaultMetaResolver implements MetaResolver {
                         + "." + wrapper.field.getName() + "] is already exists on other fields.");
             }
             SqlSnippet fieldSql = snippetResolver.resolve(wrapper.column.getFieldSql());
+            Convertor fieldConvertor = wrapper.column.getConvClazz() != null
+                    ? getOnCallConvertor(wrapper.column.getConvClazz())
+                    : null;
             FieldMeta fieldMeta = new FieldMeta(
                     beanMeta, wrapper.field, fieldSql, fieldAlias,
                     wrapper.column.isConditional(),
                     wrapper.column.getOnlyOn(),
                     wrapper.column.getDbType(),
-                    wrapper.column.getConvClazz()
+                    fieldConvertor
             );
             beanMeta.addFieldMeta(wrapper.field.getName(), fieldMeta);
         }
@@ -107,6 +112,19 @@ public class DefaultMetaResolver implements MetaResolver {
                     "Please refer https://bs.zhxu.cn/guide/latest/bean.html#%E7%9C%81%E7%95%A5-dbfield for help.");
         }
         return beanMeta;
+    }
+
+    protected Convertor getOnCallConvertor(Class<? extends Convertor> convClazz) {
+        if (!onCallConvertors.containsKey(convClazz)) {
+            try {
+                Convertor convertor = convClazz.getDeclaredConstructor().newInstance();
+                onCallConvertors.put(convClazz, convertor);
+            } catch (Exception e) {
+                throw new SearchException("Can not instantiate [" + convClazz.getName() +
+                        "], please check whether the constructor without parameters can be invoked without errors.", e);
+            }
+        }
+        return onCallConvertors.get(convClazz);
     }
 
     protected String resolveAlias(DbMapping.Column column, Set<String> checkSet) {
@@ -164,6 +182,20 @@ public class DefaultMetaResolver implements MetaResolver {
 
     public void setDbMapping(DbMapping dbMapping) {
         this.dbMapping = Objects.requireNonNull(dbMapping);
+    }
+
+    public Map<Class<?>, Convertor> getOnCallConvertors() {
+        return onCallConvertors;
+    }
+
+    public void setOnCallConvertors(Map<Class<?>, Convertor> convertors) {
+        this.onCallConvertors = Objects.requireNonNull(convertors);
+    }
+
+    public void addOnCallConvertor(FieldConvertor.BFieldConvertor convertor) {
+        if (convertor != null) {
+            onCallConvertors.put(convertor.getClass(), convertor);
+        }
     }
 
 }

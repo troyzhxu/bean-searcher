@@ -1,7 +1,7 @@
 package com.ejlchina.searcher;
 
 /**
- * @author Troy.Zhou @ 2022-07-07
+ * @author Minglei.tu @ 2022-07-07
  *
  * 数据库字段值转换接口
  * 用于把 数据库查出的字段值 型转为 另外一种值
