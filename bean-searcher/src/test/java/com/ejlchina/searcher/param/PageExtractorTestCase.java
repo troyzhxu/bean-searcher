@@ -1,6 +1,7 @@
 package com.ejlchina.searcher.param;
 
 import com.ejlchina.searcher.BeanMeta;
+import com.ejlchina.searcher.IllegalParamException;
 import com.ejlchina.searcher.PageExtractor;
 import com.ejlchina.searcher.SearchParam;
 import com.ejlchina.searcher.implement.DefaultMetaResolver;
@@ -37,12 +38,12 @@ public class PageExtractorTestCase {
         }
     }
 
-    private SearchParam resolve(Map<String, Object> paraMap) {
+    private SearchParam resolve(Map<String, Object> paraMap) throws IllegalParamException {
         return paramResolver.resolve(beanMeta, new FetchType(FetchType.DEFAULT), paraMap);
     }
 
     @Test
-    public void test_01() {
+    public void test_01() throws IllegalParamException {
         test_01_do();
         PageExtractor oldPageExtractor = paramResolver.getPageExtractor();
         paramResolver.setPageExtractor(new PageOffsetExtractor());
@@ -50,7 +51,7 @@ public class PageExtractorTestCase {
         paramResolver.setPageExtractor(oldPageExtractor);
     }
 
-    private void test_01_do() {
+    private void test_01_do() throws IllegalParamException {
         assert_01(resolve(null));
         assert_01(resolve(new HashMap<>()));
         assert_01(resolve(MapUtils.builder().build()));
@@ -70,7 +71,7 @@ public class PageExtractorTestCase {
     }
 
     @Test
-    public void test_02() {
+    public void test_02() throws IllegalParamException {
         assert_02(resolve(MapUtils.builder()
                 .page(2, 10)
                 .build()));
@@ -93,7 +94,7 @@ public class PageExtractorTestCase {
     }
 
     @Test
-    public void test_03() {
+    public void test_03() throws IllegalParamException {
         PageSizeExtractor pageExtractor = (PageSizeExtractor) paramResolver.getPageExtractor();
         pageExtractor.setStart(1);
         assert_03(resolve(MapUtils.builder()
@@ -116,7 +117,7 @@ public class PageExtractorTestCase {
     }
 
     @Test
-    public void test_04() {
+    public void test_04() throws IllegalParamException {
         PageExtractor oldPageExtractor = paramResolver.getPageExtractor();
         PageOffsetExtractor offsetExtractor = new PageOffsetExtractor();
         offsetExtractor.setStart(1);
