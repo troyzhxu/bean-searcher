@@ -38,6 +38,17 @@ public class MapBuilder extends Builder<MapBuilder> {
     }
 
     /**
+     * 批量添加参数
+     * @param params 参数集
+     * @return MapBuilder
+     * @since v3.8.1
+     */
+    public MapBuilder putAll(Map<String, ?> params) {
+        map.putAll(params);
+        return this;
+    }
+
+    /**
      * 指定只 Select 某些字段
      * @param fieldFns 需要 Select 的字段表达式，可多个
      * @param <T> 泛型
