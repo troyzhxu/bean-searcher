@@ -143,7 +143,7 @@ public class Builder<B extends Builder<B>> {
     @SuppressWarnings("unchecked")
     private B fieldOp(Object operator) {
         if (fieldParam == null) {
-            throw new IllegalStateException("the method [ op(...) ] must go after [ field(...) ] method");
+            throw new IllegalStateException("The method op(...) must go after field(...) method.");
         }
         fieldParam.setOperator(operator);
         return (B) this;
@@ -165,7 +165,7 @@ public class Builder<B extends Builder<B>> {
     @SuppressWarnings("unchecked")
     public B ic(boolean ignoreCase) {
         if (fieldParam == null) {
-            throw new IllegalStateException("the method [ ic(...) ] must go after [ field(...) ] method");
+            throw new IllegalStateException("The method ic(...) must go after field(...) method.");
         }
         fieldParam.setIgnoreCase(ignoreCase);
         return (B) this;

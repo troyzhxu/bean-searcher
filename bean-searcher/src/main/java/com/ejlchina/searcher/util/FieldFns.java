@@ -54,9 +54,9 @@ public class FieldFns {
                 cache.put(fieldFn, name);
                 return name;
             }
-            throw new IllegalStateException("can not convert method [" + methodName + "] to field name");
+            throw new IllegalStateException("Can not resolve the name of method: " + methodName);
         } catch (ReflectiveOperationException e) {
-            throw new IllegalStateException("无法反射出字段名", e);
+            throw new IllegalStateException("Can not resolve the name of " + fieldFn, e);
         }
     }
 

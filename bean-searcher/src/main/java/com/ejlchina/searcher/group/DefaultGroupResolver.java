@@ -33,7 +33,7 @@ public class DefaultGroupResolver implements GroupResolver {
             return DEFAULT_RAW_GROUP;
         }
         if (gExpr.length() > maxExprLength) {
-            throw new IllegalParamException("gExpr is too long: " + gExpr.length() + ", max allowed length is " + maxExprLength);
+            throw new IllegalParamException("The groupExpr is too long: " + gExpr.length() + ", max allowed " + maxExprLength);
         }
         if (enabled) {
             Group<String> group = cache.get(gExpr);

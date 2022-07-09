@@ -221,7 +221,7 @@ public class Group<V> {
      */
     private Group<V> sameBool(Group<V> other) {
         if (type == TYPE_RAW) {
-            throw new IllegalStateException("raw group can not invoke this method: " + this);
+            throw new IllegalStateException("This method can not be invoked on raw group: " + this);
         }
         List<Group<V>> groups = new ArrayList<>();
         for (Group<V> group: this.groups) {

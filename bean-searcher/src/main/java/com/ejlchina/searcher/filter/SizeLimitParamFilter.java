@@ -27,7 +27,7 @@ public class SizeLimitParamFilter implements ParamFilter {
             throws IllegalParamException {
         int size = paraMap.size();
         if (size > maxParaMapSize) {
-            throw new IllegalParamException("paraMap's size is too large: " + size + ", the max allowed size is: " + maxParaMapSize);
+            throw new IllegalParamException("A too large paraMap sized of " + size + ", max allowed " + maxParaMapSize);
         }
         return paraMap;
     }

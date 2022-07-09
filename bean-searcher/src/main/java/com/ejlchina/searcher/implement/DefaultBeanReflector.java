@@ -65,7 +65,8 @@ public class DefaultBeanReflector implements BeanReflector {
 				return convertor.convert(meta, value);
 			}
 		}
-		throw new SearchException("不能把【" + valueType + "】类型的数据库值转换为【" + targetType + "】类型的字段值，你可以添加一个 BFieldConvertor 来转换它！");
+		throw new SearchException("Can not convert " + valueType + " to " + targetType + " for " + meta.getBeanMeta().getBeanClass() +
+				"#" + meta.getName() + ", please check the field type, or you can add a BFieldConvertor for it.");
 	}
 
 	protected <T> T newInstance(Class<T> beanClass) {
@@ -73,7 +74,7 @@ public class DefaultBeanReflector implements BeanReflector {
 			return beanClass.getDeclaredConstructor().newInstance();
 		} catch (NoSuchMethodException e) {
 			throw new SearchException("Can not instantiate [" + beanClass.getName() +
-					"], please check whether there is a constructor without parameters in the class.", e);
+					"], please check whether there is a constructor without parameters on it.", e);
 		} catch (Exception e) {
 			throw new SearchException("Can not instantiate [" + beanClass.getName() +
 					"], please check whether the constructor without parameters can be invoked without errors.", e);

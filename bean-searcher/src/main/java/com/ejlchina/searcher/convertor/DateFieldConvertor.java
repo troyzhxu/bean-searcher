@@ -97,7 +97,7 @@ public class DateFieldConvertor implements FieldConvertor.BFieldConvertor {
         if (targetType == LocalDate.class) {
             return toLocalDate(instant);
         }
-        throw new UnsupportedOperationException();
+        throw new IllegalStateException("The supports(FieldMeta, Class<?>) method must be called first and return true before invoking convert(FieldMeta, Object) method.");
     }
 
     // 该方法用于兼容 JDK8, 因为 JDK8 没有 LocalDate.ofInstant() 方法

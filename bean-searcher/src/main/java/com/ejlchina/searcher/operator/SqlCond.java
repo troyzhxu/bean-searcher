@@ -87,18 +87,18 @@ public class SqlCond extends DialectWrapper implements FieldOp {
 
     private SqlWrapper<Object> getFieldSql(OpPara opPara, int index) {
         if (index < 1) {
-            throw new IllegalStateException("invalid sql placeholder: $" + index + ", the index must start from 1");
+            throw new IllegalStateException("Invalid sql placeholder: $" + index + ", the index must start from 1");
         }
         if (index == 1) {
             return opPara.getFieldSql();
         }
         Object[] values = opPara.getValues();
         if (values.length < index - 1) {
-            throw new IllegalStateException("invalid placeholder: $" + index + ", the index out of the field's count: " + Arrays.toString(values));
+            throw new IllegalStateException("Invalid placeholder: $" + index + ", the index out of the field's count: " + Arrays.toString(values));
         }
         Object value = values[index - 2];
         if (value == null) {
-            throw new IllegalStateException("invalid filed [null] at " + index);
+            throw new IllegalStateException("Invalid filed [null] at $" + index);
         }
         return opPara.getFieldSql(value.toString());
     }
