@@ -46,7 +46,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		for (String summaryField : summaryFields) {
 			FieldMeta fieldMeta = beanMeta.getFieldMeta(summaryField);
 			if (fieldMeta == null) {
-				throw new SearchException("求和属性【" + summaryField + "】没有和数据库字段做映射，请检查该属性是否 已被忽略 或 是否已被 @DbField 正确注解！");
+				throw new SearchException("No such field [" + summaryField + "] on " + beanMeta.getBeanClass() + " for summary.");
 			}
 			searchSql.addSummaryAlias(getSummaryAlias(fieldMeta));
 		}

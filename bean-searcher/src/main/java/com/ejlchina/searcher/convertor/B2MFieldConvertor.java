@@ -53,7 +53,7 @@ public class B2MFieldConvertor implements FieldConvertor.MFieldConvertor {
         if (convertor != null) {
             return convertor.convert(meta, value);
         }
-        throw new IllegalStateException("The supports(FieldMeta, Class<?>) method must be called first and return true before convert(FieldMeta, Object) method can be called");
+        throw new IllegalStateException("The supports(FieldMeta, Class<?>) method must be called first and return true before invoking convert(FieldMeta, Object) method.");
     }
 
 }

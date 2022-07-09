@@ -96,7 +96,7 @@ public class SearcherBuilder {
 			if (sqlExecutor != null) {
 				mainSearcher.setSqlExecutor(sqlExecutor);
 			} else if (mainSearcher.getSqlExecutor() == null) {
-				throw new SearchException("你必须配置一个 searchSqlExecutor，才能建立一个检索器！ ");
+				throw new SearchException("You must set a sqlExecutor before building. ");
 			}
 			if (metaResolver != null) {
 				mainSearcher.setMetaResolver(metaResolver);

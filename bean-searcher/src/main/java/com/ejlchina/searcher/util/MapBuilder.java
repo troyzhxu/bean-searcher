@@ -146,7 +146,7 @@ public class MapBuilder extends Builder<MapBuilder> {
                     .filter(orderBy -> fieldName.equals(orderBy.getSort()))
                     .findAny();
             if (orderByOpt.isPresent()) {
-                throw new SearchException("重复添加排序字段：" + fieldName + " " + order);
+                throw new SearchException("Repeated sort field: " + fieldName + " " + order);
             } else {
                 orderBys.add(new OrderBy(fieldName, order));
             }
@@ -183,7 +183,7 @@ public class MapBuilder extends Builder<MapBuilder> {
     public MapBuilder asc() {
         List<OrderBy> orderBys = obtainList(ORDER_BY);
         if (orderBys.isEmpty()) {
-            throw new IllegalStateException("asc(..) must call after orderBy(..) method.");
+            throw new IllegalStateException("The method asc(..) must go after orderBy(..) method.");
         }
         int index = orderBys.size() - 1;
         OrderBy last = orderBys.get(index);
@@ -213,7 +213,7 @@ public class MapBuilder extends Builder<MapBuilder> {
     public MapBuilder desc() {
         List<OrderBy> orderBys = obtainList(ORDER_BY);
         if (orderBys.isEmpty()) {
-            throw new IllegalStateException("desc(..) must call after orderBy(..) method.");
+            throw new IllegalStateException("The method desc(..) must go after orderBy(..) method.");
         }
         int index = orderBys.size() - 1;
         OrderBy last = orderBys.get(index);

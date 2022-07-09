@@ -79,7 +79,7 @@ public class BeanMeta<T> {
 
 	public void addFieldMeta(String field, FieldMeta meta) {
 		if (fieldMetaMap.containsKey(field)) {
-			throw new SearchException("不可以重复添加字段：" + field);
+			throw new SearchException("The field [" + field + "] was already added.");
 		}
 		fieldMetaMap.put(field, meta);
 	}

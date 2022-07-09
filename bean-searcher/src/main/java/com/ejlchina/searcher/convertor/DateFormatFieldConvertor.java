@@ -64,7 +64,7 @@ public class DateFormatFieldConvertor implements FieldConvertor.MFieldConvertor 
         try {
             formatMap.put(scope, new Formatter(format));
         } catch (IllegalArgumentException e) {
-            throw new SearchException("您配置了一个错误的日期/时间格式：[scope: " + scope + ", format: " + format + "]", e);
+            throw new SearchException("Invalid DATE/TIME format: [scope: " + scope + ", format: " + format + "]", e);
         }
     }
 

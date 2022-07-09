@@ -55,7 +55,7 @@ public class EnumFieldConvertor implements FieldConvertor.BFieldConvertor {
                 }
             }
             if (failOnError) {
-                throw new SearchException("can not convert [" + name + "] to " + targetType);
+                throw new SearchException("Can not convert [" + name + "] to " + targetType);
             }
         } else {
             try {
@@ -64,7 +64,7 @@ public class EnumFieldConvertor implements FieldConvertor.BFieldConvertor {
                 if (failOnError) throw e;
             }
         }
-        log.warn("can not convert [{}] to {}", name, targetType);
+        log.warn("Can not convert [{}] to {}", name, targetType);
         return null;
     }
 
@@ -75,9 +75,9 @@ public class EnumFieldConvertor implements FieldConvertor.BFieldConvertor {
             }
         }
         if (failOnError) {
-            throw new IllegalArgumentException("can not convert [" + ordinal + "] to " + targetType);
+            throw new IllegalArgumentException("Can not convert [" + ordinal + "] to " + targetType);
         }
-        log.warn("can not convert [{}] to {}", ordinal, targetType);
+        log.warn("Can not convert [{}] to {}", ordinal, targetType);
         return null;
     }
 
