@@ -146,7 +146,7 @@ public class DefaultParamResolver implements ParamResolver {
 				if (orderBy.isValid(fieldSet)) {
 					searchParam.addOrderBy(orderBy);
 				} else {
-					throw new IllegalParamException("Invalid " + orderBy + ", No such field in " + beanMeta.getBeanClass());
+					throw new IllegalParamException("Invalid " + orderBy + " on " + beanMeta.getBeanClass());
 				}
 			}
 		}
