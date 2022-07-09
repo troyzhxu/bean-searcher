@@ -103,7 +103,8 @@ public class Builder<B extends Builder<B>> {
      *     .field(User::getUserName, User::getNickName).sql("$1 = $2 or $1 = 'Jack'")
      *     .build();
      * }</pre>
-     * @param fieldFns 字段表达式
+     * @param fieldFn 字段方法引用
+     * @param fieldFns 字段方法引用
      * @param <T> 泛型
      * @return MapBuilder
      * @since 3.8.0
@@ -196,6 +197,7 @@ public class Builder<B extends Builder<B>> {
      *     .build();
      * }</pre>
      * @param sqlCond Sql 条件片段（支持占位符：$n 表示方法 field(..) 中指定的第 n 个字段）
+     * @param args Sql 参数，对应 sqlCond 里的 '?' 占位符
      * @return MapBuilder
      * @since v3.8.0
      */

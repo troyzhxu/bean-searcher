@@ -18,6 +18,7 @@ public class SqlResult<T> implements Closeable {
          * 获取当前记录的某一列的值
          * @param columnLabel 列名（别名）
          * @return 指定列的值
+         * @throws SQLException 异常
          */
         Object get(String columnLabel) throws SQLException;
 
@@ -49,6 +50,7 @@ public class SqlResult<T> implements Closeable {
         /**
          * 游标移动到下一条记录
          * @return 下一条记录是否存在
+         * @throws SQLException 异常
          */
         boolean next() throws SQLException;
 
