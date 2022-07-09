@@ -51,22 +51,19 @@ public class BeanSearcherAutoConfiguration {
 			p.setOffsetName(conf.getOffset());
 			extractor = p;
 		} else {
-			throw new IllegalConfigException("配置项 [bean-searcher.params.pagination.type] 只能为 page 或 offset！");
+			throw new IllegalConfigException("Invalid config: [bean-searcher.params.pagination.type: " + type + "], only 'page' / 'offset' allowed.");
 		}
 		int defaultSize = conf.getDefaultSize();
 		int maxAllowedSize = conf.getMaxAllowedSize();
 		long maxAllowedOffset = conf.getMaxAllowedOffset();
 		if (defaultSize > maxAllowedSize) {
-			throw new IllegalConfigException("配置项 [bean-searcher.params.pagination.default-size: " + defaultSize +
-					"] 不能比 [bean-searcher.params.pagination.max-allowed-size: " + maxAllowedSize + "] 的值大！");
+			throw new IllegalConfigException("Invalid config: [bean-searcher.params.pagination.default-size: " + defaultSize + "] can not greater than [bean-searcher.params.pagination.max-allowed-size: " + maxAllowedSize + "].");
 		}
 		if (defaultSize < 1) {
-			throw new IllegalConfigException("配置项 [bean-searcher.params.pagination.default-size: " + defaultSize +
-					"] 的值大必须大于等于 1");
+			throw new IllegalConfigException("Invalid config: [bean-searcher.params.pagination.default-size: " + defaultSize + "] must greater equal 1");
 		}
 		if (maxAllowedOffset < 1) {
-			throw new IllegalConfigException("配置项 [bean-searcher.params.pagination.max-allowed-offset: " + maxAllowedOffset +
-					"] 的值大必须大于等于 1");
+			throw new IllegalConfigException("Invalid config: [bean-searcher.params.pagination.max-allowed-offset: " + maxAllowedOffset + "] must greater equal 1");
 		}
 		extractor.setMaxAllowedSize(maxAllowedSize);
 		extractor.setMaxAllowedOffset(maxAllowedOffset);
@@ -81,7 +78,7 @@ public class BeanSearcherAutoConfiguration {
 	public Dialect dialect(BeanSearcherProperties config) {
 		Sql.Dialect dialect = config.getSql().getDialect();
 		if (dialect == null) {
-			throw new IllegalConfigException("配置项【bean-searcher.sql.dialect】不能为空");
+			throw new IllegalConfigException("Invalid config: [bean-searcher.sql.dialect] can not be null.");
 		}
 		switch (dialect) {
 			case MySQL:
@@ -94,7 +91,7 @@ public class BeanSearcherAutoConfiguration {
 			case SqlServer:
 				return new SqlServerDialect();
 		}
-		throw new IllegalConfigException("配置项【bean-searcher.sql.dialect】只能为  MySql | Oracle 中的一个，若需支持其它方言，可自己注入一个 com.ejlchina.searcher.dialect.Dialect 类型的 Bean！");
+		throw new IllegalConfigException("Invalid config: [bean-searcher.sql.dialect: " + dialect + "] only `MySql` / `Oracle` / `PostgreSQL` / `SqlServer` allowed. Please see https://bs.zhxu.cn/guide/latest/advance.html#sql-%E6%96%B9%E8%A8%80%EF%BC%88dialect%EF%BC%89 for help.");
 	}
 
 	@Bean
