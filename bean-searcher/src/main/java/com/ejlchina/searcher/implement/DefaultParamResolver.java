@@ -395,10 +395,10 @@ public class DefaultParamResolver implements ParamResolver {
 			return Arrays.stream(string.split(","))
 					.map(str -> {
 						String[] splits = str.split(":");
-						if (splits.length == 1) {
+						if (splits.length == 1 && StringUtils.isNotBlank(splits[0])) {
 							return new OrderBy(splits[0], null);
 						}
-						if (splits.length == 2) {
+						if (splits.length == 2 && StringUtils.isNotBlank(splits[0])) {
 							return new OrderBy(splits[0], splits[1]);
 						}
 						return null;
@@ -408,7 +408,7 @@ public class DefaultParamResolver implements ParamResolver {
 		}
 		String sort = ObjectUtils.string(paraMap.get(sortName));
 		String order = ObjectUtils.string(paraMap.get(orderName));
-		if (sort != null) {
+		if (StringUtils.isNotBlank(sort)) {
 			return Collections.singletonList(new OrderBy(sort, order));
 		}
 		return Collections.emptyList();
