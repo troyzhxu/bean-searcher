@@ -11,7 +11,7 @@ import com.ejlchina.searcher.implement.DefaultMapSearcher;
  * 为提高字段转换效能，v3.1.0 把字段转换器拆为两类：{@link BFieldConvertor } 与 {@link MFieldConvertor }
  * 以降低 {@link #supports(FieldMeta, Class)} 方法判断次数
  */
-public interface FieldConvertor {
+public interface FieldConvertor extends Convertor {
 
 	/**
 	 * @since v3.0.0

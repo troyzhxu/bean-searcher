@@ -1,8 +1,6 @@
 package com.ejlchina.searcher.implement;
 
-import com.ejlchina.searcher.DbMapping;
-import com.ejlchina.searcher.FieldOp;
-import com.ejlchina.searcher.SearchException;
+import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.bean.*;
 import com.ejlchina.searcher.util.StringUtils;
 import org.slf4j.Logger;
@@ -109,7 +107,8 @@ public class DefaultDbMapping implements DbMapping {
             if (dbType == DbType.UNKNOWN) {
                 dbType = dbTypeMapper.map(field.getType());
             }
-            return new Column(fieldSql, dbField.conditional(), dbField.onlyOn(), dbField.alias(), dbType);
+            Class<? extends Convertor> convClazz = dbField.converter() != Convertor.class ? dbField.converter() : null;
+            return new Column(fieldSql, dbField.conditional(), dbField.onlyOn(), dbField.alias(), dbType, convClazz);
         }
         DbType dbType = dbTypeMapper.map(field.getType());
         return new Column(fieldSql, true, EMPTY_OPERATORS, dbType);

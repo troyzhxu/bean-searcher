@@ -3,10 +3,8 @@ package com.ejlchina.searcher.implement;
 import com.ejlchina.searcher.*;
 import com.ejlchina.searcher.FieldConvertor.BFieldConvertor;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 /**
@@ -17,6 +15,7 @@ import java.util.function.Function;
 public class DefaultBeanReflector implements BeanReflector {
 
 	private List<BFieldConvertor> convertors;
+	private Map<Class<?>, Convertor> onCallConvertors;
 
 	public DefaultBeanReflector() {
 		this(new ArrayList<>());
@@ -24,6 +23,7 @@ public class DefaultBeanReflector implements BeanReflector {
 	
 	public DefaultBeanReflector(List<BFieldConvertor> convertors) {
 		this.convertors = convertors;
+		this.onCallConvertors = new ConcurrentHashMap<>();
 	}
 	
 	@Override
@@ -59,6 +59,9 @@ public class DefaultBeanReflector implements BeanReflector {
 		if (targetType.isAssignableFrom(valueType)) {
 			// 如果 targetType 是 valueType 的父类，则直接返回
 			return value;
+		}
+		if (meta.getConvertor() != null) {
+			return meta.getConvertor().convert(meta, value);
 		}
 		for (FieldConvertor convertor: convertors) {
 			if (convertor.supports(meta, valueType)) {
