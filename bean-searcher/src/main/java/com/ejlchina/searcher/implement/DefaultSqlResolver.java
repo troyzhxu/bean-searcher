@@ -52,7 +52,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		}
 		Map<String, Object> paraMap = searchParam.getParaMap();
 		SqlWrapper<Object> fieldSelectSqlWrapper = buildFieldSelectSql(beanMeta, fetchFields, paraMap);
-		SqlWrapper<Object> fromWhereSqlWrapper = buildFromWhereSql(beanMeta, searchParam.getParamsGroup(), paraMap);
+		SqlWrapper<Object> fromWhereSqlWrapper = buildFromWhereSql(beanMeta, searchParam, paraMap);
 		String fieldSelectSql = fieldSelectSqlWrapper.getSql();
 		String fromWhereSql = fromWhereSqlWrapper.getSql();
 
@@ -134,7 +134,8 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		return sqlWrapper;
 	}
 
-	protected SqlWrapper<Object> buildFromWhereSql(BeanMeta<?> beanMeta, Group<List<FieldParam>> paramsGroup, Map<String, Object> paraMap) {
+	protected SqlWrapper<Object> buildFromWhereSql(BeanMeta<?> beanMeta, SearchParam searchParam, Map<String, Object> paraMap) {
+		Group<List<FieldParam>> paramsGroup = searchParam.getParamsGroup();
 		SqlWrapper<Object> sqlWrapper = new SqlWrapper<>();
 		SqlWrapper<Object> tableSql = resolveTableSql(beanMeta.getTableSnippet(), paraMap);
 		sqlWrapper.addParas(tableSql.getParas());
@@ -159,7 +160,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 				}
 			}
 			if (hasWhereParams) {
-				useGroup(whereGroup, beanMeta, paraMap, builder, sqlWrapper.getParas());
+				useGroup(whereGroup, beanMeta, searchParam, paraMap, builder, sqlWrapper.getParas(), false);
 			}
 		}
 		if (groupBy != null) {
@@ -181,7 +182,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 					}
 				}
 				if (hasHavingParams) {
-					useGroup(havingGroup, beanMeta, paraMap, builder, sqlWrapper.getParas());
+					useGroup(havingGroup, beanMeta, searchParam, paraMap, builder, sqlWrapper.getParas(), true);
 				}
 			}
 		}
@@ -189,8 +190,8 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		return sqlWrapper;
 	}
 
-	protected void useGroup(Group<List<FieldParam>> group, BeanMeta<?> beanMeta, Map<String, Object> paraMap,
-								StringBuilder sqlBuilder, List<Object> paraReceiver) {
+	protected void useGroup(Group<List<FieldParam>> group, BeanMeta<?> beanMeta, SearchParam searchParam, Map<String, Object> paraMap,
+							StringBuilder sqlBuilder, List<Object> paraReceiver, boolean isHaving) {
 		group.forEach(event -> {
 			if (event.isGroupStart()) {
 				sqlBuilder.append("(");
@@ -220,7 +221,14 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 						(name) -> {
 							String field = name != null ? name : param.getName();
 							FieldMeta meta = beanMeta.requireFieldMeta(field);
-							return resolveDbFieldSql(meta.getFieldSql(), paraMap);
+							SqlSnippet sql = meta.getFieldSql();
+							//如果是 group by having 且查询中存在该字段，则使用该字段别名
+							if (isHaving && searchParam.getFetchFields().contains(field)) {
+								SqlSnippet sqlSnippet = new SqlSnippet();
+								sqlSnippet.setSql(meta.getDbAlias());
+								sql = sqlSnippet;
+							}
+							return resolveDbFieldSql(sql, paraMap);
 						},
 						param.isIgnoreCase(),
 						param.getValues()
@@ -231,7 +239,6 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 			}
 		});
 	}
-
 	protected SqlWrapper<Object> resolveGroupBy(BeanMeta<?> beanMeta, Map<String, Object> paraMap) {
 		String groupBy = beanMeta.getGroupBy();
 		if (StringUtils.isNotBlank(groupBy)) {
