@@ -124,7 +124,7 @@ public class DefaultParamResolver implements ParamResolver {
 	public SearchParam resolve(BeanMeta<?> beanMeta, FetchType fetchType, Map<String, Object> paraMap) throws IllegalParamException {
 		for (ParamFilter filter: paramFilters) {
 			if (paraMap == null) {
-				break;
+				paraMap = new HashMap<>();
 			}
 			paraMap = filter.doFilter(beanMeta, paraMap);
 		}
