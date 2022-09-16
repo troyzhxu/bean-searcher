@@ -2,64 +2,38 @@ package com.ejlchina.searcher;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * 检索结果
- * 
  * @author Troy.Zhou @ 2017-03-20
- * 
  * */
 public class SearchResult<T> {
 
     public static final Number[] EMPTY_SUMMARIES = new Number[]{};
 
-    private Number totalCount = 0;
+    private final Number totalCount;
     
     private final List<T> dataList;
     
-    private Number[] summaries = EMPTY_SUMMARIES;
+    private final Number[] summaries;
 
-    public SearchResult() {
-        this(0, EMPTY_SUMMARIES);
-    }
-
-    public SearchResult(Number totalCount) {
-        this(totalCount, EMPTY_SUMMARIES);
-    }
-
-    public SearchResult(Number totalCount, Number[] summaries) {
-        this(new ArrayList<>(totalCount.intValue()));
+    public SearchResult(Number totalCount, int pageSize, Number[] summaries) {
+        int size = Math.min(totalCount.intValue(), pageSize);
+        this.dataList = new ArrayList<>(size);
         this.totalCount = totalCount;
         this.summaries = summaries;
-    }
-
-    public SearchResult(List<T> dataList) {
-        this.dataList = dataList;
     }
 
     public Number getTotalCount() {
         return totalCount;
     }
 
-    public void setTotalCount(Number totalCount) {
-        this.totalCount = Objects.requireNonNull(totalCount);
-    }
-
     public List<T> getDataList() {
         return dataList;
     }
     
-    public void addData(T data) {
-        dataList.add(data);
-    }
-    
     public Number[] getSummaries() {
         return summaries;
-    }
-
-    public void setSummaries(Number[] summaries) {
-        this.summaries = Objects.requireNonNull(summaries);
     }
 
     public String toString() {

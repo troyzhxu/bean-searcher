@@ -66,7 +66,7 @@ public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearche
 				totalCount = getCountFromSqlResult(sqlResult);
 				summaries = getSummaryFromSqlResult(sqlResult);
 			}
-			SearchResult<T> result = new SearchResult<>(totalCount, summaries);
+			SearchResult<T> result = new SearchResult<>(totalCount, sqlResult.getPageSize(), summaries);
 			BeanMeta<T> beanMeta = searchSql.getBeanMeta();
 			SqlResult.ResultSet listResult = sqlResult.getListResult();
 			if (listResult != null) {

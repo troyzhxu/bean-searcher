@@ -64,7 +64,7 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 				totalCount = getCountFromSqlResult(sqlResult);
 				summaries = getSummaryFromSqlResult(sqlResult);
 			}
-			SearchResult<Map<String, Object>> result = new SearchResult<>(totalCount, summaries);
+			SearchResult<Map<String, Object>> result = new SearchResult<>(totalCount, sqlResult.getPageSize(), summaries);
 			BeanMeta<T> beanMeta = searchSql.getBeanMeta();
 			SqlResult.ResultSet listResult = sqlResult.getListResult();
 			if (listResult != null) {

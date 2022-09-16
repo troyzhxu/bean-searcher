@@ -97,7 +97,9 @@ public abstract class AbstractSearcher implements Searcher {
 			return emptyResult(beanMeta, fetchType);
 		}
 		SearchSql<T> searchSql = sqlResolver.resolve(beanMeta, searchParam);
-		return sqlExecutor.execute(intercept(searchSql, paraMap, fetchType));
+		SqlResult<T> sqlResult = sqlExecutor.execute(intercept(searchSql, paraMap, fetchType));
+		sqlResult.setPageSize(searchParam.getPageSize());
+		return sqlResult;
 	}
 
 	private <T> SqlResult<T> emptyResult(BeanMeta<T> beanMeta, FetchType fetchType) {
