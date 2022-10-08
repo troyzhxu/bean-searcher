@@ -1,4 +1,8 @@
-# v3.8.1
+# v3.8.2 @ 2022-09-16
+
+* 修复 `v3.8.1` 产生的 BUG：https://github.com/troyzhxu/bean-searcher/issues/62
+
+# v3.8.1 @ 2022-08-23
 
 ### ✨ Features
 
