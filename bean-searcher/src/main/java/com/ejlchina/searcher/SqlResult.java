@@ -72,6 +72,10 @@ public class SqlResult<T> implements Closeable {
      */
     private final Result clusterResult;
 
+    /**
+     * 最大查询条数（分页大小）
+     */
+    private int pageSize;
 
     public SqlResult(SearchSql<T> searchSql) {
         this(searchSql, null, null);
@@ -110,6 +114,14 @@ public class SqlResult<T> implements Closeable {
 
     public Result getClusterResult() {
         return clusterResult;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
     }
 
 }

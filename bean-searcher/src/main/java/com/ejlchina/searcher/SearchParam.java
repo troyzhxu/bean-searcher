@@ -65,6 +65,13 @@ public class SearchParam {
 		return paging;
 	}
 
+	public int getPageSize() {
+		if (paging != null) {
+			return paging.getSize();
+		}
+		return 0;
+	}
+
 	public void addOrderBy(OrderBy orderBy) {
 		orderBys.add(orderBy);
 	}

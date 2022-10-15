@@ -7,6 +7,13 @@ package com.ejlchina.searcher;
  */
 public class SqlSnippet extends SqlWrapper<SqlSnippet.SqlPara> {
 
+	public SqlSnippet() {
+	}
+
+	public SqlSnippet(String sql) {
+		super(sql);
+	}
+
 	/**
 	 * 内嵌参数
 	 * @author Troy.Zhou @ 2021-10-30
