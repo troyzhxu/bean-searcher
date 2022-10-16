@@ -179,7 +179,7 @@ public class MetaResolverTestCase {
         assertAlias(beanMeta.getFieldMetas());
     }
 
-    @SearchBean(tables = "user u, role r", joinCond = "u.role_id = r.id", autoMapTo = "u")
+    @SearchBean(tables = "user u, role r", where = "u.role_id = r.id", autoMapTo = "u")
     public static class User05 {
         private static final int serializeId = 1111;
         private final transient int modCount = 0;
@@ -304,7 +304,7 @@ public class MetaResolverTestCase {
         Assert.assertTrue(para2.isJdbcPara());
     }
 
-    @SearchBean(joinCond = "age = :age and :ext_cond:")
+    @SearchBean(where = "age = :age and :ext_cond:")
     public static class User08 {
         private long id;
     }

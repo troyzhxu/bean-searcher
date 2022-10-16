@@ -67,16 +67,9 @@ public class DefaultDbMapping implements DbMapping {
     public Table table(Class<?> beanClass) {
         SearchBean bean = getSearchBean(beanClass);
         if (bean != null) {
-            String where = bean.where().trim();
-            if (StringUtils.isBlank(where)) {
-                where = bean.joinCond().trim();
-                if (StringUtils.isNotBlank(where)) {
-                    log.warn("@SearchBean.joinCond was deprecated, please use @SearchBean.where instead.");
-                }
-            }
             return new Table(bean.dataSource().trim(),
                     tables(beanClass, bean),
-                    where,
+                    bean.where().trim(),
                     bean.groupBy().trim(),
                     bean.having().trim(),
                     bean.distinct(),

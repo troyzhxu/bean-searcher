@@ -34,13 +34,6 @@ public @interface SearchBean {
 	 * @return tables
 	 */
 	String tables() default "";
-	
-	/**
-	 * 请使用 {@link #where() } 替代
-	 * @return where condition
-	 * */
-	@Deprecated
-	String joinCond() default "";
 
 	/**
 	 * Where 条件，例如：
