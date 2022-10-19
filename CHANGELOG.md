@@ -1,3 +1,10 @@
+# v4.0.0 
+
+* 包名重构：`com.ejlchina.searcher` -> `cn.zhxu.bs`
+* 移除过时 API: `@SearchBean` 注解的 `joinCond` 属性 
+* 优化嵌入参数：提高兼容性，支持嵌入参数后紧跟了 `.` 符号 
+
+
 # v3.8.2 @ 2022-09-16
 
 * 修复 `v3.8.1` 产生的 BUG：https://github.com/troyzhxu/bean-searcher/issues/62
