@@ -254,7 +254,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		return null;
 	}
 
-	private GroupPair resolveGroupPair(BeanMeta<?> beanMeta, Group<List<FieldParam>> paramsGroup, boolean nonGroupBy) {
+	protected GroupPair resolveGroupPair(BeanMeta<?> beanMeta, Group<List<FieldParam>> paramsGroup, boolean nonGroupBy) {
 		if (nonGroupBy) {
 			return new GroupPair(paramsGroup, EMPTY_GROUP);
 		}
