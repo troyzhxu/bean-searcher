@@ -28,6 +28,17 @@ public class NumberParamConvertor implements ParamResolver.Convertor {
 
     @Override
     public Object convert(DbType dbType, Object value) {
+        try {
+            return doConvert(dbType, value);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Field type is " + dbType +", but the param value is: " + value, e);
+        }
+    }
+
+    protected Object doConvert(DbType dbType, Object value) {
+        if (value == null) {
+            return null;
+        }
         if (value instanceof String) {
             String s = (String) value;
             if (StringUtils.isBlank(s)) {
@@ -77,6 +88,7 @@ public class NumberParamConvertor implements ParamResolver.Convertor {
                 return BigDecimal.valueOf(num.doubleValue());
             }
         }
-        return null;
+        throw new NumberFormatException(value.toString());
     }
+
 }
