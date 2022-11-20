@@ -88,12 +88,17 @@ public interface DbMapping {
          */
         private final boolean sortable;
 
+        /**
+         * 单条 SQL 执行超时时间，单位：秒，0 表示永远不超时
+         */
+        private final int timeout;
+
         public Table(String tables) {
-            this("", tables, "", "", "", false, "", true);
+            this("", tables, "", "", "", false, "", true, 0);
         }
 
         public Table(String dataSource, String tables, String where, String groupBy, String having,
-                     boolean distinct, String orderBy, boolean sortable) {
+                     boolean distinct, String orderBy, boolean sortable, int timeout) {
             this.dataSource = dataSource;
             this.tables = tables;
             this.where = where;
@@ -102,6 +107,7 @@ public interface DbMapping {
             this.distinct = distinct;
             this.orderBy = orderBy;
             this.sortable = sortable;
+            this.timeout = timeout;
         }
 
         public String getDataSource() {
@@ -134,6 +140,10 @@ public interface DbMapping {
 
         public boolean isSortable() {
             return sortable;
+        }
+
+        public int getTimeout() {
+            return timeout;
         }
 
     }
