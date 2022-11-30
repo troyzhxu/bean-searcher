@@ -151,7 +151,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
 
 	protected SqlResult.ResultSet executeListSql(SearchSql<?> searchSql, Connection connection) throws SQLException {
 		Result result = executeQuery(connection, searchSql.getListSqlString(),
-				searchSql.getListSqlParams(), searchSql);
+				searchSql.getListSqlParams(), searchSql.getBeanMeta());
 		ResultSet resultSet = result.resultSet;
 		return new SqlResult.ResultSet() {
 			@Override
@@ -171,7 +171,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
 
 	protected SqlResult.Result executeClusterSql(SearchSql<?> searchSql, Connection connection) throws SQLException {
 		Result result = executeQuery(connection, searchSql.getClusterSqlString(),
-				searchSql.getClusterSqlParams(), searchSql);
+				searchSql.getClusterSqlParams(), searchSql.getBeanMeta());
 		ResultSet resultSet = result.resultSet;
 		boolean hasValue;
 		try {
@@ -213,7 +213,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
 	}
 
 	protected Result executeQuery(Connection connection, String sql, List<Object> params,
-								  SearchSql<?> searchSql) throws SQLException {
+								  BeanMeta<?> beanMeta) throws SQLException {
 		PreparedStatement statement = connection.prepareStatement(sql);
 		int size = params.size();
 		for (int i = 0; i < size; i++) {
@@ -221,6 +221,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
 		}
 		long t0 = System.currentTimeMillis();
 		try {
+			statement.setQueryTimeout(beanMeta.getTimeout());
 			ResultSet resultSet = statement.executeQuery();
 			return new Result(statement, resultSet);
 		} catch (SQLException e) {
@@ -228,13 +229,13 @@ public class DefaultSqlExecutor implements SqlExecutor {
 			throw e;
 		} finally {
 			long cost = System.currentTimeMillis() - t0;
-			afterExecute(searchSql, sql, params, cost);
+			afterExecute(beanMeta, sql, params, cost);
 		}
 	}
 
-	protected void afterExecute(SearchSql<?> searchSql, String sql, List<Object> params, long timeCost) {
+	protected void afterExecute(BeanMeta<?> beanMeta, String sql, List<Object> params, long timeCost) {
 		if (timeCost >= slowSqlThreshold) {
-			Class<?> beanClass = searchSql.getBeanMeta().getBeanClass();
+			Class<?> beanClass = beanMeta.getBeanClass();
 			SlowListener listener = slowListener;
 			if (listener != null) {
 				listener.onSlowSql(beanClass, sql, params, timeCost);

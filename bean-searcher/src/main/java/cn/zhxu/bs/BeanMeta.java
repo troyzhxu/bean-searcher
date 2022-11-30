@@ -62,10 +62,14 @@ public class BeanMeta<T> {
 	 * */
 	private final Map<String, FieldMeta> fieldMetaMap = new HashMap<>();
 
+	/**
+	 * 单条 SQL 执行超时时间，单位：秒，0 表示永远不超时
+	 */
+	private final int timeout;
 
 	public BeanMeta(Class<T> beanClass, String dataSource, SqlSnippet tableSnippet,
 					SqlSnippet whereSnippet, SqlSnippet groupBySnippet, SqlSnippet havingSnippet,
-					SqlSnippet orderBySnippet, boolean sortable, boolean distinct) {
+					SqlSnippet orderBySnippet, boolean sortable, boolean distinct, int timeout) {
 		this.beanClass = beanClass;
 		this.dataSource = dataSource;
 		this.tableSnippet = tableSnippet;
@@ -75,6 +79,7 @@ public class BeanMeta<T> {
 		this.orderBySnippet = orderBySnippet;
 		this.sortable = sortable;
 		this.distinct = distinct;
+		this.timeout = timeout;
 	}
 
 	public void addFieldMeta(String field, FieldMeta meta) {
@@ -171,6 +176,10 @@ public class BeanMeta<T> {
 
 	public boolean isDistinctOrGroupBy() {
 		return distinct || StringUtils.isNotBlank(groupBySnippet.getSql());
+	}
+
+	public int getTimeout() {
+		return timeout;
 	}
 
 }

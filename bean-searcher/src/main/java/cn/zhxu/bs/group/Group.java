@@ -111,6 +111,23 @@ public class Group<V> {
         return false;
     }
 
+    /**
+     * 判断是否所有的 V 都满足 evaluator
+     * @param evaluator 评估器
+     * @return boolean
+     */
+    public boolean judgeAll(Predicate<V> evaluator) {
+        if (type == TYPE_RAW) {
+            return evaluator.test(value);
+        }
+        for (Group<V> group: groups) {
+            if (!group.judgeAll(evaluator)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     @SuppressWarnings("rawtypes")
     private static final Event EVENT_START = new Event<>(Event.TYPE_GROUP_START);
 

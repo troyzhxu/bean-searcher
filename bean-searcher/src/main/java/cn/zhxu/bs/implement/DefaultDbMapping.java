@@ -74,7 +74,8 @@ public class DefaultDbMapping implements DbMapping {
                     bean.having().trim(),
                     bean.distinct(),
                     bean.orderBy(),
-                    sortable(bean.sortType())
+                    sortable(bean.sortType()),
+                    bean.timeout()
             );
         }
         return new Table(toTableName(beanClass));

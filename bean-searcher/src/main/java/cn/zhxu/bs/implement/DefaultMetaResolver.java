@@ -66,7 +66,8 @@ public class DefaultMetaResolver implements MetaResolver {
                 snippetResolver.resolve(table.getGroupBy()),
                 snippetResolver.resolve(table.getHaving()),
                 snippetResolver.resolve(table.getOrderBy()),
-                table.isSortable(), table.isDistinct());
+                table.isSortable(), table.isDistinct(),
+                table.getTimeout());
         // 解析实体类字段
         FieldWrapper[] wrappers = getBeanFields(beanClass).stream()
                 .map(field -> {
