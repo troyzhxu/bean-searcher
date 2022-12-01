@@ -9,7 +9,7 @@
 	<packaging>jar</packaging>
 
 	<parent>
-		<groupId>com.ejlchina</groupId>
+		<groupId>cn.zhxu</groupId>
 		<artifactId>bean-searcher-parent</artifactId>
 		<version>4.0.0.alpha</version>
 	</parent>

@@ -7,7 +7,7 @@
 	<description>比 MyBatis 效率快 100 倍的条件检索引擎，使一行代码实现复杂列表检索成为可能！</description>
 	<url>https://github.com/troyzhxu/bean-searcher</url>
 
-	<groupId>com.ejlchina</groupId>
+	<groupId>cn.zhxu</groupId>
 	<artifactId>bean-searcher-parent</artifactId>
 	<version>4.0.0.alpha</version>
 
