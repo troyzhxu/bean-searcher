@@ -2,6 +2,7 @@ package cn.zhxu.bs.implement;
 
 import cn.zhxu.bs.*;
 import cn.zhxu.bs.param.FetchType;
+import cn.zhxu.bs.util.FieldFns;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,6 +51,11 @@ public abstract class AbstractSearcher implements Searcher {
 		String[] fields = { Objects.requireNonNull(field) };
 		Number[] results = searchSum(beanClass, paraMap, fields);
 		return results != null && results.length > 0 ? results[0] : 0L;
+	}
+
+	@Override
+	public <T> Number searchSum(Class<T> beanClass, Map<String, Object> paraMap, FieldFns.FieldFn<T, ?> field) {
+		return searchSum(beanClass, paraMap, FieldFns.name(field));
 	}
 
 	@Override

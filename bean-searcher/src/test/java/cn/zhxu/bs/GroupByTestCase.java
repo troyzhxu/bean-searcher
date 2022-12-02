@@ -68,8 +68,10 @@ public class GroupByTestCase {
 
         MapSearcher mapSearcher = SearcherBuilder.mapSearcher().sqlExecutor(sqlExecutor).build();
         Assert.assertEquals(100, mapSearcher.searchSum(StudentCourse.class, new HashMap<>(), "sumScore"));
+        Assert.assertEquals(100, mapSearcher.searchSum(StudentCourse.class, new HashMap<>(), StudentCourse::getSumScore));
         Assert.assertArrayEquals(new Number[]{100}, mapSearcher.searchSum(StudentCourse.class, new HashMap<>(), new String[]{"sumScore"}));
         Assert.assertEquals(100, mapSearcher.searchSum(StudentCourse.class, null, "sumScore"));
+        Assert.assertEquals(100, mapSearcher.searchSum(StudentCourse.class, null, StudentCourse::getSumScore));
         Assert.assertArrayEquals(new Number[]{100}, mapSearcher.searchSum(StudentCourse.class, null, new String[]{"sumScore"}));
 
         BeanSearcher beanSearcher = SearcherBuilder.beanSearcher().sqlExecutor(sqlExecutor).build();
