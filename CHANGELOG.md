@@ -1,20 +1,31 @@
-# v4.0.0 
+# v4.0.0.alpha2
+
+* Bean Searcher
+  * 移除 Searcher 接口内的 search()、searchFirst()、searchList() 与 searchAll() 方法
+  * 新增方法：search(Class<T> beanClass) -> SearchResult
+  * 新增方法：search(Class<T> beanClass, String summaryField) -> SearchResult
+  * 新增方法：search(Class<T> beanClass, String[] summaryFields) -> SearchResult
+  * 新增方法：search(Class<T> beanClass, FieldFns.FieldFn<T, ?> summaryField) -> SearchResult
+  * 新增方法：search(Class<T> beanClass, Map<String, Object> paraMap, String summaryField) -> SearchResult
+  * 新增方法：search(Class<T> beanClass, Map<String, Object> paraMap, FieldFns.FieldFn<T, ?> summaryField) -> SearchResult
+  * 新增方法：searchFirst(Class<T> beanClass) -> T / Map<String, Object>
+  * 新增方法：searchList(Class<T> beanClass) -> List<T> / List<Map<String, Object>>
+  * 新增方法：searchAll(Class<T> beanClass) -> List<T> / List<Map<String, Object>>
+  * 新增方法：searchCount(Class<T> beanClass) -> Number
+  * 新增方法：searchSum(Class<T> beanClass, String field) -> Number
+  * 新增方法：searchSum(Class<T> beanClass, String[] fields) -> Number[]
+  * 新增方法：searchSum(Class<T> beanClass, FieldFns.FieldFn<T, ?> field) -> Number
+  * 新增方法：searchSum(Class<T> beanClass, Map<String, Object> paraMap, FieldFns.FieldFn<T, ?> field) -> Number
+
+# v4.0.0.alpha1 @ 2022-12-01
 
 * Bean Searcher
   * 包名重构：`com.ejlchina.searcher` -> `cn.zhxu.bs`
-  * 移除过时 API: `@SearchBean` 注解的 `joinCond` 属性 
-  * 优化嵌入参数：提高兼容性，支持嵌入参数后紧跟了 `.` 符号 
+  * 移除过时 API: `@SearchBean` 注解的 `joinCond` 属性
+  * 优化嵌入参数：提高兼容性，支持嵌入参数后紧跟了 `.` 符号
   * 当字段是数字，但传参不是数字时，直接返回空数据
   * SearchBean 添加 timeout 属性，用于控制慢 SQL 最大执行时长
   * 当使用 groupBy 与 逻辑分组时，如果所传参数都在 groupBy 内，也使用 where 形式的条件: https://gitee.com/troyzhxu/bean-searcher/issues/I5V4ON
-  * 移除 Searcher 接口内的 search()、searchFirst()、searchList() 与 searchAll() 方法
-  * 新增 searchSum(Class<T> beanClass, Map<String, Object> paraMap, FieldFns.FieldFn<T, ?> field) 方法，支持方法引用方式传入统计字段
-  * 新增方法：searchCount(Class<T> beanClass) -> Number
-  * 新增方法：searchSum(Class<T> beanClass, String field) -> Number
-  * 新增方法：searchSum(Class<T> beanClass, FieldFns.FieldFn<T, ?> field) -> Number
-  * 新增方法：searchSum(Class<T> beanClass, String[] fields) -> Number[]
-  * 新增方法：search(Class<T> beanClass, Map<String, Object> paraMap, String summaryField) -> SearchResult
-  * 新增方法：search(Class<T> beanClass, Map<String, Object> paraMap, FieldFns.FieldFn<T, ?> summaryField) -> SearchResult
 * Bean Searcher Boot Starter
   * 支持 Spring Boot 3
 
