@@ -59,11 +59,11 @@ public class SimpleSearchTestCase {
 
         MapSearcher mapSearcher = SearcherBuilder.mapSearcher().sqlExecutor(sqlExecutor).build();
         mapSearcher.search(SearchBean.class, new HashMap<>());
-        mapSearcher.search(SearchBean.class, null);
+        mapSearcher.search(SearchBean.class);
 
         BeanSearcher beanSearcher = SearcherBuilder.beanSearcher().sqlExecutor(sqlExecutor).build();
         beanSearcher.search(SearchBean.class, new HashMap<>());
-        beanSearcher.search(SearchBean.class, null);
+        beanSearcher.search(SearchBean.class);
     }
 
     @Test

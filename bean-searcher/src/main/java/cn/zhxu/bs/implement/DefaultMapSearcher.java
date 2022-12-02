@@ -26,8 +26,18 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 	}
 
 	@Override
+	public <T> SearchResult<Map<String, Object>> search(Class<T> beanClass) {
+		return search(beanClass, null, new FetchType(FetchType.DEFAULT));
+	}
+
+	@Override
 	public <T> SearchResult<Map<String, Object>> search(Class<T> beanClass, Map<String, Object> paraMap) {
 		return search(beanClass, paraMap, new FetchType(FetchType.DEFAULT));
+	}
+
+	@Override
+	public <T> SearchResult<Map<String, Object>> search(Class<T> beanClass, String summaryField) {
+		return search(beanClass, null, summaryField);
 	}
 
 	@Override
@@ -39,6 +49,11 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 	}
 
 	@Override
+	public <T> SearchResult<Map<String, Object>> search(Class<T> beanClass, FieldFns.FieldFn<T, ?> summaryField) {
+		return search(beanClass, null, summaryField);
+	}
+
+	@Override
 	public <T> SearchResult<Map<String, Object>> search(Class<T> beanClass, Map<String, Object> paraMap, FieldFns.FieldFn<T, ?> summaryField) {
 		if (summaryField != null) {
 			return search(beanClass, paraMap, FieldFns.name(summaryField));
@@ -47,12 +62,21 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 	}
 
 	@Override
-	public <T> SearchResult<Map<String, Object>> search(Class<T> beanClass, Map<String, Object> paraMap,
-														String[] summaryFields) {
+	public <T> SearchResult<Map<String, Object>> search(Class<T> beanClass, String[] summaryFields) {
+		return search(beanClass, null, summaryFields);
+	}
+
+	@Override
+	public <T> SearchResult<Map<String, Object>> search(Class<T> beanClass, Map<String, Object> paraMap, String[] summaryFields) {
 		if (summaryFields != null) {
 			return search(beanClass, paraMap, new FetchType(FetchType.DEFAULT, summaryFields));
 		}
 		return search(beanClass, paraMap);
+	}
+
+	@Override
+	public <T> Map<String, Object> searchFirst(Class<T> beanClass) {
+		return searchFirst(beanClass, null);
 	}
 
 	@Override
@@ -66,8 +90,18 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 	}
 
 	@Override
+	public <T> List<Map<String, Object>> searchList(Class<T> beanClass) {
+		return searchList(beanClass, null);
+	}
+
+	@Override
 	public <T> List<Map<String, Object>> searchList(Class<T> beanClass, Map<String, Object> paraMap) {
 		return search(beanClass, paraMap, new FetchType(FetchType.LIST_ONLY)).getDataList();
+	}
+
+	@Override
+	public <T> List<Map<String, Object>> searchAll(Class<T> beanClass) {
+		return searchAll(beanClass, null);
 	}
 
 	@Override
