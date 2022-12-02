@@ -1,4 +1,13 @@
-# v4.0.0.alpha2
+# v4.0.0.alpha3
+
+### ✨ Features
+
+* Bean Searcher
+  * 
+
+# v4.0.0.alpha2 @ 2022-12-02
+
+### ✨ Features
 
 * Bean Searcher
   * 移除 Searcher 接口内的 search()、searchFirst()、searchList() 与 searchAll() 方法
@@ -18,6 +27,8 @@
   * 新增方法：searchSum(Class<T> beanClass, Map<String, Object> paraMap, FieldFns.FieldFn<T, ?> field) -> Number
 
 # v4.0.0.alpha1 @ 2022-12-01
+
+### ✨ Features
 
 * Bean Searcher
   * Maven 坐标 groupId 变更 -> `cn.zhxu`
