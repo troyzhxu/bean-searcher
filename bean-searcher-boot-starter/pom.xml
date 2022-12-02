@@ -9,18 +9,18 @@
 	<packaging>jar</packaging>
 
 	<parent>
-		<groupId>com.ejlchina</groupId>
+		<groupId>cn.zhxu</groupId>
 		<artifactId>bean-searcher-parent</artifactId>
-		<version>3.8.2</version>
+		<version>4.0.0.alpha1</version>
 	</parent>
 
 	<properties>
-		<spring.boot.version>2.6.9</spring.boot.version>
+		<spring.boot.version>3.0.0</spring.boot.version>
 	</properties>
 
 	<dependencies>
 		<dependency>
-			<groupId>com.ejlchina</groupId>
+			<groupId>cn.zhxu</groupId>
 			<artifactId>bean-searcher</artifactId>
 			<version>${project.version}</version>
 		</dependency>

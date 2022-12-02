@@ -9,9 +9,9 @@
 	<packaging>jar</packaging>
 
 	<parent>
-		<groupId>com.ejlchina</groupId>
+		<groupId>cn.zhxu</groupId>
 		<artifactId>bean-searcher-parent</artifactId>
-		<version>3.8.2</version>
+		<version>4.0.0.alpha1</version>
 	</parent>
 
 	<dependencies>

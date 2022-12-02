@@ -7,9 +7,9 @@
 	<description>比 MyBatis 效率快 100 倍的条件检索引擎，使一行代码实现复杂列表检索成为可能！</description>
 	<url>https://github.com/troyzhxu/bean-searcher</url>
 
-	<groupId>com.ejlchina</groupId>
+	<groupId>cn.zhxu</groupId>
 	<artifactId>bean-searcher-parent</artifactId>
-	<version>3.8.2</version>
+	<version>4.0.0.alpha1</version>
 
 	<packaging>pom</packaging>
 
@@ -44,7 +44,7 @@
 		<connection>scm:git:https://github.com/troyzhxu/bean-searcher.git</connection>
 		<developerConnection>scm:git:https://github.com/troyzhxu/bean-searcher.git</developerConnection>
 		<url>https://github.com/troyzhxu/bean-searcher</url>
-		<tag>v3.8.2</tag>
+		<tag>v4.0.0.alpha1</tag>
 	</scm>
 
 	<dependencies>
@@ -55,15 +55,15 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	
+
 	<distributionManagement>
 		<snapshotRepository>
 			<id>ossrh</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+			<url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
 		</snapshotRepository>
 		<repository>
 			<id>ossrh</id>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+			<url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository>
 	</distributionManagement>
   
