@@ -47,6 +47,11 @@ public abstract class AbstractSearcher implements Searcher {
 	}
 
 	@Override
+	public <T> Number searchCount(Class<T> beanClass) {
+		return searchCount(beanClass, null);
+	}
+
+	@Override
 	public <T> Number searchSum(Class<T> beanClass, Map<String, Object> paraMap, String field) {
 		String[] fields = { Objects.requireNonNull(field) };
 		Number[] results = searchSum(beanClass, paraMap, fields);
@@ -54,8 +59,18 @@ public abstract class AbstractSearcher implements Searcher {
 	}
 
 	@Override
+	public <T> Number searchSum(Class<T> beanClass, String field) {
+		return searchSum(beanClass, null, field);
+	}
+
+	@Override
 	public <T> Number searchSum(Class<T> beanClass, Map<String, Object> paraMap, FieldFns.FieldFn<T, ?> field) {
 		return searchSum(beanClass, paraMap, FieldFns.name(field));
+	}
+
+	@Override
+	public <T> Number searchSum(Class<T> beanClass, FieldFns.FieldFn<T, ?> field) {
+		return searchSum(beanClass, null, field);
 	}
 
 	@Override
@@ -68,6 +83,11 @@ public abstract class AbstractSearcher implements Searcher {
 		} catch (SQLException e) {
 			throw new SearchException("A exception occurred when collect sql result!", e);
 		}
+	}
+
+	@Override
+	public <T> Number[] searchSum(Class<T> beanClass, String[] fields) {
+		return searchSum(beanClass, null, fields);
 	}
 
 	protected Number getCountFromSqlResult(SqlResult<?> sqlResult) throws SQLException {

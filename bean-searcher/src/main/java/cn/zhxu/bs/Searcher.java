@@ -23,6 +23,15 @@ public interface Searcher {
 	<T> Number searchCount(Class<T> beanClass, Map<String, Object> paraMap);
 
 	/**
+	 * 此方法省略了检索参数，您可以从参数过滤器中注入它们
+	 * @param <T> bean 类型
+	 * @param beanClass 要检索的 bean 类型
+	 * @return 数据个数
+	 * @since v4.0.0
+	 * */
+	<T> Number searchCount(Class<T> beanClass);
+
+	/**
 	 * @param <T> bean 类型
 	 * @param beanClass 要检索的 bean 类型
 	 * @param field 参与求和的字段
@@ -30,6 +39,16 @@ public interface Searcher {
 	 * @return 字段求和统计
 	 * */
 	<T> Number searchSum(Class<T> beanClass, Map<String, Object> paraMap, String field);
+
+	/**
+	 * 此方法省略了检索参数，您可以从参数过滤器中注入它们
+	 * @param <T> bean 类型
+	 * @param beanClass 要检索的 bean 类型
+	 * @param field 参与求和的字段
+	 * @return 字段求和统计
+	 * @since v4.0.0
+	 * */
+	<T> Number searchSum(Class<T> beanClass, String field);
 
 	/**
 	 * @param <T> bean 类型
@@ -41,6 +60,16 @@ public interface Searcher {
 	<T> Number searchSum(Class<T> beanClass, Map<String, Object> paraMap, FieldFns.FieldFn<T, ?> field);
 
 	/**
+	 * 此方法省略了检索参数，您可以从参数过滤器中注入它们
+	 * @param <T> bean 类型
+	 * @param beanClass 要检索的 bean 类型
+	 * @param field 参与求和的字段
+	 * @return 字段求和统计
+	 * @since v4.0.0
+	 * */
+	<T> Number searchSum(Class<T> beanClass, FieldFns.FieldFn<T, ?> field);
+
+	/**
 	 * @param <T> bean 类型
 	 * @param beanClass 要检索的 bean 类型
 	 * @param fields 参与求和的字段数组
@@ -48,5 +77,15 @@ public interface Searcher {
 	 * @return 字段求和统计
 	 * */
 	<T> Number[] searchSum(Class<T> beanClass, Map<String, Object> paraMap, String[] fields);
+
+	/**
+	 * 此方法省略了检索参数，您可以从参数过滤器中注入它们
+	 * @param <T> bean 类型
+	 * @param beanClass 要检索的 bean 类型
+	 * @param fields 参与求和的字段数组
+	 * @return 字段求和统计
+	 * @since v4.0.0
+	 * */
+	<T> Number[] searchSum(Class<T> beanClass, String[] fields);
 
 }
