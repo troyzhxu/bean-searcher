@@ -21,7 +21,7 @@
 
 * Bean Searcher
   * Maven 坐标 groupId 变更 -> `cn.zhxu`
-  * 包名重构：`com.ejlchina.searcher` -> `cn.zhxu.bs`
+  * 包名变更：`com.ejlchina.searcher` -> `cn.zhxu.bs`
   * 移除过时 API: `@SearchBean` 注解的 `joinCond` 属性
   * 优化嵌入参数：提高兼容性，支持嵌入参数后紧跟了 `.` 符号
   * 当字段是数字，但传参不是数字时，直接返回空数据
