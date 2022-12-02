@@ -24,7 +24,7 @@
   * 移除过时 API: `@SearchBean` 注解的 `joinCond` 属性
   * 优化嵌入参数：提高兼容性，支持嵌入参数后紧跟了 `.` 符号
   * 当字段是数字，但传参不是数字时，直接返回空数据
-  * SearchBean 添加 timeout 属性，用于控制慢 SQL 最大执行时长
+  * 注解 `@SearchBean` 添加 `timeout` 属性，用于控制慢 SQL 最大执行时长
   * 当使用 groupBy 与 逻辑分组时，如果所传参数都在 groupBy 内，也使用 where 形式的条件: https://gitee.com/troyzhxu/bean-searcher/issues/I5V4ON
 * Bean Searcher Boot Starter
   * 支持 Spring Boot 3
