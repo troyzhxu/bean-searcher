@@ -14,13 +14,6 @@ import java.util.Map;
  * */
 public interface Searcher {
 
-	/**
-	 * @param <T> bean 类型
-	 * @param beanClass 要检索的 bean 类型
-	 * @param paraMap 检索参数（包括排序分页参数）
-	 * @return 数据个数
-	 * */
-	<T> Number searchCount(Class<T> beanClass, Map<String, Object> paraMap);
 
 	/**
 	 * 此方法省略了检索参数，您可以从参数过滤器中注入它们
@@ -34,11 +27,10 @@ public interface Searcher {
 	/**
 	 * @param <T> bean 类型
 	 * @param beanClass 要检索的 bean 类型
-	 * @param field 参与求和的字段
 	 * @param paraMap 检索参数（包括排序分页参数）
-	 * @return 字段求和统计
+	 * @return 数据个数
 	 * */
-	<T> Number searchSum(Class<T> beanClass, Map<String, Object> paraMap, String field);
+	<T> Number searchCount(Class<T> beanClass, Map<String, Object> paraMap);
 
 	/**
 	 * 此方法省略了检索参数，您可以从参数过滤器中注入它们
@@ -57,7 +49,7 @@ public interface Searcher {
 	 * @param paraMap 检索参数（包括排序分页参数）
 	 * @return 字段求和统计
 	 * */
-	<T> Number searchSum(Class<T> beanClass, Map<String, Object> paraMap, FieldFns.FieldFn<T, ?> field);
+	<T> Number searchSum(Class<T> beanClass, Map<String, Object> paraMap, String field);
 
 	/**
 	 * 此方法省略了检索参数，您可以从参数过滤器中注入它们
@@ -72,11 +64,11 @@ public interface Searcher {
 	/**
 	 * @param <T> bean 类型
 	 * @param beanClass 要检索的 bean 类型
-	 * @param fields 参与求和的字段数组
+	 * @param field 参与求和的字段
 	 * @param paraMap 检索参数（包括排序分页参数）
 	 * @return 字段求和统计
 	 * */
-	<T> Number[] searchSum(Class<T> beanClass, Map<String, Object> paraMap, String[] fields);
+	<T> Number searchSum(Class<T> beanClass, Map<String, Object> paraMap, FieldFns.FieldFn<T, ?> field);
 
 	/**
 	 * 此方法省略了检索参数，您可以从参数过滤器中注入它们
@@ -87,5 +79,14 @@ public interface Searcher {
 	 * @since v4.0.0
 	 * */
 	<T> Number[] searchSum(Class<T> beanClass, String[] fields);
+
+	/**
+	 * @param <T> bean 类型
+	 * @param beanClass 要检索的 bean 类型
+	 * @param fields 参与求和的字段数组
+	 * @param paraMap 检索参数（包括排序分页参数）
+	 * @return 字段求和统计
+	 * */
+	<T> Number[] searchSum(Class<T> beanClass, Map<String, Object> paraMap, String[] fields);
 
 }

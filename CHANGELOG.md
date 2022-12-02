@@ -13,7 +13,8 @@
   * 新增方法：searchSum(Class<T> beanClass, String field) -> Number
   * 新增方法：searchSum(Class<T> beanClass, FieldFns.FieldFn<T, ?> field) -> Number
   * 新增方法：searchSum(Class<T> beanClass, String[] fields) -> Number[]
-  * 新增方法：
+  * 新增方法：search(Class<T> beanClass, Map<String, Object> paraMap, String summaryField) -> SearchResult
+  * 新增方法：search(Class<T> beanClass, Map<String, Object> paraMap, FieldFns.FieldFn<T, ?> summaryField) -> SearchResult
 * Bean Searcher Boot Starter
   * 支持 Spring Boot 3
 

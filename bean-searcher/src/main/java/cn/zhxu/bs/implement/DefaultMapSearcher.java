@@ -3,6 +3,7 @@ package cn.zhxu.bs.implement;
 import cn.zhxu.bs.*;
 import cn.zhxu.bs.FieldConvertor.MFieldConvertor;
 import cn.zhxu.bs.param.FetchType;
+import cn.zhxu.bs.util.FieldFns;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -30,9 +31,28 @@ public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher 
 	}
 
 	@Override
+	public <T> SearchResult<Map<String, Object>> search(Class<T> beanClass, Map<String, Object> paraMap, String summaryField) {
+		if (summaryField != null) {
+			return search(beanClass, paraMap, new String[] { summaryField });
+		}
+		return search(beanClass, paraMap);
+	}
+
+	@Override
+	public <T> SearchResult<Map<String, Object>> search(Class<T> beanClass, Map<String, Object> paraMap, FieldFns.FieldFn<T, ?> summaryField) {
+		if (summaryField != null) {
+			return search(beanClass, paraMap, FieldFns.name(summaryField));
+		}
+		return search(beanClass, paraMap);
+	}
+
+	@Override
 	public <T> SearchResult<Map<String, Object>> search(Class<T> beanClass, Map<String, Object> paraMap,
 														String[] summaryFields) {
-		return search(beanClass, paraMap, new FetchType(FetchType.DEFAULT, summaryFields));
+		if (summaryFields != null) {
+			return search(beanClass, paraMap, new FetchType(FetchType.DEFAULT, summaryFields));
+		}
+		return search(beanClass, paraMap);
 	}
 
 	@Override

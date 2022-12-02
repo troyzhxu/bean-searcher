@@ -1,5 +1,7 @@
 package cn.zhxu.bs;
 
+import cn.zhxu.bs.util.FieldFns;
+
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +21,26 @@ public interface MapSearcher extends Searcher {
 	 * @return 总条数，Bean 数据列表
 	 * */
 	<T> SearchResult<Map<String, Object>> search(Class<T> beanClass, Map<String, Object> paraMap);
+
+	/**
+	 * 适合需要分页的查询
+	 * @param <T> bean 类型
+	 * @param beanClass 要检索的 bean 类型
+	 * @param paraMap 检索参数
+	 * @param summaryField 统计字段
+	 * @return 总条数，Bean 数据列表
+	 * */
+	<T> SearchResult<Map<String, Object>> search(Class<T> beanClass, Map<String, Object> paraMap, String summaryField);
+
+	/**
+	 * 适合需要分页的查询
+	 * @param <T> bean 类型
+	 * @param beanClass 要检索的 bean 类型
+	 * @param paraMap 检索参数
+	 * @param summaryField 统计字段
+	 * @return 总条数，Bean 数据列表
+	 * */
+	<T> SearchResult<Map<String, Object>> search(Class<T> beanClass, Map<String, Object> paraMap, FieldFns.FieldFn<T, ?> summaryField);
 
 	/**
 	 * 适合需要分页的查询
