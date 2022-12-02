@@ -20,6 +20,7 @@
 # v4.0.0.alpha1 @ 2022-12-01
 
 * Bean Searcher
+  * Maven 坐标 groupId 变更 -> `cn.zhxu`
   * 包名重构：`com.ejlchina.searcher` -> `cn.zhxu.bs`
   * 移除过时 API: `@SearchBean` 注解的 `joinCond` 属性
   * 优化嵌入参数：提高兼容性，支持嵌入参数后紧跟了 `.` 符号
