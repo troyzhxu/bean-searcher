@@ -58,6 +58,12 @@ public enum DbType {
     STRING(String.class),
 
     /**
+     * JSON 字段
+     * @since v4.0.0
+     */
+    JSON(String.class),
+
+    /**
      * 日期（没有时间）
      */
     DATE(Date.class),

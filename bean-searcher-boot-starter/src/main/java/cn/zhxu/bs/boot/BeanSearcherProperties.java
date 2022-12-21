@@ -3,7 +3,6 @@ package cn.zhxu.bs.boot;
 import cn.zhxu.bs.BeanSearcher;
 import cn.zhxu.bs.FieldConvertor.BFieldConvertor;
 import cn.zhxu.bs.MapSearcher;
-import cn.zhxu.bs.Searcher;
 import cn.zhxu.bs.bean.DbField;
 import cn.zhxu.bs.bean.InheritType;
 import cn.zhxu.bs.bean.SearchBean;
@@ -326,7 +325,7 @@ public class BeanSearcherProperties {
 
 			/**
 			 * 分页保护：每页最大允许查询条数，默认为 100，
-			 * 注意：该配置对方法 {@link Searcher#searchAll(Class, Map)} 无效
+			 * 注意：该配置对 {@link BeanSearcher#searchAll(Class)} 与 {@link MapSearcher#searchAll(Class)} 方法无效
 			 */
 			private int maxAllowedSize = 100;
 
@@ -640,6 +639,19 @@ public class BeanSearcherProperties {
 		 */
 		private boolean useB2M = false;
 
+		/**
+		 * 是否启用 {@link JsonFieldConvertor }（必要条件），默认为 true，但需要注意的是，即使该参数为 true, 也不一定能成功启用 {@link JsonFieldConvertor }，
+		 * 您必须还得添加 <a href="https://gitee.com/troyzhxu/xjsonkit">xjsonkit</a> 的 json 相关实现的依赖才可以，目前这些依赖有（你可以任选其一）：
+		 * <pre>
+		 * implementation 'cn.zhxu:xjsonkit-fastjson:1.4.2'		// Fastjson 实现
+		 * implementation 'cn.zhxu:xjsonkit-fastjson2:1.4.2'	// Fastjson2 实现
+		 * implementation 'cn.zhxu:xjsonkit-gson:1.4.2'			// Gson 实现
+		 * implementation 'cn.zhxu:xjsonkit-jackson:1.4.2'		// Jackson 实现
+		 * implementation 'cn.zhxu:xjsonkit-snack3:1.4.2'		// Snack3 实现
+		 * </pre>
+		 */
+		private boolean useJson = true;
+
 		public boolean isUseNumber() {
 			return useNumber;
 		}
@@ -750,6 +762,14 @@ public class BeanSearcherProperties {
 
 		public void setUseB2M(boolean useB2M) {
 			this.useB2M = useB2M;
+		}
+
+		public boolean isUseJson() {
+			return useJson;
+		}
+
+		public void setUseJson(boolean useJson) {
+			this.useJson = useJson;
 		}
 
 	}

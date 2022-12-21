@@ -18,7 +18,13 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>1.7.36</version>
+			<version>2.0.6</version>
+		</dependency>
+		<dependency>
+			<groupId>cn.zhxu</groupId>
+			<artifactId>xjsonkit-api</artifactId>
+			<version>1.4.2</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 

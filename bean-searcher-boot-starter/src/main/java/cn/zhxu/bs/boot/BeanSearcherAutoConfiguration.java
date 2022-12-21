@@ -14,7 +14,9 @@ import cn.zhxu.bs.group.ExprParser;
 import cn.zhxu.bs.group.GroupResolver;
 import cn.zhxu.bs.implement.*;
 import cn.zhxu.bs.util.LRUCache;
+import cn.zhxu.xjson.JsonKit;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -268,6 +270,14 @@ public class BeanSearcherAutoConfiguration {
 		convertor.setFailOnError(conf.isEnumFailOnError());
 		convertor.setIgnoreCase(conf.isEnumIgnoreCase());
 		return convertor;
+	}
+
+	@Bean
+	@ConditionalOnClass(JsonKit.class)
+	@ConditionalOnProperty(name = "bean-searcher.field-convertor.use-json", havingValue = "true", matchIfMissing = true)
+	@ConditionalOnMissingBean(JsonFieldConvertor.class)
+	public JsonFieldConvertor jsonFieldConvertor() {
+		return new JsonFieldConvertor();
 	}
 
 	@Bean

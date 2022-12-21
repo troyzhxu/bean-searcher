@@ -3,7 +3,18 @@
 ### ✨ Features
 
 * Bean Searcher
-  * 
+  * 新增 `JsonFieldConvertor` 字段转换器，配合 `@DbField(type = DbType.JSON)` 可支持 JSON 字段自动转对象，需要添加 JSON 依赖（以下依赖任性一个即可）：
+    * `cn.zhxu:xjsonkit-fastjson:1.4.2`
+    * `cn.zhxu:xjsonkit-fastjson2:1.4.2`
+    * `cn.zhxu:xjsonkit-gson:1.4.2`
+    * `cn.zhxu:xjsonkit-jackson:1.4.2`
+    * `cn.zhxu:xjsonkit-snack3:1.4.2`
+    * 参考：https://gitee.com/troyzhxu/xjsonkit
+  * 升级 `slf4j-api` -> `2.0.6`
+
+* Bean Searcher Boot Starter
+  * 新增 `bean-searcher.field-convertor.use-json` 配置项，表示是否自动添加 `JsonFieldConvertor`，默认 `true`
+
 
 # v4.0.0.alpha2 @ 2022-12-02
 
