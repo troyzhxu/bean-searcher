@@ -649,8 +649,21 @@ public class BeanSearcherProperties {
 		 * implementation 'cn.zhxu:xjsonkit-jackson:1.4.2'		// Jackson 实现
 		 * implementation 'cn.zhxu:xjsonkit-snack3:1.4.2'		// Snack3 实现
 		 * </pre>
+		 * @since v4.0.0
 		 */
 		private boolean useJson = true;
+
+		/**
+		 * 是否启用 {@link ListFieldConvertor }，默认为 true
+		 * @since v4.0.0
+		 */
+		private boolean useList = true;
+
+		/**
+		 * @see ListFieldConvertor#setItemSeparator(String)
+		 * @since v4.0.0
+		 */
+		private String listItemSeparator = ",";
 
 		public boolean isUseNumber() {
 			return useNumber;
@@ -770,6 +783,22 @@ public class BeanSearcherProperties {
 
 		public void setUseJson(boolean useJson) {
 			this.useJson = useJson;
+		}
+
+		public boolean isUseList() {
+			return useList;
+		}
+
+		public void setUseList(boolean useList) {
+			this.useList = useList;
+		}
+
+		public String getListItemSeparator() {
+			return listItemSeparator;
+		}
+
+		public void setListItemSeparator(String listItemSeparator) {
+			this.listItemSeparator = listItemSeparator;
 		}
 
 	}

@@ -281,6 +281,17 @@ public class BeanSearcherAutoConfiguration {
 	}
 
 	@Bean
+	@ConditionalOnProperty(name = "bean-searcher.field-convertor.use-list", havingValue = "true", matchIfMissing = true)
+	@ConditionalOnMissingBean(ListFieldConvertor.class)
+	public ListFieldConvertor listFieldConvertor(BeanSearcherProperties config,
+				ObjectProvider<List<ListFieldConvertor.Convertor<?>>> convertorsProvider) {
+		BeanSearcherProperties.FieldConvertor conf = config.getFieldConvertor();
+		ListFieldConvertor convertor = new ListFieldConvertor(conf.getListItemSeparator());
+		ifAvailable(convertorsProvider, convertor::setConvertors);
+		return convertor;
+	}
+
+	@Bean
 	@ConditionalOnMissingBean(BeanReflector.class)
 	public BeanReflector beanReflector(ObjectProvider<List<BFieldConvertor>> convertorsProvider) {
 		List<BFieldConvertor> convertors = convertorsProvider.getIfAvailable();
