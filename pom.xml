@@ -21,6 +21,9 @@
 	<properties>
 		<java.version>1.8</java.version>
 		<junit.version>4.13.2</junit.version>
+		<slf4j.version>2.0.6</slf4j.version>
+		<xjsonkit.version>1.4.2</xjsonkit.version>
+		<spring.boot.version>3.0.0</spring.boot.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 

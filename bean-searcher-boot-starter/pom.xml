@@ -14,10 +14,6 @@
 		<version>4.0.0.alpha2</version>
 	</parent>
 
-	<properties>
-		<spring.boot.version>3.0.0</spring.boot.version>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>cn.zhxu</groupId>
@@ -40,6 +36,12 @@
 		  <artifactId>spring-boot-configuration-processor</artifactId>
 		  <version>${spring.boot.version}</version>
 		  <optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>cn.zhxu</groupId>
+			<artifactId>xjsonkit-api</artifactId>
+			<version>${xjsonkit.version}</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 
