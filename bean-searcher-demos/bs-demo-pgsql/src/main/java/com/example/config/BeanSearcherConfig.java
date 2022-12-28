@@ -1,6 +1,6 @@
 package com.example.config;
 
-import com.ejlchina.searcher.ParamFilter;
+import cn.zhxu.bs.ParamFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

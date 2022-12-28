@@ -8,7 +8,7 @@
 		<version>2.6.6</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.ejlchina</groupId>
+	<groupId>cn.zhxu</groupId>
 	<artifactId>bs-demo-sqlserver</artifactId>
 	<name>demo</name>
 	<description>Demo project for Bean Searcher</description>
@@ -24,15 +24,15 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.ejlchina</groupId>
+			<groupId>cn.zhxu</groupId>
 			<artifactId>bean-searcher-boot-starter</artifactId>
-			<version>3.8.1</version>
+			<version>4.0.0.alpha3</version>
 		</dependency>
 
 		<dependency>
-			<groupId>com.ejlchina</groupId>
-			<artifactId>jsonkit-jackson</artifactId>
-			<version>1.3.2</version>
+			<groupId>cn.zhxu</groupId>
+			<artifactId>xjsonkit-jackson</artifactId>
+			<version>1.4.2</version>
 		</dependency>
 
 		<dependency>

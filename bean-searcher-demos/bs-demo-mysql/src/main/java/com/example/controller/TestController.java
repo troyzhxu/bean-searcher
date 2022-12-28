@@ -1,7 +1,7 @@
 package com.example.controller;
 
-import com.ejlchina.searcher.MapSearcher;
-import com.ejlchina.searcher.util.MapUtils;
+import cn.zhxu.bs.MapSearcher;
+import cn.zhxu.bs.util.MapUtils;
 import com.example.sbean.DFieldBean;
 import com.example.sbean.DTableBean;
 import com.example.sbean.Employee;

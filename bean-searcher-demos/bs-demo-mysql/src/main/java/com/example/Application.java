@@ -1,8 +1,8 @@
 package com.example;
 
 import com.ejlchina.json.JSONKit;
-import com.ejlchina.searcher.BeanMeta;
-import com.ejlchina.searcher.ParamFilter;
+import cn.zhxu.bs.BeanMeta;
+import cn.zhxu.bs.ParamFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;

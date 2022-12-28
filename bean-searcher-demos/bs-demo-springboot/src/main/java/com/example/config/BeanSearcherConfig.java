@@ -1,9 +1,9 @@
 package com.example.config;
 
-import com.ejlchina.searcher.ParamFilter;
-import com.ejlchina.searcher.SqlExecutor;
-import com.ejlchina.searcher.boot.NamedDataSource;
-import com.ejlchina.searcher.implement.DefaultSqlExecutor;
+import cn.zhxu.bs.ParamFilter;
+import cn.zhxu.bs.SqlExecutor;
+import cn.zhxu.bs.boot.NamedDataSource;
+import cn.zhxu.bs.implement.DefaultSqlExecutor;
 import com.example.operator.MyOp;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;

@@ -1,7 +1,7 @@
 package com.example.operator;
 
-import com.ejlchina.searcher.FieldOp;
-import com.ejlchina.searcher.SqlWrapper;
+import cn.zhxu.bs.FieldOp;
+import cn.zhxu.bs.SqlWrapper;
 
 import java.util.Collections;
 import java.util.List;

@@ -1,9 +1,9 @@
 package com.example.controller;
 
-import com.ejlchina.searcher.BeanSearcher;
-import com.ejlchina.searcher.MapSearcher;
-import com.ejlchina.searcher.SearchResult;
-import com.ejlchina.searcher.util.MapUtils;
+import cn.zhxu.bs.BeanSearcher;
+import cn.zhxu.bs.MapSearcher;
+import cn.zhxu.bs.SearchResult;
+import cn.zhxu.bs.util.MapUtils;
 import com.example.sbean.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

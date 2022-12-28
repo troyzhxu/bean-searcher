@@ -2,8 +2,8 @@ package com.example.config;
 
 
 import com.ejlchina.json.JSONKit;
-import com.ejlchina.searcher.BeanMeta;
-import com.ejlchina.searcher.ParamFilter;
+import cn.zhxu.bs.BeanMeta;
+import cn.zhxu.bs.ParamFilter;
 
 import java.util.HashMap;
 import java.util.Map;

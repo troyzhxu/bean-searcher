@@ -1,10 +1,10 @@
 package com.example.sbean;
 
-import com.ejlchina.searcher.bean.DbField;
-import com.ejlchina.searcher.bean.SearchBean;
-import com.ejlchina.searcher.bean.SortType;
-import com.ejlchina.searcher.operator.Contain;
-import com.ejlchina.searcher.operator.StartWith;
+import cn.zhxu.bs.bean.DbField;
+import cn.zhxu.bs.bean.SearchBean;
+import cn.zhxu.bs.bean.SortType;
+import cn.zhxu.bs.operator.Contain;
+import cn.zhxu.bs.operator.StartWith;
 import com.example.enums.Gender;
 import com.fasterxml.jackson.annotation.JsonFormat;
 

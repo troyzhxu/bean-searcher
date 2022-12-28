@@ -1,6 +1,6 @@
 package com.example.sbean;
 
-import com.ejlchina.searcher.param.Operator;
+import cn.zhxu.bs.param.Operator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;

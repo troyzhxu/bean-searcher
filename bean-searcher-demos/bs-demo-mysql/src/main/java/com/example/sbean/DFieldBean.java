@@ -1,7 +1,7 @@
 package com.example.sbean;
 
-import com.ejlchina.searcher.bean.DbField;
-import com.ejlchina.searcher.bean.SearchBean;
+import cn.zhxu.bs.bean.DbField;
+import cn.zhxu.bs.bean.SearchBean;
 
 @SearchBean(tables = "employee")
 public class DFieldBean {

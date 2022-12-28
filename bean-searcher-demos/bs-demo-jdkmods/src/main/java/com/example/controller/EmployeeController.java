@@ -1,9 +1,9 @@
 package com.example.controller;
 
-import com.ejlchina.searcher.BeanSearcher;
-import com.ejlchina.searcher.MapSearcher;
-import com.ejlchina.searcher.SearchResult;
-import com.ejlchina.searcher.util.MapUtils;
+import cn.zhxu.bs.BeanSearcher;
+import cn.zhxu.bs.MapSearcher;
+import cn.zhxu.bs.SearchResult;
+import cn.zhxu.bs.util.MapUtils;
 import com.example.operator.MyOp;
 import com.example.sbean.Employee;
 import com.example.sbean.EmployeeVO;

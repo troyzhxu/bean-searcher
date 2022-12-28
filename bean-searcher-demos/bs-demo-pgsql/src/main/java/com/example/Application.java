@@ -1,12 +1,12 @@
 package com.example;
 
-import com.ejlchina.searcher.*;
-import com.ejlchina.searcher.boot.BeanSearcherProperties;
-import com.ejlchina.searcher.group.GroupResolver;
-import com.ejlchina.searcher.implement.DefaultParamResolver;
-import com.ejlchina.searcher.param.FieldParam;
-import com.ejlchina.searcher.util.MapWrapper;
-import com.ejlchina.searcher.util.StringUtils;
+import cn.zhxu.bs.*;
+import cn.zhxu.bs.boot.BeanSearcherProperties;
+import cn.zhxu.bs.group.GroupResolver;
+import cn.zhxu.bs.implement.DefaultParamResolver;
+import cn.zhxu.bs.param.FieldParam;
+import cn.zhxu.bs.util.MapWrapper;
+import cn.zhxu.bs.util.StringUtils;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
