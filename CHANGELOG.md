@@ -17,6 +17,7 @@
   * 新增 `bean-searcher.field-convertor.use-json` 配置项，表示是否自动添加 `JsonFieldConvertor`，默认 `true`
   * 新增 `bean-searcher.field-convertor.use-list` 配置项，表示是否自动添加 `ListFieldConvertor`，默认 `true`
   * 新增 `bean-searcher.field-convertor.list-item-separator` 配置项，用与配置如何将一个字符串分割成 `List` 字段
+  * 优化 `bean-searcher.field-convertor.date-formats` 配置项，支持用 `-` 替代 `:`（因为在 yml 的 key 中 `:` 默认会被过滤掉）
 
 # v4.0.0.alpha2 @ 2022-12-02
 

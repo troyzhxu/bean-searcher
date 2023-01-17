@@ -354,7 +354,11 @@ public class BeanSearcherAutoConfiguration {
 		ZoneId zoneId = conf.getZoneId();
 		DateFormatFieldConvertor convertor = new DateFormatFieldConvertor();
 		if (dateFormats != null) {
-			dateFormats.forEach(convertor::setFormat);
+			dateFormats.forEach((key, value) -> {
+				// 由于在 yml 的 key 中的 `:` 会被自动过滤，所以这里做下特殊处理，在 yml 中可以用 `-` 替代
+				String scope = key.replace('-', ':');
+				convertor.setFormat(scope, value);
+			});
 		}
 		if (zoneId != null) {
 			convertor.setZoneId(zoneId);
