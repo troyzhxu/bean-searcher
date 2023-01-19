@@ -12,9 +12,11 @@
     * 参考：https://gitee.com/troyzhxu/xjsonkit
   * 新增 `ListFieldConvertor` 字段转换器，可支持将 字符串字段自动转为简单 List 对象。
   * 增强 `NumberFieldConvertor`，使支持 `BigDecimal` 与 `Integer Long Float Double Short Byte` 之间的相互转换
+  * 增强 `DefaultDbMapping`，新增 `setAroundChar(String)` 方法，支持配置标识符的围绕符，以区分系统保留字（只对自动映射的表与字段起作用）
   * 升级 `slf4j-api` -> `2.0.6`
 
 * Bean Searcher Boot Starter
+  * 新增 `bean-searcher.sql.default-mapping.around-char` 配置项，可配置标识符的围绕符（例如 MySQL 的 ` 符）
   * 新增 `bean-searcher.field-convertor.use-json` 配置项，表示是否自动添加 `JsonFieldConvertor`，默认 `true`
   * 新增 `bean-searcher.field-convertor.use-list` 配置项，表示是否自动添加 `ListFieldConvertor`，默认 `true`
   * 新增 `bean-searcher.field-convertor.list-item-separator` 配置项，用与配置如何将一个字符串分割成 `List` 字段
