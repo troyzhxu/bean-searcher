@@ -11,6 +11,7 @@
     * `cn.zhxu:xjsonkit-snack3:1.4.2`
     * 参考：https://gitee.com/troyzhxu/xjsonkit
   * 新增 `ListFieldConvertor` 字段转换器，可支持将 字符串字段自动转为简单 List 对象。
+  * 增强 `NumberFieldConvertor`，使支持 `BigDecimal` 与 `Integer Long Float Double Short Byte` 之间的相互转换
   * 升级 `slf4j-api` -> `2.0.6`
 
 * Bean Searcher Boot Starter
