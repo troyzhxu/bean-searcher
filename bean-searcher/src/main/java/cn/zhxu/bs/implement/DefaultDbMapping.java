@@ -51,6 +51,9 @@ public class DefaultDbMapping implements DbMapping {
     // 全局忽略的实体类属性名（since v3.4.0）
     private String[] ignoreFields;
 
+    // 标识符的 围绕符，以区分系统保留字（since v4.0.0）
+    private String aroundChar;
+
     @Override
     public InheritType inheritType(Class<?> beanClass) {
         SearchBean bean = getSearchBean(beanClass);
@@ -140,7 +143,10 @@ public class DefaultDbMapping implements DbMapping {
             name = name.toUpperCase();
         }
         if (tablePrefix != null) {
-            return tablePrefix + name;
+            name = tablePrefix + name;
+        }
+        if (aroundChar != null) {
+            name = aroundChar + name + aroundChar;
         }
         return name;
     }
@@ -251,7 +257,11 @@ public class DefaultDbMapping implements DbMapping {
         if (underlineCase) {
             name = StringUtils.toUnderline(name);
         }
-        return upperCase ? name.toUpperCase() : name;
+        name = upperCase ? name.toUpperCase() : name;
+        if (aroundChar != null) {
+            name = aroundChar + name + aroundChar;
+        }
+        return name;
     }
 
     public DbTypeMapper getDbTypeMapper() {
@@ -318,6 +328,14 @@ public class DefaultDbMapping implements DbMapping {
 
     public void setIgnoreFields(String[] ignoreFields) {
         this.ignoreFields = ignoreFields;
+    }
+
+    public String getAroundChar() {
+        return aroundChar;
+    }
+
+    public void setAroundChar(String aroundChar) {
+        this.aroundChar = aroundChar;
     }
 
 }
