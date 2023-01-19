@@ -4,9 +4,12 @@ import cn.zhxu.bs.FieldConvertor;
 import cn.zhxu.bs.FieldMeta;
 import cn.zhxu.bs.implement.DefaultBeanReflector;
 
+import java.math.BigDecimal;
+
 /**
  * [数字 to 数字] 字段转换器
  * 与 {@link DefaultBeanReflector } 配合使用
+ * v4.0.0.alpha3 开始支持 BigDecimal 与 Integer Long Float Double Short Byte 之间的转换
  * @author Troy.Zhou @ 2021-11-01
  * @since v3.0.0（v3.8.0 之前在 com.ejlchina.searcher.implement 包下）
  */
@@ -22,7 +25,8 @@ public class NumberFieldConvertor implements FieldConvertor.BFieldConvertor {
                     targetType == float.class || targetType == Float.class ||
                     targetType == double.class || targetType == Double.class ||
                     targetType == short.class || targetType == Short.class ||
-                    targetType == byte.class || targetType == Byte.class
+                    targetType == byte.class || targetType == Byte.class ||
+                    targetType == BigDecimal.class
             );
         }
         return false;
@@ -49,6 +53,9 @@ public class NumberFieldConvertor implements FieldConvertor.BFieldConvertor {
         }
         if (targetType == byte.class || targetType == Byte.class) {
             return number.byteValue();
+        }
+        if (targetType == BigDecimal.class) {
+            return new BigDecimal(number.toString());
         }
         throw new IllegalStateException("Unsupported targetType: " + targetType);
     }
