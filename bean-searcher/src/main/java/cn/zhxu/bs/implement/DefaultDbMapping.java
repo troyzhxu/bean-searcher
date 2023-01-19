@@ -51,7 +51,7 @@ public class DefaultDbMapping implements DbMapping {
     // 全局忽略的实体类属性名（since v3.4.0）
     private String[] ignoreFields;
 
-    // 标识符的 围绕符，以区分系统保留字（since v4.0.0）
+    // 标识符的 围绕符，以区分系统保留字，只对自动映射的表名与字段起作用（since v4.0.0）
     private String aroundChar;
 
     @Override

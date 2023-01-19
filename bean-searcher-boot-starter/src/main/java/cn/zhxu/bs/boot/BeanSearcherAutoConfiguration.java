@@ -313,6 +313,7 @@ public class BeanSearcherAutoConfiguration {
 		mapping.setIgnoreFields(conf.getIgnoreFields());
 		mapping.setDefaultInheritType(conf.getInheritType());
 		mapping.setDefaultSortType(conf.getSortType());
+		mapping.setAroundChar(conf.getAroundChar());
 		return mapping;
 	}
 

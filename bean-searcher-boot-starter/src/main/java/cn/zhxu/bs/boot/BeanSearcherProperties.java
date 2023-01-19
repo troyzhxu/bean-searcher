@@ -486,6 +486,11 @@ public class BeanSearcherProperties {
 			 */
 			private SortType sortType = SortType.ALLOW_PARAM;
 
+			/**
+			 * 标识符的 围绕符，以区分系统保留字，只对自动映射的表名与字段起作用（since v4.0.0）
+			 */
+			private String aroundChar;
+
 			public boolean isUpperCase() {
 				return upperCase;
 			}
@@ -540,6 +545,14 @@ public class BeanSearcherProperties {
 
 			public void setSortType(SortType sortType) {
 				this.sortType = sortType;
+			}
+
+			public String getAroundChar() {
+				return aroundChar;
+			}
+
+			public void setAroundChar(String aroundChar) {
+				this.aroundChar = aroundChar;
 			}
 
 		}
