@@ -1,11 +1,13 @@
 package com.example.demo;
 
+import cn.zhxu.bs.BeanSearcher;
+import cn.zhxu.bs.MapSearcher;
+import cn.zhxu.bs.util.MapUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.ejlchina.searcher.BeanSearcher;
-import com.ejlchina.searcher.MapSearcher;
-import com.ejlchina.searcher.util.MapUtils;
 import com.example.demo.entity.Employee;
 import com.example.demo.mapper.EmployeeMapper;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
