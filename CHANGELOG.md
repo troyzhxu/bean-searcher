@@ -13,7 +13,9 @@
   * 新增 `ListFieldConvertor` 字段转换器，可支持将 字符串字段自动转为简单 List 对象。
   * 增强 `NumberFieldConvertor`，使支持 `BigDecimal` 与 `Integer Long Float Double Short Byte` 之间的相互转换
   * 增强 `DefaultDbMapping`，新增 `setAroundChar(String)` 方法，支持配置标识符的围绕符，以区分系统保留字（只对自动映射的表与字段起作用）
+  * 增强 `MapUtils`，新增 `of(k, v)`, `of(k1, v1, k2, v2)` 等 4 个 便捷 Map 构造方法
   * 升级 `slf4j-api` -> `2.0.6`
+  * 升级 `springboot` -> `3.0.2`
 
 * Bean Searcher Boot Starter
   * 新增 `bean-searcher.sql.default-mapping.around-char` 配置项，可配置标识符的围绕符（例如 MySQL 的 ` 符）
