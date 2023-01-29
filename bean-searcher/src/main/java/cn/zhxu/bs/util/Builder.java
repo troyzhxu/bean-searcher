@@ -217,17 +217,6 @@ public class Builder<B extends Builder<B>> {
 //        return (B) this;
 //    }
 
-    /**
-     * Deprecated from v3.8.1
-     * Please use {@link FieldFns#name(FieldFn)} directly
-     * @param fieldFn 方法引用
-     * @return 属性名
-     */
-    @Deprecated
-    protected String toFieldName(FieldFn<?, ?> fieldFn) {
-        return FieldFns.name(fieldFn);
-    }
-
     @SafeVarargs
     protected final <T> String[] toFields(FieldFn<T, ?>... fieldFns) {
         String[] fields = new String[fieldFns.length];
