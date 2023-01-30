@@ -1,4 +1,4 @@
-package cn.zhxu.bs.param;
+package cn.zhxu.bs;
 
 import cn.zhxu.bs.operator.*;
 
@@ -8,12 +8,12 @@ import cn.zhxu.bs.operator.*;
  * @author Troy.Zhou @ 2017-03-20
  *
  */
-public class Operator {
+public class FieldOps {
 
 	/**
 	 * 等于
 	 */
-	public static final Class<cn.zhxu.bs.operator.Equal> Equal = Equal.class;
+	public static final Class<Equal> Equal = Equal.class;
 
 	/**
 	 * 不等于
@@ -28,7 +28,7 @@ public class Operator {
 	/**
 	 * 大于
 	 */
-	public static final Class<cn.zhxu.bs.operator.GreaterThan> GreaterThan = GreaterThan.class;
+	public static final Class<GreaterThan> GreaterThan = GreaterThan.class;
 	
 	/**
 	 * 小于等于
@@ -64,7 +64,7 @@ public class Operator {
 	 * 包含
 	 * like '%xxx%'
 	 */
-	public static final Class<cn.zhxu.bs.operator.Contain> Contain = Contain.class;
+	public static final Class<Contain> Contain = Contain.class;
 
 	/**
 	 * 以 .. 开始
@@ -77,7 +77,17 @@ public class Operator {
 	 * like '%xxx'
 	 */
 	public static final Class<EndWith> EndWith = EndWith.class;
-	
+
+	/**
+	 * like {v1} or like {v1}
+	 */
+	public static final Class<OrLike> OrLike = OrLike.class;
+
+	/**
+	 * not like {v}
+	 */
+	public static final Class<NotLike> NotLike = NotLike.class;
+
 	/**
 	 * 在 .. 和 .. 之间
 	 */
@@ -86,22 +96,13 @@ public class Operator {
 	/**
 	 * 不在 .. 和 .. 之间
 	 */
-	public static final Class<cn.zhxu.bs.operator.NotBetween> NotBetween = NotBetween.class;
+	public static final Class<NotBetween> NotBetween = NotBetween.class;
 
 	/**
 	 * 在列表中
 	 * in (...)
 	 */
-	public static final Class<cn.zhxu.bs.operator.InList> InList = InList.class;
-
-	/**
-	 * 多值
-	 * in (...)
-	 * Deprecated from v3.3.0
-	 * @see #InList
-	 */
-	@Deprecated
-	public static final Class<InList> MultiValue = InList;
+	public static final Class<InList> InList = InList.class;
 
 	/**
 	 * 不在某个集合内

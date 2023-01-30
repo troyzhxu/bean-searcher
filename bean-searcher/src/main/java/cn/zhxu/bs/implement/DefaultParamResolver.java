@@ -367,7 +367,7 @@ public class DefaultParamResolver implements ParamResolver {
 
 	protected FieldOp allowedOperator(FieldOp op, Class<? extends FieldOp>[] onlyOn) {
 		if (op == null) {
-			Object tOp = onlyOn.length == 0 ? Operator.Equal : onlyOn[0];
+			Object tOp = onlyOn.length == 0 ? FieldOps.Equal : onlyOn[0];
 			return fieldOpPool.getFieldOp(tOp);
 		}
 		if (onlyOn.length == 0) {
