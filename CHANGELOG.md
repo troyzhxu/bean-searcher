@@ -1,4 +1,13 @@
-# v4.0.0.alpha3
+# v4.0.0.alpha4
+
+### ✨ Features
+
+* Bean Searcher
+  * rename `cn.zhxu.bs.param.Operator` to `cn.zhxu.bs.FieldOps`
+
+* Bean Searcher Boot Starter
+
+# v4.0.0.alpha3 @ 2023-01-29
 
 ### ✨ Features
 
