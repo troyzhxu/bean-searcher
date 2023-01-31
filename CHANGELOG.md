@@ -2,10 +2,11 @@
 
 ### ✨ Features
 
-* Bean Searcher
-  * rename `cn.zhxu.bs.param.Operator` to `cn.zhxu.bs.FieldOps`
+* 重构 `cn.zhxu.bs.param.Operator` -> `cn.zhxu.bs.FieldOps`
 
-* Bean Searcher Boot Starter
+### 🐛 Bug Fixes
+
+* 修正 `MapUtils.of(..)` 为 `static` 方法。
 
 # v4.0.0.alpha3 @ 2023-01-29
 

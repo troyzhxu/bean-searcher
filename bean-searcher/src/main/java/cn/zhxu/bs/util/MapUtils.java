@@ -55,7 +55,7 @@ public class MapUtils {
 	 * @return Map 对象
 	 * @since v4.0.0
 	 */
-	public Map<String, Object> of(String key, Object value) {
+	public static Map<String, Object> of(String key, Object value) {
 		Map<String, Object> map = new HashMap<>();
 		map.put(key, value);
 		return map;
@@ -70,7 +70,7 @@ public class MapUtils {
 	 * @return Map 对象
 	 * @since v4.0.0
 	 */
-	public Map<String, Object> of(String key1, Object value1, String key2, Object value2) {
+	public static Map<String, Object> of(String key1, Object value1, String key2, Object value2) {
 		Map<String, Object> map = new HashMap<>();
 		map.put(key1, value1);
 		map.put(key2, value2);
@@ -84,7 +84,7 @@ public class MapUtils {
 	 * @return Map 对象
 	 * @since v4.0.0
 	 */
-	public <T> Map<String, Object> of(FieldFns.FieldFn<T, ?> key, Object value) {
+	public static <T> Map<String, Object> of(FieldFns.FieldFn<T, ?> key, Object value) {
 		Map<String, Object> map = new HashMap<>();
 		map.put(FieldFns.name(key), value);
 		return map;
@@ -99,7 +99,7 @@ public class MapUtils {
 	 * @return Map 对象
 	 * @since v4.0.0
 	 */
-	public <T> Map<String, Object> of(FieldFns.FieldFn<T, ?> key1, Object value1, FieldFns.FieldFn<T, ?> key2, Object value2) {
+	public static <T> Map<String, Object> of(FieldFns.FieldFn<T, ?> key1, Object value1, FieldFns.FieldFn<T, ?> key2, Object value2) {
 		Map<String, Object> map = new HashMap<>();
 		map.put(FieldFns.name(key1), value1);
 		map.put(FieldFns.name(key2), value2);
