@@ -4,7 +4,10 @@ import cn.zhxu.bs.FieldConvertor;
 import cn.zhxu.bs.FieldMeta;
 import cn.zhxu.bs.bean.DbType;
 import cn.zhxu.bs.implement.DefaultBeanReflector;
+import cn.zhxu.bs.util.StringUtils;
 import cn.zhxu.xjson.JsonKit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * [字符串 to 数字] 字段转换器
@@ -13,6 +16,20 @@ import cn.zhxu.xjson.JsonKit;
  * @since v4.0.0
  */
 public class JsonFieldConvertor implements FieldConvertor.BFieldConvertor {
+
+    static final Logger log = LoggerFactory.getLogger(JsonFieldConvertor.class);
+
+    /**
+     * 当遇到某些值 JSON 解析异常时，是否自动捕获（即忽略）
+     * @since v4.0.1
+     */
+    private boolean catchError;
+
+    public JsonFieldConvertor() { }
+
+    public JsonFieldConvertor(boolean catchError) {
+        this.catchError = catchError;
+    }
 
     @Override
     public boolean supports(FieldMeta meta, Class<?> valueType) {
@@ -24,7 +41,28 @@ public class JsonFieldConvertor implements FieldConvertor.BFieldConvertor {
 
     @Override
     public Object convert(FieldMeta meta, Object value) {
-        return JsonKit.toBean(meta.getType(), (String) value);
+        String json = (String) value;
+        if (StringUtils.isBlank(json)) {
+            return null;
+        }
+        Class<?> type = meta.getType();
+        if (catchError) {
+            try {
+                return JsonKit.toBean(type, json);
+            } catch (Exception e) {
+                log.warn("Json parse error [{}] for {}, the value is: {}", e.getClass().getName(), type, json);
+                return null;
+            }
+        }
+        return JsonKit.toBean(type, json);
+    }
+
+    public boolean isCatchError() {
+        return catchError;
+    }
+
+    public void setCatchError(boolean catchError) {
+        this.catchError = catchError;
     }
 
 }

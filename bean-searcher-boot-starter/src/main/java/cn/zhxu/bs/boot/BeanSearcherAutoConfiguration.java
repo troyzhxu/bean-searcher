@@ -276,8 +276,9 @@ public class BeanSearcherAutoConfiguration {
 	@ConditionalOnClass(JsonKit.class)
 	@ConditionalOnProperty(name = "bean-searcher.field-convertor.use-json", havingValue = "true", matchIfMissing = true)
 	@ConditionalOnMissingBean(JsonFieldConvertor.class)
-	public JsonFieldConvertor jsonFieldConvertor() {
-		return new JsonFieldConvertor();
+	public JsonFieldConvertor jsonFieldConvertor(BeanSearcherProperties config) {
+		BeanSearcherProperties.FieldConvertor conf = config.getFieldConvertor();
+		return new JsonFieldConvertor(conf.isJsonCatchError());
 	}
 
 	@Bean

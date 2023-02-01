@@ -667,6 +667,13 @@ public class BeanSearcherProperties {
 		private boolean useJson = true;
 
 		/**
+		 * 使用 {@link JsonFieldConvertor } 时，当遇到某些值 JSON 解析异常时，是否自动捕获（即忽略）
+		 * @see JsonFieldConvertor#setCatchError(boolean)
+		 * @since v4.0.1
+		 */
+		private boolean jsonCatchError = false;
+
+		/**
 		 * 是否启用 {@link ListFieldConvertor }，默认为 true
 		 * @since v4.0.0
 		 */
@@ -796,6 +803,14 @@ public class BeanSearcherProperties {
 
 		public void setUseJson(boolean useJson) {
 			this.useJson = useJson;
+		}
+
+		public boolean isJsonCatchError() {
+			return jsonCatchError;
+		}
+
+		public void setJsonCatchError(boolean jsonCatchError) {
+			this.jsonCatchError = jsonCatchError;
 		}
 
 		public boolean isUseList() {
