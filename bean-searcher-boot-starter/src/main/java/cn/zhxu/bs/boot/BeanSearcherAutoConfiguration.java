@@ -272,13 +272,22 @@ public class BeanSearcherAutoConfiguration {
 		return convertor;
 	}
 
-	@Bean
+	/**
+	 * 注解 @ConditionalOnClass 不能与 @Bean 放在一起，否则当没有条件中的 Class 时，会出现错误：
+	 * java.lang.ArrayStoreException: sun.reflect.annotation.TypeNotPresentExceptionProxy
+	 */
+	@Configuration
 	@ConditionalOnClass(JsonKit.class)
 	@ConditionalOnProperty(name = "bean-searcher.field-convertor.use-json", havingValue = "true", matchIfMissing = true)
 	@ConditionalOnMissingBean(JsonFieldConvertor.class)
-	public JsonFieldConvertor jsonFieldConvertor(BeanSearcherProperties config) {
-		BeanSearcherProperties.FieldConvertor conf = config.getFieldConvertor();
-		return new JsonFieldConvertor(conf.isJsonFailOnError());
+	public static class JsonFieldConvertorConfig {
+
+		@Bean
+		public JsonFieldConvertor jsonFieldConvertor(BeanSearcherProperties config) {
+			BeanSearcherProperties.FieldConvertor conf = config.getFieldConvertor();
+			return new JsonFieldConvertor(conf.isJsonFailOnError());
+		}
+
 	}
 
 	@Bean
