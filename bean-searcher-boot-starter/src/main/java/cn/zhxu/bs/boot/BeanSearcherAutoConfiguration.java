@@ -278,7 +278,7 @@ public class BeanSearcherAutoConfiguration {
 	@ConditionalOnMissingBean(JsonFieldConvertor.class)
 	public JsonFieldConvertor jsonFieldConvertor(BeanSearcherProperties config) {
 		BeanSearcherProperties.FieldConvertor conf = config.getFieldConvertor();
-		return new JsonFieldConvertor(conf.isJsonCatchError());
+		return new JsonFieldConvertor(conf.isJsonFailOnError());
 	}
 
 	@Bean

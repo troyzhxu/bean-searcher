@@ -3,9 +3,9 @@
 ### ✨ Features
 
 * Bean Searcher
-  * 增强 `JsonFieldConvertor` 字段转换器，新增 `catchError` 字段，可配置遇到某些值 JSON 解析异常时，是否自动捕获（即忽略）
+  * 增强 `JsonFieldConvertor` 字段转换器，新增 `failOnError` 字段，可配置遇到某些值 JSON 解析异常时，是否自动捕获（即忽略）
 * Bean Searcher Boot Starter
-  * 新增 `bean-searcher.field-convertor.json-catch-error` 配置项，表示是否自动捕获 JSON 解析错误，默认 `false`
+  * 新增 `bean-searcher.field-convertor.json-fail-on-error` 配置项，表示是否自动捕获 JSON 解析错误，默认 `true`
 
 # v4.0.0 @ 2023-01-31
 

@@ -20,15 +20,15 @@ public class JsonFieldConvertor implements FieldConvertor.BFieldConvertor {
     static final Logger log = LoggerFactory.getLogger(JsonFieldConvertor.class);
 
     /**
-     * 当遇到某些值 JSON 解析异常时，是否自动捕获（即忽略）
+     * 当遇到某些值 JSON 解析异常时，是否抛出异常
      * @since v4.0.1
      */
-    private boolean catchError;
+    private boolean failOnError = true;
 
     public JsonFieldConvertor() { }
 
-    public JsonFieldConvertor(boolean catchError) {
-        this.catchError = catchError;
+    public JsonFieldConvertor(boolean failOnError) {
+        this.failOnError = failOnError;
     }
 
     @Override
@@ -46,23 +46,23 @@ public class JsonFieldConvertor implements FieldConvertor.BFieldConvertor {
             return null;
         }
         Class<?> type = meta.getType();
-        if (catchError) {
-            try {
-                return JsonKit.toBean(type, json);
-            } catch (Exception e) {
-                log.warn("Json parse error [{}] for {}, the value is: {}", e.getClass().getName(), type, json);
-                return null;
-            }
+        if (failOnError) {
+            return JsonKit.toBean(type, json);
         }
-        return JsonKit.toBean(type, json);
+        try {
+            return JsonKit.toBean(type, json);
+        } catch (Exception e) {
+            log.warn("Json parse error [{}] for {}, the value is: {}", e.getClass().getName(), type, json);
+            return null;
+        }
     }
 
-    public boolean isCatchError() {
-        return catchError;
+    public boolean isFailOnError() {
+        return failOnError;
     }
 
-    public void setCatchError(boolean catchError) {
-        this.catchError = catchError;
+    public void setFailOnError(boolean failOnError) {
+        this.failOnError = failOnError;
     }
 
 }
