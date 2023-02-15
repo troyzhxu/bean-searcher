@@ -7,6 +7,11 @@
 * Bean Searcher Boot Starter
   * 新增 `bean-searcher.field-convertor.json-fail-on-error` 配置项，表示是否自动捕获 JSON 解析错误，默认 `true`
 
+### 🐛 Bug Fixes
+
+* Bean Searcher Boot Starter
+  * 修复 未添加 [`xjsonkit`](https://gitee.com/troyzhxu/xjsonkit) 相关依赖时，会启动报错的问题：https://gitee.com/troyzhxu/bean-searcher/issues/I6F4LS
+
 # v4.0.0 @ 2023-01-31
 
 ### ✨ Features
