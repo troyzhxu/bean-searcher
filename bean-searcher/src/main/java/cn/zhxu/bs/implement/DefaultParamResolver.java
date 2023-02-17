@@ -325,7 +325,7 @@ public class DefaultParamResolver implements ParamResolver {
 			return null;
 		}
 		DbType dbType = meta.getDbType();
-		if (dbType.getType().isInstance(value)) {
+		if (dbType.getType() != null && dbType.getType().isInstance(value)) {
 			return value;
 		}
 		Class<?> vType = value.getClass();
