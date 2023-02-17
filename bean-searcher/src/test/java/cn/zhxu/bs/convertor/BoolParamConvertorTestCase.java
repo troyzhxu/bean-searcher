@@ -1,8 +1,10 @@
 package cn.zhxu.bs.convertor;
 
-import cn.zhxu.bs.bean.DbType;
 import org.junit.Assert;
 import org.junit.Test;
+
+import cn.zhxu.bs.FieldMeta;
+import cn.zhxu.bs.bean.DbType;
 
 public class BoolParamConvertorTestCase {
 
@@ -26,34 +28,36 @@ public class BoolParamConvertorTestCase {
     }
 
     void assertSupports(DbType dbType, boolean supports) {
-        Assert.assertEquals(supports, convertor.supports(dbType, Byte.class));
-        Assert.assertEquals(supports, convertor.supports(dbType, Short.class));
-        Assert.assertEquals(supports, convertor.supports(dbType, Integer.class));
-        Assert.assertEquals(supports, convertor.supports(dbType, Long.class));
-        Assert.assertEquals(supports, convertor.supports(dbType, String.class));
+        final FieldMeta meta = new FieldMeta(null, null, null, null, false, null, dbType);
+        Assert.assertEquals(supports, convertor.supports(meta, Byte.class));
+        Assert.assertEquals(supports, convertor.supports(meta, Short.class));
+        Assert.assertEquals(supports, convertor.supports(meta, Integer.class));
+        Assert.assertEquals(supports, convertor.supports(meta, Long.class));
+        Assert.assertEquals(supports, convertor.supports(meta, String.class));
     }
 
 
     @Test
     public void test_convert() {
-        Assert.assertEquals(true, convertor.convert(DbType.BOOL, 1));
-        Assert.assertEquals(true, convertor.convert(DbType.BOOL, true));
-        Assert.assertEquals(true, convertor.convert(DbType.BOOL, "true"));
-        Assert.assertEquals(true, convertor.convert(DbType.BOOL, "on"));
-        Assert.assertEquals(true, convertor.convert(DbType.BOOL, "TRUE"));
-        Assert.assertEquals(true, convertor.convert(DbType.BOOL, "ON"));
-        Assert.assertEquals(false, convertor.convert(DbType.BOOL, 0));
-        Assert.assertEquals(false, convertor.convert(DbType.BOOL, false));
-        Assert.assertEquals(false, convertor.convert(DbType.BOOL, "false"));
-        Assert.assertEquals(false, convertor.convert(DbType.BOOL, "f"));
-        Assert.assertEquals(false, convertor.convert(DbType.BOOL, "off"));
-        Assert.assertEquals(false, convertor.convert(DbType.BOOL, "n"));
-        Assert.assertEquals(false, convertor.convert(DbType.BOOL, "no"));
-        Assert.assertEquals(false, convertor.convert(DbType.BOOL, "FALSE"));
-        Assert.assertEquals(false, convertor.convert(DbType.BOOL, "F"));
-        Assert.assertEquals(false, convertor.convert(DbType.BOOL, "OFF"));
-        Assert.assertEquals(false, convertor.convert(DbType.BOOL, "N"));
-        Assert.assertEquals(false, convertor.convert(DbType.BOOL, "NO"));
+        FieldMeta meta = new FieldMeta(null, null, null, null, false, null, DbType.BOOL);
+        Assert.assertEquals(true, convertor.convert(meta, 1));
+        Assert.assertEquals(true, convertor.convert(meta, true));
+        Assert.assertEquals(true, convertor.convert(meta, "true"));
+        Assert.assertEquals(true, convertor.convert(meta, "on"));
+        Assert.assertEquals(true, convertor.convert(meta, "TRUE"));
+        Assert.assertEquals(true, convertor.convert(meta, "ON"));
+        Assert.assertEquals(false, convertor.convert(meta, 0));
+        Assert.assertEquals(false, convertor.convert(meta, false));
+        Assert.assertEquals(false, convertor.convert(meta, "false"));
+        Assert.assertEquals(false, convertor.convert(meta, "f"));
+        Assert.assertEquals(false, convertor.convert(meta, "off"));
+        Assert.assertEquals(false, convertor.convert(meta, "n"));
+        Assert.assertEquals(false, convertor.convert(meta, "no"));
+        Assert.assertEquals(false, convertor.convert(meta, "FALSE"));
+        Assert.assertEquals(false, convertor.convert(meta, "F"));
+        Assert.assertEquals(false, convertor.convert(meta, "OFF"));
+        Assert.assertEquals(false, convertor.convert(meta, "N"));
+        Assert.assertEquals(false, convertor.convert(meta, "NO"));
     }
 
 }

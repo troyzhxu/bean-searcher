@@ -1,9 +1,8 @@
 package cn.zhxu.bs;
 
-import cn.zhxu.bs.bean.DbType;
-import cn.zhxu.bs.param.FetchType;
-
 import java.util.Map;
+
+import cn.zhxu.bs.param.FetchType;
 
 /**
  * 请求参数解析器接口
@@ -28,18 +27,18 @@ public interface ParamResolver {
 	interface Convertor {
 
 		/**
-		 * @param dbType 需转换的目标类型
+		 * @param meta      字段元信息
 		 * @param valueType 值类型
 		 * @return 是否支持
 		 */
-		boolean supports(DbType dbType, Class<?> valueType);
+		boolean supports(FieldMeta meta, Class<?> valueType);
 
 		/**
-		 * @param dbType 目标类型
+		 * @param meta  字段元信息
 		 * @param value 待转换的值
 		 * @return 转换后的值
 		 */
-		Object convert(DbType dbType, Object value);
+		Object convert(FieldMeta meta, Object value);
 
 	}
 

@@ -1,16 +1,17 @@
 package cn.zhxu.bs.convertor;
 
 
-import cn.zhxu.bs.ParamResolver;
-import cn.zhxu.bs.bean.DbType;
-import cn.zhxu.bs.util.StringUtils;
-
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalQueries;
 import java.time.temporal.TemporalQuery;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import cn.zhxu.bs.FieldMeta;
+import cn.zhxu.bs.ParamResolver;
+import cn.zhxu.bs.bean.DbType;
+import cn.zhxu.bs.util.StringUtils;
 
 /**
  * [String | java.util.Date | LocalDate to java.sql.Date] 参数值转换器
@@ -27,12 +28,12 @@ public class TimeParamConvertor implements ParamResolver.Convertor {
     static final DateTimeFormatter FORMATTER_2 = DateTimeFormatter.ofPattern("HH:mm");
 
     @Override
-    public boolean supports(DbType dbType, Class<?> valueType) {
-        return dbType == DbType.TIME && (String.class == valueType || LocalTime.class == valueType);
+    public boolean supports(FieldMeta meta, Class<?> valueType) {
+        return meta.getDbType() == DbType.TIME && (String.class == valueType || LocalTime.class == valueType);
     }
 
     @Override
-    public Object convert(DbType dbType, Object value) {
+    public Object convert(FieldMeta meta, Object value) {
         if (value instanceof String) {
             String s = ((String) value).trim();
             if (StringUtils.isBlank(s)) {

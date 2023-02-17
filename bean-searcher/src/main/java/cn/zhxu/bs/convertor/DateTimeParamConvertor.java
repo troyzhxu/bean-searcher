@@ -1,12 +1,14 @@
 package cn.zhxu.bs.convertor;
 
 
-import cn.zhxu.bs.ParamResolver;
-import cn.zhxu.bs.bean.DbType;
-import cn.zhxu.bs.util.StringUtils;
+import static java.time.temporal.ChronoField.EPOCH_DAY;
 
 import java.sql.Timestamp;
-import java.time.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
@@ -14,7 +16,10 @@ import java.util.Date;
 import java.util.TimeZone;
 import java.util.regex.Pattern;
 
-import static java.time.temporal.ChronoField.EPOCH_DAY;
+import cn.zhxu.bs.FieldMeta;
+import cn.zhxu.bs.ParamResolver;
+import cn.zhxu.bs.bean.DbType;
+import cn.zhxu.bs.util.StringUtils;
 
 /**
  * [String | java.util.Date | LocalDate to java.sql.Date] 参数值转换器
@@ -34,12 +39,12 @@ public class DateTimeParamConvertor implements ParamResolver.Convertor {
     private TimeZone timeZone = TimeZone.getDefault();
 
     @Override
-    public boolean supports(DbType dbType, Class<?> valueType) {
-        return dbType == DbType.DATETIME && (String.class == valueType || Date.class == valueType || LocalDate.class == valueType || LocalDateTime.class == valueType);
+    public boolean supports(FieldMeta meta, Class<?> valueType) {
+        return meta.getDbType() == DbType.DATETIME && (String.class == valueType || Date.class == valueType || LocalDate.class == valueType || LocalDateTime.class == valueType);
     }
 
     @Override
-    public Object convert(DbType dbType, Object value) {
+    public Object convert(FieldMeta meta, Object value) {
         if (value instanceof String) {
             String s = ((String) value).trim().replaceAll("/", "-");
             if (StringUtils.isBlank(s)) {

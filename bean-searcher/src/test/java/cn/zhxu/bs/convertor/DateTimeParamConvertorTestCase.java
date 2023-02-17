@@ -1,9 +1,5 @@
 package cn.zhxu.bs.convertor;
 
-import cn.zhxu.bs.bean.DbType;
-import org.junit.Assert;
-import org.junit.Test;
-
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -11,6 +7,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+import cn.zhxu.bs.FieldMeta;
+import cn.zhxu.bs.bean.DbType;
 
 public class DateTimeParamConvertorTestCase {
 
@@ -34,10 +36,11 @@ public class DateTimeParamConvertorTestCase {
     }
 
     void assertSupports(DbType dbType, boolean supports) {
-        Assert.assertEquals(supports, convertor.supports(dbType, Date.class));
-        Assert.assertEquals(supports, convertor.supports(dbType, LocalDate.class));
-        Assert.assertEquals(supports, convertor.supports(dbType, LocalDateTime.class));
-        Assert.assertEquals(supports, convertor.supports(dbType, String.class));
+        FieldMeta meta = new FieldMeta(null, null, null, null, false, null, dbType);
+        Assert.assertEquals(supports, convertor.supports(meta, Date.class));
+        Assert.assertEquals(supports, convertor.supports(meta, LocalDate.class));
+        Assert.assertEquals(supports, convertor.supports(meta, LocalDateTime.class));
+        Assert.assertEquals(supports, convertor.supports(meta, String.class));
     }
 
     @Test
@@ -60,7 +63,8 @@ public class DateTimeParamConvertorTestCase {
     }
 
     private void assertConvert(Object value, int hour, int minutes, int seconds) {
-        Object date = convertor.convert(DbType.DATETIME, value);
+        FieldMeta meta = new FieldMeta(null, null, null, null, false, null, DbType.DATETIME);
+        Object date = convertor.convert(meta, value);
         Assert.assertTrue(date instanceof java.sql.Timestamp);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime((java.sql.Timestamp) date);

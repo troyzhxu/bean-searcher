@@ -1,10 +1,12 @@
 package cn.zhxu.bs.convertor;
 
-import cn.zhxu.bs.bean.DbType;
+import java.math.BigDecimal;
+
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.math.BigDecimal;
+import cn.zhxu.bs.FieldMeta;
+import cn.zhxu.bs.bean.DbType;
 
 public class NumberParamConvertorTestCase {
 
@@ -28,14 +30,15 @@ public class NumberParamConvertorTestCase {
     }
 
     void assertSupports(DbType dbType, boolean supports) {
-        Assert.assertEquals(supports, convertor.supports(dbType, String.class));
-        Assert.assertEquals(supports, convertor.supports(dbType, Byte.class));
-        Assert.assertEquals(supports, convertor.supports(dbType, Short.class));
-        Assert.assertEquals(supports, convertor.supports(dbType, Integer.class));
-        Assert.assertEquals(supports, convertor.supports(dbType, Long.class));
-        Assert.assertEquals(supports, convertor.supports(dbType, Float.class));
-        Assert.assertEquals(supports, convertor.supports(dbType, Double.class));
-        Assert.assertEquals(supports, convertor.supports(dbType, BigDecimal.class));
+        FieldMeta meta = new FieldMeta(null, null, null, null, false, null, dbType);
+        Assert.assertEquals(supports, convertor.supports(meta, String.class));
+        Assert.assertEquals(supports, convertor.supports(meta, Byte.class));
+        Assert.assertEquals(supports, convertor.supports(meta, Short.class));
+        Assert.assertEquals(supports, convertor.supports(meta, Integer.class));
+        Assert.assertEquals(supports, convertor.supports(meta, Long.class));
+        Assert.assertEquals(supports, convertor.supports(meta, Float.class));
+        Assert.assertEquals(supports, convertor.supports(meta, Double.class));
+        Assert.assertEquals(supports, convertor.supports(meta, BigDecimal.class));
     }
 
     @Test
@@ -61,7 +64,8 @@ public class NumberParamConvertorTestCase {
     }
 
     private void assertConvert(DbType dbType, Object value) {
-        Object num = convertor.convert(dbType, value);
+        FieldMeta meta = new FieldMeta(null, null, null, null, false, null, dbType);
+        Object num = convertor.convert(meta, value);
         Assert.assertTrue(dbType.getType().isInstance(num));
         String numStr = num.toString();
         String valStr = value.toString();
