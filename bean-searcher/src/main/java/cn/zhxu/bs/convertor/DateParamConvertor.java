@@ -1,10 +1,6 @@
 package cn.zhxu.bs.convertor;
 
 
-import cn.zhxu.bs.ParamResolver;
-import cn.zhxu.bs.bean.DbType;
-import cn.zhxu.bs.util.StringUtils;
-
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,6 +12,11 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import cn.zhxu.bs.FieldMeta;
+import cn.zhxu.bs.ParamResolver;
+import cn.zhxu.bs.bean.DbType;
+import cn.zhxu.bs.util.StringUtils;
 
 /**
  * [String | java.util.Date | LocalDate to java.sql.Date] 参数值转换器
@@ -30,15 +31,15 @@ public class DateParamConvertor implements ParamResolver.Convertor {
     static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @Override
-    public boolean supports(DbType dbType, Class<?> valueType) {
-        return dbType == DbType.DATE && (
+    public boolean supports(FieldMeta meta, Class<?> valueType) {
+        return meta.getDbType() == DbType.DATE && (
                 String.class == valueType || Date.class == valueType || LocalDate.class == valueType ||
                         Timestamp.class == valueType || LocalDateTime.class == valueType
         );
     }
 
     @Override
-    public Object convert(DbType dbType, Object value) {
+    public Object convert(FieldMeta meta, Object value) {
         if (value instanceof String) {
             String s = ((String) value).trim().replaceAll("/", "-");
             if (StringUtils.isBlank(s)) {

@@ -1,10 +1,11 @@
 package cn.zhxu.bs.convertor;
 
+import java.math.BigDecimal;
+
+import cn.zhxu.bs.FieldMeta;
 import cn.zhxu.bs.ParamResolver;
 import cn.zhxu.bs.bean.DbType;
 import cn.zhxu.bs.util.StringUtils;
-
-import java.math.BigDecimal;
 
 /**
  * [String | Number to Number] 参数值转换器
@@ -15,23 +16,25 @@ import java.math.BigDecimal;
 public class NumberParamConvertor implements ParamResolver.Convertor {
 
     @Override
-    public boolean supports(DbType dbType, Class<?> valueType) {
+    public boolean supports(FieldMeta meta, Class<?> valueType) {
+        DbType dbType = meta.getDbType();
         return (
-            dbType == DbType.BYTE || dbType == DbType.SHORT || dbType == DbType.INT || dbType == DbType.LONG ||
-            dbType == DbType.FLOAT || dbType == DbType.DOUBLE || dbType == DbType.DECIMAL
+                dbType == DbType.BYTE || dbType == DbType.SHORT || dbType == DbType.INT || dbType == DbType.LONG ||
+                        dbType == DbType.FLOAT || dbType == DbType.DOUBLE || dbType == DbType.DECIMAL
         ) && (
-            String.class == valueType || Byte.class == valueType || Short.class == valueType ||
-                    Integer.class == valueType || Long.class == valueType || Float.class == valueType ||
-                    Double.class == valueType || BigDecimal.class == valueType
+                String.class == valueType || Byte.class == valueType || Short.class == valueType ||
+                        Integer.class == valueType || Long.class == valueType || Float.class == valueType ||
+                        Double.class == valueType || BigDecimal.class == valueType
         );
     }
 
     @Override
-    public Object convert(DbType dbType, Object value) {
+    public Object convert(FieldMeta meta, Object value) {
+        DbType dbType = meta.getDbType();
         try {
             return doConvert(dbType, value);
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Field type is " + dbType +", but the param value is: " + value, e);
+            throw new IllegalArgumentException("Field type is " + dbType + ", but the param value is: " + value, e);
         }
     }
 

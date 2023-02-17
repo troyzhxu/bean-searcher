@@ -1,5 +1,6 @@
 package cn.zhxu.bs.convertor;
 
+import cn.zhxu.bs.FieldMeta;
 import cn.zhxu.bs.ParamResolver;
 import cn.zhxu.bs.bean.DbType;
 import cn.zhxu.bs.util.StringUtils;
@@ -15,14 +16,14 @@ public class BoolParamConvertor implements ParamResolver.Convertor {
     private String[] falseValues = new String[] { "0", "OFF", "FALSE", "N", "NO", "F" };
 
     @Override
-    public boolean supports(DbType dbType, Class<?> valueType) {
-        return dbType == DbType.BOOL && (
+    public boolean supports(FieldMeta meta, Class<?> valueType) {
+        return meta.getDbType() == DbType.BOOL && (
                 String.class == valueType || Number.class.isAssignableFrom(valueType) || Boolean.class == valueType
         );
     }
 
     @Override
-    public Object convert(DbType dbType, Object value) {
+    public Object convert(FieldMeta meta, Object value) {
         if (value instanceof Boolean) {
             return value;
         }
