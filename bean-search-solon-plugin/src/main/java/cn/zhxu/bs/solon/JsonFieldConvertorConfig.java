@@ -20,7 +20,7 @@ public class JsonFieldConvertorConfig {
 
     @Bean
     public JsonFieldConvertor jsonFieldConvertor(BeanSearcherProperties config) {
-        if(context.hasWrap(JsonFieldConvertor.class) == false){
+        if(context.hasWrap(JsonFieldConvertor.class)){
             return null;
         }
 

@@ -340,7 +340,7 @@ public class BeanSearcherAutoConfiguration {
 	@Condition(hasProperty = "${bean-searcher.field-convertor.use-list}=true")
 	public ListFieldConvertor listFieldConvertor(BeanSearcherProperties config,
 				ObjectProvider<List<ListFieldConvertor.Convertor<?>>> convertorsProvider) {
-		if(context.hasWrap(ListFieldConvertor.class) == false){
+		if(context.hasWrap(ListFieldConvertor.class)){
 			return null;
 		}
 
@@ -352,7 +352,7 @@ public class BeanSearcherAutoConfiguration {
 
 	@Bean
 	public BeanReflector beanReflector(ObjectProvider<List<BFieldConvertor>> convertorsProvider) {
-		if(context.hasWrap(BeanReflector.class) == false){
+		if(context.hasWrap(BeanReflector.class)){
 			return null;
 		}
 
@@ -365,7 +365,7 @@ public class BeanSearcherAutoConfiguration {
 
 	@Bean
 	public DbMapping dbMapping(BeanSearcherProperties config) {
-		if(context.hasWrap(DbMapping.class) == false){
+		if(context.hasWrap(DbMapping.class)){
 			return null;
 		}
 
@@ -384,7 +384,7 @@ public class BeanSearcherAutoConfiguration {
 
 	@Bean
 	public MetaResolver metaResolver(DbMapping dbMapping, ObjectProvider<SnippetResolver> snippetResolver) {
-		if(context.hasWrap(MetaResolver.class) == false){
+		if(context.hasWrap(MetaResolver.class)){
 			return null;
 		}
 
@@ -402,7 +402,7 @@ public class BeanSearcherAutoConfiguration {
 									 BeanReflector beanReflector,
 									 ObjectProvider<List<SqlInterceptor>> interceptors,
 									 ObjectProvider<List<ResultFilter>> processors) {
-		if(context.hasWrap(BeanSearcher.class) == false){
+		if(context.hasWrap(BeanSearcher.class)){
 			return null;
 		}
 
@@ -420,7 +420,7 @@ public class BeanSearcherAutoConfiguration {
 	@Bean
 	@Condition(hasProperty = "${bean-searcher.field-convertor.use-date-format}=true")
 	public DateFormatFieldConvertor dateFormatFieldConvertor(BeanSearcherProperties config) {
-		if(context.hasWrap(DateFormatFieldConvertor.class) == false){
+		if(context.hasWrap(DateFormatFieldConvertor.class)){
 			return null;
 		}
 
@@ -444,7 +444,7 @@ public class BeanSearcherAutoConfiguration {
 	@Bean
 	@Condition(hasProperty = "${bean-searcher.field-convertor.use-b2-m}=true")
 	public B2MFieldConvertor b2mFieldConvertor(ObjectProvider<List<BFieldConvertor>> convertors) {
-		if(context.hasWrap(B2MFieldConvertor.class) == false){
+		if(context.hasWrap(B2MFieldConvertor.class)){
 			return null;
 		}
 
@@ -465,7 +465,7 @@ public class BeanSearcherAutoConfiguration {
 								   ObjectProvider<List<SqlInterceptor>> interceptors,
 								   ObjectProvider<List<ResultFilter>> resultFilters) {
 
-		if(context.hasWrap(MapSearcher.class) == false){
+		if(context.hasWrap(MapSearcher.class)){
 			return null;
 		}
 
