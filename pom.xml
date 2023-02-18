@@ -15,8 +15,8 @@
 
 	<modules>
 		<module>bean-searcher</module>
-		<module>bean-search-solon-plugin</module>
 		<module>bean-searcher-boot-starter</module>
+		<module>bean-searcher-solon-plugin</module>
 	</modules>
 
 	<properties>
