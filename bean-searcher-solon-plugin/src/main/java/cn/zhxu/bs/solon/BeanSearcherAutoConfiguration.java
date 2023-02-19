@@ -12,8 +12,8 @@ import cn.zhxu.bs.group.GroupResolver;
 import cn.zhxu.bs.solon.BeanSearcherProperties.Sql;
 import cn.zhxu.bs.convertor.*;
 import cn.zhxu.bs.implement.*;
-import cn.zhxu.bs.solon.beans.ObjectProvider;
 import cn.zhxu.bs.util.LRUCache;
+import cn.zhxu.xjson.JsonKit;
 import org.noear.solon.annotation.Bean;
 import org.noear.solon.annotation.Condition;
 import org.noear.solon.annotation.Configuration;
@@ -22,11 +22,9 @@ import org.noear.solon.core.AopContext;
 
 import javax.sql.DataSource;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
+
 
 
 @Configuration
@@ -35,12 +33,13 @@ public class BeanSearcherAutoConfiguration {
 	@Inject
 	AopContext context;
 
-	@Bean
-	public PageExtractor pageExtractor(BeanSearcherProperties config) {
-		if(context.hasWrap(PageExtractor.class)){
-			return null;
-		}
+	//放到这儿，减少注入处理代码
+	@Inject
+	BeanSearcherProperties config;
 
+	@Bean
+	@Condition(onMissingBean = PageExtractor.class)
+	public PageExtractor pageExtractor() {
 		BeanSearcherProperties.Params.Pagination conf = config.getParams().getPagination();
 		String type = conf.getType();
 		BasePageExtractor extractor;
@@ -48,8 +47,7 @@ public class BeanSearcherAutoConfiguration {
 			PageSizeExtractor p = new PageSizeExtractor();
 			p.setPageName(conf.getPage());
 			extractor = p;
-		}  else
-		if (BeanSearcherProperties.Params.Pagination.TYPE_OFFSET.equals(type)) {
+		} else if (BeanSearcherProperties.Params.Pagination.TYPE_OFFSET.equals(type)) {
 			PageOffsetExtractor p = new PageOffsetExtractor();
 			p.setOffsetName(conf.getOffset());
 			extractor = p;
@@ -77,12 +75,9 @@ public class BeanSearcherAutoConfiguration {
 	}
 
 	@Bean
-	public Dialect dialect(BeanSearcherProperties config) {
-		if(context.hasWrap(Dialect.class)){
-			return null;
-		}
-
-		BeanSearcherProperties.Sql.Dialect dialect = config.getSql().getDialect();
+	@Condition(onMissingBean = Dialect.class)
+	public Dialect dialect() {
+		Sql.Dialect dialect = config.getSql().getDialect();
 		if (dialect == null) {
 			throw new IllegalConfigException("Invalid config: [bean-searcher.sql.dialect] can not be null.");
 		}
@@ -101,10 +96,9 @@ public class BeanSearcherAutoConfiguration {
 	}
 
 	@Bean
-	public FieldOpPool fieldOpPool(Dialect dialect, ObjectProvider<List<FieldOp>> fieldOps) {
-		if(context.hasWrap(FieldOpPool.class)){
-			return null;
-		}
+	@Condition(onMissingBean = FieldOpPool.class)
+	public FieldOpPool fieldOpPool(Dialect dialect) {
+		List<FieldOp> fieldOps = context.getBeansOfType(FieldOp.class);
 
 		FieldOpPool pool = new FieldOpPool();
 		ifAvailable(fieldOps, ops -> ops.forEach(pool::addFieldOp));
@@ -113,20 +107,14 @@ public class BeanSearcherAutoConfiguration {
 	}
 
 	@Bean
+	@Condition(onMissingBean = ExprParser.Factory.class)
 	public ExprParser.Factory parserFactory() {
-		if(context.hasWrap(ExprParser.Factory.class)){
-			return null;
-		}
-
 		return new DefaultParserFactory();
 	}
 
 	@Bean
-	public GroupResolver groupResolver(BeanSearcherProperties config, ExprParser.Factory parserFactory) {
-		if(context.hasWrap(GroupResolver.class)){
-			return null;
-		}
-
+	@Condition(onMissingBean = GroupResolver.class)
+	public GroupResolver groupResolver(ExprParser.Factory parserFactory) {
 		DefaultGroupResolver groupResolver = new DefaultGroupResolver();
 		BeanSearcherProperties.Params.Group conf = config.getParams().getGroup();
 		groupResolver.setEnabled(conf.isEnable());
@@ -137,71 +125,48 @@ public class BeanSearcherAutoConfiguration {
 	}
 
 	@Bean
+	@Condition(onMissingBean = BoolParamConvertor.class)
 	public BoolParamConvertor boolParamConvertor() {
-		if(context.hasWrap(BoolParamConvertor.class)){
-			return null;
-		}
-
 		return new BoolParamConvertor();
 	}
 
 	@Bean
+	@Condition(onMissingBean = NumberParamConvertor.class)
 	public NumberParamConvertor numberParamConvertor() {
-		if(context.hasWrap(NumberParamConvertor.class)){
-			return null;
-		}
-
 		return new NumberParamConvertor();
 	}
 
 	@Bean
+	@Condition(onMissingBean = DateParamConvertor.class)
 	public DateParamConvertor dateParamConvertor() {
-		if(context.hasWrap(DateParamConvertor.class)){
-			return null;
-		}
-
 		return new DateParamConvertor();
 	}
 
 	@Bean
+	@Condition(onMissingBean = TimeParamConvertor.class)
 	public TimeParamConvertor timeParamConvertor() {
-		if(context.hasWrap(TimeParamConvertor.class)){
-			return null;
-		}
-
 		return new TimeParamConvertor();
 	}
 
 	@Bean
+	@Condition(onMissingBean = DateTimeParamConvertor.class)
 	public DateTimeParamConvertor dateTimeParamConvertor() {
-		if(context.hasWrap(DateTimeParamConvertor.class)){
-			return null;
-		}
-
 		return new DateTimeParamConvertor();
 	}
 
 	@Bean
-	public SizeLimitParamFilter sizeLimitParamFilter(BeanSearcherProperties config) {
-		if(context.hasWrap(SizeLimitParamFilter.class)){
-			return null;
-		}
-
+	@Condition(onMissingBean = SizeLimitParamFilter.class)
+	public SizeLimitParamFilter sizeLimitParamFilter() {
 		return new SizeLimitParamFilter(config.getParams().getFilter().getMaxParaMapSize());
 	}
 
 	@Bean
+	@Condition(onMissingBean = ParamResolver.class)
 	public ParamResolver paramResolver(PageExtractor pageExtractor,
 									   FieldOpPool fieldOpPool,
 									   List<ParamFilter> paramFilters,
 									   List<ParamResolver.Convertor> convertors,
-									   GroupResolver groupResolver,
-									   BeanSearcherProperties config) {
-
-		if(context.hasWrap(ParamResolver.class)){
-			return null;
-		}
-
+									   GroupResolver groupResolver) {
 		DefaultParamResolver paramResolver = new DefaultParamResolver(convertors, paramFilters);
 		paramResolver.setPageExtractor(pageExtractor);
 		paramResolver.setFieldOpPool(fieldOpPool);
@@ -222,26 +187,21 @@ public class BeanSearcherAutoConfiguration {
 	}
 
 	@Bean
+	@Condition(onMissingBean = SqlResolver.class)
 	public SqlResolver sqlResolver(Dialect dialect) {
-		if(context.hasWrap(SqlResolver.class)){
-			return null;
-		}
-
 		return new DefaultSqlResolver(dialect);
 	}
 
 	@Bean
-	public SqlExecutor sqlExecutor(ObjectProvider<DataSource> dataSource,
-								   ObjectProvider<List<NamedDataSource>> namedDataSources,
-								   ObjectProvider<SqlExecutor.SlowListener> slowListener,
-								   BeanSearcherProperties config) {
-		if(context.hasWrap(SqlExecutor.class)){
-			return null;
-		}
+	@Condition(onMissingBean = SqlExecutor.class)
+	public SqlExecutor sqlExecutor() {
+		DataSource dataSource = context.getBean(DataSource.class);
+		List<NamedDataSource> namedDataSources = context.getBeansOfType(NamedDataSource.class);
+		SqlExecutor.SlowListener slowListener = context.getBean(SqlExecutor.SlowListener.class);
 
-		DefaultSqlExecutor executor = new DefaultSqlExecutor(dataSource.getIfAvailable());
+		DefaultSqlExecutor executor = new DefaultSqlExecutor(dataSource);
 		ifAvailable(namedDataSources, ndsList -> {
-			for (NamedDataSource nds: ndsList) {
+			for (NamedDataSource nds : ndsList) {
 				executor.setDataSource(nds.getName(), nds.getDataSource());
 			}
 		});
@@ -251,42 +211,30 @@ public class BeanSearcherAutoConfiguration {
 	}
 
 	@Bean
-	@Condition(hasProperty = "${bean-searcher.field-convertor.use-number}=true")
+	@Condition(onMissingBean = NumberFieldConvertor.class,
+			onProperty = "${bean-searcher.field-convertor.use-number:true}=true")
 	public NumberFieldConvertor numberFieldConvertor() {
-		if(context.hasWrap(NumberFieldConvertor.class)){
-			return null;
-		}
-
 		return new NumberFieldConvertor();
 	}
 
 	@Bean
-	@Condition(hasProperty = "${bean-searcher.field-convertor.use-str-num}=true")
+	@Condition(onMissingBean = StrNumFieldConvertor.class,
+			onProperty = "${bean-searcher.field-convertor.use-str-num:true}=true")
 	public StrNumFieldConvertor strNumFieldConvertor() {
-		if(context.hasWrap(StrNumFieldConvertor.class)){
-			return null;
-		}
-
 		return new StrNumFieldConvertor();
 	}
 
 	@Bean
-	@Condition(hasProperty = "${bean-searcher.field-convertor.use-bool-num}=true")
+	@Condition(onMissingBean = BoolNumFieldConvertor.class,
+			onProperty = "${bean-searcher.field-convertor.use-bool-num:true}=true")
 	public BoolNumFieldConvertor boolNumFieldConvertor() {
-		if(context.hasWrap(BoolNumFieldConvertor.class)){
-			return null;
-		}
-
 		return new BoolNumFieldConvertor();
 	}
 
 	@Bean
-	@Condition(hasProperty = "${bean-searcher.field-convertor.use-bool}=true")
-	public BoolFieldConvertor boolFieldConvertor(BeanSearcherProperties config) {
-		if(context.hasWrap(BoolFieldConvertor.class)){
-			return null;
-		}
-
+	@Condition(onMissingBean = BoolFieldConvertor.class,
+			onProperty = "${bean-searcher.field-convertor.use-bool:true}=true")
+	public BoolFieldConvertor boolFieldConvertor() {
 		String[] falseValues = config.getFieldConvertor().getBoolFalseValues();
 		BoolFieldConvertor convertor = new BoolFieldConvertor();
 		if (falseValues != null) {
@@ -296,12 +244,9 @@ public class BeanSearcherAutoConfiguration {
 	}
 
 	@Bean
-	@Condition(hasProperty = "${bean-searcher.field-convertor.use-date}=true")
-	public DateFieldConvertor dateFieldConvertor(BeanSearcherProperties config) {
-		if(context.hasWrap(DateFieldConvertor.class)){
-			return null;
-		}
-
+	@Condition(onMissingBean = DateFieldConvertor.class,
+			onProperty = "${bean-searcher.field-convertor.use-date:true}=true")
+	public DateFieldConvertor dateFieldConvertor() {
 		DateFieldConvertor convertor = new DateFieldConvertor();
 		ZoneId zoneId = config.getFieldConvertor().getZoneId();
 		if (zoneId != null) {
@@ -311,22 +256,16 @@ public class BeanSearcherAutoConfiguration {
 	}
 
 	@Bean
-	@Condition(hasProperty = "${bean-searcher.field-convertor.use-time}=true")
+	@Condition(onMissingBean = TimeFieldConvertor.class,
+			onProperty = "${bean-searcher.field-convertor.use-time:true}=true")
 	public TimeFieldConvertor timeFieldConvertor() {
-		if(context.hasWrap(TimeFieldConvertor.class)){
-			return null;
-		}
-
 		return new TimeFieldConvertor();
 	}
 
 	@Bean
-	@Condition(hasProperty = "${bean-searcher.field-convertor.use-enum}=true")
-	public EnumFieldConvertor enumFieldConvertor(BeanSearcherProperties config) {
-		if(context.hasWrap(EnumFieldConvertor.class)){
-			return null;
-		}
-
+	@Condition(onMissingBean = EnumFieldConvertor.class,
+			onProperty = "${bean-searcher.field-convertor.use-enum:true}=true")
+	public EnumFieldConvertor enumFieldConvertor() {
 		BeanSearcherProperties.FieldConvertor conf = config.getFieldConvertor();
 		EnumFieldConvertor convertor = new EnumFieldConvertor();
 		convertor.setFailOnError(conf.isEnumFailOnError());
@@ -335,14 +274,13 @@ public class BeanSearcherAutoConfiguration {
 	}
 
 
-
 	@Bean
-	@Condition(hasProperty = "${bean-searcher.field-convertor.use-list}=true")
-	public ListFieldConvertor listFieldConvertor(BeanSearcherProperties config,
-				ObjectProvider<List<ListFieldConvertor.Convertor<?>>> convertorsProvider) {
-		if(context.hasWrap(ListFieldConvertor.class) == false){
-			return null;
-		}
+	@Condition(onMissingBean = ListFieldConvertor.class,
+			onProperty = "${bean-searcher.field-convertor.use-list:true}=true")
+	public ListFieldConvertor listFieldConvertor() {
+		List<ListFieldConvertor.Convertor> tmp = context.getBeansOfType(ListFieldConvertor.Convertor.class);
+		List<ListFieldConvertor.Convertor<?>> convertorsProvider = new ArrayList<>();
+		tmp.forEach(c -> convertorsProvider.add(c));
 
 		BeanSearcherProperties.FieldConvertor conf = config.getFieldConvertor();
 		ListFieldConvertor convertor = new ListFieldConvertor(conf.getListItemSeparator());
@@ -351,24 +289,19 @@ public class BeanSearcherAutoConfiguration {
 	}
 
 	@Bean
-	public BeanReflector beanReflector(ObjectProvider<List<BFieldConvertor>> convertorsProvider) {
-		if(context.hasWrap(BeanReflector.class) == false){
-			return null;
-		}
+	@Condition(onMissingBean = BeanReflector.class)
+	public BeanReflector beanReflector() {
+		List<BFieldConvertor> convertorsProvider = context.getBeansOfType(BFieldConvertor.class);
 
-		List<BFieldConvertor> convertors = convertorsProvider.getIfAvailable();
-		if (convertors != null) {
-			return new DefaultBeanReflector(convertors);
+		if (convertorsProvider != null) {
+			return new DefaultBeanReflector(convertorsProvider);
 		}
 		return new DefaultBeanReflector();
 	}
 
 	@Bean
-	public DbMapping dbMapping(BeanSearcherProperties config) {
-		if(context.hasWrap(DbMapping.class) == false){
-			return null;
-		}
-
+	@Condition(onMissingBean = DbMapping.class)
+	public DbMapping dbMapping() {
 		DefaultDbMapping mapping = new DefaultDbMapping();
 		Sql.DefaultMapping conf = config.getSql().getDefaultMapping();
 		mapping.setTablePrefix(conf.getTablePrefix());
@@ -383,10 +316,9 @@ public class BeanSearcherAutoConfiguration {
 	}
 
 	@Bean
-	public MetaResolver metaResolver(DbMapping dbMapping, ObjectProvider<SnippetResolver> snippetResolver) {
-		if(context.hasWrap(MetaResolver.class) == false){
-			return null;
-		}
+	@Condition(onMissingBean = MetaResolver.class)
+	public MetaResolver metaResolver(DbMapping dbMapping) {
+		SnippetResolver snippetResolver = context.getBean(SnippetResolver.class);
 
 		DefaultMetaResolver metaResolver = new DefaultMetaResolver(dbMapping);
 		ifAvailable(snippetResolver, metaResolver::setSnippetResolver);
@@ -394,17 +326,16 @@ public class BeanSearcherAutoConfiguration {
 	}
 
 	@Bean
-	@Condition(hasProperty = "${bean-searcher.use-bean-searcher}=true")
+	@Condition(onMissingBean = BeanSearcher.class,
+			onProperty = "${bean-searcher.use-bean-searcher:true}=true")
 	public BeanSearcher beanSearcher(MetaResolver metaResolver,
 									 ParamResolver paramResolver,
 									 SqlResolver sqlResolver,
 									 SqlExecutor sqlExecutor,
-									 BeanReflector beanReflector,
-									 ObjectProvider<List<SqlInterceptor>> interceptors,
-									 ObjectProvider<List<ResultFilter>> processors) {
-		if(context.hasWrap(BeanSearcher.class) == false){
-			return null;
-		}
+									 BeanReflector beanReflector) {
+
+		List<SqlInterceptor> interceptors = context.getBeansOfType(SqlInterceptor.class);
+		List<ResultFilter> processors = context.getBeansOfType(ResultFilter.class);
 
 		DefaultBeanSearcher searcher = new DefaultBeanSearcher();
 		searcher.setMetaResolver(metaResolver);
@@ -418,12 +349,9 @@ public class BeanSearcherAutoConfiguration {
 	}
 
 	@Bean
-	@Condition(hasProperty = "${bean-searcher.field-convertor.use-date-format}=true")
-	public DateFormatFieldConvertor dateFormatFieldConvertor(BeanSearcherProperties config) {
-		if(context.hasWrap(DateFormatFieldConvertor.class) == false){
-			return null;
-		}
-
+	@Condition(onMissingBean = DateFormatFieldConvertor.class,
+			onProperty = "${bean-searcher.field-convertor.use-date-format:true}=true")
+	public DateFormatFieldConvertor dateFormatFieldConvertor() {
 		BeanSearcherProperties.FieldConvertor conf = config.getFieldConvertor();
 		Map<String, String> dateFormats = conf.getDateFormats();
 		ZoneId zoneId = conf.getZoneId();
@@ -442,41 +370,36 @@ public class BeanSearcherAutoConfiguration {
 	}
 
 	@Bean
-	@Condition(hasProperty = "${bean-searcher.field-convertor.use-b2-m}=true")
-	public B2MFieldConvertor b2mFieldConvertor(ObjectProvider<List<BFieldConvertor>> convertors) {
-		if(context.hasWrap(B2MFieldConvertor.class) == false){
-			return null;
-		}
+	@Condition(onMissingBean = B2MFieldConvertor.class,
+			onProperty = "${bean-searcher.field-convertor.use-b2-m}=true")
+	public B2MFieldConvertor b2mFieldConvertor() {
+		List<BFieldConvertor> convertors = context.getBeansOfType(BFieldConvertor.class);
 
-		List<BFieldConvertor> list = convertors.getIfAvailable();
-		if (list != null) {
-			return new B2MFieldConvertor(list);
+		if (convertors != null) {
+			return new B2MFieldConvertor(convertors);
 		}
 		return new B2MFieldConvertor(Collections.emptyList());
 	}
 
-	@Bean
-	@Condition(hasProperty = "${bean-searcher.use-map-searcher}=true")
+	@Bean //@Primary
+	@Condition(onMissingBean = MapSearcher.class,
+			onProperty = "${bean-searcher.use-map-searcher:true}=true")
 	public MapSearcher mapSearcher(MetaResolver metaResolver,
 								   ParamResolver paramResolver,
 								   SqlResolver sqlResolver,
-								   SqlExecutor sqlExecutor,
-								   ObjectProvider<List<MFieldConvertor>> convertors,
-								   ObjectProvider<List<SqlInterceptor>> interceptors,
-								   ObjectProvider<List<ResultFilter>> resultFilters) {
-
-		if(context.hasWrap(MapSearcher.class) == false){
-			return null;
-		}
+								   SqlExecutor sqlExecutor) {
+		List<MFieldConvertor> convertors = context.getBeansOfType(MFieldConvertor.class);
+		List<SqlInterceptor> interceptors = context.getBeansOfType(SqlInterceptor.class);
+		List<ResultFilter> resultFilters = context.getBeansOfType(ResultFilter.class);
 
 		DefaultMapSearcher searcher = new DefaultMapSearcher();
 		searcher.setMetaResolver(metaResolver);
 		searcher.setParamResolver(paramResolver);
 		searcher.setSqlResolver(sqlResolver);
 		searcher.setSqlExecutor(sqlExecutor);
-		List<MFieldConvertor> list = convertors.getIfAvailable();
-		if (list != null) {
-			List<MFieldConvertor> newList = new ArrayList<>(list);
+
+		if (convertors != null) {
+			List<MFieldConvertor> newList = new ArrayList<>(convertors);
 			// 让 DateFormatFieldConvertor 排在前面
 			newList.sort((o1, o2) -> {
 				if (o1 instanceof DateFormatFieldConvertor) {
@@ -494,13 +417,20 @@ public class BeanSearcherAutoConfiguration {
 		return searcher;
 	}
 
-	private <T> void ifAvailable(ObjectProvider<T> provider, Consumer<T> consumer) {
-		// 为了兼容 1.x 的 SpringBoot，最低兼容到 v1.4
-		// 不直接使用 ObjectProvider.ifAvailable 方法
-		T dependency = provider.getIfAvailable();
-		if (dependency != null) {
-			consumer.accept(dependency);
-		}
+	//
+	// 在 springboot 那边，是用单独类处理的；在 solon 这边，用函数
+	//
+	@Bean
+	@Condition(onClass = JsonKit.class,
+			onProperty = "${bean-searcher.field-convertor.use-json:true}=true")
+	public JsonFieldConvertor jsonFieldConvertor() {
+		BeanSearcherProperties.FieldConvertor conf = config.getFieldConvertor();
+		return new JsonFieldConvertor(conf.isJsonFailOnError());
 	}
 
+	private <T> void ifAvailable(T provider, Consumer<T> consumer) {
+		if (provider != null) {
+			consumer.accept(provider);
+		}
+	}
 }
