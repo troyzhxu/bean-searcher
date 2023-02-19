@@ -33,9 +33,13 @@ public class BeanSearcherAutoConfiguration {
 	@Inject
 	AopContext context;
 
+	//放到这儿，减少注入处理代码
+	@Inject
+	BeanSearcherProperties config;
+
 	@Bean
 	@Condition(onMissingBean = PageExtractor.class)
-	public PageExtractor pageExtractor(BeanSearcherProperties config) {
+	public PageExtractor pageExtractor() {
 		BeanSearcherProperties.Params.Pagination conf = config.getParams().getPagination();
 		String type = conf.getType();
 		BasePageExtractor extractor;
@@ -72,7 +76,7 @@ public class BeanSearcherAutoConfiguration {
 
 	@Bean
 	@Condition(onMissingBean = Dialect.class)
-	public Dialect dialect(BeanSearcherProperties config) {
+	public Dialect dialect() {
 		Sql.Dialect dialect = config.getSql().getDialect();
 		if (dialect == null) {
 			throw new IllegalConfigException("Invalid config: [bean-searcher.sql.dialect] can not be null.");
@@ -110,7 +114,7 @@ public class BeanSearcherAutoConfiguration {
 
 	@Bean
 	@Condition(onMissingBean = GroupResolver.class)
-	public GroupResolver groupResolver(BeanSearcherProperties config, ExprParser.Factory parserFactory) {
+	public GroupResolver groupResolver(ExprParser.Factory parserFactory) {
 		DefaultGroupResolver groupResolver = new DefaultGroupResolver();
 		BeanSearcherProperties.Params.Group conf = config.getParams().getGroup();
 		groupResolver.setEnabled(conf.isEnable());
@@ -152,7 +156,7 @@ public class BeanSearcherAutoConfiguration {
 
 	@Bean
 	@Condition(onMissingBean = SizeLimitParamFilter.class)
-	public SizeLimitParamFilter sizeLimitParamFilter(BeanSearcherProperties config) {
+	public SizeLimitParamFilter sizeLimitParamFilter() {
 		return new SizeLimitParamFilter(config.getParams().getFilter().getMaxParaMapSize());
 	}
 
@@ -162,8 +166,7 @@ public class BeanSearcherAutoConfiguration {
 									   FieldOpPool fieldOpPool,
 									   List<ParamFilter> paramFilters,
 									   List<ParamResolver.Convertor> convertors,
-									   GroupResolver groupResolver,
-									   BeanSearcherProperties config) {
+									   GroupResolver groupResolver) {
 		DefaultParamResolver paramResolver = new DefaultParamResolver(convertors, paramFilters);
 		paramResolver.setPageExtractor(pageExtractor);
 		paramResolver.setFieldOpPool(fieldOpPool);
@@ -191,7 +194,7 @@ public class BeanSearcherAutoConfiguration {
 
 	@Bean
 	@Condition(onMissingBean = SqlExecutor.class)
-	public SqlExecutor sqlExecutor(BeanSearcherProperties config) {
+	public SqlExecutor sqlExecutor() {
 		DataSource dataSource = context.getBean(DataSource.class);
 		List<NamedDataSource> namedDataSources = context.getBeansOfType(NamedDataSource.class);
 		SqlExecutor.SlowListener slowListener = context.getBean(SqlExecutor.SlowListener.class);
@@ -231,7 +234,7 @@ public class BeanSearcherAutoConfiguration {
 	@Bean
 	@Condition(onMissingBean = BoolFieldConvertor.class,
 			onProperty = "${bean-searcher.field-convertor.use-bool:true}=true")
-	public BoolFieldConvertor boolFieldConvertor(BeanSearcherProperties config) {
+	public BoolFieldConvertor boolFieldConvertor() {
 		String[] falseValues = config.getFieldConvertor().getBoolFalseValues();
 		BoolFieldConvertor convertor = new BoolFieldConvertor();
 		if (falseValues != null) {
@@ -243,7 +246,7 @@ public class BeanSearcherAutoConfiguration {
 	@Bean
 	@Condition(onMissingBean = DateFieldConvertor.class,
 			onProperty = "${bean-searcher.field-convertor.use-date:true}=true")
-	public DateFieldConvertor dateFieldConvertor(BeanSearcherProperties config) {
+	public DateFieldConvertor dateFieldConvertor() {
 		DateFieldConvertor convertor = new DateFieldConvertor();
 		ZoneId zoneId = config.getFieldConvertor().getZoneId();
 		if (zoneId != null) {
@@ -262,7 +265,7 @@ public class BeanSearcherAutoConfiguration {
 	@Bean
 	@Condition(onMissingBean = EnumFieldConvertor.class,
 			onProperty = "${bean-searcher.field-convertor.use-enum:true}=true")
-	public EnumFieldConvertor enumFieldConvertor(BeanSearcherProperties config) {
+	public EnumFieldConvertor enumFieldConvertor() {
 		BeanSearcherProperties.FieldConvertor conf = config.getFieldConvertor();
 		EnumFieldConvertor convertor = new EnumFieldConvertor();
 		convertor.setFailOnError(conf.isEnumFailOnError());
@@ -274,7 +277,7 @@ public class BeanSearcherAutoConfiguration {
 	@Bean
 	@Condition(onMissingBean = ListFieldConvertor.class,
 			onProperty = "${bean-searcher.field-convertor.use-list:true}=true")
-	public ListFieldConvertor listFieldConvertor(BeanSearcherProperties config) {
+	public ListFieldConvertor listFieldConvertor() {
 		List<ListFieldConvertor.Convertor> tmp = context.getBeansOfType(ListFieldConvertor.Convertor.class);
 		List<ListFieldConvertor.Convertor<?>> convertorsProvider = new ArrayList<>();
 		tmp.forEach(c -> convertorsProvider.add(c));
@@ -298,7 +301,7 @@ public class BeanSearcherAutoConfiguration {
 
 	@Bean
 	@Condition(onMissingBean = DbMapping.class)
-	public DbMapping dbMapping(BeanSearcherProperties config) {
+	public DbMapping dbMapping() {
 		DefaultDbMapping mapping = new DefaultDbMapping();
 		Sql.DefaultMapping conf = config.getSql().getDefaultMapping();
 		mapping.setTablePrefix(conf.getTablePrefix());
@@ -348,7 +351,7 @@ public class BeanSearcherAutoConfiguration {
 	@Bean
 	@Condition(onMissingBean = DateFormatFieldConvertor.class,
 			onProperty = "${bean-searcher.field-convertor.use-date-format:true}=true")
-	public DateFormatFieldConvertor dateFormatFieldConvertor(BeanSearcherProperties config) {
+	public DateFormatFieldConvertor dateFormatFieldConvertor() {
 		BeanSearcherProperties.FieldConvertor conf = config.getFieldConvertor();
 		Map<String, String> dateFormats = conf.getDateFormats();
 		ZoneId zoneId = conf.getZoneId();
@@ -420,7 +423,7 @@ public class BeanSearcherAutoConfiguration {
 	@Bean
 	@Condition(onClass = JsonKit.class,
 			onProperty = "${bean-searcher.field-convertor.use-json:true}=true")
-	public JsonFieldConvertor jsonFieldConvertor(BeanSearcherProperties config) {
+	public JsonFieldConvertor jsonFieldConvertor() {
 		BeanSearcherProperties.FieldConvertor conf = config.getFieldConvertor();
 		return new JsonFieldConvertor(conf.isJsonFailOnError());
 	}
