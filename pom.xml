@@ -15,7 +15,7 @@
 
 	<modules>
 		<module>bean-searcher</module>
-		<module>bean-search-solon-plugin</module>
+		<module>bean-searcher-solon-plugin</module>
 		<module>bean-searcher-boot-starter</module>
 	</modules>
 
@@ -25,7 +25,7 @@
 		<slf4j.version>2.0.6</slf4j.version>
 		<xjsonkit.version>1.4.2</xjsonkit.version>
 		<spring.boot.version>3.0.2</spring.boot.version>
-		<solon.version>2.1.3</solon.version>
+		<solon.version>2.1.4-M1</solon.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
