@@ -1,3 +1,18 @@
+# v4.1.0
+
+### ✨ Features
+
+* Bean Searcher
+  * 优化：`ParamResolver.Convertor`：入参 `DbType` 修改为 `FieldMeta`
+  * 优化： 支持 `DbType` 为 `UNKNOWN` 时进行参数值转换，交由用户自己判断
+  * 重构：`ParamResolver.Convertor` -> `FieldConvertor.ParamConvertor`
+* Bean Searcher Solon Plugin
+  * 首版 Solon 插件
+
+* Contributors
+  
+
+
 # v4.0.1 @ 2023-02-25
 
 ### ✨ Features
