@@ -15,6 +15,12 @@ public class FieldMeta {
     private final BeanMeta<?> beanMeta;
 
     /**
+     * 字段名
+     * @since v4.1.0
+     */
+    private final String name;
+
+    /**
      * Java 字段
      */
     private final Field field;
@@ -45,9 +51,10 @@ public class FieldMeta {
      */
     private final DbType dbType;
 
-    public FieldMeta(BeanMeta<?> beanMeta, Field field, SqlSnippet fieldSql, String dbAlias, boolean conditional,
+    public FieldMeta(BeanMeta<?> beanMeta, String name, Field field, SqlSnippet fieldSql, String dbAlias, boolean conditional,
                      Class<? extends FieldOp>[] onlyOn, DbType dbType) {
         this.beanMeta = beanMeta;
+        this.name = name;
         this.field = field;
         this.fieldSql = fieldSql;
         this.dbAlias = dbAlias;

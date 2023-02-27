@@ -35,7 +35,7 @@ public class DateParamConvertorTestCase {
     }
 
     void assertSupports(DbType dbType, boolean supports) {
-        final FieldMeta meta = new FieldMeta(null, null, null, null, false, null, dbType);
+        final FieldMeta meta = new FieldMeta(null, null, null, null, null, false, null, dbType);
         Assert.assertEquals(supports, convertor.supports(meta, Date.class));
         Assert.assertEquals(supports, convertor.supports(meta, LocalDate.class));
         Assert.assertEquals(supports, convertor.supports(meta, Timestamp.class));
@@ -59,7 +59,7 @@ public class DateParamConvertorTestCase {
     }
 
     private void assertConvert(Object value) {
-        FieldMeta meta = new FieldMeta(null, null, null, null, false, null, DbType.DATE);
+        FieldMeta meta = new FieldMeta(null, null, null, null, null, false, null, DbType.DATE);
         Object date = convertor.convert(meta, value);
         Assert.assertTrue(date instanceof java.sql.Date);
         Calendar calendar = Calendar.getInstance();

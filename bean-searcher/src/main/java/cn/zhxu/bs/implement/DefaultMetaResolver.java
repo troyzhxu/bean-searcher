@@ -95,15 +95,16 @@ public class DefaultMetaResolver implements MetaResolver {
             }
             SqlSnippet fieldSql = snippetResolver.resolve(wrapper.column.getFieldSql());
             FieldMeta fieldMeta = new FieldMeta(
-                    beanMeta, wrapper.field, fieldSql, fieldAlias,
+                    beanMeta, wrapper.column.getName(),
+                    wrapper.field, fieldSql, fieldAlias,
                     wrapper.column.isConditional(),
                     wrapper.column.getOnlyOn(),
                     wrapper.column.getDbType()
             );
-            beanMeta.addFieldMeta(wrapper.field.getName(), fieldMeta);
+            beanMeta.addFieldMeta(fieldMeta.getName(), fieldMeta);
         }
         if (beanMeta.getFieldCount() == 0) {
-            throw new SearchException("[" + beanClass.getName() + "] is not a valid SearchBean, because there is no field mapping to database. Please see https://bs.zhxu.cn/guide/latest/bean.html#%E7%9C%81%E7%95%A5-dbfield for help.");
+            throw new SearchException("[" + beanClass.getName() + "] is not a valid SearchBean, because there is no field mapping to database. Please refer https://bs.zhxu.cn/guide/latest/bean.html#%E7%9C%81%E7%95%A5-dbfield for help.");
         }
         return beanMeta;
     }

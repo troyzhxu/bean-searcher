@@ -155,6 +155,11 @@ public interface DbMapping {
     class Column {
 
         /**
+         * 列名
+         */
+        private final String name;
+
+        /**
          * 该字段对应的 SQL 片段
          */
         private final String fieldSql;
@@ -181,16 +186,21 @@ public interface DbMapping {
          */
         private final DbType dbType;
 
-        public Column(String fieldSql, boolean conditional, Class<? extends FieldOp>[] onlyOn, DbType dbType) {
-            this(fieldSql, conditional, onlyOn, null, dbType);
+        public Column(String name, String fieldSql, boolean conditional, Class<? extends FieldOp>[] onlyOn, DbType dbType) {
+            this(name, fieldSql, conditional, onlyOn, null, dbType);
         }
 
-        public Column(String fieldSql, boolean conditional, Class<? extends FieldOp>[] onlyOn, String alias, DbType dbType) {
+        public Column(String name, String fieldSql, boolean conditional, Class<? extends FieldOp>[] onlyOn, String alias, DbType dbType) {
+            this.name = name;
             this.fieldSql = fieldSql;
             this.conditional = conditional;
             this.onlyOn = onlyOn;
             this.alias = alias;
             this.dbType = dbType;
+        }
+
+        public String getName() {
+            return name;
         }
 
         public String getFieldSql() {

@@ -6,12 +6,17 @@
   * 优化：`ParamResolver.Convertor`：入参 `DbType` 修改为 `FieldMeta`
   * 优化： 支持 `DbType` 为 `UNKNOWN` 时进行参数值转换，交由用户自己判断
   * 重构：`ParamResolver.Convertor` -> `FieldConvertor.ParamConvertor`
+  * 优化：注解 `@DbField` 新增 `name` 属性
 * Bean Searcher Solon Plugin
   * 首版 Solon 插件
 
-* Contributors
-  
+### Contributors
 
+Thank you to all the contributors who worked on this release:
+
+  * [@VampireAchao](https://gitee.com/VampireAchao)
+  * [@noear_admin](https://gitee.com/noear_admin)
+  * [@troyzhxu](https://gitee.com/troyzhxu)
 
 # v4.0.1 @ 2023-02-25
 

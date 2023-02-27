@@ -30,7 +30,7 @@ public class NumberParamConvertorTestCase {
     }
 
     void assertSupports(DbType dbType, boolean supports) {
-        FieldMeta meta = new FieldMeta(null, null, null, null, false, null, dbType);
+        FieldMeta meta = new FieldMeta(null, null, null, null, null, false, null, dbType);
         Assert.assertEquals(supports, convertor.supports(meta, String.class));
         Assert.assertEquals(supports, convertor.supports(meta, Byte.class));
         Assert.assertEquals(supports, convertor.supports(meta, Short.class));
@@ -64,7 +64,7 @@ public class NumberParamConvertorTestCase {
     }
 
     private void assertConvert(DbType dbType, Object value) {
-        FieldMeta meta = new FieldMeta(null, null, null, null, false, null, dbType);
+        FieldMeta meta = new FieldMeta(null, null, null, null, null, false, null, dbType);
         Object num = convertor.convert(meta, value);
         Assert.assertTrue(dbType.getType().isInstance(num));
         String numStr = num.toString();

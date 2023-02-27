@@ -5,8 +5,6 @@ import cn.zhxu.bs.FieldOp;
 import cn.zhxu.bs.SearchException;
 import cn.zhxu.bs.bean.*;
 import cn.zhxu.bs.util.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.util.Objects;
@@ -19,8 +17,6 @@ import java.util.regex.Pattern;
  * @since v3.1.0 从 DefaultMetaResolver 里分离出来
  */
 public class DefaultDbMapping implements DbMapping {
-
-    protected static final Logger log = LoggerFactory.getLogger(DefaultDbMapping.class);
 
     @SuppressWarnings("unchecked")
     protected static final Class<FieldOp>[] EMPTY_OPERATORS = new Class[0];
@@ -106,10 +102,11 @@ public class DefaultDbMapping implements DbMapping {
             if (dbType == DbType.UNKNOWN) {
                 dbType = dbTypeMapper.map(field.getType());
             }
-            return new Column(fieldSql, dbField.conditional(), dbField.onlyOn(), dbField.alias(), dbType);
+            String name = StringUtils.isBlank(dbField.name()) ? field.getName() : dbField.name();
+            return new Column(name, fieldSql, dbField.conditional(), dbField.onlyOn(), dbField.alias(), dbType);
         }
         DbType dbType = dbTypeMapper.map(field.getType());
-        return new Column(fieldSql, true, EMPTY_OPERATORS, dbType);
+        return new Column(field.getName(), fieldSql, true, EMPTY_OPERATORS, dbType);
     }
 
     protected SearchBean getSearchBean(Class<?> beanClass) {

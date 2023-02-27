@@ -18,6 +18,13 @@ import java.lang.annotation.*;
 public @interface DbField {
 
 	/**
+	 * 字段属性名，用于衍生字段参数，不指定时，默认为实体类的属性名
+	 * @since v4.1.0
+	 * @return 字段属性名
+	 */
+	String name() default "";
+
+	/**
 	 * 用于指定属性对应数据库的哪张表的哪个字段，例如:
 	 * u.username
 	 * 别名 u 由  @SearchBean 注解的 tables 值指定
