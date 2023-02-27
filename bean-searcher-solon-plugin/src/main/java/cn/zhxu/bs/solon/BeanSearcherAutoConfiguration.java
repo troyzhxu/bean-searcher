@@ -3,15 +3,15 @@ package cn.zhxu.bs.solon;
 import cn.zhxu.bs.*;
 import cn.zhxu.bs.FieldConvertor.BFieldConvertor;
 import cn.zhxu.bs.FieldConvertor.MFieldConvertor;
+import cn.zhxu.bs.convertor.*;
 import cn.zhxu.bs.dialect.*;
 import cn.zhxu.bs.filter.SizeLimitParamFilter;
 import cn.zhxu.bs.group.DefaultGroupResolver;
 import cn.zhxu.bs.group.DefaultParserFactory;
 import cn.zhxu.bs.group.ExprParser;
 import cn.zhxu.bs.group.GroupResolver;
-import cn.zhxu.bs.solon.BeanSearcherProperties.Sql;
-import cn.zhxu.bs.convertor.*;
 import cn.zhxu.bs.implement.*;
+import cn.zhxu.bs.solon.BeanSearcherProperties.Sql;
 import cn.zhxu.bs.util.LRUCache;
 import cn.zhxu.xjson.JsonKit;
 import org.noear.solon.annotation.Bean;
@@ -22,7 +22,10 @@ import org.noear.solon.core.AopContext;
 
 import javax.sql.DataSource;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 
@@ -165,7 +168,7 @@ public class BeanSearcherAutoConfiguration {
 	public ParamResolver paramResolver(PageExtractor pageExtractor,
 									   FieldOpPool fieldOpPool,
 									   List<ParamFilter> paramFilters,
-									   List<ParamResolver.Convertor> convertors,
+									   List<FieldConvertor.ParamConvertor> convertors,
 									   GroupResolver groupResolver) {
 		DefaultParamResolver paramResolver = new DefaultParamResolver(convertors, paramFilters);
 		paramResolver.setPageExtractor(pageExtractor);

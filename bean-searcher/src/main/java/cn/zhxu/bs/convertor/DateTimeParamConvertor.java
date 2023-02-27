@@ -1,14 +1,13 @@
 package cn.zhxu.bs.convertor;
 
 
-import static java.time.temporal.ChronoField.EPOCH_DAY;
+import cn.zhxu.bs.FieldConvertor;
+import cn.zhxu.bs.FieldMeta;
+import cn.zhxu.bs.bean.DbType;
+import cn.zhxu.bs.util.StringUtils;
 
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
@@ -16,10 +15,7 @@ import java.util.Date;
 import java.util.TimeZone;
 import java.util.regex.Pattern;
 
-import cn.zhxu.bs.FieldMeta;
-import cn.zhxu.bs.ParamResolver;
-import cn.zhxu.bs.bean.DbType;
-import cn.zhxu.bs.util.StringUtils;
+import static java.time.temporal.ChronoField.EPOCH_DAY;
 
 /**
  * [String | java.util.Date | LocalDate to java.sql.Date] 参数值转换器
@@ -27,7 +23,7 @@ import cn.zhxu.bs.util.StringUtils;
  * @author Troy.Zhou @ 2022-06-14
  * @since v3.8.0
  */
-public class DateTimeParamConvertor implements ParamResolver.Convertor {
+public class DateTimeParamConvertor implements FieldConvertor.ParamConvertor {
 
     static final Pattern DATETIME_PATTERN = Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}");
 

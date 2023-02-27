@@ -1,34 +1,7 @@
 package cn.zhxu.bs.implement;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-
-import cn.zhxu.bs.BeanMeta;
-import cn.zhxu.bs.FieldMeta;
-import cn.zhxu.bs.FieldOp;
-import cn.zhxu.bs.FieldOpPool;
-import cn.zhxu.bs.FieldOps;
-import cn.zhxu.bs.IllegalParamException;
-import cn.zhxu.bs.PageExtractor;
-import cn.zhxu.bs.ParamFilter;
-import cn.zhxu.bs.ParamResolver;
-import cn.zhxu.bs.SearchParam;
-import cn.zhxu.bs.bean.DbType;
-import cn.zhxu.bs.convertor.BoolParamConvertor;
-import cn.zhxu.bs.convertor.DateParamConvertor;
-import cn.zhxu.bs.convertor.DateTimeParamConvertor;
-import cn.zhxu.bs.convertor.NumberParamConvertor;
-import cn.zhxu.bs.convertor.TimeParamConvertor;
+import cn.zhxu.bs.*;
+import cn.zhxu.bs.convertor.*;
 import cn.zhxu.bs.filter.SizeLimitParamFilter;
 import cn.zhxu.bs.group.DefaultGroupResolver;
 import cn.zhxu.bs.group.Group;
@@ -37,11 +10,11 @@ import cn.zhxu.bs.param.FetchType;
 import cn.zhxu.bs.param.FieldParam;
 import cn.zhxu.bs.param.OrderBy;
 import cn.zhxu.bs.param.Paging;
-import cn.zhxu.bs.util.Builder;
-import cn.zhxu.bs.util.MapBuilder;
-import cn.zhxu.bs.util.MapWrapper;
-import cn.zhxu.bs.util.ObjectUtils;
-import cn.zhxu.bs.util.StringUtils;
+import cn.zhxu.bs.util.*;
+
+import java.util.*;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * @author Troy.Zhou @ 2017-03-20
@@ -66,7 +39,7 @@ public class DefaultParamResolver implements ParamResolver {
 	 * @since v3.8.0
 	 * 用于对参数值进行转换
 	 */
-	private List<Convertor> convertors = new ArrayList<>();
+	private List<FieldConvertor.ParamConvertor> convertors = new ArrayList<>();
 
 	/**
 	 * 字段运算符池
@@ -144,7 +117,7 @@ public class DefaultParamResolver implements ParamResolver {
 		paramFilters.add(new SizeLimitParamFilter());
 	}
 
-	public DefaultParamResolver(List<Convertor> convertors, List<ParamFilter> paramFilters) {
+	public DefaultParamResolver(List<FieldConvertor.ParamConvertor> convertors, List<ParamFilter> paramFilters) {
 		setConvertors(convertors);
 		setParamFilters(paramFilters);
 	}
@@ -353,12 +326,12 @@ public class DefaultParamResolver implements ParamResolver {
 		if (value == null) {
 			return null;
 		}
-		DbType dbType = meta.getDbType();
-		if (dbType.getType() != null && dbType.getType().isInstance(value)) {
+		Class<?> type = meta.getDbType().getType();
+		if (type != null && type.isInstance(value)) {
 			return value;
 		}
 		Class<?> vType = value.getClass();
-		for (Convertor convertor : convertors) {
+		for (FieldConvertor.ParamConvertor convertor : convertors) {
 			if (convertor.supports(meta, vType)) {
 				return convertor.convert(meta, value);
 			}
@@ -557,15 +530,15 @@ public class DefaultParamResolver implements ParamResolver {
 		this.groupSeparator = Objects.requireNonNull(groupSeparator);
 	}
 
-	public List<Convertor> getConvertors() {
+	public List<FieldConvertor.ParamConvertor> getConvertors() {
 		return convertors;
 	}
 
-	public void setConvertors(List<Convertor> convertors) {
+	public void setConvertors(List<FieldConvertor.ParamConvertor> convertors) {
 		this.convertors = Objects.requireNonNull(convertors) ;
 	}
 
-	public void addConvertor(Convertor convertor) {
+	public void addConvertor(FieldConvertor.ParamConvertor convertor) {
 		this.convertors.add(convertor);
 	}
 

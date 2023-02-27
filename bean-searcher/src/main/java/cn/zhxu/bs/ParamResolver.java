@@ -1,8 +1,8 @@
 package cn.zhxu.bs;
 
-import java.util.Map;
-
 import cn.zhxu.bs.param.FetchType;
+
+import java.util.Map;
 
 /**
  * 请求参数解析器接口
@@ -19,27 +19,5 @@ public interface ParamResolver {
 	 * @throws IllegalParamException 抛出非法参数异常后将终止 SQL 查询
 	 * */
 	SearchParam resolve(BeanMeta<?> beanMeta, FetchType fetchType, Map<String, Object> paraMap) throws IllegalParamException;
-
-	/**
-	 * 参数值转换器
-	 * @since v3.8.0
-	 */
-	interface Convertor {
-
-		/**
-		 * @param meta      字段元信息
-		 * @param valueType 值类型
-		 * @return 是否支持
-		 */
-		boolean supports(FieldMeta meta, Class<?> valueType);
-
-		/**
-		 * @param meta  字段元信息
-		 * @param value 待转换的值
-		 * @return 转换后的值
-		 */
-		Object convert(FieldMeta meta, Object value);
-
-	}
 
 }

@@ -1,11 +1,11 @@
 package cn.zhxu.bs.convertor;
 
-import java.math.BigDecimal;
-
+import cn.zhxu.bs.FieldConvertor;
 import cn.zhxu.bs.FieldMeta;
-import cn.zhxu.bs.ParamResolver;
 import cn.zhxu.bs.bean.DbType;
 import cn.zhxu.bs.util.StringUtils;
+
+import java.math.BigDecimal;
 
 /**
  * [String | Number to Number] 参数值转换器
@@ -13,7 +13,7 @@ import cn.zhxu.bs.util.StringUtils;
  * @author Troy.Zhou @ 2022-06-14
  * @since v3.8.0
  */
-public class NumberParamConvertor implements ParamResolver.Convertor {
+public class NumberParamConvertor implements FieldConvertor.ParamConvertor {
 
     @Override
     public boolean supports(FieldMeta meta, Class<?> valueType) {

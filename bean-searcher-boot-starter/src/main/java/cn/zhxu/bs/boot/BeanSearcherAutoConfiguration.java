@@ -164,7 +164,7 @@ public class BeanSearcherAutoConfiguration {
 	public ParamResolver paramResolver(PageExtractor pageExtractor,
 									   FieldOpPool fieldOpPool,
 									   List<ParamFilter> paramFilters,
-									   List<ParamResolver.Convertor> convertors,
+									   List<FieldConvertor.ParamConvertor> convertors,
 									   GroupResolver groupResolver,
 									   BeanSearcherProperties config) {
 		DefaultParamResolver paramResolver = new DefaultParamResolver(convertors, paramFilters);

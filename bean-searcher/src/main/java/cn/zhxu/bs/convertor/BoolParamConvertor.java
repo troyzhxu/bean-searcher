@@ -1,7 +1,7 @@
 package cn.zhxu.bs.convertor;
 
+import cn.zhxu.bs.FieldConvertor;
 import cn.zhxu.bs.FieldMeta;
-import cn.zhxu.bs.ParamResolver;
 import cn.zhxu.bs.bean.DbType;
 import cn.zhxu.bs.util.StringUtils;
 
@@ -11,7 +11,7 @@ import cn.zhxu.bs.util.StringUtils;
  * @author Troy.Zhou @ 2022-06-14
  * @since v3.8.0
  */
-public class BoolParamConvertor implements ParamResolver.Convertor {
+public class BoolParamConvertor implements FieldConvertor.ParamConvertor {
 
     private String[] falseValues = new String[] { "0", "OFF", "FALSE", "N", "NO", "F" };
 

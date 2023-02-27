@@ -1,6 +1,11 @@
 package cn.zhxu.bs.convertor;
 
 
+import cn.zhxu.bs.FieldConvertor;
+import cn.zhxu.bs.FieldMeta;
+import cn.zhxu.bs.bean.DbType;
+import cn.zhxu.bs.util.StringUtils;
+
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalQueries;
@@ -8,18 +13,13 @@ import java.time.temporal.TemporalQuery;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import cn.zhxu.bs.FieldMeta;
-import cn.zhxu.bs.ParamResolver;
-import cn.zhxu.bs.bean.DbType;
-import cn.zhxu.bs.util.StringUtils;
-
 /**
  * [String | java.util.Date | LocalDate to java.sql.Date] 参数值转换器
  *
  * @author Troy.Zhou @ 2022-06-14
  * @since v3.8.0
  */
-public class TimeParamConvertor implements ParamResolver.Convertor {
+public class TimeParamConvertor implements FieldConvertor.ParamConvertor {
 
     static final Pattern TIME_PATTERN_1 = Pattern.compile("[0-9]{2}:[0-9]{2}:[0-9]{2}");
     static final Pattern TIME_PATTERN_2 = Pattern.compile("[0-9]{2}:[0-9]{2}");

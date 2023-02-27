@@ -5,7 +5,7 @@ import cn.zhxu.bs.implement.DefaultMapSearcher;
 
 /**
  * @author Troy.Zhou @ 2017-04-07
- * 
+ * <p>
  * 数据库字段值转换接口
  * 用于把 数据库查出的字段值 型转为 另外一种值
  * 为提高字段转换效能，v3.1.0 把字段转换器拆为两类：{@link BFieldConvertor } 与 {@link MFieldConvertor }
@@ -47,5 +47,12 @@ public interface FieldConvertor {
 	 * @since v3.1.0
 	 */
 	interface MFieldConvertor extends FieldConvertor { }
+
+	/**
+	 * 参数值转换器（重构自 ParamResolver.Convertor）
+	 * @author Troy.Zhou @ 2023-02-27
+	 * @since v4.1.0
+	 */
+	interface ParamConvertor extends FieldConvertor { }
 
 }
