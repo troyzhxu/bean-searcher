@@ -72,7 +72,7 @@ public class FieldMeta {
     }
 
     public String getName() {
-        return field.getName();
+        return name;
     }
 
     public Class<?> getType() {
