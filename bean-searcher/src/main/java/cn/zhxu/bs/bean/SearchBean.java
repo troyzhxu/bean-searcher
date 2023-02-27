@@ -1,7 +1,7 @@
 package cn.zhxu.bs.bean;
 
-import cn.zhxu.bs.implement.DefaultDbMapping;
 import cn.zhxu.bs.DbMapping;
+import cn.zhxu.bs.implement.DefaultDbMapping;
 import cn.zhxu.bs.implement.DefaultSqlExecutor;
 
 import javax.sql.DataSource;
@@ -42,6 +42,21 @@ public @interface SearchBean {
 	 * @since v3.8.0
 	 */
 	String where() default "";
+
+	/**
+	 * 声明额外的条件字段，可根据字段参数动态生成 where 条件，用法：
+	 * <pre>{@code
+	 * @SearchBean(fields = {
+	 *     @DbField(name = "name"),
+	 *     @DbField(name = "age")	// 这里的 name 是必填的
+	 * })
+	 * // 或者：
+	 * @SearchBean(fields = @DbField(name = "name"))
+	 * }</pre>
+	 * @return 额外的条件字段
+	 * @since v4.1.0
+	 */
+	DbField[] fields() default {};
 
 	/**
 	 * 分组字段，例如

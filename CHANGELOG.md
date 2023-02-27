@@ -6,7 +6,8 @@
   * 优化：`ParamResolver.Convertor`：入参 `DbType` 修改为 `FieldMeta`
   * 优化： 支持 `DbType` 为 `UNKNOWN` 时进行参数值转换，交由用户自己判断
   * 重构：`ParamResolver.Convertor` -> `FieldConvertor.ParamConvertor`
-  * 优化：注解 `@DbField` 新增 `name` 属性
+  * 功能：注解 `@DbField` 新增 `name` 属性，可显示指定字段参数名
+  * 功能：注解 `@SearchBean` 新增 `fields` 属性，用于指定额外的条件字段（DOING）
 * Bean Searcher Solon Plugin
   * 首版 Solon 插件
 
