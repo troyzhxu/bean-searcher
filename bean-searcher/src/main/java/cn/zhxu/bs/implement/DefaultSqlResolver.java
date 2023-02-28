@@ -4,6 +4,7 @@ import cn.zhxu.bs.*;
 import cn.zhxu.bs.dialect.Dialect;
 import cn.zhxu.bs.dialect.DialectWrapper;
 import cn.zhxu.bs.group.Group;
+import cn.zhxu.bs.group.GroupPair;
 import cn.zhxu.bs.param.FetchType;
 import cn.zhxu.bs.param.FieldParam;
 import cn.zhxu.bs.param.OrderBy;
@@ -258,12 +259,15 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		if (nonGroupBy) {
 			return new GroupPair(paramsGroup, EMPTY_GROUP);
 		}
+		List<String> selectFields = beanMeta.getSelectFields();
 		String groupBy = beanMeta.getGroupBy();
 		if (paramsGroup.isRaw()) {
 			List<FieldParam> where = new ArrayList<>();
 			List<FieldParam> having = new ArrayList<>();
 			for (FieldParam param: paramsGroup.getValue()) {
-				if (StringUtils.sqlContains(groupBy, beanMeta.getFieldSql(param.getName()))) {
+				String name = param.getName();
+				if (StringUtils.sqlContains(groupBy, beanMeta.getFieldSql(name))
+						|| !selectFields.contains(name)) {
 					where.add(param);
 				} else {
 					having.add(param);
@@ -272,36 +276,20 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 			return new GroupPair(new Group<>(where), new Group<>(having));
 		} else if (paramsGroup.judgeAll(list -> {
 			for (FieldParam param: list) {
-				if (!StringUtils.sqlContains(groupBy, beanMeta.getFieldSql(param.getName()))) {
+				String name = param.getName();
+				if (!StringUtils.sqlContains(groupBy, beanMeta.getFieldSql(name))
+						&& selectFields.contains(name)) {
 					return false;
 				}
 			}
 			return true;
 		})) {
 			// v4.0.0: 如果所有条件字段都在 groupBy 里，则也把条件放在 where 里
+			// v4.1.0: 或在 @SearchBean.fields 里
 			return new GroupPair(paramsGroup, EMPTY_GROUP);
 		}
 		// 复杂的组，都作为 having 条件
 		return new GroupPair(EMPTY_GROUP, paramsGroup);
-	}
-
-	protected static class GroupPair {
-
-		final Group<List<FieldParam>> whereGroup;
-		final Group<List<FieldParam>> havingGroup;
-
-		public GroupPair(Group<List<FieldParam>> whereGroup, Group<List<FieldParam>> havingGroup) {
-			this.whereGroup = whereGroup;
-			this.havingGroup = havingGroup;
-		}
-
-		public Group<List<FieldParam>> getWhereGroup() {
-			return whereGroup;
-		}
-
-		public Group<List<FieldParam>> getHavingGroup() {
-			return havingGroup;
-		}
 	}
 
 	protected String buildSqlSnippet(String sqlSnippet, List<SqlSnippet.SqlPara> sqlParas, Map<String, Object> paraMap, List<Object> paraReceiver) {
