@@ -106,7 +106,11 @@ public class DefaultDbMapping implements DbMapping {
         return Arrays.stream(fields).map(field -> column(beanClass, new BeanField() {
             @Override
             public String getName() {
-                return field.name();
+                String name = field.name();
+                if (StringUtils.isBlank(name)) {
+                    throw new SearchException("The name of @DbField in @SearchBean.fields on [" + beanClass.getName() + "] is not assigned.");
+                }
+                return name;
             }
             @Override
             public Class<?> getType() {
