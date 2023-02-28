@@ -92,12 +92,17 @@ public class DefaultMetaResolver implements MetaResolver {
             int i2 = StringUtils.isBlank(w2.column.getAlias()) ? 1 : 0;
             return i1 - i2;
         });
-        // 用于校验别名是否重复
-        Set<String> checkSet = new HashSet<>();
+        Set<String> fieldChecks = new HashSet<>();  // 用于校验属性是否重复
+        Set<String> aliasChecks = new HashSet<>();  // 用于校验别名是否重复
         for (FieldWrapper wrapper: wrappers) {
-            String fieldAlias = resolveAlias(wrapper.column, checkSet);
+            if (fieldChecks.contains(wrapper.column.getName())) {
+                throw new SearchException("Duplicate field name [" + wrapper.column.getName() + "] on [" + beanClass.getName() + "].");
+            } else {
+                fieldChecks.add(wrapper.column.getName());
+            }
+            String fieldAlias = resolveAlias(wrapper.column, aliasChecks);
             if (fieldAlias != null) {
-                checkSet.add(fieldAlias);
+                aliasChecks.add(fieldAlias);
             } else {
                 throw new SearchException("The alias [" + wrapper.column.getAlias() + "] of [" + beanClass.getName()
                         + "." + wrapper.column.getName() + "] is already exists on other fields.");
@@ -119,18 +124,18 @@ public class DefaultMetaResolver implements MetaResolver {
         return beanMeta;
     }
 
-    protected String resolveAlias(DbMapping.Column column, Set<String> checkSet) {
+    protected String resolveAlias(DbMapping.Column column, Set<String> checks) {
         String alias = column.getAlias();
         if (StringUtils.isBlank(alias)) {
             // 注意：Oracle 数据库的别名不能以下划线开头
-            int index = checkSet.size();
+            int index = checks.size();
             alias = "c_" + index;
-            while (checkSet.contains(alias)) {
+            while (checks.contains(alias)) {
                 alias = "c_" + (++index);
             }
             return alias;
         }
-        if (checkSet.contains(alias)) {
+        if (checks.contains(alias)) {
             return null;
         }
         return alias;
