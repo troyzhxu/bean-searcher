@@ -6,12 +6,15 @@
   * 优化：`ParamResolver.Convertor`：入参 `DbType` 修改为 `FieldMeta`
   * 优化： 支持 `DbType` 为 `UNKNOWN` 时进行参数值转换，交由用户自己判断
   * 重构：`ParamResolver.Convertor` -> `FieldConvertor.ParamConvertor`
-  * 功能：注解 `@DbField` 新增 `name` 属性，可显示指定字段参数名
-  * 功能：注解 `@SearchBean` 新增 `fields` 属性，用于指定额外的条件字段（DOING）
+  * 功能：注解 `@DbField` 新增 `name` 属性，可显式指定字段的参数名
+  * 功能：注解 `@DbField` 新增 `cluster` 属性，可显式指定该字段是否是聚合字段
+  * 功能：注解 `@SearchBean` 新增 `fields` 属性，用于指定额外的条件字段
+* Bean Searcher Boot Starter
+  * GroupPairResolver 支持注入 Bean 的方式自定义
 * Bean Searcher Solon Plugin
-  * 首版 Solon 插件
+  * 首发 Solon 插件
 
-### Contributors
+### 👨🏻‍💻 Contributors
 
 Thank you to all the contributors who worked on this release:
 

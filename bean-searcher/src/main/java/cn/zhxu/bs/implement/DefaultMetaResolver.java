@@ -39,9 +39,13 @@ public class DefaultMetaResolver implements MetaResolver {
             return beanMeta;
         }
         synchronized (cache) {
-            beanMeta = resolveMetadata(beanClass);
-            cache.put(beanClass, beanMeta);
-            return beanMeta;
+            @SuppressWarnings("unchecked")
+            BeanMeta<T> meta = (BeanMeta<T>) cache.get(beanClass);
+            if (meta == null) {
+                meta = resolveMetadata(beanClass);
+                cache.put(beanClass, meta);
+            }
+            return meta;
         }
     }
 
@@ -104,7 +108,8 @@ public class DefaultMetaResolver implements MetaResolver {
                     wrapper.field, fieldSql, fieldAlias,
                     wrapper.column.isConditional(),
                     wrapper.column.getOnlyOn(),
-                    wrapper.column.getDbType()
+                    wrapper.column.getDbType(),
+                    wrapper.column.getCluster()
             );
             beanMeta.addFieldMeta(fieldMeta);
         }

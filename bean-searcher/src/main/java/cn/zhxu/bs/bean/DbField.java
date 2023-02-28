@@ -60,4 +60,11 @@ public @interface DbField {
 	 */
 	DbType type() default DbType.UNKNOWN;
 
+	/**
+	 * 用于指定该字段是否是聚合字段
+	 * @since v4.1.0
+	 * @return FieldType
+	 */
+	Cluster cluster() default Cluster.AUTO;
+
 }

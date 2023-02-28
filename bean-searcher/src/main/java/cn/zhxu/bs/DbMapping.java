@@ -1,9 +1,6 @@
 package cn.zhxu.bs;
 
-import cn.zhxu.bs.bean.DbField;
-import cn.zhxu.bs.bean.DbType;
-import cn.zhxu.bs.bean.InheritType;
-import cn.zhxu.bs.bean.SearchBean;
+import cn.zhxu.bs.bean.*;
 
 import java.lang.reflect.Field;
 import java.util.Collections;
@@ -199,17 +196,24 @@ public interface DbMapping {
          */
         private final DbType dbType;
 
+        /**
+         * 字段的聚合标志
+         * @since v4.1.0
+         */
+        private final Cluster cluster;
+
         public Column(String name, String fieldSql, boolean conditional, Class<? extends FieldOp>[] onlyOn, DbType dbType) {
-            this(name, fieldSql, conditional, onlyOn, null, dbType);
+            this(name, fieldSql, conditional, onlyOn, null, dbType, Cluster.AUTO);
         }
 
-        public Column(String name, String fieldSql, boolean conditional, Class<? extends FieldOp>[] onlyOn, String alias, DbType dbType) {
+        public Column(String name, String fieldSql, boolean conditional, Class<? extends FieldOp>[] onlyOn, String alias, DbType dbType, Cluster cluster) {
             this.name = name;
             this.fieldSql = fieldSql;
             this.conditional = conditional;
             this.onlyOn = onlyOn;
             this.alias = alias;
             this.dbType = dbType;
+            this.cluster = cluster;
         }
 
         public String getName() {
@@ -234,6 +238,10 @@ public interface DbMapping {
 
         public DbType getDbType() {
             return dbType;
+        }
+
+        public Cluster getCluster() {
+            return cluster;
         }
 
     }

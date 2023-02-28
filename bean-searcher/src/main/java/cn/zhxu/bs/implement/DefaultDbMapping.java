@@ -159,7 +159,7 @@ public class DefaultDbMapping implements DbMapping {
                 dbType = dbTypeMapper.map(fieldType);
             }
             String name = StringUtils.isBlank(dbField.name()) ? field.getName() : dbField.name();
-            return new Column(name, fieldSql, dbField.conditional(), dbField.onlyOn(), dbField.alias(), dbType);
+            return new Column(name, fieldSql, dbField.conditional(), dbField.onlyOn(), dbField.alias(), dbType, dbField.cluster());
         }
         DbType dbType = fieldType != null ? dbTypeMapper.map(fieldType) : DbType.UNKNOWN;
         return new Column(field.getName(), fieldSql, true, EMPTY_OPERATORS, dbType);

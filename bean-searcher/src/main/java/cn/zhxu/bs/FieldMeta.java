@@ -1,5 +1,6 @@
 package cn.zhxu.bs;
 
+import cn.zhxu.bs.bean.Cluster;
 import cn.zhxu.bs.bean.DbType;
 
 import java.lang.reflect.Field;
@@ -51,8 +52,14 @@ public class FieldMeta {
      */
     private final DbType dbType;
 
+    /**
+     * 字段的聚合标志
+     * @since v4.1.0
+     */
+    private final Cluster cluster;
+
     public FieldMeta(BeanMeta<?> beanMeta, String name, Field field, SqlSnippet fieldSql, String dbAlias, boolean conditional,
-                     Class<? extends FieldOp>[] onlyOn, DbType dbType) {
+                     Class<? extends FieldOp>[] onlyOn, DbType dbType, Cluster cluster) {
         this.beanMeta = beanMeta;
         this.name = name;
         this.field = field;
@@ -61,6 +68,7 @@ public class FieldMeta {
         this.conditional = conditional;
         this.onlyOn = onlyOn;
         this.dbType = dbType;
+        this.cluster = cluster;
     }
 
     public BeanMeta<?> getBeanMeta() {
@@ -97,6 +105,10 @@ public class FieldMeta {
 
     public DbType getDbType() {
         return dbType;
+    }
+
+    public Cluster getCluster() {
+        return cluster;
     }
 
 }

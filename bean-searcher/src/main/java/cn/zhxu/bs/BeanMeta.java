@@ -63,7 +63,8 @@ public class BeanMeta<T> {
 	private final Map<String, FieldMeta> fieldMetaMap = new HashMap<>();
 
 	/**
-	 * 可以被 Select 的属性
+	 * 可以被 Select 的属性集
+	 * @since v4.1.0
 	 */
 	private final List<String> selectFields = new ArrayList<>();
 
