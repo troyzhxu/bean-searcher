@@ -22,7 +22,14 @@ public class GroupPair {
      */
     public interface Resolver {
 
-        GroupPair resolve(BeanMeta<?> beanMeta, Group<List<FieldParam>> paramsGroup);
+        /**
+         * 解析 GroupPair
+         * @param beanMeta 元信息
+         * @param paramsGroup 参数组
+         * @param groupBy 非空
+         * @return GroupPair
+         */
+        GroupPair resolve(BeanMeta<?> beanMeta, Group<List<FieldParam>> paramsGroup, String groupBy);
 
     }
 

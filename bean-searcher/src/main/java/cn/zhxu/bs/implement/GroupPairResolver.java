@@ -1,6 +1,8 @@
 package cn.zhxu.bs.implement;
 
 import cn.zhxu.bs.BeanMeta;
+import cn.zhxu.bs.FieldMeta;
+import cn.zhxu.bs.bean.Cluster;
 import cn.zhxu.bs.group.Group;
 import cn.zhxu.bs.group.GroupPair;
 import cn.zhxu.bs.param.FieldParam;
@@ -18,16 +20,14 @@ import java.util.List;
 public class GroupPairResolver implements GroupPair.Resolver {
 
     @Override
-    public GroupPair resolve(BeanMeta<?> beanMeta, Group<List<FieldParam>> paramsGroup) {
+    public GroupPair resolve(BeanMeta<?> beanMeta, Group<List<FieldParam>> paramsGroup, String groupBy) {
         List<String> selectFields = beanMeta.getSelectFields();
-        String groupBy = beanMeta.getGroupBy();
         if (paramsGroup.isRaw()) {
             List<FieldParam> where = new ArrayList<>();
             List<FieldParam> having = new ArrayList<>();
             for (FieldParam param: paramsGroup.getValue()) {
-                String name = param.getName();
-                if (StringUtils.sqlContains(groupBy, beanMeta.getFieldSql(name))
-                        || !selectFields.contains(name)) {
+                FieldMeta meta = beanMeta.requireFieldMeta(param.getName());
+                if (isRawField(groupBy, meta)) {
                     where.add(param);
                 } else {
                     having.add(param);
@@ -37,8 +37,8 @@ public class GroupPairResolver implements GroupPair.Resolver {
         } else if (paramsGroup.judgeAll(list -> {
             for (FieldParam param: list) {
                 String name = param.getName();
-                if (!StringUtils.sqlContains(groupBy, beanMeta.getFieldSql(name))
-                        && selectFields.contains(name)) {
+                FieldMeta meta = beanMeta.requireFieldMeta(param.getName());
+                if (!isRawField(groupBy, meta)) {
                     return false;
                 }
             }
@@ -50,6 +50,11 @@ public class GroupPairResolver implements GroupPair.Resolver {
         }
         // 复杂的组，都作为 having 条件
         return new GroupPair(GroupPair.EMPTY_GROUP, paramsGroup);
+    }
+
+    protected static boolean isRawField(String groupBy, FieldMeta meta) {
+        return meta.getCluster() == Cluster.FALSE || meta.getCluster() == Cluster.AUTO && meta.getField() == null
+                || StringUtils.sqlContains(groupBy, meta.getFieldSql().getSql());
     }
 
 }

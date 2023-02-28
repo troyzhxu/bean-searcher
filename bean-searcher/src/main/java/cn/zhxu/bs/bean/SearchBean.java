@@ -53,6 +53,7 @@ public @interface SearchBean {
 	 * // 或者：
 	 * @SearchBean(fields = @DbField(name = "name"))
 	 * }</pre>
+	 * 此处 {@link DbField#cluster()} 如果不显式指定，将自动推断为 {@link Cluster#FALSE }
 	 * @return 额外的条件字段
 	 * @since v4.1.0
 	 */

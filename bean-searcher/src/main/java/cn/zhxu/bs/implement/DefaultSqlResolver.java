@@ -149,7 +149,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 			where = buildSqlSnippet(where, beanMeta.getWhereSqlParas(), paraMap, sqlWrapper.getParas());
 		}
 		SqlWrapper<Object> groupBy = resolveGroupBy(beanMeta, paraMap);
-		GroupPair groupPair = resolveGroupPair(beanMeta, paramsGroup, groupBy == null);
+		GroupPair groupPair = resolveGroupPair(beanMeta, paramsGroup, groupBy);
 		Group<List<FieldParam>> whereGroup = groupPair.getWhereGroup();
 
 		boolean hasWhere = StringUtils.isNotBlank(where);
@@ -255,11 +255,11 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		return null;
 	}
 
-	protected GroupPair resolveGroupPair(BeanMeta<?> beanMeta, Group<List<FieldParam>> paramsGroup, boolean nonGroupBy) {
-		if (nonGroupBy) {
+	protected GroupPair resolveGroupPair(BeanMeta<?> beanMeta, Group<List<FieldParam>> paramsGroup, SqlWrapper<Object> groupBy) {
+		if (groupBy == null) {
 			return new GroupPair(paramsGroup, GroupPair.EMPTY_GROUP);
 		}
-		return groupPairResolver.resolve(beanMeta, paramsGroup);
+		return groupPairResolver.resolve(beanMeta, paramsGroup, groupBy.getSql());
 	}
 
 	protected String buildSqlSnippet(String sqlSnippet, List<SqlSnippet.SqlPara> sqlParas, Map<String, Object> paraMap, List<Object> paraReceiver) {
