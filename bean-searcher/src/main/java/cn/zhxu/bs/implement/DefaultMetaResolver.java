@@ -8,6 +8,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * 默认元信息解析器
@@ -50,6 +51,9 @@ public class DefaultMetaResolver implements MetaResolver {
         public final DbMapping.Column column;
 
         public FieldWrapper(Field field, DbMapping.Column column) {
+            if (field != null) {
+                field.setAccessible(true);
+            }
             this.field = field;
             this.column = column;
         }
@@ -68,30 +72,31 @@ public class DefaultMetaResolver implements MetaResolver {
                 snippetResolver.resolve(table.getOrderBy()),
                 table.isSortable(), table.isDistinct(),
                 table.getTimeout());
-        // 解析实体类字段
-        FieldWrapper[] wrappers = getBeanFields(beanClass).stream()
+        List<FieldWrapper> wrappers = new ArrayList<>();
+        table.getFields().forEach(column -> wrappers.add(new FieldWrapper(null, column)));
+        wrappers.addAll(getBeanFields(beanClass).stream()
                 .map(field -> {
+                    // 解析实体类字段
                     DbMapping.Column column = dbMapping.column(beanClass, field);
                     return column != null ? new FieldWrapper(field, column) : null;
                 })
                 .filter(Objects::nonNull)
-                // 排序：使指定了别名的 字段排在前面
-                .sorted((w1, w2) -> {
-                    int i1 = StringUtils.isBlank(w1.column.getAlias()) ? 1 : 0;
-                    int i2 = StringUtils.isBlank(w2.column.getAlias()) ? 1 : 0;
-                    return i1 - i2;
-                })
-                .toArray(FieldWrapper[]::new);
+                .collect(Collectors.toList()));
+        // 排序：使指定了别名的 字段排在前面
+        wrappers.sort((w1, w2) -> {
+            int i1 = StringUtils.isBlank(w1.column.getAlias()) ? 1 : 0;
+            int i2 = StringUtils.isBlank(w2.column.getAlias()) ? 1 : 0;
+            return i1 - i2;
+        });
         // 用于校验别名是否重复
         Set<String> checkSet = new HashSet<>();
         for (FieldWrapper wrapper: wrappers) {
-            wrapper.field.setAccessible(true);
             String fieldAlias = resolveAlias(wrapper.column, checkSet);
             if (fieldAlias != null) {
                 checkSet.add(fieldAlias);
             } else {
                 throw new SearchException("The alias [" + wrapper.column.getAlias() + "] of [" + beanClass.getName()
-                        + "." + wrapper.field.getName() + "] is already exists on other fields.");
+                        + "." + wrapper.column.getName() + "] is already exists on other fields.");
             }
             SqlSnippet fieldSql = snippetResolver.resolve(wrapper.column.getFieldSql());
             FieldMeta fieldMeta = new FieldMeta(
@@ -101,7 +106,7 @@ public class DefaultMetaResolver implements MetaResolver {
                     wrapper.column.getOnlyOn(),
                     wrapper.column.getDbType()
             );
-            beanMeta.addFieldMeta(fieldMeta.getName(), fieldMeta);
+            beanMeta.addFieldMeta(fieldMeta);
         }
         if (beanMeta.getFieldCount() == 0) {
             throw new SearchException("[" + beanClass.getName() + "] is not a valid SearchBean, because there is no field mapping to database. Please refer https://bs.zhxu.cn/guide/latest/bean.html#%E7%9C%81%E7%95%A5-dbfield for help.");

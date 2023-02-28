@@ -6,10 +6,14 @@ import cn.zhxu.bs.SearchException;
 import cn.zhxu.bs.bean.*;
 import cn.zhxu.bs.util.StringUtils;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * 默认的数据库映射解析器
@@ -74,7 +78,8 @@ public class DefaultDbMapping implements DbMapping {
                     bean.distinct(),
                     bean.orderBy(),
                     sortable(bean.sortType()),
-                    bean.timeout()
+                    bean.timeout(),
+                    columns(beanClass, bean.fields())
             );
         }
         return new Table(toTableName(beanClass));
@@ -90,22 +95,73 @@ public class DefaultDbMapping implements DbMapping {
         return defaultSortType == SortType.ALLOW_PARAM;
     }
 
+    interface BeanField {
+        String getName();
+        Class<?> getType();
+        <T extends Annotation> T getAnnotation(Class<T> annotationClass);
+        Class<?> getDeclaringClass();
+    }
+
+    protected List<Column> columns(Class<?> beanClass, DbField[] fields) {
+        return Arrays.stream(fields).map(field -> column(beanClass, new BeanField() {
+            @Override
+            public String getName() {
+                return field.name();
+            }
+            @Override
+            public Class<?> getType() {
+                return null;
+            }
+            @Override
+            @SuppressWarnings("all")
+            public <T extends Annotation> T getAnnotation(Class<T> annotationClass) {
+                return annotationClass == DbField.class ? (T) field : null;
+            }
+            @Override
+            public Class<?> getDeclaringClass() {
+                return beanClass;
+            }
+        })).collect(Collectors.toList());
+    }
+
     @Override
     public Column column(Class<?> beanClass, Field field) {
+        return column(beanClass, new BeanField() {
+            @Override
+            public String getName() {
+                return field.getName();
+            }
+            @Override
+            public Class<?> getType() {
+                return field.getType();
+            }
+            @Override
+            public <T extends Annotation> T getAnnotation(Class<T> annotationClass) {
+                return field.getAnnotation(annotationClass);
+            }
+            @Override
+            public Class<?> getDeclaringClass() {
+                return field.getDeclaringClass();
+            }
+        });
+    }
+
+    protected Column column(Class<?> beanClass, BeanField field) {
         String fieldSql = dbFieldSql(beanClass, field);
         if (fieldSql == null) {
             return null;
         }
+        Class<?> fieldType = field.getType();
         DbField dbField = field.getAnnotation(DbField.class);
         if (dbField != null) {
             DbType dbType = dbField.type();
-            if (dbType == DbType.UNKNOWN) {
-                dbType = dbTypeMapper.map(field.getType());
+            if (dbType == DbType.UNKNOWN && fieldType != null) {
+                dbType = dbTypeMapper.map(fieldType);
             }
             String name = StringUtils.isBlank(dbField.name()) ? field.getName() : dbField.name();
             return new Column(name, fieldSql, dbField.conditional(), dbField.onlyOn(), dbField.alias(), dbType);
         }
-        DbType dbType = dbTypeMapper.map(field.getType());
+        DbType dbType = fieldType != null ? dbTypeMapper.map(fieldType) : DbType.UNKNOWN;
         return new Column(field.getName(), fieldSql, true, EMPTY_OPERATORS, dbType);
     }
 
@@ -160,7 +216,7 @@ public class DefaultDbMapping implements DbMapping {
         return className;
     }
 
-    protected String dbFieldSql(Class<?> beanClass, Field field) {
+    protected String dbFieldSql(Class<?> beanClass, BeanField field) {
         DbField dbField = field.getAnnotation(DbField.class);
         if (field.getAnnotation(DbIgnore.class) != null) {
             if (dbField == null) {
@@ -221,7 +277,7 @@ public class DefaultDbMapping implements DbMapping {
     // return 0 表示层级相等，
     // return + 表示 Field 比 @SearchBean 更接近父类
     // return - 表示 @SearchBean 比 Field 更接近父类
-    protected int compareFieldToBeanAnnotation(Field field, Class<?> beanClass) {
+    protected int compareFieldToBeanAnnotation(BeanField field, Class<?> beanClass) {
         int fieldLevel = 0;
         int beanLevel = 0;
         Class<?> clazz = beanClass;
@@ -237,7 +293,7 @@ public class DefaultDbMapping implements DbMapping {
         return fieldLevel - beanLevel;
     }
 
-    protected boolean shouldIgnore(Field field, String[] ignoreFields) {
+    protected boolean shouldIgnore(BeanField field, String[] ignoreFields) {
         if (ignoreFields != null) {
             String name = field.getName();
             for (String igField : ignoreFields) {
@@ -249,7 +305,7 @@ public class DefaultDbMapping implements DbMapping {
         return false;
     }
 
-    protected String toColumnName(Field field) {
+    protected String toColumnName(BeanField field) {
         String name = field.getName();
         if (underlineCase) {
             name = StringUtils.toUnderline(name);

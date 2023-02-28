@@ -6,6 +6,8 @@ import cn.zhxu.bs.bean.InheritType;
 import cn.zhxu.bs.bean.SearchBean;
 
 import java.lang.reflect.Field;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * 在 {@link SearchBean } 或 {@link DbField } 缺省时
@@ -93,12 +95,18 @@ public interface DbMapping {
          */
         private final int timeout;
 
+        /**
+         * @see SearchBean#fields()
+         * @since v4.1.0
+         */
+        private final List<Column> fields;
+
         public Table(String tables) {
-            this("", tables, "", "", "", false, "", true, 0);
+            this("", tables, "", "", "", false, "", true, 0, Collections.emptyList());
         }
 
         public Table(String dataSource, String tables, String where, String groupBy, String having,
-                     boolean distinct, String orderBy, boolean sortable, int timeout) {
+                     boolean distinct, String orderBy, boolean sortable, int timeout, List<Column> fields) {
             this.dataSource = dataSource;
             this.tables = tables;
             this.where = where;
@@ -108,6 +116,7 @@ public interface DbMapping {
             this.orderBy = orderBy;
             this.sortable = sortable;
             this.timeout = timeout;
+            this.fields = fields;
         }
 
         public String getDataSource() {
@@ -144,6 +153,10 @@ public interface DbMapping {
 
         public int getTimeout() {
             return timeout;
+        }
+
+        public List<Column> getFields() {
+            return fields;
         }
 
     }

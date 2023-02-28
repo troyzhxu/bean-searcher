@@ -13,7 +13,7 @@ import java.util.*;
 public class BeanMeta<T> {
 
 	/**
-	 * 用户 Bean Class
+	 * Bean Class
 	 */
 	private final Class<T> beanClass;
 
@@ -63,6 +63,11 @@ public class BeanMeta<T> {
 	private final Map<String, FieldMeta> fieldMetaMap = new HashMap<>();
 
 	/**
+	 * 可以被 Select 的属性
+	 */
+	private final List<String> selectFields = new ArrayList<>();
+
+	/**
 	 * 单条 SQL 执行超时时间，单位：秒，0 表示永远不超时
 	 */
 	private final int timeout;
@@ -82,9 +87,13 @@ public class BeanMeta<T> {
 		this.timeout = timeout;
 	}
 
-	public void addFieldMeta(String field, FieldMeta meta) {
+	public void addFieldMeta(FieldMeta meta) {
+		String field = meta.getName();
 		if (fieldMetaMap.containsKey(field)) {
 			throw new SearchException("The field [" + field + "] was already added.");
+		}
+		if (meta.getField() != null) {
+			selectFields.add(field);
 		}
 		fieldMetaMap.put(field, meta);
 	}
@@ -131,6 +140,10 @@ public class BeanMeta<T> {
 
 	public Set<String> getFieldSet() {
 		return Collections.unmodifiableSet(fieldMetaMap.keySet());
+	}
+
+	public List<String> getSelectFields() {
+		return Collections.unmodifiableList(selectFields);
 	}
 
 	public int getFieldCount() {
