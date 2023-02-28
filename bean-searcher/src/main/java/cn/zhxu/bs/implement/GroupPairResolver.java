@@ -21,40 +21,66 @@ public class GroupPairResolver implements GroupPair.Resolver {
 
     @Override
     public GroupPair resolve(BeanMeta<?> beanMeta, Group<List<FieldParam>> paramsGroup, String groupBy) {
-        List<String> selectFields = beanMeta.getSelectFields();
         if (paramsGroup.isRaw()) {
-            List<FieldParam> where = new ArrayList<>();
-            List<FieldParam> having = new ArrayList<>();
-            for (FieldParam param: paramsGroup.getValue()) {
-                FieldMeta meta = beanMeta.requireFieldMeta(param.getName());
-                if (isRawField(groupBy, meta)) {
-                    where.add(param);
-                } else {
-                    having.add(param);
-                }
-            }
-            return new GroupPair(new Group<>(where), new Group<>(having));
-        } else if (paramsGroup.judgeAll(list -> {
+            // 没有或只有且 的 原始组
+            return splitRawParams(beanMeta, paramsGroup.getValue(), groupBy);
+        }
+        if (paramsGroup.judgeAll(list -> {
             for (FieldParam param: list) {
-                String name = param.getName();
-                FieldMeta meta = beanMeta.requireFieldMeta(param.getName());
-                if (!isRawField(groupBy, meta)) {
+                if (isClusterField(beanMeta, param, groupBy)) {
                     return false;
                 }
             }
             return true;
         })) {
-            // v4.0.0: 如果所有条件字段都在 groupBy 里，则也把条件放在 where 里
-            // v4.1.0: 如果所有条件字段都在 groupBy 或 @SearchBean.fields 里，则也把条件放在 where 里
+            // 如果所有条件字段都是 非聚合字段，则都作为 where 条件
             return new GroupPair(paramsGroup, GroupPair.EMPTY_GROUP);
         }
-        // 复杂的组，都作为 having 条件
+        if (paramsGroup.judgeAll(list -> {
+            for (FieldParam param: list) {
+                if (isClusterField(beanMeta, param, groupBy)) {
+                    return true;
+                }
+            }
+            return false;
+        })) {
+            // 如果所有条件字段都是 聚合字段，则都作为 having 条件
+            return new GroupPair(GroupPair.EMPTY_GROUP, paramsGroup);
+        }
+        // 既包含 聚合字段，又包含 非聚合字段，只能进行拆分了
+        return splitComplexGroup(beanMeta, paramsGroup, groupBy);
+    }
+
+
+    protected GroupPair splitComplexGroup(BeanMeta<?> beanMeta, Group<List<FieldParam>> paramsGroup, String groupBy) {
+        // TODO:
         return new GroupPair(GroupPair.EMPTY_GROUP, paramsGroup);
     }
 
-    protected static boolean isRawField(String groupBy, FieldMeta meta) {
-        return meta.getCluster() == Cluster.FALSE || meta.getCluster() == Cluster.AUTO && meta.getField() == null
-                || StringUtils.sqlContains(groupBy, meta.getFieldSql().getSql());
+
+    protected GroupPair splitRawParams(BeanMeta<?> beanMeta, List<FieldParam> params, String groupBy) {
+        List<FieldParam> where = new ArrayList<>();
+        List<FieldParam> having = new ArrayList<>();
+        for (FieldParam param: params) {
+            if (isClusterField(beanMeta, param, groupBy)) {
+                having.add(param);
+            } else {
+                where.add(param);
+            }
+        }
+        return new GroupPair(new Group<>(where), new Group<>(having));
+    }
+
+    protected boolean isClusterField(BeanMeta<?> beanMeta, FieldParam param, String groupBy) {
+        FieldMeta meta = beanMeta.requireFieldMeta(param.getName());
+        Cluster cluster = meta.getCluster();
+        if (cluster == Cluster.FALSE) {
+            return false;
+        }
+        if (cluster == Cluster.TRUE) {
+            return true;
+        }
+        return meta.getField() != null && !StringUtils.sqlContains(groupBy, meta.getFieldSql().getSql());
     }
 
 }

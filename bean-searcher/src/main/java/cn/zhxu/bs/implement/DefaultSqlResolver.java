@@ -226,7 +226,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 							String field = name != null ? name : param.getName();
 							FieldMeta meta = beanMeta.requireFieldMeta(field);
 							SqlSnippet sql = meta.getFieldSql();
-							//如果是 group by having 且查询中存在该字段，则使用该字段别名
+							//如果是 group by having 且 Select 列表中 存在该字段，则使用该字段的别名
 							if (isHaving && fetchFields.contains(field)) {
 								sql = new SqlSnippet(meta.getDbAlias());
 							}
