@@ -8,10 +8,7 @@ import cn.zhxu.bs.boot.BeanSearcherProperties.Sql;
 import cn.zhxu.bs.convertor.*;
 import cn.zhxu.bs.dialect.*;
 import cn.zhxu.bs.filter.SizeLimitParamFilter;
-import cn.zhxu.bs.group.DefaultGroupResolver;
-import cn.zhxu.bs.group.DefaultParserFactory;
-import cn.zhxu.bs.group.ExprParser;
-import cn.zhxu.bs.group.GroupResolver;
+import cn.zhxu.bs.group.*;
 import cn.zhxu.bs.implement.*;
 import cn.zhxu.bs.util.LRUCache;
 import cn.zhxu.xjson.JsonKit;
@@ -187,9 +184,17 @@ public class BeanSearcherAutoConfiguration {
 	}
 
 	@Bean
+	@ConditionalOnMissingBean(GroupPair.Resolver.class)
+	public GroupPair.Resolver groupPairResolver() {
+		return new GroupPairResolver();
+	}
+
+	@Bean
 	@ConditionalOnMissingBean(SqlResolver.class)
-	public SqlResolver sqlResolver(Dialect dialect) {
-		return new DefaultSqlResolver(dialect);
+	public SqlResolver sqlResolver(Dialect dialect, GroupPair.Resolver groupPairResolver) {
+		DefaultSqlResolver resolver = new DefaultSqlResolver(dialect);
+		resolver.setGroupPairResolver(groupPairResolver);
+		return resolver;
 	}
 
 	@Bean

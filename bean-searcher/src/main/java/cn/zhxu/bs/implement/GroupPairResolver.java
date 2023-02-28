@@ -45,7 +45,7 @@ public class GroupPairResolver implements GroupPair.Resolver {
             return true;
         })) {
             // v4.0.0: 如果所有条件字段都在 groupBy 里，则也把条件放在 where 里
-            // v4.1.0: 或在 @SearchBean.fields 里
+            // v4.1.0: 如果所有条件字段都在 groupBy 或 @SearchBean.fields 里，则也把条件放在 where 里
             return new GroupPair(paramsGroup, GroupPair.EMPTY_GROUP);
         }
         // 复杂的组，都作为 having 条件
