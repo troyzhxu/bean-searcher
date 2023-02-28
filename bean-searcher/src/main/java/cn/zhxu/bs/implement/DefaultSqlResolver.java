@@ -11,10 +11,9 @@ import cn.zhxu.bs.param.OrderBy;
 import cn.zhxu.bs.param.Paging;
 import cn.zhxu.bs.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 默认 SQL 解析器
@@ -24,7 +23,7 @@ import java.util.Map;
  */
 public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 
-	private static final Group<List<FieldParam>> EMPTY_GROUP = new Group<>(Collections.emptyList());
+	private GroupPair.Resolver groupPairResolver = new GroupPairResolver();
 
 	public DefaultSqlResolver() { }
 
@@ -242,6 +241,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 			}
 		});
 	}
+
 	protected SqlWrapper<Object> resolveGroupBy(BeanMeta<?> beanMeta, Map<String, Object> paraMap) {
 		String groupBy = beanMeta.getGroupBy();
 		if (StringUtils.isNotBlank(groupBy)) {
@@ -257,39 +257,9 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 
 	protected GroupPair resolveGroupPair(BeanMeta<?> beanMeta, Group<List<FieldParam>> paramsGroup, boolean nonGroupBy) {
 		if (nonGroupBy) {
-			return new GroupPair(paramsGroup, EMPTY_GROUP);
+			return new GroupPair(paramsGroup, GroupPair.EMPTY_GROUP);
 		}
-		List<String> selectFields = beanMeta.getSelectFields();
-		String groupBy = beanMeta.getGroupBy();
-		if (paramsGroup.isRaw()) {
-			List<FieldParam> where = new ArrayList<>();
-			List<FieldParam> having = new ArrayList<>();
-			for (FieldParam param: paramsGroup.getValue()) {
-				String name = param.getName();
-				if (StringUtils.sqlContains(groupBy, beanMeta.getFieldSql(name))
-						|| !selectFields.contains(name)) {
-					where.add(param);
-				} else {
-					having.add(param);
-				}
-			}
-			return new GroupPair(new Group<>(where), new Group<>(having));
-		} else if (paramsGroup.judgeAll(list -> {
-			for (FieldParam param: list) {
-				String name = param.getName();
-				if (!StringUtils.sqlContains(groupBy, beanMeta.getFieldSql(name))
-						&& selectFields.contains(name)) {
-					return false;
-				}
-			}
-			return true;
-		})) {
-			// v4.0.0: 如果所有条件字段都在 groupBy 里，则也把条件放在 where 里
-			// v4.1.0: 或在 @SearchBean.fields 里
-			return new GroupPair(paramsGroup, EMPTY_GROUP);
-		}
-		// 复杂的组，都作为 having 条件
-		return new GroupPair(EMPTY_GROUP, paramsGroup);
+		return groupPairResolver.resolve(beanMeta, paramsGroup);
 	}
 
 	protected String buildSqlSnippet(String sqlSnippet, List<SqlSnippet.SqlPara> sqlParas, Map<String, Object> paraMap, List<Object> paraReceiver) {
@@ -382,6 +352,14 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 	protected <T> String getTableAlias(BeanMeta<T> beanMeta) {
 		// 注意：Oracle 数据库的别名不能以下划线开头，留参 beanMeta 方便用户重写该方法
 		return "t_";
+	}
+
+	public GroupPair.Resolver getGroupPairResolver() {
+		return groupPairResolver;
+	}
+
+	public void setGroupPairResolver(GroupPair.Resolver groupPairResolver) {
+		this.groupPairResolver = Objects.requireNonNull(groupPairResolver);
 	}
 
 }

@@ -1,8 +1,10 @@
 package cn.zhxu.bs.group;
 
+import cn.zhxu.bs.BeanMeta;
 import cn.zhxu.bs.implement.DefaultSqlResolver;
 import cn.zhxu.bs.param.FieldParam;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -12,6 +14,18 @@ import java.util.List;
  * @since v4.1.0
  */
 public class GroupPair {
+
+    public static final Group<List<FieldParam>> EMPTY_GROUP = new Group<>(Collections.emptyList());
+
+    /**
+     * 解析器
+     */
+    public interface Resolver {
+
+        GroupPair resolve(BeanMeta<?> beanMeta, Group<List<FieldParam>> paramsGroup);
+
+    }
+
 
     /**
      * 用于 where 的条件组
