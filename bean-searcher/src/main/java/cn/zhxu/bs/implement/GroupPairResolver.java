@@ -110,23 +110,23 @@ public class GroupPairResolver implements GroupPair.Resolver {
             if (pair == GroupPair.EMPTY_PAIR) {
                 continue;
             }
-            where = compute(group.isAnd(), where, pair.getWhereGroup());
-            having = compute(group.isAnd(), having, pair.getHavingGroup());
+            where = compute(where, pair.getWhereGroup(), group.isAnd());
+            having = compute(having, pair.getHavingGroup(), group.isAnd());
         }
         return new GroupPair(where, having);
     }
 
-    protected Group<List<FieldParam>> compute(boolean isAnd, Group<List<FieldParam>> group, Group<List<FieldParam>> other) {
+    protected Group<List<FieldParam>> compute(Group<List<FieldParam>> group, Group<List<FieldParam>> other, boolean isAnd) {
         if (group == GroupPair.EMPTY_GROUP) {
-            group = other;
-        } else if (other != GroupPair.EMPTY_GROUP) {
-            if (isAnd) {
-                group = group.and(other);
-            } else {
-                group = group.or(other);
-            }
+            return other;
         }
-        return group;
+        if (other == GroupPair.EMPTY_GROUP) {
+            return group;
+        }
+        if (isAnd) {
+            return group.and(other);
+        }
+        return group.or(other);
     }
 
 }
