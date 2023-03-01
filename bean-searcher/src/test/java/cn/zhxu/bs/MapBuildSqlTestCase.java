@@ -29,7 +29,7 @@ public class MapBuildSqlTestCase {
                 .sqlExecutor(new SqlExecutor() {
                     @Override
                     public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
-                        Assert.assertEquals("select name c_1, id c_0, age c_2 from user where (10 < id and name = 'jack')", searchSql.getListSqlString());
+                        Assert.assertEquals("select id c_0, name c_1, age c_2 from user where (10 < id and name = 'jack')", searchSql.getListSqlString());
                         return new SqlResult<>(searchSql);
                     }
                 })
@@ -46,7 +46,7 @@ public class MapBuildSqlTestCase {
                 .sqlExecutor(new SqlExecutor() {
                     @Override
                     public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
-                        Assert.assertEquals("select name c_1, id c_0, age c_2 from user where (? < id and name = ?)", searchSql.getListSqlString());
+                        Assert.assertEquals("select id c_0, name c_1, age c_2 from user where (? < id and name = ?)", searchSql.getListSqlString());
                         Assert.assertArrayEquals(new Object[] {15, "jack"}, searchSql.getListSqlParams().toArray(new Object[0]));
                         return new SqlResult<>(searchSql);
                     }
@@ -64,7 +64,7 @@ public class MapBuildSqlTestCase {
                 .sqlExecutor(new SqlExecutor() {
                     @Override
                     public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
-                        Assert.assertEquals("select name c_1, id c_0, age c_2 from user where (age = ? and 10 = id)", searchSql.getListSqlString());
+                        Assert.assertEquals("select id c_0, name c_1, age c_2 from user where (age = ? and 10 = id)", searchSql.getListSqlString());
                         Assert.assertArrayEquals(new Object[] {15}, searchSql.getListSqlParams().toArray(new Object[0]));
                         return new SqlResult<>(searchSql);
                     }

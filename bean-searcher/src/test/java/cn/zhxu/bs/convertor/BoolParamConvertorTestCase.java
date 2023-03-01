@@ -1,5 +1,6 @@
 package cn.zhxu.bs.convertor;
 
+import cn.zhxu.bs.bean.Cluster;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -28,7 +29,7 @@ public class BoolParamConvertorTestCase {
     }
 
     void assertSupports(DbType dbType, boolean supports) {
-        final FieldMeta meta = new FieldMeta(null, null,null, null, null, false, null, dbType);
+        final FieldMeta meta = new FieldMeta(null, null,null, null, null, false, null, dbType, Cluster.AUTO);
         Assert.assertEquals(supports, convertor.supports(meta, Byte.class));
         Assert.assertEquals(supports, convertor.supports(meta, Short.class));
         Assert.assertEquals(supports, convertor.supports(meta, Integer.class));
@@ -39,7 +40,7 @@ public class BoolParamConvertorTestCase {
 
     @Test
     public void test_convert() {
-        FieldMeta meta = new FieldMeta(null, null,null, null, null, false, null, DbType.BOOL);
+        FieldMeta meta = new FieldMeta(null, null,null, null, null, false, null, DbType.BOOL, Cluster.AUTO);
         Assert.assertEquals(true, convertor.convert(meta, 1));
         Assert.assertEquals(true, convertor.convert(meta, true));
         Assert.assertEquals(true, convertor.convert(meta, "true"));

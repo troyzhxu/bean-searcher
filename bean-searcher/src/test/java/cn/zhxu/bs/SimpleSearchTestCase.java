@@ -44,7 +44,7 @@ public class SimpleSearchTestCase {
         SqlExecutor sqlExecutor = new SqlExecutor() {
             @Override
             public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
-                Assert.assertEquals("select name c_1, id c_0 from search_bean limit ?, ?", searchSql.getListSqlString());
+                Assert.assertEquals("select id c_0, name c_1 from search_bean limit ?, ?", searchSql.getListSqlString());
                 List<Object> listParams = searchSql.getListSqlParams();
                 Assert.assertEquals(2, listParams.size());
                 Assert.assertEquals(0L, listParams.get(0));
@@ -74,7 +74,7 @@ public class SimpleSearchTestCase {
                 System.out.println(searchSql.getListSqlString());
                 System.out.println(searchSql.getListSqlParams());
 
-                Assert.assertEquals("select name c_1, id c_0 from search_bean where (id = ?) limit ?, ?", searchSql.getListSqlString());
+                Assert.assertEquals("select id c_0, name c_1 from search_bean where (id = ?) limit ?, ?", searchSql.getListSqlString());
                 List<Object> listParams = searchSql.getListSqlParams();
                 Assert.assertEquals(3, listParams.size());
                 Assert.assertEquals(1L, listParams.get(0));
@@ -120,7 +120,7 @@ public class SimpleSearchTestCase {
             @Override
             public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
                 System.out.println(searchSql.getListSqlString());
-                Assert.assertEquals("select name c_1, id c_0 from search_bean order by c_1 asc", searchSql.getListSqlString());
+                Assert.assertEquals("select id c_0, name c_1 from search_bean order by c_1 asc", searchSql.getListSqlString());
                 List<Object> listParams = searchSql.getListSqlParams();
                 Assert.assertEquals(0, listParams.size());
                 Assert.assertNull(searchSql.getClusterSqlString());

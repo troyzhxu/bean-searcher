@@ -38,7 +38,7 @@ public class GroupByTestCase {
                 System.out.println(searchSql.getClusterSqlString());
                 Assert.assertNull(searchSql.getListSqlString());
                 Assert.assertTrue(searchSql.getListSqlParams().isEmpty());
-                Assert.assertEquals("select count(*) s_count from (select avg(score) c_2, sum(score) c_1, course_id c_0 from student_course group by course_id) t_", searchSql.getClusterSqlString());
+                Assert.assertEquals("select count(*) s_count from (select course_id c_0, sum(score) c_1, avg(score) c_2 from student_course group by course_id) t_", searchSql.getClusterSqlString());
                 Assert.assertTrue(searchSql.getClusterSqlParams().isEmpty());
                 return new SqlResult<>(searchSql, null, columnLabel -> 100);
             }
@@ -60,7 +60,7 @@ public class GroupByTestCase {
             public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
                 Assert.assertNull(searchSql.getListSqlString());
                 Assert.assertTrue(searchSql.getListSqlParams().isEmpty());
-                Assert.assertEquals("select sum(c_1) c_1_sum_ from (select avg(score) c_2, sum(score) c_1, course_id c_0 from student_course group by course_id) t_", searchSql.getClusterSqlString());
+                Assert.assertEquals("select sum(c_1) c_1_sum_ from (select course_id c_0, sum(score) c_1, avg(score) c_2 from student_course group by course_id) t_", searchSql.getClusterSqlString());
                 Assert.assertTrue(searchSql.getClusterSqlParams().isEmpty());
                 return new SqlResult<>(searchSql, null, columnLabel -> 100);
             }
@@ -88,7 +88,7 @@ public class GroupByTestCase {
             public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
                 Assert.assertNull(searchSql.getClusterSqlString());
                 Assert.assertTrue(searchSql.getClusterSqlParams().isEmpty());
-                Assert.assertEquals("select avg(score) c_2, sum(score) c_1, course_id c_0 from student_course where (course_id = ?) group by course_id limit ?, ?", searchSql.getListSqlString());
+                Assert.assertEquals("select course_id c_0, sum(score) c_1, avg(score) c_2 from student_course where (course_id = ?) group by course_id limit ?, ?", searchSql.getListSqlString());
                 List<Object> params = searchSql.getListSqlParams();
                 Assert.assertEquals(3, params.size());
                 Assert.assertEquals(5L, params.get(0));
@@ -120,7 +120,7 @@ public class GroupByTestCase {
             public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
                 Assert.assertNull(searchSql.getClusterSqlString());
                 Assert.assertTrue(searchSql.getClusterSqlParams().isEmpty());
-                Assert.assertEquals("select avg(score) c_2, sum(score) c_1, course_id c_0 from student_course group by course_id having (c_2 > ?) limit ?, ?", searchSql.getListSqlString());
+                Assert.assertEquals("select course_id c_0, sum(score) c_1, avg(score) c_2 from student_course group by course_id having (c_2 > ?) limit ?, ?", searchSql.getListSqlString());
                 List<Object> params = searchSql.getListSqlParams();
                 Assert.assertEquals(3, params.size());
                 Assert.assertEquals(80, params.get(0));
@@ -152,7 +152,7 @@ public class GroupByTestCase {
             public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
                 Assert.assertNull(searchSql.getClusterSqlString());
                 Assert.assertTrue(searchSql.getClusterSqlParams().isEmpty());
-                Assert.assertEquals("select avg(score) c_2, sum(score) c_1, course_id c_0 from student_course where (course_id = ?) group by course_id having (c_2 > ?) limit ?, ?", searchSql.getListSqlString());
+                Assert.assertEquals("select course_id c_0, sum(score) c_1, avg(score) c_2 from student_course where (course_id = ?) group by course_id having (c_2 > ?) limit ?, ?", searchSql.getListSqlString());
                 List<Object> params = searchSql.getListSqlParams();
                 Assert.assertEquals(4, params.size());
                 Assert.assertEquals(5L, params.get(0));
@@ -186,15 +186,6 @@ public class GroupByTestCase {
         private int sumScore;
         @DbField("avg(score)")
         private int avgScore;
-        public long getCourseId() {
-            return courseId;
-        }
-        public int getSumScore() {
-            return sumScore;
-        }
-        public int getAvgScore() {
-            return avgScore;
-        }
     }
 
     @Test
@@ -205,7 +196,7 @@ public class GroupByTestCase {
                 System.out.println(searchSql.getClusterSqlString());
                 Assert.assertNull(searchSql.getListSqlString());
                 Assert.assertTrue(searchSql.getListSqlParams().isEmpty());
-                Assert.assertEquals("select count(*) s_count from (select avg(score) c_2, sum(score) sum_score, course_id c_1 from student_course2 group by course_id having (sum_score > 100)) t_", searchSql.getClusterSqlString());
+                Assert.assertEquals("select count(*) s_count from (select sum(score) sum_score, course_id c_1, avg(score) c_2 from student_course2 group by course_id having (sum_score > 100)) t_", searchSql.getClusterSqlString());
                 Assert.assertTrue(searchSql.getClusterSqlParams().isEmpty());
                 return new SqlResult<>(searchSql, null, columnLabel -> 100);
             }
@@ -228,7 +219,7 @@ public class GroupByTestCase {
                 System.out.println(searchSql.getClusterSqlString());
                 Assert.assertNull(searchSql.getListSqlString());
                 Assert.assertTrue(searchSql.getListSqlParams().isEmpty());
-                Assert.assertEquals("select count(*) s_count from (select avg(score) c_2, sum(score) sum_score, course_id c_1 from student_course2 where (course_id = ?) group by course_id having (sum_score > 100)) t_", searchSql.getClusterSqlString());
+                Assert.assertEquals("select count(*) s_count from (select sum(score) sum_score, course_id c_1, avg(score) c_2 from student_course2 where (course_id = ?) group by course_id having (sum_score > 100)) t_", searchSql.getClusterSqlString());
                 List<Object> params = searchSql.getClusterSqlParams();
                 Assert.assertEquals(1, params.size());
                 Assert.assertEquals(5L, params.get(0));
@@ -249,7 +240,7 @@ public class GroupByTestCase {
                 System.out.println(searchSql.getClusterSqlString());
                 Assert.assertNull(searchSql.getListSqlString());
                 Assert.assertTrue(searchSql.getListSqlParams().isEmpty());
-                Assert.assertEquals("select count(*) s_count from (select avg(score) c_2, sum(score) sum_score, course_id c_1 from student_course2 group by course_id having (sum_score > 100) and (c_2 > ?)) t_", searchSql.getClusterSqlString());
+                Assert.assertEquals("select count(*) s_count from (select sum(score) sum_score, course_id c_1, avg(score) c_2 from student_course2 group by course_id having (sum_score > 100) and (c_2 > ?)) t_", searchSql.getClusterSqlString());
                 List<Object> params = searchSql.getClusterSqlParams();
                 Assert.assertEquals(1, params.size());
                 Assert.assertEquals(80, params.get(0));
@@ -269,7 +260,7 @@ public class GroupByTestCase {
                 System.out.println(searchSql.getClusterSqlString());
                 Assert.assertNull(searchSql.getListSqlString());
                 Assert.assertTrue(searchSql.getListSqlParams().isEmpty());
-                Assert.assertEquals("select count(*) s_count from (select avg(score) c_2, sum(score) sum_score, course_id c_1 from student_course2 where (course_id = ?) group by course_id having (sum_score > 100) and (c_2 > ?)) t_", searchSql.getClusterSqlString());
+                Assert.assertEquals("select count(*) s_count from (select sum(score) sum_score, course_id c_1, avg(score) c_2 from student_course2 where (course_id = ?) group by course_id having (sum_score > 100) and (c_2 > ?)) t_", searchSql.getClusterSqlString());
                 List<Object> params = searchSql.getClusterSqlParams();
                 Assert.assertEquals(2, params.size());
                 Assert.assertEquals(5L, params.get(0));

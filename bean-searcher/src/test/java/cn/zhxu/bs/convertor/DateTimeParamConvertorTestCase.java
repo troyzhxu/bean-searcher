@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 
+import cn.zhxu.bs.bean.Cluster;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -36,7 +37,7 @@ public class DateTimeParamConvertorTestCase {
     }
 
     void assertSupports(DbType dbType, boolean supports) {
-        FieldMeta meta = new FieldMeta(null,  null, null, null, null, false, null, dbType);
+        FieldMeta meta = new FieldMeta(null,  null, null, null, null, false, null, dbType, Cluster.AUTO);
         Assert.assertEquals(supports, convertor.supports(meta, Date.class));
         Assert.assertEquals(supports, convertor.supports(meta, LocalDate.class));
         Assert.assertEquals(supports, convertor.supports(meta, LocalDateTime.class));
@@ -63,7 +64,7 @@ public class DateTimeParamConvertorTestCase {
     }
 
     private void assertConvert(Object value, int hour, int minutes, int seconds) {
-        FieldMeta meta = new FieldMeta(null, null,null, null, null, false, null, DbType.DATETIME);
+        FieldMeta meta = new FieldMeta(null, null,null, null, null, false, null, DbType.DATETIME, Cluster.AUTO);
         Object date = convertor.convert(meta, value);
         Assert.assertTrue(date instanceof java.sql.Timestamp);
         Calendar calendar = Calendar.getInstance();
