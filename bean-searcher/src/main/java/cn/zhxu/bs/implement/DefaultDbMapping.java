@@ -11,7 +11,6 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -243,38 +242,48 @@ public class DefaultDbMapping implements DbMapping {
                 return null;
             }
         }
+        String mapTo = dbField != null ? dbField.mapTo().trim() : null;
         if (dbField != null) {
             String fieldSql = dbField.value().trim();
             if (StringUtils.isNotBlank(fieldSql)) {
                 if (fieldSql.toLowerCase().startsWith("select ")) {
                     return "(" + fieldSql + ")";
                 }
-                return fieldSql;
+                return withMapTo(fieldSql, mapTo);
             }
         } else if (shouldIgnore(field, ignoreFields)) {
             // 未加 @DbField 注解时，更据 ignoreFields 判断该字段是否应该被忽略
             return null;
         }
-        if (bean == null) {
-            // 省略了 @SearchBean 注解，此时默认为单表映射
-            return toColumnName(field);
+        if (StringUtils.isNotBlank(mapTo)) {
+            // 指定了 mapTo 属性
+            return withMapTo(toColumnName(field), mapTo);
         }
-        String tables = bean.tables().trim();
-        if (StringUtils.isBlank(tables)) {
-            // 注解 @SearchBean 的 tables 没有赋值，此时默认为单表映射
-            return toColumnName(field);
-        }
-        String tab = bean.autoMapTo().trim();
-        if (StringUtils.isNotBlank(tab)) {
+        String autoMapTo = bean != null ? bean.autoMapTo().trim() : null;
+        if (StringUtils.isNotBlank(autoMapTo)) {
             // 指定了 autoMapTo, 则映射它指定的表
-            return tab + "." + toColumnName(field);
+            return withMapTo(toColumnName(field), autoMapTo);
         }
-        Matcher matcher = SINGLE_TABLE_PATTERN.matcher(tables);
-        if (matcher.matches()) {
-            // @SearchBean.tables 是单表
+        if (isMapToSingleTable(bean)) {
+            // 单表映射
             return toColumnName(field);
         }
+        // 其它情况，忽略该字段
         return null;
+    }
+
+    protected String withMapTo(String fieldSql, String mapTo) {
+        if (StringUtils.isBlank(mapTo)) {
+            return fieldSql;
+        }
+        return mapTo + "." + fieldSql;
+    }
+
+    // 判断是否是单表映射
+    protected boolean isMapToSingleTable(SearchBean bean) {
+        if (bean == null) return true;
+        String tables = bean.tables().trim();
+        return StringUtils.isBlank(tables) || SINGLE_TABLE_PATTERN.matcher(tables).matches();
     }
 
     // 比较 Field 的所在类层级是否比 @SearchBean 注解更接近父类

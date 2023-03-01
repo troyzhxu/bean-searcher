@@ -80,9 +80,9 @@ public @interface SearchBean {
 	boolean distinct() default false;
 
 	/**
-	 * 字段未加 {@link DbField } 注解时，指定它自动映射到那张表
-	 * 只有在 {@link #tables()} 属性不空时起作用，当 {@link #tables()} 为空时，并且没有添加 {@link DbIgnore } 注解时，则字段自动映射到 {@link DbMapping } 决定的那张表）
-	 * 如果该属性为空，则表示 未被 @DbField 注解的字段不需要映射
+	 * 当某字段同时未指定 {@link DbField#value()} 与 {@link DbField#mapTo()} 时，该属性指定它自动映射到哪张表 <p>
+	 * 只有在 {@link #tables()} 指定了多张表时起作用 <p>
+	 * 当多表映射中，如果该属性为空，则表示未被 @DbField 注解的字段不需要映射
 	 * @since v3.0.0
 	 * @return 自动映射的表名 或 别名
 	 */

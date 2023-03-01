@@ -3,14 +3,14 @@
 ### ✨ Features
 
 * Bean Searcher
-  * 优化：`ParamResolver.Convertor`：入参 `DbType` 修改为 `FieldMeta`
-  * 优化： 支持 `DbType` 为 `UNKNOWN` 时进行参数值转换，交由用户自己判断
-  * 重构：`ParamResolver.Convertor` -> `FieldConvertor.ParamConvertor`
+  * 优化：`@DbField.type` 为 `UNKNOWN` 时，也支持使用 `ParamConvertor` 进行参数值转换
+  * 重构：`ParamResolver.Convertor` -> `FieldConvertor.ParamConvertor`，且入参 `DbType` 类型修改为 `FieldMeta` 类型
   * 功能：注解 `@DbField` 新增 `name` 属性，可显式指定字段的参数名
-  * 功能：注解 `@DbField` 新增 `cluster` 属性，可显式指定该字段是否是聚合字段
-  * 功能：注解 `@SearchBean` 新增 `fields` 属性，用于指定额外的条件字段
-  * 优化：当 `@SearchBean.groupBy` 使用拼接参数时，条件字段的生成逻辑
-  * 优化：完善 `groupBy` 与 `groupExpr` 同时使用时的 `where` 与 `having` 条件拆分
+  * 功能：注解 `@DbField` 新增 `cluster` 属性，可显式指定是否是聚合字段
+  * 功能：注解 `@DbField` 新增 `mapTo` 属性，可显式指定映射到哪张表
+  * 功能：注解 `@SearchBean` 新增 `fields` 属性，用于指定额外的动态条件字段
+  * 优化：注解 `@SearchBean.groupBy` 使用拼接参数时，条件字段的生成逻辑
+  * 优化：完善 `groupBy` 与 `groupExpr` 同时使用时 `where` 与 `having` 的条件拆分逻辑
 * Bean Searcher Boot Starter
   * GroupPairResolver 支持注入 Bean 的方式自定义
 * Bean Searcher Solon Plugin

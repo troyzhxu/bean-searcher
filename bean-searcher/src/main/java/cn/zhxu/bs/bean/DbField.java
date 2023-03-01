@@ -3,7 +3,10 @@ package cn.zhxu.bs.bean;
 import cn.zhxu.bs.DbMapping;
 import cn.zhxu.bs.FieldOp;
 
-import java.lang.annotation.*;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * 用于注解一个可检索 bean 的属性
@@ -32,6 +35,13 @@ public @interface DbField {
 	 * @return 数据库字段
 	 * */
 	String value() default "";
+
+	/**
+	 * 用于指定该字段映射到哪张表
+	 * @since v4.1.0
+	 * @return 数据库表名 或 别名
+	 */
+	String mapTo() default "";
 
 	/**
 	 * @since v3.0.0
