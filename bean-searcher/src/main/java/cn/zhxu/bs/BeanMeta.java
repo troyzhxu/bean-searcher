@@ -93,7 +93,7 @@ public class BeanMeta<T> {
 		if (fieldMetaMap.containsKey(field)) {
 			throw new SearchException("The field [" + field + "] was already added.");
 		}
-		if (meta.getField() != null) {
+		if (meta.selectable()) {
 			selectFields.add(field);
 		}
 		fieldMetaMap.put(field, meta);

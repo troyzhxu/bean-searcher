@@ -40,11 +40,11 @@ public class Group<V> {
     }
 
     public Group(int type, List<Group<V>> groups) {
-        this(type, groups, null);
+        this(type, Objects.requireNonNull(groups), null);
     }
 
     public Group(V value) {
-        this(TYPE_RAW, Collections.emptyList(), value);
+        this(TYPE_RAW, Collections.emptyList(), Objects.requireNonNull(value));
     }
 
     private Group(int type, List<Group<V>> groups, V value) {
@@ -198,13 +198,15 @@ public class Group<V> {
     }
 
     /**
+     * <pre>
      * 与另一个 Group 进行逻辑运算，并会自动简化表达式
      * 简化依据为以下 5 组逻辑关系：
-     *   (1)、A | A             = A                 A & A             = A
-     *   (2)、A | (A & B)       = A                 A & (A | B)       = A
-     *   (3)、A | ((A | C) & B) = A | (B & C)       A & ((A & C) | B) = A & (B | C)
-     *   (4)、A | (B | C)       = A | B | C         A & (B & C)       = A & B & C
-     *   (5)、若 A | B = A，则 A | B | C = A | C ;   若 A & B = A，则 A & B & C = A & C ;
+     *   (1) A | A             = A                 A & A             = A
+     *   (2) A | (A & B)       = A                 A & (A | B)       = A
+     *   (3) A | ((A | C) & B) = A | (B & C)       A & ((A & C) | B) = A & (B | C)
+     *   (4) A | (B | C)       = A | B | C         A & (B & C)       = A & B & C
+     *   (5) 若 A | B = A，则 A | B | C = A | C
+     *       若 A & B = A，则 A & B & C = A & C</pre>
      * @param opType 运算类型
      * @param other 另一个 Group
      * @return Group
@@ -329,6 +331,14 @@ public class Group<V> {
      */
     public V getValue() {
         return value;
+    }
+
+    /**
+     * @return 子组
+     * @since v4.1.0
+     */
+    public List<Group<V>> getGroups() {
+        return groups;
     }
 
     @Override

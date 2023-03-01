@@ -17,6 +17,8 @@ public class GroupPair {
 
     public static final Group<List<FieldParam>> EMPTY_GROUP = new Group<>(Collections.emptyList());
 
+    public static final GroupPair EMPTY_PAIR = new GroupPair(EMPTY_GROUP, EMPTY_GROUP);
+
     /**
      * 解析器
      */
@@ -32,7 +34,6 @@ public class GroupPair {
         GroupPair resolve(BeanMeta<?> beanMeta, Group<List<FieldParam>> paramsGroup, String groupBy);
 
     }
-
 
     /**
      * 用于 where 的条件组

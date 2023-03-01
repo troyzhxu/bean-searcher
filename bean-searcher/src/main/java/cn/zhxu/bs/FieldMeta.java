@@ -79,6 +79,10 @@ public class FieldMeta {
         return field;
     }
 
+    public boolean selectable() {
+        return field != null;
+    }
+
     public String getName() {
         return name;
     }
