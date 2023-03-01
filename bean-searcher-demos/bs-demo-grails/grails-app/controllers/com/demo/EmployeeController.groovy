@@ -1,7 +1,7 @@
 package com.demo
 
 import com.demo.sbean.EmployeeBean
-import com.ejlchina.searcher.BeanSearcher
+import cn.zhxu.bs.BeanSearcher
 import grails.converters.JSON
 
 class EmployeeController {

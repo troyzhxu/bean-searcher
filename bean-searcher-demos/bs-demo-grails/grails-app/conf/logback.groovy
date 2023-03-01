@@ -36,7 +36,7 @@ if (Environment.isDevelopmentMode() && targetDir != null) {
 }
 
 // 开启 Bean Searcher 的 SQL 日志
-logger("com.ejlchina.searcher.implement.DefaultSqlExecutor", DEBUG, ['STDOUT'], false)
+logger("cn.zhxu.bs", DEBUG, ['STDOUT'], false)
 
 logger("org.hibernate.SQL", DEBUG, ['STDOUT'], false)
 
