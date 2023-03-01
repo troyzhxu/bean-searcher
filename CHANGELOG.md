@@ -10,6 +10,7 @@
   * 功能：注解 `@DbField` 新增 `cluster` 属性，可显式指定该字段是否是聚合字段
   * 功能：注解 `@SearchBean` 新增 `fields` 属性，用于指定额外的条件字段
   * 优化：当 `@SearchBean.groupBy` 使用拼接参数时，条件字段的生成逻辑
+  * 优化：完善 `groupBy` 与 `groupExpr` 同时使用时的 `where` 与 `having` 条件拆分
 * Bean Searcher Boot Starter
   * GroupPairResolver 支持注入 Bean 的方式自定义
 * Bean Searcher Solon Plugin
