@@ -31,7 +31,7 @@ Thank you to all the contributors who worked on this release:
 * Bean Searcher
   * 增强 `JsonFieldConvertor` 字段转换器，新增 `failOnError` 字段，可配置遇到某些值 JSON 解析异常时，是否自动捕获（即忽略）
 * Bean Searcher Boot Starter
-  * 新增 `bean-searcher.field-convertor.json-fail-on-error` 配置项，表示是否自动捕获 JSON 解析错误，默认 `true`
+  * 新增 `bean-searcher.field-convertor.json-fail-on-error` 配置项，表示是当 JSON 解析错误时，是否抛出异常，默认 `true`
 
 ### 🐛 Bug Fixes
 
