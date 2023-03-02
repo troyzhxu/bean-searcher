@@ -1,0 +1,50 @@
+plugins {
+    id "java"
+    id "maven-publish"
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url 'https://mirrors.cloud.tencent.com/nexus/repository/maven-public/' }
+}
+
+group = "com.example"
+version = "1.0"
+description = "demo"
+
+
+dependencies {
+    implementation platform("org.noear:solon-parent:2.2.0")
+
+    implementation "org.noear:solon-api"
+    implementation "org.noear:wood-solon-plugin"
+    implementation "com.zaxxer:HikariCP:4.0.3"
+
+    implementation "cn.zhxu:bean-searcher-solon-plugin:4.1.0"
+
+    runtimeOnly "com.h2database:h2:2.1.214"
+
+    testImplementation "org.noear:solon-test"
+}
+
+
+compileJava {
+    options.encoding = "UTF-8"
+    options.compilerArgs << "-parameters"
+}
+
+jar {
+    manifest {
+        attributes "Main-Class": "com.example.demo.App"
+    }
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from(configurations.runtimeClasspath.collect {
+        if (it.isDirectory()) it else zipTree(it)
+    })
+    
+    def sourcesMain = sourceSets.main
+    sourcesMain.allSource.forEach { println("add from sources: ${it.name}") }
+    from(sourcesMain.output)
+}

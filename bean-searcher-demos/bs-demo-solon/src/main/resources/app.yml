@@ -1,0 +1,6 @@
+
+datasource:
+  jdbcUrl: jdbc:h2:~/test
+  driverClassName: org.h2.Driver
+  username: sa
+  password: 123456
