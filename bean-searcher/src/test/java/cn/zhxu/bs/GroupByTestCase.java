@@ -1,8 +1,9 @@
 package cn.zhxu.bs;
 
+import cn.zhxu.bs.bean.Cluster;
 import cn.zhxu.bs.bean.DbField;
 import cn.zhxu.bs.bean.SearchBean;
-import cn.zhxu.bs.operator.GreaterThan;
+import cn.zhxu.bs.operator.*;
 import cn.zhxu.bs.util.MapUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -146,7 +147,7 @@ public class GroupByTestCase {
 
 
     @Test
-    public void test_where_having() {
+    public void test_where_having_1() {
         SqlExecutor sqlExecutor = new SqlExecutor() {
             @Override
             public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
@@ -272,6 +273,231 @@ public class GroupByTestCase {
         MapSearcher mapSearcher = SearcherBuilder.mapSearcher().sqlExecutor(sqlExecutor).build();
         Assert.assertEquals(100, mapSearcher.searchCount(StudentCourse2.class, MapUtils.builder().field(StudentCourse::getCourseId, 5)
                 .field(StudentCourse::getAvgScore, 80).op(GreaterThan.class).build()));
+    }
+
+    @SearchBean(
+        tables = "course c, student_course sc",
+        where = "c.id = sc.course_id",
+        groupBy = "sc.course_id",
+        fields = {
+            @DbField(name = "no", mapTo = "c"),
+            @DbField(name = "name", mapTo = "c", onlyOn = Contain.class),
+        },
+        autoMapTo = "sc"
+    )
+    public static class CourseScore {
+        private long courseId;
+        @DbField("sum(sc.score)")
+        private int sumScore;
+        @DbField("avg(sc.score)")
+        private int avgScore;
+        public long getCourseId() {
+            return courseId;
+        }
+        public int getSumScore() {
+            return sumScore;
+        }
+        public int getAvgScore() {
+            return avgScore;
+        }
+    }
+
+    @Test
+    public void test_where_having_2() {
+        SqlExecutor sqlExecutor = new SqlExecutor() {
+            @Override
+            public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
+                Assert.assertNull(searchSql.getClusterSqlString());
+                Assert.assertTrue(searchSql.getClusterSqlParams().isEmpty());
+                System.out.println(searchSql.getListSqlString());
+                Assert.assertEquals("select sc.course_id c_2, sum(sc.score) c_3, avg(sc.score) c_4 from course c, student_course sc " +
+                        "where (c.id = sc.course_id) and (c.no like ?) and (c.name like ?) and (sc.course_id = ?) group by sc.course_id having (c_4 > ?)", searchSql.getListSqlString());
+                List<Object> params = searchSql.getListSqlParams();
+                System.out.println(params);
+                Assert.assertEquals(4, params.size());
+                Assert.assertEquals("100%", params.get(0));
+                Assert.assertEquals("%Jack%", params.get(1));
+                Assert.assertEquals(5L, params.get(2));
+                Assert.assertEquals(80, params.get(3));
+                return new SqlResult<>(searchSql, new SqlResult.ResultSet() {
+                    @Override
+                    public boolean next() {
+                        return false;
+                    }
+                    @Override
+                    public Object get(String columnLabel) {
+                        return 0;
+                    }
+                }, columnLabel -> 100);
+            }
+        };
+        MapSearcher mapSearcher = SearcherBuilder.mapSearcher().sqlExecutor(sqlExecutor).build();
+        mapSearcher.searchAll(CourseScore.class, MapUtils.builder()
+                .field(CourseScore::getCourseId, 5)
+                .field("name", "Jack")
+                .field("no", "100").op(StartWith.class)
+                .field(CourseScore::getAvgScore, 80).op(GreaterThan.class)
+                .build());
+        BeanSearcher beanSearcher = SearcherBuilder.beanSearcher().sqlExecutor(sqlExecutor).build();
+        beanSearcher.searchAll(CourseScore.class, MapUtils.builder()
+                .field(CourseScore::getCourseId, 5)
+                .field("name", "Jack")
+                .field("no", "100").op(StartWith.class)
+                .field(CourseScore::getAvgScore, 80).op(GreaterThan.class)
+                .build());
+    }
+
+    @SearchBean(
+        tables = "course c, student_course sc",
+        where = "c.id = sc.course_id",
+        groupBy = "course_id",
+        fields = {
+            @DbField(name = "avgScore", value = "avg(sc.score)", cluster = Cluster.TRUE),
+            @DbField(name = "name", mapTo = "c", onlyOn = Contain.class),
+        },
+        autoMapTo = "sc"
+    )
+    public static class CourseScore3 {
+        // 将映射为 “sc.course_id”，并不在 groupBy 里，这里使用 Cluster.FALSE 来标记非聚合字段
+        @DbField(cluster = Cluster.FALSE)
+        private long courseId;
+        @DbField("sum(sc.score)")
+        private int sumScore;
+        public long getCourseId() {
+            return courseId;
+        }
+        public int getSumScore() {
+            return sumScore;
+        }
+    }
+
+    @Test
+    public void test_where_having_3() {
+        SqlExecutor sqlExecutor = new SqlExecutor() {
+            @Override
+            public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
+                Assert.assertNull(searchSql.getClusterSqlString());
+                Assert.assertTrue(searchSql.getClusterSqlParams().isEmpty());
+                System.out.println(searchSql.getListSqlString());
+                Assert.assertEquals("select sc.course_id c_2, sum(sc.score) c_3 from course c, student_course sc " +
+                        "where (c.id = sc.course_id) and (c.name like ?) and (sc.course_id = ?) group by course_id having (avg(sc.score) > ?)", searchSql.getListSqlString());
+                List<Object> params = searchSql.getListSqlParams();
+                System.out.println(params);
+                Assert.assertEquals(3, params.size());
+                Assert.assertEquals("%Jack%", params.get(0));
+                Assert.assertEquals(5L, params.get(1));
+                Assert.assertEquals(80, params.get(2));
+                return new SqlResult<>(searchSql, new SqlResult.ResultSet() {
+                    @Override
+                    public boolean next() {
+                        return false;
+                    }
+                    @Override
+                    public Object get(String columnLabel) {
+                        return 0;
+                    }
+                }, columnLabel -> 100);
+            }
+        };
+        MapSearcher mapSearcher = SearcherBuilder.mapSearcher().sqlExecutor(sqlExecutor).build();
+        mapSearcher.searchAll(CourseScore3.class, MapUtils.builder()
+                .field(CourseScore3::getCourseId, 5)
+                .field("name", "Jack")
+                .field("avgScore", 80).op(GreaterThan.class)
+                .build());
+        BeanSearcher beanSearcher = SearcherBuilder.beanSearcher().sqlExecutor(sqlExecutor).build();
+        beanSearcher.searchAll(CourseScore3.class, MapUtils.builder()
+                .field(CourseScore3::getCourseId, 5)
+                .field("name", "Jack")
+                .field("avgScore", 80).op(GreaterThan.class)
+                .build());
+    }
+
+    @Test
+    public void test_group_expr_1() {
+        SqlExecutor sqlExecutor = new SqlExecutor() {
+            @Override
+            public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
+                Assert.assertNull(searchSql.getClusterSqlString());
+                Assert.assertTrue(searchSql.getClusterSqlParams().isEmpty());
+                System.out.println(searchSql.getListSqlString());
+                Assert.assertEquals("select sc.course_id c_2, sum(sc.score) c_3 from course c, student_course sc " +
+                        "where (c.id = sc.course_id) and ((sc.course_id = ?) or (c.name like ?)) group by course_id having ((avg(sc.score) > ?) or (c_3 <= ?))", searchSql.getListSqlString());
+                List<Object> params = searchSql.getListSqlParams();
+                Assert.assertEquals(4, params.size());
+                Assert.assertEquals(5L, params.get(0));
+                Assert.assertEquals("%Jack%", params.get(1));
+                Assert.assertEquals(80, params.get(2));
+                Assert.assertEquals(1000, params.get(3));
+                return new SqlResult<>(searchSql, new SqlResult.ResultSet() {
+                    @Override
+                    public boolean next() {
+                        return false;
+                    }
+                    @Override
+                    public Object get(String columnLabel) {
+                        return 0;
+                    }
+                }, columnLabel -> 100);
+            }
+        };
+        SearcherBuilder.mapSearcher().sqlExecutor(sqlExecutor).build().searchAll(CourseScore3.class,
+                MapUtils.builder()
+                    .group("A")
+                    .field(CourseScore3::getCourseId, 5)
+                    .group("B")
+                    .field("name", "Jack")
+                    .group("C")
+                    .field("avgScore", 80).op(GreaterThan.class)
+                    .group("D")
+                    .field("sumScore", 1000).op(FieldOps.LessEqual)
+                    .groupExpr("(A|B)&(C|D)")
+                    .build()
+        );
+    }
+
+
+    @Test
+    public void test_group_expr_2() {
+        SqlExecutor sqlExecutor = new SqlExecutor() {
+            @Override
+            public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
+                Assert.assertNull(searchSql.getClusterSqlString());
+                Assert.assertTrue(searchSql.getClusterSqlParams().isEmpty());
+                System.out.println(searchSql.getListSqlString());
+                Assert.assertEquals("select sc.course_id c_2, sum(sc.score) c_3 from course c, student_course sc " +
+                        "where (c.id = sc.course_id) and ((sc.course_id = ?) or (c.name like ?)) group by course_id having (avg(sc.score) > ?) and (c_3 <= ?)", searchSql.getListSqlString());
+                List<Object> params = searchSql.getListSqlParams();
+                Assert.assertEquals(4, params.size());
+                Assert.assertEquals(5L, params.get(0));
+                Assert.assertEquals("%Jack%", params.get(1));
+                Assert.assertEquals(80, params.get(2));
+                Assert.assertEquals(1000, params.get(3));
+                return new SqlResult<>(searchSql, new SqlResult.ResultSet() {
+                    @Override
+                    public boolean next() {
+                        return false;
+                    }
+                    @Override
+                    public Object get(String columnLabel) {
+                        return 0;
+                    }
+                }, columnLabel -> 100);
+            }
+        };
+        SearcherBuilder.mapSearcher().sqlExecutor(sqlExecutor).build().searchAll(CourseScore3.class,
+                MapUtils.builder()
+                        .group("A")
+                        .field(CourseScore3::getCourseId, 5)
+                        .field("avgScore", 80).op(GreaterThan.class)
+                        .field("sumScore", 1000).op(FieldOps.LessEqual)
+                        .group("B")
+                        .field("name", "Jack")
+                        .field("avgScore", 80).op(GreaterThan.class)
+                        .field("sumScore", 1000).op(FieldOps.LessEqual)
+                        .groupExpr("A|B")
+                        .build()
+        );
     }
 
 }
