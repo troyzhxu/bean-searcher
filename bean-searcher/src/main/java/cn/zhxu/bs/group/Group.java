@@ -200,13 +200,13 @@ public class Group<V> {
     /**
      * <pre>
      * 与另一个 Group 进行逻辑运算，并会自动简化表达式
-     * 简化依据为以下 5 组逻辑关系：
-     *   (1) A | A             = A                 A & A             = A
-     *   (2) A | (A & B)       = A                 A & (A | B)       = A
-     *   (3) A | ((A | C) & B) = A | (B & C)       A & ((A & C) | B) = A & (B | C)
-     *   (4) A | (B | C)       = A | B | C         A & (B & C)       = A & B & C
-     *   (5) 若 A | B = A，则 A | B | C = A | C
-     *       若 A & B = A，则 A & B & C = A & C</pre>
+     * 简化依据为以下 6 组逻辑等式：
+     * (1) A | A             = A               A & A             = A
+     * (2) A | (A & B)       = A               A & (A | B)       = A
+     * (3) A | ((A | C) & B) = A | (B & C)     A & ((A & C) | B) = A & (B | C)
+     * (4) A | (B | C)       = A | B | C       A & (B & C)       = A & B & C
+     * (5) 若 A | B = A，则 A | B | C = A | C   若 A & B = A，则 A & B & C = A & C
+     * (6) (A & B) | (A & C) = A & (B | C)     (A | B) & (A & C) = A | (B & C) </pre>
      * @param opType 运算类型
      * @param other 另一个 Group
      * @return Group
@@ -280,6 +280,22 @@ public class Group<V> {
             return g1.type == opType ? g1 : g2;
         }
         if (g1.type != TYPE_RAW && g1.type != opType) {
+            if (g1.type == g2.type) {
+                // 化简：根据逻辑等式 (2) (6)
+                List<Group<V>> sames = g1.groups.stream().filter(g2.groups::contains).collect(Collectors.toList());
+                if (sames.size() == g1.groups.size() || sames.size() == g2.groups.size()) {
+                    return new Group<>(g1.type, sames);
+                }
+                if (sames.size() > 0) {
+                    List<Group<V>> others1 = g1.groups.stream().filter(g -> !sames.contains(g)).collect(Collectors.toList());
+                    List<Group<V>> others2 = g2.groups.stream().filter(g -> !sames.contains(g)).collect(Collectors.toList());
+                    Group<V> groups1 = others1.size() == 1 ? others1.get(0) : new Group<>(g1.type, others1);
+                    Group<V> groups2 = others2.size() == 1 ? others2.get(0) : new Group<>(g2.type, others2);
+                    ArrayList<Group<V>> children = new ArrayList<>(sames);
+                    children.add(new Group<>(opType, Arrays.asList(groups1, groups2)));
+                    return new Group<>(g1.type, children);
+                }
+            }
             for (Group<V> group: g1.groups) {
                 if (group.type == opType) {
                     // 化简：根据逻辑等式 (3)

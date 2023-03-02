@@ -140,4 +140,44 @@ public class ExprParserTestCase {
         Assert.assertEquals("(D|C|B)&A", parse("A & (A & C | B | A & D)"));
     }
 
+    @Test
+    public void test_25() {
+        Assert.assertEquals("B&(A|C)", parse("(A & B) | (C & B)"));
+    }
+
+    @Test
+    public void test_26() {
+        Assert.assertEquals("B|A&C", parse("(A | B) & (C | B)"));
+    }
+
+    @Test
+    public void test_27() {
+        Assert.assertEquals("A&B", parse("(A & B) | (A & B & D)"));
+    }
+
+    @Test
+    public void test_28() {
+        Assert.assertEquals("A|B", parse("(A | B) & (A | B | D)"));
+    }
+
+    @Test
+    public void test_29() {
+        Assert.assertEquals("A&B&(C&D|E&F)", parse("(A&B&C&D)|(A&B&E&F)"));
+    }
+
+    @Test
+    public void test_30() {
+        Assert.assertEquals("A|B|(C|D)&(E|F)", parse("(A|B|C|D)&(A|B|E|F)"));
+    }
+
+    @Test
+    public void test_31() {
+        Assert.assertEquals("A&B&(C|E&F)", parse("(A&B&C)|(A&B&E&F)"));
+    }
+
+    @Test
+    public void test_32() {
+        Assert.assertEquals("A|B|C&(E|F)", parse("(A|B|C)&(A|B|E|F)"));
+    }
+
 }
