@@ -79,7 +79,11 @@ public class GroupPairResolver implements GroupPair.Resolver {
                 where.add(param);
             }
         }
-        return new GroupPair(new Group<>(where), new Group<>(having));
+        return new GroupPair(group(where), group(having));
+    }
+
+    protected Group<List<FieldParam>> group(List<FieldParam> params) {
+        return params.isEmpty() ? GroupPair.EMPTY_GROUP : new Group<>(params);
     }
 
     /**

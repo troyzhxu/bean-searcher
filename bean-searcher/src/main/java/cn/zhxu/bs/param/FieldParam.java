@@ -6,6 +6,7 @@ import cn.zhxu.bs.util.StringUtils;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 字段参数
@@ -52,6 +53,19 @@ public class FieldParam {
 
 		public Object getValue() {
 			return value;
+		}
+
+		/**
+		 * 在 {@link cn.zhxu.bs.group.Group } 的布尔运算中，会用到该方法
+		 * @param o Object
+		 * @return boolean
+		 */
+		@Override
+		public boolean equals(Object o) {
+			if (this == o) return true;
+			if (o == null || getClass() != o.getClass()) return false;
+			Value that = (Value) o;
+			return index == that.index && Objects.equals(value, that.value);
 		}
 
 	}
@@ -103,6 +117,19 @@ public class FieldParam {
 
 	public void setIgnoreCase(boolean ignoreCase) {
 		this.ignoreCase = ignoreCase;
+	}
+
+	/**
+	 * 在 {@link cn.zhxu.bs.group.Group } 的布尔运算中，会用到该方法
+	 * @param o Object
+	 * @return boolean
+	 */
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		FieldParam that = (FieldParam) o;
+		return ignoreCase == that.ignoreCase && Objects.equals(name, that.name) && Objects.equals(operator, that.operator) && Objects.equals(values, that.values);
 	}
 
 }
