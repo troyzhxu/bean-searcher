@@ -206,7 +206,7 @@ public class Group<V> {
      * (3) A | ((A | C) & B) = A | (B & C)     A & ((A & C) | B) = A & (B | C)
      * (4) A | (B | C)       = A | B | C       A & (B & C)       = A & B & C
      * (5) 若 A | B = A，则 A | B | C = A | C   若 A & B = A，则 A & B & C = A & C
-     * (6) (A & B) | (A & C) = A & (B | C)     (A | B) & (A & C) = A | (B & C) </pre>
+     * (6) (A & B) | (A & C) = A & (B | C)     (A | B) & (A & C) = A | (B & C)</pre>
      * @param opType 运算类型
      * @param other 另一个 Group
      * @return Group
@@ -281,7 +281,7 @@ public class Group<V> {
         }
         if (g1.type != TYPE_RAW && g1.type != opType) {
             if (g1.type == g2.type) {
-                // 化简：根据逻辑等式 (2) (6)
+                // @since v4.1.0 化简：根据逻辑等式 (2) (6)
                 List<Group<V>> sames = g1.groups.stream().filter(g2.groups::contains).collect(Collectors.toList());
                 if (sames.size() == g1.groups.size() || sames.size() == g2.groups.size()) {
                     return new Group<>(g1.type, sames);
