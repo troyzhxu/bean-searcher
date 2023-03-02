@@ -91,6 +91,9 @@ public class Group<V> {
                 newGroups.add(newGroup);
             }
         }
+        if (newGroups.size() == 1) {
+            return newGroups.get(0);
+        }
         return new Group<>(type, newGroups);
     }
 
