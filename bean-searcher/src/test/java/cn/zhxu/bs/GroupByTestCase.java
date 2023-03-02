@@ -456,7 +456,6 @@ public class GroupByTestCase {
         );
     }
 
-
     @Test
     public void test_group_expr_2() {
         SqlExecutor sqlExecutor = new SqlExecutor() {
@@ -494,6 +493,80 @@ public class GroupByTestCase {
                         .group("B")
                         .field("name", "Jack")
                         .field("avgScore", 80).op(GreaterThan.class)
+                        .field("sumScore", 1000).op(FieldOps.LessEqual)
+                        .groupExpr("A|B")
+                        .build()
+        );
+    }
+
+    @Test
+    public void test_group_expr_3() {
+        SqlExecutor sqlExecutor = new SqlExecutor() {
+            @Override
+            public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
+                Assert.assertNull(searchSql.getClusterSqlString());
+                Assert.assertTrue(searchSql.getClusterSqlParams().isEmpty());
+                System.out.println(searchSql.getListSqlString());
+                Assert.assertEquals("select sc.course_id c_2, sum(sc.score) c_3 from course c, student_course sc " +
+                        "where (c.id = sc.course_id) and ((sc.course_id = ?) or (c.name like ?)) group by course_id", searchSql.getListSqlString());
+                List<Object> params = searchSql.getListSqlParams();
+                Assert.assertEquals(2, params.size());
+                Assert.assertEquals(5L, params.get(0));
+                Assert.assertEquals("%Jack%", params.get(1));
+                return new SqlResult<>(searchSql, new SqlResult.ResultSet() {
+                    @Override
+                    public boolean next() {
+                        return false;
+                    }
+                    @Override
+                    public Object get(String columnLabel) {
+                        return 0;
+                    }
+                }, columnLabel -> 100);
+            }
+        };
+        SearcherBuilder.mapSearcher().sqlExecutor(sqlExecutor).build().searchAll(CourseScore3.class,
+                MapUtils.builder()
+                        .group("A")
+                        .field(CourseScore3::getCourseId, 5)
+                        .group("B")
+                        .field("name", "Jack")
+                        .groupExpr("(A|B)")
+                        .build()
+        );
+    }
+
+    @Test
+    public void test_group_expr_4() {
+        SqlExecutor sqlExecutor = new SqlExecutor() {
+            @Override
+            public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
+                Assert.assertNull(searchSql.getClusterSqlString());
+                Assert.assertTrue(searchSql.getClusterSqlParams().isEmpty());
+                System.out.println(searchSql.getListSqlString());
+                Assert.assertEquals("select sc.course_id c_2, sum(sc.score) c_3 from course c, student_course sc " +
+                        "where (c.id = sc.course_id) group by course_id having ((avg(sc.score) > ?) or (c_3 <= ?))", searchSql.getListSqlString());
+                List<Object> params = searchSql.getListSqlParams();
+                Assert.assertEquals(2, params.size());
+                Assert.assertEquals(80, params.get(0));
+                Assert.assertEquals(1000, params.get(1));
+                return new SqlResult<>(searchSql, new SqlResult.ResultSet() {
+                    @Override
+                    public boolean next() {
+                        return false;
+                    }
+                    @Override
+                    public Object get(String columnLabel) {
+                        return 0;
+                    }
+                }, columnLabel -> 100);
+            }
+        };
+        SearcherBuilder.mapSearcher().sqlExecutor(sqlExecutor).build().searchAll(CourseScore3.class,
+                MapUtils.builder()
+                        .group("A")
+                        .field("avgScore", 80).op(GreaterThan.class)
+                        .group("B")
                         .field("sumScore", 1000).op(FieldOps.LessEqual)
                         .groupExpr("A|B")
                         .build()
