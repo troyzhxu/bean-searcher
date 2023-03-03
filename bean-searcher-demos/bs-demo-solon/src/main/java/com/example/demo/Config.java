@@ -17,7 +17,6 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Configuration
@@ -49,22 +48,12 @@ public class Config {
             @Override
             public <T> Map<String, Object> doFilter(BeanMeta<T> beanMeta, Map<String, Object> paraMap) {
                 // 获取当前请求的所有参数
-                Map<String, Object> params = flat(Context.current().paramsMap());
+                Map<String, Object> params = new HashMap<>(Context.current().paramMap());
+                // 用户传入的参数优先级更高
                 params.putAll(paraMap);
                 return params;
             }
         };
-    }
-
-    public static Map<String, Object> flat(Map<String, List<String>> map) {
-        Map<String, Object> newMap = new HashMap<>();
-        for (Map.Entry<String, List<String>> entry: map.entrySet()) {
-            List<String> values = entry.getValue();
-            if (values.size() > 0) {
-                newMap.put(entry.getKey(), values.get(0));
-            }
-        }
-        return newMap;
     }
 
     @Bean
