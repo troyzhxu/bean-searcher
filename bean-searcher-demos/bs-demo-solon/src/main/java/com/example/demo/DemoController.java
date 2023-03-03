@@ -20,6 +20,7 @@ public class DemoController {
 
     @Mapping("/employees")
     public SearchResult<Employee> employees() {
+        // 分页查询员工信息，并对年龄进行统计
         return beanSearcher.search(Employee.class, Employee::getAge);
     }
 
