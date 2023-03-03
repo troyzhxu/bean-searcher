@@ -2,11 +2,12 @@ package com.example.demo;
 
 import cn.zhxu.bs.BeanSearcher;
 import cn.zhxu.bs.SearchResult;
+import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Inject;
 import org.noear.solon.annotation.Mapping;
 import org.noear.solon.core.handle.ModelAndView;
 
-@org.noear.solon.annotation.Controller
+@Controller
 public class DemoController {
 
     @Inject
