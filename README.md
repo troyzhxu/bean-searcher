@@ -198,8 +198,8 @@ List<User> users = beanSearcher.searchList(User.class, params);
 
 **Demos**：
 
-* [v3.x - demos](./bean-searcher-demos)
-* [v2.x - demo](https://gitee.com/troyzhxu/bean-searcher-demo)
+* [v4.x - demos](./bean-searcher-demos)
+* [v3.x - demos](https://gitee.com/troyzhxu/bean-searcher/tree/v3.8/bean-searcher-demos)
 
 ### 🚀 Rapid development
 
@@ -212,7 +212,7 @@ Using Bean Searcher can greatly save the development time of the complex list re
 
 Bean Searcher can work with any JavaWeb frameworks, such as: SpringBoot, SpringMVC, Grails, Jfinal and so on.
 
-#### SpringBoot
+#### SpringBoot / Grails
 
 All you need is to add a dependence:
 
@@ -220,7 +220,7 @@ All you need is to add a dependence:
 implementation 'cn.zhxu:bean-searcher-boot-stater:4.1.0'
 ```
 
-and then you can inject `Searcher` into a `Controller` or `Service`:
+and then you can inject Searcher into a `Controller` or `Service`:
 
 ```groovy
 /**
@@ -233,6 +233,30 @@ private MapSearcher mapSearcher;
  * Inject a BeanSearcher, which retrieved data is generic objects
  */
 @Autowired
+private BeanSearcher beanSearcher;
+```
+
+#### Solon Project
+
+All you need is to add a dependence:
+
+```groovy
+implementation 'cn.zhxu:bean-searcher-solon-plugin:4.1.0'
+```
+
+and then you can inject Searcher into a `Controller` or `Service`:
+
+```groovy
+/**
+ * Inject a MapSearcher, which retrieved data is Map objects
+ */
+@Inject
+private MapSearcher mapSearcher;
+
+/**
+ * Inject a BeanSearcher, which retrieved data is generic objects
+ */
+@Inject
 private BeanSearcher beanSearcher;
 ```
 

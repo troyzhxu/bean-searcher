@@ -192,8 +192,8 @@ List<User> users = beanSearcher.searchList(User.class, params);
 
 **DEMO 快速体验**：
 
-* [v3.x 的 demos](./bean-searcher-demos)
-* [v2.x 的 demo](https://gitee.com/troyzhxu/bean-searcher-demo)
+* [v4.x - demos](./bean-searcher-demos)
+* [v3.x - demos](https://gitee.com/troyzhxu/bean-searcher/tree/v3.8/bean-searcher-demos)
 
 ### 🚀 快速开发
 
@@ -225,6 +225,28 @@ private MapSearcher mapSearcher;
  * 注入 Bean 检索器，它检索出来的数据以 泛型 对象呈现
  */
 @Autowired
+private BeanSearcher beanSearcher;
+```
+
+#### Solon 项目，添加依赖即集成完毕：
+
+```groovy
+implementation 'cn.zhxu:bean-searcher-solon-plugin:4.1.0'
+```
+
+接着便可在 `Controller` 或 `Service` 里注入检索器：
+
+```groovy
+/**
+ * Inject a MapSearcher, which retrieved data is Map objects
+ */
+@Inject
+private MapSearcher mapSearcher;
+
+/**
+ * Inject a BeanSearcher, which retrieved data is generic objects
+ */
+@Inject
 private BeanSearcher beanSearcher;
 ```
 
