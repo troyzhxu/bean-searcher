@@ -7,9 +7,9 @@
 ### 软件架构
 软件架构说明
 
-- 控制层：spring-boot-web 2
+- Web框架：solon
 - 数据库：h2 （无需安装配置）
-- 数据库访问：spring-jdbc、bean-searcher
+- 数据库访问：wood、bean-searcher
 - 模板引擎：thymeleaf
 - 前端框架：vue、element-ui
 
