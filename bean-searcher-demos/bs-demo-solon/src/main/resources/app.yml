@@ -1,6 +1,12 @@
 
-datasource:
+db:
   jdbcUrl: jdbc:h2:~/test
   driverClassName: org.h2.Driver
   username: sa
   password: 123456
+
+# 为兼容前端 Element UI 的分页组件，它是从 1 开始的
+bean-searcher:
+  params:
+    pagination:
+      start: 1

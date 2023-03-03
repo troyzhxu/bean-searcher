@@ -4,6 +4,7 @@ import cn.zhxu.bs.BeanSearcher;
 import cn.zhxu.bs.SearchResult;
 import org.noear.solon.annotation.Inject;
 import org.noear.solon.annotation.Mapping;
+import org.noear.solon.core.handle.ModelAndView;
 
 @org.noear.solon.annotation.Controller
 public class DemoController {
@@ -12,13 +13,12 @@ public class DemoController {
     private BeanSearcher beanSearcher;
 
     @Mapping("/")
-    public String index() {
-        System.out.println("beanSearcher = " + beanSearcher);
-        return "You can request";
+    public ModelAndView index() {
+        return new ModelAndView("index.html");
     }
 
-    @Mapping("/employee")
-    public SearchResult<Employee> employee() {
+    @Mapping("/employees")
+    public SearchResult<Employee> employees() {
         return beanSearcher.search(Employee.class);
     }
 

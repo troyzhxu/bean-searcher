@@ -18,10 +18,13 @@ dependencies {
     implementation platform("org.noear:solon-parent:2.2.1")
 
     implementation "org.noear:solon-api"
+    implementation "org.noear:solon.view.thymeleaf"
     implementation "org.noear:wood-solon-plugin"
-    implementation "com.zaxxer:HikariCP:4.0.3"
 
     implementation "cn.zhxu:bean-searcher-solon-plugin:4.1.0"
+    implementation "cn.zhxu:xjsonkit-snack3:1.4.2"
+
+    implementation "com.zaxxer:HikariCP:4.0.3"
 
     runtimeOnly "com.h2database:h2:2.1.214"
 
