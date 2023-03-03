@@ -15,7 +15,7 @@ description = "demo"
 
 
 dependencies {
-    implementation platform("org.noear:solon-parent:2.2.0")
+    implementation platform("org.noear:solon-parent:2.2.1")
 
     implementation "org.noear:solon-api"
     implementation "org.noear:wood-solon-plugin"
