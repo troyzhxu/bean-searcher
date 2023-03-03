@@ -18,3 +18,6 @@
 * [Grails 案例](./bs-demo-grails)（无需配置数据库）
   - 使用 H2 数据库，无需任何配置即可启动体验
   - JDK 8+
+* [Solon 案例](./bs-demo-solon)
+  - 使用 H2 数据库，无需任何配置即可启动体验
+  - JDK 8+

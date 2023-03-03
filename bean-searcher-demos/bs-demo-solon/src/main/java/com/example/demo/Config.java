@@ -3,11 +3,13 @@ package com.example.demo;
 import cn.zhxu.bs.BeanMeta;
 import cn.zhxu.bs.ParamFilter;
 import com.zaxxer.hikari.HikariDataSource;
+import org.noear.snack.core.Feature;
 import org.noear.solon.annotation.Bean;
 import org.noear.solon.annotation.Configuration;
 import org.noear.solon.annotation.Inject;
 import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.util.ResourceUtil;
+import org.noear.solon.serialization.snack3.SnackRenderFactory;
 import org.noear.wood.DbContext;
 import org.noear.wood.annotation.Db;
 
@@ -63,6 +65,12 @@ public class Config {
             }
         }
         return newMap;
+    }
+
+    @Bean
+    public void jsonInit(@Inject SnackRenderFactory factory){
+        // 枚举序列化为名字
+        factory.addFeatures(Feature.EnumUsingName);  //增加特性
     }
 
 }
