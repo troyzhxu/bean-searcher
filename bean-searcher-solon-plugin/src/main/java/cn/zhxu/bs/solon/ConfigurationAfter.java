@@ -85,20 +85,6 @@ public class ConfigurationAfter {
 	}
 
 	@Bean
-	@Condition(onMissingBean = ListFieldConvertor.class,
-			onProperty = "${bean-searcher.field-convertor.use-list:true}=true")
-	@SuppressWarnings("all")
-	public ListFieldConvertor listFieldConvertor() {
-		List<ListFieldConvertor.Convertor> tmp = context.getBeansOfType(ListFieldConvertor.Convertor.class);
-		List<ListFieldConvertor.Convertor<?>> convertors = new ArrayList<>();
-		tmp.forEach(convertors::add);
-		BeanSearcherProperties.FieldConvertor conf = config.getFieldConvertor();
-		ListFieldConvertor convertor = new ListFieldConvertor(conf.getListItemSeparator());
-		ifAvailable(convertors, convertor::setConvertors);
-		return convertor;
-	}
-
-	@Bean
 	@Condition(onMissingBean = BeanReflector.class)
 	public BeanReflector beanReflector() {
 		List<BFieldConvertor> convertors = context.getBeansOfType(BFieldConvertor.class);

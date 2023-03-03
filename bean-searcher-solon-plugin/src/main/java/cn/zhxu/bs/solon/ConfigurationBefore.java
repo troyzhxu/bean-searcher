@@ -15,6 +15,8 @@ import org.noear.solon.annotation.Inject;
 import org.noear.solon.core.AopContext;
 
 import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Configuration
@@ -215,6 +217,33 @@ public class ConfigurationBefore {
         return convertor;
     }
 
+    //
+    // 在 springboot 那边，是用单独类处理的；在 solon 这边，用函数
+    //
+    @Bean
+    @Condition(onMissingBean = JsonFieldConvertor.class, onClass = JsonKit.class,
+            onProperty = "${bean-searcher.field-convertor.use-json:true}=true")
+    public JsonFieldConvertor jsonFieldConvertor() {
+        BeanSearcherProperties.FieldConvertor conf = config.getFieldConvertor();
+        return new JsonFieldConvertor(conf.isJsonFailOnError());
+    }
+
+    @Bean
+    @Condition(onMissingBean = ListFieldConvertor.class,
+            onProperty = "${bean-searcher.field-convertor.use-list:true}=true")
+    @SuppressWarnings("all")
+    public ListFieldConvertor listFieldConvertor() {
+        List<ListFieldConvertor.Convertor> tmp = context.getBeansOfType(ListFieldConvertor.Convertor.class);
+        List<ListFieldConvertor.Convertor<?>> convertors = new ArrayList<>();
+        tmp.forEach(convertors::add);
+        BeanSearcherProperties.FieldConvertor conf = config.getFieldConvertor();
+        ListFieldConvertor convertor = new ListFieldConvertor(conf.getListItemSeparator());
+        if (convertors != null) {
+            convertor.setConvertors(convertors);
+        }
+        return convertor;
+    }
+
     @Bean
     @Condition(onMissingBean = DbMapping.class)
     public DbMapping dbMapping() {
@@ -261,17 +290,6 @@ public class ConfigurationBefore {
             convertor.setZoneId(zoneId);
         }
         return convertor;
-    }
-
-    //
-    // 在 springboot 那边，是用单独类处理的；在 solon 这边，用函数
-    //
-    @Bean
-    @Condition(onClass = JsonKit.class,
-            onProperty = "${bean-searcher.field-convertor.use-json:true}=true")
-    public JsonFieldConvertor jsonFieldConvertor() {
-        BeanSearcherProperties.FieldConvertor conf = config.getFieldConvertor();
-        return new JsonFieldConvertor(conf.isJsonFailOnError());
     }
 
 }
