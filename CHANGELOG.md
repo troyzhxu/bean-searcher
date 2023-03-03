@@ -20,7 +20,7 @@
 * Bean Searcher Boot Starter
   * 支持 `GroupPairResolver` 注入 Bean 的方式自定义
 * Bean Searcher Solon Plugin
-  * 首发 Solon 插件
+  * 首发 Solon 插件（功能同 `bean-searcher-boot-starter`）
 
 ### 👨🏻‍💻 Contributors
 
