@@ -18,7 +18,7 @@
 ```bash
 > git clone https://github.com/troyzhxu/bean-searcher.git
 > cd bean-searcher/bean-searcher-demos/bs-demo-solon
-> IDEA 打开允许
+> IDEA 打开运行
 ```
 
 ### 运行效果
