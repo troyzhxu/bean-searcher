@@ -163,9 +163,11 @@ public class BeanSearcherAutoConfiguration {
 	@Condition(onMissingBean = ParamResolver.class)
 	public ParamResolver paramResolver(PageExtractor pageExtractor,
 									   FieldOpPool fieldOpPool,
-									   List<ParamFilter> paramFilters,
-									   List<FieldConvertor.ParamConvertor> convertors,
 									   GroupResolver groupResolver) {
+
+		List<ParamFilter> paramFilters = context.getBeansOfType(ParamFilter.class);
+		List<FieldConvertor.ParamConvertor> convertors = context.getBeansOfType(FieldConvertor.ParamConvertor.class);
+
 		DefaultParamResolver paramResolver = new DefaultParamResolver(convertors, paramFilters);
 		paramResolver.setPageExtractor(pageExtractor);
 		paramResolver.setFieldOpPool(fieldOpPool);
