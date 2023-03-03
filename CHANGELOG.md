@@ -1,4 +1,9 @@
-# v4.1.0
+# v4.1.1 @ 2023-03-03
+
+* Bean Searcher
+  * 优化 SearchBean 校验
+
+# v4.1.0 @ 2023-03-03
 
 ### ✨ Features
 
