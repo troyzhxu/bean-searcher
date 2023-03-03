@@ -25,7 +25,7 @@
 
 ##### 1. 打开浏览器访问：[http://localhost:8080/](http://localhost:8080/) 效果如下：
 
-![输入图片说明](https://images.gitee.com/uploads/images/2020/1231/163659_08cb49b0_1393412.png "屏幕截图.png")
+![输入图片说明](image.png)
 
 如果页面有乱码，则添加 JVM 参数：-Dfile.encoding=utf-8
 
