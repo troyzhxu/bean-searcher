@@ -20,7 +20,7 @@ public class DemoController {
 
     @Mapping("/employees")
     public SearchResult<Employee> employees() {
-        return beanSearcher.search(Employee.class);
+        return beanSearcher.search(Employee.class, Employee::getAge);
     }
 
 }

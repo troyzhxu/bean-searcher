@@ -30,4 +30,29 @@ public class Employee {
     @ONodeAttr(format = "yyyy-MM-dd HH:mm")
     private LocalDateTime entryDate;
 
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public LocalDateTime getEntryDate() {
+        return entryDate;
+    }
+
 }
