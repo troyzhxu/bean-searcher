@@ -1,23 +1,25 @@
 package com.example.demo;
 
 import cn.zhxu.bs.BeanSearcher;
-import org.noear.solon.Solon;
-import org.noear.solon.annotation.Controller;
+import cn.zhxu.bs.SearchResult;
 import org.noear.solon.annotation.Inject;
 import org.noear.solon.annotation.Mapping;
-import org.noear.solon.annotation.Param;
 
-@Controller
+@org.noear.solon.annotation.Controller
 public class DemoController {
 
     @Inject
     private BeanSearcher beanSearcher;
 
-    @Mapping("/hello")
-    public String hello(@Param(defaultValue = "world") String name) {
+    @Mapping("/")
+    public String index() {
         System.out.println("beanSearcher = " + beanSearcher);
-        System.out.println("Solon.context().getBean(BeanSearcher.class) = " + Solon.context().getBean(BeanSearcher.class));
-        return String.format("Hello %s!", name);
+        return "You can request";
+    }
+
+    @Mapping("/employee")
+    public SearchResult<Employee> employee() {
+        return beanSearcher.search(Employee.class);
     }
 
 }
