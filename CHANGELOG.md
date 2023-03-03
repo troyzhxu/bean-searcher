@@ -13,7 +13,7 @@
   * 优化：完善 `groupBy` 与 `groupExpr` 同时使用时 `where` 与 `having` 的条件拆分逻辑
   * 优化：增强逻辑表达式的自动化简能力
 * Bean Searcher Boot Starter
-  * GroupPairResolver 支持注入 Bean 的方式自定义
+  * 支持 `GroupPairResolver` 注入 Bean 的方式自定义
 * Bean Searcher Solon Plugin
   * 首发 Solon 插件
 

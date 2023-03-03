@@ -87,8 +87,8 @@ public class GroupPairResolver implements GroupPair.Resolver {
     }
 
     /**
-     * 由于 where 与 having 只能是 且 的关系，所以此处的拆分可能会该变 原有的 逻辑语义
-     * 因此使用者应该自己保证 聚合字段条件 与 非聚合字段条件 不应该存在 或 的关系
+     * 由于 where 与 having 只能是 且 的关系，所以此处的拆分可能会改变 原有的 逻辑语义
+     * 因此使用者应该自己保证 聚合字段条件 与 非聚合字段条件 之间不应该存在 或 的关系
      * @param group 待拆分的组
      * @param havingTester 测试器
      * @return GroupPair
