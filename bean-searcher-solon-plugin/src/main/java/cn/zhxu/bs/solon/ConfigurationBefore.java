@@ -16,17 +16,15 @@ import org.noear.solon.core.AopContext;
 
 import java.time.ZoneId;
 import java.util.Map;
-import java.util.function.Consumer;
 
 @Configuration
-public class BeanSearcherAutoConfigurationBef {
+public class ConfigurationBefore {
     @Inject
     AopContext context;
 
     //放到这儿，减少注入处理代码
     @Inject
     BeanSearcherProperties config;
-
 
     @Bean
     @Condition(onMissingBean = BoolParamConvertor.class)
@@ -63,7 +61,6 @@ public class BeanSearcherAutoConfigurationBef {
     public SizeLimitParamFilter sizeLimitParamFilter() {
         return new SizeLimitParamFilter(config.getParams().getFilter().getMaxParaMapSize());
     }
-
 
     @Bean
     @Condition(onMissingBean = PageExtractor.class)
@@ -123,7 +120,6 @@ public class BeanSearcherAutoConfigurationBef {
         throw new IllegalConfigException("Invalid config: [bean-searcher.sql.dialect: " + dialect + "] only `MySql` / `Oracle` / `PostgreSQL` / `SqlServer` allowed. Please see https://bs.zhxu.cn/guide/latest/advance.html#sql-%E6%96%B9%E8%A8%80%EF%BC%88dialect%EF%BC%89 for help.");
     }
 
-
     @Bean
     @Condition(onMissingBean = ExprParser.Factory.class)
     public ExprParser.Factory parserFactory() {
@@ -142,7 +138,6 @@ public class BeanSearcherAutoConfigurationBef {
         return groupResolver;
     }
 
-
     @Bean
     @Condition(onMissingBean = GroupPair.Resolver.class)
     public GroupPair.Resolver groupPairResolver() {
@@ -156,8 +151,6 @@ public class BeanSearcherAutoConfigurationBef {
         resolver.setGroupPairResolver(groupPairResolver);
         return resolver;
     }
-
-
 
     @Bean
     @Condition(onMissingBean = NumberFieldConvertor.class,
@@ -222,8 +215,6 @@ public class BeanSearcherAutoConfigurationBef {
         return convertor;
     }
 
-
-
     @Bean
     @Condition(onMissingBean = DbMapping.class)
     public DbMapping dbMapping() {
@@ -240,18 +231,16 @@ public class BeanSearcherAutoConfigurationBef {
         return mapping;
     }
 
-
     @Bean
     @Condition(onMissingBean = MetaResolver.class)
     public MetaResolver metaResolver(DbMapping dbMapping) {
         SnippetResolver snippetResolver = context.getBean(SnippetResolver.class);
-
         DefaultMetaResolver metaResolver = new DefaultMetaResolver(dbMapping);
-        ifAvailable(snippetResolver, metaResolver::setSnippetResolver);
+        if (snippetResolver != null) {
+            metaResolver.setSnippetResolver(snippetResolver);
+        }
         return metaResolver;
     }
-
-
 
     @Bean
     @Condition(onMissingBean = DateFormatFieldConvertor.class,
@@ -285,10 +274,4 @@ public class BeanSearcherAutoConfigurationBef {
         return new JsonFieldConvertor(conf.isJsonFailOnError());
     }
 
-
-    private <T> void ifAvailable(T provider, Consumer<T> consumer) {
-        if (provider != null) {
-            consumer.accept(provider);
-        }
-    }
 }

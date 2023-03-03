@@ -14,16 +14,13 @@ import org.noear.solon.annotation.Inject;
 import org.noear.solon.core.AopContext;
 
 import javax.sql.DataSource;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Consumer;
 
-
 @Configuration
-public class BeanSearcherAutoConfiguration {
+public class ConfigurationAfter {
 
 	@Inject
 	AopContext context;
@@ -32,26 +29,21 @@ public class BeanSearcherAutoConfiguration {
 	@Inject
 	BeanSearcherProperties config;
 
-
-
 	@Bean
 	@Condition(onMissingBean = FieldOpPool.class)
 	public FieldOpPool fieldOpPool(Dialect dialect) {
 		List<FieldOp> fieldOps = context.getBeansOfType(FieldOp.class);
-
 		FieldOpPool pool = new FieldOpPool();
 		ifAvailable(fieldOps, ops -> ops.forEach(pool::addFieldOp));
 		pool.setDialect(dialect);
 		return pool;
 	}
 
-
 	@Bean
 	@Condition(onMissingBean = ParamResolver.class)
 	public ParamResolver paramResolver(PageExtractor pageExtractor,
 									   FieldOpPool fieldOpPool,
 									   GroupResolver groupResolver) {
-
 		List<ParamFilter> paramFilters = context.getBeansOfType(ParamFilter.class);
 		List<FieldConvertor.ParamConvertor> convertors = context.getBeansOfType(FieldConvertor.ParamConvertor.class);
 
@@ -74,7 +66,6 @@ public class BeanSearcherAutoConfiguration {
 		return paramResolver;
 	}
 
-
 	@Bean
 	@Condition(onMissingBean = SqlExecutor.class)
 	public SqlExecutor sqlExecutor() {
@@ -93,7 +84,6 @@ public class BeanSearcherAutoConfiguration {
 		return executor;
 	}
 
-
 	@Bean
 	@Condition(onMissingBean = ListFieldConvertor.class,
 			onProperty = "${bean-searcher.field-convertor.use-list:true}=true")
@@ -111,15 +101,12 @@ public class BeanSearcherAutoConfiguration {
 	@Bean
 	@Condition(onMissingBean = BeanReflector.class)
 	public BeanReflector beanReflector() {
-		List<BFieldConvertor> convertorsProvider = context.getBeansOfType(BFieldConvertor.class);
-
-		if (convertorsProvider != null) {
-			return new DefaultBeanReflector(convertorsProvider);
+		List<BFieldConvertor> convertors = context.getBeansOfType(BFieldConvertor.class);
+		if (convertors != null) {
+			return new DefaultBeanReflector(convertors);
 		}
 		return new DefaultBeanReflector();
 	}
-
-
 
 	@Bean
 	@Condition(onMissingBean = BeanSearcher.class,
@@ -129,7 +116,6 @@ public class BeanSearcherAutoConfiguration {
 									 SqlResolver sqlResolver,
 									 SqlExecutor sqlExecutor,
 									 BeanReflector beanReflector) {
-
 		List<SqlInterceptor> interceptors = context.getBeansOfType(SqlInterceptor.class);
 		List<ResultFilter> processors = context.getBeansOfType(ResultFilter.class);
 
@@ -144,13 +130,11 @@ public class BeanSearcherAutoConfiguration {
 		return searcher;
 	}
 
-
 	@Bean
 	@Condition(onMissingBean = B2MFieldConvertor.class,
 			onProperty = "${bean-searcher.field-convertor.use-b2-m}=true")
 	public B2MFieldConvertor b2mFieldConvertor() {
 		List<BFieldConvertor> convertors = context.getBeansOfType(BFieldConvertor.class);
-
 		if (convertors != null) {
 			return new B2MFieldConvertor(convertors);
 		}
@@ -193,10 +177,10 @@ public class BeanSearcherAutoConfiguration {
 		return searcher;
 	}
 
-
 	private <T> void ifAvailable(T provider, Consumer<T> consumer) {
 		if (provider != null) {
 			consumer.accept(provider);
 		}
 	}
+
 }
