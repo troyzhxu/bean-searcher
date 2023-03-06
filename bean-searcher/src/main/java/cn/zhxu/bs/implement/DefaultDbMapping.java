@@ -94,14 +94,14 @@ public class DefaultDbMapping implements DbMapping {
         return defaultSortType == SortType.ALLOW_PARAM;
     }
 
-    interface BeanField {
+    public interface BeanField {
         String getName();
         Class<?> getType();
         <T extends Annotation> T getAnnotation(Class<T> annotationClass);
         Class<?> getDeclaringClass();
     }
 
-    protected List<Column> columns(Class<?> beanClass, DbField[] fields) {
+    public List<Column> columns(Class<?> beanClass, DbField[] fields) {
         return Arrays.stream(fields).map(field -> column(beanClass, new BeanField() {
             @Override
             public String getName() {
@@ -149,7 +149,7 @@ public class DefaultDbMapping implements DbMapping {
         });
     }
 
-    protected Column column(Class<?> beanClass, BeanField field) {
+    public Column column(Class<?> beanClass, BeanField field) {
         String fieldSql = dbFieldSql(beanClass, field);
         if (fieldSql == null) {
             return null;
@@ -168,7 +168,7 @@ public class DefaultDbMapping implements DbMapping {
         return new Column(field.getName(), fieldSql, true, EMPTY_OPERATORS, dbType);
     }
 
-    protected SearchBean getSearchBean(Class<?> beanClass) {
+    public SearchBean getSearchBean(Class<?> beanClass) {
         while (beanClass != Object.class) {
             SearchBean bean = beanClass.getAnnotation(SearchBean.class);
             if (bean != null) {
@@ -182,7 +182,7 @@ public class DefaultDbMapping implements DbMapping {
         return null;
     }
 
-    protected String tables(Class<?> beanClass, SearchBean bean) {
+    public String tables(Class<?> beanClass, SearchBean bean) {
         String tables = bean.tables();
         if (StringUtils.isBlank(tables)) {
             return toTableName(beanClass);
@@ -190,7 +190,7 @@ public class DefaultDbMapping implements DbMapping {
         return tables.trim();
     }
 
-    protected String toTableName(Class<?> beanClass) {
+    public String toTableName(Class<?> beanClass) {
         String name = simplify(beanClass.getSimpleName());
         if (underlineCase) {
             name = StringUtils.toUnderline(name);
@@ -207,7 +207,7 @@ public class DefaultDbMapping implements DbMapping {
         return name;
     }
 
-    protected String simplify(String className) {
+    public String simplify(String className) {
         if (redundantSuffixes != null) {
             int length = className.length();
             for (String suffix: redundantSuffixes) {
@@ -219,7 +219,7 @@ public class DefaultDbMapping implements DbMapping {
         return className;
     }
 
-    protected String dbFieldSql(Class<?> beanClass, BeanField field) {
+    public String dbFieldSql(Class<?> beanClass, BeanField field) {
         DbField dbField = field.getAnnotation(DbField.class);
         if (field.getAnnotation(DbIgnore.class) != null) {
             if (dbField == null) {
@@ -272,7 +272,7 @@ public class DefaultDbMapping implements DbMapping {
         return null;
     }
 
-    protected String withMapTo(String fieldSql, String mapTo) {
+    public String withMapTo(String fieldSql, String mapTo) {
         if (StringUtils.isBlank(mapTo)) {
             return fieldSql;
         }
@@ -280,7 +280,7 @@ public class DefaultDbMapping implements DbMapping {
     }
 
     // 判断是否是单表映射
-    protected boolean isMapToSingleTable(SearchBean bean) {
+    public boolean isMapToSingleTable(SearchBean bean) {
         if (bean == null) return true;
         String tables = bean.tables().trim();
         return StringUtils.isBlank(tables) || SINGLE_TABLE_PATTERN.matcher(tables).matches();
@@ -290,7 +290,7 @@ public class DefaultDbMapping implements DbMapping {
     // return 0 表示层级相等，
     // return + 表示 Field 比 @SearchBean 更接近父类
     // return - 表示 @SearchBean 比 Field 更接近父类
-    protected int compareFieldToBeanAnnotation(BeanField field, Class<?> beanClass) {
+    public int compareFieldToBeanAnnotation(BeanField field, Class<?> beanClass) {
         int fieldLevel = 0;
         int beanLevel = 0;
         Class<?> clazz = beanClass;
@@ -306,7 +306,7 @@ public class DefaultDbMapping implements DbMapping {
         return fieldLevel - beanLevel;
     }
 
-    protected boolean shouldIgnore(BeanField field, String[] ignoreFields) {
+    public boolean shouldIgnore(BeanField field, String[] ignoreFields) {
         if (ignoreFields != null) {
             String name = field.getName();
             for (String igField : ignoreFields) {
@@ -318,7 +318,7 @@ public class DefaultDbMapping implements DbMapping {
         return false;
     }
 
-    protected String toColumnName(BeanField field) {
+    public String toColumnName(BeanField field) {
         String name = field.getName();
         if (underlineCase) {
             name = StringUtils.toUnderline(name);

@@ -56,7 +56,7 @@ public class GroupPairResolver implements GroupPair.Resolver {
         return buildGroupPair(paramsGroup, havingTester);
     }
 
-    protected boolean isClusterField(BeanMeta<?> beanMeta, FieldParam param, String groupBy) {
+    public boolean isClusterField(BeanMeta<?> beanMeta, FieldParam param, String groupBy) {
         FieldMeta meta = beanMeta.requireFieldMeta(param.getName());
         Cluster cluster = meta.getCluster();
         if (cluster == Cluster.FALSE) {
@@ -69,7 +69,7 @@ public class GroupPairResolver implements GroupPair.Resolver {
         return meta.selectable() && !StringUtils.sqlContains(groupBy, meta.getFieldSql().getSql());
     }
 
-    protected GroupPair buildGroupPair(List<FieldParam> params, Predicate<FieldParam> havingTester) {
+    public GroupPair buildGroupPair(List<FieldParam> params, Predicate<FieldParam> havingTester) {
         List<FieldParam> where = new ArrayList<>();
         List<FieldParam> having = new ArrayList<>();
         for (FieldParam param: params) {
@@ -82,7 +82,7 @@ public class GroupPairResolver implements GroupPair.Resolver {
         return new GroupPair(group(where), group(having));
     }
 
-    protected Group<List<FieldParam>> group(List<FieldParam> params) {
+    public Group<List<FieldParam>> group(List<FieldParam> params) {
         return params.isEmpty() ? GroupPair.EMPTY_GROUP : new Group<>(params);
     }
 
@@ -93,7 +93,7 @@ public class GroupPairResolver implements GroupPair.Resolver {
      * @param havingTester 测试器
      * @return GroupPair
      */
-    protected GroupPair buildGroupPair(Group<List<FieldParam>> group, Predicate<FieldParam> havingTester) {
+    public GroupPair buildGroupPair(Group<List<FieldParam>> group, Predicate<FieldParam> havingTester) {
         if (group == GroupPair.EMPTY_GROUP) {
             return GroupPair.EMPTY_PAIR;
         }
@@ -120,7 +120,7 @@ public class GroupPairResolver implements GroupPair.Resolver {
         return new GroupPair(where, having);
     }
 
-    protected Group<List<FieldParam>> compute(Group<List<FieldParam>> group, Group<List<FieldParam>> other, boolean isAnd) {
+    public Group<List<FieldParam>> compute(Group<List<FieldParam>> group, Group<List<FieldParam>> other, boolean isAnd) {
         if (group == GroupPair.EMPTY_GROUP) {
             return other;
         }
