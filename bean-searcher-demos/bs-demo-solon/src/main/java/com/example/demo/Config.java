@@ -35,8 +35,8 @@ public class Config {
         exeSqlFile(db, "db/data.sql");
     }
 
-    private void exeSqlFile(DbContext db, String sqlFilePath) throws IOException, SQLException {
-        for (String sql : ResourceUtil.getResourceAsString(sqlFilePath)
+    private void exeSqlFile(DbContext db, String filePath) throws IOException, SQLException {
+        for (String sql : ResourceUtil.getResourceAsString(filePath)
                 .split(";")) {
             db.sql(sql).execute();
         }
