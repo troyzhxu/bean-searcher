@@ -4,10 +4,10 @@
 
 ### 测试结论
 
-* 比 Spring Data Jdbc 高 5 ~ 10 倍
-* 比 Spring Data JPA 高 2 ~ 3 倍
-* 比 MyBatis Plus 高 2 ~ 3 倍
-* 比 原生 MyBatis 高 1 ~ 2 倍
+* 比 Spring Data Jdbc 高 **5 ~ 10** 倍
+* 比 Spring Data JPA 高 **2 ~ 3** 倍
+* 比 MyBatis Plus 高 **2 ~ 3** 倍
+* 比 原生 MyBatis 高 **1 ~ 2** 倍
 
 下面是测试案例，大家可以运行验证：
 
