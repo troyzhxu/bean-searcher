@@ -1,8 +1,8 @@
 package com.example.demo;
 
-import com.ejlchina.searcher.BeanSearcher;
-import com.ejlchina.searcher.MapSearcher;
-import com.ejlchina.searcher.util.MapUtils;
+import cn.zhxu.bs.BeanSearcher;
+import cn.zhxu.bs.MapSearcher;
+import cn.zhxu.bs.util.MapUtils;
 import com.example.demo.entity.Employee;
 import com.example.demo.repository.EmployeeRepository;
 import org.junit.jupiter.api.MethodOrderer;
