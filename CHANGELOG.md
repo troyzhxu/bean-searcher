@@ -1,3 +1,9 @@
+# v4.0.2 @ 2023-03-09
+
+### 🌻 Better
+
+* 提升 `DefaultSqlExecutor` 的执行性能
+
 # v4.0.1 @ 2023-02-25
 
 ### ✨ Features
@@ -138,7 +144,7 @@
 
 # v3.7.1 @ 2022-06-22
 
-### ✨ Better
+### 🌻 Better
 
 * Bean Searcher
   * 优化 `参数构建器`：新增 `orderBy(FieldFn<T, ?> fieldFn)`、`orderBy(String fieldName)`、`asc()` 与 `desc()` 方法
@@ -183,13 +189,13 @@
 
 # v3.6.2 @ 2022-05-11
 
-### ✨ Better
+### 🌻 Better
 
 * Bean Searcher Boot Starter: 升级 `spring-boot -> 2.6.7`
 
 # v3.5.4 @ 2022-05-11
 
-### ✨ Better
+### 🌻 Better
 
 * Bean Searcher Boot Starter: 升级 `spring-boot -> 2.6.7`
 
@@ -239,7 +245,7 @@
 
 # v3.5.3 @ 2022-04-06
 
-### ✨ Better
+### 🌻 Better
 
 * Bean Searcher Boot Starter: 升级 spring-boot -> 2.6.6
 
@@ -253,7 +259,7 @@
 
 * Bean Searcher: 参数构建器新增 `field(FieldFn<T, ?> fieldFn, Collection<?> values)` 与 `field(String fieldName, Collection<?> values)` 方法，支持字段值集合参数
 
-### ✨ Better
+### 🌻 Better
 
 * Bean Searcher Boot Starter: 升级 spring-boot -> 2.6.4
 
@@ -263,7 +269,7 @@
 
 # v3.5.1 @ 2022-02-24
 
-### ✨ Better
+### 🌻 Better
 
 * 强化对复杂逻辑表达式的简化能力
 * 升级 slf4j-api -> 1.7.36
@@ -294,14 +300,14 @@
 
 # v3.4.2 @ 2022-02-18
 
-### ✨ Better
+### 🌻 Better
 
 * 带嵌入参数的字段也能参与过滤条件
 * 带嵌入参数的字段也能参与字段统计
 
 # v3.4.1 @ 2022-02-11
 
-### ✨ Better
+### 🌻 Better
 
 * Bean Searcher
   * 优化 SQL 生成逻辑：当 `@SearchBean` 注解的 `joinCond` 属性只有一个拼接参数 且 该参数值为空时，则使其不参与 `where` 子句
@@ -314,7 +320,7 @@
 
 # v3.3.3 @ 2022-02-11
 
-### ✨ Better
+### 🌻 Better
 
 * Bean Searcher
   * bump slf4j-api from 1.7.32 to 1.7.35
@@ -332,7 +338,7 @@
 
 # v3.2.4 @ 2022-02-11
 
-### ✨ Better
+### 🌻 Better
 
 * Bean Searcher Boot Starter
   * 去掉无用的配置提示
@@ -345,7 +351,7 @@
 
 # v3.1.4 @ 2022-02-11
 
-### ✨ Better
+### 🌻 Better
 
 * Bean Searcher
   * 增强 `BoolFieldConvertor`，使支持 `Boolean -> boolean` 方向的转换

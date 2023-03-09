@@ -15,7 +15,7 @@ repositories {
 
 dependencies {
 	implementation 'com.baomidou:mybatis-plus-boot-starter:3.5.3.1'
-	implementation 'cn.zhxu:bean-searcher-boot-starter:4.0.1'
+	implementation 'cn.zhxu:bean-searcher-boot-starter:4.0.2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	runtimeOnly 'com.h2database:h2'
 }
