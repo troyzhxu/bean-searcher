@@ -35,7 +35,7 @@ class DemoApplicationTests {
 		System.out.println("热身...");
 		System.out.println("Bean Searcher 与 MyBatis Plus 各执行 1000 次...");
 		long t0 = System.currentTimeMillis();
-		for (int i = 0; i < 1000; i++) {
+		for (int i = 0; i < 10000; i++) {
 			mapSearcher.searchAll(Employee.class, MapUtils.builder()
 					.field(Employee::getAge, 30)
 					.build());
@@ -48,14 +48,13 @@ class DemoApplicationTests {
 		System.out.println("热身完毕，耗时：" + cost + "ms");
 	}
 
-
 	@Test
 	@Order(2)
 	void testMapSearcher() {
-		System.out.println("MapSearcher 执行 1000 次...");
+		System.out.println("MapSearcher 执行 10000 次...");
 		long t0 = System.currentTimeMillis();
 		int totalCount = 0;
-		for (int i = 0; i < 1000; i++) {
+		for (int i = 0; i < 10000; i++) {
 			List<Map<String, Object>> list = mapSearcher.searchAll(Employee.class, MapUtils.builder()
 					.field(Employee::getAge, 30)
 					.build());
@@ -69,10 +68,10 @@ class DemoApplicationTests {
 	@Test
 	@Order(3)
 	void testMyBatisPlus() {
-		System.out.println("MyBatisPlus 执行 1000 次 ...");
+		System.out.println("MyBatisPlus 执行 10000 次 ...");
 		long t0 = System.currentTimeMillis();
 		int totalCount = 0;
-		for (int i = 0; i < 1000; i++) {
+		for (int i = 0; i < 10000; i++) {
 			List<Employee> list = employeeMapper.selectList(new LambdaQueryWrapper<>(Employee.class).eq(Employee::getAge, 30));
 			totalCount += list.size();
 		}
@@ -84,10 +83,10 @@ class DemoApplicationTests {
 	@Test
 	@Order(4)
 	void testBeanSearcher() {
-		System.out.println("BeanSearcher 执行 1000 次...");
+		System.out.println("BeanSearcher 执行 10000 次...");
 		long t0 = System.currentTimeMillis();
 		int totalCount = 0;
-		for (int i = 0; i < 1000; i++) {
+		for (int i = 0; i < 10000; i++) {
 			List<Employee> list = beanSearcher.searchAll(Employee.class, MapUtils.builder()
 					.field(Employee::getAge, 30)
 					.build());
