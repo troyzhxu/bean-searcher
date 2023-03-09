@@ -221,7 +221,11 @@ public class DefaultSqlExecutor implements SqlExecutor {
 		}
 		long t0 = System.currentTimeMillis();
 		try {
-			statement.setQueryTimeout(beanMeta.getTimeout());
+			int timeout = beanMeta.getTimeout();
+			if (timeout > 0) {
+				// 这个方法比较耗时，只在 timeout 大于 0 的情况下才调用它
+				statement.setQueryTimeout(timeout);
+			}
 			ResultSet resultSet = statement.executeQuery();
 			return new Result(statement, resultSet);
 		} catch (SQLException e) {
