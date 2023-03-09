@@ -7,9 +7,10 @@
 
 # v4.1.1 @ 2023-03-06
 
-* Bean Searcher
-  * 优化 SearchBean 校验
-  * 优化 `DefaultDbMapping.BeanField` 的访问权限
+### 🌻 Better
+
+* 优化 `SearchBean` 校验
+* 优化 `DefaultDbMapping.BeanField` 的访问权限
 
 # v4.1.0 @ 2023-03-03
 
