@@ -21,7 +21,7 @@ public enum InheritType {
     NONE,
 
     /**
-     * 表继承
+     * 继承 {@link SearchBean} 注解
      */
     TABLE,
 
