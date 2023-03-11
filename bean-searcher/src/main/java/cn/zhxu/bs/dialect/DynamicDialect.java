@@ -21,17 +21,17 @@ public class DynamicDialect implements Dialect {
     private String defaultKey = "default";
 
     /**
-     * 设置当前方言
-     * @param key 键
+     * 设置当前的数据源名称
+     * @param dataSource 键
      */
-    public static void current(String key) {
-        holder.set(key);
+    public static void setCurrent(String dataSource) {
+        holder.set(dataSource);
     }
 
     /**
      * @return 当前方言的键
      */
-    public String current() {
+    public String currentKey() {
         String key = holder.get();
         if (key == null) {
             return defaultKey;
@@ -44,10 +44,10 @@ public class DynamicDialect implements Dialect {
      * @return Dialect
      */
     public Dialect lookup() {
-        String key = current();
+        String key = currentKey();
         Dialect dialect = dialectMap.get(key);
         if (dialect == null) {
-            throw new SearchException("No Dialect for key: " + key);
+            throw new SearchException("No Dialect for dataSource: " + key);
         }
         return dialect;
     }
@@ -76,24 +76,29 @@ public class DynamicDialect implements Dialect {
      * @param defaultKey 默认方言的键
      */
     public void setDefaultKey(String defaultKey) {
+        dialectMap.put(defaultKey, dialectMap.get(this.defaultKey));
         this.defaultKey = defaultKey;
     }
 
     /**
      * 添加方言
-     * @param key 键
+     * @param dataSource 数据源名称
      * @param dialect 方言
      */
-    public void put(String key, Dialect dialect) {
-        dialectMap.put(key, dialect);
+    public void put(String dataSource, Dialect dialect) {
+        dialectMap.put(dataSource, dialect);
     }
 
     /**
-     * 添加方法
-     * @param dialectMap 方言集合
+     * 添加方言
+     * @param dialectMap 方言集合（key: 数据源名称, value: 方言）
      */
     public void put(Map<String, Dialect> dialectMap) {
         this.dialectMap.putAll(dialectMap);
+    }
+
+    public void setDefaultDialect(Dialect dialect) {
+        dialectMap.put(defaultKey, dialect);
     }
 
     public Map<String, Dialect> getDialectMap() {
