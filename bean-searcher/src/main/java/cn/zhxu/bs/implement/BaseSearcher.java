@@ -14,9 +14,9 @@ import java.util.*;
  * @author Troy.Zhou @ 2021-10-30
  * @since v3.0.0
  */
-public abstract class AbstractSearcher implements Searcher {
+public class BaseSearcher implements Searcher {
 
-	protected static final Logger log = LoggerFactory.getLogger(AbstractSearcher.class);
+	protected static final Logger log = LoggerFactory.getLogger(BaseSearcher.class);
 
 	private SqlExecutor sqlExecutor;
 
@@ -30,10 +30,10 @@ public abstract class AbstractSearcher implements Searcher {
 
 	private List<ResultFilter> resultFilters = new ArrayList<>();
 
-	public AbstractSearcher() {
+	public BaseSearcher() {
 	}
 
-	public AbstractSearcher(SqlExecutor sqlExecutor) {
+	public BaseSearcher(SqlExecutor sqlExecutor) {
 		this.sqlExecutor = sqlExecutor;
 	}
 

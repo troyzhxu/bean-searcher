@@ -1,6 +1,6 @@
 package cn.zhxu.bs;
 
-import cn.zhxu.bs.implement.AbstractSearcher;
+import cn.zhxu.bs.implement.BaseSearcher;
 import cn.zhxu.bs.implement.DefaultBeanSearcher;
 import cn.zhxu.bs.implement.DefaultMapSearcher;
 import cn.zhxu.bs.FieldConvertor.MFieldConvertor;
@@ -86,7 +86,7 @@ public class SearcherBuilder {
 			return (Builder) this;
 		}
 
-		protected void buildInternal(AbstractSearcher mainSearcher) {
+		protected void buildInternal(BaseSearcher mainSearcher) {
 			if (paramResolver != null) {
 				mainSearcher.setParamResolver(paramResolver);
 			}

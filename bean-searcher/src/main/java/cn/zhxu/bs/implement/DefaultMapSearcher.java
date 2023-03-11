@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  * @author Troy.Zhou @ 2021-10-29
  * @since v3.0.0
  */
-public class DefaultMapSearcher extends AbstractSearcher implements MapSearcher {
+public class DefaultMapSearcher extends BaseSearcher implements MapSearcher {
 
 	private List<MFieldConvertor> convertors = new ArrayList<>();
 

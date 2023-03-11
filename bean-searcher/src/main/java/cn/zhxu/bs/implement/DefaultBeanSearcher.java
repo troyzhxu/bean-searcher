@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  * @author Troy.Zhou @ 2021-10-29
  * @since v3.0.0
  */
-public class DefaultBeanSearcher extends AbstractSearcher implements BeanSearcher {
+public class DefaultBeanSearcher extends BaseSearcher implements BeanSearcher {
 
 	private BeanReflector beanReflector = new DefaultBeanReflector();
 
