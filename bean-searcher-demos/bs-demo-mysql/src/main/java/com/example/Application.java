@@ -1,8 +1,8 @@
 package com.example;
 
-import com.ejlchina.json.JSONKit;
 import cn.zhxu.bs.BeanMeta;
 import cn.zhxu.bs.ParamFilter;
+import cn.zhxu.xjson.JsonKit;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -28,7 +28,7 @@ public class Application implements WebMvcConfigurer {
     }
 
 	/**
-	 * 为了简化多值参数传递
+	 * 为了简化多值参数传递，不是必须的
 	 * 参考：https://github.com/troyzhxu/bean-searcher/issues/10
 	 * @return 参数过滤器
 	 */
@@ -64,7 +64,7 @@ public class Application implements WebMvcConfigurer {
                     if (likelyJsonArr(valVal)) {
                         try {
                             String vKey = valKey;
-                            JSONKit.toArray((String) valVal).forEach(
+                            JsonKit.toArray((String) valVal).forEach(
                                 (index, data) -> newParaMap.put(vKey + "-" + index, data.toString())
                             );
                             newParaMap.put(opKey, opVal);

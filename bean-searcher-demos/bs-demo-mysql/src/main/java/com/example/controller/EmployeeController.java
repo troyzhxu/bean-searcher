@@ -30,7 +30,7 @@ public class EmployeeController {
 	@GetMapping("/index")
 	public Object index(@RequestParam Map<String, Object> params) {
 		// 组合检索、排序、分页 和 统计 都在这一句代码中实现了
-		return beanSearcher.search(Employee.class, params, new String[] { "age" });
+		return beanSearcher.search(Employee.class, params, Employee::getAge);
 	}
 
 	@GetMapping("/count")
@@ -44,7 +44,7 @@ public class EmployeeController {
 	public Object sum(HttpServletRequest request) {
 		// 组合检索、排序、分页 和 统计 都在这一句代码中实现了
 		return beanSearcher.searchSum(Employee.class,				// 指定实体类
-				MapUtils.flat(request.getParameterMap()), "age");					// 统计字段：年龄
+				MapUtils.flat(request.getParameterMap()), Employee::getAge);					// 统计字段：年龄
 	}
 
 	@GetMapping("/sums")

@@ -1,19 +1,18 @@
 package com.example.sbean;
 
-import cn.zhxu.bs.param.Operator;
+import cn.zhxu.bs.bean.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Map;
 
 @SearchBean(
 		tables = "employee e, department d",
-		joinCond = "e.department_id = d.id",
+		where = "e.department_id = d.id",
 		autoMapTo = "e"							// 字段没使用 DbField 注解时，自动映射到 employee 表
 )
 public class Employee
-		implements BeanAware, ParamAware    	// 这两接口 都是可选的
+		implements BeanAware, ParamAware        // 这两接口 都是可选的，可以不要
 {
 
 	// 自动映射到 "e.id"
