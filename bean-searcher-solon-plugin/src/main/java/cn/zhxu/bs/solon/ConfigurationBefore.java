@@ -3,7 +3,7 @@ package cn.zhxu.bs.solon;
 import cn.zhxu.bs.*;
 import cn.zhxu.bs.convertor.*;
 import cn.zhxu.bs.dialect.*;
-import cn.zhxu.bs.support.SizeLimitParamFilter;
+import cn.zhxu.bs.filter.SizeLimitParamFilter;
 import cn.zhxu.bs.group.*;
 import cn.zhxu.bs.implement.*;
 import cn.zhxu.bs.util.LRUCache;

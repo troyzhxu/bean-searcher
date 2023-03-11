@@ -8,7 +8,7 @@ import cn.zhxu.bs.bean.InheritType;
 import cn.zhxu.bs.bean.SearchBean;
 import cn.zhxu.bs.bean.SortType;
 import cn.zhxu.bs.convertor.*;
-import cn.zhxu.bs.support.SizeLimitParamFilter;
+import cn.zhxu.bs.filter.SizeLimitParamFilter;
 import cn.zhxu.bs.group.DefaultGroupResolver;
 import cn.zhxu.bs.implement.DefaultParamResolver;
 import cn.zhxu.bs.util.MapBuilder;

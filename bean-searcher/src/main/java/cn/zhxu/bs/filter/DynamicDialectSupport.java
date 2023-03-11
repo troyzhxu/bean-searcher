@@ -1,4 +1,4 @@
-package cn.zhxu.bs.support;
+package cn.zhxu.bs.filter;
 
 import cn.zhxu.bs.BeanMeta;
 import cn.zhxu.bs.ParamFilter;
