@@ -89,7 +89,7 @@ public class EmployeeController {
 				.page(page, size)
 				.build();
 		// 组合检索、排序、分页 和 统计 都在这一句代码中实现了
-		return beanSearcher.search(Employee.class, params, new String[] { "age" });
+		return beanSearcher.search(Employee.class, params, Employee::getAge);
 	}
 
 }

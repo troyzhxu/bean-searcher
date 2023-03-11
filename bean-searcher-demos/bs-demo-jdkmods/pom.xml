@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>cn.zhxu</groupId>
-	<artifactId>spring-boot-jdkmods</artifactId>
+	<artifactId>bs-demo-jdkmods</artifactId>
 	<name>demo</name>
 	<description>Demo project for Bean Searcher</description>
 

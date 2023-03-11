@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import cn.zhxu.bs.MapSearcher;
+import cn.zhxu.bs.operator.Contain;
 import cn.zhxu.bs.util.MapUtils;
 import com.example.sbean.DFieldBean;
 import com.example.sbean.DTableBean;
@@ -28,7 +29,7 @@ public class TestController {
 				MapUtils.builder()
 						.onlySelect(Employee::getId)
 						.onlySelect(Employee::getAge)
-						.field(Employee::getName, "j").op("in").ic()
+						.field(Employee::getName, "j").op(Contain.class).ic()
 						.build()
 		);
 	}

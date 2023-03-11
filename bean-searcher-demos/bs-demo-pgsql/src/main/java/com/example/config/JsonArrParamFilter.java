@@ -1,9 +1,9 @@
 package com.example.config;
 
 
-import com.ejlchina.json.JSONKit;
 import cn.zhxu.bs.BeanMeta;
 import cn.zhxu.bs.ParamFilter;
+import cn.zhxu.xjson.JsonKit;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,7 +44,7 @@ public class JsonArrParamFilter implements ParamFilter {
             if (likelyJsonArr(valVal)) {
                 try {
                     String vKey = valKey;
-                    JSONKit.toArray((String) valVal).forEach(
+                    JsonKit.toArray((String) valVal).forEach(
                             (index, data) -> newParaMap.put(vKey + "-" + index, data.toString())
                     );
                     newParaMap.put(opKey, opVal);
