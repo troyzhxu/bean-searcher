@@ -1,4 +1,20 @@
 
+# v4.2.0 @ Next
+
+### ✨ Features
+
+* Bean Searcher
+  * 新增 `DynamicDialect` 与 `DynamicDialectSupport` 类，用于支持动态方言
+  * 重构 `FieldParam.Value.isEmptyValue()` 方法重命名为 `FieldParam.Value.isEmpty()`
+  * 重构 `AbstractSearcher` 重命名为 `BaseSearcher`
+  * 
+* Bean Searcher Boot Starter
+  * 新增配置项 `bean-searcher.sql.dialect-dynamic`, 表示是否启用动态数据源，默认 `false`
+  * 当启用动态数据源时，支持以 `DataSourceDialect` 注入 Bean 的方式添加数据源与方言的映射关系
+* Bean Searcher Solon Plugin
+  * 新增配置项 `bean-searcher.sql.dialect-dynamic`, 表示是否启用动态数据源，默认 `false`
+  * 当启用动态数据源时，支持以 `DataSourceDialect` 注入 Bean 的方式添加数据源与方言的映射关系
+
 # v4.1.2 & v4.0.2 @ 2023-03-09
 
 ### 🌻 Better
