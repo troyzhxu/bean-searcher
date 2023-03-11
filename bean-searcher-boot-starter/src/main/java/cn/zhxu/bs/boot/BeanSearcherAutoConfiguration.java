@@ -94,6 +94,23 @@ public class BeanSearcherAutoConfiguration {
 	}
 
 	@Bean
+	@ConditionalOnProperty(name = "bean-searcher.sql.dialect-dynamic", havingValue = "true")
+	@ConditionalOnMissingBean(DynamicDialect.class)
+	public DynamicDialect dynamicDialect(Dialect dialect, ObjectProvider<List<DataSourceDialect>> dialects) {
+		DynamicDialect dynamicDialect = new DynamicDialect();
+		dynamicDialect.setDefaultDialect(dialect);
+		ifAvailable(dialects, list -> list.forEach(item -> dynamicDialect.put(item.getDataSource(), item.getDialect())));
+		return dynamicDialect;
+	}
+
+	@Bean
+	@ConditionalOnProperty(name = "bean-searcher.sql.dialect-dynamic", havingValue = "true")
+	@ConditionalOnMissingBean(DynamicDialectSupport.class)
+	public DynamicDialectSupport dynamicDialectSupport() {
+		return new DynamicDialectSupport();
+	}
+
+	@Bean
 	@ConditionalOnMissingBean(FieldOpPool.class)
 	public FieldOpPool fieldOpPool(Dialect dialect, ObjectProvider<List<FieldOp>> fieldOps) {
 		FieldOpPool pool = new FieldOpPool();
