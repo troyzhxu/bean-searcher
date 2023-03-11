@@ -7,7 +7,7 @@ import cn.zhxu.bs.boot.BeanSearcherProperties.Params;
 import cn.zhxu.bs.boot.BeanSearcherProperties.Sql;
 import cn.zhxu.bs.convertor.*;
 import cn.zhxu.bs.dialect.*;
-import cn.zhxu.bs.filter.SizeLimitParamFilter;
+import cn.zhxu.bs.support.SizeLimitParamFilter;
 import cn.zhxu.bs.group.*;
 import cn.zhxu.bs.implement.*;
 import cn.zhxu.bs.util.LRUCache;

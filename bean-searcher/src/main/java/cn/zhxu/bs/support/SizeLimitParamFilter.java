@@ -1,4 +1,4 @@
-package cn.zhxu.bs.filter;
+package cn.zhxu.bs.support;
 
 import cn.zhxu.bs.IllegalParamException;
 import cn.zhxu.bs.ParamFilter;
