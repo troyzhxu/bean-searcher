@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @SearchBean(
 		tables = "employee e, department d",
-		joinCond = "e.department_id = d.id",
+		where = "e.department_id = d.id",
 		autoMapTo = "e"							// 字段没使用 DbField 注解时，自动映射到 employee 表
 )
 public class Employee extends BaseBean {

@@ -10,7 +10,7 @@ module mydemo {
     requires spring.core;
     requires bean.searcher;
     requires data.core;
-    requires jsonkit.core;
+    requires xjsonkit.api;
     requires com.fasterxml.jackson.annotation;
 
     opens com.example;
