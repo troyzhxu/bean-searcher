@@ -33,7 +33,7 @@ public class EmployeeController {
 	@GetMapping("/index")
 	public Object index(@RequestParam Map<String, Object> params) {
 		// 组合检索、排序、分页 和 统计 都在这一句代码中实现了
-		return beanSearcher.search(Employee.class, params, new String[] { "age" });
+		return beanSearcher.search(Employee.class, params, Employee::getAge);
 	}
 
 	@GetMapping("/builder")
@@ -95,7 +95,7 @@ public class EmployeeController {
 		// 组合检索、排序、分页 和 统计 都在这一句代码中实现了
 		return mapSearcher.search(Employee.class,				// 指定实体类
 				MapUtils.flat(request.getParameterMap()), 	// 直接收集前端传来的检索参数，此种方式代码最为简洁
-				new String[] { "age" });					// 统计字段：年龄
+				Employee::getAge);					// 统计字段：年龄
 	}
 
 	// 以上代码等效于：
@@ -122,7 +122,7 @@ public class EmployeeController {
 				.page(page != null ? page : 0, size != null ? size : 15)
 				.build();
 		// 组合检索、排序、分页 和 统计 都在这一句代码中实现了
-		return beanSearcher.search(Employee.class, params, new String[] { "age" });
+		return beanSearcher.search(Employee.class, params, Employee::getAge);
 	}
 
 	// 还等效于：
@@ -158,7 +158,7 @@ public class EmployeeController {
 		params.put("sort", sort);					// 排序字段
 		params.put("order", order);					// 排序方法：asc|desc
 		// 组合检索、排序、分页 和 统计 都在这一句代码中实现了
-		return beanSearcher.search(Employee.class, params, new String[] { "age" });
+		return beanSearcher.search(Employee.class, params, Employee::getAge);
 	}
 
 }

@@ -11,7 +11,7 @@
     </appender>
 
     <!-- 打开 Bean Searcher 的 SQL 日志 -->
-    <logger name="DefaultSqlExecutor" level="DEBUG" additivity="false">
+    <logger name="cn.zhxu.bs" level="DEBUG" additivity="false">
         <appender-ref ref="console" />
     </logger>
 
