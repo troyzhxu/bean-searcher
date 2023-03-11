@@ -427,6 +427,11 @@ public class BeanSearcherProperties {
 		private Dialect dialect = Dialect.MySQL;
 
 		/**
+		 * 是否启用动态方言
+		 */
+		private boolean dialectDynamic;
+
+		/**
 		 * 默认映射配置
 		 */
 		private final DefaultMapping defaultMapping = new DefaultMapping();
@@ -443,6 +448,14 @@ public class BeanSearcherProperties {
 
 		public void setDialect(Dialect dialect) {
 			this.dialect = dialect;
+		}
+
+		public boolean isDialectDynamic() {
+			return dialectDynamic;
+		}
+
+		public void setDialectDynamic(boolean dialectDynamic) {
+			this.dialectDynamic = dialectDynamic;
 		}
 
 		public DefaultMapping getDefaultMapping() {

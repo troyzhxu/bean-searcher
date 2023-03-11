@@ -123,6 +123,22 @@ public class ConfigurationBefore {
     }
 
     @Bean
+    @Condition(onMissingBean = DynamicDialect.class, onProperty = "${bean-searcher.sql.dialect-dynamic}=true")
+    public DynamicDialect dynamicDialect(Dialect dialect) {
+        DynamicDialect dynamicDialect = new DynamicDialect();
+        dynamicDialect.setDefaultDialect(dialect);
+        List<DataSourceDialect> dialects = context.getBeansOfType(DataSourceDialect.class);
+        dialects.forEach(item -> dynamicDialect.put(item.getDataSource(), item.getDialect()));
+        return dynamicDialect;
+    }
+
+    @Bean
+    @Condition(onMissingBean = DynamicDialectSupport.class, onProperty = "${bean-searcher.sql.dialect-dynamic}=true")
+    public DynamicDialectSupport dynamicDialectSupport() {
+        return new DynamicDialectSupport();
+    }
+
+    @Bean
     @Condition(onMissingBean = ExprParser.Factory.class)
     public ExprParser.Factory parserFactory() {
         return new DefaultParserFactory();
