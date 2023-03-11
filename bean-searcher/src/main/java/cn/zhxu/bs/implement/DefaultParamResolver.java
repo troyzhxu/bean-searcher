@@ -341,7 +341,7 @@ public class DefaultParamResolver implements ParamResolver {
 
 	protected boolean isAllEmpty(List<FieldParam.Value> values) {
 		for (FieldParam.Value value : values) {
-			if (!value.isEmptyValue()) {
+			if (!value.isEmpty()) {
 				return false;
 			}
 		}

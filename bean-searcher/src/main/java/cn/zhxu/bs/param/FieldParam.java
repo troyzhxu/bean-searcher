@@ -47,7 +47,7 @@ public class FieldParam {
 			this.index = index;
 		}
 
-		public boolean isEmptyValue() {
+		public boolean isEmpty() {
 			return value == null || (value instanceof String && StringUtils.isBlank((String) value));
 		}
 
