@@ -5,10 +5,8 @@ import cn.zhxu.bs.operator.SqlCond;
 import cn.zhxu.bs.param.FieldParam;
 import cn.zhxu.bs.util.FieldFns.FieldFn;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Consumer;
 
 import static cn.zhxu.bs.util.MapBuilder.FIELD_PARAM;
 
@@ -205,17 +203,69 @@ public class Builder<B extends Builder<B>> {
         return fieldOp(new SqlCond(sqlCond, args));
     }
 
-//    @SuppressWarnings("unchecked")
-//    public B and(Consumer<Builder<?>> condition) {
-//        // TODO:
-//        return (B) this;
-//    }
-//
-//    @SuppressWarnings("unchecked")
-//    public B or(Consumer<Builder<?>> condition) {
-//        // TODO:
-//        return (B) this;
-//    }
+    private boolean isOr = false;
+
+    @SuppressWarnings("unchecked")
+    public B and(Consumer<Builder<?>> condition) {
+        isOr = false;
+        String preGroup = group;
+        group = nextGroup();
+        // TODO: 更新 groupExpe
+        condition.accept(this);
+        group = preGroup;
+        return (B) this;
+    }
+
+    @SuppressWarnings("unchecked")
+    public B or(Consumer<Builder<?>> condition) {
+        isOr = true;
+        String preGroup = group;
+        group = nextGroup();
+        // TODO: 更新 groupExpe
+        condition.accept(this);
+        group = preGroup;
+        return (B) this;
+    }
+
+    protected String nextGroup() {
+        String groupExpr = groupExpr();
+        String nGroup = nextGroup(group);
+        while (groupExpr != null && groupExpr.contains(nGroup)) {
+            nGroup = nextGroup(nGroup);
+        }
+        return nGroup;
+    }
+
+    protected String nextGroup(String group) {
+        if (group.length() == 1) {
+            char c = group.charAt(0);
+            if (c == '$') {
+                return "A";
+            }
+            if (c == 'Z') {
+                return "a";
+            }
+            if (c == 'z') {
+                return "0";
+            }
+            if (c >= 'A' && c < 'Z' || c >= 'a' && c < 'z' || c >= '0' && c < '9') {
+                return String.valueOf((char) (c + 1));
+            }
+            if (c == '9') {
+                return "10";
+            }
+        }
+        return String.valueOf(Integer.parseInt(group) + 1);
+    }
+
+    protected String groupExpr() {
+        Object value = map.get(MapBuilder.GROUP_EXPR);
+        if (value instanceof String) {
+            return (String) value;
+        }
+        return null;
+    }
+
 
     @SafeVarargs
     protected final <T> String[] toFields(FieldFn<T, ?>... fieldFns) {
