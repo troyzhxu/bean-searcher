@@ -293,12 +293,12 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 
 文档已完善！
 
-### 开发计划
+### 📅 开发计划
 
-v4.2: 动态方言
-v4.3: 参数构建器支持 and 与 or 便捷方法
-v4.4: 条件模板
-v4.5: 内嵌对象/列表
+* v4.2: 动态方言
+* v4.3: 参数构建器支持 and 与 or 便捷方法
+* v4.4: 条件模板
+* v4.5: 内嵌对象/列表
 
 ### 🤝 友情接链
 
