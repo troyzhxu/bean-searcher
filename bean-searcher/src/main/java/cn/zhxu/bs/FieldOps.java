@@ -4,111 +4,109 @@ import cn.zhxu.bs.operator.*;
 
 /**
  * 过滤运算符
- * 
  * @author Troy.Zhou @ 2017-03-20
- *
  */
 public class FieldOps {
 
 	/**
 	 * 等于
 	 */
-	public static final Class<Equal> Equal = Equal.class;
+	public static final Equal Equal = new Equal();
 
 	/**
 	 * 不等于
 	 */
-	public static final Class<NotEqual> NotEqual = NotEqual.class;
+	public static final NotEqual NotEqual = new NotEqual();
 
 	/**
 	 * 大于等于
 	 */
-	public static final Class<GreaterEqual> GreaterEqual = GreaterEqual.class;
+	public static final GreaterEqual GreaterEqual = new GreaterEqual();
 	
 	/**
 	 * 大于
 	 */
-	public static final Class<GreaterThan> GreaterThan = GreaterThan.class;
+	public static final GreaterThan GreaterThan = new GreaterThan();
 	
 	/**
 	 * 小于等于
 	 */
-	public static final Class<LessEqual> LessEqual = LessEqual.class;
+	public static final LessEqual LessEqual = new LessEqual();
 	
 	/**
 	 * 小于
 	 */
-	public static final Class<LessThan> LessThan = LessThan.class;
+	public static final LessThan LessThan = new LessThan();
 
 	/**
 	 * 为 null
 	 */
-	public static final Class<IsNull> IsNull = IsNull.class;
+	public static final IsNull IsNull = new IsNull();
 
 	/**
 	 * 不为 null
 	 */
-	public static final Class<NotNull> NotNull = NotNull.class;
+	public static final NotNull NotNull = new NotNull();
 
 	/**
 	 * 为空
 	 */
-	public static final Class<Empty> Empty = Empty.class;
+	public static final Empty Empty = new Empty();
 	
 	/**
 	 * 不为空
 	 */
-	public static final Class<NotEmpty> NotEmpty = NotEmpty.class;
+	public static final NotEmpty NotEmpty = new NotEmpty();
 
 	/**
 	 * 包含
 	 * like '%xxx%'
 	 */
-	public static final Class<Contain> Contain = Contain.class;
+	public static final Contain Contain = new Contain();
 
 	/**
 	 * 以 .. 开始
 	 * like 'xxx%'
 	 */
-	public static final Class<StartWith> StartWith = StartWith.class;
+	public static final StartWith StartWith = new StartWith();
 	
 	/**
 	 * 以 .. 结束
 	 * like '%xxx'
 	 */
-	public static final Class<EndWith> EndWith = EndWith.class;
+	public static final EndWith EndWith = new EndWith();
 
 	/**
 	 * like {v1} or like {v1}
 	 */
-	public static final Class<OrLike> OrLike = OrLike.class;
+	public static final OrLike OrLike = new OrLike();
 
 	/**
 	 * not like {v}
 	 */
-	public static final Class<NotLike> NotLike = NotLike.class;
+	public static final NotLike NotLike = new NotLike();
 
 	/**
 	 * 在 .. 和 .. 之间
 	 */
-	public static final Class<Between> Between = Between.class;
+	public static final Between Between = new Between();
 
 	/**
 	 * 不在 .. 和 .. 之间
 	 */
-	public static final Class<NotBetween> NotBetween = NotBetween.class;
+	public static final NotBetween NotBetween = new NotBetween();
 
 	/**
 	 * 在列表中
 	 * in (...)
 	 */
-	public static final Class<InList> InList = InList.class;
+	public static final InList InList = new InList();
 
 	/**
 	 * 不在某个集合内
 	 * not in
 	 * @since v3.3
 	 */
-	public static final Class<NotIn> NotIn = NotIn.class;
+	public static final NotIn NotIn = new NotIn();
 
 }

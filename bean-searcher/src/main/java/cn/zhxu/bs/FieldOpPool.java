@@ -3,7 +3,6 @@ package cn.zhxu.bs;
 import cn.zhxu.bs.dialect.Dialect;
 import cn.zhxu.bs.dialect.DialectSensor;
 import cn.zhxu.bs.dialect.DialectWrapper;
-import cn.zhxu.bs.operator.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,25 +27,25 @@ public class FieldOpPool extends DialectWrapper {
 
     public FieldOpPool() {
         fieldOps = new ArrayList<>();
-        checkAdd(new Equal());
-        checkAdd(new NotEqual());
-        checkAdd(new GreaterThan());
-        checkAdd(new GreaterEqual());
-        checkAdd(new LessThan());
-        checkAdd(new LessEqual());
-        checkAdd(new Between());
-        checkAdd(new NotBetween());
-        checkAdd(new Contain());
-        checkAdd(new StartWith());
-        checkAdd(new EndWith());
-        checkAdd(new OrLike());
-        checkAdd(new NotLike());
-        checkAdd(new InList());
-        checkAdd(new NotIn());
-        checkAdd(new IsNull());
-        checkAdd(new NotNull());
-        checkAdd(new Empty());
-        checkAdd(new NotEmpty());
+        checkAdd(FieldOps.Equal);
+        checkAdd(FieldOps.NotEqual);
+        checkAdd(FieldOps.GreaterThan);
+        checkAdd(FieldOps.GreaterEqual);
+        checkAdd(FieldOps.LessThan);
+        checkAdd(FieldOps.LessEqual);
+        checkAdd(FieldOps.Between);
+        checkAdd(FieldOps.NotBetween);
+        checkAdd(FieldOps.Contain);
+        checkAdd(FieldOps.StartWith);
+        checkAdd(FieldOps.EndWith);
+        checkAdd(FieldOps.OrLike);
+        checkAdd(FieldOps.NotLike);
+        checkAdd(FieldOps.InList);
+        checkAdd(FieldOps.NotIn);
+        checkAdd(FieldOps.IsNull);
+        checkAdd(FieldOps.NotNull);
+        checkAdd(FieldOps.Empty);
+        checkAdd(FieldOps.NotEmpty);
     }
 
 
