@@ -25,7 +25,7 @@ import static java.time.temporal.ChronoField.EPOCH_DAY;
  */
 public class DateTimeParamConvertor implements FieldConvertor.ParamConvertor {
 
-    static final Pattern DATETIME_PATTERN = Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}");
+    static final Pattern DATETIME_PATTERN = Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}");
 
     static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -73,14 +73,23 @@ public class DateTimeParamConvertor implements FieldConvertor.ParamConvertor {
 
     private String normalize(String datetime) {
         int len = datetime.length();
+        if (len == 19) {
+            return datetime + ".000";
+        }
         if (len == 16) {
-            return datetime + ":00";
+            return datetime + ":00.000";
         }
         if (len == 13) {
-            return datetime + ":00:00";
+            return datetime + ":00:00.000";
         }
         if (len == 10) {
-            return datetime + " 00:00:00";
+            return datetime + " 00:00:00.000";
+        }
+        if (len == 7) {
+            return datetime + "-01 00:00:00.000";
+        }
+        if (len == 4) {
+            return datetime + "-01-01 00:00:00.000";
         }
         return datetime;
     }

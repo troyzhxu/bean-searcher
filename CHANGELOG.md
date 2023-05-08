@@ -8,6 +8,7 @@
   * 重构 `FieldParam.Value.isEmptyValue()` 方法重命名为 `FieldParam.Value.isEmpty()`
   * 重构 `AbstractSearcher` 重命名为 `BaseSearcher`
   * 功能：若子类 `@SearchBean` 注解省略了 `tables` 属性，则优先尝试从父类的注解中继承（TODO）
+  * 优化 `DateTimeParamConvertor`, 使其支持解析 `yyyy-MM-dd HH:mm:ss.SSS`、`yyyy-MM` 与 `yyyy` 格式的参数
 * Bean Searcher Boot Starter
   * 新增配置项 `bean-searcher.sql.dialect-dynamic`, 表示是否启用动态方言，默认 `false`
   * 当启用动态数据源时，支持以 `DataSourceDialect` 注入 Bean 的方式添加数据源与方言的映射关系
