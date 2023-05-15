@@ -74,7 +74,7 @@ public @interface DbField {
 	 * 用于指定该字段是否是聚合字段 <p>
 	 * 如果是聚合字段，当字段传入条件，则在分组（groupBy）查询时，该条件会放入 having 语句中。
 	 * @since v4.1.0
-	 * @return FieldType
+	 * @return Cluster
 	 */
 	Cluster cluster() default Cluster.AUTO;
 
