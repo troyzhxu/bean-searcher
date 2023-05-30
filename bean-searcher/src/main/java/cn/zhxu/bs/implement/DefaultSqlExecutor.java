@@ -215,12 +215,12 @@ public class DefaultSqlExecutor implements SqlExecutor {
 	protected Result executeQuery(Connection connection, String sql, List<Object> params,
 								  BeanMeta<?> beanMeta) throws SQLException {
 		PreparedStatement statement = connection.prepareStatement(sql);
-		int size = params.size();
-		for (int i = 0; i < size; i++) {
-			statement.setObject(i + 1, params.get(i));
-		}
 		long t0 = System.currentTimeMillis();
 		try {
+			int size = params.size();
+			for (int i = 0; i < size; i++) {
+				statement.setObject(i + 1, params.get(i));
+			}
 			int timeout = beanMeta.getTimeout();
 			if (timeout > 0) {
 				// 这个方法比较耗时，只在 timeout 大于 0 的情况下才调用它
