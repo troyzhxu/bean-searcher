@@ -27,7 +27,8 @@ public class DateFieldConvertor implements FieldConvertor.BFieldConvertor {
                 valueType == java.sql.Date.class ||
                 valueType == Timestamp.class ||
                 valueType == LocalDateTime.class ||
-                valueType == LocalDate.class
+                valueType == LocalDate.class ||
+                valueType == Instant.class
         ) {
             Class<?> targetType = meta.getType();
             return (
@@ -35,7 +36,8 @@ public class DateFieldConvertor implements FieldConvertor.BFieldConvertor {
                     targetType == java.sql.Date.class ||
                     targetType == Timestamp.class ||
                     targetType == LocalDateTime.class ||
-                    targetType == LocalDate.class
+                    targetType == LocalDate.class ||
+                    targetType == Instant.class
             );
         }
         return false;
@@ -64,6 +66,14 @@ public class DateFieldConvertor implements FieldConvertor.BFieldConvertor {
                 }
                 return LocalDateTime.ofInstant(date.toInstant(), zoneId);
             }
+            if (targetType == Instant.class) {
+                if (date instanceof java.sql.Date) {
+                    // 注意：java.sql.Date 的 toInstant() 方法会抛异常
+                    LocalDate localDate = ((java.sql.Date) date).toLocalDate();
+                    return Instant.from(localDate);
+                }
+                return date.toInstant();
+            }
             if (targetType == LocalDate.class) {
                 // 注意：java.sql.Date 的 toInstant() 方法会抛异常
                 if (date instanceof java.sql.Date) {
@@ -78,6 +88,8 @@ public class DateFieldConvertor implements FieldConvertor.BFieldConvertor {
         LocalDateTime dateTime;
         if (valueType == LocalDateTime.class) {
             dateTime = (LocalDateTime) value;
+        } else if (valueType == Instant.class) {
+            dateTime = LocalDateTime.ofInstant((Instant) value, zoneId);
         } else {
             dateTime = LocalDateTime.of((LocalDate) value, LocalTime.of(0, 0));
         }
@@ -85,6 +97,9 @@ public class DateFieldConvertor implements FieldConvertor.BFieldConvertor {
             return dateTime;
         }
         Instant instant = dateTime.atZone(zoneId).toInstant();
+        if (targetType == Instant.class) {
+            return instant;
+        }
         if (targetType == Date.class) {
             return new Date(instant.toEpochMilli());
         }
