@@ -2,12 +2,17 @@
 
 ### ✨ Features
 
-* 增强：`DateFieldConvertor` 支持 `Instant` 类型的转换
+* 增强：`DateFieldConvertor` 支持 `Instant` 类型的转换：https://gitee.com/troyzhxu/bean-searcher/pulls/9
 * 优化：`PreparedStatement.setObject(..)` 方法报错时，仍然打印 SQL 日志
 
 ### 🐛 Bug Fixes
 
-* 修复使用动态方言时，默认方言不能用的问题
+* Bean Searcher
+  * 修复使用动态方言时，默认方言不能用的问题
+* Bean Searcher Boot Starter
+  * 修复 动态方言 不能自动化配置的问题
+* Bean Searcher Solon Plugin
+  * 修复 动态方言 不能自动化配置的问题
 
 ### 🌻 Better
 
