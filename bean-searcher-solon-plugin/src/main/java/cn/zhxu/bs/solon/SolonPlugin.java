@@ -15,14 +15,10 @@ public class SolonPlugin implements Plugin {
 
         //容器加载完成后再执行，确保用户的 Bean 优先
         // 先处理没有 getBeansOfType 接口调用的
-        context.lifecycle(-99, () -> {
-            context.beanMake(ConfigurationBefore.class);
-        });
+        context.lifecycle(-99, () -> context.beanMake(ConfigurationBefore.class));
 
         //再处理有 getBeansOfType 接口调用的
-        context.lifecycle(-98, () -> {
-            context.beanMake(ConfigurationAfter.class);
-        });
+        context.lifecycle(-98, () -> context.beanMake(ConfigurationAfter.class));
     }
 
 }
