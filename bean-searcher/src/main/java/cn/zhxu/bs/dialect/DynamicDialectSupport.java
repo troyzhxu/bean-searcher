@@ -5,6 +5,7 @@ import cn.zhxu.bs.ParamFilter;
 import cn.zhxu.bs.SearchSql;
 import cn.zhxu.bs.SqlInterceptor;
 import cn.zhxu.bs.param.FetchType;
+import cn.zhxu.bs.util.StringUtils;
 
 import java.util.Map;
 
@@ -20,7 +21,7 @@ public class DynamicDialectSupport implements ParamFilter, SqlInterceptor {
         // 这里的实现适用于静态多数据源的场景：https://bs.zhxu.cn/guide/latest/advance.html#%E9%9D%99%E6%80%81%E6%95%B0%E6%8D%AE%E6%BA%90
         // 如果您使用的是动态数据源，那么可以重写该方法
         String dataSource = beanMeta.getDataSource();
-        if (dataSource != null) {
+        if (StringUtils.isNotBlank(dataSource)) {
             DynamicDialect.setCurrent(dataSource);
         }
         return paraMap;
