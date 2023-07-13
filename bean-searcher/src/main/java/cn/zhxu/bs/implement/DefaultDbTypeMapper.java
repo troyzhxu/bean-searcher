@@ -16,6 +16,15 @@ import java.util.Date;
  */
 public class DefaultDbTypeMapper implements DbMapping.DbTypeMapper {
 
+    private DbType enumAutoMapTo = DbType.INT;
+
+    public DefaultDbTypeMapper() {
+    }
+
+    public DefaultDbTypeMapper(DbType enumAutoMapTo) {
+        this.enumAutoMapTo = enumAutoMapTo;
+    }
+
     @Override
     public DbType map(Class<?> fieldType) {
         if (fieldType == boolean.class || fieldType == Boolean.class) {
@@ -54,7 +63,19 @@ public class DefaultDbTypeMapper implements DbMapping.DbTypeMapper {
         if (fieldType == Date.class || fieldType == Timestamp.class || fieldType == LocalDateTime.class) {
             return DbType.DATETIME;
         }
+        // 枚举，对应的 DbType 默认为 INT
+        if (enumAutoMapTo != null && Enum.class.isAssignableFrom(fieldType)) {
+            return enumAutoMapTo;
+        }
         return DbType.UNKNOWN;
+    }
+
+    public DbType getEnumAutoMapTo() {
+        return enumAutoMapTo;
+    }
+
+    public void setEnumAutoMapTo(DbType enumAutoMapTo) {
+        this.enumAutoMapTo = enumAutoMapTo;
     }
 
 }
