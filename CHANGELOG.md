@@ -4,7 +4,7 @@
 
 * Bean Searcher
   * 增强：`DateFieldConvertor` 支持 `Instant` 类型的转换：https://gitee.com/troyzhxu/bean-searcher/pulls/9
-  * 新增：`EnumParamConvertor` 支持 `String/Emun` 类型的参数自动转换为枚举序号
+  * 新增：`EnumParamConvertor` 对于枚举字段，可将 `String/Emun` 类型的参数自动转换为 `枚举序号`（默认）或 `枚举名`（由 `@DbField.type` 决定）
   * 优化：`PreparedStatement.setObject(..)` 方法报错时，仍然打印 SQL 日志
 * Bean Searcher Boot Starter
   * 自动配置 `EnumParamConvertor`
