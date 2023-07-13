@@ -12,7 +12,6 @@ import cn.zhxu.bs.group.*;
 import cn.zhxu.bs.implement.*;
 import cn.zhxu.bs.util.LRUCache;
 import cn.zhxu.xjson.JsonKit;
-import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -34,12 +33,6 @@ import java.util.function.Consumer;
 @Configuration
 @EnableConfigurationProperties(BeanSearcherProperties.class)
 public class BeanSearcherAutoConfiguration {
-
-	private final BeanFactory beanFactory;
-
-	public BeanSearcherAutoConfiguration(BeanFactory beanFactory) {
-		this.beanFactory = beanFactory;
-	}
 
 	@Bean
 	@ConditionalOnMissingBean(PageExtractor.class)

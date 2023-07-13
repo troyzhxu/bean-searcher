@@ -432,6 +432,11 @@ public class BeanSearcherProperties {
 		private boolean dialectDynamic;
 
 		/**
+		 * 多方言配置：数据源名称 -> 方言类型
+		 */
+		private Map<String, Dialect> dialects = new HashMap<>();
+
+		/**
 		 * 默认映射配置
 		 */
 		private final DefaultMapping defaultMapping = new DefaultMapping();
@@ -456,6 +461,14 @@ public class BeanSearcherProperties {
 
 		public void setDialectDynamic(boolean dialectDynamic) {
 			this.dialectDynamic = dialectDynamic;
+		}
+
+		public Map<String, Dialect> getDialects() {
+			return dialects;
+		}
+
+		public void setDialects(Map<String, Dialect> dialects) {
+			this.dialects = dialects;
 		}
 
 		public DefaultMapping getDefaultMapping() {

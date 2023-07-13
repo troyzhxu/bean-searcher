@@ -6,6 +6,7 @@ import cn.zhxu.bs.dialect.*;
 import cn.zhxu.bs.filter.SizeLimitParamFilter;
 import cn.zhxu.bs.group.*;
 import cn.zhxu.bs.implement.*;
+import cn.zhxu.bs.solon.BeanSearcherProperties.Sql;
 import cn.zhxu.bs.util.LRUCache;
 import cn.zhxu.xjson.JsonKit;
 import org.noear.solon.annotation.Bean;
@@ -104,23 +105,26 @@ public class ConfigurationBefore {
     @Bean
     @Condition(onMissingBean = Dialect.class)
     public Dialect dialect() {
-        Dialect dialect = defaultDialect();
-        if (config.getSql().isDialectDynamic()) {
-            DynamicDialect dynamicDialect = new DynamicDialect();
-            dynamicDialect.setDefaultDialect(dialect);
-            List<DataSourceDialect> dialects = context.getBeansOfType(DataSourceDialect.class);
-            dialects.forEach(item -> dynamicDialect.put(item.getDataSource(), item.getDialect()));
-            return dynamicDialect;
-        }
-        return dialect;
-    }
-
-    private Dialect defaultDialect() {
-        BeanSearcherProperties.Sql.Dialect dialect = config.getSql().getDialect();
-        if (dialect == null) {
+        Sql conf = config.getSql();
+        Sql.Dialect defaultType = conf.getDialect();
+        if (defaultType == null) {
             throw new IllegalConfigException("Invalid config: [bean-searcher.sql.dialect] can not be null.");
         }
-        switch (dialect) {
+        Dialect defaultDialect = createDialect(defaultType, "dialect");
+        if (conf.isDialectDynamic()) {
+            DynamicDialect dynamicDialect = new DynamicDialect();
+            dynamicDialect.setDefaultDialect(defaultDialect);
+            List<DataSourceDialect> dialects = context.getBeansOfType(DataSourceDialect.class);
+            dialects.forEach(item -> dynamicDialect.put(item.getDataSource(), item.getDialect()));
+            conf.getDialects().forEach((ds, dType) ->
+                    dynamicDialect.put(ds, createDialect(dType, "dialects." + ds)));
+            return dynamicDialect;
+        }
+        return defaultDialect;
+    }
+
+    private Dialect createDialect(Sql.Dialect dialectType, String propKey) {
+        switch (dialectType) {
             case MySQL:
                 return new MySqlDialect();
             case Oracle:
@@ -131,7 +135,8 @@ public class ConfigurationBefore {
             case SqlServer:
                 return new SqlServerDialect();
         }
-        throw new IllegalConfigException("Invalid config: [bean-searcher.sql.dialect: " + dialect + "] only `MySql` / `Oracle` / `PostgreSQL` / `SqlServer` allowed. Please see https://bs.zhxu.cn/guide/latest/advance.html#sql-%E6%96%B9%E8%A8%80%EF%BC%88dialect%EF%BC%89 for help.");
+        throw new IllegalConfigException("Invalid config: [bean-searcher.sql." + propKey + ": " + dialectType + "]. " +
+                "Please see https://bs.zhxu.cn/guide/latest/advance.html#sql-%E6%96%B9%E8%A8%80%EF%BC%88dialect%EF%BC%89 for help.");
     }
 
     @Bean
