@@ -5,7 +5,7 @@ package cn.zhxu.bs;
  * @author Troy.Zhou @ 2022-07-07
  * @since v3.8.1
  */
-public class IllegalParamException extends Exception {
+public class IllegalParamException extends RuntimeException {
 
     public IllegalParamException(String message) {
         super(message);
