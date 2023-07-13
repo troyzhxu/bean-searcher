@@ -60,6 +60,12 @@ public class ConfigurationBefore {
     }
 
     @Bean
+    @Condition(onMissingBean = EnumParamConvertor.class)
+    public EnumParamConvertor enumParamConvertor() {
+        return new EnumParamConvertor();
+    }
+
+    @Bean
     @Condition(onMissingBean = SizeLimitParamFilter.class)
     public SizeLimitParamFilter sizeLimitParamFilter() {
         return new SizeLimitParamFilter(config.getParams().getFilter().getMaxParaMapSize());

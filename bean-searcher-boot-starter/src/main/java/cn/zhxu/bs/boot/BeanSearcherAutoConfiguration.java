@@ -173,6 +173,12 @@ public class BeanSearcherAutoConfiguration {
 	}
 
 	@Bean
+	@ConditionalOnMissingBean(EnumParamConvertor.class)
+	public EnumParamConvertor enumParamConvertor() {
+		return new EnumParamConvertor();
+	}
+
+	@Bean
 	@ConditionalOnMissingBean(SizeLimitParamFilter.class)
 	public SizeLimitParamFilter sizeLimitParamFilter(BeanSearcherProperties config) {
 		return new SizeLimitParamFilter(config.getParams().getFilter().getMaxParaMapSize());
