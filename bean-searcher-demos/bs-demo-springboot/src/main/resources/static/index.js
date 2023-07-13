@@ -18,13 +18,13 @@ new Vue({
         loading: false,
         params: {
             'name': null,
-            'name-op': 'in',
+            'name-op': 'ct',
             'name-ic': false,
             'age-0': null,
             'age-1': null,
             'age-op': 'eq',
             'department': null,
-            'department-op': 'in',
+            'department-op': 'ct',
             'department-ic': false,
             'entryDate-0': null,
             'entryDate-1': null,
@@ -36,13 +36,13 @@ new Vue({
         },
         strOps: [
             { key: 'eq', label: '等于'},
-            { key: 'in', label: '包含'},
+            { key: 'ct', label: '包含'},
             { key: 'sw', label: '以...开始'},
             { key: 'ew', label: '以...结束'}
         ],
         nameOps: [
             { key: 'eq', label: '等于' , disabled: true},
-            { key: 'in', label: '包含'},
+            { key: 'ct', label: '包含'},
             { key: 'sw', label: '以...开始'},
             { key: 'ew', label: '以...结束', disabled: true}
         ],
