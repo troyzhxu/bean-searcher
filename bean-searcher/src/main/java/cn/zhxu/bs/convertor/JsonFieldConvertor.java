@@ -33,15 +33,12 @@ public class JsonFieldConvertor implements FieldConvertor.BFieldConvertor {
 
     @Override
     public boolean supports(FieldMeta meta, Class<?> valueType) {
-        if (valueType == String.class) {
-            return meta.getType() != String.class && meta.getDbType() == DbType.JSON;
-        }
-        return false;
+        return meta.getType() != String.class && meta.getDbType() == DbType.JSON;
     }
 
     @Override
     public Object convert(FieldMeta meta, Object value) {
-        String json = (String) value;
+        String json = value.toString();
         if (StringUtils.isBlank(json)) {
             return null;
         }
