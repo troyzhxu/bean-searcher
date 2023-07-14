@@ -25,7 +25,7 @@ public class NumberParamConvertor implements FieldConvertor.ParamConvertor {
                 String.class == valueType || Byte.class == valueType || Short.class == valueType ||
                         Integer.class == valueType || Long.class == valueType || Float.class == valueType ||
                         Double.class == valueType || BigDecimal.class == valueType
-        );
+        ) && !Enum.class.isAssignableFrom(meta.getType());
     }
 
     @Override
