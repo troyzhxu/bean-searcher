@@ -1,20 +1,19 @@
 package cn.zhxu.bs.convertor;
 
-import java.math.BigDecimal;
-
+import cn.zhxu.bs.FieldMeta;
 import cn.zhxu.bs.bean.Cluster;
+import cn.zhxu.bs.bean.DbType;
 import org.junit.Assert;
 import org.junit.Test;
 
-import cn.zhxu.bs.FieldMeta;
-import cn.zhxu.bs.bean.DbType;
+import java.math.BigDecimal;
 
 public class NumberParamConvertorTestCase {
 
     final NumberParamConvertor convertor = new NumberParamConvertor();
 
     @Test
-    public void test_support() {
+    public void test_support() throws NoSuchFieldException {
         assertSupports(DbType.BOOL, false);
         assertSupports(DbType.BYTE, true);
         assertSupports(DbType.SHORT, true);
@@ -30,8 +29,14 @@ public class NumberParamConvertorTestCase {
         assertSupports(DbType.UNKNOWN, false);
     }
 
-    void assertSupports(DbType dbType, boolean supports) {
-        FieldMeta meta = new FieldMeta(null, null, null, null, null, false, null, dbType, Cluster.AUTO);
+
+    public static class TestBean {
+        private long id;
+    }
+
+    void assertSupports(DbType dbType, boolean supports) throws NoSuchFieldException {
+        FieldMeta meta = new FieldMeta(null, null, TestBean.class.getDeclaredField("id"),
+                null, null, false, null, dbType, Cluster.AUTO);
         Assert.assertEquals(supports, convertor.supports(meta, String.class));
         Assert.assertEquals(supports, convertor.supports(meta, Byte.class));
         Assert.assertEquals(supports, convertor.supports(meta, Short.class));
