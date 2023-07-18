@@ -1,4 +1,4 @@
-# v4.2.2
+# v4.2.2 @ 2023-07-18
 
 * 修复 `NumberParamConvertor` 与 `EnumParamConvertor` 冲突问题，`NumberParamConvertor` 不再处理枚举字段的转换
 * 增强 `JsonFieldConvertor`，支持将 `非 String` 类型（例如：`PGobject`）的 JSON 值转换为对象
