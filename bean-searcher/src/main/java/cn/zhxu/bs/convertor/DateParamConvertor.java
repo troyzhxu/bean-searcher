@@ -1,12 +1,10 @@
 package cn.zhxu.bs.convertor;
 
-
 import cn.zhxu.bs.FieldConvertor;
 import cn.zhxu.bs.FieldMeta;
 import cn.zhxu.bs.bean.DbType;
 import cn.zhxu.bs.util.StringUtils;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -14,6 +12,7 @@ import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalQueries;
 import java.time.temporal.TemporalQuery;
 import java.util.Date;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -30,11 +29,31 @@ public class DateParamConvertor implements FieldConvertor.ParamConvertor {
 
     static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
+    /**
+     * 转换目标
+     */
+    enum Target {
+
+        SQL_DATE,
+        LOCAL_DATE
+
+    }
+
+    private Target target = Target.SQL_DATE;
+
+    public DateParamConvertor() { }
+
+    public DateParamConvertor(Target target) {
+        this.target = Objects.requireNonNull(target);
+    }
+
     @Override
     public boolean supports(FieldMeta meta, Class<?> valueType) {
         return meta.getDbType() == DbType.DATE && (
-                String.class == valueType || Date.class == valueType || LocalDate.class == valueType ||
-                        Timestamp.class == valueType || LocalDateTime.class == valueType
+                String.class == valueType ||
+                        Date.class.isAssignableFrom(valueType) ||
+                        LocalDate.class == valueType ||
+                        LocalDateTime.class == valueType
         );
     }
 
@@ -52,7 +71,11 @@ public class DateParamConvertor implements FieldConvertor.ParamConvertor {
             }
         }
         if (value instanceof Date) {
-            return new java.sql.Date(((Date) value).getTime());
+            java.sql.Date sqlDate = new java.sql.Date(((Date) value).getTime());
+            if (target == Target.SQL_DATE) {
+                return sqlDate;
+            }
+            return sqlDate.toLocalDate();
         }
         if (value instanceof LocalDate) {
             return toDate((LocalDate) value);
@@ -63,9 +86,20 @@ public class DateParamConvertor implements FieldConvertor.ParamConvertor {
         return null;
     }
 
-    private java.sql.Date toDate(LocalDate date) {
-        long days = date.getLong(ChronoField.EPOCH_DAY);
-        return new java.sql.Date(TimeUnit.DAYS.toMillis(days));
+    private Object toDate(LocalDate date) {
+        if (target == Target.SQL_DATE) {
+            long days = date.getLong(ChronoField.EPOCH_DAY);
+            return new java.sql.Date(TimeUnit.DAYS.toMillis(days));
+        }
+        return date;
+    }
+
+    public Target getTarget() {
+        return target;
+    }
+
+    public void setTarget(Target target) {
+        this.target = Objects.requireNonNull(target);
     }
 
 }

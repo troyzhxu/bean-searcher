@@ -1,15 +1,16 @@
 package cn.zhxu.bs.convertor;
 
-
 import cn.zhxu.bs.FieldConvertor;
 import cn.zhxu.bs.FieldMeta;
 import cn.zhxu.bs.bean.DbType;
 import cn.zhxu.bs.util.StringUtils;
 
+import java.sql.Time;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalQueries;
 import java.time.temporal.TemporalQuery;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,9 +28,27 @@ public class TimeParamConvertor implements FieldConvertor.ParamConvertor {
     static final DateTimeFormatter FORMATTER_1 = DateTimeFormatter.ofPattern("HH:mm:ss");
     static final DateTimeFormatter FORMATTER_2 = DateTimeFormatter.ofPattern("HH:mm");
 
+    /**
+     * 转换目标
+     */
+    enum Target {
+
+        SQL_TIME,
+        LOCAL_TIME
+
+    }
+
+    private Target target = Target.SQL_TIME;
+
+    public TimeParamConvertor() { }
+
+    public TimeParamConvertor(Target target) {
+        this.target = Objects.requireNonNull(target);
+    }
+
     @Override
     public boolean supports(FieldMeta meta, Class<?> valueType) {
-        return meta.getDbType() == DbType.TIME && (String.class == valueType || LocalTime.class == valueType);
+        return meta.getDbType() == DbType.TIME && (String.class == valueType || LocalTime.class == valueType || Time.class == valueType);
     }
 
     @Override
@@ -52,11 +71,25 @@ public class TimeParamConvertor implements FieldConvertor.ParamConvertor {
         if (value instanceof LocalTime) {
             return toTime((LocalTime) value);
         }
-        return null;
+        if (value instanceof Time && target == Target.LOCAL_TIME) {
+            return ((Time) value).toLocalTime();
+        }
+        return value;
     }
 
-    private java.sql.Time toTime(LocalTime time) {
-        return new java.sql.Time(time.getHour(), time.getMinute(), time.getSecond());
+    private Object toTime(LocalTime time) {
+        if (target == Target.SQL_TIME) {
+            return Time.valueOf(time);
+        }
+        return time;
+    }
+
+    public Target getTarget() {
+        return target;
+    }
+
+    public void setTarget(Target target) {
+        this.target = Objects.requireNonNull(target);
     }
 
 }

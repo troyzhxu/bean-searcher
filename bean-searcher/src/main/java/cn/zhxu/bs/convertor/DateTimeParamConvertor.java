@@ -1,6 +1,5 @@
 package cn.zhxu.bs.convertor;
 
-
 import cn.zhxu.bs.FieldConvertor;
 import cn.zhxu.bs.FieldMeta;
 import cn.zhxu.bs.bean.DbType;
@@ -12,6 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
 import java.util.Date;
+import java.util.Objects;
 import java.util.TimeZone;
 import java.util.regex.Pattern;
 
@@ -34,9 +34,32 @@ public class DateTimeParamConvertor implements FieldConvertor.ParamConvertor {
      */
     private TimeZone timeZone = TimeZone.getDefault();
 
+    /**
+     * 转换目标
+     */
+    enum Target {
+
+        SQL_TIMESTAMP,
+        LOCAL_DATE_TIME
+
+    }
+
+    private Target target = Target.SQL_TIMESTAMP;
+
+    public DateTimeParamConvertor() { }
+
+    public DateTimeParamConvertor(Target target) {
+        this.target = Objects.requireNonNull(target);
+    }
+
     @Override
     public boolean supports(FieldMeta meta, Class<?> valueType) {
-        return meta.getDbType() == DbType.DATETIME && (String.class == valueType || Date.class == valueType || LocalDate.class == valueType || LocalDateTime.class == valueType);
+        return meta.getDbType() == DbType.DATETIME && (
+                String.class == valueType ||
+                        Date.class.isAssignableFrom(valueType) ||
+                        LocalDate.class == valueType ||
+                        LocalDateTime.class == valueType
+        );
     }
 
     @Override
@@ -55,6 +78,14 @@ public class DateTimeParamConvertor implements FieldConvertor.ParamConvertor {
             }
         }
         if (value instanceof Date) {
+            if (target == Target.LOCAL_DATE_TIME) {
+                // 注意：java.sql.Date 的 toInstant() 方法会抛异常
+                if (value instanceof java.sql.Date) {
+                    LocalDate localDate = ((java.sql.Date) value).toLocalDate();
+                    return LocalDateTime.of(localDate, LocalTime.of(0, 0, 0, 0));
+                }
+                return LocalDateTime.ofInstant(((Date) value).toInstant(), timeZone.toZoneId());
+            }
             return new Timestamp(((Date) value).getTime());
         }
         if (value instanceof LocalDate) {
@@ -66,9 +97,12 @@ public class DateTimeParamConvertor implements FieldConvertor.ParamConvertor {
         return null;
     }
 
-    private Timestamp toTimestamp(LocalDateTime dateTime) {
-        ZoneOffset offset = ZoneOffset.ofTotalSeconds(timeZone.getRawOffset() / 1000);
-        return new Timestamp(dateTime.toInstant(offset).toEpochMilli());
+    private Object toTimestamp(LocalDateTime dateTime) {
+        if (target == Target.SQL_TIMESTAMP) {
+            ZoneOffset offset = ZoneOffset.ofTotalSeconds(timeZone.getRawOffset() / 1000);
+            return new Timestamp(dateTime.toInstant(offset).toEpochMilli());
+        }
+        return dateTime;
     }
 
     private String normalize(String datetime) {
@@ -102,6 +136,14 @@ public class DateTimeParamConvertor implements FieldConvertor.ParamConvertor {
         if (zoneId != null) {
             timeZone = TimeZone.getTimeZone(zoneId);
         }
+    }
+
+    public Target getTarget() {
+        return target;
+    }
+
+    public void setTarget(Target target) {
+        this.target = Objects.requireNonNull(target);
     }
 
 }

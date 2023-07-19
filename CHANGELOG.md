@@ -1,3 +1,9 @@
+# v4.2.3 @ Next
+
+* 增强 `DateParamConvertor`，支持 `java.util.Date` 子类的转换，并新增 `target` 属性，支持配置转换目标类型
+* 增强 `DateTimeParamConvertor`，支持 `java.util.Date` 子类的转换，并新增 `target` 属性，支持配置转换目标类型
+* 增强 `TimeParamConvertor`，新增 `target` 属性，支持配置转换目标类型
+
 # v4.2.2 @ 2023-07-18
 
 * 修复 `NumberParamConvertor` 与 `EnumParamConvertor` 冲突问题，`NumberParamConvertor` 不再处理枚举字段的转换
