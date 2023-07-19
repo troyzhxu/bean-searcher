@@ -1,6 +1,7 @@
 # Next
 
 * Bean Searcher
+  * 增强 `BaseSearcher`，新增 `failOnParamError` 属性，可配置当参数错误时是否向外抛出异常，默认 `false`
   * 增强 `DateParamConvertor`，支持 `java.util.Date` 子类的转换，并新增 `target` 属性，支持配置转换目标类型
   * 增强 `DateTimeParamConvertor`，支持 `java.util.Date` 子类的转换，并新增 `target` 属性，支持配置转换目标类型
   * 增强 `TimeParamConvertor`，新增 `target` 属性，支持配置转换目标类型

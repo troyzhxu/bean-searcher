@@ -30,6 +30,8 @@ public class BaseSearcher implements Searcher {
 
 	private List<ResultFilter> resultFilters = new ArrayList<>();
 
+	private boolean failOnParamError = false;
+
 	public BaseSearcher() {
 	}
 
@@ -119,6 +121,9 @@ public class BaseSearcher implements Searcher {
 		try {
 			searchParam = paramResolver.resolve(beanMeta, fetchType, paraMap);
 		} catch (IllegalParamException e) {
+			if (failOnParamError) {
+				throw e;
+			}
 			log.warn("Empty data will be returned, because of illegal params detected: [{}]", e.getMessage());
 			return emptyResult(beanMeta, fetchType);
 		}
@@ -195,6 +200,14 @@ public class BaseSearcher implements Searcher {
 		if (resultFilter != null) {
 			this.resultFilters.add(resultFilter);
 		}
+	}
+
+	public boolean isFailOnParamError() {
+		return failOnParamError;
+	}
+
+	public void setFailOnParamError(boolean failOnParamError) {
+		this.failOnParamError = failOnParamError;
 	}
 
 }
