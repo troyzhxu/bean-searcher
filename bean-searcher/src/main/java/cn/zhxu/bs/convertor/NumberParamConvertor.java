@@ -2,6 +2,7 @@ package cn.zhxu.bs.convertor;
 
 import cn.zhxu.bs.FieldConvertor;
 import cn.zhxu.bs.FieldMeta;
+import cn.zhxu.bs.IllegalParamException;
 import cn.zhxu.bs.bean.DbType;
 import cn.zhxu.bs.util.StringUtils;
 
@@ -34,7 +35,7 @@ public class NumberParamConvertor implements FieldConvertor.ParamConvertor {
         try {
             return doConvert(dbType, value);
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Field type is " + dbType + ", but the param value is: " + value, e);
+            throw new IllegalParamException("Field type is " + dbType + ", but the param value is: " + value, e);
         }
     }
 
