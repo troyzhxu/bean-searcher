@@ -32,7 +32,7 @@ public class DateParamConvertor implements FieldConvertor.ParamConvertor {
     /**
      * 转换目标
      */
-    enum Target {
+    public enum Target {
 
         SQL_DATE,
         LOCAL_DATE

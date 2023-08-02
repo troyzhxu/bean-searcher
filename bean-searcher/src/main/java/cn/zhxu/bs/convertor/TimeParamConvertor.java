@@ -31,7 +31,7 @@ public class TimeParamConvertor implements FieldConvertor.ParamConvertor {
     /**
      * 转换目标
      */
-    enum Target {
+    public enum Target {
 
         SQL_TIME,
         LOCAL_TIME

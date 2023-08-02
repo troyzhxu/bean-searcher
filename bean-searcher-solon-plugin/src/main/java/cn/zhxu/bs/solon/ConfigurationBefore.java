@@ -44,19 +44,19 @@ public class ConfigurationBefore {
     @Bean
     @Condition(onMissingBean = DateParamConvertor.class)
     public DateParamConvertor dateParamConvertor() {
-        return new DateParamConvertor();
+        return new DateParamConvertor(config.getParams().getConvertor().getDateTarget());
     }
 
     @Bean
     @Condition(onMissingBean = TimeParamConvertor.class)
     public TimeParamConvertor timeParamConvertor() {
-        return new TimeParamConvertor();
+        return new TimeParamConvertor(config.getParams().getConvertor().getTimeTarget());
     }
 
     @Bean
     @Condition(onMissingBean = DateTimeParamConvertor.class)
     public DateTimeParamConvertor dateTimeParamConvertor() {
-        return new DateTimeParamConvertor();
+        return new DateTimeParamConvertor(config.getParams().getConvertor().getDateTimeTarget());
     }
 
     @Bean

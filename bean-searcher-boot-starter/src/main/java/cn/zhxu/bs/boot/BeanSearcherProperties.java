@@ -214,6 +214,40 @@ public class BeanSearcherProperties {
 
 		}
 
+		private final Convertor convertor = new Convertor();
+
+		public static class Convertor {
+
+			private DateParamConvertor.Target dateTarget;
+			private DateTimeParamConvertor.Target dateTimeTarget;
+			private TimeParamConvertor.Target timeTarget;
+
+			public DateParamConvertor.Target getDateTarget() {
+				return dateTarget;
+			}
+
+			public void setDateTarget(DateParamConvertor.Target dateTarget) {
+				this.dateTarget = dateTarget;
+			}
+
+			public DateTimeParamConvertor.Target getDateTimeTarget() {
+				return dateTimeTarget;
+			}
+
+			public void setDateTimeTarget(DateTimeParamConvertor.Target dateTimeTarget) {
+				this.dateTimeTarget = dateTimeTarget;
+			}
+
+			public TimeParamConvertor.Target getTimeTarget() {
+				return timeTarget;
+			}
+
+			public void setTimeTarget(TimeParamConvertor.Target timeTarget) {
+				this.timeTarget = timeTarget;
+			}
+
+		}
+
 		/**
 		 * 分页相关配置
 		 */
@@ -285,6 +319,10 @@ public class BeanSearcherProperties {
 
 		public Group getGroup() {
 			return group;
+		}
+
+		public Convertor getConvertor() {
+			return convertor;
 		}
 
 		public boolean isFailOnError() {

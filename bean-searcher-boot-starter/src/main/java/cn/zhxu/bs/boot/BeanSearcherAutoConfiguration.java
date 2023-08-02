@@ -156,20 +156,20 @@ public class BeanSearcherAutoConfiguration {
 
 	@Bean
 	@ConditionalOnMissingBean(DateParamConvertor.class)
-	public DateParamConvertor dateParamConvertor() {
-		return new DateParamConvertor();
+	public DateParamConvertor dateParamConvertor(BeanSearcherProperties props) {
+		return new DateParamConvertor(props.getParams().getConvertor().getDateTarget());
 	}
 
 	@Bean
 	@ConditionalOnMissingBean(TimeParamConvertor.class)
-	public TimeParamConvertor timeParamConvertor() {
-		return new TimeParamConvertor();
+	public TimeParamConvertor timeParamConvertor(BeanSearcherProperties props) {
+		return new TimeParamConvertor(props.getParams().getConvertor().getTimeTarget());
 	}
 
 	@Bean
 	@ConditionalOnMissingBean(DateTimeParamConvertor.class)
-	public DateTimeParamConvertor dateTimeParamConvertor() {
-		return new DateTimeParamConvertor();
+	public DateTimeParamConvertor dateTimeParamConvertor(BeanSearcherProperties props) {
+		return new DateTimeParamConvertor(props.getParams().getConvertor().getDateTimeTarget());
 	}
 
 	@Bean

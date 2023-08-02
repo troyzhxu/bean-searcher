@@ -9,14 +9,14 @@
   * 增强 `TimeParamConvertor`，新增 `target` 属性，支持配置转换目标类型
 * Bean Searcher Boot Starter
   * 新增配置项 `bean-searcher.params.fail-on-error` 指定参数错误时，是否抛出异常，默认 `false`
-  * 新增配置项 `bean-searcher.params.convertor.date-target`(TODO)
-  * 新增配置项 `bean-searcher.params.convertor.date-time-target`(TODO)
-  * 新增配置项 `bean-searcher.params.convertor.time-target`(TODO)
+  * 新增配置项 `bean-searcher.params.convertor.date-target`
+  * 新增配置项 `bean-searcher.params.convertor.date-time-target`
+  * 新增配置项 `bean-searcher.params.convertor.time-target`
 * Bean Searcher Solon Plugin
-  * 新增配置项 `bean-searcher.params.fail-on-error` 指定参数错误时，是否抛出异常，默认 `false`(TODO)
-  * 新增配置项 `bean-searcher.params.convertor.date-target`(TODO)
-  * 新增配置项 `bean-searcher.params.convertor.date-time-target`(TODO)
-  * 新增配置项 `bean-searcher.params.convertor.time-target`(TODO)
+  * 新增配置项 `bean-searcher.params.fail-on-error` 指定参数错误时，是否抛出异常，默认 `false`
+  * 新增配置项 `bean-searcher.params.convertor.date-target`
+  * 新增配置项 `bean-searcher.params.convertor.date-time-target`
+  * 新增配置项 `bean-searcher.params.convertor.time-target`
 
 ### 🐛 Bug Fixes
 
