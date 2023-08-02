@@ -1,3 +1,9 @@
+# v4.2.4 @ 2023-08-02
+
+* 为配置项 `bean-searcher.params.convertor.date-target` 添加默认值 `SQL_DATE`
+* 为配置项 `bean-searcher.params.convertor.date-time-target` 添加默认值 `SQL_TIMESTAMP`
+* 为配置项 `bean-searcher.params.convertor.time-target` 添加默认值 `SQL_TIME`
+
 # v4.2.3 @ 2023-08-02
 
 ### ✨ Features
