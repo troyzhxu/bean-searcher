@@ -1,5 +1,6 @@
 package cn.zhxu.bs;
 
+import cn.zhxu.bs.operator.IsNull;
 import cn.zhxu.bs.util.MapUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -113,7 +114,6 @@ public class SimpleSearchTestCase {
         beanSearcher.search(SearchBean.class, params2);
     }
 
-
     @Test
     public void test3() {
         SqlExecutor sqlExecutor = new SqlExecutor() {
@@ -144,6 +144,36 @@ public class SimpleSearchTestCase {
         mapSearcher.searchAll(SearchBean.class, params2);
         beanSearcher.searchAll(SearchBean.class, params1);
         beanSearcher.searchAll(SearchBean.class, params2);
+    }
+
+    @Test
+    public void test4() {
+        SqlExecutor sqlExecutor = new SqlExecutor() {
+            @Override
+            public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
+                System.out.println(searchSql.getListSqlString());
+                Assert.assertEquals("select id c_0, name c_1 from search_bean where (((id = ?) or (id is null)) and (name = ?))", searchSql.getListSqlString());
+                List<Object> listParams = searchSql.getListSqlParams();
+                Assert.assertEquals(2, listParams.size());
+                Assert.assertEquals(10L, listParams.get(0));
+                Assert.assertEquals("Jack", listParams.get(1));
+                return new SqlResult<>(searchSql, EMPTY_RESULT_SET, columnLabel -> null);
+            }
+        };
+        BeanSearcher beanSearcher = SearcherBuilder.beanSearcher().sqlExecutor(sqlExecutor).build();
+        Object value = null;
+        Map<String, Object> params = MapUtils.builder()
+                .group("A")
+                .field(SearchBean::getId, value)
+                .group("B")
+                .field(SearchBean::getId, 10)
+                .group("C")
+                .field(SearchBean::getId).op(IsNull.class)
+                .group("D")
+                .field(SearchBean::getName, "Jack")
+                .groupExpr("(A|B|C)&D")
+                .build();
+        beanSearcher.searchAll(SearchBean.class, params);
     }
 
 }

@@ -87,7 +87,7 @@ public class Group<V> {
                 continue;
             }
             Group<V> newGroup = group.filter(predicate);
-            if (newGroup.groups.size() > 0) {
+            if (newGroup.type == TYPE_RAW || newGroup.groups.size() > 0) {
                 newGroups.add(newGroup);
             }
         }
