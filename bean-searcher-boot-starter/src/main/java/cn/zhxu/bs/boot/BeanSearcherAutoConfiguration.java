@@ -377,13 +377,15 @@ public class BeanSearcherAutoConfiguration {
 									 SqlExecutor sqlExecutor,
 									 BeanReflector beanReflector,
 									 ObjectProvider<List<SqlInterceptor>> interceptors,
-									 ObjectProvider<List<ResultFilter>> processors) {
+									 ObjectProvider<List<ResultFilter>> processors,
+									 BeanSearcherProperties props) {
 		DefaultBeanSearcher searcher = new DefaultBeanSearcher();
 		searcher.setMetaResolver(metaResolver);
 		searcher.setParamResolver(paramResolver);
 		searcher.setSqlResolver(sqlResolver);
 		searcher.setSqlExecutor(sqlExecutor);
 		searcher.setBeanReflector(beanReflector);
+		searcher.setFailOnParamError(props.getParams().isFailOnError());
 		ifAvailable(interceptors, searcher::setInterceptors);
 		ifAvailable(processors, searcher::setResultFilters);
 		return searcher;
@@ -430,12 +432,14 @@ public class BeanSearcherAutoConfiguration {
 								   SqlExecutor sqlExecutor,
 								   ObjectProvider<List<MFieldConvertor>> convertors,
 								   ObjectProvider<List<SqlInterceptor>> interceptors,
-								   ObjectProvider<List<ResultFilter>> resultFilters) {
+								   ObjectProvider<List<ResultFilter>> resultFilters,
+								   BeanSearcherProperties props) {
 		DefaultMapSearcher searcher = new DefaultMapSearcher();
 		searcher.setMetaResolver(metaResolver);
 		searcher.setParamResolver(paramResolver);
 		searcher.setSqlResolver(sqlResolver);
 		searcher.setSqlExecutor(sqlExecutor);
+		searcher.setFailOnParamError(props.getParams().isFailOnError());
 		List<MFieldConvertor> list = convertors.getIfAvailable();
 		if (list != null) {
 			List<MFieldConvertor> newList = new ArrayList<>(list);

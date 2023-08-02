@@ -101,16 +101,17 @@ public class ConfigurationAfter {
 									 ParamResolver paramResolver,
 									 SqlResolver sqlResolver,
 									 SqlExecutor sqlExecutor,
-									 BeanReflector beanReflector) {
+									 BeanReflector beanReflector,
+									 BeanSearcherProperties props) {
 		List<SqlInterceptor> interceptors = context.getBeansOfType(SqlInterceptor.class);
 		List<ResultFilter> processors = context.getBeansOfType(ResultFilter.class);
-
 		DefaultBeanSearcher searcher = new DefaultBeanSearcher();
 		searcher.setMetaResolver(metaResolver);
 		searcher.setParamResolver(paramResolver);
 		searcher.setSqlResolver(sqlResolver);
 		searcher.setSqlExecutor(sqlExecutor);
 		searcher.setBeanReflector(beanReflector);
+		searcher.setFailOnParamError(props.getParams().isFailOnError());
 		ifAvailable(interceptors, searcher::setInterceptors);
 		ifAvailable(processors, searcher::setResultFilters);
 		return searcher;
@@ -133,17 +134,17 @@ public class ConfigurationAfter {
 	public MapSearcher mapSearcher(MetaResolver metaResolver,
 								   ParamResolver paramResolver,
 								   SqlResolver sqlResolver,
-								   SqlExecutor sqlExecutor) {
+								   SqlExecutor sqlExecutor,
+								   BeanSearcherProperties props) {
 		List<MFieldConvertor> convertors = context.getBeansOfType(MFieldConvertor.class);
 		List<SqlInterceptor> interceptors = context.getBeansOfType(SqlInterceptor.class);
 		List<ResultFilter> resultFilters = context.getBeansOfType(ResultFilter.class);
-
 		DefaultMapSearcher searcher = new DefaultMapSearcher();
 		searcher.setMetaResolver(metaResolver);
 		searcher.setParamResolver(paramResolver);
 		searcher.setSqlResolver(sqlResolver);
 		searcher.setSqlExecutor(sqlExecutor);
-
+		searcher.setFailOnParamError(props.getParams().isFailOnError());
 		if (convertors != null) {
 			List<MFieldConvertor> newList = new ArrayList<>(convertors);
 			// 让 DateFormatFieldConvertor 排在前面

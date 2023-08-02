@@ -1,4 +1,6 @@
-# Next
+# v4.2.3 @ 2023-08-02
+
+### ✨ Features
 
 * Bean Searcher
   * 增强 `BaseSearcher`，新增 `failOnParamError` 属性，可配置当参数错误时是否向外抛出异常，默认 `false`
@@ -6,7 +8,7 @@
   * 增强 `DateTimeParamConvertor`，支持 `java.util.Date` 子类的转换，并新增 `target` 属性，支持配置转换目标类型
   * 增强 `TimeParamConvertor`，新增 `target` 属性，支持配置转换目标类型
 * Bean Searcher Boot Starter
-  * 新增配置项 `bean-searcher.params.fail-on-error` 指定参数错误时，是否抛出异常，默认 `false` (TODO)
+  * 新增配置项 `bean-searcher.params.fail-on-error` 指定参数错误时，是否抛出异常，默认 `false`
   * 新增配置项 `bean-searcher.params.convertor.date-target`(TODO)
   * 新增配置项 `bean-searcher.params.convertor.date-time-target`(TODO)
   * 新增配置项 `bean-searcher.params.convertor.time-target`(TODO)
@@ -15,6 +17,17 @@
   * 新增配置项 `bean-searcher.params.convertor.date-target`(TODO)
   * 新增配置项 `bean-searcher.params.convertor.date-time-target`(TODO)
   * 新增配置项 `bean-searcher.params.convertor.time-target`(TODO)
+
+### 🐛 Bug Fixes
+
+* Bean Searcher
+  * 修复：逻辑分组在某些情况下会丢失部分条件的问题
+  * 修复：实体类字段类型是整形，参数传字母时会报 `IllegalArqumentException` 的问题
+
+### 🌻 Better
+
+* 升级 Solon -> v2.4.1
+* 升级 SpringBoot -> v3.1.2
 
 # v4.2.2 @ 2023-07-18
 

@@ -18,7 +18,6 @@ import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Map;
 
-
 @ConfigurationProperties(prefix = "bean-searcher")
 public class BeanSearcherProperties {
 
@@ -109,6 +108,12 @@ public class BeanSearcherProperties {
 		 * @see DefaultParamResolver#setSelectExcludeName(String)
 		 */
 		private String selectExclude = "selectExclude";
+
+		/**
+		 * 参数非法时是否抛出异常
+		 * @since v4.2.3
+		 */
+		private boolean failOnError = false;
 
 		/**
 		 * 过滤器配置
@@ -280,6 +285,14 @@ public class BeanSearcherProperties {
 
 		public Group getGroup() {
 			return group;
+		}
+
+		public boolean isFailOnError() {
+			return failOnError;
+		}
+
+		public void setFailOnError(boolean failOnError) {
+			this.failOnError = failOnError;
 		}
 
 		public Pagination getPagination() {
