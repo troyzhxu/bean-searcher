@@ -21,8 +21,8 @@
 ### 🐛 Bug Fixes
 
 * Bean Searcher
-  * 修复：逻辑分组在某些情况下会丢失部分条件的问题
   * 修复：实体类字段类型是整形，参数传字母时会报 `IllegalArqumentException` 的问题
+  * 修复：逻辑分组在某些情况下会丢失部分条件的问题：https://gitee.com/troyzhxu/bean-searcher/issues/I7PZQ1
 
 ### 🌻 Better
 
