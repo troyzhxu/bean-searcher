@@ -220,9 +220,9 @@ public class BeanSearcherProperties {
 
 		public static class Convertor {
 
-			private DateParamConvertor.Target dateTarget;
-			private DateTimeParamConvertor.Target dateTimeTarget;
-			private TimeParamConvertor.Target timeTarget;
+			private DateParamConvertor.Target dateTarget = DateParamConvertor.Target.SQL_DATE;
+			private DateTimeParamConvertor.Target dateTimeTarget = DateTimeParamConvertor.Target.SQL_TIMESTAMP;
+			private TimeParamConvertor.Target timeTarget = TimeParamConvertor.Target.SQL_TIME;
 
 			public DateParamConvertor.Target getDateTarget() {
 				return dateTarget;
