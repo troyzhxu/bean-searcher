@@ -13,7 +13,7 @@ import org.noear.solon.annotation.Bean;
 import org.noear.solon.annotation.Condition;
 import org.noear.solon.annotation.Configuration;
 import org.noear.solon.annotation.Inject;
-import org.noear.solon.core.AopContext;
+import org.noear.solon.core.AppContext;
 
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ import java.util.Map;
 @Configuration
 public class ConfigurationBefore {
     @Inject
-    AopContext context;
+    AppContext context;
 
     //放到这儿，减少注入处理代码
     @Inject

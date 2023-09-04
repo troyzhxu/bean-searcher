@@ -25,7 +25,7 @@
 		<slf4j.version>2.0.7</slf4j.version>
 		<xjsonkit.version>1.4.2</xjsonkit.version>
 		<spring.boot.version>3.1.2</spring.boot.version>
-		<solon.version>2.4.1</solon.version>
+		<solon.version>2.5.3</solon.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
