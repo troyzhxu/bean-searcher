@@ -1,6 +1,6 @@
 package cn.zhxu.bs.solon;
 
-import org.noear.solon.core.AopContext;
+import org.noear.solon.core.AppContext;
 import org.noear.solon.core.Plugin;
 
 /**
@@ -10,7 +10,7 @@ import org.noear.solon.core.Plugin;
 public class SolonPlugin implements Plugin {
 
     @Override
-    public void start(AopContext context) {
+    public void start(AppContext context) {
         context.beanMake(BeanSearcherProperties.class);
 
         //容器加载完成后再执行，确保用户的 Bean 优先
