@@ -14,6 +14,11 @@
 		<version>4.2.4</version>
 	</parent>
 
+	<properties>
+		<java.version>17</java.version>
+	</properties>
+
+
 	<dependencies>
 		<dependency>
 			<groupId>org.slf4j</groupId>
