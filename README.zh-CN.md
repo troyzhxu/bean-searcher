@@ -209,7 +209,7 @@ List<User> users = beanSearcher.searchList(User.class, params);
 #### Spring Boot 项目，添加依赖即集成完毕：
 
 ```groovy
-implementation 'cn.zhxu:bean-searcher-boot-stater:4.2.4'
+implementation 'cn.zhxu:bean-searcher-boot-stater:4.2.5'
 ```
 
 接着便可在 `Controller` 或 `Service` 里注入检索器：
@@ -231,7 +231,7 @@ private BeanSearcher beanSearcher;
 #### Solon 项目，添加依赖即集成完毕：
 
 ```groovy
-implementation 'cn.zhxu:bean-searcher-solon-plugin:4.2.4'
+implementation 'cn.zhxu:bean-searcher-solon-plugin:4.2.5'
 ```
 
 接着便可在 `Controller` 或 `Service` 里注入检索器：
@@ -253,7 +253,7 @@ private BeanSearcher beanSearcher;
 #### 其它框架，使用如下依赖：
 
 ```groovy
-implementation 'cn.zhxu:bean-searcher:4.2.4'
+implementation 'cn.zhxu:bean-searcher:4.2.5'
 ```
 
 然后可以使用 `SearcherBuilder` 构建一个检索器：
