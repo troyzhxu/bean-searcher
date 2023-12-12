@@ -1,12 +1,16 @@
 # v4.2.5 @ Next
 
+### 🐛 Bug Fixes
 
+* 修复当默认排序字段 `@SearchBean.orderBy` 仅为一个拼接参数，且查询时未传任何参数时，仍然生成 `order by` 子句的问题。
+  https://gitee.com/troyzhxu/bean-searcher/issues/I8NT9X
 
-* 依赖升级
-  * spring-boot -> 3.1.6
-  * solon -> 2.6.2
-  * slf4j -> 2.0.9
-  * xjsonkit -> 1.4.3
+### 🌻 Dependency Upgrade
+
+* spring-boot -> 3.1.6
+* solon -> 2.6.2
+* slf4j -> 2.0.9
+* xjsonkit -> 1.4.3
 
 # v4.2.5 @ 2023-08-02
 
