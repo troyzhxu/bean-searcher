@@ -1,3 +1,13 @@
+# v4.2.5 @ Next
+
+
+
+* 依赖升级
+  * spring-boot -> 3.1.6
+  * solon -> 2.6.2
+  * slf4j -> 2.0.9
+  * xjsonkit -> 1.4.3
+
 # v4.2.4 @ 2023-08-02
 
 * 为配置项 `bean-searcher.params.convertor.date-target` 添加默认值 `SQL_DATE`
