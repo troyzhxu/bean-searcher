@@ -89,7 +89,6 @@
   * 新增 `DynamicDialect` 与 `DynamicDialectSupport` 类，用于支持动态方言
   * 重构 `FieldParam.Value.isEmptyValue()` 方法重命名为 `FieldParam.Value.isEmpty()`
   * 重构 `AbstractSearcher` 重命名为 `BaseSearcher`
-  * 功能：若子类 `@SearchBean` 注解省略了 `tables` 属性，则优先尝试从父类的注解中继承（TODO）
   * 优化 `DateTimeParamConvertor`, 使其支持解析 `yyyy-MM-dd HH:mm:ss.SSS`、`yyyy-MM` 与 `yyyy` 格式的参数
   * 升级 `slf4j` -> `2.0.7`
 * Bean Searcher Boot Starter
