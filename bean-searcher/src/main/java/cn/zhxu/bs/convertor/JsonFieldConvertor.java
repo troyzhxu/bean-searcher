@@ -9,6 +9,10 @@ import cn.zhxu.xjson.JsonKit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.List;
+
 /**
  * [Json 字符串 to 对象] 字段转换器
  * 与 {@link DefaultBeanReflector } 配合使用
@@ -42,16 +46,27 @@ public class JsonFieldConvertor implements FieldConvertor.BFieldConvertor {
         if (StringUtils.isBlank(json)) {
             return null;
         }
-        Class<?> type = meta.getType();
         if (failOnError) {
-            return JsonKit.toBean(type, json);
+            return doConvert(meta, json);
         }
         try {
-            return JsonKit.toBean(type, json);
+            return doConvert(meta, json);
         } catch (Exception e) {
-            log.warn("Json parse error [{}] for {}, the value is: {}", e.getClass().getName(), type, json);
+            log.warn("Json parse error [{}] for {}, the value is: {}", e.getClass().getName(), meta.getType(), json);
             return null;
         }
+    }
+
+    private static Object doConvert(FieldMeta meta, String json) {
+        Class<?> type = meta.getType();
+        if (List.class.isAssignableFrom(type)) {
+            Type genericType = meta.getField().getGenericType();
+            if (genericType instanceof ParameterizedType) {
+                Type itemType = ((ParameterizedType) genericType).getActualTypeArguments()[0];
+                return JsonKit.toList((Class<?>) itemType, json);
+            }
+        }
+        return JsonKit.toBean(type, json);
     }
 
     public boolean isFailOnError() {

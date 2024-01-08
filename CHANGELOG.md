@@ -1,3 +1,15 @@
+# v4.2.6 @ Next
+
+### ✨ Features
+
+* 增强 `JsonFieldConvertor`：使支持复杂 `JSON` 数组到泛型 `List<T>` 的数据转换
+
+### 🌻 Better
+
+* 升级 solon -> 2.6.4
+* 升级 spring-boot -> 3.2.1
+* 升级 slf4j-api -> 2.0.10
+
 # v4.2.5 @ 2023-12-13
 
 ### 🐛 Bug Fixes
