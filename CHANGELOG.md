@@ -2,7 +2,7 @@
 
 ### ✨ Features
 
-* 增强 `JsonFieldConvertor`：使支持复杂 `JSON` 数组到泛型 `List<T>` 的数据转换
+* 增强 `JsonFieldConvertor`：使支持复杂 `JSON` 数组到泛型 `List<T>` 的字段转换
 
 ### 🌻 Better
 
