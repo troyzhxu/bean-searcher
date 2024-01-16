@@ -1,5 +1,5 @@
 plugins {
-	id 'org.springframework.boot' version '2.7.8'
+	id 'org.springframework.boot' version '2.7.18'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 	id 'java'
 }
@@ -14,7 +14,7 @@ repositories {
 }
 
 dependencies {
-	implementation 'cn.zhxu:bean-searcher-boot-starter:4.1.2'
+	implementation 'cn.zhxu:bean-searcher-boot-starter:4.2.7'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	runtimeOnly 'com.h2database:h2'
