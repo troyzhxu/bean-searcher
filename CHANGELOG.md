@@ -9,35 +9,6 @@
 * 升级 solon -> 2.6.5
 * 升级 slf4j-api -> 2.0.11
 
-# v4.1.3 @ 2024-01-16
-
-### 🐛 Bug Fixes
-
-* 修复当默认排序字段 `@SearchBean.orderBy` 仅为一个拼接参数，且查询时未传任何参数时，仍然生成 `order by` 子句的问题。
-  https://gitee.com/troyzhxu/bean-searcher/issues/I8NT9X
-* 修复：使用 `@SearchBean.fields` 时，某些情况下会出现 `NullPointerException` 的问题
-
-### 🌻 Better
-
-* 升级 spring-boot -> 3.2.1
-* 升级 solon -> 2.6.5
-* 升级 slf4j-api -> 2.0.10
-* 升级 xjsonkit -> 1.4.3
-
-# v4.0.3 @ 2024-01-16
-
-### 🐛 Bug Fixes
-
-* 修复当默认排序字段 `@SearchBean.orderBy` 仅为一个拼接参数，且查询时未传任何参数时，仍然生成 `order by` 子句的问题。
-  https://gitee.com/troyzhxu/bean-searcher/issues/I8NT9X
-
-### 🌻 Better
-
-* 升级 spring-boot -> 3.2.1
-* 升级 solon -> 2.6.5
-* 升级 slf4j-api -> 2.0.10
-* 升级 xjsonkit -> 1.4.3
-
 # v4.2.6 @ 2024-01-08
 
 ### ✨ Features
