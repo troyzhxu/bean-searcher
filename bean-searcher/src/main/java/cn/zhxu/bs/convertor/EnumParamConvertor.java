@@ -16,7 +16,7 @@ public class EnumParamConvertor implements FieldConvertor.ParamConvertor {
     @Override
     public boolean supports(FieldMeta meta, Class<?> valueType) {
         Class<?> targetType = meta.getType();
-        if (Enum.class.isAssignableFrom(targetType)) {
+        if (targetType != null && Enum.class.isAssignableFrom(targetType)) {
             DbType dbType = meta.getDbType();
             return dbType == DbType.INT && (valueType == String.class || valueType == targetType) ||
                     dbType == DbType.STRING && valueType == targetType;

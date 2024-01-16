@@ -88,7 +88,7 @@ public class FieldMeta {
     }
 
     public Class<?> getType() {
-        return field.getType();
+        return field != null ? field.getType() : null;
     }
 
     public SqlSnippet getFieldSql() {

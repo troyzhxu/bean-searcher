@@ -19,6 +19,7 @@ public class NumberParamConvertor implements FieldConvertor.ParamConvertor {
     @Override
     public boolean supports(FieldMeta meta, Class<?> valueType) {
         DbType dbType = meta.getDbType();
+        Class<?> targetType = meta.getType();
         return (
                 dbType == DbType.BYTE || dbType == DbType.SHORT || dbType == DbType.INT || dbType == DbType.LONG ||
                         dbType == DbType.FLOAT || dbType == DbType.DOUBLE || dbType == DbType.DECIMAL
@@ -26,7 +27,7 @@ public class NumberParamConvertor implements FieldConvertor.ParamConvertor {
                 String.class == valueType || Byte.class == valueType || Short.class == valueType ||
                         Integer.class == valueType || Long.class == valueType || Float.class == valueType ||
                         Double.class == valueType || BigDecimal.class == valueType
-        ) && !Enum.class.isAssignableFrom(meta.getType());
+        ) && (targetType == null || !Enum.class.isAssignableFrom(targetType));
     }
 
     @Override
