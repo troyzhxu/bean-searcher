@@ -19,7 +19,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Set;
 
 public class DbFieldsConvertorsTestCase {
 
@@ -73,11 +72,20 @@ public class DbFieldsConvertorsTestCase {
         private LocalDate p21;
         private LocalDateTime p22;
         private LocalTime p23;
+        private Gender gender;
+        @DbField(type = DbType.INT)
+        private Gender gender2;
+    }
+
+    enum Gender {
+        Male,
+        Female
     }
 
     private Object[] values = new Object[] {
         100, true, false, 10f, 10d, "100", "2024-01-16",
-        new Date(), LocalTime.now(), LocalDate.now(), LocalDateTime.now()
+        new Date(), LocalTime.now(), LocalDate.now(), LocalDateTime.now(),
+        Gender.Female, Gender.Male
     };
 
     @Test
