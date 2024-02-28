@@ -2,6 +2,7 @@ package cn.zhxu.bs.convertor;
 
 import cn.zhxu.bs.FieldConvertor;
 import cn.zhxu.bs.FieldMeta;
+import cn.zhxu.bs.bean.DbType;
 import cn.zhxu.bs.implement.DefaultBeanReflector;
 import cn.zhxu.bs.util.StringUtils;
 
@@ -37,7 +38,7 @@ public class ListFieldConvertor implements FieldConvertor.BFieldConvertor {
     @Override
     public boolean supports(FieldMeta meta, Class<?> valueType) {
         if (valueType == String.class) {
-            return meta.getType() == List.class;
+            return meta.getType() == List.class && meta.getDbType() != DbType.JSON;
         }
         return false;
     }
