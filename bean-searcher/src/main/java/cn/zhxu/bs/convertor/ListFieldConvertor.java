@@ -38,7 +38,7 @@ public class ListFieldConvertor implements FieldConvertor.BFieldConvertor {
     @Override
     public boolean supports(FieldMeta meta, Class<?> valueType) {
         if (valueType == String.class) {
-            return meta.getType() == List.class && meta.getDbType() != DbType.JSON;
+            return meta.getType() == List.class && meta.getDbType() == DbType.UNKNOWN;
         }
         return false;
     }
