@@ -12,19 +12,21 @@ import java.util.function.Function;
  * <pre>{@code
  * String name = FieldFns.name(User::getName);
  * }</pre>
- * @since v3.8.1
+ *
  * @author Troy.Zhou @ 2017-03-20
+ * @since v3.8.1
  */
 public class FieldFns {
 
     @FunctionalInterface
-    public interface FieldFn<T, R> extends Function<T, R>, Serializable {  }
+    public interface FieldFn<T, R> extends Function<T, R>, Serializable {
+    }
 
     private static final Map<FieldFn<?, ?>, String> cache = new ConcurrentHashMap<>();
 
     /**
      * @param fieldFn 方法引用
-     * @param <T> 泛型
+     * @param <T>     泛型
      * @return 该方法对应的属性名
      */
     public static <T> String name(FieldFn<T, ?> fieldFn) {
@@ -54,7 +56,7 @@ public class FieldFns {
                 cache.put(fieldFn, name);
                 return name;
             }
-            throw new IllegalStateException("Can not resolve the name of method: " + methodName);
+            return methodName;
         } catch (ReflectiveOperationException e) {
             throw new IllegalStateException("Can not resolve the name of " + fieldFn, e);
         }
