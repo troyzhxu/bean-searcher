@@ -52,7 +52,7 @@ public class SearchSql<T> {
 	private final List<String> summaryAliases = new ArrayList<>();
 
 	/**
-	 * 是否应该查询总条数
+	 * 是否应该查询聚合信息
 	 * */
 	private boolean shouldQueryCluster;
 	
