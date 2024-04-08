@@ -51,7 +51,7 @@ public class GroupPairResolver implements GroupPair.Resolver {
             return new GroupPair(GroupPair.EMPTY_GROUP, paramsGroup);
         }
         /* 既包含 聚合字段，又包含 非聚合字段，只能进行拆分了
-         * 但由于 where 与 having 在一个 SQL 中只能是 且 的关系，所以此处的拆分可能会该变 原有的 逻辑语义
+         * 但由于 where 与 having 在一个 SQL 中只能是 且 的关系，所以此处的拆分可能会改变 原有的 逻辑语义
          * 因此使用者应该自己保证 聚合字段条件 与 非聚合字段条件 不应该存在 或 的关系 */
         return buildGroupPair(paramsGroup, havingTester);
     }

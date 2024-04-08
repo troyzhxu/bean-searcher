@@ -33,9 +33,8 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 
 	@Override
 	public <T> SearchSql<T> resolve(BeanMeta<T> beanMeta, SearchParam searchParam) {
-		List<String> fetchFields = searchParam.getFetchFields();
 		FetchType fetchType = searchParam.getFetchType();
-		SearchSql<T> searchSql = new SearchSql<>(beanMeta, fetchFields);
+		SearchSql<T> searchSql = new SearchSql<>(beanMeta, searchParam);
 		searchSql.setShouldQueryCluster(fetchType.shouldQueryCluster());
 		searchSql.setShouldQueryList(fetchType.shouldQueryList());
 
@@ -50,7 +49,9 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 			}
 			searchSql.addSummaryAlias(getSummaryAlias(fieldMeta));
 		}
+		List<String> fetchFields = searchParam.getFetchFields();
 		Map<String, Object> paraMap = searchParam.getParaMap();
+
 		SqlWrapper<Object> fieldSelectSqlWrapper = buildFieldSelectSql(beanMeta, fetchFields, paraMap);
 		SqlWrapper<Object> fromWhereSqlWrapper = buildFromWhereSql(beanMeta, searchParam);
 		String fieldSelectSql = fieldSelectSqlWrapper.getSql();
@@ -153,7 +154,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 		Group<List<FieldParam>> whereGroup = groupPair.getWhereGroup();
 
 		boolean hasWhere = StringUtils.isNotBlank(where);
-		boolean hasWhereParams = whereGroup.judgeAny(l -> l.size() > 0);
+		boolean hasWhereParams = whereGroup.judgeAny(l -> !l.isEmpty());
 
 		if (hasWhere || hasWhereParams) {
 			builder.append(" where ");
@@ -176,7 +177,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 			}
 			Group<List<FieldParam>> havingGroup = groupPair.getHavingGroup();
 			boolean hasHaving = StringUtils.isNotBlank(having);
-			boolean hasHavingParams = havingGroup.judgeAny(l -> l.size() > 0);
+			boolean hasHavingParams = havingGroup.judgeAny(l -> !l.isEmpty());
 			if (hasHaving || hasHavingParams) {
 				builder.append(" having ");
 				if (hasHaving) {

@@ -1,13 +1,12 @@
 package cn.zhxu.bs;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * 检索的 SQL 信息
- *  
  * @author Troy.Zhou @ 2017-03-20
- * 
  * */
 public class SearchSql<T> {
 
@@ -17,9 +16,9 @@ public class SearchSql<T> {
 	private final BeanMeta<T> beanMeta;
 
 	/**
-	 * 需要 Select 的字段
+	 * 检索参数
 	 */
-	private final List<String> fetchFields;
+	private final SearchParam searchParam;
 
 	/**
 	 * 查询数据列表的SQL
@@ -62,17 +61,21 @@ public class SearchSql<T> {
 	private boolean shouldQueryList;
 
 
-	public SearchSql(BeanMeta<T> beanMeta, List<String> fetchFields) {
+	public SearchSql(BeanMeta<T> beanMeta, SearchParam searchParam) {
 		this.beanMeta = beanMeta;
-		this.fetchFields = fetchFields;
+		this.searchParam = searchParam;
 	}
 
 	public BeanMeta<T> getBeanMeta() {
 		return beanMeta;
 	}
 
+	public SearchParam getSearchParam() {
+		return searchParam;
+	}
+
 	public List<String> getFetchFields() {
-		return fetchFields;
+		return searchParam != null ? searchParam.getFetchFields() : Collections.emptyList();
 	}
 
 	public String getListSqlString() {

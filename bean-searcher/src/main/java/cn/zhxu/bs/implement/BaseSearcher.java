@@ -134,7 +134,7 @@ public class BaseSearcher implements Searcher {
 	}
 
 	private <T> SqlResult<T> emptyResult(BeanMeta<T> beanMeta, FetchType fetchType) {
-		SearchSql<T> searchSql = new SearchSql<>(beanMeta, Collections.emptyList());
+		SearchSql<T> searchSql = new SearchSql<>(beanMeta, null);
 		for (String summaryField : fetchType.getSummaryFields()) {
 			searchSql.addSummaryAlias(summaryField);
 		}
