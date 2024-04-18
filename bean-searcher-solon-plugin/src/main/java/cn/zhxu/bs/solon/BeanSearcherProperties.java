@@ -19,8 +19,8 @@ import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Map;
 
-@Inject("${bean-searcher}")
 @Configuration
+@Inject(value = "${bean-searcher}", required = false)
 public class BeanSearcherProperties {
 
 	/**
