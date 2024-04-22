@@ -9,7 +9,7 @@
 * 优化 `ListFieldConvertor` 的字段匹配条件：未指定 `dbType` 的 `List` 字段
 * 优化 `bean-searcher-solon-plugin` 组件支持零配置使用
 * 升级 solon -> 2.7.5
-* 升级 spring-boot -> 3.2.5
+* 升级 spring-boot -> 2.7.18
 * 升级 slf4j-api -> 2.0.13
 
 # v4.2.7 @ 2024-01-16
