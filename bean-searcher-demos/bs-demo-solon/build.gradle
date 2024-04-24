@@ -15,13 +15,13 @@ description = "demo"
 
 
 dependencies {
-    implementation platform("org.noear:solon-parent:2.6.2")
+    implementation platform("org.noear:solon-parent:2.7.5")
 
     implementation "org.noear:solon-api"
     implementation "org.noear:solon.view.thymeleaf"
     implementation "org.noear:wood-solon-plugin"
 
-    implementation "cn.zhxu:bean-searcher-solon-plugin:4.2.7"
+    implementation "cn.zhxu:bean-searcher-solon-plugin:4.2.8"
     // 若想使用 JSON 字段转对象的功能，可以添加此依赖
     implementation "cn.zhxu:xjsonkit-snack3:1.4.3"
 

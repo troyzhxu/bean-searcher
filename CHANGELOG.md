@@ -1,3 +1,18 @@
+# v4.2.8 @ 2024-04-24
+
+### 🐛 Bug Fixes
+
+* 修复在 PgSQL 数据库上，使用字段参数动态生成 `having` 条件并且该条件字段在 `select` 列表中时，生成的 `having` 条件含有别名的问题（这个语法特性在 MySQL 上支持，PgSQL 上不支持）。
+
+### 🌻 Better
+
+* 优化 `ListFieldConvertor` 的字段匹配条件：未指定 `dbType` 的 `List` 字段
+* 优化 `bean-searcher-solon-plugin` 组件支持零配置使用
+* 升级 solon -> 2.7.5
+* 升级 spring-boot -> 2.7.18
+* 升级 slf4j-api -> 2.0.13
+* 兼容 JDK 8
+
 # v4.2.7 @ 2024-01-16
 
 ### 🐛 Bug Fixes

@@ -19,7 +19,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
-	implementation 'cn.zhxu:bean-searcher-boot-starter:4.2.7'
+	implementation 'cn.zhxu:bean-searcher-boot-starter:4.2.8'
 
 	runtimeOnly 'com.h2database:h2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
