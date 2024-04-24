@@ -45,14 +45,12 @@ public @interface SearchBean {
 
 	/**
 	 * 声明额外的条件字段，可根据字段参数动态生成 where 条件，用法：
-	 * <pre>{@code
-	 * @SearchBean(fields = {
-	 *     @DbField(name = "name"),
-	 *     @DbField(name = "age")	// 这里的 name 是必填的
+	 * \@SearchBean(fields = {
+	 *     \@DbField(name = "name"),
+	 *     \@DbField(name = "age")	// 这里的 name 是必填的
 	 * })
 	 * // 或者：
-	 * @SearchBean(fields = @DbField(name = "name"))
-	 * }</pre>
+	 * \@SearchBean(fields = @DbField(name = "name"))
 	 * 此处 {@link DbField#cluster()} 如果不显式指定，将自动推断为 {@link Cluster#FALSE }
 	 * @return 额外的条件字段
 	 * @since v4.1.0

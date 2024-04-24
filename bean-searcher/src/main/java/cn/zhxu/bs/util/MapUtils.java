@@ -79,6 +79,7 @@ public class MapUtils {
 
 	/**
 	 * 构建只有一个键值对的 Map 对象
+	 * @param <T> 泛型
 	 * @param key 键
 	 * @param value 值
 	 * @return Map 对象
@@ -92,6 +93,7 @@ public class MapUtils {
 
 	/**
 	 * 构建只有两个键值对的 Map 对象
+	 * @param <T> 泛型
 	 * @param key1 第一个键
 	 * @param value1 第一个值
 	 * @param key2 第二个键

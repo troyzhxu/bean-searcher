@@ -171,7 +171,7 @@ public class Builder<B extends Builder<B>> {
     }
 
     /**
-     * 自定义 SQL 条件，一般配和 {@link #field(FieldFn, FieldFn[])} 一起使用，例如：
+     * 自定义 SQL 条件，一般配和 {@link #field(FieldFn, FieldFn...)} 一起使用，例如：
      * <pre>{@code
      * Map<String, Object> params = MapUtils.builder()
      *     // 生成 SQL 条件：username = nickname or username = 'Jack'
@@ -187,7 +187,7 @@ public class Builder<B extends Builder<B>> {
     }
 
     /**
-     * 自定义 SQL 条件，一般配和 {@link #field(FieldFn, FieldFn[])} 一起使用，例如：
+     * 自定义 SQL 条件，一般配和 {@link #field(FieldFn, FieldFn...)} 一起使用，例如：
      * <pre>{@code
      * Map<String, Object> params = MapUtils.builder()
      *     // 生成 SQL 条件：id < ? or age > ?，两个占位符参数分别为：100，20
@@ -202,7 +202,7 @@ public class Builder<B extends Builder<B>> {
     public B sql(String sqlCond, Object... args) {
         return fieldOp(new SqlCond(sqlCond, args));
     }
-
+    /*
     private boolean isOr = false;
 
     @SuppressWarnings("unchecked")
@@ -226,7 +226,7 @@ public class Builder<B extends Builder<B>> {
         group = preGroup;
         return (B) this;
     }
-
+    */
     protected String nextGroup() {
         String groupExpr = groupExpr();
         String nGroup = nextGroup(group);
@@ -265,7 +265,6 @@ public class Builder<B extends Builder<B>> {
         }
         return null;
     }
-
 
     @SafeVarargs
     protected final <T> String[] toFields(FieldFn<T, ?>... fieldFns) {
