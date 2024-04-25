@@ -59,7 +59,7 @@ public class JsonFieldConvertor implements FieldConvertor.BFieldConvertor {
     }
 
     protected String unwrap(String json) {
-        // 有的数据库查出的值多包了一层，这里做下特殊处理
+        // 某些 DB 查出的值多包了一层（例如：H2），这里做下解包预处理
         if (json.length() > 1 && json.charAt(0) == '"' && json.charAt(json.length() - 1) == '"') {
             return JsonKit.toBean(String.class, json);
         }
@@ -67,10 +67,11 @@ public class JsonFieldConvertor implements FieldConvertor.BFieldConvertor {
     }
 
     protected String jsonStr(Object value) {
-        // H2 的 JSON 字段，返回的是 byte[] 类型，这里做一下特殊处理
+        // 某些 DB（例如：H2）的 JSON 字段，返回的是 byte[] 类型，这里做个兼容
         if (value instanceof byte[]) {
             return new String((byte[]) value, StandardCharsets.UTF_8);
         }
+        // 还有些 DB 的 JSON 字段，返回的不是 byte[] 也不是 String, 当通过 toString 方法就可以得到它的 JSON 文本
         return value.toString();
     }
 
