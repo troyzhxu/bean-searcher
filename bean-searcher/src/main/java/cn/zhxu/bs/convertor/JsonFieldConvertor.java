@@ -43,7 +43,7 @@ public class JsonFieldConvertor implements FieldConvertor.BFieldConvertor {
 
     @Override
     public Object convert(FieldMeta meta, Object value) {
-        String json = toJsonString(value);
+        String json = unwrap(jsonStr(value));
         if (StringUtils.isBlank(json)) {
             return null;
         }
@@ -58,7 +58,18 @@ public class JsonFieldConvertor implements FieldConvertor.BFieldConvertor {
         }
     }
 
-    protected String toJsonString(Object value) {
+    protected String unwrap(String json) {
+        // 去除 JSON 文本两端的引号
+        if (json.length() > 1) {
+            int endIdx = json.length() - 1;
+            if (json.charAt(0) == '"' && json.charAt(endIdx) == '"' || json.charAt(0) == '\'' && json.charAt(endIdx) == '\'') {
+                return json.substring(1, endIdx);
+            }
+        }
+        return json;
+    }
+
+    protected String jsonStr(Object value) {
         // H2 的 JSON 字段，返回的是 byte[] 类型，这里做一下特殊处理
         if (value instanceof byte[]) {
             return new String((byte[]) value, StandardCharsets.UTF_8);
