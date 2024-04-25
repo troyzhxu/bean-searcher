@@ -59,12 +59,9 @@ public class JsonFieldConvertor implements FieldConvertor.BFieldConvertor {
     }
 
     protected String unwrap(String json) {
-        // 去除 JSON 文本两端的引号
-        if (json.length() > 1) {
-            int endIdx = json.length() - 1;
-            if (json.charAt(0) == '"' && json.charAt(endIdx) == '"' || json.charAt(0) == '\'' && json.charAt(endIdx) == '\'') {
-                return json.substring(1, endIdx);
-            }
+        // 有的数据库查出的值多包了一层，这里做下特殊处理
+        if (json.length() > 1 && json.charAt(0) == '"' && json.charAt(json.length() - 1) == '"') {
+            return JsonKit.toBean(String.class, json);
         }
         return json;
     }
