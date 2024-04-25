@@ -4,6 +4,7 @@ CREATE TABLE `department` (
   `id` int NOT NULL,
   `name` varchar(45) DEFAULT NULL,
   `create_date` datetime DEFAULT NULL,
+  `attrs` json DEFAULT NULL,
   PRIMARY KEY (`id`)
 );
 
