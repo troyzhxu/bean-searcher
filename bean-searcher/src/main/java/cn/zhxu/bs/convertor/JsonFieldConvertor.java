@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -42,7 +43,7 @@ public class JsonFieldConvertor implements FieldConvertor.BFieldConvertor {
 
     @Override
     public Object convert(FieldMeta meta, Object value) {
-        String json = value.toString();
+        String json = toJsonString(value);
         if (StringUtils.isBlank(json)) {
             return null;
         }
@@ -57,7 +58,15 @@ public class JsonFieldConvertor implements FieldConvertor.BFieldConvertor {
         }
     }
 
-    private static Object doConvert(FieldMeta meta, String json) {
+    protected String toJsonString(Object value) {
+        // H2 的 JSON 字段，返回的是 byte[] 类型，这里做一下特殊处理
+        if (value instanceof byte[]) {
+            return new String((byte[]) value, StandardCharsets.UTF_8);
+        }
+        return value.toString();
+    }
+
+    protected Object doConvert(FieldMeta meta, String json) {
         Class<?> type = meta.getType();
         if (List.class.isAssignableFrom(type)) {
             Type genericType = meta.getField().getGenericType();
