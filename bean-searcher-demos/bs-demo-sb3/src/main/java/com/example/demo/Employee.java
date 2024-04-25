@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import cn.zhxu.bs.bean.DbField;
+import cn.zhxu.bs.bean.DbType;
 import cn.zhxu.bs.bean.SearchBean;
 import cn.zhxu.bs.operator.Contain;
 import cn.zhxu.bs.operator.StartWith;
@@ -31,6 +32,9 @@ public class Employee {
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm", timezone = "GMT+8")
 	private LocalDateTime entryDate;
 
+	@DbField(mapTo = "d", type = DbType.JSON)
+	private DeptAttr attrs;
+
 	public long getId() {
 		return id;
 	}
@@ -53,6 +57,10 @@ public class Employee {
 
 	public LocalDateTime getEntryDate() {
 		return entryDate;
+	}
+
+	public DeptAttr getAttrs() {
+		return attrs;
 	}
 
 }

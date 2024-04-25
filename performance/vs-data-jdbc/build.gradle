@@ -14,7 +14,7 @@ repositories {
 }
 
 dependencies {
-	implementation 'cn.zhxu:bean-searcher-boot-starter:4.2.8'
+	implementation 'cn.zhxu:bean-searcher-boot-starter:4.2.9'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	runtimeOnly 'com.h2database:h2'

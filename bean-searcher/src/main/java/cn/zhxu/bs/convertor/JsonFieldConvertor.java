@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -42,7 +43,7 @@ public class JsonFieldConvertor implements FieldConvertor.BFieldConvertor {
 
     @Override
     public Object convert(FieldMeta meta, Object value) {
-        String json = value.toString();
+        String json = unwrap(jsonStr(value));
         if (StringUtils.isBlank(json)) {
             return null;
         }
@@ -57,7 +58,24 @@ public class JsonFieldConvertor implements FieldConvertor.BFieldConvertor {
         }
     }
 
-    private static Object doConvert(FieldMeta meta, String json) {
+    protected String unwrap(String json) {
+        // 某些 DB 查出的值多包了一层（例如：H2），这里做下解包预处理
+        if (json.length() > 1 && json.charAt(0) == '"' && json.charAt(json.length() - 1) == '"') {
+            return JsonKit.toBean(String.class, json);
+        }
+        return json;
+    }
+
+    protected String jsonStr(Object value) {
+        // 某些 DB（例如：H2）的 JSON 字段，返回的是 byte[] 类型，这里做个兼容
+        if (value instanceof byte[]) {
+            return new String((byte[]) value, StandardCharsets.UTF_8);
+        }
+        // 还有些 DB 的 JSON 字段，返回的不是 byte[] 也不是 String, 当通过 toString 方法就可以得到它的 JSON 文本
+        return value.toString();
+    }
+
+    protected Object doConvert(FieldMeta meta, String json) {
         Class<?> type = meta.getType();
         if (List.class.isAssignableFrom(type)) {
             Type genericType = meta.getField().getGenericType();
