@@ -1,6 +1,6 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.2.1'
+	id 'org.springframework.boot' version '3.2.5'
 	id 'io.spring.dependency-management' version '1.1.4'
 }
 
@@ -19,7 +19,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
-	implementation 'cn.zhxu:bean-searcher-boot-starter:4.2.8'
+	implementation 'cn.zhxu:bean-searcher-boot-starter:4.2.9'
+	implementation 'cn.zhxu:xjsonkit-jackson:1.4.3'
 
 	runtimeOnly 'com.h2database:h2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
