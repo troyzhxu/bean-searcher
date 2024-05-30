@@ -114,6 +114,7 @@ public class DefaultParamResolver implements ParamResolver {
 		convertors.add(new DateParamConvertor());
 		convertors.add(new TimeParamConvertor());
 		convertors.add(new DateTimeParamConvertor());
+		convertors.add(new EnumParamConvertor());
 		paramFilters.add(new SizeLimitParamFilter());
 	}
 
