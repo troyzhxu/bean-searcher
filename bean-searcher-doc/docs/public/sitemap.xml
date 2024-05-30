@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<urlset>
+    <url>
+        <loc>https://bs.zhxu.cn/index.html</loc>
+        <!-- 最后修改时间 -->
+        <lastmod>2022-05-12</lastmod>
+        <!-- 修改频率：always，hourly，daily，weekly，monthly，yearly，never -->
+        <changefreq>weekly</changefreq>
+        <!-- 用来指定此链接相对于其他链接的优先权比值，0.0-1.0 -->
+        <priority>1</priority>
+    </url>
+    <url>
+        <loc>https://bs.zhxu.cn/guide/latest/introduction.html</loc>
+        <lastmod>2022-05-12</lastmod>
+        <changefreq>weekly</changefreq>
+    </url>
+    <url>
+        <loc>https://bs.zhxu.cn/guide/latest/start.html</loc>
+        <lastmod>2022-05-12</lastmod>
+        <changefreq>weekly</changefreq>
+    </url>
+    <url>
+        <loc>https://bs.zhxu.cn/guide/latest/bean.html</loc>
+        <lastmod>2022-05-12</lastmod>
+        <changefreq>weekly</changefreq>
+    </url>
+    <url>
+        <loc>https://bs.zhxu.cn/guide/latest/params.html</loc>
+        <lastmod>2022-05-12</lastmod>
+        <changefreq>weekly</changefreq>
+    </url>
+        <url>
+        <loc>https://bs.zhxu.cn/guide/latest/advance.html</loc>
+        <lastmod>2022-05-12</lastmod>
+        <changefreq>weekly</changefreq>
+    </url>
+    <url>
+        <loc>https://bs.zhxu.cn/guide/latest/simples.html</loc>
+        <lastmod>2022-05-12</lastmod>
+        <changefreq>weekly</changefreq>
+    </url>
+</urlset>
