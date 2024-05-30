@@ -5,8 +5,10 @@ import cn.zhxu.bs.operator.SqlCond;
 import cn.zhxu.bs.param.FieldParam;
 import cn.zhxu.bs.util.FieldFns.FieldFn;
 
-import java.util.*;
-import java.util.function.Consumer;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 import static cn.zhxu.bs.util.MapBuilder.FIELD_PARAM;
 
@@ -41,7 +43,10 @@ public class Builder<B extends Builder<B>> {
      * @since 3.5.2
      */
     public <T> B field(FieldFn<T, ?> fieldFn, Collection<?> values) {
-        return field(fieldFn, values.toArray());
+        if (values != null) {
+            return field(fieldFn, values.toArray());
+        }
+        return field(fieldFn);
     }
 
     /**
@@ -64,7 +69,10 @@ public class Builder<B extends Builder<B>> {
      * @since 3.5.2
      */
     public <T> B field(String fieldName, Collection<?> values) {
-        return field(fieldName, values.toArray());
+        if (values != null) {
+            return field(fieldName, values.toArray());
+        }
+        return field(fieldName);
     }
 
     /**
