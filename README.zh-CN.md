@@ -295,7 +295,6 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 
 ### 📅 开发计划
 
-* v4.2: 动态方言
 * v4.3: 参数构建器支持 and 与 or 便捷方法
 * v4.4: 条件模板
 * v4.5: 内嵌对象/列表
@@ -318,7 +317,7 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 ### ❤️ 参与贡献
 
 1.  Star and Fork 本仓库
-2.  新建 Feat_xxx 分支
+2.  新建 Feat_xxx 分支（新功能基于 dev 分支，bugfix 基于特定版本的分支）
 3.  提交代码
 4.  新建 Pull Request
 

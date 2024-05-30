@@ -36,4 +36,12 @@ public interface Dialect {
 		return false;
 	}
 
+	/**
+	 * @return 是否允许在 having 语句中使用别名
+	 * @since v4.3.0
+	 */
+	default boolean allowHavingAlias() {
+		return false;
+	}
+
 }
