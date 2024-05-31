@@ -9,9 +9,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.regex.Pattern;
 
 import static cn.zhxu.bs.util.MapBuilder.FIELD_PARAM;
-
 
 /**
  * 检索参数构建器基类
@@ -64,11 +65,10 @@ public class Builder<B extends Builder<B>> {
      * 指定某个字段的检索值
      * @param fieldName 实体类属性名
      * @param values 检索值，集合
-     * @param <T> 泛型
      * @return MapBuilder
      * @since 3.5.2
      */
-    public <T> B field(String fieldName, Collection<?> values) {
+    public B field(String fieldName, Collection<?> values) {
         if (values != null) {
             return field(fieldName, values.toArray());
         }
@@ -210,68 +210,60 @@ public class Builder<B extends Builder<B>> {
     public B sql(String sqlCond, Object... args) {
         return fieldOp(new SqlCond(sqlCond, args));
     }
-    /*
-    private boolean isOr = false;
 
     @SuppressWarnings("unchecked")
-    public B and(Consumer<Builder<?>> condition) {
-        isOr = false;
-        String preGroup = group;
-        group = nextGroup();
-        // TODO: 更新 groupExpe
-        condition.accept(this);
-        group = preGroup;
-        return (B) this;
-    }
-
-    @SuppressWarnings("unchecked")
-    public B or(Consumer<Builder<?>> condition) {
-        isOr = true;
-        String preGroup = group;
-        group = nextGroup();
-        // TODO: 更新 groupExpe
-        condition.accept(this);
-        group = preGroup;
-        return (B) this;
-    }
-    */
-    protected String nextGroup() {
-        String groupExpr = groupExpr();
-        String nGroup = nextGroup(group);
-        while (groupExpr != null && groupExpr.contains(nGroup)) {
-            nGroup = nextGroup(nGroup);
+    protected B withOr(Consumer<OrBuilder> condition, String parentExpr) {
+        if (this instanceof OrBuilder) {
+            throw new IllegalStateException("The method or(...) can't be invoked inner the condition of or(...) method.");
         }
-        return nGroup;
+        OrBuilder builder = new OrBuilder(parentExpr, group);
+        condition.accept(builder);
+        String expr1 = builder.getGroupExpr();
+        if (expr1 != null && !builder.map.isEmpty()) {
+            String expr0 = getGroupExpr();
+            if (expr0 != null) {
+                setGroupExpr("(" + expr0 + ")&(" + expr1 + ")");
+            } else {
+                setGroupExpr(expr1);
+            }
+        }
+        map.putAll(builder.map);
+        return (B) this;
     }
+
+    static final Pattern GROUP_PATTERN = Pattern.compile("_[0-9]+");
 
     protected String nextGroup(String group) {
-        if (group.length() == 1) {
-            char c = group.charAt(0);
-            if (c == '$') {
-                return "A";
-            }
-            if (c == 'Z') {
-                return "a";
-            }
-            if (c == 'z') {
-                return "0";
-            }
-            if (c >= 'A' && c < 'Z' || c >= 'a' && c < 'z' || c >= '0' && c < '9') {
-                return String.valueOf((char) (c + 1));
-            }
-            if (c == '9') {
-                return "10";
-            }
+        String next = genNextGroup(group);
+        while (isGroupExists(next)) {
+            next = genNextGroup(next);
         }
-        return String.valueOf(Integer.parseInt(group) + 1);
+        return next;
     }
 
-    protected String groupExpr() {
+    protected String genNextGroup(String group) {
+        if (GROUP_PATTERN.matcher(group).matches()) {
+            int idx = Integer.parseInt(group.substring(1));
+            return "_" + (idx + 1);
+        }
+        return "_0";
+    }
+
+    protected boolean isGroupExists(String group) {
+        String expr = getGroupExpr();
+        return expr != null && expr.contains(group);
+    }
+
+    protected String getGroupExpr() {
         Object value = map.get(MapBuilder.GROUP_EXPR);
         if (value instanceof String) {
             return (String) value;
         }
         return null;
+    }
+
+    protected void setGroupExpr(String gExpr) {
+        map.put(MapBuilder.GROUP_EXPR, gExpr);
     }
 
     @SafeVarargs

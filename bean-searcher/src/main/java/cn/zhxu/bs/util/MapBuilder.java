@@ -8,6 +8,7 @@ import cn.zhxu.bs.param.Paging;
 import cn.zhxu.bs.util.FieldFns.FieldFn;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * 检索参数构建器
@@ -118,6 +119,25 @@ public class MapBuilder extends Builder<MapBuilder> {
     public MapBuilder groupExpr(String gExpr) {
         map.put(GROUP_EXPR, gExpr);
         return this;
+    }
+
+    /**
+     * 用于构建一组以或为关系的条件，例如：
+     * <pre>{@code
+     * Map<String, Object> params = MapUtils.builder()
+     *     .field(User::getAge, 20).op(Equal.class);
+     *     .or(b -> {
+     *         b.field(User::getName, '张').op(StartWith.class);
+     *         b.field(User::getName, '三').op(EndWith.class);
+     *     })
+     *     .build();
+     * // 生成条件：(age = 20) and (name like '张%' or name like '三%')
+     * }</pre>
+     * @param condition 或条件构建器
+     * @return MapBuilder
+     */
+    public MapBuilder or(Consumer<OrBuilder> condition) {
+        return withOr(condition, getGroupExpr());
     }
 
     /**
