@@ -284,7 +284,7 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 * 自定义 [`FieldConvertor`](/bean-searcher/src/main/java/cn/zhxu/bs/FieldConvertor.java) 来支持任意的 特殊字段类型
 * 自定义 [`DbMapping`](/bean-searcher/src/main/java/cn/zhxu/bs/DbMapping.java) 来实现自定义注解，或让 Bean Searcher 识别其它 ORM 的注解
 * 自定义 [`ParamResolver`](/bean-searcher/src/main/java/cn/zhxu/bs/ParamResolver.java) 来支持其它形式的检索参数
-* 自定义 [`Dialect`](/bean-searcher/src/main/java/cn/zhxu/bs/Dialect.java) 来支持更多的数据库
+* 自定义 [`Dialect`](/bean-searcher/src/main/java/cn/zhxu/bs/dialect/Dialect.java) 来支持更多的数据库
 * 等等..
 
 ### 📚 详细文档

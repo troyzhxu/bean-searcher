@@ -296,7 +296,7 @@ For example:
 * Customizing [`DbMapping`](/bean-searcher/src/main/java/cn/zhxu/bs/DbMapping.java) to support other ORM‘s annotations
 * Customizing [`ParamResolver`](/bean-searcher/src/main/java/cn/zhxu/bs/ParamResolver.java) to support JSON query params
 * Customizing [`FieldConvertor`](/bean-searcher/src/main/java/cn/zhxu/bs/FieldConvertor.java) to support any type of field
-* Customizing [`Dialect`](/bean-searcher/src/main/java/cn/zhxu/bs/Dialect.java) to support more database
+* Customizing [`Dialect`](/bean-searcher/src/main/java/cn/zhxu/bs/dialect/Dialect.java) to support more database
 * and so and
 
 ### 📚 Detailed documentation
