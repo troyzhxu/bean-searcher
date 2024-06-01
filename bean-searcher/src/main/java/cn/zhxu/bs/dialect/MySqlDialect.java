@@ -6,9 +6,7 @@ import cn.zhxu.bs.param.Paging;
 
 /**
  * MySql 方言实现
- *  
  * @author Troy.Zhou
- * 
  * */
 public class MySqlDialect implements Dialect {
 
@@ -24,6 +22,11 @@ public class MySqlDialect implements Dialect {
 		}
 		wrapper.setSql(ret.toString());
 		return wrapper;
+	}
+
+	@Override
+	public boolean allowHavingAlias() {
+		return true;
 	}
 
 }

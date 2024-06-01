@@ -42,6 +42,14 @@ public class DialectWrapper implements DialectSensor {
         return dialect.forPaginate(fieldSelectSql, fromWhereSql, paging);
     }
 
+    /**
+     * @return 是否允许在 having 语句中使用别名
+     * @since v4.3.0
+     */
+    public boolean allowHavingAlias() {
+        return dialect.allowHavingAlias();
+    }
+
     @Override
     public void setDialect(Dialect dialect) {
         this.dialect = dialect;
