@@ -1,5 +1,6 @@
 package cn.zhxu.bs;
 
+import cn.zhxu.bs.implement.DefaultParamResolver;
 import cn.zhxu.bs.operator.IsNull;
 import cn.zhxu.bs.util.MapUtils;
 import org.junit.Assert;
@@ -41,7 +42,7 @@ public class SimpleSearchTestCase {
     }
 
     @Test
-    public void test1() {
+    public void test_1() {
         SqlExecutor sqlExecutor = new SqlExecutor() {
             @Override
             public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
@@ -68,7 +69,7 @@ public class SimpleSearchTestCase {
     }
 
     @Test
-    public void test2() {
+    public void test_2() {
         SqlExecutor sqlExecutor = new SqlExecutor() {
             @Override
             public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
@@ -115,7 +116,7 @@ public class SimpleSearchTestCase {
     }
 
     @Test
-    public void test3() {
+    public void test_3() {
         SqlExecutor sqlExecutor = new SqlExecutor() {
             @Override
             public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
@@ -147,7 +148,7 @@ public class SimpleSearchTestCase {
     }
 
     @Test
-    public void test4() {
+    public void test_4() {
         SqlExecutor sqlExecutor = new SqlExecutor() {
             @Override
             public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
@@ -161,10 +162,10 @@ public class SimpleSearchTestCase {
             }
         };
         BeanSearcher beanSearcher = SearcherBuilder.beanSearcher().sqlExecutor(sqlExecutor).build();
-        Object value = null;
+
         Map<String, Object> params = MapUtils.builder()
                 .group("A")
-                .field(SearchBean::getId, value)
+                .field(SearchBean::getId, (Object) null)
                 .group("B")
                 .field(SearchBean::getId, 10)
                 .group("C")
@@ -172,6 +173,121 @@ public class SimpleSearchTestCase {
                 .group("D")
                 .field(SearchBean::getName, "Jack")
                 .groupExpr("(A|B|C)&D")
+                .build();
+        beanSearcher.searchAll(SearchBean.class, params);
+    }
+
+    @Test
+    public void test_5() {
+        SqlExecutor sqlExecutor = new SqlExecutor() {
+            @Override
+            public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
+                System.out.println(searchSql.getListSqlString());
+                Assert.assertEquals("select id c_0, name c_1 from search_bean where ((name = ?) and ((id = ?) or (id is null)))", searchSql.getListSqlString());
+                List<Object> listParams = searchSql.getListSqlParams();
+                Assert.assertEquals(2, listParams.size());
+                Assert.assertEquals("Jack", listParams.get(0));
+                Assert.assertEquals(10L, listParams.get(1));
+                return new SqlResult<>(searchSql, EMPTY_RESULT_SET, columnLabel -> null);
+            }
+        };
+        BeanSearcher beanSearcher = SearcherBuilder.beanSearcher().sqlExecutor(sqlExecutor).build();
+
+        Map<String, Object> params = MapUtils.builder()
+                .field(SearchBean::getName, "Jack")
+                .or(o -> {
+                    o.field(SearchBean::getId, (Object) null);
+                    o.field(SearchBean::getId, 10);
+                    o.field(SearchBean::getId).op(IsNull.class);
+                })
+                .build();
+        beanSearcher.searchAll(SearchBean.class, params);
+
+        params = MapUtils.builder()
+                .or(o -> {
+                    o.field(SearchBean::getId, (Object) null);
+                    o.field(SearchBean::getId, 10);
+                    o.field(SearchBean::getId).op(IsNull.class);
+                })
+                .field(SearchBean::getName, "Jack")
+                .build();
+        beanSearcher.searchAll(SearchBean.class, params);
+    }
+
+    @Test
+    public void test_6() {
+        SqlExecutor sqlExecutor = new SqlExecutor() {
+            @Override
+            public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
+                System.out.println(searchSql.getListSqlString());
+                Assert.assertEquals("select id c_0, name c_1 from search_bean where (" +
+                        "((id = ?) or (id is null))" +
+                        " and " +
+                        "((name like ?) and (id = ?) or (id = ?))" +
+                        " and " +
+                        "(name = ?)" +
+                        ")", searchSql.getListSqlString());
+                List<Object> listParams = searchSql.getListSqlParams();
+                Assert.assertEquals(5, listParams.size());
+                Assert.assertEquals(10L, listParams.get(0));
+                Assert.assertEquals("Tom%", listParams.get(1));
+                Assert.assertEquals(20L, listParams.get(2));
+                Assert.assertEquals(30L, listParams.get(3));
+                Assert.assertEquals("Jack", listParams.get(4));
+                return new SqlResult<>(searchSql, EMPTY_RESULT_SET, columnLabel -> null);
+            }
+        };
+        BeanSearcher beanSearcher = SearcherBuilder.beanSearcher().sqlExecutor(sqlExecutor).build();
+
+        Map<String, Object> params = MapUtils.builder()
+                .put("A.id", 20)
+                .put("A.name", "Tom")
+                .put("A.name-op", "sw")
+                .put("B.id", 30)
+                .put("gexpr", "A|B")
+                .field(SearchBean::getName, "Jack")
+                .or(o -> {
+                    o.field(SearchBean::getId, 10);
+                    o.field(SearchBean::getId).op(IsNull.class);
+                })
+                .build();
+        beanSearcher.searchAll(SearchBean.class, params);
+    }
+
+    @Test
+    public void test_7() {
+        SqlExecutor sqlExecutor = new SqlExecutor() {
+            @Override
+            public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
+                System.out.println(searchSql.getListSqlString());
+                Assert.assertEquals("select id c_0, name c_1 from search_bean where " +
+                        "((name = ?) and ((id = ?) or (id is null)))", searchSql.getListSqlString());
+                List<Object> listParams = searchSql.getListSqlParams();
+                Assert.assertEquals(2, listParams.size());
+                Assert.assertEquals("Jack", listParams.get(0));
+                Assert.assertEquals(10L, listParams.get(1));
+                return new SqlResult<>(searchSql, EMPTY_RESULT_SET, columnLabel -> null);
+            }
+        };
+        DefaultParamResolver paramResolver = new DefaultParamResolver();
+        paramResolver.setGexprMerge(false);
+
+        BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
+                .paramResolver(paramResolver)
+                .sqlExecutor(sqlExecutor)
+                .build();
+
+        Map<String, Object> params = MapUtils.builder()
+                .put("A.id", 20)
+                .put("A.name", "Tom")
+                .put("A.name-op", "sw")
+                .put("B.id", 30)
+                .put("gexpr", "A|B")
+                .field(SearchBean::getName, "Jack")
+                .or(o -> {
+                    o.field(SearchBean::getId, 10);
+                    o.field(SearchBean::getId).op(IsNull.class);
+                })
                 .build();
         beanSearcher.searchAll(SearchBean.class, params);
     }

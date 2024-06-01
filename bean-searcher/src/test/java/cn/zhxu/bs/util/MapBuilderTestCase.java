@@ -4,6 +4,7 @@ import cn.zhxu.bs.param.FieldParam;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
@@ -92,6 +93,15 @@ public class MapBuilderTestCase {
         FieldParam fieldParam = (FieldParam) result;
         Assert.assertEquals(fieldParam.getName(), field);
         Assert.assertArrayEquals(fieldParam.getValues(), values);
+    }
+
+    @Test
+    public void test_03() {
+        Set<String> keys = MapUtils.builder()
+                .field(FieldFnsTestCase.User::getName, (Collection<Object>) null)
+                .build()
+                .keySet();
+        Assert.assertTrue(keys.contains(MapBuilder.FIELD_PARAM + "name"));
     }
 
 }
