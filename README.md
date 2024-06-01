@@ -292,11 +292,11 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 You can customize and extend any component in Bean Searcher .
 
 For example:
-* Customizing [`FieldOp`](/bean-searcher/src/main/java/com/ejlchina/searcher/FieldOp.java) to support other field operator
-* Customizing [`DbMapping`](/bean-searcher/src/main/java/com/ejlchina/searcher/DbMapping.java) to support other ORM‘s annotations
-* Customizing [`ParamResolver`](/bean-searcher/src/main/java/com/ejlchina/searcher/ParamResolver.java) to support JSON query params
-* Customizing [`FieldConvertor`](/bean-searcher/src/main/java/com/ejlchina/searcher/FieldConvertor.java) to support any type of field
-* Customizing [`Dialect`](/bean-searcher/src/main/java/com/ejlchina/searcher/Dialect.java) to support more database
+* Customizing [`FieldOp`](/bean-searcher/src/main/java/cn/zhxu/bs/FieldOp.java) to support other field operator
+* Customizing [`DbMapping`](/bean-searcher/src/main/java/cn/zhxu/bs/DbMapping.java) to support other ORM‘s annotations
+* Customizing [`ParamResolver`](/bean-searcher/src/main/java/cn/zhxu/bs/ParamResolver.java) to support JSON query params
+* Customizing [`FieldConvertor`](/bean-searcher/src/main/java/cn/zhxu/bs/FieldConvertor.java) to support any type of field
+* Customizing [`Dialect`](/bean-searcher/src/main/java/cn/zhxu/bs/Dialect.java) to support more database
 * and so and
 
 ### 📚 Detailed documentation
