@@ -44,7 +44,9 @@ public interface ExprParser {
          * @see #AND_OP
          */
         @Deprecated
-        char getAndKey();
+        default char getAndKey() {
+            return AND_OP;
+        }
 
         /**
          * deprecated from v4.3.0
@@ -53,7 +55,9 @@ public interface ExprParser {
          * @see #OR_OP
          */
         @Deprecated
-        char getOrKey();
+        default char getOrKey() {
+            return OR_OP;
+        }
 
     }
 

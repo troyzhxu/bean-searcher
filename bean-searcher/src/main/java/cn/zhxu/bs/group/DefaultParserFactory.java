@@ -12,14 +12,4 @@ public class DefaultParserFactory implements ExprParser.Factory {
         return new DefaultExprParser(expr);
     }
 
-    @Override
-    public char getAndKey() {
-        return ExprParser.AND_OP;
-    }
-
-    @Override
-    public char getOrKey() {
-        return ExprParser.OR_OP;
-    }
-
 }
