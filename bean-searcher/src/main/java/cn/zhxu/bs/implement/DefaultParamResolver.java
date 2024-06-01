@@ -4,7 +4,6 @@ import cn.zhxu.bs.*;
 import cn.zhxu.bs.convertor.*;
 import cn.zhxu.bs.filter.SizeLimitParamFilter;
 import cn.zhxu.bs.group.DefaultGroupResolver;
-import cn.zhxu.bs.group.ExprParser;
 import cn.zhxu.bs.group.Group;
 import cn.zhxu.bs.group.GroupResolver;
 import cn.zhxu.bs.param.FetchType;
@@ -16,6 +15,8 @@ import cn.zhxu.bs.util.*;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+import static cn.zhxu.bs.group.ExprParser.*;
 
 /**
  * @author Troy.Zhou @ 2017-03-20
@@ -108,6 +109,13 @@ public class DefaultParamResolver implements ParamResolver {
 	 * 用于解析组表达式
 	 */
 	private GroupResolver groupResolver = new DefaultGroupResolver();
+
+	/**
+	 * @since v4.3.0
+	 * 用于指定组表达式是否可以合并
+	 */
+	private boolean gexprMergeable  = false;
+
 
 	public DefaultParamResolver() {
 		convertors.add(new BoolParamConvertor());
@@ -219,20 +227,20 @@ public class DefaultParamResolver implements ParamResolver {
 	}
 
 	protected String getGroupExpr(Map<String, Object> paraMap) throws IllegalParamException {
-		String expr = ObjectUtils.string(paraMap.get(MapBuilder.GROUP_EXPR));
-		if (expr == null) {
-			expr = ObjectUtils.string(paraMap.get(gexprName));
+		String gExpr = ObjectUtils.string(paraMap.get(MapBuilder.GROUP_EXPR));
+		String expr = ObjectUtils.string(paraMap.get(gexprName));
+		if (StringUtils.isBlank(gExpr)) {
+			gExpr = expr;
+		} else if (gexprMergeable && StringUtils.isNotBlank(expr)) {
+			gExpr = BRACKET_LEFT + gExpr + BRACKET_RIGHT + AND_OP + BRACKET_LEFT + expr + BRACKET_RIGHT;
 		}
-		if (expr != null) {
-			expr = expr.trim();
-		}
-		if (StringUtils.isNotBlank(expr)) {
-			if (expr.contains(Builder.ROOT_GROUP)) {
-				throw new IllegalParamException("Invalid groupExpr [" + expr + "] because of containing '" + Builder.ROOT_GROUP + "'.");
+		if (StringUtils.isNotBlank(gExpr)) {
+			if (gExpr.contains(Builder.ROOT_GROUP)) {
+				throw new IllegalParamException("Invalid groupExpr [" + gExpr + "] because of containing '" + Builder.ROOT_GROUP + "'.");
 			}
-			expr = Builder.ROOT_GROUP + ExprParser.AND_OP + "(" + expr + ")";
+			gExpr = Builder.ROOT_GROUP + AND_OP + BRACKET_LEFT + gExpr + BRACKET_RIGHT;
 		}
-		return expr;
+		return gExpr;
 	}
 
 	private List<FieldParam> extractFieldParams(Collection<FieldMeta> fieldMetas, MapWrapper paraMap) {
@@ -541,6 +549,14 @@ public class DefaultParamResolver implements ParamResolver {
 
 	public void addConvertor(FieldConvertor.ParamConvertor convertor) {
 		this.convertors.add(convertor);
+	}
+
+	public boolean isGexprMergeable() {
+		return gexprMergeable;
+	}
+
+	public void setGexprMergeable(boolean gexprMergeable) {
+		this.gexprMergeable = gexprMergeable;
 	}
 
 }

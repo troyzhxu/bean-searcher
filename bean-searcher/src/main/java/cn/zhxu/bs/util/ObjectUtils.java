@@ -47,8 +47,8 @@ public class ObjectUtils {
 
 	public static String string(Object value) {
 		if (value instanceof String) {
-			return (String) value;
-		}
+            return ((String) value).trim();
+        }
 		return null;
 	}
 	
