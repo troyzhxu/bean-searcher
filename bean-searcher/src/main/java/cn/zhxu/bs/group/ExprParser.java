@@ -20,6 +20,18 @@ public interface ExprParser {
     char OR_OP = '|';
 
     /**
+     * 左括号
+     * @since v4.3.0
+     */
+    char BRACKET_LEFT = '(';
+
+    /**
+     * 右号
+     * @since v4.3.0
+     */
+    char BRACKET_RIGHT = ')';
+
+    /**
      * 解析
      * @return Group
      */

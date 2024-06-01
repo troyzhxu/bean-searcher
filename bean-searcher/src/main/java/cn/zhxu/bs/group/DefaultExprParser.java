@@ -51,7 +51,7 @@ public class DefaultExprParser implements ExprParser {
         int initIndex = index;
         while (index < expression.length()) {
             char ch = expression.charAt(index);
-            if (ch == AND_OP || ch == OR_OP || ch == '(' || ch == ')') {
+            if (ch == AND_OP || ch == OR_OP || ch == BRACKET_LEFT || ch == BRACKET_RIGHT) {
                 if (index == initIndex) {
                     index++;
                     return ch;
@@ -67,15 +67,15 @@ public class DefaultExprParser implements ExprParser {
     }
 
     protected void onReadOperator(char op) {
-        if (op != '(') {
+        if (op != BRACKET_LEFT) {
             while (!opStack.isEmpty()) {
                 // 取出栈顶运算符
                 char topOp = opStack.pop();
-                if (op == ')') {
-                    if (topOp == '(') {
+                if (op == BRACKET_RIGHT) {
+                    if (topOp == BRACKET_LEFT) {
                         return;
                     }
-                } else if (topOp == '(' || op == AND_OP && topOp == OR_OP) {
+                } else if (topOp == BRACKET_LEFT || op == AND_OP && topOp == OR_OP) {
                     // 新的运算符优先级高，则栈顶运算符归位并退出循环
                     opStack.push(topOp);
                     break;

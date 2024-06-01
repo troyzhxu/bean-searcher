@@ -1,6 +1,7 @@
 package cn.zhxu.bs.util;
 
 import cn.zhxu.bs.FieldOp;
+import cn.zhxu.bs.group.ExprParser;
 import cn.zhxu.bs.operator.SqlCond;
 import cn.zhxu.bs.param.FieldParam;
 import cn.zhxu.bs.util.FieldFns.FieldFn;
@@ -12,6 +13,8 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
+import static cn.zhxu.bs.group.ExprParser.BRACKET_LEFT;
+import static cn.zhxu.bs.group.ExprParser.BRACKET_RIGHT;
 import static cn.zhxu.bs.util.MapBuilder.FIELD_PARAM;
 
 /**
@@ -222,7 +225,7 @@ public class Builder<B extends Builder<B>> {
         if (expr1 != null && !builder.map.isEmpty()) {
             String expr0 = getGroupExpr();
             if (expr0 != null) {
-                setGroupExpr("(" + expr0 + ")&(" + expr1 + ")");
+                setGroupExpr(BRACKET_LEFT + expr0 + BRACKET_RIGHT + ExprParser.AND_OP + BRACKET_LEFT + expr1 + BRACKET_RIGHT);
             } else {
                 setGroupExpr(expr1);
             }

@@ -3,6 +3,8 @@ package cn.zhxu.bs.util;
 import java.util.HashMap;
 import java.util.function.Consumer;
 
+import static cn.zhxu.bs.group.ExprParser.*;
+
 /**
  * 或者关系参数构建器
  * @author Troy.Zhou @ 2024-06-01
@@ -23,7 +25,7 @@ public class OrBuilder extends Builder<OrBuilder> {
     public OrBuilder field(String fieldName, Object... values) {
         group = nextGroup(group);
         if (groupExpr != null) {
-            groupExpr += "|" + group;
+            groupExpr += OR_OP + group;
         } else {
             groupExpr = group;
         }
@@ -60,9 +62,9 @@ public class OrBuilder extends Builder<OrBuilder> {
         if (expr1 != null) {
             String expr0 = getGroupExpr();
             if (expr0 != null) {
-                setGroupExpr("(" + expr0 + ")|(" + expr1 + ")");
+                setGroupExpr(BRACKET_LEFT + expr0 + BRACKET_RIGHT + OR_OP + BRACKET_LEFT + expr1 + BRACKET_RIGHT);
             } else {
-                setGroupExpr("(" + expr1 + ")");
+                setGroupExpr(BRACKET_LEFT + expr1 + BRACKET_RIGHT);
             }
         }
         map.putAll(builder.map);
