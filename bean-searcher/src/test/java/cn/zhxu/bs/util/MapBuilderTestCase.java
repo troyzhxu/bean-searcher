@@ -1,5 +1,6 @@
 package cn.zhxu.bs.util;
 
+import cn.zhxu.bs.param.FieldParam;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -48,21 +49,49 @@ public class MapBuilderTestCase {
         Assert.assertTrue(keys.contains(MapBuilder.FIELD_PARAM + "accountLocked"));
     }
 
-//    @Test
-//    public void test_02() {
-//        Map<String, Object> params = MapUtils.builder()
-//                .field("id", 1)                             // $
-//                .field("nickName", "You")                   // $
-//                .or(b -> {
-//                    b.field("name", "Jack");                // A
-//                    b.field("name", "Tom");                 // B
-//                    b.and(c -> {
-//                        c.field("active", true);            // C
-//                        c.field("accountLocked", false);    // C
-//                    });
-//                })
-//                .build();
-//        // $&(A|B|C)
-//    }
+    @Test
+    public void test_02() {
+        Map<String, Object> params = MapUtils.builder()
+                .field("id", 1)                             // $
+                .field("nickName", "You")                   // $
+                .or(b -> {
+                    b.field("name", "Jack");                // _0
+                    b.field("name", "Tom");                 // _1
+                    b.and(c -> {
+                        c.field("active", true);            // _2
+                        c.or(o -> {
+                            o.field("age", 20);             // _3
+                            o.field("age", 30);             // _4
+                        });
+                        c.field("accountLocked", false);    // _2
+                    });
+                })
+                .or(b -> {
+                    b.field("sex", "男");                    // _5
+                    b.field("sex", "女");                    // _6
+                })
+                .build();
+        assertParam(params, "$", "id", 1);
+        assertParam(params, "$", "nickName", "You");
+        assertParam(params, "_0", "name", "Jack");
+        assertParam(params, "_1", "name", "Tom");
+        assertParam(params, "_2", "active", true);
+        assertParam(params, "_2", "accountLocked", false);
+        assertParam(params, "_3", "age", 20);
+        assertParam(params, "_4", "age", 30);
+        assertParam(params, "_5", "sex", "男");
+        assertParam(params, "_6", "sex", "女");
+        String groupExpr = MapUtils.builder(params).getGroupExpr();
+        Assert.assertEquals("((_0|_1)|((_2)&(_3|_4)))&(_5|_6)", groupExpr);
+        System.out.println(groupExpr);
+    }
+
+    private void assertParam(Map<String, Object> params, String group, String field, Object... values) {
+        Object result = params.get(group + MapBuilder.FIELD_PARAM + field);
+        Assert.assertTrue(result instanceof FieldParam);
+        FieldParam fieldParam = (FieldParam) result;
+        Assert.assertEquals(fieldParam.getName(), field);
+        Assert.assertArrayEquals(fieldParam.getValues(), values);
+    }
 
 }
