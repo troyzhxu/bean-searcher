@@ -2,8 +2,20 @@
 
 ### ✨ Features
 
-* 参数构建器：新增 `or(..)` 与 `and(..)` 方法：https://gitee.com/troyzhxu/bean-searcher/issues/I9T66B
-* 逻辑组中的且关系符 `&` 与 或关系符 `|` 做成常量，不再支持自定义。
+* Bean Searcher
+  * 增强 `参数构建器` 新增 `or(..)` 与 `and(..)` 方法：https://gitee.com/troyzhxu/bean-searcher/issues/I9T66B
+  * 增强 `DefaultParamResolver` 新增 `gexprMerge` 属性，可用于控制参数构建器中使用 `groupExpr(..)` 方法指定的组表达式是否合并或覆盖前端参数传来的组表达式：https://gitee.com/troyzhxu/bean-searcher/issues/I9TAV6
+  * 逻辑组中的且关系符 `&` 与 或关系符 `|` 做成常量，不再支持自定义。
+* Bean Searcher Boot Starter
+  * 新增配置项 `bean-searcher.params.group.mergeable` 指定组表达式是否可合并，默认 `true`
+* Bean Searcher Solon Plugin
+  * 新增配置项 `bean-searcher.params.group.mergeable` 指定组表达式是否可合并，默认 `true`
+
+### 🌻 Better
+
+* 优化 `参数构建器` 兼容集合类型的字段值传入 `null` 的用法
+
+
 
 # v4.2.9 @ 2024-04-25
 

@@ -99,6 +99,12 @@ public class DefaultParamResolver implements ParamResolver {
 	private String gexprName = "gexpr";
 
 	/**
+	 * @since v4.3.0
+	 * 用于控制参数构建器中使用 `groupExpr(..)` 方法指定的组表达式是否合并或覆盖前端参数传来的组表达式
+	 */
+	private boolean gexprMerge = true;
+
+	/**
 	 * @since v3.5.0
 	 * 组分割符
 	 */
@@ -109,12 +115,6 @@ public class DefaultParamResolver implements ParamResolver {
 	 * 用于解析组表达式
 	 */
 	private GroupResolver groupResolver = new DefaultGroupResolver();
-
-	/**
-	 * @since v4.3.0
-	 * 用于指定组表达式是否可以合并
-	 */
-	private boolean gexprMergeable  = false;
 
 
 	public DefaultParamResolver() {
@@ -231,7 +231,7 @@ public class DefaultParamResolver implements ParamResolver {
 		String expr = ObjectUtils.string(paraMap.get(gexprName));
 		if (StringUtils.isBlank(gExpr)) {
 			gExpr = expr;
-		} else if (gexprMergeable && StringUtils.isNotBlank(expr)) {
+		} else if (gexprMerge && StringUtils.isNotBlank(expr)) {
 			gExpr = BRACKET_LEFT + gExpr + BRACKET_RIGHT + AND_OP + BRACKET_LEFT + expr + BRACKET_RIGHT;
 		}
 		if (StringUtils.isNotBlank(gExpr)) {
@@ -523,6 +523,14 @@ public class DefaultParamResolver implements ParamResolver {
 		this.gexprName = gexprName;
 	}
 
+	public boolean isGexprMerge() {
+		return gexprMerge;
+	}
+
+	public void setGexprMerge(boolean gexprMerge) {
+		this.gexprMerge = gexprMerge;
+	}
+
 	public GroupResolver getGroupResolver() {
 		return groupResolver;
 	}
@@ -549,14 +557,6 @@ public class DefaultParamResolver implements ParamResolver {
 
 	public void addConvertor(FieldConvertor.ParamConvertor convertor) {
 		this.convertors.add(convertor);
-	}
-
-	public boolean isGexprMergeable() {
-		return gexprMergeable;
-	}
-
-	public void setGexprMergeable(boolean gexprMergeable) {
-		this.gexprMergeable = gexprMergeable;
 	}
 
 }

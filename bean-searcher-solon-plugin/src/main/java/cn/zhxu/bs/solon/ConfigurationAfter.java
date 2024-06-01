@@ -61,6 +61,7 @@ public class ConfigurationAfter {
 		paramResolver.setSelectExcludeName(conf.getSelectExclude());
 		BeanSearcherProperties.Params.Group group = conf.getGroup();
 		paramResolver.setGexprName(group.getExprName());
+		paramResolver.setGexprMerge(group.isMergeable());
 		paramResolver.setGroupSeparator(group.getSeparator());
 		paramResolver.setGroupResolver(groupResolver);
 		return paramResolver;

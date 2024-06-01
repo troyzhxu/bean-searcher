@@ -158,6 +158,12 @@ public class BeanSearcherProperties {
 			private String exprName = "gexpr";
 
 			/**
+			 * 用于控制参数构建器中使用 `groupExpr(..)` 方法指定的组表达式是否合并或覆盖前端参数传来的组表达式
+			 * @see DefaultParamResolver#setGexprMerge(boolean)
+			 */
+			private boolean mergeable = true;
+
+			/**
 			 * 组参数分隔符，默认为 `.`，
 			 * @see DefaultParamResolver#setGroupSeparator(String)
 			 */
@@ -188,6 +194,14 @@ public class BeanSearcherProperties {
 
 			public void setExprName(String exprName) {
 				this.exprName = exprName;
+			}
+
+			public boolean isMergeable() {
+				return mergeable;
+			}
+
+			public void setMergeable(boolean mergeable) {
+				this.mergeable = mergeable;
 			}
 
 			public String getSeparator() {
