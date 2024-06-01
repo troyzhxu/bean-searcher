@@ -21,7 +21,7 @@ dependencies {
     implementation "org.noear:solon.view.thymeleaf"
     implementation "org.noear:wood-solon-plugin"
 
-    implementation "cn.zhxu:bean-searcher-solon-plugin:4.2.9"
+    implementation "cn.zhxu:bean-searcher-solon-plugin:4.3.0"
     // 若想使用 JSON 字段转对象的功能，可以添加此依赖
     implementation "cn.zhxu:xjsonkit-snack3:1.4.3"
 
