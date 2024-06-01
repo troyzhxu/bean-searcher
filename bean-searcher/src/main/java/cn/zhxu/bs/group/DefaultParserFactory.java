@@ -7,31 +7,19 @@ package cn.zhxu.bs.group;
  */
 public class DefaultParserFactory implements ExprParser.Factory {
 
-    private char andKey = '&';
-
-    private char orKey = '|';
-
     @Override
     public ExprParser create(String expr) {
-        return new DefaultExprParser(expr, andKey, orKey);
+        return new DefaultExprParser(expr);
     }
 
     @Override
     public char getAndKey() {
-        return andKey;
-    }
-
-    public void setAndKey(char andKey) {
-        this.andKey = andKey;
+        return ExprParser.AND_OP;
     }
 
     @Override
     public char getOrKey() {
-        return orKey;
-    }
-
-    public void setOrKey(char orKey) {
-        this.orKey = orKey;
+        return ExprParser.OR_OP;
     }
 
 }

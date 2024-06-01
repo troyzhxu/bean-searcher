@@ -18,16 +18,10 @@ public class DefaultExprParser implements ExprParser {
     // 运算符栈
     private final Stack<Character> opStack = new Stack<>();
 
-    private final char andOp;
-
-    private final char orOp;
-
     private int index = 0;      // 下一步该读取的下标
 
-    public DefaultExprParser(String expression, char andOp, char orOp) {
+    public DefaultExprParser(String expression) {
         this.expression = expression;
-        this.andOp = andOp;
-        this.orOp = orOp;
     }
 
     @Override
@@ -57,7 +51,7 @@ public class DefaultExprParser implements ExprParser {
         int initIndex = index;
         while (index < expression.length()) {
             char ch = expression.charAt(index);
-            if (ch == andOp || ch == orOp || ch == '(' || ch == ')') {
+            if (ch == AND_OP || ch == OR_OP || ch == '(' || ch == ')') {
                 if (index == initIndex) {
                     index++;
                     return ch;
@@ -74,14 +68,14 @@ public class DefaultExprParser implements ExprParser {
 
     protected void onReadOperator(char op) {
         if (op != '(') {
-            while (opStack.size() > 0) {
+            while (!opStack.isEmpty()) {
                 // 取出栈顶运算符
                 char topOp = opStack.pop();
                 if (op == ')') {
                     if (topOp == '(') {
                         return;
                     }
-                } else if (topOp == '(' || op == andOp && topOp == orOp) {
+                } else if (topOp == '(' || op == AND_OP && topOp == OR_OP) {
                     // 新的运算符优先级高，则栈顶运算符归位并退出循环
                     opStack.push(topOp);
                     break;
@@ -99,9 +93,9 @@ public class DefaultExprParser implements ExprParser {
         Group<String> value2 = valueStack.pop();
         Group<String> value1 = valueStack.pop();
         // 计算结果压入操作数栈
-        if (op == andOp) {
+        if (op == AND_OP) {
             valueStack.push(value1.and(value2));
-        } else if (op == orOp) {
+        } else if (op == OR_OP) {
             valueStack.push(value1.or(value2));
         } else {
             throw new IllegalStateException("Invalid groupExpr: " + expression);
@@ -109,7 +103,7 @@ public class DefaultExprParser implements ExprParser {
     }
 
     protected Group<String> getResult() {
-        while (opStack.size() > 0) {
+        while (!opStack.isEmpty()) {
             char op = opStack.pop();
             updateValueStack(op);
         }

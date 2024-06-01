@@ -8,6 +8,18 @@ package cn.zhxu.bs.group;
 public interface ExprParser {
 
     /**
+     * 且关系运算符常量
+     * @since v4.3.0
+     */
+    char AND_OP = '&';
+
+    /**
+     * 或关系关系符常量
+     * @since v4.3.0
+     */
+    char OR_OP = '|';
+
+    /**
      * 解析
      * @return Group
      */
@@ -26,15 +38,21 @@ public interface ExprParser {
         ExprParser create(String expr);
 
         /**
+         * deprecated from v4.3.0
          * @since v3.8.0
          * @return 且逻辑符
+         * @see #AND_OP
          */
+        @Deprecated
         char getAndKey();
 
         /**
+         * deprecated from v4.3.0
          * @since v3.8.0
          * @return 或逻辑符
+         * @see #OR_OP
          */
+        @Deprecated
         char getOrKey();
 
     }

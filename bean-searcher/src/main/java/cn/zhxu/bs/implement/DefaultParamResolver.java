@@ -4,6 +4,7 @@ import cn.zhxu.bs.*;
 import cn.zhxu.bs.convertor.*;
 import cn.zhxu.bs.filter.SizeLimitParamFilter;
 import cn.zhxu.bs.group.DefaultGroupResolver;
+import cn.zhxu.bs.group.ExprParser;
 import cn.zhxu.bs.group.Group;
 import cn.zhxu.bs.group.GroupResolver;
 import cn.zhxu.bs.param.FetchType;
@@ -214,7 +215,7 @@ public class DefaultParamResolver implements ParamResolver {
 					}
 					return params;
 				})
-				.filter(list -> list.size() > 0);
+				.filter(list -> !list.isEmpty());
 	}
 
 	protected String getGroupExpr(Map<String, Object> paraMap) throws IllegalParamException {
@@ -229,8 +230,7 @@ public class DefaultParamResolver implements ParamResolver {
 			if (expr.contains(Builder.ROOT_GROUP)) {
 				throw new IllegalParamException("Invalid groupExpr [" + expr + "] because of containing '" + Builder.ROOT_GROUP + "'.");
 			}
-			char andKey = groupResolver.getParserFactory().getAndKey();
-			expr = Builder.ROOT_GROUP + andKey + "(" + expr + ")";
+			expr = Builder.ROOT_GROUP + ExprParser.AND_OP + "(" + expr + ")";
 		}
 		return expr;
 	}
@@ -301,7 +301,7 @@ public class DefaultParamResolver implements ParamResolver {
 				value = convertParamValue(meta, value);
 				values.add(new FieldParam.Value(value, index));
 			}
-		} else if (values.size() > 0) {
+		} else if (!values.isEmpty()) {
 			for (int index = 0; index < values.size(); index++) {
 				FieldParam.Value value = values.get(index);
 				if (value != null) {
