@@ -41,6 +41,10 @@ public interface Dialect {
 	 * @since v4.3.0
 	 */
 	default boolean allowHavingAlias() {
+		// MySql: true
+		// PostgreSql: false
+		// SqlServer: false
+		// Oracle: false
 		return false;
 	}
 
