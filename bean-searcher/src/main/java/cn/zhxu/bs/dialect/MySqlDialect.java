@@ -11,7 +11,7 @@ public class MySqlDialect extends SqlPagination implements Dialect {
 
 	@Override
 	public SqlWrapper<Object> forPaginate(String fieldSelectSql, String fromWhereSql, Paging paging) {
-		return forPaginate(OFFSET_LIMIT, fieldSelectSql, fromWhereSql, paging);
+		return forPaginate(SIMPLE_LIMIT, fieldSelectSql, fromWhereSql, paging);
 	}
 
 	@Override

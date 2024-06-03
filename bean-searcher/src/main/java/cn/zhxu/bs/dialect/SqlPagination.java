@@ -12,6 +12,7 @@ public class SqlPagination {
 
     public static final String OFFSET_LIMIT = " offset ? limit ?";
     public static final String OFFSET_FETCH = " offset ? rows fetch next ? rows only";
+    public static final String SIMPLE_LIMIT = " limit ?, ?";
 
     /**
      * @param method 分页方法
