@@ -847,7 +847,7 @@ public class TagConvertor implements ListFieldConvertor.Convertor<Tag> {
 启用该转换器后，可以让 `MapSearcher` 检索器的检索结果的 值类型 与 实体类 中声明的字段类型 **保持一致**。
 
 ::: tip 注意
-当启用 [DateFormatFieldConvertor](/guide/latest/advance.html#dateformatfieldconvertor)，并且 某 日期/时间 类型的字段 在它指定的格式化范围内 时，则该字段仍会被格式化为字符串，从而与实体类种声明的 日期/时间 类型 不再保持一致。
+当启用 [DateFormatFieldConvertor](/guide/advance/convertor#dateformatfieldconvertor)，并且 某 日期/时间 类型的字段 在它指定的格式化范围内 时，则该字段仍会被格式化为字符串，从而与实体类种声明的 日期/时间 类型 不再保持一致。
 :::
 
 为了性能考虑，**默认未启用** 该转换器，用户可以根据自己的业务需求决定是否启用它。

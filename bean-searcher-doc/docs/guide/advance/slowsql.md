@@ -49,7 +49,7 @@ MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
 14:55:02.151 WARN - bean-searcher [600ms] slow-sql: [select count(*) s_count from employee e where (e.type = ?)] params: [1] on [com.example.sbean.Employee]
 ```
 
-参考：[起步 > 使用 > SQL 日志](/guide/latest/start.html#sql-日志) 章节。
+参考：[起步 > 使用 > SQL 日志](/guide/start/use#sql-日志) 章节。
 
 ## 监听慢 SQL 事件
 

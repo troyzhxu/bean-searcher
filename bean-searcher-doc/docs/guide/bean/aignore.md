@@ -70,7 +70,7 @@ MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
 * `数据库字段名` = `根据配置是否转为大写（驼峰转小写下划线（实体类字段名））`
 * 如果实体类指定了 `autoMapTo` 属性，则该字段映射到 `autoMapTo` 指定的表中
 
-其中的 `根据配置是否转为大写` 是一个可配置项，配置方法 [同上文](/guide/latest/bean.html#省略-searchbean)。
+其中的 `根据配置是否转为大写` 是一个可配置项，配置方法 [同上文](/guide/bean/aignore#省略-searchbean)。
 
 ::: tip 提示
 如果想忽略某个字段，可使用 `@DbIgnore` 注解，它不可与 `@DbField` 在同一个字段上使用。

@@ -1,6 +1,6 @@
 # 玩转运算符
 
-自 `v3.3.0` 起，Bean Searcher 的 [字段运算符](/guide/latest/params.html#%E5%AD%97%E6%AE%B5%E8%BF%90%E7%AE%97%E7%AC%A6) 支持高度扩展与自定义。
+自 `v3.3.0` 起，Bean Searcher 的 [字段运算符](/guide/param/field#字段运算符) 支持高度扩展与自定义。
 
 ## 添加新的字段运算符
 
@@ -36,7 +36,7 @@ public FieldOp myOp() { return new IsOne(); }
 
 然后就可以使用它了：
 
-* /user/index ? **age-op=io**  （套用 [起步](/guide/latest/start.html#开始检索) 章节中的例子）
+* /user/index ? **age-op=io**  （套用 [起步 > 使用](/guide/start/use#开始检索) 章节中的例子）
 * /user/index ? **age-op=IsOne** （等效请求）
 * 或者在参数构建器里使用：
 
@@ -62,7 +62,7 @@ https://github.com/troyzhxu/bean-searcher/tree/master/bean-searcher/src/main/jav
 
 ## 定义全新运算符体系
 
-如果你 **不喜欢** Bean Searcher [内置的一套字段运算符](/guide/latest/params.html#%E5%AD%97%E6%AE%B5%E8%BF%90%E7%AE%97%E7%AC%A6)，你可以轻松的将它们 **都换掉**。
+如果你 **不喜欢** Bean Searcher [内置的一套字段运算符](/guide/param/field#字段运算符)，你可以轻松的将它们 **都换掉**。
 
 ### SpringBoot / Grails 项目（使用 bean-searcher-boot-starter 依赖）
 

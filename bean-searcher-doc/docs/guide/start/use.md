@@ -66,9 +66,9 @@ private Searcher Searcher;
 
 完整的接口定义，可查阅：[Searcher](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/Searcher.java)、[MapSearcher](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/MapSearcher.java) 与 、[BeanSearcher](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/BeanSearcher.java) 。
 
-## 实体类
+## 检索实体类
 
-在 Bean Searcher 的世界里，与数据库有映射关系的实体类成为 SearchBean（一个实体类可以映射一张表，也可以映射多张表），例如，您的项目中可能已经存在这样的一个实体类了：
+在 Bean Searcher 的世界里，与数据库有映射关系的实体类称为 SearchBean（一个 SearchBean 可以映射一张表，也可以映射多张表），例如，您的项目中可能已经存在这样的一个实体类了：
 
 ```java
 public class User {             // 默认映射到 user 表

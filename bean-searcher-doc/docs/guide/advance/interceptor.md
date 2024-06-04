@@ -27,7 +27,7 @@ public interface SqlInterceptor {
 
 在 SQL 拦截器中，我们可以对 `SearchSql` 进行修改，来实现我们自定义的逻辑。
 
-* 案例：[使用 SQL 拦截器 实现 多字段排序](https://github.com/troyzhxu/bean-searcher/issues/9)（自 `v3.4.0` 起，框架已内置 [多字段排序](/guide/latest/params.html#多字段排序（since-v3-4）) 功能）。
+* 案例：[使用 SQL 拦截器 实现 多字段排序](https://github.com/troyzhxu/bean-searcher/issues/9)（自 `v3.4.0` 起，框架已内置 [多字段排序](/guide/param/sort#多字段排序-since-v3-4) 功能）。
 
 ## 配置（SpringBoot / Grails）
 

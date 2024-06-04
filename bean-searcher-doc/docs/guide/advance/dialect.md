@@ -81,7 +81,7 @@ MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
 
 ## 动态方言（v4.2.0）
 
-动态方言一般与 [多数据源](/guide/latest/advance.html#多数据源) 的场景下才会使用。其实现原理非常简单，仅两个实现类：
+动态方言一般在 [多数据源](/guide/advance/datasource) 的场景下才会使用。其实现原理非常简单，仅两个实现类：
 
 * `DynamicDialect`（核心类）
 * `DynamicDialectSupport`
