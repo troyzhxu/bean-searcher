@@ -33,6 +33,7 @@ export default defineConfig({
           }
         ]
       },
+      { text: '💖赞助', link: '/support' },
       {
         text: '推荐',
         items: [
