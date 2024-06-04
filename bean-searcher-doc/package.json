@@ -1,16 +1,11 @@
 {
-  "name": "bean-searcher-doc",
-  "version": "1.0.0",
-  "repository": "https://gitee.com/troyzhxu/bean-searcher-doc",
-  "author": "zhouxu <zhou.xu@ejlchina.com>",
-  "license": "MIT",
   "scripts": {
     "dev": "vitepress dev docs",
-    "build": "vitepress build docs"
+    "build": "vitepress build docs",
+    "preview": "vitepress preview docs"
   },
   "devDependencies": {
-    "vitepress": "^0.22.3",
-    "axios": "^0.26.1",
-    "ant-design-vue": "^3.2.20"
+    "vitepress": "^1.2.2",
+    "axios": "^1.7.2"
   }
 }
