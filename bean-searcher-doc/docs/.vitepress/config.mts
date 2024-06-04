@@ -20,6 +20,20 @@ export default defineConfig({
 
     nav: [
       { text: '指南', link: '/guide/info/bean-searcher', activeMatch: '/guide/' },
+      { text: '博客', link: 'https://juejin.cn/column/7028509095564935199' },
+      {
+        text: 'v4.2.9',
+        items: [
+          {
+            text: '更新日志',
+            link: 'https://gitee.com/troyzhxu/bean-searcher/blob/dev/CHANGELOG.md'
+          },
+          {
+            text: '参与贡献',
+            link: 'https://gitee.com/troyzhxu/bean-searcher/blob/dev/CONTRIBUTING.md'
+          }
+        ]
+      }
     ],
 
     sidebar: {
@@ -108,6 +122,19 @@ export default defineConfig({
     outline: {
       label: '页面导航',
       level: [2, 3]
+    },
+
+    lastUpdated: {
+      text: '最后更新于',
+      formatOptions: {
+        dateStyle: 'short',
+        timeStyle: 'medium'
+      }
+    },
+
+    editLink: {
+      pattern: 'https://gitee.com/troyzhxu/bean-searcher/edit/dev/bean-searcher-doc/docs/:path',
+      text: '在 Gitee 上编辑此页面'
     },
 
     docFooter: {
