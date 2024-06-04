@@ -11,8 +11,8 @@
 
 实体类的注解内可以嵌入两种形式的参数：
 
-* 形如 `:name` 的可作为 JDBC 参数的 [普通内嵌参数](/guide/latest/params.html#普通内嵌参数)（该参数无 SQL 注入风险，应首选使用）
-* 形如 `:name:` 的 [拼接参数](/guide/latest/params.html#拼接参数)（该参数会拼接在 SQL 内，开发者在检索时应 **先检查该参数值的合法性，以免 SQL 注入漏洞产生**）
+* 形如 `:name` 的可作为 JDBC 参数的 [普通内嵌参数](/guide/param/embed#普通内嵌参数)（该参数无 SQL 注入风险，应首选使用）
+* 形如 `:name:` 的 [拼接参数](/guide/param/embed#拼接参数)（该参数会拼接在 SQL 内，开发者在检索时应 **先检查该参数值的合法性，以免 SQL 注入漏洞产生**）
 
 ## 嵌入到 @SearchBean.tables
 
@@ -50,7 +50,7 @@ public class Order {
 }
 ```
 
-参考：[示例 > 动态检索 > 分表检索](/guide/latest/simples.html#分表检索) 章节。
+参考：[实践 > 分表检索](/demo#分表检索) 章节。
 
 ## 嵌入到 @SearchBean.where
 

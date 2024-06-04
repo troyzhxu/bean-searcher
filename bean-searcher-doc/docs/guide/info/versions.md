@@ -174,15 +174,15 @@
 ### v3.6 的新特性（v3.6.3）
 
 * Bean Searcher
-  * 实体类 `@SearchBean` [注解内的 SQL 片段支持 `:` 的 转义（`\\:`）语义](/guide/latest/bean.html#前缀符转义（since-v3-6-0）)；
-  * 实体类 `@SearchBean` [注解新增 `orderBy` 属性，可指定 默认排序字段](/guide/latest/bean.html#默认排序（since-v3-6-0）)；
-  * 实体类 `@SearchBean` [注解新增 `sortType` 属性，可指定 排序约束类型](/guide/latest/bean.html#排序约束（since-v3-6-0）)；
+  * 实体类 `@SearchBean` [注解内的 SQL 片段支持 `:` 的 转义（`\\:`）语义](/guide/bean/params#前缀符转义-since-v3-6-0)；
+  * 实体类 `@SearchBean` [注解新增 `orderBy` 属性，可指定 默认排序字段](/guide/bean/otherform#默认排序-since-v3-6-0)；
+  * 实体类 `@SearchBean` [注解新增 `sortType` 属性，可指定 排序约束类型](/guide/bean/otherform#排序约束-since-v3-6-0)；
   * 实体类 `@SearchBean` 注解指定 `groupBy` 属性时，支持 字段求和 查询
-  * 检索器 [新增 `ResultFilter` 机制](/guide/latest/advance.html#结果过滤器（v3-6-0）)，可让用户对检索结果统一做进一步的自定义处理
-  * 新增 [`PostgreSqlDialect` 方言实现](/guide/latest/advance.html#方言实现)，可用于 PostgreSql 数据库
+  * 检索器 [新增 `ResultFilter` 机制](/guide/advance/filter#结果过滤器-v3-6-0)，可让用户对检索结果统一做进一步的自定义处理
+  * 新增 [`PostgreSqlDialect` 方言实现](/guide/advance/dialect#方言实现)，可用于 PostgreSql 数据库
   * 重构 `SqlResult`，与 JDBC 解耦，便于使用其它 ORM 重写 `SqlExecutor`
-  * 重构 `SqlInterceptor`，[它的 `intercept(..)` 方法新增 `FetchType` 参数](/guide/latest/advance.html#sqlinterceptor)
-  * 新增 `B2MFieldConvertor`，[可让 `BFieldConvertor` 也适用于 `MapSearcher` 检索器](/guide/latest/advance.html#b2mfieldconvertor)
+  * 重构 `SqlInterceptor`，[它的 `intercept(..)` 方法新增 `FetchType` 参数](/guide/advance/interceptor)
+  * 新增 `B2MFieldConvertor`，[可让 `BFieldConvertor` 也适用于 `MapSearcher` 检索器](/guide/advance/convertor.html#b2mfieldconvertor)
   * 移除 `DefaultSqlExecutor` 的 `addDataSource(..)` 方法，该方法在 `v3.0.0` 被标记为过时
   * 移除 `DateFormatFieldConvertor` 的 `addFormat(..)` 方法，该方法在 `v3.0.1` 被标记为过时
   * 当使用 `in/Include` 运算符时，输出警告，提示使用 `ct/Contain` 运算符

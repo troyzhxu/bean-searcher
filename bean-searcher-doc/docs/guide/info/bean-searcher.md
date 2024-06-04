@@ -59,7 +59,7 @@ CRUD | Only R | CRUD | CRUD
 * 分页语法和 Oracle 一样的数据库，选用 Oracle 方言 即可
 * 分页语法和 SqlServer (v2012+) 一样的数据库，选用 SqlServer 方言 即可
 
-如果分页语法独创的，则只需自定义一个方言，只需实现两个方法，参考：[高级 > SQL 方言](/guide/latest/advance.html#sql-方言（dialect）) 章节。
+如果分页语法独创的，则只需自定义一个方言，只需实现两个方法，参考：[高级 > SQL 方言](/guide/advance/dialect) 章节。
 
 ## DEMO 快速体验
 

@@ -25,9 +25,9 @@ public class User {
 
 以它的 `name` 字段为例，可衍生出以下一系列的字段参数：
 
-* **`name-{n}`**： name 字段的第 n 个参数值，如：`name-0`、`name-1`、`name-2` 等等（[理解不了？参考这里](/guide/latest/start.html#（11）字段过滤（-field-op-bt-）)）
+* **`name-{n}`**： name 字段的第 n 个参数值，如：`name-0`、`name-1`、`name-2` 等等（[理解不了？参考这里](/guide/start/use#_11-字段过滤-field-op-bt)）
 * **`name`**： 等价于 `name-0`，name 字段的第 0 个参数值
-* **`name-op`**： name 的 [字段运算符](/guide/latest/params.html#字段运算符)，如: `Equal`、`GreaterEqual`、`GreaterThan` 等等
+* **`name-op`**： name 的 [字段运算符](#字段运算符)，如: `Equal`、`GreaterEqual`、`GreaterThan` 等等
 * **`name-ic`**： name 字段在检索时是否应该忽略大小写
 
 以上在衍生字段参数时，用到了中划线（`-`）作为连接符，如果你喜欢下划线（`_`），可把 `bean-searcher.params.separator` 配置为下划线即可。配置为下划线后，衍生出的参数就是 `name_{n}`、`name`、`name_op`、`name_ic` 了。同理: `op` 与 `ic` 后缀您也可以自定义。
@@ -65,7 +65,7 @@ public class User {
 `NotEmpty` | `ny` | `x is not null and x != ''` | 否 | 不为空（仅适用于 **字符串** 类型的字段）
 
 ::: tip 除此之外
-你还可以自定义运算符，参见 [高级 > 玩转运算符](/guide/latest/advance.html#玩转运算符（since-v3-3-0）) 章节。
+你还可以自定义运算符，参见 [高级 > 玩转运算符](/guide/advance/fieldop) 章节。
 :::
 
 由于 Bean Searcher 为运算符提供了全称与缩写，所以对于每一种运算符，都有几种等效的用法，
