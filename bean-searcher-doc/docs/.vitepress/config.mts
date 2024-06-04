@@ -20,7 +20,6 @@ export default defineConfig({
 
     nav: [
       { text: '指南', link: '/guide/info/bean-searcher', activeMatch: '/guide/' },
-      { text: '博客', link: 'https://juejin.cn/column/7028509095564935199' },
       {
         text: 'v4.2.9',
         items: [
@@ -33,7 +32,18 @@ export default defineConfig({
             link: 'https://gitee.com/troyzhxu/bean-searcher/blob/dev/CONTRIBUTING.md'
           }
         ]
-      }
+      },
+      {
+        text: '推荐',
+        items: [
+          { text: 'OkHttps 非常好用的 HTTP 客户端', link: 'http://ok.zhxu.cn' },
+          { text: 'Sa-Token 一个轻量级 java 权限认证框架，让鉴权变得简单、优雅！', link: 'https://sa-token.cc/' },
+          { text: 'Jsonkit 一个超轻盈-优雅-简单的 JSON 门面工具！', link: 'https://gitee.com/troyzhxu/xjsonkit' },
+          { text: 'Easy-Trans 一个注解搞定数据翻译，减少30%SQL代码量！', link: 'http://easy-trans.fhs-opensource.top/' },
+          { text: 'Grails 中文文档', link: 'https://grails.zhxu.cn/' },
+        ]
+      },
+      { text: '博客', link: 'https://juejin.cn/column/7028509095564935199' },
     ],
 
     sidebar: {

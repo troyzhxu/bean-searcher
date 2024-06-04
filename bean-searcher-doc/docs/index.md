@@ -24,7 +24,7 @@ features:
     details: 相较于 MyBatis、Hibernate 等传统 ORM，拥有数倍的运行时性能提升。
   - icon: 🛡︎
     title: 构建安全服务
-    details: 内置 防注入、防大页 等安全机制，降低安全隐患，开发者可放心编码，构建安全服务。
+    details: 内置 防注入、防深页、防大页 等安全机制，默认启用，杜绝无意识的安全隐患。
 ---
 
 <div style="text-align: center; font-size: 20px; margin-top:60px">这不是一个重复的轮子</div>
