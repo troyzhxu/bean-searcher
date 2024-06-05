@@ -1,4 +1,6 @@
 import { defineConfig } from 'vitepress'
+import { projects } from './projects'
+
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -36,16 +38,7 @@ export default defineConfig({
       { text: '💖赞助', link: '/support' },
       {
         text: '推荐',
-        items: [
-          { text: 'Solon - Java“生态型”应用开发框架：更快、更小、更简单。', link: 'https://solon.noear.org/' },
-          { text: 'MyBatis-Plus - MyBatis 最佳搭档，只做增强不做改变，为简化开发、提高效率而生。', link: 'https://baomidou.com/' },
-          { text: 'Sa-Token 一个轻量级 java 权限认证框架，让鉴权变得简单、优雅！', link: 'https://sa-token.cc/' },
-          { text: 'LiteFlow 🚀 轻量，快速，稳定可编排的组件式规则引擎。', link: 'https://liteflow.cc/' },
-          { text: 'Easy-Trans 一个注解搞定数据翻译，减少30%SQL代码量！', link: 'http://easy-trans.fhs-opensource.top/' },
-          { text: 'Forest - 声明式与编程式双修，让天下没有难以发送的 HTTP 请求!', link: 'https://forest.dtflyx.com/' },
-          { text: 'Jsonkit 一个超轻盈-优雅-简单的 JSON 门面工具！', link: 'https://gitee.com/troyzhxu/xjsonkit' },
-          { text: 'OkHttps - 非常好用的 HTTP 客户端。', link: 'http://ok.zhxu.cn' },
-        ]
+        items: projects
       },
       { text: '博客', link: 'https://juejin.cn/column/7028509095564935199' },
     ],

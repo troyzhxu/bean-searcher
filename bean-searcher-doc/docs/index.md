@@ -53,4 +53,10 @@ public class UserController {
 
 <img src="/wx_discuss.png" width = "700" style="margin: 1rem auto" />
 
-<div style="text-align: center; margin-top:1rem;"> 广告推销者谢绝进群 </div>
+<div style="text-align: center; margin-top:1rem; color: gray"> 广告推销者谢绝进群 </div>
+
+<script setup>
+import OtherProjects from './.vitepress/theme/OtherProjects.vue'
+</script>
+
+<OtherProjects />
