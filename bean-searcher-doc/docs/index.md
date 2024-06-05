@@ -16,10 +16,10 @@ hero:
       link: /guide/start/install
 
 features:
-  - icon: 🚀
+  - icon: 😱
     title: 开发效率惊人
     details: 天生支持联表，免 DTO/VO 转换，一行代码轻松实现高级查询，极大提高研发效率。
-  - icon: 🎁
+  - icon: 🚀
     title: 运行性能绝尘
     details: 相较于 MyBatis、Hibernate 等传统 ORM，拥有数倍的运行时性能提升。
   - icon: 🛡︎
