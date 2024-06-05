@@ -68,7 +68,7 @@ Map<String, Object> params = MapUtils.builder()
 ```
 
 ::: tip 提示
-只有 [字段参数](/guide/latest/params.html#字段参数) 才可以分组，[分页参数](/guide/latest/params.html#分页参数)、[排序参数](/guide/latest/params.html#排序参数)、[内嵌参数](/guide/latest/params.html#内嵌参数) 与 [Select 参数](/guide/latest/params.html#指定-select-字段) 都是不能分组的。
+只有 [字段参数](/guide/param/field) 与 [自定义 SQL 条件](/guide/param/sql) 才可以分组，[分页参数](/guide/param/page)、[排序参数](/guide/param/sort)、[内嵌参数](/guide/param/embed) 与 [Select 参数](/guide/param/select) 都是不能被分组的。
 :::
 
 ## 逻辑表达式
@@ -88,7 +88,7 @@ Map<String, Object> params = MapUtils.builder()
 * 非法表达式 在检索时 将输出警告，并会被检索忽略
 
 ::: warning 注意
-组表达式不能包含 `$` 符，因为这是框架内置的一个组（跟组），如果表达式中包含了 `$` 符，将视作无效从而被忽略。参阅 [根参数](/guide/latest/params.html#根参数（since-v3-8-0）) 章节。
+组表达式不能包含 `$` 符，因为这是框架内置的一个组（跟组），如果表达式中包含了 `$` 符，将视作无效从而被忽略。参阅 [根参数](#根参数-since-v3-8-0) 章节。
 :::
 
 ### 逻辑优先级

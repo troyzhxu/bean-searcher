@@ -40,4 +40,4 @@ List<User> users = searcher.searchList(User.class, params);
 ::: 
 
 * 参考：[实体类 > 嵌入参数](/guide/bean/params.html) 章节；
-* 参考：[实践 > 动态检索 > 分表检索](/guide/latest/simples.html#分表检索) 案例。
+<!-- * 参考：[实践 > 动态检索 > 分表检索](/simples.html#分表检索) 案例。[TODO] -->

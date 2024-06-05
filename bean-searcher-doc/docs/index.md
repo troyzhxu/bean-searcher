@@ -24,7 +24,7 @@ features:
     details: 相较于 MyBatis、Hibernate 等传统 ORM，拥有数倍的运行时性能提升。
   - icon: 🛡︎
     title: 构建安全服务
-    details: 内置 防注入、防深页、防大页 等安全机制，默认启用，杜绝无意识的安全隐患。
+    details: 内置 防注入、防大页、防深拉 等安全机制，默认启用，杜绝无意识的安全隐患。
 ---
 
 <div style="text-align: center; font-size: 20px; margin-top:60px">这不是一个重复的轮子</div>
@@ -42,7 +42,7 @@ public class UserController {
 
     @GetMapping("/index")
     public SearchResult<User> index(HttpServletRequest request) {
-        // 只一行代码，实现包含 分页、组合过滤、任意字段排序、甚至统计、多表联查的 复杂检索功能
+        // 只一行代码，实现包含 分页、组合过滤、任意字段排序、甚至统计、多表联查的 复杂检索功能  // [!code focus]
         return beanSearcher.search(User.class, MapUtils.flat(request.getParameterMap())); // [!code focus]
     }
 

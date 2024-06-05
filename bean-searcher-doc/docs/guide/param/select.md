@@ -9,7 +9,7 @@
 
 * 前端传参形式
 
-参考：[起步 > 使用 > 开始检索](/guide/latest/start.html#（4）指定（排除）字段（onlyselect-selectexclude）) 章节。
+参考：[起步 > 使用 > 开始检索](/guide/start/use.html#_4-指定-排除-字段-onlyselect-selectexclude) 章节。
 
 * 参数构建器形式
 

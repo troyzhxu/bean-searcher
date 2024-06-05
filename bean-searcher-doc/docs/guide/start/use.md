@@ -1,6 +1,6 @@
 # 使用
 
-如果您还不了解  Bean Searcher 适合在在哪些场景使用的话，请先阅读 [介绍 > Bean Searcher](/guide/latest/introduction.html#bean-searcher) 章节。
+如果您还不了解  Bean Searcher 适合在在哪些场景使用的话，请先阅读 [介绍 > Bean Searcher](/guide/info/bean-searcher) 章节。
 
 ## 检索器
 
@@ -83,7 +83,7 @@ public class User {             // 默认映射到 user 表
 
 相比 v2.x, Bean Searcher v3.x 的实体类可以省略注解，也可以自定义识别其它框架的注解。
 
-在注解缺省的情况下，Bean Searcher 认为它是一个单表实体类（即只映射数据库中的一张表，联表实体类 的例子 请参考 [实体类 > 多表关联](/guide/latest/bean.html#多表关联) 章节。
+在注解缺省的情况下，Bean Searcher 认为它是一个单表实体类（即只映射到数据库中的一张表，联表实体类 的例子 请参考 [实体类 > 多表关联](/guide/bean/multitable) 章节。
 
 ## 开始检索
 
@@ -210,7 +210,7 @@ public class UserController {
 参数 `age-0=20` 表示 `age` 的第 0 个参数值是 `20`。上文中提到的 `age=20` 实际上是 `age-0=20` 的简写形式。
 参数名 `age-0` 与 ` age-1` 中的连字符 `-` 可自定义。
 
-**优化**：觉得 age-0=20 & age-1=30 有点复杂，想用 **age=[20,30]** 替代？可以的！请参考 [参数过滤器](/guide/latest/advance.html#参数过滤器) 章节。
+**优化**：觉得 age-0=20 & age-1=30 有点复杂，想用 **age=[20,30]** 替代？可以的！请参考 [高级 > 参数过滤器](/guide/advance/filter) 章节。
 :::
 
 ### （12）字段过滤（ [field]-op=il ）
@@ -219,7 +219,7 @@ public class UserController {
 * 返回结果：结构同 **（1）**（但只返回 age in (20, 30, 40) 的数据，`il` 是 `InList` 的缩写）
 
 ::: tip 优化
-同理 age-0=20 & age-1=30 & age-2=40 可优化为 **age=[20,30,40]**，参考 [参数过滤器](/guide/latest/advance.html#参数过滤器) 章节。
+同理 age-0=20 & age-1=30 & age-2=40 可优化为 **age=[20,30,40]**，参考 [高级 > 参数过滤器](/guide/advance/filter) 章节。
 :::
 
 ### （13）字段过滤（ [field]-op=ct ）
@@ -256,14 +256,14 @@ public class UserController {
 参数名 `name-ic` 中的后缀 `-ic` 可自定义，该参数可与其它的参数组合使用，比如这里检索的是 name 等于 Jack 时忽略大小写，但同样适用于检索 name 已 Jack 开头或结尾时忽略大小写。
 :::
 
-Bean Searcher 还支持 **更多** 的检索方式（甚至可以自定义，参考： [参数 > 字段参数 > 字段运算符](/guide/latest/params.html#字段运算符) 章节），这里就不再列举了。
+Bean Searcher 还支持 **更多** 的检索方式（甚至可以自定义，参考： [参数 > 字段参数 > 字段运算符](/guide/param/field#字段运算符) 章节），这里就不再列举了。
 
 本例的 `/user/index` 接口里我们只写了一行代码，它便可以支持这么多种的检索方式，你现在体会到了 **一行代码便可实现复杂列表检索** 的含义了吗？有没有觉得你现在写的一行代码可以干过别人的一百行呢？
 
 ::: tip
 本例所举的是一个简单的单表查询，实际上，无论是单表还是多表，只要在映射在同一个实体类里，就可以支持上文所列的所有检索方式。
 
-至于如何让多张数据库表映射到同一个实体类，请看下一章节：[实体类](/guide/latest/bean.html)。
+至于如何让多张数据库表映射到同一个实体类，请看下一章节：[实体类](/guide/bean/info)。
 :::
 
 ## SQL 日志
@@ -296,4 +296,4 @@ logging.level.cn.zhxu.bs: DEBUG
 
 > Bean Searcher 使用日志门面 `slf4j-api` 打印日志（这也是 Bean Searcher 的唯一依赖），它并不依赖 `logback`，所以 `log4j` 等其它日志框架也是支持的哦。
 
-慢 SQL 相关配置，可参考：[高级 > 慢 SQL 日志与监听](/guide/latest/advance.html#慢-sql-日志与监听（since-v3-7-0）) 章节。
+慢 SQL 相关配置，可参考：[高级 > 慢 SQL 日志与监听](/guide/advance/slowsql) 章节。

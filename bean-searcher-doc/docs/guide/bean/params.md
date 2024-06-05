@@ -50,7 +50,7 @@ public class Order {
 }
 ```
 
-参考：[实践 > 分表检索](/demo#分表检索) 章节。
+<!-- 参考：[实践 > 分表检索](/demo#分表检索) 章节。[TODO] -->
 
 ## 嵌入到 @SearchBean.where
 
