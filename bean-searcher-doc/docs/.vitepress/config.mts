@@ -37,11 +37,12 @@ export default defineConfig({
       {
         text: '推荐',
         items: [
-          { text: 'OkHttps 非常好用的 HTTP 客户端', link: 'http://ok.zhxu.cn' },
           { text: 'Sa-Token 一个轻量级 java 权限认证框架，让鉴权变得简单、优雅！', link: 'https://sa-token.cc/' },
-          { text: 'Jsonkit 一个超轻盈-优雅-简单的 JSON 门面工具！', link: 'https://gitee.com/troyzhxu/xjsonkit' },
+          { text: 'LiteFlow 🚀 轻量，快速，稳定可编排的组件式规则引擎。', link: 'https://liteflow.cc/' },
           { text: 'Easy-Trans 一个注解搞定数据翻译，减少30%SQL代码量！', link: 'http://easy-trans.fhs-opensource.top/' },
-          { text: 'Grails 中文文档', link: 'https://grails.zhxu.cn/' },
+          { text: 'Forest 声明式与编程式双修，让天下没有难以发送的 HTTP 请求!', link: 'https://forest.dtflyx.com/' },
+          { text: 'OkHttps 非常好用的 HTTP 客户端。', link: 'http://ok.zhxu.cn' },
+          { text: 'Jsonkit 一个超轻盈-优雅-简单的 JSON 门面工具！', link: 'https://gitee.com/troyzhxu/xjsonkit' },
         ]
       },
       { text: '博客', link: 'https://juejin.cn/column/7028509095564935199' },
