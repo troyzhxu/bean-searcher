@@ -28,7 +28,9 @@ onMounted(() => {
     baiduTongji();
     advertisement();
   }
-  console.log("\n%c Bean Searcher 祝贺你 %c 发现新大陆啦！\n", "color: #fff; background: #f1404b; padding:5px 0;", "background: #111; padding:5px 0; color: #fff");
+  console.log("\n%c Bean Searcher %c 你点 STAR 了没有 😎 ? \n", "color: #fff; background: #f1404b; padding:5px 0;", "background: #111; padding:5px 0; color: #fff");
+  console.log('👉 https://github.com/troyzhxu/bean-searcher')
+  console.log('👉 https://gitee.com/troyzhxu/bean-searcher')
 })
 
 function checkEnvAndSSL() {

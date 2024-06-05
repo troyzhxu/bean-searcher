@@ -137,3 +137,10 @@
   --docsearch-primary-color: var(--vp-c-brand-1) !important;
 }
 
+.VPSocialLink > svg.gitee {
+  fill: #c71d23ce;
+}
+
+.VPSocialLink > svg.gitee:hover {
+  fill: #C71D23;
+}
