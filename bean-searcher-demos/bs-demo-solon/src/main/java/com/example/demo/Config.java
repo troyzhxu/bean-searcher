@@ -47,11 +47,34 @@ public class Config {
         return new ParamFilter() {
             @Override
             public <T> Map<String, Object> doFilter(BeanMeta<T> beanMeta, Map<String, Object> paraMap) {
+                System.out.println("currentRequestParamFilter");
                 // 获取当前请求的所有参数
                 Map<String, Object> params = new HashMap<>(Context.current().paramMap());
                 // 用户传入的参数优先级更高
                 params.putAll(paraMap);
                 return params;
+            }
+        };
+    }
+
+    @Bean(index = 1)
+    public ParamFilter paramFilter1() {
+        return new ParamFilter() {
+            @Override
+            public <T> Map<String, Object> doFilter(BeanMeta<T> beanMeta, Map<String, Object> paraMap) {
+                System.out.println("前一个过滤器");
+                return paraMap;
+            }
+        };
+    }
+
+    @Bean(index = 2)
+    public ParamFilter paramFilter2() {
+        return new ParamFilter() {
+            @Override
+            public <T> Map<String, Object> doFilter(BeanMeta<T> beanMeta, Map<String, Object> paraMap) {
+                System.out.println("后一个过滤器");
+                return paraMap;
             }
         };
     }
