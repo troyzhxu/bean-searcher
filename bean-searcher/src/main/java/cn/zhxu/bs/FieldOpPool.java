@@ -48,7 +48,6 @@ public class FieldOpPool extends DialectWrapper {
         checkAdd(FieldOps.NotEmpty);
         checkAdd(FieldOps.AlwaysTrue);
         checkAdd(FieldOps.AlwaysFalse);
-
     }
 
 

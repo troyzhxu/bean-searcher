@@ -106,7 +106,6 @@ public class FieldOps {
     /**
      * 不在某个集合内
      * not in
-     *
      * @since v3.3
      */
     public static final NotIn NotIn = new NotIn();
@@ -114,16 +113,14 @@ public class FieldOps {
     /**
      * 恒真运算符
      * always true
-     *
-     * @since v4.2.10
+     * @since v4.3
      */
     public static final AlwaysTrue AlwaysTrue = new AlwaysTrue();
 
     /**
      * 恒假运算符
      * always true
-     *
-     * @since v4.2.10
+     * @since v4.3
      */
     public static final AlwaysFalse AlwaysFalse = new AlwaysFalse();
 
