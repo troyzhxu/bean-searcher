@@ -20,6 +20,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 
 import javax.sql.DataSource;
 import java.time.ZoneId;
@@ -179,6 +181,7 @@ public class BeanSearcherAutoConfiguration {
 	}
 
 	@Bean
+	@Order(Ordered.HIGHEST_PRECEDENCE)
 	@ConditionalOnMissingBean(SizeLimitParamFilter.class)
 	public SizeLimitParamFilter sizeLimitParamFilter(BeanSearcherProperties config) {
 		return new SizeLimitParamFilter(config.getParams().getFilter().getMaxParaMapSize());

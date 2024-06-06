@@ -1,7 +1,6 @@
 package com.example.config;
 
-import cn.zhxu.bs.SqlExecutor;
-import cn.zhxu.bs.SqlWrapper;
+import cn.zhxu.bs.*;
 import cn.zhxu.bs.boot.DataSourceDialect;
 import cn.zhxu.bs.boot.NamedDataSource;
 import cn.zhxu.bs.dialect.MySqlDialect;
@@ -13,8 +12,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 
 import javax.sql.DataSource;
+import java.util.Map;
 
 @Configuration
 public class BeanSearcherConfig {
@@ -32,6 +33,30 @@ public class BeanSearcherConfig {
     public SqlExecutor.SlowListener slowSqlListener() {
         return (beanClass, slowSql, params, timeCost) -> {
             System.out.println("慢 SQL 啦");
+        };
+    }
+
+    @Order(1)
+    @Bean
+    public ParamFilter paramFilter1() {
+        return new ParamFilter() {
+            @Override
+            public <T> Map<String, Object> doFilter(BeanMeta<T> beanMeta, Map<String, Object> paraMap) throws IllegalParamException {
+                System.out.println("前一个过滤器");
+                return paraMap;
+            }
+        };
+    }
+
+    @Order(2)
+    @Bean
+    public ParamFilter paramFilter2() {
+        return new ParamFilter() {
+            @Override
+            public <T> Map<String, Object> doFilter(BeanMeta<T> beanMeta, Map<String, Object> paraMap) throws IllegalParamException {
+                System.out.println("后一个过滤器");
+                return paraMap;
+            }
         };
     }
 
