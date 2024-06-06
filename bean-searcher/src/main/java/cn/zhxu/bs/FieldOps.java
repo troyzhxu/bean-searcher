@@ -4,109 +4,127 @@ import cn.zhxu.bs.operator.*;
 
 /**
  * 过滤运算符
+ *
  * @author Troy.Zhou @ 2017-03-20
  */
 public class FieldOps {
 
-	/**
-	 * 等于
-	 */
-	public static final Equal Equal = new Equal();
+    /**
+     * 等于
+     */
+    public static final Equal Equal = new Equal();
 
-	/**
-	 * 不等于
-	 */
-	public static final NotEqual NotEqual = new NotEqual();
+    /**
+     * 不等于
+     */
+    public static final NotEqual NotEqual = new NotEqual();
 
-	/**
-	 * 大于等于
-	 */
-	public static final GreaterEqual GreaterEqual = new GreaterEqual();
-	
-	/**
-	 * 大于
-	 */
-	public static final GreaterThan GreaterThan = new GreaterThan();
-	
-	/**
-	 * 小于等于
-	 */
-	public static final LessEqual LessEqual = new LessEqual();
-	
-	/**
-	 * 小于
-	 */
-	public static final LessThan LessThan = new LessThan();
+    /**
+     * 大于等于
+     */
+    public static final GreaterEqual GreaterEqual = new GreaterEqual();
 
-	/**
-	 * 为 null
-	 */
-	public static final IsNull IsNull = new IsNull();
+    /**
+     * 大于
+     */
+    public static final GreaterThan GreaterThan = new GreaterThan();
 
-	/**
-	 * 不为 null
-	 */
-	public static final NotNull NotNull = new NotNull();
+    /**
+     * 小于等于
+     */
+    public static final LessEqual LessEqual = new LessEqual();
 
-	/**
-	 * 为空
-	 */
-	public static final Empty Empty = new Empty();
-	
-	/**
-	 * 不为空
-	 */
-	public static final NotEmpty NotEmpty = new NotEmpty();
+    /**
+     * 小于
+     */
+    public static final LessThan LessThan = new LessThan();
 
-	/**
-	 * 包含
-	 * like '%xxx%'
-	 */
-	public static final Contain Contain = new Contain();
+    /**
+     * 为 null
+     */
+    public static final IsNull IsNull = new IsNull();
 
-	/**
-	 * 以 .. 开始
-	 * like 'xxx%'
-	 */
-	public static final StartWith StartWith = new StartWith();
-	
-	/**
-	 * 以 .. 结束
-	 * like '%xxx'
-	 */
-	public static final EndWith EndWith = new EndWith();
+    /**
+     * 不为 null
+     */
+    public static final NotNull NotNull = new NotNull();
 
-	/**
-	 * like {v1} or like {v1}
-	 */
-	public static final OrLike OrLike = new OrLike();
+    /**
+     * 为空
+     */
+    public static final Empty Empty = new Empty();
 
-	/**
-	 * not like {v}
-	 */
-	public static final NotLike NotLike = new NotLike();
+    /**
+     * 不为空
+     */
+    public static final NotEmpty NotEmpty = new NotEmpty();
 
-	/**
-	 * 在 .. 和 .. 之间
-	 */
-	public static final Between Between = new Between();
+    /**
+     * 包含
+     * like '%xxx%'
+     */
+    public static final Contain Contain = new Contain();
 
-	/**
-	 * 不在 .. 和 .. 之间
-	 */
-	public static final NotBetween NotBetween = new NotBetween();
+    /**
+     * 以 .. 开始
+     * like 'xxx%'
+     */
+    public static final StartWith StartWith = new StartWith();
 
-	/**
-	 * 在列表中
-	 * in (...)
-	 */
-	public static final InList InList = new InList();
+    /**
+     * 以 .. 结束
+     * like '%xxx'
+     */
+    public static final EndWith EndWith = new EndWith();
 
-	/**
-	 * 不在某个集合内
-	 * not in
-	 * @since v3.3
-	 */
-	public static final NotIn NotIn = new NotIn();
+    /**
+     * like {v1} or like {v1}
+     */
+    public static final OrLike OrLike = new OrLike();
+
+    /**
+     * not like {v}
+     */
+    public static final NotLike NotLike = new NotLike();
+
+    /**
+     * 在 .. 和 .. 之间
+     */
+    public static final Between Between = new Between();
+
+    /**
+     * 不在 .. 和 .. 之间
+     */
+    public static final NotBetween NotBetween = new NotBetween();
+
+    /**
+     * 在列表中
+     * in (...)
+     */
+    public static final InList InList = new InList();
+
+    /**
+     * 不在某个集合内
+     * not in
+     *
+     * @since v3.3
+     */
+    public static final NotIn NotIn = new NotIn();
+
+    /**
+     * 恒真运算符
+     * always true
+     *
+     * @since v4.2.10
+     */
+    public static final AlwaysTrue AlwaysTrue = new AlwaysTrue();
+
+    /**
+     * 恒假运算符
+     * always true
+     *
+     * @since v4.2.10
+     */
+    public static final AlwaysFalse AlwaysFalse = new AlwaysFalse();
 
 }
