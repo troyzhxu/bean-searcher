@@ -279,18 +279,7 @@ public class Builder<B extends Builder<B>> {
     }
 
     protected <T> List<T> obtainList(String key) {
-        Object value = map.get(key);
-        List<T> list = null;
-        if (value instanceof List) {
-            @SuppressWarnings("all")
-            List<T> l = (List<T>) value;
-            list = l;
-        }
-        if (list == null) {
-            list = new ArrayList<>();
-            map.put(key, list);
-        }
-        return list;
+        return MapUtils.obtainList(map, key);
     }
 
 }
