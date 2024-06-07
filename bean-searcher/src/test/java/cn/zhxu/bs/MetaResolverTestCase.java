@@ -721,4 +721,30 @@ public class MetaResolverTestCase {
         System.out.println("\ttest_24 ok!");
     }
 
+    @SearchBean(
+            tables = "user u, :table: t",
+            where = "u.id = t.user_id and u.groupId = :groupId :extra:",
+            groupBy = ":groupBy:",
+            having = ":having:",
+            orderBy = ":orderBy:"
+    )
+    public static class User25 {
+
+        @DbField("select sum(score) from :scoreTable: s where s.user_id = u.id and s.score > :minScore")
+        private int totalScore;
+    }
+
+    @Test
+    public void test_25() {
+        BeanMeta<User25> beanMeta = metaResolver.resolve(User25.class);
+        List<String> joinParaNames = beanMeta.getJoinParaNames();
+        Assertions.assertEquals(6, joinParaNames.size());
+        Assertions.assertTrue(joinParaNames.contains("table"));
+        Assertions.assertTrue(joinParaNames.contains("extra"));
+        Assertions.assertTrue(joinParaNames.contains("groupBy"));
+        Assertions.assertTrue(joinParaNames.contains("having"));
+        Assertions.assertTrue(joinParaNames.contains("orderBy"));
+        Assertions.assertTrue(joinParaNames.contains("scoreTable"));
+    }
+
 }
