@@ -25,15 +25,29 @@ import java.util.StringJoiner;
 public class CollectionParamFilter implements ParamFilter {
 
     @Override
-    public <T> Map<String, Object> doFilter(BeanMeta<T> beanMeta, Map<String, Object> paraMap) {
+    public <T> Map<String, Object> doFilter(BeanMeta<T> beanMeta, Map<String, Object> paraMap)
+            throws IllegalParamException {
         paraMap.forEach((key, value) -> {
             if (value instanceof Collection) {
                 StringJoiner joiner = new StringJoiner(",");
-                ((Collection<?>) value).forEach(v -> joiner.add(String.valueOf(v)));
+                ((Collection<?>) value).forEach(v -> joiner.add(valueOf(v)));
                 paraMap.put(key, joiner.toString());
             }
         });
         return paraMap;
+    }
+
+    protected String valueOf(Object value) {
+        if (value instanceof Number) {
+            return value.toString();
+        }
+        if (value instanceof String) {
+            return "'" + value + "'";
+        }
+        if (value == null) {
+            return "null";
+        }
+        throw new IllegalParamException("非法的集合元素类型：" + value.getClass());
     }
 
 }
