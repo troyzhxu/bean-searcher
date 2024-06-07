@@ -28,19 +28,40 @@ public class JoinParaValueParamFilter implements ParamFilter {
     @Override
     public <T> Map<String, Object> doFilter(BeanMeta<T> beanMeta, Map<String, Object> paraMap)
             throws IllegalParamException {
-        List<String> joinParaNames = beanMeta.getJoinParaNames();
-        paraMap.forEach((key, value) -> {
-            if (value instanceof Collection && joinParaNames.contains(key)) {
+        for (String name : beanMeta.getJoinParaNames()) {
+            Object value = paraMap.get(name);
+            if (value instanceof Collection) {
                 StringJoiner joiner = new StringJoiner(",");
                 ((Collection<?>) value).forEach(v -> joiner.add(valueOf(v)));
-                paraMap.put(key, joiner.toString());
+                paraMap.put(name, joiner.toString());
+            } else if (value instanceof Object[]) {
+                StringJoiner joiner = new StringJoiner(",");
+                for (Object v : (Object[]) value) {
+                    joiner.add(valueOf(v));
+                }
+                paraMap.put(name, joiner.toString());
+            } else if (value instanceof int[]) {
+                StringJoiner joiner = new StringJoiner(",");
+                for (int v : (int[]) value) {
+                    joiner.add(Integer.toString(v));
+                }
+                paraMap.put(name, joiner.toString());
+            } else if (value instanceof long[]) {
+                StringJoiner joiner = new StringJoiner(",");
+                for (long v : (long[]) value) {
+                    joiner.add(Long.toString(v));
+                }
+                paraMap.put(name, joiner.toString());
             }
-        });
+        }
         return paraMap;
     }
 
     protected String valueOf(Object value) {
         if (value instanceof Number) {
+            return value.toString();
+        }
+        if (value instanceof Boolean) {
             return value.toString();
         }
         if (value instanceof String) {

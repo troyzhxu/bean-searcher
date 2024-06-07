@@ -32,4 +32,12 @@ public class ArrayValueParamFilterTestCase {
         System.out.println("\ttest_01 passed!");
     }
 
+    @Test
+    public void test_02() {
+        System.out.println(new String[]{""} instanceof Object[]);
+        System.out.println(new Integer[]{1} instanceof Object[]);
+        Object value = new int[]{2};
+        System.out.println(value instanceof Object[]);
+    }
+
 }
