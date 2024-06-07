@@ -334,24 +334,24 @@ public class BeanSearcherConfiguration {
                                        List<FieldConvertor.ParamConvertor> convertors,
                                        FieldOpPool fieldOpPool,
                                        GroupResolver groupResolver) {
-
         DefaultParamResolver paramResolver = new DefaultParamResolver(convertors, paramFilters);
         paramResolver.setPageExtractor(pageExtractor);
         paramResolver.setFieldOpPool(fieldOpPool);
-        BeanSearcherProperties.Params conf = config.getParams();
-        paramResolver.setOperatorSuffix(conf.getOperatorKey());
-        paramResolver.setIgnoreCaseSuffix(conf.getIgnoreCaseKey());
-        paramResolver.setOrderName(conf.getOrder());
-        paramResolver.setSortName(conf.getSort());
-        paramResolver.setOrderByName(conf.getOrderBy());
-        paramResolver.setSeparator(conf.getSeparator());
-        paramResolver.setOnlySelectName(conf.getOnlySelect());
-        paramResolver.setSelectExcludeName(conf.getSelectExclude());
-        BeanSearcherProperties.Params.Group group = conf.getGroup();
-        paramResolver.setGexprName(group.getExprName());
-        paramResolver.setGexprMerge(group.isMergeable());
-        paramResolver.setGroupSeparator(group.getSeparator());
         paramResolver.setGroupResolver(groupResolver);
+        BeanSearcherProperties.Params conf = config.getParams();
+        ParamResolver.Configuration configuration = paramResolver.getConfiguration();
+        configuration.setOperatorSuffix(conf.getOperatorKey());
+        configuration.setIgnoreCaseSuffix(conf.getIgnoreCaseKey());
+        configuration.setOrderName(conf.getOrder());
+        configuration.setSortName(conf.getSort());
+        configuration.setOrderByName(conf.getOrderBy());
+        configuration.setSeparator(conf.getSeparator());
+        configuration.setOnlySelectName(conf.getOnlySelect());
+        configuration.setSelectExcludeName(conf.getSelectExclude());
+        BeanSearcherProperties.Params.Group group = conf.getGroup();
+        configuration.setGexprName(group.getExprName());
+        configuration.setGexprMerge(group.isMergeable());
+        configuration.setGroupSeparator(group.getSeparator());
         return paramResolver;
     }
 

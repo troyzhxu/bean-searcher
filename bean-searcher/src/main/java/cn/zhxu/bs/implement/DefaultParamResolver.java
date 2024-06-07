@@ -50,73 +50,16 @@ public class DefaultParamResolver implements ParamResolver {
 	private FieldOpPool fieldOpPool = FieldOpPool.DEFAULT;
 
 	/**
-	 * 排序字段参数名
-	 */
-	private String sortName = "sort";
-	
-	/**
-	 * 排序方法字段参数名
-	 */
-	private String orderName = "order";
-
-	/**
-	 * @since v3.4.0
-	 * 排序参数名（该参数与 {@link #sortName } 和 {@link #orderName } 指定的参数互斥）
-	 * 该参数可指定多个排序字段，例如：orderBy=age:desc,dateCreate:asc
-	 */
-	private String orderByName = "orderBy";
-
-	/**
-	 * 参数名分割符
-	 * v1.2.0之前默认值是下划线："_"，自 v1.2.0之后默认值更新为中划线："-"
-	 */
-	private String separator = "-";
-	
-	/**
-	 * 忽略大小写参数名后缀
-	 * 带上该参数会导致字段索引不被使用，查询速度降低，在大数据量下建议使用数据库本身的字符集实现忽略大小写功能。
-	 */
-	private String ignoreCaseSuffix = "ic";
-
-	/**
-	 * 过滤运算符参数名后缀
-	 */
-	private String operatorSuffix = "op";
-
-	/**
-	 * 用于指定只 Select 某些字段的参数名
-	 */
-	private String onlySelectName = "onlySelect";
-
-	/**
-	 * 用于指定不需要 Select 的字段的参数名
-	 */
-	private String selectExcludeName = "selectExclude";
-
-	/**
-	 * @since v3.5.0
-	 * 用于指定组表达式参数名
-	 */
-	private String gexprName = "gexpr";
-
-	/**
-	 * @since v4.3.0
-	 * 用于控制参数构建器中使用 `groupExpr(..)` 方法指定的组表达式是否合并或覆盖前端参数传来的组表达式
-	 */
-	private boolean gexprMerge = true;
-
-	/**
-	 * @since v3.5.0
-	 * 组分割符
-	 */
-	private String groupSeparator = ".";
-
-	/**
 	 * @since v3.5.0
 	 * 用于解析组表达式
 	 */
 	private GroupResolver groupResolver = new DefaultGroupResolver();
 
+	/**
+	 * @since v4.3.0
+	 * 配置参数
+	 */
+	private Configuration configuration = new Configuration();
 
 	public DefaultParamResolver() {
 		convertors.add(new BoolParamConvertor());
@@ -197,7 +140,7 @@ public class DefaultParamResolver implements ParamResolver {
 		if (value != null) {
 			return value;
 		}
-		return paraMap.get(selectExcludeName);
+		return paraMap.get(configuration.getSelectExcludeName());
 	}
 
 	protected Object getOnlySelect(Map<String, Object> paraMap) {
@@ -205,7 +148,7 @@ public class DefaultParamResolver implements ParamResolver {
 		if (value != null) {
 			return value;
 		}
-		return paraMap.get(onlySelectName);
+		return paraMap.get(configuration.getOnlySelectName());
 	}
 
 	public Group<List<FieldParam>> resolveParamsGroup(Collection<FieldMeta> fieldMetas, Map<String, Object> paraMap) throws IllegalParamException {
@@ -216,7 +159,7 @@ public class DefaultParamResolver implements ParamResolver {
 					if (params == null) {
 						MapWrapper mapWrapper;
 						if (gKey != null) {
-							mapWrapper = new MapWrapper(paraMap, gKey, groupSeparator);
+							mapWrapper = new MapWrapper(paraMap, gKey, configuration.getGroupSeparator());
 						} else {
 							mapWrapper = new MapWrapper(paraMap);
 						}
@@ -230,10 +173,10 @@ public class DefaultParamResolver implements ParamResolver {
 
 	protected String getGroupExpr(Map<String, Object> paraMap) throws IllegalParamException {
 		String gExpr = ObjectUtils.string(paraMap.get(MapBuilder.GROUP_EXPR));
-		String expr = ObjectUtils.string(paraMap.get(gexprName));
+		String expr = ObjectUtils.string(paraMap.get(configuration.getGexprName()));
 		if (StringUtils.isBlank(gExpr)) {
 			gExpr = expr;
-		} else if (gexprMerge && StringUtils.isNotBlank(expr)) {
+		} else if (configuration.isGexprMerge() && StringUtils.isNotBlank(expr)) {
 			gExpr = BRACKET_LEFT + gExpr + BRACKET_RIGHT + AND_OP + BRACKET_LEFT + expr + BRACKET_RIGHT;
 		}
 		if (StringUtils.isNotBlank(gExpr)) {
@@ -248,7 +191,7 @@ public class DefaultParamResolver implements ParamResolver {
 	private List<FieldParam> extractFieldParams(Collection<FieldMeta> fieldMetas, MapWrapper paraMap) {
 		Map<String, Set<Integer>> fieldIndicesMap = new HashMap<>();
 		for (String key : paraMap.keySet()) {
-			int index = key.lastIndexOf(separator);
+			int index = key.lastIndexOf(configuration.getSeparator());
 			if (index > 0 && key.length() > index + 1) {
 				String suffix = key.substring(index + 1);
 				if (INDEX_PATTERN.matcher(suffix).matches()) {
@@ -304,7 +247,7 @@ public class DefaultParamResolver implements ParamResolver {
 		List<FieldParam.Value> values = param != null ? param.getValueList() : new ArrayList<>();
 		if (values.isEmpty() && indices != null) {
 			for (int index : indices) {
-				Object value = paraMap.get1(field + separator + index);
+				Object value = paraMap.get1(field + configuration.getSeparator() + index);
 				if (index == 0 && value == null) {
 					value = paraMap.get1(field);
 				}
@@ -328,7 +271,7 @@ public class DefaultParamResolver implements ParamResolver {
 			ignoreCase = param.isIgnoreCase();
 		}
 		if (ignoreCase == null) {
-			ignoreCase = ObjectUtils.toBoolean(paraMap.get1(field + separator + ignoreCaseSuffix));
+			ignoreCase = ObjectUtils.toBoolean(paraMap.get1(field + configuration.separatorIcSuffix()));
 		}
 		return new FieldParam(field, operator, values, ignoreCase);
 	}
@@ -372,7 +315,7 @@ public class DefaultParamResolver implements ParamResolver {
 				return fieldOpPool.getFieldOp(op);
 			}
 		}
-		Object value = paraMap.get1(field + separator + operatorSuffix);
+		Object value = paraMap.get1(field + configuration.separatorOpSuffix());
 		return fieldOpPool.getFieldOp(value);
 	}
 
@@ -401,7 +344,7 @@ public class DefaultParamResolver implements ParamResolver {
 			List<OrderBy> orderBys = (List<OrderBy>) list;
 			return orderBys;
 		}
-		String string = ObjectUtils.string(paraMap.get(orderByName));
+		String string = ObjectUtils.string(paraMap.get(configuration.getOrderByName()));
 		if (StringUtils.isNotBlank(string)) {
 			return Arrays.stream(string.split(","))
 					.map(str -> {
@@ -417,8 +360,8 @@ public class DefaultParamResolver implements ParamResolver {
 					.filter(Objects::nonNull)
 					.collect(Collectors.toList());
 		}
-		String sort = ObjectUtils.string(paraMap.get(sortName));
-		String order = ObjectUtils.string(paraMap.get(orderName));
+		String sort = ObjectUtils.string(paraMap.get(configuration.getSortName()));
+		String order = ObjectUtils.string(paraMap.get(configuration.getOrderName()));
 		if (StringUtils.isNotBlank(sort)) {
 			return Collections.singletonList(new OrderBy(sort, order));
 		}
@@ -433,16 +376,16 @@ public class DefaultParamResolver implements ParamResolver {
 		this.pageExtractor = Objects.requireNonNull(pageExtractor);
 	}
 
+	public List<ParamFilter> getParamFilters() {
+		return paramFilters;
+	}
+
 	public void addParamFilter(ParamFilter paramFilter) {
 		paramFilters.add(Objects.requireNonNull(paramFilter));
 	}
 
 	public void setParamFilters(List<ParamFilter> paramFilters) {
 		this.paramFilters = Objects.requireNonNull(paramFilters);
-	}
-
-	public List<ParamFilter> getParamFilters() {
-		return paramFilters;
 	}
 
 	public FieldOpPool getFieldOpPool() {
@@ -453,100 +396,12 @@ public class DefaultParamResolver implements ParamResolver {
 		this.fieldOpPool = Objects.requireNonNull(fieldOpPool);
 	}
 
-	public String getSortName() {
-		return sortName;
-	}
-
-	public void setSortName(String sortName) {
-		this.sortName = Objects.requireNonNull(sortName);
-	}
-
-	public String getOrderName() {
-		return orderName;
-	}
-
-	public void setOrderName(String orderName) {
-		this.orderName = Objects.requireNonNull(orderName);
-	}
-
-	public String getOrderByName() {
-		return orderByName;
-	}
-
-	public void setOrderByName(String orderByName) {
-		this.orderByName = orderByName;
-	}
-
-	public String getIgnoreCaseSuffix() {
-		return ignoreCaseSuffix;
-	}
-
-	public void setIgnoreCaseSuffix(String ignoreCaseSuffix) {
-		this.ignoreCaseSuffix = Objects.requireNonNull(ignoreCaseSuffix);
-	}
-
-	public String getOperatorSuffix() {
-		return operatorSuffix;
-	}
-
-	public void setOperatorSuffix(String operatorSuffix) {
-		this.operatorSuffix = Objects.requireNonNull(operatorSuffix);
-	}
-
-	public String getSeparator() {
-		return separator;
-	}
-
-	public void setSeparator(String separator) {
-		this.separator = Objects.requireNonNull(separator);
-	}
-
-	public String getOnlySelectName() {
-		return onlySelectName;
-	}
-
-	public void setOnlySelectName(String onlySelectName) {
-		this.onlySelectName = Objects.requireNonNull(onlySelectName);
-	}
-
-	public String getSelectExcludeName() {
-		return selectExcludeName;
-	}
-
-	public void setSelectExcludeName(String selectExcludeName) {
-		this.selectExcludeName = Objects.requireNonNull(selectExcludeName);
-	}
-
-	public String getGexprName() {
-		return gexprName;
-	}
-
-	public void setGexprName(String gexprName) {
-		this.gexprName = gexprName;
-	}
-
-	public boolean isGexprMerge() {
-		return gexprMerge;
-	}
-
-	public void setGexprMerge(boolean gexprMerge) {
-		this.gexprMerge = gexprMerge;
-	}
-
 	public GroupResolver getGroupResolver() {
 		return groupResolver;
 	}
 
 	public void setGroupResolver(GroupResolver groupResolver) {
 		this.groupResolver = Objects.requireNonNull(groupResolver);
-	}
-
-	public String getGroupSeparator() {
-		return groupSeparator;
-	}
-
-	public void setGroupSeparator(String groupSeparator) {
-		this.groupSeparator = Objects.requireNonNull(groupSeparator);
 	}
 
 	public List<FieldConvertor.ParamConvertor> getConvertors() {
@@ -558,7 +413,15 @@ public class DefaultParamResolver implements ParamResolver {
 	}
 
 	public void addConvertor(FieldConvertor.ParamConvertor convertor) {
-		this.convertors.add(convertor);
+		this.convertors.add(Objects.requireNonNull(convertor));
+	}
+
+	public Configuration getConfiguration() {
+		return configuration;
+	}
+
+	public void setConfiguration(Configuration configuration) {
+		this.configuration = Objects.requireNonNull(configuration);
 	}
 
 }
