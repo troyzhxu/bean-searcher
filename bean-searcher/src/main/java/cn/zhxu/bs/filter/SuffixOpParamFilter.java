@@ -35,13 +35,12 @@ public class SuffixOpParamFilter implements ParamFilter {
             if (fieldOpPool.getFieldOp(opName) == null) {
                 continue;
             }
-            Object value = entry.getValue();
             String field = key.substring(0, idx);
             if (newMap == null) {
                 newMap = new HashMap<>();
             }
-            newMap.put(field, value);
             newMap.put(field + separator + operatorSuffix, opName);
+            newMap.put(field, entry.getValue());
         }
         if (newMap != null) {
             paraMap.putAll(newMap);
