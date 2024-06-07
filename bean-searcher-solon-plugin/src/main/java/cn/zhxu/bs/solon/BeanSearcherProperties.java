@@ -3,6 +3,7 @@ package cn.zhxu.bs.solon;
 import cn.zhxu.bs.BeanSearcher;
 import cn.zhxu.bs.FieldConvertor.BFieldConvertor;
 import cn.zhxu.bs.MapSearcher;
+import cn.zhxu.bs.ParamResolver.Configuration;
 import cn.zhxu.bs.bean.DbField;
 import cn.zhxu.bs.bean.InheritType;
 import cn.zhxu.bs.bean.SearchBean;
@@ -10,16 +11,14 @@ import cn.zhxu.bs.bean.SortType;
 import cn.zhxu.bs.convertor.*;
 import cn.zhxu.bs.filter.SizeLimitParamFilter;
 import cn.zhxu.bs.group.DefaultGroupResolver;
-import cn.zhxu.bs.implement.DefaultParamResolver;
 import cn.zhxu.bs.util.MapBuilder;
-import org.noear.solon.annotation.Configuration;
 import org.noear.solon.annotation.Inject;
 
 import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Map;
 
-@Configuration
+@org.noear.solon.annotation.Configuration
 @Inject(value = "${bean-searcher}", required = false)
 public class BeanSearcherProperties {
 
@@ -65,49 +64,49 @@ public class BeanSearcherProperties {
 
 		/**
 		 * 排序字段参数名，默认为 `sort`，
-		 * @see DefaultParamResolver#setSortName(String)
+		 * @see Configuration#setSortName(String)
 		 */
 		private String sort = "sort";
 
 		/**
 		 * 排序方法参数名，默认为 `order`，
-		 * @see DefaultParamResolver#setOrderName(String)
+		 * @see Configuration#setOrderName(String)
 		 */
 		private String order = "order";
 
 		/**
 		 * 排序参数名，默认为 `orderBy`，
-		 * @see DefaultParamResolver#setOrderByName(String)
+		 * @see Configuration#setOrderByName(String)
  		 */
 		private String orderBy = "orderBy";
 
 		/**
 		 * 字段参数名分隔符，默认为 `-`，
-		 * @see DefaultParamResolver#setSeparator(String)
+		 * @see Configuration#setSeparator(String)
 		 */
 		private String separator = "-";
 
 		/**
 		 * 是否忽略大小写字段参数名的后缀，默认为 `ic`，
-		 * @see DefaultParamResolver#setIgnoreCaseSuffix(String)
+		 * @see Configuration#setIgnoreCaseSuffix(String)
 		 */
 		private String ignoreCaseKey = "ic";
 
 		/**
 		 * 检索运算符参数名后缀，默认为 `op`，
-		 * @see DefaultParamResolver#setOperatorSuffix(String)
+		 * @see Configuration#setOperatorSuffix(String)
 		 */
 		private String operatorKey = "op";
 
 		/**
 		 * 指定只 Select 某些字段的参数名，默认为 `onlySelect`，
-		 * @see DefaultParamResolver#setOnlySelectName(String)
+		 * @see Configuration#setOnlySelectName(String)
 		 */
 		private String onlySelect = "onlySelect";
 
 		/**
 		 * 指定 Select 排除某些字段的参数名，默认为 `selectExclude`，
-		 * @see DefaultParamResolver#setSelectExcludeName(String)
+		 * @see Configuration#setSelectExcludeName(String)
 		 */
 		private String selectExclude = "selectExclude";
 
@@ -153,19 +152,19 @@ public class BeanSearcherProperties {
 
 			/**
 			 * 组表达式参数名，默认为 `gexpr`，
-			 * @see DefaultParamResolver#setGexprName(String)
+			 * @see Configuration#setGexprName(String)
 			 */
 			private String exprName = "gexpr";
 
 			/**
 			 * 用于控制参数构建器中使用 `groupExpr(..)` 方法指定的组表达式是否合并或覆盖前端参数传来的组表达式
-			 * @see DefaultParamResolver#setGexprMerge(boolean)
+			 * @see Configuration#setGexprMerge(boolean)
 			 */
 			private boolean mergeable = true;
 
 			/**
 			 * 组参数分隔符，默认为 `.`，
-			 * @see DefaultParamResolver#setGroupSeparator(String)
+			 * @see Configuration#setGroupSeparator(String)
 			 */
 			private String separator = ".";
 
