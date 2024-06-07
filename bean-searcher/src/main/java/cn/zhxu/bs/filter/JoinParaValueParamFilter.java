@@ -52,6 +52,12 @@ public class JoinParaValueParamFilter implements ParamFilter {
                     joiner.add(Long.toString(v));
                 }
                 paraMap.put(name, joiner.toString());
+            } else if (value instanceof boolean[]) {
+                StringJoiner joiner = new StringJoiner(",");
+                for (boolean v : (boolean[]) value) {
+                    joiner.add(Boolean.toString(v));
+                }
+                paraMap.put(name, joiner.toString());
             }
         }
         return paraMap;
