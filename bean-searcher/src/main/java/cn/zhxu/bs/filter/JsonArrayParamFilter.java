@@ -10,7 +10,8 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * JSON 数组参数值过滤器，用于简化前端传参，例如 age=[20,30] 替代 age-0=20 & age-1=30
+ * JSON 数组参数值过滤器，用于简化前端传参，例如 age=[20,30] 替代 age-0=20 & age-1=30 <br>
+ * 如果与 {@link SuffixOpParamFilter } 一起使用，则本过滤器需要放在它的后面，才能支持 age-bt=[20,30] 这样的用法
  * @author Troy.Zhou @ 2024-06-07
  * @since v4.3
  */

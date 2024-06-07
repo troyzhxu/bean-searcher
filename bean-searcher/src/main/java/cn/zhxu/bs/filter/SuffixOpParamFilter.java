@@ -9,7 +9,8 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * 后缀运算符参数值过滤器，用于简化前端传参，例如 age-gt=25 替代 age=25 & age-op=gt
+ * 后缀运算符参数值过滤器，用于简化前端传参，例如 age-gt=25 替代 age=25 & age-op=gt <br>
+ * 如果与 {@link JsonArrayParamFilter } 一起使用，则本过滤器需要放在它的前面，才能支持 age-bt=[20,30] 这样的用法
  * @author Troy.Zhou @ 2024-06-07
  * @since v4.3
  */
