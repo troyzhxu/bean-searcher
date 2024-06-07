@@ -15,7 +15,7 @@ import java.util.Objects;
  */
 public class SuffixOpParamFilter implements ParamFilter {
 
-    private FieldOpPool fieldOpPool = new FieldOpPool();
+    private FieldOpPool fieldOpPool = FieldOpPool.DEFAULT;
     private String separator = "-";
     private String operatorSuffix = "op";
 
@@ -35,12 +35,20 @@ public class SuffixOpParamFilter implements ParamFilter {
             if (fieldOpPool.getFieldOp(opName) == null) {
                 continue;
             }
-            String field = key.substring(0, idx);
             if (newMap == null) {
                 newMap = new HashMap<>();
             }
+            String field = key.substring(0, idx);
+            Object value = entry.getValue();
+            if (value instanceof String[]) {
+                String[] vs = (String[]) value;
+                for (int i = 0; i < vs.length; i++) {
+                    newMap.put(field + separator + i, vs[i]);
+                }
+            } else {
+                newMap.put(field, value);
+            }
             newMap.put(field + separator + operatorSuffix, opName);
-            newMap.put(field, entry.getValue());
         }
         if (newMap != null) {
             paraMap.putAll(newMap);
