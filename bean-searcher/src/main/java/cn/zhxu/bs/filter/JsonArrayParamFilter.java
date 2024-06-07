@@ -7,10 +7,11 @@ import cn.zhxu.xjson.JsonKit;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
- * JSON 数组参数值过滤器，用于简化前端传参，例如 age=[20,30] 替代 age-0=20&age-1=30
- * @author Troy.Zhou @ 2024-06-06
+ * JSON 数组参数值过滤器，用于简化前端传参，例如 age=[20,30] 替代 age-0=20 & age-1=30
+ * @author Troy.Zhou @ 2024-06-07
  * @since v4.3
  */
 public class JsonArrayParamFilter implements ParamFilter {
@@ -64,7 +65,7 @@ public class JsonArrayParamFilter implements ParamFilter {
     }
 
     public void setSeparator(String separator) {
-        this.separator = separator;
+        this.separator = Objects.requireNonNull(separator);
     }
 
 }
