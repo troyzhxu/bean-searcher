@@ -3,6 +3,7 @@ package cn.zhxu.bs;
 import cn.zhxu.bs.util.StringUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * SearchBean 的元信息
@@ -97,6 +98,45 @@ public class BeanMeta<T> {
 			selectFields.add(field);
 		}
 		fieldMetaMap.put(field, meta);
+	}
+
+	transient List<SqlSnippet> snippets;
+
+	/**
+	 * 获取该实体类上所有的 SQL 片段
+	 * @return SQL 片段列表
+	 * @since v4.3.0
+	 */
+	public List<SqlSnippet> getSqlSnippets() {
+		if (snippets != null) {
+			return snippets;
+		}
+		List<SqlSnippet> list = new ArrayList<>(5 + fieldMetaMap.size());
+		list.add(tableSnippet);
+		list.add(whereSnippet);
+		list.add(groupBySnippet);
+		list.add(havingSnippet);
+		list.add(orderBySnippet);
+		list.addAll(fieldMetaMap.values().stream().map(FieldMeta::getFieldSql).collect(Collectors.toList()));
+		return snippets = list;
+	}
+
+	transient List<String> joinParas;
+
+	/**
+	 * 获取该实体类上所有的 拼接参数 的名称
+	 * @return 拼接参数 的名称段列表
+	 * @since v4.3.0
+	 */
+	public List<String> getJoinParaNames() {
+		if (joinParas != null) {
+			return joinParas;
+		}
+		return joinParas = getSqlSnippets().stream()
+				.flatMap(snippet -> snippet.getParas().stream())
+				.filter(sqlPara -> !sqlPara.isJdbcPara())
+				.map(SqlSnippet.SqlPara::getName)
+				.collect(Collectors.toList());
 	}
 
 	public Class<T> getBeanClass() {
