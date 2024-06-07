@@ -3,8 +3,8 @@ package cn.zhxu.bs.convertor;
 import cn.zhxu.bs.FieldMeta;
 import cn.zhxu.bs.bean.Cluster;
 import cn.zhxu.bs.bean.DbType;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
@@ -37,14 +37,14 @@ public class NumberParamConvertorTestCase {
     void assertSupports(DbType dbType, boolean supports) throws NoSuchFieldException {
         FieldMeta meta = new FieldMeta(null, null, TestBean.class.getDeclaredField("id"),
                 null, null, false, null, dbType, Cluster.AUTO);
-        Assert.assertEquals(supports, convertor.supports(meta, String.class));
-        Assert.assertEquals(supports, convertor.supports(meta, Byte.class));
-        Assert.assertEquals(supports, convertor.supports(meta, Short.class));
-        Assert.assertEquals(supports, convertor.supports(meta, Integer.class));
-        Assert.assertEquals(supports, convertor.supports(meta, Long.class));
-        Assert.assertEquals(supports, convertor.supports(meta, Float.class));
-        Assert.assertEquals(supports, convertor.supports(meta, Double.class));
-        Assert.assertEquals(supports, convertor.supports(meta, BigDecimal.class));
+        Assertions.assertEquals(supports, convertor.supports(meta, String.class));
+        Assertions.assertEquals(supports, convertor.supports(meta, Byte.class));
+        Assertions.assertEquals(supports, convertor.supports(meta, Short.class));
+        Assertions.assertEquals(supports, convertor.supports(meta, Integer.class));
+        Assertions.assertEquals(supports, convertor.supports(meta, Long.class));
+        Assertions.assertEquals(supports, convertor.supports(meta, Float.class));
+        Assertions.assertEquals(supports, convertor.supports(meta, Double.class));
+        Assertions.assertEquals(supports, convertor.supports(meta, BigDecimal.class));
     }
 
     @Test
@@ -72,10 +72,10 @@ public class NumberParamConvertorTestCase {
     private void assertConvert(DbType dbType, Object value) {
         FieldMeta meta = new FieldMeta(null, null, null, null, null, false, null, dbType, Cluster.AUTO);
         Object num = convertor.convert(meta, value);
-        Assert.assertTrue(dbType.getType().isInstance(num));
+        Assertions.assertTrue(dbType.getType().isInstance(num));
         String numStr = num.toString();
         String valStr = value.toString();
-        Assert.assertTrue(numStr.equals(valStr) || numStr.equals(valStr + ".0") || valStr.equals(numStr + ".0"));
+        Assertions.assertTrue(numStr.equals(valStr) || numStr.equals(valStr + ".0") || valStr.equals(numStr + ".0"));
     }
 
 }

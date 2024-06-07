@@ -1,7 +1,7 @@
 package cn.zhxu.bs.util;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class FieldFnsTestCase {
 
@@ -30,10 +30,10 @@ public class FieldFnsTestCase {
 
     @Test
     public void test() {
-        Assert.assertEquals("name", FieldFns.name(User::getName));
-        Assert.assertEquals("nickName", FieldFns.name(User::getNickName));
-        Assert.assertEquals("active", FieldFns.name(User::isActive));
-        Assert.assertEquals("accountLocked", FieldFns.name(User::isAccountLocked));
+        Assertions.assertEquals("name", FieldFns.name(User::getName));
+        Assertions.assertEquals("nickName", FieldFns.name(User::getNickName));
+        Assertions.assertEquals("active", FieldFns.name(User::isActive));
+        Assertions.assertEquals("accountLocked", FieldFns.name(User::isAccountLocked));
 
         long t0 = System.currentTimeMillis();
         for (int i = 0; i < 10000000; i++) {

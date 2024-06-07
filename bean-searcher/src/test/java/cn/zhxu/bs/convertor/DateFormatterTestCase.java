@@ -1,7 +1,7 @@
 package cn.zhxu.bs.convertor;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -19,35 +19,35 @@ public class DateFormatterTestCase {
 
     @Test
     public void dateSupports() {
-        Assert.assertTrue(dateFormatter.supports(Date.class));
-        Assert.assertTrue(dateFormatter.supports(java.sql.Date.class));
-        Assert.assertTrue(dateFormatter.supports(Timestamp.class));
-        Assert.assertTrue(dateFormatter.supports(LocalDateTime.class));
-        Assert.assertTrue(dateFormatter.supports(LocalDate.class));
-        Assert.assertFalse(dateFormatter.supports(Time.class));
-        Assert.assertFalse(dateFormatter.supports(LocalTime.class));
+        Assertions.assertTrue(dateFormatter.supports(Date.class));
+        Assertions.assertTrue(dateFormatter.supports(java.sql.Date.class));
+        Assertions.assertTrue(dateFormatter.supports(Timestamp.class));
+        Assertions.assertTrue(dateFormatter.supports(LocalDateTime.class));
+        Assertions.assertTrue(dateFormatter.supports(LocalDate.class));
+        Assertions.assertFalse(dateFormatter.supports(Time.class));
+        Assertions.assertFalse(dateFormatter.supports(LocalTime.class));
     }
 
     @Test
     public void dateTimeSupports() {
-        Assert.assertTrue(dateTimeFormatter.supports(Date.class));
-        Assert.assertTrue(dateTimeFormatter.supports(Timestamp.class));
-        Assert.assertTrue(dateTimeFormatter.supports(LocalDateTime.class));
-        Assert.assertFalse(dateTimeFormatter.supports(java.sql.Date.class));
-        Assert.assertFalse(dateTimeFormatter.supports(LocalDate.class));
-        Assert.assertFalse(dateTimeFormatter.supports(Time.class));
-        Assert.assertFalse(dateTimeFormatter.supports(LocalTime.class));
+        Assertions.assertTrue(dateTimeFormatter.supports(Date.class));
+        Assertions.assertTrue(dateTimeFormatter.supports(Timestamp.class));
+        Assertions.assertTrue(dateTimeFormatter.supports(LocalDateTime.class));
+        Assertions.assertFalse(dateTimeFormatter.supports(java.sql.Date.class));
+        Assertions.assertFalse(dateTimeFormatter.supports(LocalDate.class));
+        Assertions.assertFalse(dateTimeFormatter.supports(Time.class));
+        Assertions.assertFalse(dateTimeFormatter.supports(LocalTime.class));
     }
 
     @Test
     public void timeSupports() {
-        Assert.assertTrue(timeFormatter.supports(Date.class));
-        Assert.assertTrue(timeFormatter.supports(Timestamp.class));
-        Assert.assertTrue(timeFormatter.supports(LocalDateTime.class));
-        Assert.assertTrue(timeFormatter.supports(Time.class));
-        Assert.assertTrue(timeFormatter.supports(LocalTime.class));
-        Assert.assertFalse(timeFormatter.supports(java.sql.Date.class));
-        Assert.assertFalse(timeFormatter.supports(LocalDate.class));
+        Assertions.assertTrue(timeFormatter.supports(Date.class));
+        Assertions.assertTrue(timeFormatter.supports(Timestamp.class));
+        Assertions.assertTrue(timeFormatter.supports(LocalDateTime.class));
+        Assertions.assertTrue(timeFormatter.supports(Time.class));
+        Assertions.assertTrue(timeFormatter.supports(LocalTime.class));
+        Assertions.assertFalse(timeFormatter.supports(java.sql.Date.class));
+        Assertions.assertFalse(timeFormatter.supports(LocalDate.class));
     }
 
     @Test
@@ -57,11 +57,11 @@ public class DateFormatterTestCase {
         Object localDateTime = LocalDateTime.of(2022, 2, 10, 13, 59, 10);
         Object time = new Time(13, 59, 10);
         Object localTime = LocalTime.of(13, 59, 10);
-        Assert.assertEquals("13:59:10", timeFormatter.format(date));
-        Assert.assertEquals("13:59:10", timeFormatter.format(timestamp));
-        Assert.assertEquals("13:59:10", timeFormatter.format(localDateTime));
-        Assert.assertEquals("13:59:10", timeFormatter.format(time));
-        Assert.assertEquals("13:59:10", timeFormatter.format(localTime));
+        Assertions.assertEquals("13:59:10", timeFormatter.format(date));
+        Assertions.assertEquals("13:59:10", timeFormatter.format(timestamp));
+        Assertions.assertEquals("13:59:10", timeFormatter.format(localDateTime));
+        Assertions.assertEquals("13:59:10", timeFormatter.format(time));
+        Assertions.assertEquals("13:59:10", timeFormatter.format(localTime));
     }
 
 }

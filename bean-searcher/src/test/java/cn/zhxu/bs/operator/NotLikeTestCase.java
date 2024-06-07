@@ -4,8 +4,8 @@ import cn.zhxu.bs.FieldOp;
 import cn.zhxu.bs.SqlWrapper;
 import cn.zhxu.bs.dialect.MySqlDialect;
 import cn.zhxu.bs.dialect.PostgreSqlDialect;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
@@ -15,10 +15,10 @@ public class NotLikeTestCase {
 
     @Test
     public void test_01() {
-        Assert.assertEquals("NotLike", notLike.name());
-        Assert.assertTrue(notLike.isNamed("nk"));
-        Assert.assertTrue(notLike.isNamed("NotLike"));
-        Assert.assertFalse(notLike.lonely());
+        Assertions.assertEquals("NotLike", notLike.name());
+        Assertions.assertTrue(notLike.isNamed("nk"));
+        Assertions.assertTrue(notLike.isNamed("NotLike"));
+        Assertions.assertFalse(notLike.lonely());
         System.out.println("NotLikeTestCase test_01 passed");
     }
 
@@ -29,8 +29,8 @@ public class NotLikeTestCase {
         List<Object> params = notLike.operate(sb, new FieldOp.OpPara(
                 name -> new SqlWrapper<>("name"), false, new Object[]{ "abc%" }
         ));
-        Assert.assertEquals("name not like ?", sb.toString());
-        Assert.assertArrayEquals(new Object[] { "abc%" }, params.toArray());
+        Assertions.assertEquals("name not like ?", sb.toString());
+        Assertions.assertArrayEquals(new Object[] { "abc%" }, params.toArray());
         System.out.println("NotLikeTestCase test_02 passed");
     }
 
@@ -41,8 +41,8 @@ public class NotLikeTestCase {
         List<Object> params = notLike.operate(sb, new FieldOp.OpPara(
                 name -> new SqlWrapper<>("name"), true, new Object[]{ "abc%" }
         ));
-        Assert.assertEquals("upper(name) not like ?", sb.toString());
-        Assert.assertArrayEquals(new Object[] { "ABC%" }, params.toArray());
+        Assertions.assertEquals("upper(name) not like ?", sb.toString());
+        Assertions.assertArrayEquals(new Object[] { "ABC%" }, params.toArray());
         System.out.println("NotLikeTestCase test_03 passed");
     }
 
@@ -55,8 +55,8 @@ public class NotLikeTestCase {
         List<Object> params = notLike.operate(sb, new FieldOp.OpPara(
                 name -> fieldSql, false, new Object[]{ "abc%" }
         ));
-        Assert.assertEquals("(select name from user where id = ?) not like ?", sb.toString());
-        Assert.assertArrayEquals(new Object[] { 12, "abc%" }, params.toArray());
+        Assertions.assertEquals("(select name from user where id = ?) not like ?", sb.toString());
+        Assertions.assertArrayEquals(new Object[] { 12, "abc%" }, params.toArray());
         System.out.println("NotLikeTestCase test_04 passed");
     }
 
@@ -69,8 +69,8 @@ public class NotLikeTestCase {
         List<Object> params = notLike.operate(sb, new FieldOp.OpPara(
                 name -> fieldSql, true, new Object[]{ "abc%" }
         ));
-        Assert.assertEquals("upper((select name from user where id = ?)) not like ?", sb.toString());
-        Assert.assertArrayEquals(new Object[] { 12, "ABC%" }, params.toArray());
+        Assertions.assertEquals("upper((select name from user where id = ?)) not like ?", sb.toString());
+        Assertions.assertArrayEquals(new Object[] { 12, "ABC%" }, params.toArray());
         System.out.println("NotLikeTestCase test_05 passed");
     }
 
@@ -81,8 +81,8 @@ public class NotLikeTestCase {
         List<Object> params = notLike.operate(sb, new FieldOp.OpPara(
                 name -> new SqlWrapper<>("name"), false, new Object[]{ "abc%" }
         ));
-        Assert.assertEquals("name not like ?", sb.toString());
-        Assert.assertArrayEquals(new Object[] { "abc%" }, params.toArray());
+        Assertions.assertEquals("name not like ?", sb.toString());
+        Assertions.assertArrayEquals(new Object[] { "abc%" }, params.toArray());
         System.out.println("NotLikeTestCase test_06 passed");
     }
 
@@ -93,8 +93,8 @@ public class NotLikeTestCase {
         List<Object> params = notLike.operate(sb, new FieldOp.OpPara(
                 name -> new SqlWrapper<>("name"), true, new Object[]{ "abc%" }
         ));
-        Assert.assertEquals("name not ilike ?", sb.toString());
-        Assert.assertArrayEquals(new Object[] { "abc%" }, params.toArray());
+        Assertions.assertEquals("name not ilike ?", sb.toString());
+        Assertions.assertArrayEquals(new Object[] { "abc%" }, params.toArray());
         System.out.println("NotLikeTestCase test_07 passed");
     }
 
@@ -107,8 +107,8 @@ public class NotLikeTestCase {
         List<Object> params = notLike.operate(sb, new FieldOp.OpPara(
                 name -> fieldSql, false, new Object[] { "abc%" }
         ));
-        Assert.assertEquals("(select name from user where id = ?) not like ?", sb.toString());
-        Assert.assertArrayEquals(new Object[]{ 12, "abc%" }, params.toArray());
+        Assertions.assertEquals("(select name from user where id = ?) not like ?", sb.toString());
+        Assertions.assertArrayEquals(new Object[]{ 12, "abc%" }, params.toArray());
         System.out.println("NotLikeTestCase test_08 passed");
     }
 
@@ -121,8 +121,8 @@ public class NotLikeTestCase {
         List<Object> params = notLike.operate(sb, new FieldOp.OpPara(
                 name -> fieldSql, true, new Object[] { "abc%" }
         ));
-        Assert.assertEquals("(select name from user where id = ?) not ilike ?", sb.toString());
-        Assert.assertArrayEquals(new Object[]{ 12, "abc%" }, params.toArray());
+        Assertions.assertEquals("(select name from user where id = ?) not ilike ?", sb.toString());
+        Assertions.assertArrayEquals(new Object[]{ 12, "abc%" }, params.toArray());
         System.out.println("NotLikeTestCase test_09 passed");
     }
 

@@ -4,8 +4,8 @@ import cn.zhxu.bs.FieldOp;
 import cn.zhxu.bs.SqlWrapper;
 import cn.zhxu.bs.dialect.MySqlDialect;
 import cn.zhxu.bs.dialect.PostgreSqlDialect;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
@@ -15,10 +15,10 @@ public class EndWithTestCase {
 
     @Test
     public void test_01() {
-        Assert.assertEquals("EndWith", endWith.name());
-        Assert.assertTrue(endWith.isNamed("ew"));
-        Assert.assertTrue(endWith.isNamed("EndWith"));
-        Assert.assertFalse(endWith.lonely());
+        Assertions.assertEquals("EndWith", endWith.name());
+        Assertions.assertTrue(endWith.isNamed("ew"));
+        Assertions.assertTrue(endWith.isNamed("EndWith"));
+        Assertions.assertFalse(endWith.lonely());
         System.out.println("EndWithTestCase test_01 passed");
     }
 
@@ -29,8 +29,8 @@ public class EndWithTestCase {
         List<Object> params = endWith.operate(sb, new FieldOp.OpPara(
                 name -> new SqlWrapper<>("name"), false, new Object[]{ "abc" }
         ));
-        Assert.assertEquals("name like ?", sb.toString());
-        Assert.assertArrayEquals(new Object[] { "%abc" }, params.toArray());
+        Assertions.assertEquals("name like ?", sb.toString());
+        Assertions.assertArrayEquals(new Object[] { "%abc" }, params.toArray());
         System.out.println("EndWithTestCase test_02 passed");
     }
 
@@ -41,8 +41,8 @@ public class EndWithTestCase {
         List<Object> params = endWith.operate(sb, new FieldOp.OpPara(
                 name -> new SqlWrapper<>("name"), true, new Object[]{ "abc" }
         ));
-        Assert.assertEquals("upper(name) like ?", sb.toString());
-        Assert.assertArrayEquals(new Object[] { "%ABC" }, params.toArray());
+        Assertions.assertEquals("upper(name) like ?", sb.toString());
+        Assertions.assertArrayEquals(new Object[] { "%ABC" }, params.toArray());
         System.out.println("EndWithTestCase test_03 passed");
     }
 
@@ -55,8 +55,8 @@ public class EndWithTestCase {
         List<Object> params = endWith.operate(sb, new FieldOp.OpPara(
                 name -> fieldSql, false, new Object[]{ "abc" }
         ));
-        Assert.assertEquals("(select name from user where id = ?) like ?", sb.toString());
-        Assert.assertArrayEquals(new Object[] { 12, "%abc" }, params.toArray());
+        Assertions.assertEquals("(select name from user where id = ?) like ?", sb.toString());
+        Assertions.assertArrayEquals(new Object[] { 12, "%abc" }, params.toArray());
         System.out.println("EndWithTestCase test_04 passed");
     }
 
@@ -69,8 +69,8 @@ public class EndWithTestCase {
         List<Object> params = endWith.operate(sb, new FieldOp.OpPara(
                 name -> fieldSql, true, new Object[]{ "abc" }
         ));
-        Assert.assertEquals("upper((select name from user where id = ?)) like ?", sb.toString());
-        Assert.assertArrayEquals(new Object[] { 12, "%ABC" }, params.toArray());
+        Assertions.assertEquals("upper((select name from user where id = ?)) like ?", sb.toString());
+        Assertions.assertArrayEquals(new Object[] { 12, "%ABC" }, params.toArray());
         System.out.println("EndWithTestCase test_05 passed");
     }
 
@@ -81,8 +81,8 @@ public class EndWithTestCase {
         List<Object> params = endWith.operate(sb, new FieldOp.OpPara(
                 name -> new SqlWrapper<>("name"), false, new Object[]{ "abc" }
         ));
-        Assert.assertEquals("name like ?", sb.toString());
-        Assert.assertArrayEquals(new Object[] { "%abc" }, params.toArray());
+        Assertions.assertEquals("name like ?", sb.toString());
+        Assertions.assertArrayEquals(new Object[] { "%abc" }, params.toArray());
         System.out.println("EndWithTestCase test_06 passed");
     }
 
@@ -93,8 +93,8 @@ public class EndWithTestCase {
         List<Object> params = endWith.operate(sb, new FieldOp.OpPara(
                 name -> new SqlWrapper<>("name"), true, new Object[]{ "abc" }
         ));
-        Assert.assertEquals("name ilike ?", sb.toString());
-        Assert.assertArrayEquals(new Object[] { "%abc" }, params.toArray());
+        Assertions.assertEquals("name ilike ?", sb.toString());
+        Assertions.assertArrayEquals(new Object[] { "%abc" }, params.toArray());
         System.out.println("EndWithTestCase test_07 passed");
     }
 
@@ -107,8 +107,8 @@ public class EndWithTestCase {
         List<Object> params = endWith.operate(sb, new FieldOp.OpPara(
                 name -> fieldSql, false, new Object[] { "abc" }
         ));
-        Assert.assertEquals("(select name from user where id = ?) like ?", sb.toString());
-        Assert.assertArrayEquals(new Object[]{ 12, "%abc" }, params.toArray());
+        Assertions.assertEquals("(select name from user where id = ?) like ?", sb.toString());
+        Assertions.assertArrayEquals(new Object[]{ 12, "%abc" }, params.toArray());
         System.out.println("EndWithTestCase test_08 passed");
     }
 
@@ -121,8 +121,8 @@ public class EndWithTestCase {
         List<Object> params = endWith.operate(sb, new FieldOp.OpPara(
                 name -> fieldSql, true, new Object[] { "abc" }
         ));
-        Assert.assertEquals("(select name from user where id = ?) ilike ?", sb.toString());
-        Assert.assertArrayEquals(new Object[]{ 12, "%abc" }, params.toArray());
+        Assertions.assertEquals("(select name from user where id = ?) ilike ?", sb.toString());
+        Assertions.assertArrayEquals(new Object[]{ 12, "%abc" }, params.toArray());
         System.out.println("EndWithTestCase test_09 passed");
     }
 

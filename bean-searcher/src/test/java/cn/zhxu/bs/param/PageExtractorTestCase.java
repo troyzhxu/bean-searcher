@@ -9,8 +9,8 @@ import cn.zhxu.bs.implement.DefaultParamResolver;
 import cn.zhxu.bs.implement.PageOffsetExtractor;
 import cn.zhxu.bs.implement.PageSizeExtractor;
 import cn.zhxu.bs.util.MapUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -61,13 +61,13 @@ public class PageExtractorTestCase {
     }
 
     private void assert_01(SearchParam param) {
-        Assert.assertTrue(param.getParaMap().isEmpty());
-        Assert.assertEquals(FetchType.DEFAULT, param.getFetchType().getType());
-        Assert.assertArrayEquals(new Object[]{ "name", "age"}, param.getFetchFields().toArray());
+        Assertions.assertTrue(param.getParaMap().isEmpty());
+        Assertions.assertEquals(FetchType.DEFAULT, param.getFetchType().getType());
+        Assertions.assertArrayEquals(new Object[]{ "name", "age"}, param.getFetchFields().toArray());
         Paging paging = param.getPaging();
-        Assert.assertEquals(15, paging.getSize());
-        Assert.assertEquals(0, paging.getOffset());
-        Assert.assertEquals("[]", param.getParamsGroup().toString());
+        Assertions.assertEquals(15, paging.getSize());
+        Assertions.assertEquals(0, paging.getOffset());
+        Assertions.assertEquals("[]", param.getParamsGroup().toString());
     }
 
     @Test
@@ -85,12 +85,12 @@ public class PageExtractorTestCase {
     }
 
     private void assert_02(SearchParam param) {
-        Assert.assertEquals(FetchType.DEFAULT, param.getFetchType().getType());
-        Assert.assertArrayEquals(new Object[]{ "name", "age"}, param.getFetchFields().toArray());
+        Assertions.assertEquals(FetchType.DEFAULT, param.getFetchType().getType());
+        Assertions.assertArrayEquals(new Object[]{ "name", "age"}, param.getFetchFields().toArray());
         Paging paging = param.getPaging();
-        Assert.assertEquals(10, paging.getSize());
-        Assert.assertEquals(20, paging.getOffset());
-        Assert.assertEquals("[]", param.getParamsGroup().toString());
+        Assertions.assertEquals(10, paging.getSize());
+        Assertions.assertEquals(20, paging.getOffset());
+        Assertions.assertEquals("[]", param.getParamsGroup().toString());
     }
 
     @Test
@@ -108,12 +108,12 @@ public class PageExtractorTestCase {
     }
 
     private void assert_03(SearchParam param) {
-        Assert.assertEquals(FetchType.DEFAULT, param.getFetchType().getType());
-        Assert.assertArrayEquals(new Object[]{ "name", "age"}, param.getFetchFields().toArray());
+        Assertions.assertEquals(FetchType.DEFAULT, param.getFetchType().getType());
+        Assertions.assertArrayEquals(new Object[]{ "name", "age"}, param.getFetchFields().toArray());
         Paging paging = param.getPaging();
-        Assert.assertEquals(10, paging.getSize());
-        Assert.assertEquals(10, paging.getOffset());
-        Assert.assertEquals("[]", param.getParamsGroup().toString());
+        Assertions.assertEquals(10, paging.getSize());
+        Assertions.assertEquals(10, paging.getOffset());
+        Assertions.assertEquals("[]", param.getParamsGroup().toString());
     }
 
     @Test
@@ -133,12 +133,12 @@ public class PageExtractorTestCase {
     }
 
     private void assert_04(SearchParam param) {
-        Assert.assertEquals(FetchType.DEFAULT, param.getFetchType().getType());
-        Assert.assertArrayEquals(new Object[]{ "name", "age"}, param.getFetchFields().toArray());
+        Assertions.assertEquals(FetchType.DEFAULT, param.getFetchType().getType());
+        Assertions.assertArrayEquals(new Object[]{ "name", "age"}, param.getFetchFields().toArray());
         Paging paging = param.getPaging();
-        Assert.assertEquals(10, paging.getSize());
-        Assert.assertEquals(19, paging.getOffset());
-        Assert.assertEquals("[]", param.getParamsGroup().toString());
+        Assertions.assertEquals(10, paging.getSize());
+        Assertions.assertEquals(19, paging.getOffset());
+        Assertions.assertEquals("[]", param.getParamsGroup().toString());
     }
 
 }

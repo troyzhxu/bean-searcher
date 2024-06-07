@@ -1,8 +1,8 @@
 package cn.zhxu.bs.util;
 
 import cn.zhxu.bs.param.FieldParam;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 import java.util.Map;
@@ -43,11 +43,11 @@ public class MapBuilderTestCase {
                 .field(FieldFnsTestCase.User::isAccountLocked)
                 .build()
                 .keySet();
-        Assert.assertTrue(keys.contains(MapBuilder.FIELD_PARAM + "id"));
-        Assert.assertTrue(keys.contains(MapBuilder.FIELD_PARAM + "name"));
-        Assert.assertTrue(keys.contains(MapBuilder.FIELD_PARAM + "nickName"));
-        Assert.assertTrue(keys.contains(MapBuilder.FIELD_PARAM + "active"));
-        Assert.assertTrue(keys.contains(MapBuilder.FIELD_PARAM + "accountLocked"));
+        Assertions.assertTrue(keys.contains(MapBuilder.FIELD_PARAM + "id"));
+        Assertions.assertTrue(keys.contains(MapBuilder.FIELD_PARAM + "name"));
+        Assertions.assertTrue(keys.contains(MapBuilder.FIELD_PARAM + "nickName"));
+        Assertions.assertTrue(keys.contains(MapBuilder.FIELD_PARAM + "active"));
+        Assertions.assertTrue(keys.contains(MapBuilder.FIELD_PARAM + "accountLocked"));
     }
 
     @Test
@@ -83,16 +83,16 @@ public class MapBuilderTestCase {
         assertParam(params, "_5", "sex", "男");
         assertParam(params, "_6", "sex", "女");
         String groupExpr = MapUtils.builder(params).getGroupExpr();
-        Assert.assertEquals("((_0|_1)|((_2)&(_3|_4)))&(_5|_6)", groupExpr);
+        Assertions.assertEquals("((_0|_1)|((_2)&(_3|_4)))&(_5|_6)", groupExpr);
         System.out.println(groupExpr);
     }
 
     private void assertParam(Map<String, Object> params, String group, String field, Object... values) {
         Object result = params.get(group + MapBuilder.FIELD_PARAM + field);
-        Assert.assertTrue(result instanceof FieldParam);
+        Assertions.assertTrue(result instanceof FieldParam);
         FieldParam fieldParam = (FieldParam) result;
-        Assert.assertEquals(fieldParam.getName(), field);
-        Assert.assertArrayEquals(fieldParam.getValues(), values);
+        Assertions.assertEquals(fieldParam.getName(), field);
+        Assertions.assertArrayEquals(fieldParam.getValues(), values);
     }
 
     @Test
@@ -101,7 +101,7 @@ public class MapBuilderTestCase {
                 .field(FieldFnsTestCase.User::getName, (Collection<Object>) null)
                 .build()
                 .keySet();
-        Assert.assertTrue(keys.contains(MapBuilder.FIELD_PARAM + "name"));
+        Assertions.assertTrue(keys.contains(MapBuilder.FIELD_PARAM + "name"));
     }
 
 }

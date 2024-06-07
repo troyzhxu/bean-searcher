@@ -2,8 +2,8 @@ package cn.zhxu.bs;
 
 import cn.zhxu.bs.bean.SearchBean;
 import cn.zhxu.bs.util.MapUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
@@ -194,7 +194,7 @@ public class OrderByTestCase {
             public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
                 String listSql = searchSql.getListSqlString();
                 System.out.println(listSql);
-                Assert.assertEquals(sqlExpected, listSql);
+                Assertions.assertEquals(sqlExpected, listSql);
                 return new SqlResult<>(searchSql, new SqlResult.ResultSet() {
                     private boolean next = true;
                     @Override
@@ -219,10 +219,10 @@ public class OrderByTestCase {
             }
         };
         List<T> list = SearcherBuilder.beanSearcher().sqlExecutor(sqlExecutor).build().searchAll(beanClass, params);
-        Assert.assertEquals(1, list.size());
+        Assertions.assertEquals(1, list.size());
         T user = list.get(0);
-        Assert.assertEquals(100, user.getId());
-        Assert.assertEquals("Jack", user.getName());
+        Assertions.assertEquals(100, user.getId());
+        Assertions.assertEquals("Jack", user.getName());
     }
 
 

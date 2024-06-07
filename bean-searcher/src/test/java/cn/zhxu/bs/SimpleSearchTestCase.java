@@ -3,8 +3,8 @@ package cn.zhxu.bs;
 import cn.zhxu.bs.implement.DefaultParamResolver;
 import cn.zhxu.bs.operator.IsNull;
 import cn.zhxu.bs.util.MapUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.List;
@@ -46,15 +46,15 @@ public class SimpleSearchTestCase {
         SqlExecutor sqlExecutor = new SqlExecutor() {
             @Override
             public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
-                Assert.assertEquals("select id c_0, name c_1 from search_bean limit ?, ?", searchSql.getListSqlString());
+                Assertions.assertEquals("select id c_0, name c_1 from search_bean limit ?, ?", searchSql.getListSqlString());
                 List<Object> listParams = searchSql.getListSqlParams();
-                Assert.assertEquals(2, listParams.size());
-                Assert.assertEquals(0L, listParams.get(0));
-                Assert.assertEquals(15, listParams.get(1));
-                Assert.assertEquals("select count(*) s_count from search_bean", searchSql.getClusterSqlString());
-                Assert.assertEquals(0, searchSql.getClusterSqlParams().size());
-                Assert.assertEquals("s_count", searchSql.getCountAlias());
-                Assert.assertEquals(0, searchSql.getSummaryAliases().size());
+                Assertions.assertEquals(2, listParams.size());
+                Assertions.assertEquals(0L, listParams.get(0));
+                Assertions.assertEquals(15, listParams.get(1));
+                Assertions.assertEquals("select count(*) s_count from search_bean", searchSql.getClusterSqlString());
+                Assertions.assertEquals(0, searchSql.getClusterSqlParams().size());
+                Assertions.assertEquals("s_count", searchSql.getCountAlias());
+                Assertions.assertEquals(0, searchSql.getSummaryAliases().size());
                 return new SqlResult<>(searchSql, EMPTY_RESULT_SET, columnLabel -> null);
             }
         };
@@ -76,28 +76,28 @@ public class SimpleSearchTestCase {
                 System.out.println(searchSql.getListSqlString());
                 System.out.println(searchSql.getListSqlParams());
 
-                Assert.assertEquals("select id c_0, name c_1 from search_bean where (id = ?) limit ?, ?", searchSql.getListSqlString());
+                Assertions.assertEquals("select id c_0, name c_1 from search_bean where (id = ?) limit ?, ?", searchSql.getListSqlString());
                 List<Object> listParams = searchSql.getListSqlParams();
-                Assert.assertEquals(3, listParams.size());
-                Assert.assertEquals(1L, listParams.get(0));
-                Assert.assertEquals(0L, listParams.get(1));
-                Assert.assertEquals(15, listParams.get(2));
+                Assertions.assertEquals(3, listParams.size());
+                Assertions.assertEquals(1L, listParams.get(0));
+                Assertions.assertEquals(0L, listParams.get(1));
+                Assertions.assertEquals(15, listParams.get(2));
 
                 System.out.println(searchSql.getClusterSqlString());
-                Assert.assertEquals("select count(*) s_count from search_bean where (id = ?)", searchSql.getClusterSqlString());
+                Assertions.assertEquals("select count(*) s_count from search_bean where (id = ?)", searchSql.getClusterSqlString());
 
                 List<Object> clusterSqlParams = searchSql.getClusterSqlParams();
                 System.out.println(clusterSqlParams);
-                Assert.assertEquals(1, clusterSqlParams.size());
-                Assert.assertEquals(1L, clusterSqlParams.get(0));
+                Assertions.assertEquals(1, clusterSqlParams.size());
+                Assertions.assertEquals(1L, clusterSqlParams.get(0));
 
                 System.out.println(searchSql.getCountAlias());
 
-                Assert.assertEquals("s_count", searchSql.getCountAlias());
+                Assertions.assertEquals("s_count", searchSql.getCountAlias());
 
                 System.out.println(searchSql.getSummaryAliases());
 
-                Assert.assertEquals(0, searchSql.getSummaryAliases().size());
+                Assertions.assertEquals(0, searchSql.getSummaryAliases().size());
                 return new SqlResult<>(searchSql, EMPTY_RESULT_SET, columnLabel -> null);
             }
         };
@@ -121,14 +121,14 @@ public class SimpleSearchTestCase {
             @Override
             public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
                 System.out.println(searchSql.getListSqlString());
-                Assert.assertEquals("select id c_0, name c_1 from search_bean order by c_1 asc", searchSql.getListSqlString());
+                Assertions.assertEquals("select id c_0, name c_1 from search_bean order by c_1 asc", searchSql.getListSqlString());
                 List<Object> listParams = searchSql.getListSqlParams();
-                Assert.assertEquals(0, listParams.size());
-                Assert.assertNull(searchSql.getClusterSqlString());
+                Assertions.assertEquals(0, listParams.size());
+                Assertions.assertNull(searchSql.getClusterSqlString());
                 List<Object> clusterSqlParams = searchSql.getClusterSqlParams();
-                Assert.assertEquals(0, clusterSqlParams.size());
-                Assert.assertNull(searchSql.getCountAlias());
-                Assert.assertEquals(0, searchSql.getSummaryAliases().size());
+                Assertions.assertEquals(0, clusterSqlParams.size());
+                Assertions.assertNull(searchSql.getCountAlias());
+                Assertions.assertEquals(0, searchSql.getSummaryAliases().size());
                 return new SqlResult<>(searchSql, EMPTY_RESULT_SET, columnLabel -> null);
             }
         };
@@ -153,11 +153,11 @@ public class SimpleSearchTestCase {
             @Override
             public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
                 System.out.println(searchSql.getListSqlString());
-                Assert.assertEquals("select id c_0, name c_1 from search_bean where (((id = ?) or (id is null)) and (name = ?))", searchSql.getListSqlString());
+                Assertions.assertEquals("select id c_0, name c_1 from search_bean where (((id = ?) or (id is null)) and (name = ?))", searchSql.getListSqlString());
                 List<Object> listParams = searchSql.getListSqlParams();
-                Assert.assertEquals(2, listParams.size());
-                Assert.assertEquals(10L, listParams.get(0));
-                Assert.assertEquals("Jack", listParams.get(1));
+                Assertions.assertEquals(2, listParams.size());
+                Assertions.assertEquals(10L, listParams.get(0));
+                Assertions.assertEquals("Jack", listParams.get(1));
                 return new SqlResult<>(searchSql, EMPTY_RESULT_SET, columnLabel -> null);
             }
         };
@@ -183,11 +183,11 @@ public class SimpleSearchTestCase {
             @Override
             public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
                 System.out.println(searchSql.getListSqlString());
-                Assert.assertEquals("select id c_0, name c_1 from search_bean where ((name = ?) and ((id = ?) or (id is null)))", searchSql.getListSqlString());
+                Assertions.assertEquals("select id c_0, name c_1 from search_bean where ((name = ?) and ((id = ?) or (id is null)))", searchSql.getListSqlString());
                 List<Object> listParams = searchSql.getListSqlParams();
-                Assert.assertEquals(2, listParams.size());
-                Assert.assertEquals("Jack", listParams.get(0));
-                Assert.assertEquals(10L, listParams.get(1));
+                Assertions.assertEquals(2, listParams.size());
+                Assertions.assertEquals("Jack", listParams.get(0));
+                Assertions.assertEquals(10L, listParams.get(1));
                 return new SqlResult<>(searchSql, EMPTY_RESULT_SET, columnLabel -> null);
             }
         };
@@ -220,7 +220,7 @@ public class SimpleSearchTestCase {
             @Override
             public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
                 System.out.println(searchSql.getListSqlString());
-                Assert.assertEquals("select id c_0, name c_1 from search_bean where (" +
+                Assertions.assertEquals("select id c_0, name c_1 from search_bean where (" +
                         "((id = ?) or (id is null))" +
                         " and " +
                         "((name like ?) and (id = ?) or (id = ?))" +
@@ -228,12 +228,12 @@ public class SimpleSearchTestCase {
                         "(name = ?)" +
                         ")", searchSql.getListSqlString());
                 List<Object> listParams = searchSql.getListSqlParams();
-                Assert.assertEquals(5, listParams.size());
-                Assert.assertEquals(10L, listParams.get(0));
-                Assert.assertEquals("Tom%", listParams.get(1));
-                Assert.assertEquals(20L, listParams.get(2));
-                Assert.assertEquals(30L, listParams.get(3));
-                Assert.assertEquals("Jack", listParams.get(4));
+                Assertions.assertEquals(5, listParams.size());
+                Assertions.assertEquals(10L, listParams.get(0));
+                Assertions.assertEquals("Tom%", listParams.get(1));
+                Assertions.assertEquals(20L, listParams.get(2));
+                Assertions.assertEquals(30L, listParams.get(3));
+                Assertions.assertEquals("Jack", listParams.get(4));
                 return new SqlResult<>(searchSql, EMPTY_RESULT_SET, columnLabel -> null);
             }
         };
@@ -260,12 +260,12 @@ public class SimpleSearchTestCase {
             @Override
             public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
                 System.out.println(searchSql.getListSqlString());
-                Assert.assertEquals("select id c_0, name c_1 from search_bean where " +
+                Assertions.assertEquals("select id c_0, name c_1 from search_bean where " +
                         "((name = ?) and ((id = ?) or (id is null)))", searchSql.getListSqlString());
                 List<Object> listParams = searchSql.getListSqlParams();
-                Assert.assertEquals(2, listParams.size());
-                Assert.assertEquals("Jack", listParams.get(0));
-                Assert.assertEquals(10L, listParams.get(1));
+                Assertions.assertEquals(2, listParams.size());
+                Assertions.assertEquals("Jack", listParams.get(0));
+                Assertions.assertEquals(10L, listParams.get(1));
                 return new SqlResult<>(searchSql, EMPTY_RESULT_SET, columnLabel -> null);
             }
         };

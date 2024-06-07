@@ -8,7 +8,7 @@ import cn.zhxu.bs.bean.DbField;
 import cn.zhxu.bs.bean.DbType;
 import cn.zhxu.bs.bean.SearchBean;
 import cn.zhxu.bs.implement.DefaultMetaResolver;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

@@ -1,7 +1,7 @@
 package cn.zhxu.bs.util;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
@@ -28,7 +28,7 @@ public class LRUCacheTestCase {
                         lruCache.cache(key, key);
                         putCount.incrementAndGet();
                     } else {
-                        Assert.assertEquals(key, value);
+                        Assertions.assertEquals(key, value);
                     }
                 }
                 latch.countDown();

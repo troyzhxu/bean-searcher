@@ -7,8 +7,8 @@ import cn.zhxu.bs.operator.Equal;
 import cn.zhxu.bs.operator.GreaterEqual;
 import cn.zhxu.bs.operator.StartWith;
 import cn.zhxu.bs.util.StringUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 import java.util.Date;
@@ -31,64 +31,64 @@ public class MetaResolverTestCase {
     @Test
     public void test01() {
         BeanMeta<User01> beanMeta = metaResolver.resolve(User01.class);
-        Assert.assertEquals("user01", beanMeta.getTableSnippet().getSql());
-        Assert.assertTrue(beanMeta.getTableSnippet().getParas().isEmpty());
+        Assertions.assertEquals("user01", beanMeta.getTableSnippet().getSql());
+        Assertions.assertTrue(beanMeta.getTableSnippet().getParas().isEmpty());
 
-        Assert.assertTrue(StringUtils.isBlank(beanMeta.getWhere()));
-        Assert.assertTrue(beanMeta.getWhereSqlParas().isEmpty());
+        Assertions.assertTrue(StringUtils.isBlank(beanMeta.getWhere()));
+        Assertions.assertTrue(beanMeta.getWhereSqlParas().isEmpty());
 
-        Assert.assertTrue(StringUtils.isBlank(beanMeta.getGroupBy()));
-        Assert.assertTrue(beanMeta.getGroupBySqlParas().isEmpty());
+        Assertions.assertTrue(StringUtils.isBlank(beanMeta.getGroupBy()));
+        Assertions.assertTrue(beanMeta.getGroupBySqlParas().isEmpty());
 
-        Assert.assertTrue(StringUtils.isBlank(beanMeta.getOrderBySnippet().getSql()));
-        Assert.assertTrue(beanMeta.getOrderBySnippet().getParas().isEmpty());
+        Assertions.assertTrue(StringUtils.isBlank(beanMeta.getOrderBySnippet().getSql()));
+        Assertions.assertTrue(beanMeta.getOrderBySnippet().getParas().isEmpty());
 
-        Assert.assertSame(User01.class, beanMeta.getBeanClass());
-        Assert.assertTrue(StringUtils.isBlank(beanMeta.getDataSource()));
+        Assertions.assertSame(User01.class, beanMeta.getBeanClass());
+        Assertions.assertTrue(StringUtils.isBlank(beanMeta.getDataSource()));
 
-        Assert.assertFalse(beanMeta.isDistinct());
-        Assert.assertTrue(beanMeta.isSortable());
-        Assert.assertFalse(beanMeta.isDistinctOrGroupBy());
+        Assertions.assertFalse(beanMeta.isDistinct());
+        Assertions.assertTrue(beanMeta.isSortable());
+        Assertions.assertFalse(beanMeta.isDistinctOrGroupBy());
 
-        Assert.assertEquals(4, beanMeta.getFieldCount());
-        Assert.assertEquals(4, beanMeta.getFieldSet().size());
-        Assert.assertEquals(4, beanMeta.getFieldMetas().size());
+        Assertions.assertEquals(4, beanMeta.getFieldCount());
+        Assertions.assertEquals(4, beanMeta.getFieldSet().size());
+        Assertions.assertEquals(4, beanMeta.getFieldMetas().size());
 
         FieldMeta idMeta = beanMeta.requireFieldMeta("id");
-        Assert.assertSame(beanMeta, idMeta.getBeanMeta());
-        Assert.assertEquals("id", idMeta.getName());
-        Assert.assertSame(long.class, idMeta.getType());
-        Assert.assertEquals("id", idMeta.getFieldSql().getSql());
-        Assert.assertTrue(idMeta.getFieldSql().getParas().isEmpty());
-        Assert.assertEquals(0, idMeta.getOnlyOn().length);
-        Assert.assertTrue(idMeta.isConditional());
+        Assertions.assertSame(beanMeta, idMeta.getBeanMeta());
+        Assertions.assertEquals("id", idMeta.getName());
+        Assertions.assertSame(long.class, idMeta.getType());
+        Assertions.assertEquals("id", idMeta.getFieldSql().getSql());
+        Assertions.assertTrue(idMeta.getFieldSql().getParas().isEmpty());
+        Assertions.assertEquals(0, idMeta.getOnlyOn().length);
+        Assertions.assertTrue(idMeta.isConditional());
 
         FieldMeta nameMeta = beanMeta.requireFieldMeta("name");
-        Assert.assertSame(beanMeta, nameMeta.getBeanMeta());
-        Assert.assertEquals("name", nameMeta.getName());
-        Assert.assertSame(String.class, nameMeta.getType());
-        Assert.assertEquals("name", nameMeta.getFieldSql().getSql());
-        Assert.assertTrue(nameMeta.getFieldSql().getParas().isEmpty());
-        Assert.assertEquals(0, nameMeta.getOnlyOn().length);
-        Assert.assertTrue(nameMeta.isConditional());
+        Assertions.assertSame(beanMeta, nameMeta.getBeanMeta());
+        Assertions.assertEquals("name", nameMeta.getName());
+        Assertions.assertSame(String.class, nameMeta.getType());
+        Assertions.assertEquals("name", nameMeta.getFieldSql().getSql());
+        Assertions.assertTrue(nameMeta.getFieldSql().getParas().isEmpty());
+        Assertions.assertEquals(0, nameMeta.getOnlyOn().length);
+        Assertions.assertTrue(nameMeta.isConditional());
 
         FieldMeta enableMeta = beanMeta.requireFieldMeta("enable");
-        Assert.assertSame(beanMeta, enableMeta.getBeanMeta());
-        Assert.assertEquals("enable", enableMeta.getName());
-        Assert.assertSame(boolean.class, enableMeta.getType());
-        Assert.assertEquals("enable", enableMeta.getFieldSql().getSql());
-        Assert.assertTrue(enableMeta.getFieldSql().getParas().isEmpty());
-        Assert.assertEquals(0, enableMeta.getOnlyOn().length);
-        Assert.assertTrue(enableMeta.isConditional());
+        Assertions.assertSame(beanMeta, enableMeta.getBeanMeta());
+        Assertions.assertEquals("enable", enableMeta.getName());
+        Assertions.assertSame(boolean.class, enableMeta.getType());
+        Assertions.assertEquals("enable", enableMeta.getFieldSql().getSql());
+        Assertions.assertTrue(enableMeta.getFieldSql().getParas().isEmpty());
+        Assertions.assertEquals(0, enableMeta.getOnlyOn().length);
+        Assertions.assertTrue(enableMeta.isConditional());
 
         FieldMeta birthdayMeta = beanMeta.requireFieldMeta("birthday");
-        Assert.assertSame(beanMeta, birthdayMeta.getBeanMeta());
-        Assert.assertEquals("birthday", birthdayMeta.getName());
-        Assert.assertSame(Date.class, birthdayMeta.getType());
-        Assert.assertEquals("birthday", birthdayMeta.getFieldSql().getSql());
-        Assert.assertTrue(birthdayMeta.getFieldSql().getParas().isEmpty());
-        Assert.assertEquals(0, birthdayMeta.getOnlyOn().length);
-        Assert.assertTrue(birthdayMeta.isConditional());
+        Assertions.assertSame(beanMeta, birthdayMeta.getBeanMeta());
+        Assertions.assertEquals("birthday", birthdayMeta.getName());
+        Assertions.assertSame(Date.class, birthdayMeta.getType());
+        Assertions.assertEquals("birthday", birthdayMeta.getFieldSql().getSql());
+        Assertions.assertTrue(birthdayMeta.getFieldSql().getParas().isEmpty());
+        Assertions.assertEquals(0, birthdayMeta.getOnlyOn().length);
+        Assertions.assertTrue(birthdayMeta.isConditional());
 
         assertAlias(beanMeta.getFieldMetas());
     }
@@ -100,11 +100,11 @@ public class MetaResolverTestCase {
             System.out.println(meta.getName() + ": " + alias);
             char fc = alias.charAt(0);
             // Oracle 数据库的别名不能以下划线开头
-            Assert.assertTrue("别名必须以字母开头", fc >= 'A' && fc <= 'z' && (fc <= 'Z' || fc >= 'a'));
+            Assertions.assertTrue(fc >= 'A' && fc <= 'z' && (fc <= 'Z' || fc >= 'a'), "别名必须以字母开头");
             for (char c : alias.toCharArray()) {
-                Assert.assertTrue("别名必须由字母数字下划线组成",c >= 'A' && c <= 'z' && (c <= 'Z' || c >= 'a') || (c >= '0' && c <= '9') || c == '_');
+                Assertions.assertTrue(c >= 'A' && c <= 'z' && (c <= 'Z' || c >= 'a') || (c >= '0' && c <= '9') || c == '_', "别名必须由字母数字下划线组成");
             }
-            Assert.assertFalse("别名不能重复", set.contains(alias));
+            Assertions.assertFalse(set.contains(alias), "别名不能重复");
             set.add(alias);
         }
     }
@@ -123,9 +123,9 @@ public class MetaResolverTestCase {
     @Test
     public void test02() {
         BeanMeta<User02> beanMeta = metaResolver.resolve(User02.class);
-        Assert.assertEquals("c_2", beanMeta.requireFieldMeta("id").getDbAlias());
-        Assert.assertEquals("c_1", beanMeta.requireFieldMeta("enable").getDbAlias());
-        Assert.assertEquals("xxx", beanMeta.requireFieldMeta("birthday").getDbAlias());
+        Assertions.assertEquals("c_2", beanMeta.requireFieldMeta("id").getDbAlias());
+        Assertions.assertEquals("c_1", beanMeta.requireFieldMeta("enable").getDbAlias());
+        Assertions.assertEquals("xxx", beanMeta.requireFieldMeta("birthday").getDbAlias());
         assertAlias(beanMeta.getFieldMetas());
     }
 
@@ -146,12 +146,12 @@ public class MetaResolverTestCase {
         } catch (SearchException e) {
             String message = e.getMessage();
             System.out.println(message);
-            Assert.assertTrue(message.startsWith("The alias [bb] of [" + User03.class.getName()));
-            Assert.assertTrue(message.endsWith("] is already exists on other fields."));
-            Assert.assertTrue(message.contains("User03.id]") || message.contains("User03.enable]"));
+            Assertions.assertTrue(message.startsWith("The alias [bb] of [" + User03.class.getName()));
+            Assertions.assertTrue(message.endsWith("] is already exists on other fields."));
+            Assertions.assertTrue(message.contains("User03.id]") || message.contains("User03.enable]"));
             exception = true;
         }
-        Assert.assertTrue(exception);
+        Assertions.assertTrue(exception);
     }
 
     public static class User04 {
@@ -168,14 +168,14 @@ public class MetaResolverTestCase {
     @Test
     public void test04() {
         BeanMeta<User04> beanMeta = metaResolver.resolve(User04.class);
-        Assert.assertArrayEquals(new Object[] {GreaterEqual.class}, beanMeta.requireFieldMeta("id").getOnlyOn());
-        Assert.assertArrayEquals(new Object[] {StartWith.class, Equal.class}, beanMeta.requireFieldMeta("name").getOnlyOn());
-        Assert.assertArrayEquals(new Object[] {}, beanMeta.requireFieldMeta("enable").getOnlyOn());
-        Assert.assertArrayEquals(new Object[] {}, beanMeta.requireFieldMeta("birthday").getOnlyOn());
-        Assert.assertTrue(beanMeta.requireFieldMeta("id").isConditional());
-        Assert.assertTrue(beanMeta.requireFieldMeta("name").isConditional());
-        Assert.assertFalse(beanMeta.requireFieldMeta("enable").isConditional());
-        Assert.assertTrue(beanMeta.requireFieldMeta("birthday").isConditional());
+        Assertions.assertArrayEquals(new Object[] {GreaterEqual.class}, beanMeta.requireFieldMeta("id").getOnlyOn());
+        Assertions.assertArrayEquals(new Object[] {StartWith.class, Equal.class}, beanMeta.requireFieldMeta("name").getOnlyOn());
+        Assertions.assertArrayEquals(new Object[] {}, beanMeta.requireFieldMeta("enable").getOnlyOn());
+        Assertions.assertArrayEquals(new Object[] {}, beanMeta.requireFieldMeta("birthday").getOnlyOn());
+        Assertions.assertTrue(beanMeta.requireFieldMeta("id").isConditional());
+        Assertions.assertTrue(beanMeta.requireFieldMeta("name").isConditional());
+        Assertions.assertFalse(beanMeta.requireFieldMeta("enable").isConditional());
+        Assertions.assertTrue(beanMeta.requireFieldMeta("birthday").isConditional());
         assertAlias(beanMeta.getFieldMetas());
     }
 
@@ -193,40 +193,40 @@ public class MetaResolverTestCase {
     @Test
     public void test05() {
         BeanMeta<User05> beanMeta = metaResolver.resolve(User05.class);
-        Assert.assertEquals("user u, role r", beanMeta.getTableSnippet().getSql());
-        Assert.assertTrue(beanMeta.getTableSnippet().getParas().isEmpty());
+        Assertions.assertEquals("user u, role r", beanMeta.getTableSnippet().getSql());
+        Assertions.assertTrue(beanMeta.getTableSnippet().getParas().isEmpty());
 
-        Assert.assertEquals("u.role_id = r.id", beanMeta.getWhere());
-        Assert.assertTrue(beanMeta.getWhereSqlParas().isEmpty());
+        Assertions.assertEquals("u.role_id = r.id", beanMeta.getWhere());
+        Assertions.assertTrue(beanMeta.getWhereSqlParas().isEmpty());
 
-        Assert.assertTrue(StringUtils.isBlank(beanMeta.getGroupBy()));
-        Assert.assertTrue(beanMeta.getGroupBySqlParas().isEmpty());
+        Assertions.assertTrue(StringUtils.isBlank(beanMeta.getGroupBy()));
+        Assertions.assertTrue(beanMeta.getGroupBySqlParas().isEmpty());
 
-        Assert.assertTrue(StringUtils.isBlank(beanMeta.getOrderBySnippet().getSql()));
-        Assert.assertTrue(beanMeta.getOrderBySnippet().getParas().isEmpty());
+        Assertions.assertTrue(StringUtils.isBlank(beanMeta.getOrderBySnippet().getSql()));
+        Assertions.assertTrue(beanMeta.getOrderBySnippet().getParas().isEmpty());
 
-        Assert.assertSame(User05.class, beanMeta.getBeanClass());
-        Assert.assertTrue(StringUtils.isBlank(beanMeta.getDataSource()));
+        Assertions.assertSame(User05.class, beanMeta.getBeanClass());
+        Assertions.assertTrue(StringUtils.isBlank(beanMeta.getDataSource()));
 
-        Assert.assertFalse(beanMeta.isDistinct());
-        Assert.assertTrue(beanMeta.isSortable());
-        Assert.assertFalse(beanMeta.isDistinctOrGroupBy());
+        Assertions.assertFalse(beanMeta.isDistinct());
+        Assertions.assertTrue(beanMeta.isSortable());
+        Assertions.assertFalse(beanMeta.isDistinctOrGroupBy());
 
-        Assert.assertEquals(4, beanMeta.getFieldCount());
-        Assert.assertEquals(4, beanMeta.getFieldSet().size());
-        Assert.assertEquals(4, beanMeta.getFieldMetas().size());
+        Assertions.assertEquals(4, beanMeta.getFieldCount());
+        Assertions.assertEquals(4, beanMeta.getFieldSet().size());
+        Assertions.assertEquals(4, beanMeta.getFieldMetas().size());
 
         FieldMeta idMeta = beanMeta.requireFieldMeta("id");
-        Assert.assertEquals("u.id", idMeta.getFieldSql().getSql());
+        Assertions.assertEquals("u.id", idMeta.getFieldSql().getSql());
 
         FieldMeta nameMeta = beanMeta.requireFieldMeta("name");
-        Assert.assertEquals("u.name", nameMeta.getFieldSql().getSql());
+        Assertions.assertEquals("u.name", nameMeta.getFieldSql().getSql());
 
         FieldMeta enableMeta = beanMeta.requireFieldMeta("enable");
-        Assert.assertEquals("u.enable", enableMeta.getFieldSql().getSql());
+        Assertions.assertEquals("u.enable", enableMeta.getFieldSql().getSql());
 
         FieldMeta birthdayMeta = beanMeta.requireFieldMeta("role");
-        Assert.assertEquals("r.name", birthdayMeta.getFieldSql().getSql());
+        Assertions.assertEquals("r.name", birthdayMeta.getFieldSql().getSql());
 
         assertAlias(beanMeta.getFieldMetas());
     }
@@ -241,40 +241,40 @@ public class MetaResolverTestCase {
     public void test06() {
         BeanMeta<User06> beanMeta = metaResolver.resolve(User06.class);
         SqlSnippet tableSnippet = beanMeta.getTableSnippet();
-        Assert.assertEquals(":t_name: t", tableSnippet.getSql());
+        Assertions.assertEquals(":t_name: t", tableSnippet.getSql());
         List<SqlSnippet.SqlPara> tableParas = tableSnippet.getParas();
-        Assert.assertEquals(1, tableParas.size());
+        Assertions.assertEquals(1, tableParas.size());
         SqlSnippet.SqlPara tablePara = tableParas.get(0);
 
-        Assert.assertEquals("t_name", tablePara.getName());
-        Assert.assertEquals(":t_name:", tablePara.getSqlName());
-        Assert.assertFalse(tablePara.isJdbcPara());
+        Assertions.assertEquals("t_name", tablePara.getName());
+        Assertions.assertEquals(":t_name:", tablePara.getSqlName());
+        Assertions.assertFalse(tablePara.isJdbcPara());
 
-        Assert.assertTrue(StringUtils.isBlank(beanMeta.getWhere()));
-        Assert.assertTrue(beanMeta.getWhereSqlParas().isEmpty());
+        Assertions.assertTrue(StringUtils.isBlank(beanMeta.getWhere()));
+        Assertions.assertTrue(beanMeta.getWhereSqlParas().isEmpty());
 
-        Assert.assertTrue(StringUtils.isBlank(beanMeta.getGroupBy()));
-        Assert.assertTrue(beanMeta.getGroupBySqlParas().isEmpty());
+        Assertions.assertTrue(StringUtils.isBlank(beanMeta.getGroupBy()));
+        Assertions.assertTrue(beanMeta.getGroupBySqlParas().isEmpty());
 
-        Assert.assertTrue(StringUtils.isBlank(beanMeta.getOrderBySnippet().getSql()));
-        Assert.assertTrue(beanMeta.getOrderBySnippet().getParas().isEmpty());
+        Assertions.assertTrue(StringUtils.isBlank(beanMeta.getOrderBySnippet().getSql()));
+        Assertions.assertTrue(beanMeta.getOrderBySnippet().getParas().isEmpty());
 
-        Assert.assertSame(User06.class, beanMeta.getBeanClass());
-        Assert.assertTrue(StringUtils.isBlank(beanMeta.getDataSource()));
+        Assertions.assertSame(User06.class, beanMeta.getBeanClass());
+        Assertions.assertTrue(StringUtils.isBlank(beanMeta.getDataSource()));
 
-        Assert.assertFalse(beanMeta.isDistinct());
-        Assert.assertTrue(beanMeta.isSortable());
-        Assert.assertFalse(beanMeta.isDistinctOrGroupBy());
+        Assertions.assertFalse(beanMeta.isDistinct());
+        Assertions.assertTrue(beanMeta.isSortable());
+        Assertions.assertFalse(beanMeta.isDistinctOrGroupBy());
 
-        Assert.assertEquals(2, beanMeta.getFieldCount());
-        Assert.assertEquals(2, beanMeta.getFieldSet().size());
-        Assert.assertEquals(2, beanMeta.getFieldMetas().size());
+        Assertions.assertEquals(2, beanMeta.getFieldCount());
+        Assertions.assertEquals(2, beanMeta.getFieldSet().size());
+        Assertions.assertEquals(2, beanMeta.getFieldMetas().size());
 
         FieldMeta idMeta = beanMeta.requireFieldMeta("id");
-        Assert.assertEquals("t.id", idMeta.getFieldSql().getSql());
+        Assertions.assertEquals("t.id", idMeta.getFieldSql().getSql());
 
         FieldMeta nameMeta = beanMeta.requireFieldMeta("name");
-        Assert.assertEquals("t.name", nameMeta.getFieldSql().getSql());
+        Assertions.assertEquals("t.name", nameMeta.getFieldSql().getSql());
 
         assertAlias(beanMeta.getFieldMetas());
     }
@@ -289,19 +289,19 @@ public class MetaResolverTestCase {
     public void test07() {
         BeanMeta<User07> beanMeta = metaResolver.resolve(User07.class);
         SqlSnippet tableSnippet = beanMeta.getTableSnippet();
-        Assert.assertEquals(":t_name: t left join (select * from user where type = ?) u", tableSnippet.getSql());
+        Assertions.assertEquals(":t_name: t left join (select * from user where type = ?) u", tableSnippet.getSql());
         List<SqlSnippet.SqlPara> tableParas = tableSnippet.getParas();
-        Assert.assertEquals(2, tableParas.size());
+        Assertions.assertEquals(2, tableParas.size());
 
         SqlSnippet.SqlPara para1 = tableParas.get(0);
-        Assert.assertEquals("t_name", para1.getName());
-        Assert.assertEquals(":t_name:", para1.getSqlName());
-        Assert.assertFalse(para1.isJdbcPara());
+        Assertions.assertEquals("t_name", para1.getName());
+        Assertions.assertEquals(":t_name:", para1.getSqlName());
+        Assertions.assertFalse(para1.isJdbcPara());
 
         SqlSnippet.SqlPara para2 = tableParas.get(1);
-        Assert.assertEquals("type", para2.getName());
-        Assert.assertEquals(":type", para2.getSqlName());
-        Assert.assertTrue(para2.isJdbcPara());
+        Assertions.assertEquals("type", para2.getName());
+        Assertions.assertEquals(":type", para2.getSqlName());
+        Assertions.assertTrue(para2.isJdbcPara());
     }
 
     @SearchBean(where = "age = :age and :ext_cond:")
@@ -312,19 +312,19 @@ public class MetaResolverTestCase {
     @Test
     public void test08() {
         BeanMeta<User08> beanMeta = metaResolver.resolve(User08.class);
-        Assert.assertEquals("age = ? and :ext_cond:", beanMeta.getWhere());
+        Assertions.assertEquals("age = ? and :ext_cond:", beanMeta.getWhere());
         List<SqlSnippet.SqlPara> jsonCondParas = beanMeta.getWhereSqlParas();
-        Assert.assertEquals(2, jsonCondParas.size());
+        Assertions.assertEquals(2, jsonCondParas.size());
 
         SqlSnippet.SqlPara para1 = jsonCondParas.get(0);
-        Assert.assertEquals("age", para1.getName());
-        Assert.assertEquals(":age", para1.getSqlName());
-        Assert.assertTrue(para1.isJdbcPara());
+        Assertions.assertEquals("age", para1.getName());
+        Assertions.assertEquals(":age", para1.getSqlName());
+        Assertions.assertTrue(para1.isJdbcPara());
 
         SqlSnippet.SqlPara para2 = jsonCondParas.get(1);
-        Assert.assertEquals("ext_cond", para2.getName());
-        Assert.assertEquals(":ext_cond:", para2.getSqlName());
-        Assert.assertFalse(para2.isJdbcPara());
+        Assertions.assertEquals("ext_cond", para2.getName());
+        Assertions.assertEquals(":ext_cond:", para2.getSqlName());
+        Assertions.assertFalse(para2.isJdbcPara());
     }
 
     @SearchBean(groupBy = "sex, :g:")
@@ -335,15 +335,15 @@ public class MetaResolverTestCase {
     @Test
     public void test09() {
         BeanMeta<User09> beanMeta = metaResolver.resolve(User09.class);
-        Assert.assertEquals("sex, :g:", beanMeta.getGroupBy());
+        Assertions.assertEquals("sex, :g:", beanMeta.getGroupBy());
         List<SqlSnippet.SqlPara> paras = beanMeta.getGroupBySqlParas();
-        Assert.assertEquals(1, paras.size());
+        Assertions.assertEquals(1, paras.size());
         SqlSnippet.SqlPara para1 = paras.get(0);
-        Assert.assertEquals("g", para1.getName());
-        Assert.assertEquals(":g:", para1.getSqlName());
-        Assert.assertFalse(para1.isJdbcPara());
+        Assertions.assertEquals("g", para1.getName());
+        Assertions.assertEquals(":g:", para1.getSqlName());
+        Assertions.assertFalse(para1.isJdbcPara());
 
-        Assert.assertTrue(beanMeta.isDistinctOrGroupBy());
+        Assertions.assertTrue(beanMeta.isDistinctOrGroupBy());
     }
 
     @SearchBean(orderBy = "age :order:")
@@ -355,14 +355,14 @@ public class MetaResolverTestCase {
     public void test10() {
         BeanMeta<User10> beanMeta = metaResolver.resolve(User10.class);
         SqlSnippet orderBySnippet = beanMeta.getOrderBySnippet();
-        Assert.assertEquals("age :order:", orderBySnippet.getSql());
+        Assertions.assertEquals("age :order:", orderBySnippet.getSql());
         List<SqlSnippet.SqlPara> paras = orderBySnippet.getParas();
-        Assert.assertEquals(1, paras.size());
+        Assertions.assertEquals(1, paras.size());
         SqlSnippet.SqlPara para1 = paras.get(0);
-        Assert.assertEquals("order", para1.getName());
-        Assert.assertEquals(":order:", para1.getSqlName());
-        Assert.assertFalse(para1.isJdbcPara());
-        Assert.assertTrue(beanMeta.isSortable());
+        Assertions.assertEquals("order", para1.getName());
+        Assertions.assertEquals(":order:", para1.getSqlName());
+        Assertions.assertFalse(para1.isJdbcPara());
+        Assertions.assertTrue(beanMeta.isSortable());
     }
 
     @SearchBean(distinct = true)
@@ -382,14 +382,14 @@ public class MetaResolverTestCase {
     @Test
     public void test11() {
         BeanMeta<User11> beanMeta = metaResolver.resolve(User11.class);
-        Assert.assertTrue(beanMeta.isDistinct());
-        Assert.assertTrue(beanMeta.isDistinctOrGroupBy());
-        Assert.assertTrue(beanMeta.isSortable());
+        Assertions.assertTrue(beanMeta.isDistinct());
+        Assertions.assertTrue(beanMeta.isDistinctOrGroupBy());
+        Assertions.assertTrue(beanMeta.isSortable());
 
         BeanMeta<User11> beanMeta2 = ignoreNameAgeHeightAndOnlyEntityMetaResolver.resolve(User11.class);
-        Assert.assertTrue(beanMeta2.isDistinct());
-        Assert.assertTrue(beanMeta2.isDistinctOrGroupBy());
-        Assert.assertFalse(beanMeta2.isSortable());
+        Assertions.assertTrue(beanMeta2.isDistinct());
+        Assertions.assertTrue(beanMeta2.isDistinctOrGroupBy());
+        Assertions.assertFalse(beanMeta2.isSortable());
     }
 
     @SearchBean(sortType = SortType.ONLY_ENTITY)
@@ -400,14 +400,14 @@ public class MetaResolverTestCase {
     @Test
     public void test12() {
         BeanMeta<User12> beanMeta = metaResolver.resolve(User12.class);
-        Assert.assertFalse(beanMeta.isDistinct());
-        Assert.assertFalse(beanMeta.isDistinctOrGroupBy());
-        Assert.assertFalse(beanMeta.isSortable());
+        Assertions.assertFalse(beanMeta.isDistinct());
+        Assertions.assertFalse(beanMeta.isDistinctOrGroupBy());
+        Assertions.assertFalse(beanMeta.isSortable());
 
         BeanMeta<User12> beanMeta2 = ignoreNameAgeHeightAndOnlyEntityMetaResolver.resolve(User12.class);
-        Assert.assertFalse(beanMeta2.isDistinct());
-        Assert.assertFalse(beanMeta2.isDistinctOrGroupBy());
-        Assert.assertFalse(beanMeta2.isSortable());
+        Assertions.assertFalse(beanMeta2.isDistinct());
+        Assertions.assertFalse(beanMeta2.isDistinctOrGroupBy());
+        Assertions.assertFalse(beanMeta2.isSortable());
     }
 
     @SearchBean(sortType = SortType.DEFAULT)
@@ -418,14 +418,14 @@ public class MetaResolverTestCase {
     @Test
     public void test13() {
         BeanMeta<User13> beanMeta = metaResolver.resolve(User13.class);
-        Assert.assertFalse(beanMeta.isDistinct());
-        Assert.assertFalse(beanMeta.isDistinctOrGroupBy());
-        Assert.assertTrue(beanMeta.isSortable());
+        Assertions.assertFalse(beanMeta.isDistinct());
+        Assertions.assertFalse(beanMeta.isDistinctOrGroupBy());
+        Assertions.assertTrue(beanMeta.isSortable());
 
         BeanMeta<User13> beanMeta2 = ignoreNameAgeHeightAndOnlyEntityMetaResolver.resolve(User13.class);
-        Assert.assertFalse(beanMeta2.isDistinct());
-        Assert.assertFalse(beanMeta2.isDistinctOrGroupBy());
-        Assert.assertFalse(beanMeta2.isSortable());
+        Assertions.assertFalse(beanMeta2.isDistinct());
+        Assertions.assertFalse(beanMeta2.isDistinctOrGroupBy());
+        Assertions.assertFalse(beanMeta2.isSortable());
     }
 
     @SearchBean(sortType = SortType.ALLOW_PARAM)
@@ -436,14 +436,14 @@ public class MetaResolverTestCase {
     @Test
     public void test14() {
         BeanMeta<User14> beanMeta = metaResolver.resolve(User14.class);
-        Assert.assertFalse(beanMeta.isDistinct());
-        Assert.assertFalse(beanMeta.isDistinctOrGroupBy());
-        Assert.assertTrue(beanMeta.isSortable());
+        Assertions.assertFalse(beanMeta.isDistinct());
+        Assertions.assertFalse(beanMeta.isDistinctOrGroupBy());
+        Assertions.assertTrue(beanMeta.isSortable());
 
         BeanMeta<User14> beanMeta2 = ignoreNameAgeHeightAndOnlyEntityMetaResolver.resolve(User14.class);
-        Assert.assertFalse(beanMeta2.isDistinct());
-        Assert.assertFalse(beanMeta2.isDistinctOrGroupBy());
-        Assert.assertTrue(beanMeta2.isSortable());
+        Assertions.assertFalse(beanMeta2.isDistinct());
+        Assertions.assertFalse(beanMeta2.isDistinctOrGroupBy());
+        Assertions.assertTrue(beanMeta2.isSortable());
     }
 
     public static class User15 {
@@ -455,9 +455,9 @@ public class MetaResolverTestCase {
     @Test
     public void test15() {
         BeanMeta<User15> beanMeta = metaResolver.resolve(User15.class);
-        Assert.assertEquals(1, beanMeta.getFieldCount());
-        Assert.assertNotNull(beanMeta.getFieldMeta("id"));
-        Assert.assertNull(beanMeta.getFieldMeta("name"));
+        Assertions.assertEquals(1, beanMeta.getFieldCount());
+        Assertions.assertNotNull(beanMeta.getFieldMeta("id"));
+        Assertions.assertNull(beanMeta.getFieldMeta("name"));
     }
 
     @SearchBean(ignoreFields = {"age", "height"})
@@ -472,11 +472,11 @@ public class MetaResolverTestCase {
     @Test
     public void test16() {
         BeanMeta<User16> beanMeta = metaResolver.resolve(User16.class);
-        Assert.assertEquals(1, beanMeta.getFieldCount());
-        Assert.assertNotNull(beanMeta.getFieldMeta("id"));
-        Assert.assertNull(beanMeta.getFieldMeta("name"));
-        Assert.assertNull(beanMeta.getFieldMeta("age"));
-        Assert.assertNull(beanMeta.getFieldMeta("height"));
+        Assertions.assertEquals(1, beanMeta.getFieldCount());
+        Assertions.assertNotNull(beanMeta.getFieldMeta("id"));
+        Assertions.assertNull(beanMeta.getFieldMeta("name"));
+        Assertions.assertNull(beanMeta.getFieldMeta("age"));
+        Assertions.assertNull(beanMeta.getFieldMeta("height"));
     }
 
     public static class User17 {
@@ -489,11 +489,11 @@ public class MetaResolverTestCase {
     @Test
     public void test17() {
         BeanMeta<User17> beanMeta = ignoreNameAgeHeightAndOnlyEntityMetaResolver.resolve(User17.class);
-        Assert.assertEquals(1, beanMeta.getFieldCount());
-        Assert.assertNotNull(beanMeta.getFieldMeta("id"));
-        Assert.assertNull(beanMeta.getFieldMeta("name"));
-        Assert.assertNull(beanMeta.getFieldMeta("age"));
-        Assert.assertNull(beanMeta.getFieldMeta("height"));
+        Assertions.assertEquals(1, beanMeta.getFieldCount());
+        Assertions.assertNotNull(beanMeta.getFieldMeta("id"));
+        Assertions.assertNull(beanMeta.getFieldMeta("name"));
+        Assertions.assertNull(beanMeta.getFieldMeta("age"));
+        Assertions.assertNull(beanMeta.getFieldMeta("height"));
     }
 
     public static class User18 {
@@ -508,11 +508,11 @@ public class MetaResolverTestCase {
     @Test
     public void test18() {
         BeanMeta<User18> beanMeta = ignoreNameAgeHeightAndOnlyEntityMetaResolver.resolve(User18.class);
-        Assert.assertEquals(3, beanMeta.getFieldCount());
-        Assert.assertNotNull(beanMeta.getFieldMeta("id"));
-        Assert.assertNotNull(beanMeta.getFieldMeta("name"));
-        Assert.assertNotNull(beanMeta.getFieldMeta("age"));
-        Assert.assertNull(beanMeta.getFieldMeta("height"));
+        Assertions.assertEquals(3, beanMeta.getFieldCount());
+        Assertions.assertNotNull(beanMeta.getFieldMeta("id"));
+        Assertions.assertNotNull(beanMeta.getFieldMeta("name"));
+        Assertions.assertNotNull(beanMeta.getFieldMeta("age"));
+        Assertions.assertNull(beanMeta.getFieldMeta("height"));
     }
 
     public static class Base19 {
@@ -534,24 +534,24 @@ public class MetaResolverTestCase {
     @Test
     public void test19() {
         BeanMeta<User19> beanMeta = metaResolver.resolve(User19.class);
-        Assert.assertEquals(4, beanMeta.getFieldCount());
-        Assert.assertNotNull(beanMeta.getFieldMeta("id"));
-        Assert.assertNotNull(beanMeta.getFieldMeta("name"));
-        Assert.assertNotNull(beanMeta.getFieldMeta("age"));
-        Assert.assertNotNull(beanMeta.getFieldMeta("height"));
-        Assert.assertNull(beanMeta.getFieldMeta("birthday"));
-        Assert.assertNull(beanMeta.getFieldMeta("sex"));
-        Assert.assertNull(beanMeta.getFieldMeta("hobby"));
+        Assertions.assertEquals(4, beanMeta.getFieldCount());
+        Assertions.assertNotNull(beanMeta.getFieldMeta("id"));
+        Assertions.assertNotNull(beanMeta.getFieldMeta("name"));
+        Assertions.assertNotNull(beanMeta.getFieldMeta("age"));
+        Assertions.assertNotNull(beanMeta.getFieldMeta("height"));
+        Assertions.assertNull(beanMeta.getFieldMeta("birthday"));
+        Assertions.assertNull(beanMeta.getFieldMeta("sex"));
+        Assertions.assertNull(beanMeta.getFieldMeta("hobby"));
 
         BeanMeta<User19> beanMeta2 = ignoreNameAgeHeightAndOnlyEntityMetaResolver.resolve(User19.class);
-        Assert.assertEquals(2, beanMeta2.getFieldCount());
-        Assert.assertNotNull(beanMeta2.getFieldMeta("id"));
-        Assert.assertNull(beanMeta2.getFieldMeta("name"));
-        Assert.assertNotNull(beanMeta2.getFieldMeta("age"));
-        Assert.assertNull(beanMeta2.getFieldMeta("height"));
-        Assert.assertNull(beanMeta2.getFieldMeta("birthday"));
-        Assert.assertNull(beanMeta2.getFieldMeta("sex"));
-        Assert.assertNull(beanMeta2.getFieldMeta("hobby"));
+        Assertions.assertEquals(2, beanMeta2.getFieldCount());
+        Assertions.assertNotNull(beanMeta2.getFieldMeta("id"));
+        Assertions.assertNull(beanMeta2.getFieldMeta("name"));
+        Assertions.assertNotNull(beanMeta2.getFieldMeta("age"));
+        Assertions.assertNull(beanMeta2.getFieldMeta("height"));
+        Assertions.assertNull(beanMeta2.getFieldMeta("birthday"));
+        Assertions.assertNull(beanMeta2.getFieldMeta("sex"));
+        Assertions.assertNull(beanMeta2.getFieldMeta("hobby"));
     }
 
     @SearchBean(ignoreFields = {"name", "sex", "age", "height"})
@@ -573,13 +573,13 @@ public class MetaResolverTestCase {
     @Test
     public void test20() {
         BeanMeta<User20> beanMeta = metaResolver.resolve(User20.class);
-        Assert.assertEquals(4, beanMeta.getFieldCount());
-        Assert.assertNotNull(beanMeta.getFieldMeta("id"));
-        Assert.assertNull(beanMeta.getFieldMeta("name"));
-        Assert.assertNotNull(beanMeta.getFieldMeta("age"));
-        Assert.assertNull(beanMeta.getFieldMeta("height"));
-        Assert.assertNotNull(beanMeta.getFieldMeta("birthday"));
-        Assert.assertNotNull(beanMeta.getFieldMeta("sex"));
+        Assertions.assertEquals(4, beanMeta.getFieldCount());
+        Assertions.assertNotNull(beanMeta.getFieldMeta("id"));
+        Assertions.assertNull(beanMeta.getFieldMeta("name"));
+        Assertions.assertNotNull(beanMeta.getFieldMeta("age"));
+        Assertions.assertNull(beanMeta.getFieldMeta("height"));
+        Assertions.assertNotNull(beanMeta.getFieldMeta("birthday"));
+        Assertions.assertNotNull(beanMeta.getFieldMeta("sex"));
     }
 
     @SearchBean(ignoreFields = {"name", "age"})
@@ -604,7 +604,7 @@ public class MetaResolverTestCase {
             System.out.println(e.getMessage());
             exception = true;
         }
-        Assert.assertTrue(exception);
+        Assertions.assertTrue(exception);
         exception = false;
         try {
             metaResolver.resolve(Base21.class);
@@ -612,7 +612,7 @@ public class MetaResolverTestCase {
             System.out.println(e.getMessage());
             exception = true;
         }
-        Assert.assertTrue(exception);
+        Assertions.assertTrue(exception);
     }
 
     public static class User22 extends Base21 {
@@ -625,11 +625,11 @@ public class MetaResolverTestCase {
     @Test
     public void test22() {
         BeanMeta<User22> beanMeta = metaResolver.resolve(User22.class);
-        Assert.assertEquals(3, beanMeta.getFieldCount());
-        Assert.assertNotNull(beanMeta.getFieldMeta("id"));
-        Assert.assertNull(beanMeta.getFieldMeta("name"));
-        Assert.assertNotNull(beanMeta.getFieldMeta("sex"));
-        Assert.assertNotNull(beanMeta.getFieldMeta("age"));
+        Assertions.assertEquals(3, beanMeta.getFieldCount());
+        Assertions.assertNotNull(beanMeta.getFieldMeta("id"));
+        Assertions.assertNull(beanMeta.getFieldMeta("name"));
+        Assertions.assertNotNull(beanMeta.getFieldMeta("sex"));
+        Assertions.assertNotNull(beanMeta.getFieldMeta("age"));
     }
 
     public static class Base23 {
@@ -659,13 +659,13 @@ public class MetaResolverTestCase {
     @Test
     public void test23() {
         BeanMeta<User23> beanMeta = metaResolver.resolve(User23.class);
-        Assert.assertEquals(3, beanMeta.getFieldCount());
-        Assert.assertNotNull(beanMeta.getFieldMeta("id"));
-        Assert.assertNotNull(beanMeta.getFieldMeta("name"));
-        Assert.assertNotNull(beanMeta.getFieldMeta("age"));
+        Assertions.assertEquals(3, beanMeta.getFieldCount());
+        Assertions.assertNotNull(beanMeta.getFieldMeta("id"));
+        Assertions.assertNotNull(beanMeta.getFieldMeta("name"));
+        Assertions.assertNotNull(beanMeta.getFieldMeta("age"));
 
-        Assert.assertEquals(1, metaResolver.resolve(User23_1.class).getFieldCount());
-        Assert.assertEquals(1, metaResolver.resolve(User23_2.class).getFieldCount());
+        Assertions.assertEquals(1, metaResolver.resolve(User23_1.class).getFieldCount());
+        Assertions.assertEquals(1, metaResolver.resolve(User23_2.class).getFieldCount());
     }
 
     @SearchBean(tables = "user")
@@ -685,16 +685,16 @@ public class MetaResolverTestCase {
 
     @Test
     public void test24() {
-        Assert.assertEquals(1, metaResolver.resolve(User24_1.class).getFieldCount());
-        Assert.assertEquals(1, metaResolver.resolve(User24_2.class).getFieldCount());
+        Assertions.assertEquals(1, metaResolver.resolve(User24_1.class).getFieldCount());
+        Assertions.assertEquals(1, metaResolver.resolve(User24_2.class).getFieldCount());
         SearchException ex = null;
         try {
             metaResolver.resolve(User24_3.class);
         } catch (SearchException e) {
             ex = e;
         }
-        Assert.assertNotNull(ex);
-        Assert.assertTrue(ex.getMessage().contains("is not a valid SearchBean, because there is no field mapping to database"));
+        Assertions.assertNotNull(ex);
+        Assertions.assertTrue(ex.getMessage().contains("is not a valid SearchBean, because there is no field mapping to database"));
     }
 
 }

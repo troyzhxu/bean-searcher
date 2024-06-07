@@ -1,8 +1,8 @@
 package cn.zhxu.bs;
 
 import cn.zhxu.bs.util.MapUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
@@ -29,7 +29,7 @@ public class MapBuildSqlTestCase {
                 .sqlExecutor(new SqlExecutor() {
                     @Override
                     public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
-                        Assert.assertEquals("select id c_0, name c_1, age c_2 from user where (10 < id and name = 'jack')", searchSql.getListSqlString());
+                        Assertions.assertEquals("select id c_0, name c_1, age c_2 from user where (10 < id and name = 'jack')", searchSql.getListSqlString());
                         return new SqlResult<>(searchSql);
                     }
                 })
@@ -46,8 +46,8 @@ public class MapBuildSqlTestCase {
                 .sqlExecutor(new SqlExecutor() {
                     @Override
                     public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
-                        Assert.assertEquals("select id c_0, name c_1, age c_2 from user where (? < id and name = ?)", searchSql.getListSqlString());
-                        Assert.assertArrayEquals(new Object[] {15, "jack"}, searchSql.getListSqlParams().toArray(new Object[0]));
+                        Assertions.assertEquals("select id c_0, name c_1, age c_2 from user where (? < id and name = ?)", searchSql.getListSqlString());
+                        Assertions.assertArrayEquals(new Object[] {15, "jack"}, searchSql.getListSqlParams().toArray(new Object[0]));
                         return new SqlResult<>(searchSql);
                     }
                 })
@@ -64,8 +64,8 @@ public class MapBuildSqlTestCase {
                 .sqlExecutor(new SqlExecutor() {
                     @Override
                     public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
-                        Assert.assertEquals("select id c_0, name c_1, age c_2 from user where (age = ? and 10 = id)", searchSql.getListSqlString());
-                        Assert.assertArrayEquals(new Object[] {15}, searchSql.getListSqlParams().toArray(new Object[0]));
+                        Assertions.assertEquals("select id c_0, name c_1, age c_2 from user where (age = ? and 10 = id)", searchSql.getListSqlString());
+                        Assertions.assertArrayEquals(new Object[] {15}, searchSql.getListSqlParams().toArray(new Object[0]));
                         return new SqlResult<>(searchSql);
                     }
                 })

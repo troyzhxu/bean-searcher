@@ -1,8 +1,8 @@
 package cn.zhxu.bs.filter;
 
 import cn.zhxu.bs.util.MapUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -17,8 +17,8 @@ public class CollectionParamFilterTests {
                 .put("idList", Arrays.asList(1, 2, 3))
                 .build();
         params = filter.doFilter(null, params);
-        Assert.assertEquals(1, params.size());
-        Assert.assertEquals("1,2,3", params.get("idList"));
+        Assertions.assertEquals(1, params.size());
+        Assertions.assertEquals("1,2,3", params.get("idList"));
     }
 
     @Test
@@ -29,10 +29,10 @@ public class CollectionParamFilterTests {
                 .put("name", "Jack")
                 .build();
         params = filter.doFilter(null, params);
-        Assert.assertEquals(3, params.size());
-        Assert.assertEquals(30, params.get("age"));
-        Assert.assertEquals("1,2,3", params.get("idList"));
-        Assert.assertEquals("Jack", params.get("name"));
+        Assertions.assertEquals(3, params.size());
+        Assertions.assertEquals(30, params.get("age"));
+        Assertions.assertEquals("1,2,3", params.get("idList"));
+        Assertions.assertEquals("Jack", params.get("name"));
     }
 
 }

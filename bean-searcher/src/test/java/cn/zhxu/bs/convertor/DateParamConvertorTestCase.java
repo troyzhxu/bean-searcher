@@ -8,8 +8,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 import cn.zhxu.bs.bean.Cluster;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import cn.zhxu.bs.FieldMeta;
 import cn.zhxu.bs.bean.DbType;
@@ -37,10 +37,10 @@ public class DateParamConvertorTestCase {
 
     void assertSupports(DbType dbType, boolean supports) {
         final FieldMeta meta = new FieldMeta(null, null, null, null, null, false, null, dbType, Cluster.AUTO);
-        Assert.assertEquals(supports, convertor.supports(meta, Date.class));
-        Assert.assertEquals(supports, convertor.supports(meta, LocalDate.class));
-        Assert.assertEquals(supports, convertor.supports(meta, Timestamp.class));
-        Assert.assertEquals(supports, convertor.supports(meta, String.class));
+        Assertions.assertEquals(supports, convertor.supports(meta, Date.class));
+        Assertions.assertEquals(supports, convertor.supports(meta, LocalDate.class));
+        Assertions.assertEquals(supports, convertor.supports(meta, Timestamp.class));
+        Assertions.assertEquals(supports, convertor.supports(meta, String.class));
     }
 
     @Test
@@ -62,12 +62,12 @@ public class DateParamConvertorTestCase {
     private void assertConvert(Object value) {
         FieldMeta meta = new FieldMeta(null, null, null, null, null, false, null, DbType.DATE, Cluster.AUTO);
         Object date = convertor.convert(meta, value);
-        Assert.assertTrue(date instanceof java.sql.Date);
+        Assertions.assertTrue(date instanceof java.sql.Date);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime((java.sql.Date) date);
-        Assert.assertEquals(2022, calendar.get(Calendar.YEAR));
-        Assert.assertEquals(Calendar.JUNE, calendar.get(Calendar.MONTH));
-        Assert.assertEquals(16, calendar.get(Calendar.DAY_OF_MONTH));
+        Assertions.assertEquals(2022, calendar.get(Calendar.YEAR));
+        Assertions.assertEquals(Calendar.JUNE, calendar.get(Calendar.MONTH));
+        Assertions.assertEquals(16, calendar.get(Calendar.DAY_OF_MONTH));
     }
 
 }

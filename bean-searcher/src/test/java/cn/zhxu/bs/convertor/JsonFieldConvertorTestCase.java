@@ -4,8 +4,8 @@ import cn.zhxu.bs.FieldMeta;
 import cn.zhxu.bs.bean.DbField;
 import cn.zhxu.bs.bean.DbType;
 import cn.zhxu.bs.implement.DefaultMetaResolver;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
@@ -51,15 +51,15 @@ public class JsonFieldConvertorTestCase {
     }
 
     public void test_supports(FieldMeta meta) {
-        Assert.assertTrue(convertor.supports(meta, String.class));
-        Assert.assertEquals(meta.getDbType(), DbType.JSON);
+        Assertions.assertTrue(convertor.supports(meta, String.class));
+        Assertions.assertEquals(meta.getDbType(), DbType.JSON);
     }
 
     @Test
     public void test_convert_role() {
         String value = "{\"id\":1,\"name\":\"Jack\"}]";
         Object result = convertor.convert(roleMeta, value);
-        Assert.assertNotNull(result);
+        Assertions.assertNotNull(result);
         assertRole(result, 1, "Jack");
     }
 
@@ -67,20 +67,20 @@ public class JsonFieldConvertorTestCase {
     public void test_convert_roles() {
         String value = "[{\"id\":1,\"name\":\"Jack\"},{\"id\":2,\"name\":\"Tom\"}]";
         Object results = convertor.convert(rolesMeta, value);
-        Assert.assertNotNull(results);
-        Assert.assertTrue(List.class.isAssignableFrom(results.getClass()));
+        Assertions.assertNotNull(results);
+        Assertions.assertTrue(List.class.isAssignableFrom(results.getClass()));
         List<?> list = (List<?>) results;
-        Assert.assertEquals(2, list.size());
+        Assertions.assertEquals(2, list.size());
         assertRole(list.get(0), 1, "Jack");
         assertRole(list.get(1), 2, "Tom");
     }
 
     private void assertRole(Object data, int id, String name) {
-        Assert.assertNotNull(data);
-        Assert.assertTrue(Role.class.isAssignableFrom(data.getClass()));
+        Assertions.assertNotNull(data);
+        Assertions.assertTrue(Role.class.isAssignableFrom(data.getClass()));
         Role role = (Role) data;
-        Assert.assertEquals(id, role.getId());
-        Assert.assertEquals(name, role.getName());
+        Assertions.assertEquals(id, role.getId());
+        Assertions.assertEquals(name, role.getName());
     }
 
 }

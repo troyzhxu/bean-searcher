@@ -9,8 +9,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 import cn.zhxu.bs.bean.Cluster;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import cn.zhxu.bs.FieldMeta;
 import cn.zhxu.bs.bean.DbType;
@@ -38,10 +38,10 @@ public class DateTimeParamConvertorTestCase {
 
     void assertSupports(DbType dbType, boolean supports) {
         FieldMeta meta = new FieldMeta(null,  null, null, null, null, false, null, dbType, Cluster.AUTO);
-        Assert.assertEquals(supports, convertor.supports(meta, Date.class));
-        Assert.assertEquals(supports, convertor.supports(meta, LocalDate.class));
-        Assert.assertEquals(supports, convertor.supports(meta, LocalDateTime.class));
-        Assert.assertEquals(supports, convertor.supports(meta, String.class));
+        Assertions.assertEquals(supports, convertor.supports(meta, Date.class));
+        Assertions.assertEquals(supports, convertor.supports(meta, LocalDate.class));
+        Assertions.assertEquals(supports, convertor.supports(meta, LocalDateTime.class));
+        Assertions.assertEquals(supports, convertor.supports(meta, String.class));
     }
 
     @Test
@@ -66,16 +66,16 @@ public class DateTimeParamConvertorTestCase {
     private void assertConvert(Object value, int hour, int minutes, int seconds) {
         FieldMeta meta = new FieldMeta(null, null,null, null, null, false, null, DbType.DATETIME, Cluster.AUTO);
         Object date = convertor.convert(meta, value);
-        Assert.assertTrue(date instanceof java.sql.Timestamp);
+        Assertions.assertTrue(date instanceof java.sql.Timestamp);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime((java.sql.Timestamp) date);
         System.out.println(((java.sql.Timestamp) date).getTime());
-        Assert.assertEquals(2022, calendar.get(Calendar.YEAR));
-        Assert.assertEquals(Calendar.JUNE, calendar.get(Calendar.MONTH));
-        Assert.assertEquals(16, calendar.get(Calendar.DAY_OF_MONTH));
-        Assert.assertEquals(hour, calendar.get(Calendar.HOUR_OF_DAY));
-        Assert.assertEquals(minutes, calendar.get(Calendar.MINUTE));
-        Assert.assertEquals(seconds, calendar.get(Calendar.SECOND));
+        Assertions.assertEquals(2022, calendar.get(Calendar.YEAR));
+        Assertions.assertEquals(Calendar.JUNE, calendar.get(Calendar.MONTH));
+        Assertions.assertEquals(16, calendar.get(Calendar.DAY_OF_MONTH));
+        Assertions.assertEquals(hour, calendar.get(Calendar.HOUR_OF_DAY));
+        Assertions.assertEquals(minutes, calendar.get(Calendar.MINUTE));
+        Assertions.assertEquals(seconds, calendar.get(Calendar.SECOND));
     }
 
 }

@@ -4,8 +4,8 @@ import cn.zhxu.bs.FieldOp;
 import cn.zhxu.bs.SqlWrapper;
 import cn.zhxu.bs.dialect.MySqlDialect;
 import cn.zhxu.bs.dialect.PostgreSqlDialect;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
@@ -15,10 +15,10 @@ public class StartWithTestCase {
 
     @Test
     public void test_01() {
-        Assert.assertEquals("StartWith", startWith.name());
-        Assert.assertTrue(startWith.isNamed("sw"));
-        Assert.assertTrue(startWith.isNamed("StartWith"));
-        Assert.assertFalse(startWith.lonely());
+        Assertions.assertEquals("StartWith", startWith.name());
+        Assertions.assertTrue(startWith.isNamed("sw"));
+        Assertions.assertTrue(startWith.isNamed("StartWith"));
+        Assertions.assertFalse(startWith.lonely());
         System.out.println("StartWithTestCase test_01 passed");
     }
 
@@ -29,8 +29,8 @@ public class StartWithTestCase {
         List<Object> params = startWith.operate(sb, new FieldOp.OpPara(
                 name -> new SqlWrapper<>("name"), false, new Object[]{ "abc" }
         ));
-        Assert.assertEquals("name like ?", sb.toString());
-        Assert.assertArrayEquals(new Object[] { "abc%" }, params.toArray());
+        Assertions.assertEquals("name like ?", sb.toString());
+        Assertions.assertArrayEquals(new Object[] { "abc%" }, params.toArray());
         System.out.println("StartWithTestCase test_02 passed");
     }
 
@@ -41,8 +41,8 @@ public class StartWithTestCase {
         List<Object> params = startWith.operate(sb, new FieldOp.OpPara(
                 name -> new SqlWrapper<>("name"), true, new Object[]{ "abc" }
         ));
-        Assert.assertEquals("upper(name) like ?", sb.toString());
-        Assert.assertArrayEquals(new Object[] { "ABC%" }, params.toArray());
+        Assertions.assertEquals("upper(name) like ?", sb.toString());
+        Assertions.assertArrayEquals(new Object[] { "ABC%" }, params.toArray());
         System.out.println("StartWithTestCase test_03 passed");
     }
 
@@ -55,8 +55,8 @@ public class StartWithTestCase {
         List<Object> params = startWith.operate(sb, new FieldOp.OpPara(
                 name -> fieldSql, false, new Object[]{ "abc" }
         ));
-        Assert.assertEquals("(select name from user where id = ?) like ?", sb.toString());
-        Assert.assertArrayEquals(new Object[] { 12, "abc%" }, params.toArray());
+        Assertions.assertEquals("(select name from user where id = ?) like ?", sb.toString());
+        Assertions.assertArrayEquals(new Object[] { 12, "abc%" }, params.toArray());
         System.out.println("StartWithTestCase test_04 passed");
     }
 
@@ -69,8 +69,8 @@ public class StartWithTestCase {
         List<Object> params = startWith.operate(sb, new FieldOp.OpPara(
                 name -> fieldSql, true, new Object[]{ "abc" }
         ));
-        Assert.assertEquals("upper((select name from user where id = ?)) like ?", sb.toString());
-        Assert.assertArrayEquals(new Object[] { 12, "ABC%" }, params.toArray());
+        Assertions.assertEquals("upper((select name from user where id = ?)) like ?", sb.toString());
+        Assertions.assertArrayEquals(new Object[] { 12, "ABC%" }, params.toArray());
         System.out.println("StartWithTestCase test_05 passed");
     }
 
@@ -81,8 +81,8 @@ public class StartWithTestCase {
         List<Object> params = startWith.operate(sb, new FieldOp.OpPara(
                 name -> new SqlWrapper<>("name"), false, new Object[]{ "abc" }
         ));
-        Assert.assertEquals("name like ?", sb.toString());
-        Assert.assertArrayEquals(new Object[] { "abc%" }, params.toArray());
+        Assertions.assertEquals("name like ?", sb.toString());
+        Assertions.assertArrayEquals(new Object[] { "abc%" }, params.toArray());
         System.out.println("StartWithTestCase test_06 passed");
     }
 
@@ -93,8 +93,8 @@ public class StartWithTestCase {
         List<Object> params = startWith.operate(sb, new FieldOp.OpPara(
                 name -> new SqlWrapper<>("name"), true, new Object[]{ "abc" }
         ));
-        Assert.assertEquals("name ilike ?", sb.toString());
-        Assert.assertArrayEquals(new Object[] { "abc%" }, params.toArray());
+        Assertions.assertEquals("name ilike ?", sb.toString());
+        Assertions.assertArrayEquals(new Object[] { "abc%" }, params.toArray());
         System.out.println("StartWithTestCase test_07 passed");
     }
 
@@ -107,8 +107,8 @@ public class StartWithTestCase {
         List<Object> params = startWith.operate(sb, new FieldOp.OpPara(
                 name -> fieldSql, false, new Object[] { "abc" }
         ));
-        Assert.assertEquals("(select name from user where id = ?) like ?", sb.toString());
-        Assert.assertArrayEquals(new Object[]{ 12, "abc%" }, params.toArray());
+        Assertions.assertEquals("(select name from user where id = ?) like ?", sb.toString());
+        Assertions.assertArrayEquals(new Object[]{ 12, "abc%" }, params.toArray());
         System.out.println("StartWithTestCase test_08 passed");
     }
 
@@ -121,8 +121,8 @@ public class StartWithTestCase {
         List<Object> params = startWith.operate(sb, new FieldOp.OpPara(
                 name -> fieldSql, true, new Object[] { "abc" }
         ));
-        Assert.assertEquals("(select name from user where id = ?) ilike ?", sb.toString());
-        Assert.assertArrayEquals(new Object[]{ 12, "abc%" }, params.toArray());
+        Assertions.assertEquals("(select name from user where id = ?) ilike ?", sb.toString());
+        Assertions.assertArrayEquals(new Object[]{ 12, "abc%" }, params.toArray());
         System.out.println("StartWithTestCase test_09 passed");
     }
 

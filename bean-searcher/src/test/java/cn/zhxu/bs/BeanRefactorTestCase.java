@@ -4,8 +4,8 @@ import cn.zhxu.bs.bean.DbField;
 import cn.zhxu.bs.convertor.*;
 import cn.zhxu.bs.implement.DefaultBeanReflector;
 import cn.zhxu.bs.implement.DefaultMetaResolver;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -40,23 +40,23 @@ public class BeanRefactorTestCase {
 
         private void assertEquals(Object expect, Object value) {
             if (expect instanceof String) {
-                Assert.assertEquals(expect, String.valueOf(value));
+                Assertions.assertEquals(expect, String.valueOf(value));
             } else if (expect instanceof Number && value instanceof Number) {
-                Assert.assertEquals(((Number) expect).longValue(), ((Number) value).longValue());
+                Assertions.assertEquals(((Number) expect).longValue(), ((Number) value).longValue());
             } else if (value instanceof Date) {
                 if (expect instanceof Date) {
-                    Assert.assertEquals(expect, value);
+                    Assertions.assertEquals(expect, value);
                 }
                 if (expect instanceof LocalDateTime) {
-                    Assert.assertEquals(((LocalDateTime) expect).getYear(), ((Date) value).getYear() + 1900);
-                    Assert.assertEquals(((LocalDateTime) expect).getMonth().getValue(), ((Date) value).getMonth() + 1);
-                    Assert.assertEquals(((LocalDateTime) expect).getDayOfMonth(), ((Date) value).getDate());
-                    Assert.assertEquals(((LocalDateTime) expect).getHour(), ((Date) value).getHours());
-                    Assert.assertEquals(((LocalDateTime) expect).getMinute(), ((Date) value).getMinutes());
-                    Assert.assertEquals(((LocalDateTime) expect).getSecond(), ((Date) value).getSeconds());
+                    Assertions.assertEquals(((LocalDateTime) expect).getYear(), ((Date) value).getYear() + 1900);
+                    Assertions.assertEquals(((LocalDateTime) expect).getMonth().getValue(), ((Date) value).getMonth() + 1);
+                    Assertions.assertEquals(((LocalDateTime) expect).getDayOfMonth(), ((Date) value).getDate());
+                    Assertions.assertEquals(((LocalDateTime) expect).getHour(), ((Date) value).getHours());
+                    Assertions.assertEquals(((LocalDateTime) expect).getMinute(), ((Date) value).getMinutes());
+                    Assertions.assertEquals(((LocalDateTime) expect).getSecond(), ((Date) value).getSeconds());
                 }
             } else {
-                Assert.assertEquals(expect, value);
+                Assertions.assertEquals(expect, value);
             }
         }
 

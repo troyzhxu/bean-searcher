@@ -7,8 +7,8 @@ import cn.zhxu.bs.implement.PageSizeExtractor;
 import cn.zhxu.bs.param.FetchType;
 import cn.zhxu.bs.param.Paging;
 import cn.zhxu.bs.util.MapUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 
@@ -20,8 +20,8 @@ public class PageResolverTestCase {
         DefaultParamResolver paramResolver = new DefaultParamResolver();
         paramResolver.setPageExtractor(pageExtractor);
         Paging paging = paramResolver.resolvePaging(new FetchType(FetchType.DEFAULT), new HashMap<>());
-        Assert.assertEquals(0, paging.getOffset());
-        Assert.assertEquals(pageExtractor.getDefaultSize(), paging.getSize());
+        Assertions.assertEquals(0, paging.getOffset());
+        Assertions.assertEquals(pageExtractor.getDefaultSize(), paging.getSize());
     }
 
     @Test
@@ -30,8 +30,8 @@ public class PageResolverTestCase {
         DefaultParamResolver paramResolver = new DefaultParamResolver();
         paramResolver.setPageExtractor(pageExtractor);
         Paging paging = paramResolver.resolvePaging(new FetchType(FetchType.DEFAULT), new HashMap<>());
-        Assert.assertEquals(0, paging.getOffset());
-        Assert.assertEquals(pageExtractor.getDefaultSize(), paging.getSize());
+        Assertions.assertEquals(0, paging.getOffset());
+        Assertions.assertEquals(pageExtractor.getDefaultSize(), paging.getSize());
     }
 
     @Test
@@ -39,7 +39,7 @@ public class PageResolverTestCase {
         BasePageExtractor pageExtractor = new PageSizeExtractor();
         DefaultParamResolver paramResolver = new DefaultParamResolver();
         paramResolver.setPageExtractor(pageExtractor);
-        Assert.assertThrows(IllegalParamException.class, () -> paramResolver.resolvePaging(
+        Assertions.assertThrows(IllegalParamException.class, () -> paramResolver.resolvePaging(
                 new FetchType(FetchType.DEFAULT),
                 MapUtils.builder()
                         .page(0, pageExtractor.getMaxAllowedSize() + 10000)
@@ -52,7 +52,7 @@ public class PageResolverTestCase {
         PageOffsetExtractor pageExtractor = new PageOffsetExtractor();
         DefaultParamResolver paramResolver = new DefaultParamResolver();
         paramResolver.setPageExtractor(pageExtractor);
-        Assert.assertThrows(IllegalParamException.class, () -> paramResolver.resolvePaging(
+        Assertions.assertThrows(IllegalParamException.class, () -> paramResolver.resolvePaging(
                 new FetchType(FetchType.DEFAULT),
                 MapUtils.builder()
                         .page(0, pageExtractor.getMaxAllowedSize() + 10000)
@@ -65,7 +65,7 @@ public class PageResolverTestCase {
         PageSizeExtractor pageExtractor = new PageSizeExtractor();
         DefaultParamResolver paramResolver = new DefaultParamResolver();
         paramResolver.setPageExtractor(pageExtractor);
-        Assert.assertThrows(IllegalParamException.class, () -> paramResolver.resolvePaging(
+        Assertions.assertThrows(IllegalParamException.class, () -> paramResolver.resolvePaging(
                 new FetchType(FetchType.DEFAULT),
                 MapUtils.builder()
                         .put("page", 0)
@@ -79,7 +79,7 @@ public class PageResolverTestCase {
         PageOffsetExtractor pageExtractor = new PageOffsetExtractor();
         DefaultParamResolver paramResolver = new DefaultParamResolver();
         paramResolver.setPageExtractor(pageExtractor);
-        Assert.assertThrows(IllegalParamException.class, () -> paramResolver.resolvePaging(
+        Assertions.assertThrows(IllegalParamException.class, () -> paramResolver.resolvePaging(
                 new FetchType(FetchType.DEFAULT),
                 MapUtils.builder()
                         .put("page", 0)

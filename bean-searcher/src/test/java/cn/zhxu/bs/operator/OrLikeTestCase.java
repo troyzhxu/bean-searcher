@@ -4,8 +4,8 @@ import cn.zhxu.bs.FieldOp;
 import cn.zhxu.bs.SqlWrapper;
 import cn.zhxu.bs.dialect.MySqlDialect;
 import cn.zhxu.bs.dialect.PostgreSqlDialect;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
@@ -15,10 +15,10 @@ public class OrLikeTestCase {
 
     @Test
     public void test_01() {
-        Assert.assertEquals("OrLike", orLike.name());
-        Assert.assertTrue(orLike.isNamed("ol"));
-        Assert.assertTrue(orLike.isNamed("OrLike"));
-        Assert.assertFalse(orLike.lonely());
+        Assertions.assertEquals("OrLike", orLike.name());
+        Assertions.assertTrue(orLike.isNamed("ol"));
+        Assertions.assertTrue(orLike.isNamed("OrLike"));
+        Assertions.assertFalse(orLike.lonely());
         System.out.println("OrLikeTestCase test_01 passed");
     }
 
@@ -29,8 +29,8 @@ public class OrLikeTestCase {
         List<Object> params = orLike.operate(sb, new FieldOp.OpPara(
                 name -> new SqlWrapper<>("name"), false, new Object[]{ "a", "B", "c" }
         ));
-        Assert.assertEquals("name like ? or name like ? or name like ?", sb.toString());
-        Assert.assertArrayEquals(new Object[]{ "a", "B", "c" }, params.toArray());
+        Assertions.assertEquals("name like ? or name like ? or name like ?", sb.toString());
+        Assertions.assertArrayEquals(new Object[]{ "a", "B", "c" }, params.toArray());
         System.out.println("OrLikeTestCase test_02 passed");
     }
 
@@ -41,8 +41,8 @@ public class OrLikeTestCase {
         List<Object> params = orLike.operate(sb, new FieldOp.OpPara(
                 name -> new SqlWrapper<>("name"), true, new Object[]{ "a", "B", "c" }
         ));
-        Assert.assertEquals("upper(name) like ? or upper(name) like ? or upper(name) like ?", sb.toString());
-        Assert.assertArrayEquals(new Object[]{ "A", "B", "C" }, params.toArray());
+        Assertions.assertEquals("upper(name) like ? or upper(name) like ? or upper(name) like ?", sb.toString());
+        Assertions.assertArrayEquals(new Object[]{ "A", "B", "C" }, params.toArray());
         System.out.println("OrLikeTestCase test_03 passed");
     }
 
@@ -55,10 +55,10 @@ public class OrLikeTestCase {
         List<Object> params = orLike.operate(sb, new FieldOp.OpPara(
                 name -> fieldSql, false, new Object[]{ "a", "B", "c" }
         ));
-        Assert.assertEquals("(select name from user where id = ?) like ? or " +
+        Assertions.assertEquals("(select name from user where id = ?) like ? or " +
                 "(select name from user where id = ?) like ? or " +
                 "(select name from user where id = ?) like ?", sb.toString());
-        Assert.assertArrayEquals(new Object[]{ 12, "a", 12, "B", 12, "c" }, params.toArray());
+        Assertions.assertArrayEquals(new Object[]{ 12, "a", 12, "B", 12, "c" }, params.toArray());
         System.out.println("OrLikeTestCase test_04 passed");
     }
 
@@ -71,10 +71,10 @@ public class OrLikeTestCase {
         List<Object> params = orLike.operate(sb, new FieldOp.OpPara(
                 name -> fieldSql, true, new Object[]{ "a", "B", "c" }
         ));
-        Assert.assertEquals("upper((select name from user where id = ?)) like ? or " +
+        Assertions.assertEquals("upper((select name from user where id = ?)) like ? or " +
                 "upper((select name from user where id = ?)) like ? or " +
                 "upper((select name from user where id = ?)) like ?", sb.toString());
-        Assert.assertArrayEquals(new Object[]{ 12, "A", 12, "B", 12, "C" }, params.toArray());
+        Assertions.assertArrayEquals(new Object[]{ 12, "A", 12, "B", 12, "C" }, params.toArray());
         System.out.println("OrLikeTestCase test_05 passed");
     }
 
@@ -85,8 +85,8 @@ public class OrLikeTestCase {
         List<Object> params = orLike.operate(sb, new FieldOp.OpPara(
                 name -> new SqlWrapper<>("name"), false, new Object[]{ "a", "B", "c" }
         ));
-        Assert.assertEquals("name like ? or name like ? or name like ?", sb.toString());
-        Assert.assertArrayEquals(new Object[]{ "a", "B", "c" }, params.toArray());
+        Assertions.assertEquals("name like ? or name like ? or name like ?", sb.toString());
+        Assertions.assertArrayEquals(new Object[]{ "a", "B", "c" }, params.toArray());
         System.out.println("OrLikeTestCase test_06 passed");
     }
 
@@ -97,8 +97,8 @@ public class OrLikeTestCase {
         List<Object> params = orLike.operate(sb, new FieldOp.OpPara(
                 name -> new SqlWrapper<>("name"), true, new Object[]{ "a", "B", "c" }
         ));
-        Assert.assertEquals("name ilike ? or name ilike ? or name ilike ?", sb.toString());
-        Assert.assertArrayEquals(new Object[]{ "a", "B", "c" }, params.toArray());
+        Assertions.assertEquals("name ilike ? or name ilike ? or name ilike ?", sb.toString());
+        Assertions.assertArrayEquals(new Object[]{ "a", "B", "c" }, params.toArray());
         System.out.println("OrLikeTestCase test_07 passed");
     }
 
@@ -111,10 +111,10 @@ public class OrLikeTestCase {
         List<Object> params = orLike.operate(sb, new FieldOp.OpPara(
                 name -> fieldSql, false, new Object[]{ "a", "B", "c" }
         ));
-        Assert.assertEquals("(select name from user where id = ?) like ? or " +
+        Assertions.assertEquals("(select name from user where id = ?) like ? or " +
                 "(select name from user where id = ?) like ? or " +
                 "(select name from user where id = ?) like ?", sb.toString());
-        Assert.assertArrayEquals(new Object[]{ 12, "a", 12, "B", 12, "c" }, params.toArray());
+        Assertions.assertArrayEquals(new Object[]{ 12, "a", 12, "B", 12, "c" }, params.toArray());
         System.out.println("OrLikeTestCase test_08 passed");
     }
 
@@ -127,10 +127,10 @@ public class OrLikeTestCase {
         List<Object> params = orLike.operate(sb, new FieldOp.OpPara(
                 name -> fieldSql, true, new Object[]{ "a", "B", "c" }
         ));
-        Assert.assertEquals("(select name from user where id = ?) ilike ? or " +
+        Assertions.assertEquals("(select name from user where id = ?) ilike ? or " +
                 "(select name from user where id = ?) ilike ? or " +
                 "(select name from user where id = ?) ilike ?", sb.toString());
-        Assert.assertArrayEquals(new Object[]{ 12, "a", 12, "B", 12, "c" }, params.toArray());
+        Assertions.assertArrayEquals(new Object[]{ 12, "a", 12, "B", 12, "c" }, params.toArray());
         System.out.println("OrLikeTestCase test_09 passed");
     }
 

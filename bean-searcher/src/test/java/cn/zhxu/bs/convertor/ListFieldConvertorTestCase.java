@@ -3,8 +3,8 @@ package cn.zhxu.bs.convertor;
 import cn.zhxu.bs.BeanMeta;
 import cn.zhxu.bs.FieldMeta;
 import cn.zhxu.bs.implement.DefaultMetaResolver;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
@@ -76,46 +76,46 @@ public class ListFieldConvertorTestCase {
     }
 
     public void test_supports(FieldMeta meta) {
-        Assert.assertTrue(convertor.supports(meta, String.class));
+        Assertions.assertTrue(convertor.supports(meta, String.class));
     }
 
     @Test
     public void test_convert_role_ids() {
         String value = "1,2,3";
         Object result = convertor.convert(roleIdsMeta, value);
-        Assert.assertNotNull(result);
-        Assert.assertTrue(result instanceof List);
+        Assertions.assertNotNull(result);
+        Assertions.assertTrue(result instanceof List);
         List<?> list = (List<?>) result;
-        Assert.assertEquals(3, list.size());
-        Assert.assertEquals(1, list.get(0));
-        Assert.assertEquals(2, list.get(1));
-        Assert.assertEquals(3, list.get(2));
+        Assertions.assertEquals(3, list.size());
+        Assertions.assertEquals(1, list.get(0));
+        Assertions.assertEquals(2, list.get(1));
+        Assertions.assertEquals(3, list.get(2));
     }
 
     @Test
     public void test_convert_role_names() {
         String value = "管理员,财务,采购";
         Object result = convertor.convert(roleNamesMeta, value);
-        Assert.assertNotNull(result);
-        Assert.assertTrue(result instanceof List);
+        Assertions.assertNotNull(result);
+        Assertions.assertTrue(result instanceof List);
         List<?> list = (List<?>) result;
-        Assert.assertEquals(3, list.size());
-        Assert.assertEquals("管理员", list.get(0));
-        Assert.assertEquals("财务", list.get(1));
-        Assert.assertEquals("采购", list.get(2));
+        Assertions.assertEquals(3, list.size());
+        Assertions.assertEquals("管理员", list.get(0));
+        Assertions.assertEquals("财务", list.get(1));
+        Assertions.assertEquals("采购", list.get(2));
     }
 
     @Test
     public void test_convert_roles() {
         String value = "1:管理员,2:财务,3:采购";
         Object result = convertor.convert(rolesMeta, value);
-        Assert.assertNotNull(result);
-        Assert.assertTrue(result instanceof List);
+        Assertions.assertNotNull(result);
+        Assertions.assertTrue(result instanceof List);
         List<?> list = (List<?>) result;
-        Assert.assertEquals(3, list.size());
-        Assert.assertEquals(new Role(1,"管理员"), list.get(0));
-        Assert.assertEquals(new Role(2,"财务"), list.get(1));
-        Assert.assertEquals(new Role(3,"采购"), list.get(2));
+        Assertions.assertEquals(3, list.size());
+        Assertions.assertEquals(new Role(1,"管理员"), list.get(0));
+        Assertions.assertEquals(new Role(2,"财务"), list.get(1));
+        Assertions.assertEquals(new Role(3,"采购"), list.get(2));
     }
 
 }

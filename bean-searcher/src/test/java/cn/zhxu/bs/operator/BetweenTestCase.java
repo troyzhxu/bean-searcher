@@ -3,8 +3,8 @@ package cn.zhxu.bs.operator;
 import cn.zhxu.bs.FieldOp;
 import cn.zhxu.bs.SqlWrapper;
 import cn.zhxu.bs.dialect.MySqlDialect;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
@@ -18,10 +18,10 @@ public class BetweenTestCase {
 
     @Test
     public void test_01() {
-        Assert.assertEquals("Between", between.name());
-        Assert.assertTrue(between.isNamed("bt"));
-        Assert.assertTrue(between.isNamed("Between"));
-        Assert.assertFalse(between.lonely());
+        Assertions.assertEquals("Between", between.name());
+        Assertions.assertTrue(between.isNamed("bt"));
+        Assertions.assertTrue(between.isNamed("Between"));
+        Assertions.assertFalse(between.lonely());
         System.out.println("BetweenTestCase test_01 passed");
     }
 
@@ -31,8 +31,8 @@ public class BetweenTestCase {
         List<Object> params = between.operate(sb, new FieldOp.OpPara(
                 name -> new SqlWrapper<>("age"), false, new Object[]{ 10, 20 }
         ));
-        Assert.assertEquals("age between ? and ?", sb.toString());
-        Assert.assertArrayEquals(new Object[]{ 10, 20 }, params.toArray());
+        Assertions.assertEquals("age between ? and ?", sb.toString());
+        Assertions.assertArrayEquals(new Object[]{ 10, 20 }, params.toArray());
         System.out.println("BetweenTestCase test_02 passed");
     }
 
@@ -42,8 +42,8 @@ public class BetweenTestCase {
         List<Object> params = between.operate(sb, new FieldOp.OpPara(
                 name -> new SqlWrapper<>("age"), false, new Object[]{ 10 }
         ));
-        Assert.assertEquals("age >= ?", sb.toString());
-        Assert.assertArrayEquals(new Object[]{ 10 }, params.toArray());
+        Assertions.assertEquals("age >= ?", sb.toString());
+        Assertions.assertArrayEquals(new Object[]{ 10 }, params.toArray());
         System.out.println("BetweenTestCase test_03 passed");
     }
 
@@ -53,8 +53,8 @@ public class BetweenTestCase {
         List<Object> params = between.operate(sb, new FieldOp.OpPara(
                 name -> new SqlWrapper<>("age"), false, new Object[]{ 10, null }
         ));
-        Assert.assertEquals("age >= ?", sb.toString());
-        Assert.assertArrayEquals(new Object[]{ 10 }, params.toArray());
+        Assertions.assertEquals("age >= ?", sb.toString());
+        Assertions.assertArrayEquals(new Object[]{ 10 }, params.toArray());
         System.out.println("BetweenTestCase test_04 passed");
     }
 
@@ -64,8 +64,8 @@ public class BetweenTestCase {
         List<Object> params = between.operate(sb, new FieldOp.OpPara(
                 name -> new SqlWrapper<>("age"), false, new Object[]{ null, 10 }
         ));
-        Assert.assertEquals("age <= ?", sb.toString());
-        Assert.assertArrayEquals(new Object[]{ 10 }, params.toArray());
+        Assertions.assertEquals("age <= ?", sb.toString());
+        Assertions.assertArrayEquals(new Object[]{ 10 }, params.toArray());
         System.out.println("BetweenTestCase test_05 passed");
     }
 
@@ -75,8 +75,8 @@ public class BetweenTestCase {
         List<Object> params = between.operate(sb, new FieldOp.OpPara(
                 name -> new SqlWrapper<>("age"), false, new Object[]{ 10, " " }
         ));
-        Assert.assertEquals("age >= ?", sb.toString());
-        Assert.assertArrayEquals(new Object[]{ 10 }, params.toArray());
+        Assertions.assertEquals("age >= ?", sb.toString());
+        Assertions.assertArrayEquals(new Object[]{ 10 }, params.toArray());
         System.out.println("BetweenTestCase test_06 passed");
     }
 
@@ -86,8 +86,8 @@ public class BetweenTestCase {
         List<Object> params = between.operate(sb, new FieldOp.OpPara(
                 name -> new SqlWrapper<>("age"), false, new Object[]{ " ", 10 }
         ));
-        Assert.assertEquals("age <= ?", sb.toString());
-        Assert.assertArrayEquals(new Object[]{ 10 }, params.toArray());
+        Assertions.assertEquals("age <= ?", sb.toString());
+        Assertions.assertArrayEquals(new Object[]{ 10 }, params.toArray());
         System.out.println("BetweenTestCase test_07 passed");
     }
 
@@ -99,8 +99,8 @@ public class BetweenTestCase {
         List<Object> params = between.operate(sb, new FieldOp.OpPara(
                 name -> fieldSql, false, new Object[]{ 10, 20 }
         ));
-        Assert.assertEquals("(select age from user where id = ?) between ? and ?", sb.toString());
-        Assert.assertArrayEquals(new Object[]{ 120, 10, 20 }, params.toArray());
+        Assertions.assertEquals("(select age from user where id = ?) between ? and ?", sb.toString());
+        Assertions.assertArrayEquals(new Object[]{ 120, 10, 20 }, params.toArray());
         System.out.println("BetweenTestCase test_08 passed");
     }
 
@@ -110,8 +110,8 @@ public class BetweenTestCase {
         List<Object> params = between.operate(sb, new FieldOp.OpPara(
                 name -> new SqlWrapper<>("name"), true, new Object[]{ 'A', 'b' }
         ));
-        Assert.assertEquals("upper(name) between ? and ?", sb.toString());
-        Assert.assertArrayEquals(new Object[]{ "A", "B" }, params.toArray());
+        Assertions.assertEquals("upper(name) between ? and ?", sb.toString());
+        Assertions.assertArrayEquals(new Object[]{ "A", "B" }, params.toArray());
         System.out.println("BetweenTestCase test_09 passed");
     }
 
@@ -121,8 +121,8 @@ public class BetweenTestCase {
         List<Object> params = between.operate(sb, new FieldOp.OpPara(
                 name -> new SqlWrapper<>("name"), true, new Object[]{ "Abc", "Abc" }
         ));
-        Assert.assertEquals("upper(name) between ? and ?", sb.toString());
-        Assert.assertArrayEquals(new Object[]{ "ABC", "ABC" }, params.toArray());
+        Assertions.assertEquals("upper(name) between ? and ?", sb.toString());
+        Assertions.assertArrayEquals(new Object[]{ "ABC", "ABC" }, params.toArray());
         System.out.println("BetweenTestCase test_10 passed");
     }
 
