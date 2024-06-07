@@ -7,10 +7,12 @@
   * 增强 `DefaultParamResolver` 新增 `gexprMerge` 属性，可用于控制参数构建器中使用 `groupExpr(..)` 方法指定的组表达式是否合并或覆盖前端参数传来的组表达式：https://gitee.com/troyzhxu/bean-searcher/issues/I9TAV6
   * 逻辑组中的且关系符 `&` 与 或关系符 `|` 做成常量，不再支持自定义。
   * 升级 `OracleDialect`: 仅支持 Oracle 12c（2013年6月发布）及以上版本
-  * 新增 `ArrValueParamFilter`：用于配合 `MapUtils.flat(..)`} `MapUtils.flatBuilder(..)` 方法，兼容数组参数值的用法，例如前端传参：age=20 & age=30 & age-op=bt
   * 新增 `JsonArrayParamFilter`：用于简化前端传参，例如 age=[20,30] 替代 age-0=20 & age-1=30
   * 新增 `SuffixOpParamFilter`：用于简化前端传参，例如 age-gt=25 替代 age=25 & age-op=gt
-  * 新增 `CollectionParamFilter`：用于让拼接参数支持直接使用集合参数值
+  * 新增 `ArrayValueParamFilter`：用于配合 `MapUtils.flat(..)`} `MapUtils.flatBuilder(..)` 方法，兼容数组参数值的用法，例如前端传参：age=20 & age=30 & age-op=bt
+  * 新增 `JoinParaValueParamFilter`：用于让拼接参数支持直接使用集合参数值，在该过滤器中将集合参数值用英文逗号进行连接处理
+  * 新增 `BeanMeta.getSqlSnippets()` 方法，用于获取该实体类上所有的 SQL 片段
+  * 新增 `BeanMeta.getJoinParaNames()` 方法，用于获取该实体类上所有的 拼接参数 的名称
 * Bean Searcher Boot Starter
   * 新增配置项 `bean-searcher.params.group.mergeable` 指定组表达式是否可合并，默认 `true`
 * Bean Searcher Solon Plugin
