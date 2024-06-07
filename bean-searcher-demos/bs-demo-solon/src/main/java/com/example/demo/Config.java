@@ -42,7 +42,7 @@ public class Config {
         }
     }
 
-    @Bean
+    @Bean(name = "currentRequestParamFilter")
     public ParamFilter currentRequestParamFilter() {
         return new ParamFilter() {
             @Override
@@ -57,7 +57,7 @@ public class Config {
         };
     }
 
-    @Bean(index = 1)
+    @Bean(name = "paramFilter1", index = 2)
     public ParamFilter paramFilter1() {
         return new ParamFilter() {
             @Override
@@ -68,7 +68,7 @@ public class Config {
         };
     }
 
-    @Bean(index = 2)
+    @Bean(name = "paramFilter2", index = 1)
     public ParamFilter paramFilter2() {
         return new ParamFilter() {
             @Override
