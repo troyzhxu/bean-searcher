@@ -5,6 +5,7 @@ import cn.zhxu.bs.ParamFilter;
 import cn.zhxu.data.Array;
 import cn.zhxu.xjson.JsonKit;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -18,21 +19,35 @@ public class JsonArrayParamFilter implements ParamFilter {
 
     @Override
     public <T> Map<String, Object> doFilter(BeanMeta<T> beanMeta, Map<String, Object> paraMap) {
-        paraMap.forEach((key, value) -> {
+        Map<String, Object> newMap = null;
+        for (Map.Entry<String, Object> entry : paraMap.entrySet()) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
             if (!likelyJsonArr(value)) {
-                return;
+                continue;
             }
             if (key == null || key.contains(separator)) {
-                return;
+                continue;
             }
             Array array;
             try {
                 array = JsonKit.toArray((String) value);
             } catch (Exception ignore) {
-                return;
+                continue;
             }
-            array.forEach((idx, data) -> paraMap.put(key + separator + idx, data.toString()));
-        });
+            if (array.isEmpty()) {
+                continue;
+            }
+            if (newMap == null) {
+                newMap = new HashMap<>();
+            }
+            for (int i = 0; i < array.size(); i++) {
+                newMap.put(key + separator + i, array.getString(i));
+            }
+        }
+        if (newMap != null) {
+            paraMap.putAll(newMap);
+        }
         return paraMap;
     }
 
