@@ -2,6 +2,7 @@ package cn.zhxu.bs.implement;
 
 import cn.zhxu.bs.*;
 import cn.zhxu.bs.convertor.*;
+import cn.zhxu.bs.filter.ArrValueParamFilter;
 import cn.zhxu.bs.filter.SizeLimitParamFilter;
 import cn.zhxu.bs.group.DefaultGroupResolver;
 import cn.zhxu.bs.group.Group;
@@ -46,7 +47,7 @@ public class DefaultParamResolver implements ParamResolver {
 	/**
 	 * 字段运算符池
 	 */
-	private FieldOpPool fieldOpPool = new FieldOpPool();
+	private FieldOpPool fieldOpPool = FieldOpPool.DEFAULT;
 
 	/**
 	 * 排序字段参数名
@@ -125,6 +126,7 @@ public class DefaultParamResolver implements ParamResolver {
 		convertors.add(new DateTimeParamConvertor());
 		convertors.add(new EnumParamConvertor());
 		paramFilters.add(new SizeLimitParamFilter());
+		paramFilters.add(new ArrValueParamFilter());
 	}
 
 	public DefaultParamResolver(List<FieldConvertor.ParamConvertor> convertors, List<ParamFilter> paramFilters) {
@@ -448,7 +450,7 @@ public class DefaultParamResolver implements ParamResolver {
 	}
 
 	public void setFieldOpPool(FieldOpPool fieldOpPool) {
-		this.fieldOpPool = fieldOpPool;
+		this.fieldOpPool = Objects.requireNonNull(fieldOpPool);
 	}
 
 	public String getSortName() {
