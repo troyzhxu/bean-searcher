@@ -120,7 +120,7 @@ public class BeanSearcherAutoConfiguration {
 	@Bean
 	@ConditionalOnMissingBean(FieldOpPool.class)
 	public FieldOpPool fieldOpPool(Dialect dialect, ObjectProvider<List<FieldOp>> fieldOps) {
-		FieldOpPool pool = new FieldOpPool();
+		FieldOpPool pool = FieldOpPool.DEFAULT;
 		ifAvailable(fieldOps, ops -> ops.forEach(pool::addFieldOp));
 		pool.setDialect(dialect);
 		return pool;

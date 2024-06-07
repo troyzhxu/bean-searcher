@@ -64,7 +64,7 @@ public class BeanSearcherConfiguration {
         return new EnumParamConvertor();
     }
 
-    @Bean
+    @Bean(index = Integer.MIN_VALUE)
     @Condition(onMissingBean = SizeLimitParamFilter.class)
     public SizeLimitParamFilter sizeLimitParamFilter() {
         return new SizeLimitParamFilter(config.getParams().getFilter().getMaxParaMapSize());
@@ -322,7 +322,7 @@ public class BeanSearcherConfiguration {
     @Bean
     @Condition(onMissingBean = FieldOpPool.class)
     public FieldOpPool fieldOpPool(List<FieldOp> fieldOps, Dialect dialect) {
-        FieldOpPool pool = new FieldOpPool();
+        FieldOpPool pool = FieldOpPool.DEFAULT;
         ifAvailable(fieldOps, ops -> ops.forEach(pool::addFieldOp));
         pool.setDialect(dialect);
         return pool;

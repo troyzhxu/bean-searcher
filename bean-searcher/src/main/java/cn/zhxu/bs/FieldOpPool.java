@@ -17,6 +17,12 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class FieldOpPool extends DialectWrapper {
 
+    /**
+     * 默认字段运算符池
+     * @since v4.3
+     */
+    public static final FieldOpPool DEFAULT = new FieldOpPool();
+
     private List<FieldOp> fieldOps;
 
     private final Map<Object, FieldOp> cache = new ConcurrentHashMap<>();
@@ -49,7 +55,6 @@ public class FieldOpPool extends DialectWrapper {
         checkAdd(FieldOps.AlwaysTrue);
         checkAdd(FieldOps.AlwaysFalse);
     }
-
 
     public FieldOp getFieldOp(Object key) {
         if (key == null) {
@@ -112,14 +117,16 @@ public class FieldOpPool extends DialectWrapper {
     }
 
     private void checkAdd(FieldOp fieldOp) {
-        checkFieldOp(fieldOp);
-        this.fieldOps.add(fieldOp);
+        if (checkFieldOp(fieldOp)) {
+            fieldOps.add(fieldOp);
+        }
     }
 
-    private void checkFieldOp(FieldOp fieldOp) {
+    private boolean checkFieldOp(FieldOp fieldOp) {
         if (fieldOp.isNonPublic()) {
             throw new IllegalStateException("Only public FieldOp can add into FieldOpPool, and " + fieldOp + " is non public.");
         }
+        return !fieldOps.contains(fieldOp);
     }
 
     @Override
