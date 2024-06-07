@@ -140,7 +140,7 @@ public class BeanSearcherProperties {
             private boolean useArrayValue = true;
 
             /**
-             * 是否启用集合参数值，默认为 true，用于转换集合参数值，一般与拼接参数配合使用，启用时，可让框架支持以下用法：
+             * 是否启用拼接参数值过滤器，默认为 true，用于转换集合参数值，一般与拼接参数配合使用，启用时，可让框架支持以下用法：
              * <pre> {@code
              * @SearchBean(where="id in (:idList:)")
              * }</pre>
@@ -159,11 +159,11 @@ public class BeanSearcherProperties {
              * 是否启用 Json 数组参数值，默认为 false，用于简化前端传参，例如 age=[20,30] 替代 age-0=20 & age-1=30 <br>
              * 但需要注意的是，即使该参数为 true, 也不一定能成功启用该过滤器，您必须还得添加 <a href="https://gitee.com/troyzhxu/xjsonkit">xjsonkit</a> 的 json 相关实现的依赖才可以，目前这些依赖有（你可以任选其一）：
              * <pre>
-             * implementation 'cn.zhxu:xjsonkit-fastjson:1.4.3' // Fastjson 实现
-             * implementation 'cn.zhxu:xjsonkit-fastjson2:1.4.3'// Fastjson2 实现
-             * implementation 'cn.zhxu:xjsonkit-gson:1.4.3'     // Gson 实现
-             * implementation 'cn.zhxu:xjsonkit-jackson:1.4.3'  // Jackson 实现
-             * implementation 'cn.zhxu:xjsonkit-snack3:1.4.3'   // Snack3 实现
+             * implementation 'cn.zhxu:xjsonkit-fastjson:最新版本' // Fastjson 实现
+             * implementation 'cn.zhxu:xjsonkit-fastjson2:最新版本'// Fastjson2 实现
+             * implementation 'cn.zhxu:xjsonkit-gson:最新版本'     // Gson 实现
+             * implementation 'cn.zhxu:xjsonkit-jackson:最新版本'  // Jackson 实现
+             * implementation 'cn.zhxu:xjsonkit-snack3:最新版本'   // Snack3 实现
              * </pre>
              * @see JsonArrayParamFilter
              * @since v4.3.0
@@ -843,11 +843,11 @@ public class BeanSearcherProperties {
          * 是否启用 {@link JsonFieldConvertor }（必要条件），默认为 true，但需要注意的是，即使该参数为 true, 也不一定能成功启用 {@link JsonFieldConvertor }，
          * 您必须还得添加 <a href="https://gitee.com/troyzhxu/xjsonkit">xjsonkit</a> 的 json 相关实现的依赖才可以，目前这些依赖有（你可以任选其一）：
          * <pre>
-         * implementation 'cn.zhxu:xjsonkit-fastjson:1.4.3' // Fastjson 实现
-         * implementation 'cn.zhxu:xjsonkit-fastjson2:1.4.3'// Fastjson2 实现
-         * implementation 'cn.zhxu:xjsonkit-gson:1.4.3'     // Gson 实现
-         * implementation 'cn.zhxu:xjsonkit-jackson:1.4.3'  // Jackson 实现
-         * implementation 'cn.zhxu:xjsonkit-snack3:1.4.3'   // Snack3 实现
+         * implementation 'cn.zhxu:xjsonkit-fastjson:最新版本' // Fastjson 实现
+         * implementation 'cn.zhxu:xjsonkit-fastjson2:最新版本'// Fastjson2 实现
+         * implementation 'cn.zhxu:xjsonkit-gson:最新版本'     // Gson 实现
+         * implementation 'cn.zhxu:xjsonkit-jackson:最新版本'  // Jackson 实现
+         * implementation 'cn.zhxu:xjsonkit-snack3:最新版本'   // Snack3 实现
          * </pre>
          * @since v4.0.0
          */
