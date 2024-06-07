@@ -19,7 +19,7 @@ public class StartWithTestCase {
         Assertions.assertTrue(startWith.isNamed("sw"));
         Assertions.assertTrue(startWith.isNamed("StartWith"));
         Assertions.assertFalse(startWith.lonely());
-        System.out.println("StartWithTestCase test_01 passed");
+        System.out.println("\ttest_01 passed");
     }
 
     @Test
@@ -31,7 +31,7 @@ public class StartWithTestCase {
         ));
         Assertions.assertEquals("name like ?", sb.toString());
         Assertions.assertArrayEquals(new Object[] { "abc%" }, params.toArray());
-        System.out.println("StartWithTestCase test_02 passed");
+        System.out.println("\ttest_02 passed");
     }
 
     @Test
@@ -43,7 +43,7 @@ public class StartWithTestCase {
         ));
         Assertions.assertEquals("upper(name) like ?", sb.toString());
         Assertions.assertArrayEquals(new Object[] { "ABC%" }, params.toArray());
-        System.out.println("StartWithTestCase test_03 passed");
+        System.out.println("\ttest_03 passed");
     }
 
     @Test
@@ -57,7 +57,7 @@ public class StartWithTestCase {
         ));
         Assertions.assertEquals("(select name from user where id = ?) like ?", sb.toString());
         Assertions.assertArrayEquals(new Object[] { 12, "abc%" }, params.toArray());
-        System.out.println("StartWithTestCase test_04 passed");
+        System.out.println("\ttest_04 passed");
     }
 
     @Test
@@ -71,7 +71,7 @@ public class StartWithTestCase {
         ));
         Assertions.assertEquals("upper((select name from user where id = ?)) like ?", sb.toString());
         Assertions.assertArrayEquals(new Object[] { 12, "ABC%" }, params.toArray());
-        System.out.println("StartWithTestCase test_05 passed");
+        System.out.println("\ttest_05 passed");
     }
 
     @Test
@@ -83,7 +83,7 @@ public class StartWithTestCase {
         ));
         Assertions.assertEquals("name like ?", sb.toString());
         Assertions.assertArrayEquals(new Object[] { "abc%" }, params.toArray());
-        System.out.println("StartWithTestCase test_06 passed");
+        System.out.println("\ttest_06 passed");
     }
 
     @Test
@@ -95,7 +95,7 @@ public class StartWithTestCase {
         ));
         Assertions.assertEquals("name ilike ?", sb.toString());
         Assertions.assertArrayEquals(new Object[] { "abc%" }, params.toArray());
-        System.out.println("StartWithTestCase test_07 passed");
+        System.out.println("\ttest_07 passed");
     }
 
     @Test
@@ -109,7 +109,7 @@ public class StartWithTestCase {
         ));
         Assertions.assertEquals("(select name from user where id = ?) like ?", sb.toString());
         Assertions.assertArrayEquals(new Object[]{ 12, "abc%" }, params.toArray());
-        System.out.println("StartWithTestCase test_08 passed");
+        System.out.println("\ttest_08 passed");
     }
 
     @Test
@@ -123,7 +123,7 @@ public class StartWithTestCase {
         ));
         Assertions.assertEquals("(select name from user where id = ?) ilike ?", sb.toString());
         Assertions.assertArrayEquals(new Object[]{ 12, "abc%" }, params.toArray());
-        System.out.println("StartWithTestCase test_09 passed");
+        System.out.println("\ttest_09 passed");
     }
 
 }

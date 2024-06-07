@@ -15,6 +15,7 @@ public class SnippetResolverTestCase {
         SqlSnippet snippet = resolver.resolve("name = ?");
         Assertions.assertEquals("name = ?", snippet.getSql());
         Assertions.assertTrue(snippet.getParas().isEmpty());
+        System.out.println("\ttest_01 ok!");
     }
 
     @Test
@@ -82,6 +83,7 @@ public class SnippetResolverTestCase {
         snippet = resolver.resolve("name<=:name");
         Assertions.assertEquals("name<=?", snippet.getSql());
         assert_02(snippet.getParas());
+        System.out.println("\ttest_02 ok!");
     }
 
     private void assert_02(List<SqlSnippet.SqlPara> paras) {
@@ -137,6 +139,7 @@ public class SnippetResolverTestCase {
         snippet = resolver.resolve("name<:name:");
         Assertions.assertEquals("name<:name:", snippet.getSql());
         assert_03(snippet.getParas());
+        System.out.println("\ttest_03 ok!");
     }
 
     private void assert_03(List<SqlSnippet.SqlPara> paras) {
@@ -152,6 +155,7 @@ public class SnippetResolverTestCase {
         SqlSnippet snippet = resolver.resolve("json_param\\:\\:jsonb->>name");
         Assertions.assertEquals("json_param::jsonb->>name", snippet.getSql());
         Assertions.assertTrue(snippet.getParas().isEmpty());
+        System.out.println("\ttest_04 ok!");
     }
 
     @Test
@@ -159,6 +163,7 @@ public class SnippetResolverTestCase {
         SqlSnippet snippet = resolver.resolve("\\:name");
         Assertions.assertEquals(":name", snippet.getSql());
         Assertions.assertTrue(snippet.getParas().isEmpty());
+        System.out.println("\ttest_05 ok!");
     }
 
 }

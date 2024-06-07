@@ -19,7 +19,7 @@ public class NotLikeTestCase {
         Assertions.assertTrue(notLike.isNamed("nk"));
         Assertions.assertTrue(notLike.isNamed("NotLike"));
         Assertions.assertFalse(notLike.lonely());
-        System.out.println("NotLikeTestCase test_01 passed");
+        System.out.println("\ttest_01 passed");
     }
 
     @Test
@@ -31,7 +31,7 @@ public class NotLikeTestCase {
         ));
         Assertions.assertEquals("name not like ?", sb.toString());
         Assertions.assertArrayEquals(new Object[] { "abc%" }, params.toArray());
-        System.out.println("NotLikeTestCase test_02 passed");
+        System.out.println("\ttest_02 passed");
     }
 
     @Test
@@ -43,7 +43,7 @@ public class NotLikeTestCase {
         ));
         Assertions.assertEquals("upper(name) not like ?", sb.toString());
         Assertions.assertArrayEquals(new Object[] { "ABC%" }, params.toArray());
-        System.out.println("NotLikeTestCase test_03 passed");
+        System.out.println("\ttest_03 passed");
     }
 
     @Test
@@ -57,7 +57,7 @@ public class NotLikeTestCase {
         ));
         Assertions.assertEquals("(select name from user where id = ?) not like ?", sb.toString());
         Assertions.assertArrayEquals(new Object[] { 12, "abc%" }, params.toArray());
-        System.out.println("NotLikeTestCase test_04 passed");
+        System.out.println("\ttest_04 passed");
     }
 
     @Test
@@ -71,7 +71,7 @@ public class NotLikeTestCase {
         ));
         Assertions.assertEquals("upper((select name from user where id = ?)) not like ?", sb.toString());
         Assertions.assertArrayEquals(new Object[] { 12, "ABC%" }, params.toArray());
-        System.out.println("NotLikeTestCase test_05 passed");
+        System.out.println("\ttest_05 passed");
     }
 
     @Test
@@ -83,7 +83,7 @@ public class NotLikeTestCase {
         ));
         Assertions.assertEquals("name not like ?", sb.toString());
         Assertions.assertArrayEquals(new Object[] { "abc%" }, params.toArray());
-        System.out.println("NotLikeTestCase test_06 passed");
+        System.out.println("\ttest_06 passed");
     }
 
     @Test
@@ -95,7 +95,7 @@ public class NotLikeTestCase {
         ));
         Assertions.assertEquals("name not ilike ?", sb.toString());
         Assertions.assertArrayEquals(new Object[] { "abc%" }, params.toArray());
-        System.out.println("NotLikeTestCase test_07 passed");
+        System.out.println("\ttest_07 passed");
     }
 
     @Test
@@ -109,7 +109,7 @@ public class NotLikeTestCase {
         ));
         Assertions.assertEquals("(select name from user where id = ?) not like ?", sb.toString());
         Assertions.assertArrayEquals(new Object[]{ 12, "abc%" }, params.toArray());
-        System.out.println("NotLikeTestCase test_08 passed");
+        System.out.println("\ttest_08 passed");
     }
 
     @Test
@@ -123,7 +123,7 @@ public class NotLikeTestCase {
         ));
         Assertions.assertEquals("(select name from user where id = ?) not ilike ?", sb.toString());
         Assertions.assertArrayEquals(new Object[]{ 12, "abc%" }, params.toArray());
-        System.out.println("NotLikeTestCase test_09 passed");
+        System.out.println("\ttest_09 passed");
     }
 
 }

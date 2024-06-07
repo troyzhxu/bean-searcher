@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.Map;
 
-public class CollectionParamFilterTests {
+public class CollectionParamFilterTestCase {
 
     CollectionParamFilter filter = new CollectionParamFilter();
 
@@ -19,6 +19,7 @@ public class CollectionParamFilterTests {
         params = filter.doFilter(null, params);
         Assertions.assertEquals(1, params.size());
         Assertions.assertEquals("1,2,3", params.get("idList"));
+        System.out.println("\ttest_01 passed!");
     }
 
     @Test
@@ -33,6 +34,7 @@ public class CollectionParamFilterTests {
         Assertions.assertEquals(30, params.get("age"));
         Assertions.assertEquals("1,2,3", params.get("idList"));
         Assertions.assertEquals("Jack", params.get("name"));
+        System.out.println("\ttest_02 passed!");
     }
 
 }

@@ -21,7 +21,7 @@ public class DefaultDbMappingTestCase {
         Assertions.assertEquals("id", mapping.column(UserEntity.class, UserEntity.class.getDeclaredField("id")).getFieldSql());
         Assertions.assertEquals("name", mapping.column(UserEntity.class, UserEntity.class.getDeclaredField("name")).getFieldSql());
         Assertions.assertEquals("nick_name", mapping.column(UserEntity.class, UserEntity.class.getDeclaredField("nickName")).getFieldSql());
-        System.out.println("DefaultDbMappingTestCase test_01 passed");
+        System.out.println("\ttest_01 passed");
     }
 
     @Test
@@ -32,7 +32,7 @@ public class DefaultDbMappingTestCase {
         Assertions.assertEquals("ID", mapping.column(UserEntity.class, UserEntity.class.getDeclaredField("id")).getFieldSql());
         Assertions.assertEquals("NAME", mapping.column(UserEntity.class, UserEntity.class.getDeclaredField("name")).getFieldSql());
         Assertions.assertEquals("NICK_NAME", mapping.column(UserEntity.class, UserEntity.class.getDeclaredField("nickName")).getFieldSql());
-        System.out.println("DefaultDbMappingTestCase test_02 passed");
+        System.out.println("\ttest_02 passed");
     }
 
     @Test
@@ -43,7 +43,7 @@ public class DefaultDbMappingTestCase {
         Assertions.assertEquals("id", mapping.column(UserEntity.class, UserEntity.class.getDeclaredField("id")).getFieldSql());
         Assertions.assertEquals("name", mapping.column(UserEntity.class, UserEntity.class.getDeclaredField("name")).getFieldSql());
         Assertions.assertEquals("nick_name", mapping.column(UserEntity.class, UserEntity.class.getDeclaredField("nickName")).getFieldSql());
-        System.out.println("DefaultDbMappingTestCase test_03 passed");
+        System.out.println("\ttest_03 passed");
     }
 
     @Test
@@ -54,7 +54,7 @@ public class DefaultDbMappingTestCase {
         Assertions.assertEquals("id", mapping.column(UserEntity.class, UserEntity.class.getDeclaredField("id")).getFieldSql());
         Assertions.assertEquals("name", mapping.column(UserEntity.class, UserEntity.class.getDeclaredField("name")).getFieldSql());
         Assertions.assertEquals("nickName", mapping.column(UserEntity.class, UserEntity.class.getDeclaredField("nickName")).getFieldSql());
-        System.out.println("DefaultDbMappingTestCase test_04 passed");
+        System.out.println("\ttest_04 passed");
     }
 
     @Test
@@ -66,7 +66,7 @@ public class DefaultDbMappingTestCase {
         Assertions.assertEquals("ID", mapping.column(UserEntity.class, UserEntity.class.getDeclaredField("id")).getFieldSql());
         Assertions.assertEquals("NAME", mapping.column(UserEntity.class, UserEntity.class.getDeclaredField("name")).getFieldSql());
         Assertions.assertEquals("NICKNAME", mapping.column(UserEntity.class, UserEntity.class.getDeclaredField("nickName")).getFieldSql());
-        System.out.println("DefaultDbMappingTestCase test_05 passed");
+        System.out.println("\ttest_05 passed");
     }
 
     @Test
@@ -74,7 +74,7 @@ public class DefaultDbMappingTestCase {
         DefaultDbMapping mapping = new DefaultDbMapping();
         mapping.setTablePrefix("t_");
         Assertions.assertEquals("t_user_entity", mapping.table(UserEntity.class).getTables());
-        System.out.println("DefaultDbMappingTestCase test_06 passed");
+        System.out.println("\ttest_06 passed");
     }
 
     @Test
@@ -83,7 +83,7 @@ public class DefaultDbMappingTestCase {
         mapping.setTablePrefix("t_");
         mapping.setRedundantSuffixes(new String[]{"VO", "Entity"});
         Assertions.assertEquals("t_user", mapping.table(UserEntity.class).getTables());
-        System.out.println("DefaultDbMappingTestCase test_07 passed");
+        System.out.println("\ttest_07 passed");
     }
 
     @Test
@@ -94,7 +94,7 @@ public class DefaultDbMappingTestCase {
         Assertions.assertEquals("id", mapping.column(UserEntity.class, UserEntity.class.getDeclaredField("id")).getFieldSql());
         Assertions.assertEquals("name", mapping.column(UserEntity.class, UserEntity.class.getDeclaredField("name")).getFieldSql());
         Assertions.assertEquals("nickName", mapping.column(UserEntity.class, UserEntity.class.getDeclaredField("nickName")).getFieldSql());
-        System.out.println("DefaultDbMappingTestCase test_08 passed");
+        System.out.println("\ttest_08 passed");
     }
 
 }

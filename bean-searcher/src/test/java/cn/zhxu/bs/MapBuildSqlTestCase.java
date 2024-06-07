@@ -38,6 +38,7 @@ public class MapBuildSqlTestCase {
                 .field(User::getId, User::getName).sql("10 < $1 and $2 = 'jack'")
                 .build();
         mapSearcher.searchAll(User.class, params);
+        System.out.println("\ttest_01 ok!");
     }
 
     @Test
@@ -56,6 +57,7 @@ public class MapBuildSqlTestCase {
                 .field(User::getId, User::getName).sql("? < $1 and $2 = ?", 15, "jack")
                 .build();
         mapSearcher.searchAll(User.class, params);
+        System.out.println("\ttest_02 ok!");
     }
 
     @Test
@@ -74,6 +76,7 @@ public class MapBuildSqlTestCase {
                 .field(User::getId, User::getAge).sql("$2 = ? and 10 = $1", 15)
                 .build();
         mapSearcher.searchAll(User.class, params);
+        System.out.println("\ttest_03 ok!");
     }
 
 }

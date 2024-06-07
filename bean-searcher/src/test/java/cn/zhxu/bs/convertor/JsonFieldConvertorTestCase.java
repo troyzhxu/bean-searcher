@@ -48,6 +48,7 @@ public class JsonFieldConvertorTestCase {
     public void test_supports() {
         test_supports(roleMeta);
         test_supports(rolesMeta);
+        System.out.println("\ttest_support ok!");
     }
 
     public void test_supports(FieldMeta meta) {
@@ -61,6 +62,7 @@ public class JsonFieldConvertorTestCase {
         Object result = convertor.convert(roleMeta, value);
         Assertions.assertNotNull(result);
         assertRole(result, 1, "Jack");
+        System.out.println("\ttest_convert_role ok!");
     }
 
     @Test
@@ -73,6 +75,7 @@ public class JsonFieldConvertorTestCase {
         Assertions.assertEquals(2, list.size());
         assertRole(list.get(0), 1, "Jack");
         assertRole(list.get(1), 2, "Tom");
+        System.out.println("\ttest_convert_roles ok!");
     }
 
     private void assertRole(Object data, int id, String name) {

@@ -48,6 +48,7 @@ public class MapBuilderTestCase {
         Assertions.assertTrue(keys.contains(MapBuilder.FIELD_PARAM + "nickName"));
         Assertions.assertTrue(keys.contains(MapBuilder.FIELD_PARAM + "active"));
         Assertions.assertTrue(keys.contains(MapBuilder.FIELD_PARAM + "accountLocked"));
+        System.out.println("\ttest_01 ok!");
     }
 
     @Test
@@ -84,7 +85,7 @@ public class MapBuilderTestCase {
         assertParam(params, "_6", "sex", "女");
         String groupExpr = MapUtils.builder(params).getGroupExpr();
         Assertions.assertEquals("((_0|_1)|((_2)&(_3|_4)))&(_5|_6)", groupExpr);
-        System.out.println(groupExpr);
+        System.out.println("\ttest_02 ok!");
     }
 
     private void assertParam(Map<String, Object> params, String group, String field, Object... values) {
@@ -102,6 +103,7 @@ public class MapBuilderTestCase {
                 .build()
                 .keySet();
         Assertions.assertTrue(keys.contains(MapBuilder.FIELD_PARAM + "name"));
+        System.out.println("\ttest_03 ok!");
     }
 
 }

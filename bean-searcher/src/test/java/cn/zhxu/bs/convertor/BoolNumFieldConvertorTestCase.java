@@ -34,7 +34,7 @@ public class BoolNumFieldConvertorTestCase {
         Collection<FieldMeta> fieldMetas = beanMeta.getFieldMetas();
         Assertions.assertEquals(8, fieldMetas.size());
         fieldMetas.forEach(meta -> Assertions.assertTrue(convertor.supports(meta, Boolean.class)));
-        System.out.println("BoolNumFieldConvertorTests 01 OK!");
+        System.out.println("\ttest_supports ok!");
     }
 
     @Test
@@ -45,7 +45,7 @@ public class BoolNumFieldConvertorTestCase {
         Assertions.assertEquals(Integer.valueOf(1), entity.vI);
         meta.getField().set(entity, convertor.convert(meta, false));
         Assertions.assertEquals(Integer.valueOf(0), entity.vI);
-        System.out.println("BoolNumFieldConvertorTests 02 OK!");
+        System.out.println("\ttest_convert_vI ok!");
     }
 
     @Test
@@ -56,6 +56,7 @@ public class BoolNumFieldConvertorTestCase {
         Assertions.assertEquals(1, entity.vi);
         meta.getField().set(entity, convertor.convert(meta, false));
         Assertions.assertEquals(0, entity.vi);
+        System.out.println("\ttest_convert_vi ok!");
     }
 
     @Test
@@ -66,6 +67,7 @@ public class BoolNumFieldConvertorTestCase {
         Assertions.assertEquals(Long.valueOf(1), entity.vL);
         meta.getField().set(entity, convertor.convert(meta, false));
         Assertions.assertEquals(Long.valueOf(0), entity.vL);
+        System.out.println("\ttest_convert_vL ok!");
     }
 
     @Test
@@ -76,6 +78,7 @@ public class BoolNumFieldConvertorTestCase {
         Assertions.assertEquals(1L, entity.vl);
         meta.getField().set(entity, convertor.convert(meta, false));
         Assertions.assertEquals(0L, entity.vl);
+        System.out.println("\ttest_convert_vl ok!");
     }
 
     @Test
@@ -86,6 +89,7 @@ public class BoolNumFieldConvertorTestCase {
         Assertions.assertEquals(Short.valueOf((short) 1), entity.vS);
         meta.getField().set(entity, convertor.convert(meta, false));
         Assertions.assertEquals(Short.valueOf((short) 0), entity.vS);
+        System.out.println("\ttest_convert_vS ok!");
     }
 
     @Test
@@ -96,6 +100,7 @@ public class BoolNumFieldConvertorTestCase {
         Assertions.assertEquals((short) 1, entity.vs);
         meta.getField().set(entity, convertor.convert(meta, false));
         Assertions.assertEquals((short) 0, entity.vs);
+        System.out.println("\ttest_convert_vs ok!");
     }
 
     @Test
@@ -106,6 +111,7 @@ public class BoolNumFieldConvertorTestCase {
         Assertions.assertEquals(Byte.valueOf((byte) 1), entity.vB);
         meta.getField().set(entity, convertor.convert(meta, false));
         Assertions.assertEquals(Byte.valueOf((byte) 0), entity.vB);
+        System.out.println("\ttest_convert_vB ok!");
     }
 
     @Test
@@ -116,6 +122,7 @@ public class BoolNumFieldConvertorTestCase {
         Assertions.assertEquals((byte) 1, entity.vb);
         meta.getField().set(entity, convertor.convert(meta, false));
         Assertions.assertEquals((byte) 0, entity.vb);
+        System.out.println("\ttest_convert_vb ok!");
     }
 
 }

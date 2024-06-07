@@ -33,6 +33,7 @@ public class DateParamConvertorTestCase {
         assertSupports(DbType.TIME, false);
         assertSupports(DbType.DATETIME, false);
         assertSupports(DbType.UNKNOWN, false);
+        System.out.println("\ttest_support ok!");
     }
 
     void assertSupports(DbType dbType, boolean supports) {
@@ -57,6 +58,7 @@ public class DateParamConvertorTestCase {
         assertConvert(new Timestamp(time));
         assertConvert(LocalDate.parse("2022-06-16"));
         assertConvert(LocalDate.of(2022, 6, 16));
+        System.out.println("\ttest_convert ok!");
     }
 
     private void assertConvert(Object value) {

@@ -26,6 +26,7 @@ public class BoolParamConvertorTestCase {
         assertSupports(DbType.TIME, false);
         assertSupports(DbType.DATETIME, false);
         assertSupports(DbType.UNKNOWN, false);
+        System.out.println("\ttest_support ok!");
     }
 
     void assertSupports(DbType dbType, boolean supports) {
@@ -36,7 +37,6 @@ public class BoolParamConvertorTestCase {
         Assertions.assertEquals(supports, convertor.supports(meta, Long.class));
         Assertions.assertEquals(supports, convertor.supports(meta, String.class));
     }
-
 
     @Test
     public void test_convert() {
@@ -59,6 +59,7 @@ public class BoolParamConvertorTestCase {
         Assertions.assertEquals(false, convertor.convert(meta, "OFF"));
         Assertions.assertEquals(false, convertor.convert(meta, "N"));
         Assertions.assertEquals(false, convertor.convert(meta, "NO"));
+        System.out.println("\ttest_convert ok!");
     }
 
 }

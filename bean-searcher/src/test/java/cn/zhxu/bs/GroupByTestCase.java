@@ -52,6 +52,7 @@ public class GroupByTestCase {
         BeanSearcher beanSearcher = SearcherBuilder.beanSearcher().sqlExecutor(sqlExecutor).build();
         Assertions.assertEquals(100, beanSearcher.searchCount(StudentCourse.class, new HashMap<>()));
         Assertions.assertEquals(100, beanSearcher.searchCount(StudentCourse.class, null));
+        System.out.println("\ttest_count ok!");
     }
 
     @Test
@@ -80,6 +81,7 @@ public class GroupByTestCase {
         Assertions.assertArrayEquals(new Number[]{100}, beanSearcher.searchSum(StudentCourse.class, new HashMap<>(), new String[]{"sumScore"}));
         Assertions.assertEquals(100, beanSearcher.searchSum(StudentCourse.class, null, "sumScore"));
         Assertions.assertArrayEquals(new Number[]{100}, beanSearcher.searchSum(StudentCourse.class, null, new String[]{"sumScore"}));
+        System.out.println("\ttest_sum ok!");
     }
 
     @Test
@@ -111,6 +113,7 @@ public class GroupByTestCase {
         mapSearcher.searchFirst(StudentCourse.class, MapUtils.builder().field(StudentCourse::getCourseId, 5).build());
         BeanSearcher beanSearcher = SearcherBuilder.beanSearcher().sqlExecutor(sqlExecutor).build();
         beanSearcher.searchFirst(StudentCourse.class, MapUtils.builder().field(StudentCourse::getCourseId, 5).build());
+        System.out.println("\ttest_where ok!");
     }
 
 
@@ -143,6 +146,7 @@ public class GroupByTestCase {
         mapSearcher.searchFirst(StudentCourse.class, MapUtils.builder().field(StudentCourse::getAvgScore, 80).op(GreaterThan.class).build());
         BeanSearcher beanSearcher = SearcherBuilder.beanSearcher().sqlExecutor(sqlExecutor).build();
         beanSearcher.searchFirst(StudentCourse.class, MapUtils.builder().field(StudentCourse::getAvgScore, 80).op(GreaterThan.class).build());
+        System.out.println("\ttest_having ok!");
     }
 
 
@@ -178,6 +182,7 @@ public class GroupByTestCase {
         BeanSearcher beanSearcher = SearcherBuilder.beanSearcher().sqlExecutor(sqlExecutor).build();
         beanSearcher.searchFirst(StudentCourse.class, MapUtils.builder().field(StudentCourse::getCourseId, 5)
                 .field(StudentCourse::getAvgScore, 80).op(GreaterThan.class).build());
+        System.out.println("\ttest_where_having_1 ok!");
     }
 
     @SearchBean(groupBy = "course_id", having = "sum_score > 100")
@@ -210,6 +215,7 @@ public class GroupByTestCase {
         BeanSearcher beanSearcher = SearcherBuilder.beanSearcher().sqlExecutor(sqlExecutor).build();
         Assertions.assertEquals(100, beanSearcher.searchCount(StudentCourse2.class, new HashMap<>()));
         Assertions.assertEquals(100, beanSearcher.searchCount(StudentCourse2.class, null));
+        System.out.println("\ttest_count_having_1 ok!");
     }
 
     @Test
@@ -230,6 +236,7 @@ public class GroupByTestCase {
 
         MapSearcher mapSearcher = SearcherBuilder.mapSearcher().sqlExecutor(sqlExecutor).build();
         Assertions.assertEquals(100, mapSearcher.searchCount(StudentCourse2.class, MapUtils.builder().field(StudentCourse::getCourseId, 5).build()));
+        System.out.println("\ttest_count_having_2 ok!");
     }
 
 
@@ -251,6 +258,7 @@ public class GroupByTestCase {
 
         MapSearcher mapSearcher = SearcherBuilder.mapSearcher().sqlExecutor(sqlExecutor).build();
         Assertions.assertEquals(100, mapSearcher.searchCount(StudentCourse2.class, MapUtils.builder().field(StudentCourse::getAvgScore, 80).op(GreaterThan.class).build()));
+        System.out.println("\ttest_count_having_3 ok!");
     }
 
     @Test
@@ -273,6 +281,7 @@ public class GroupByTestCase {
         MapSearcher mapSearcher = SearcherBuilder.mapSearcher().sqlExecutor(sqlExecutor).build();
         Assertions.assertEquals(100, mapSearcher.searchCount(StudentCourse2.class, MapUtils.builder().field(StudentCourse::getCourseId, 5)
                 .field(StudentCourse::getAvgScore, 80).op(GreaterThan.class).build()));
+        System.out.println("\ttest_count_having_4 ok!");
     }
 
     @SearchBean(
@@ -345,6 +354,7 @@ public class GroupByTestCase {
                 .field("no", "100").op(StartWith.class)
                 .field(CourseScore::getAvgScore, 80).op(GreaterThan.class)
                 .build());
+        System.out.println("\ttest_where_having_2 ok!");
     }
 
     @SearchBean(
@@ -411,6 +421,7 @@ public class GroupByTestCase {
                 .field("name", "Jack")
                 .field("avgScore", 80).op(GreaterThan.class)
                 .build());
+        System.out.println("\ttest_where_having_3 ok!");
     }
 
     @Test
@@ -454,6 +465,7 @@ public class GroupByTestCase {
                     .groupExpr("(A|B)&(C|D)")
                     .build()
         );
+        System.out.println("\ttest_group_expr_1 ok!");
     }
 
     @Test
@@ -497,6 +509,7 @@ public class GroupByTestCase {
                         .groupExpr("A|B")
                         .build()
         );
+        System.out.println("\ttest_group_expr_2 ok!");
     }
 
     @Test
@@ -534,6 +547,7 @@ public class GroupByTestCase {
                         .groupExpr("(A|B)")
                         .build()
         );
+        System.out.println("\ttest_group_expr_3 ok!");
     }
 
     @Test
@@ -571,6 +585,7 @@ public class GroupByTestCase {
                         .groupExpr("A|B")
                         .build()
         );
+        System.out.println("\ttest_group_expr_4 ok!");
     }
 
 }

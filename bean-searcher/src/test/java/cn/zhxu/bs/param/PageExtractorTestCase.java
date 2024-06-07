@@ -49,6 +49,7 @@ public class PageExtractorTestCase {
         paramResolver.setPageExtractor(new PageOffsetExtractor());
         test_01_do();
         paramResolver.setPageExtractor(oldPageExtractor);
+        System.out.println("\ttest_01 ok");
     }
 
     private void test_01_do() throws IllegalParamException {
@@ -82,6 +83,7 @@ public class PageExtractorTestCase {
         params.put("page", 2);
         params.put("size", 10);
         assert_02(resolve(params));
+        System.out.println("\ttest_02 ok");
     }
 
     private void assert_02(SearchParam param) {
@@ -105,6 +107,7 @@ public class PageExtractorTestCase {
         params.put("size", 10);
         assert_03(resolve(params));
         pageExtractor.setStart(0);
+        System.out.println("\ttest_03 ok");
     }
 
     private void assert_03(SearchParam param) {
@@ -130,6 +133,7 @@ public class PageExtractorTestCase {
         params.put("size", 10);
         assert_04(resolve(params));
         paramResolver.setPageExtractor(oldPageExtractor);
+        System.out.println("\ttest_04 ok");
     }
 
     private void assert_04(SearchParam param) {

@@ -66,6 +66,7 @@ public class SimpleSearchTestCase {
         BeanSearcher beanSearcher = SearcherBuilder.beanSearcher().sqlExecutor(sqlExecutor).build();
         beanSearcher.search(SearchBean.class, new HashMap<>());
         beanSearcher.search(SearchBean.class);
+        System.out.println("\ttest_1 ok!");
     }
 
     @Test
@@ -113,6 +114,7 @@ public class SimpleSearchTestCase {
 
         beanSearcher.search(SearchBean.class, params1);
         beanSearcher.search(SearchBean.class, params2);
+        System.out.println("\ttest_2 ok!");
     }
 
     @Test
@@ -145,6 +147,7 @@ public class SimpleSearchTestCase {
         mapSearcher.searchAll(SearchBean.class, params2);
         beanSearcher.searchAll(SearchBean.class, params1);
         beanSearcher.searchAll(SearchBean.class, params2);
+        System.out.println("\ttest_3 ok!");
     }
 
     @Test
@@ -175,6 +178,7 @@ public class SimpleSearchTestCase {
                 .groupExpr("(A|B|C)&D")
                 .build();
         beanSearcher.searchAll(SearchBean.class, params);
+        System.out.println("\ttest_4 ok!");
     }
 
     @Test
@@ -212,6 +216,7 @@ public class SimpleSearchTestCase {
                 .field(SearchBean::getName, "Jack")
                 .build();
         beanSearcher.searchAll(SearchBean.class, params);
+        System.out.println("\ttest_5 ok!");
     }
 
     @Test
@@ -252,6 +257,7 @@ public class SimpleSearchTestCase {
                 })
                 .build();
         beanSearcher.searchAll(SearchBean.class, params);
+        System.out.println("\ttest_6 ok!");
     }
 
     @Test
@@ -270,7 +276,7 @@ public class SimpleSearchTestCase {
             }
         };
         DefaultParamResolver paramResolver = new DefaultParamResolver();
-        paramResolver.setGexprMerge(false);
+        paramResolver.getConfiguration().setGexprMerge(false);
 
         BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
                 .paramResolver(paramResolver)
@@ -290,6 +296,7 @@ public class SimpleSearchTestCase {
                 })
                 .build();
         beanSearcher.searchAll(SearchBean.class, params);
+        System.out.println("\ttest_7 ok!");
     }
 
 }

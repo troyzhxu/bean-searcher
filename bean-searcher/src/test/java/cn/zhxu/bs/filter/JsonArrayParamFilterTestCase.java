@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-public class JsonArrayParamFilterTests {
+public class JsonArrayParamFilterTestCase {
 
     @Test
     public void test_01() {
@@ -19,6 +19,7 @@ public class JsonArrayParamFilterTests {
         Assertions.assertEquals("1", params.get("id-0"));
         Assertions.assertEquals("2", params.get("id-1"));
         Assertions.assertEquals("3", params.get("id-2"));
+        System.out.println("\ttest_01 passed!");
     }
 
     @Test
@@ -35,6 +36,7 @@ public class JsonArrayParamFilterTests {
         Assertions.assertEquals("21", params.get("age_0"));
         Assertions.assertEquals("22", params.get("age_1"));
         Assertions.assertEquals("30", params.get("age_2"));
+        System.out.println("\ttest_02 passed!");
     }
 
     @Test
@@ -48,6 +50,7 @@ public class JsonArrayParamFilterTests {
         Assertions.assertEquals(2, params.size());
         Assertions.assertEquals("1,2,3]", params.get("id"));
         Assertions.assertEquals("[32", params.get("age"));
+        System.out.println(getClass() + " test_03 passed!");
     }
 
 }

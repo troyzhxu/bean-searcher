@@ -17,53 +17,58 @@ public class DateFieldConvertorTestCase {
     DateFormatFieldConvertor.Formatter dateTimeFormatter = new DateFormatFieldConvertor().new Formatter("yyyy-MM-dd HH:mm:ss");
 
     @Test
-    public void java_util_Date() {
+    public void test_java_util_Date() {
         Object value = new Date(122, Calendar.FEBRUARY, 10, 12, 1, 0);
         Assertions.assertEquals(dateTimeFormatter.format(convertor.convert(Date.class, value)), "2022-02-10 12:01:00");
         Assertions.assertEquals(dateFormatter.format(convertor.convert(java.sql.Date.class, value)), "2022-02-10");
         Assertions.assertEquals(dateTimeFormatter.format(convertor.convert(Timestamp.class, value)), "2022-02-10 12:01:00");
         Assertions.assertEquals(dateTimeFormatter.format(convertor.convert(LocalDateTime.class, value)), "2022-02-10 12:01:00");
         Assertions.assertEquals(dateFormatter.format(convertor.convert(LocalDate.class, value)), "2022-02-10");
+        System.out.println("\ttest_java_util_Date ok!");
     }
 
     @Test
-    public void java_sql_Date() {
+    public void test_java_sql_Date() {
         Object value = new java.sql.Date(122, Calendar.FEBRUARY, 10);
         Assertions.assertEquals(dateFormatter.format(convertor.convert(Date.class, value)), "2022-02-10");
         Assertions.assertEquals(dateFormatter.format(convertor.convert(java.sql.Date.class, value)), "2022-02-10");
         Assertions.assertEquals(dateTimeFormatter.format(convertor.convert(Timestamp.class, value)), "2022-02-10 00:00:00");
         Assertions.assertEquals(dateTimeFormatter.format(convertor.convert(LocalDateTime.class, value)), "2022-02-10 00:00:00");
         Assertions.assertEquals(dateFormatter.format(convertor.convert(LocalDate.class, value)), "2022-02-10");
+        System.out.println("\ttest_java_sql_Date ok!");
     }
 
     @Test
-    public void java_sql_Timestamp() {
+    public void test_java_sql_Timestamp() {
         Object value = new java.sql.Timestamp(122, Calendar.FEBRUARY, 10, 12, 1, 0, 0);
         Assertions.assertEquals(dateTimeFormatter.format(convertor.convert(Date.class, value)), "2022-02-10 12:01:00");
         Assertions.assertEquals(dateFormatter.format(convertor.convert(java.sql.Date.class, value)), "2022-02-10");
         Assertions.assertEquals(dateTimeFormatter.format(convertor.convert(Timestamp.class, value)), "2022-02-10 12:01:00");
         Assertions.assertEquals(dateTimeFormatter.format(convertor.convert(LocalDateTime.class, value)), "2022-02-10 12:01:00");
         Assertions.assertEquals(dateFormatter.format(convertor.convert(LocalDate.class, value)), "2022-02-10");
+        System.out.println("\ttest_java_sql_Timestamp ok!");
     }
 
     @Test
-    public void java_time_LocalDate() {
+    public void test_java_time_LocalDate() {
         Object value = LocalDate.of(2022, 2, 10);
         Assertions.assertEquals(dateTimeFormatter.format(convertor.convert(Date.class, value)), "2022-02-10 00:00:00");
         Assertions.assertEquals(dateFormatter.format(convertor.convert(java.sql.Date.class, value)), "2022-02-10");
         Assertions.assertEquals(dateTimeFormatter.format(convertor.convert(Timestamp.class, value)), "2022-02-10 00:00:00");
         Assertions.assertEquals(dateTimeFormatter.format(convertor.convert(LocalDateTime.class, value)), "2022-02-10 00:00:00");
         Assertions.assertEquals(dateFormatter.format(convertor.convert(LocalDate.class, value)), "2022-02-10");
+        System.out.println("\ttest_java_time_LocalDate ok!");
     }
 
     @Test
-    public void java_time_LocalDateTime() {
+    public void test_java_time_LocalDateTime() {
         Object value = LocalDateTime.of(2022, 2, 10, 12, 1, 0);
         Assertions.assertEquals(dateTimeFormatter.format(convertor.convert(Date.class, value)), "2022-02-10 12:01:00");
         Assertions.assertEquals(dateFormatter.format(convertor.convert(java.sql.Date.class, value)), "2022-02-10");
         Assertions.assertEquals(dateTimeFormatter.format(convertor.convert(Timestamp.class, value)), "2022-02-10 12:01:00");
         Assertions.assertEquals(dateTimeFormatter.format(convertor.convert(LocalDateTime.class, value)), "2022-02-10 12:01:00");
         Assertions.assertEquals(dateFormatter.format(convertor.convert(LocalDate.class, value)), "2022-02-10");
+        System.out.println("\ttest_java_time_LocalDateTime ok!");
     }
 
 }

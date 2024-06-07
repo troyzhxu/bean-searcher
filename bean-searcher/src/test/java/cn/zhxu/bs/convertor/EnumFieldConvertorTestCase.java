@@ -7,8 +7,6 @@ import org.junit.jupiter.api.Test;
 
 public class EnumFieldConvertorTestCase {
 
-    final EnumFieldConvertor convertor = new EnumFieldConvertor();
-
     final FieldMeta meta = new DefaultMetaResolver().resolve(Model.class).requireFieldMeta("gender");
 
     static class Model {
@@ -23,22 +21,25 @@ public class EnumFieldConvertorTestCase {
 
     @Test
     public void test_supports() {
+        EnumFieldConvertor convertor = new EnumFieldConvertor();
         Assertions.assertTrue(convertor.supports(meta, String.class));
         Assertions.assertTrue(convertor.supports(meta, Integer.class));
         Assertions.assertTrue(convertor.supports(meta, int.class));
-        System.out.println("EnumFieldConvertorTestCase test_supports passed");
+        System.out.println("\ttest_support ok!");
     }
 
     @Test
     public void test_convert_string() {
+        EnumFieldConvertor convertor = new EnumFieldConvertor();
         Assertions.assertEquals(Gender.Male, convertor.convert(meta, "Male"));
         Assertions.assertEquals(Gender.Female, convertor.convert(meta, "Female"));
         Assertions.assertEquals(Gender.Unknown, convertor.convert(meta, "Unknown"));
-        System.out.println("EnumFieldConvertorTestCase test_convert_string passed");
+        System.out.println("\ttest_convert_string ok!");
     }
 
     @Test
     public void test_convert_string_ic() {
+        EnumFieldConvertor convertor = new EnumFieldConvertor();
         convertor.setIgnoreCase(true);
         Assertions.assertEquals(Gender.Male, convertor.convert(meta, "male"));
         Assertions.assertEquals(Gender.Female, convertor.convert(meta, "female"));
@@ -46,19 +47,21 @@ public class EnumFieldConvertorTestCase {
         Assertions.assertEquals(Gender.Male, convertor.convert(meta, "MALE"));
         Assertions.assertEquals(Gender.Female, convertor.convert(meta, "FEMALE"));
         Assertions.assertEquals(Gender.Unknown, convertor.convert(meta, "UNKNOWN"));
-        System.out.println("EnumFieldConvertorTestCase test_convert_string_ic passed");
+        System.out.println("\ttest_convert_string_ic ok!");
     }
 
     @Test
     public void test_convert_int() {
+        EnumFieldConvertor convertor = new EnumFieldConvertor();
         Assertions.assertEquals(Gender.Male, convertor.convert(meta, 0));
         Assertions.assertEquals(Gender.Female, convertor.convert(meta, 1));
         Assertions.assertEquals(Gender.Unknown, convertor.convert(meta, 2));
-        System.out.println("EnumFieldConvertorTestCase test_convert_int passed");
+        System.out.println("\ttest_convert_int ok!");
     }
 
     @Test
     public void test_fail_on_error() {
+        EnumFieldConvertor convertor = new EnumFieldConvertor();
         convertor.setFailOnError(true);
         boolean exception = false;
         try {
@@ -74,11 +77,12 @@ public class EnumFieldConvertorTestCase {
             exception = true;
         }
         Assertions.assertTrue(exception);
-        System.out.println("EnumFieldConvertorTestCase test_fail_on_error passed");
+        System.out.println("\ttest_fail_on_error ok!");
     }
 
     @Test
     public void test_null_on_error() {
+        EnumFieldConvertor convertor = new EnumFieldConvertor();
         convertor.setFailOnError(false);
         convertor.setIgnoreCase(false);
         Assertions.assertNull(convertor.convert(meta, "male"));
@@ -90,7 +94,7 @@ public class EnumFieldConvertorTestCase {
         Assertions.assertNull(convertor.convert(meta, "yyy"));
         Assertions.assertNull(convertor.convert(meta, -1));
         Assertions.assertNull(convertor.convert(meta, 3));
-        System.out.println("EnumFieldConvertorTestCase test_fail_on_error_false passed");
+        System.out.println("\ttest_null_on_error ok!");
     }
 
 }

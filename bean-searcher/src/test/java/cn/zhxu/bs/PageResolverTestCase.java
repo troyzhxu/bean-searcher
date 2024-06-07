@@ -22,6 +22,7 @@ public class PageResolverTestCase {
         Paging paging = paramResolver.resolvePaging(new FetchType(FetchType.DEFAULT), new HashMap<>());
         Assertions.assertEquals(0, paging.getOffset());
         Assertions.assertEquals(pageExtractor.getDefaultSize(), paging.getSize());
+        System.out.println("\ttest_page_01 ok!");
     }
 
     @Test
@@ -32,6 +33,7 @@ public class PageResolverTestCase {
         Paging paging = paramResolver.resolvePaging(new FetchType(FetchType.DEFAULT), new HashMap<>());
         Assertions.assertEquals(0, paging.getOffset());
         Assertions.assertEquals(pageExtractor.getDefaultSize(), paging.getSize());
+        System.out.println("\ttest_page_02 ok!");
     }
 
     @Test
@@ -45,6 +47,7 @@ public class PageResolverTestCase {
                         .page(0, pageExtractor.getMaxAllowedSize() + 10000)
                         .build()
         ));
+        System.out.println("\ttest_page_03 ok!");
     }
 
     @Test
@@ -58,6 +61,7 @@ public class PageResolverTestCase {
                         .page(0, pageExtractor.getMaxAllowedSize() + 10000)
                         .build()
         ));
+        System.out.println("\ttest_page_04 ok!");
     }
 
     @Test
@@ -72,6 +76,7 @@ public class PageResolverTestCase {
                         .put("size", pageExtractor.getMaxAllowedSize() + 10000)
                         .build()
         ));
+        System.out.println("\ttest_page_05 ok!");
     }
 
     @Test
@@ -86,6 +91,7 @@ public class PageResolverTestCase {
                         .put("size", pageExtractor.getMaxAllowedSize() + 10000)
                         .build()
         ));
+        System.out.println("\ttest_page_06 ok!");
     }
 
 }

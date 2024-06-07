@@ -76,7 +76,7 @@ public class BeanRefactorTestCase {
     ));
 
     @Test
-    public void test() {
+    public void test_01() {
         BeanMeta<TestBean> beanMeta = metaResolver.resolve(TestBean.class);
         Collection<FieldMeta> fieldSet = beanMeta.getFieldMetas();
 
@@ -95,7 +95,7 @@ public class BeanRefactorTestCase {
         values2.put("dateCreated", LocalDateTime.now());
 
         beanReflector.reflect(beanMeta, fieldSet, values2::get).assertEqual(values2);
-        System.out.println("BeanRefactorTests OK!");
+        System.out.println("\ttest_01 ok!");
     }
 
 

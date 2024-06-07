@@ -73,6 +73,7 @@ public class ListFieldConvertorTestCase {
         test_supports(rolesMeta);
         test_supports(roleIdsMeta);
         test_supports(roleNamesMeta);
+        System.out.println("\ttest_support ok!");
     }
 
     public void test_supports(FieldMeta meta) {
@@ -90,6 +91,7 @@ public class ListFieldConvertorTestCase {
         Assertions.assertEquals(1, list.get(0));
         Assertions.assertEquals(2, list.get(1));
         Assertions.assertEquals(3, list.get(2));
+        System.out.println("\ttest_convert_role_ids ok!");
     }
 
     @Test
@@ -103,6 +105,7 @@ public class ListFieldConvertorTestCase {
         Assertions.assertEquals("管理员", list.get(0));
         Assertions.assertEquals("财务", list.get(1));
         Assertions.assertEquals("采购", list.get(2));
+        System.out.println("\ttest_convert_role_names ok!");
     }
 
     @Test
@@ -116,6 +119,7 @@ public class ListFieldConvertorTestCase {
         Assertions.assertEquals(new Role(1,"管理员"), list.get(0));
         Assertions.assertEquals(new Role(2,"财务"), list.get(1));
         Assertions.assertEquals(new Role(3,"采购"), list.get(2));
+        System.out.println("\ttest_convert_roles ok!");
     }
 
 }

@@ -34,6 +34,7 @@ public class DateTimeParamConvertorTestCase {
         assertSupports(DbType.TIME, false);
         assertSupports(DbType.DATETIME, true);
         assertSupports(DbType.UNKNOWN, false);
+        System.out.println("\ttest_support ok!");
     }
 
     void assertSupports(DbType dbType, boolean supports) {
@@ -61,15 +62,15 @@ public class DateTimeParamConvertorTestCase {
         assertConvert(LocalDate.of(2022, 6, 16), 0, 0, 0);
         assertConvert(LocalDateTime.parse("2022-06-16T20:39:10"), 20, 39, 10);
         assertConvert(LocalDateTime.of(2022, 6, 16, 20, 39, 10), 20, 39, 10);
+        System.out.println("\ttest_convert ok!");
     }
 
     private void assertConvert(Object value, int hour, int minutes, int seconds) {
         FieldMeta meta = new FieldMeta(null, null,null, null, null, false, null, DbType.DATETIME, Cluster.AUTO);
         Object date = convertor.convert(meta, value);
-        Assertions.assertTrue(date instanceof java.sql.Timestamp);
+        Assertions.assertInstanceOf(Timestamp.class, date);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime((java.sql.Timestamp) date);
-        System.out.println(((java.sql.Timestamp) date).getTime());
         Assertions.assertEquals(2022, calendar.get(Calendar.YEAR));
         Assertions.assertEquals(Calendar.JUNE, calendar.get(Calendar.MONTH));
         Assertions.assertEquals(16, calendar.get(Calendar.DAY_OF_MONTH));

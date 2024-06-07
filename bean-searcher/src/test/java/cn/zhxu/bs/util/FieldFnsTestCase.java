@@ -29,12 +29,11 @@ public class FieldFnsTestCase {
     }
 
     @Test
-    public void test() {
+    public void test_01() {
         Assertions.assertEquals("name", FieldFns.name(User::getName));
         Assertions.assertEquals("nickName", FieldFns.name(User::getNickName));
         Assertions.assertEquals("active", FieldFns.name(User::isActive));
         Assertions.assertEquals("accountLocked", FieldFns.name(User::isAccountLocked));
-
         long t0 = System.currentTimeMillis();
         for (int i = 0; i < 10000000; i++) {
             FieldFns.name(User::getId);
@@ -45,6 +44,7 @@ public class FieldFnsTestCase {
         }
         long t = System.currentTimeMillis() - t0;
         System.out.println("耗时：" + t);
+        System.out.println("\ttest_01 ok!");
     }
 
 

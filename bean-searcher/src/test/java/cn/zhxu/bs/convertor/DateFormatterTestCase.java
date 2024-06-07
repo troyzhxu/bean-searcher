@@ -18,7 +18,7 @@ public class DateFormatterTestCase {
     DateFormatFieldConvertor.Formatter timeFormatter = new DateFormatFieldConvertor().new Formatter("HH:mm:ss");
 
     @Test
-    public void dateSupports() {
+    public void test_dateSupports() {
         Assertions.assertTrue(dateFormatter.supports(Date.class));
         Assertions.assertTrue(dateFormatter.supports(java.sql.Date.class));
         Assertions.assertTrue(dateFormatter.supports(Timestamp.class));
@@ -26,10 +26,11 @@ public class DateFormatterTestCase {
         Assertions.assertTrue(dateFormatter.supports(LocalDate.class));
         Assertions.assertFalse(dateFormatter.supports(Time.class));
         Assertions.assertFalse(dateFormatter.supports(LocalTime.class));
+        System.out.println("\ttest_dateSupports ok!");
     }
 
     @Test
-    public void dateTimeSupports() {
+    public void test_dateTimeSupports() {
         Assertions.assertTrue(dateTimeFormatter.supports(Date.class));
         Assertions.assertTrue(dateTimeFormatter.supports(Timestamp.class));
         Assertions.assertTrue(dateTimeFormatter.supports(LocalDateTime.class));
@@ -37,10 +38,11 @@ public class DateFormatterTestCase {
         Assertions.assertFalse(dateTimeFormatter.supports(LocalDate.class));
         Assertions.assertFalse(dateTimeFormatter.supports(Time.class));
         Assertions.assertFalse(dateTimeFormatter.supports(LocalTime.class));
+        System.out.println("\ttest_dateTimeSupports ok!");
     }
 
     @Test
-    public void timeSupports() {
+    public void test_timeSupports() {
         Assertions.assertTrue(timeFormatter.supports(Date.class));
         Assertions.assertTrue(timeFormatter.supports(Timestamp.class));
         Assertions.assertTrue(timeFormatter.supports(LocalDateTime.class));
@@ -48,10 +50,11 @@ public class DateFormatterTestCase {
         Assertions.assertTrue(timeFormatter.supports(LocalTime.class));
         Assertions.assertFalse(timeFormatter.supports(java.sql.Date.class));
         Assertions.assertFalse(timeFormatter.supports(LocalDate.class));
+        System.out.println("\ttest_timeSupports ok!");
     }
 
     @Test
-    public void testTimeFormatter() {
+    public void test_TimeFormatter() {
         Object date = new Date(122, Calendar.FEBRUARY, 10, 13, 59, 10);
         Object timestamp = new Timestamp(122, Calendar.FEBRUARY, 10, 13, 59, 10, 0);
         Object localDateTime = LocalDateTime.of(2022, 2, 10, 13, 59, 10);
@@ -62,6 +65,7 @@ public class DateFormatterTestCase {
         Assertions.assertEquals("13:59:10", timeFormatter.format(localDateTime));
         Assertions.assertEquals("13:59:10", timeFormatter.format(time));
         Assertions.assertEquals("13:59:10", timeFormatter.format(localTime));
+        System.out.println("\ttest_TimeFormatter ok!");
     }
 
 }

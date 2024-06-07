@@ -14,7 +14,7 @@ public class LRUCacheTestCase {
     Random random = new Random();
 
     @Test
-    public void test() throws InterruptedException {
+    public void test_01() throws InterruptedException {
         AtomicInteger putCount = new AtomicInteger(0);
         int threadCount = 50;
         CountDownLatch latch = new CountDownLatch(threadCount);
@@ -38,6 +38,7 @@ public class LRUCacheTestCase {
         long t = System.currentTimeMillis() - t0;
         System.out.println("次数：" + putCount);
         System.out.println("耗时：" + t);
+        System.out.println("\ttest_01 ok!");
     }
 
 }

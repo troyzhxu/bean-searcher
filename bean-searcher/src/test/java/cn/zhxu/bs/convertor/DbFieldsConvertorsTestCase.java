@@ -89,7 +89,7 @@ public class DbFieldsConvertorsTestCase {
     };
 
     @Test
-    public void doTest() {
+    public void test_01() {
         BeanMeta<Bean> beanMeta = new DefaultMetaResolver().resolve(Bean.class);
         Collection<FieldMeta> fieldMetas = beanMeta.getFieldMetas();
         for (FieldMeta meta : fieldMetas) {
@@ -97,7 +97,7 @@ public class DbFieldsConvertorsTestCase {
                 doTest(meta, convertor);
             }
         }
-        System.out.println("filed count = " + fieldMetas.size());
+        System.out.println("\ttest_01 ok!");
     }
 
     private void doTest(FieldMeta meta, FieldConvertor.ParamConvertor convertor) {
