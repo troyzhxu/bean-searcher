@@ -4,8 +4,6 @@ import cn.zhxu.bs.FieldOp;
 import cn.zhxu.bs.SqlWrapper;
 import cn.zhxu.bs.dialect.DialectWrapper;
 import cn.zhxu.bs.util.ObjectUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +15,6 @@ import java.util.List;
  */
 public class InList extends DialectWrapper implements FieldOp {
 
-    static final Logger log = LoggerFactory.getLogger(InList.class);
-
     @Override
     public String name() {
         return "InList";
@@ -26,14 +22,6 @@ public class InList extends DialectWrapper implements FieldOp {
 
     @Override
     public boolean isNamed(String name) {
-        if ("mv".equals(name)) {
-            log.warn("FieldOp 'mv' is deprecated from v3.3.0, please use 'il' instead.");
-            return true;
-        }
-        if ("MultiValue".equals(name)) {
-            log.warn("FieldOp 'MultiValue' is deprecated from v3.3.0, please use 'InList' instead.");
-            return true;
-        }
         return "il".equals(name) || "InList".equals(name);
     }
 
