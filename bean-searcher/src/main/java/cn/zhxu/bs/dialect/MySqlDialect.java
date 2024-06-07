@@ -9,14 +9,14 @@ import cn.zhxu.bs.param.Paging;
  * */
 public class MySqlDialect extends SqlPagination implements Dialect {
 
-	@Override
-	public SqlWrapper<Object> forPaginate(String fieldSelectSql, String fromWhereSql, Paging paging) {
-		return forPaginate(SIMPLE_LIMIT, fieldSelectSql, fromWhereSql, paging);
-	}
+    @Override
+    public SqlWrapper<Object> forPaginate(String fieldSelectSql, String fromWhereSql, Paging paging) {
+        return forPaginate(SIMPLE_LIMIT, fieldSelectSql, fromWhereSql, paging);
+    }
 
-	@Override
-	public boolean allowHavingAlias() {
-		return true;
-	}
+    @Override
+    public boolean allowHavingAlias() {
+        return true;
+    }
 
 }

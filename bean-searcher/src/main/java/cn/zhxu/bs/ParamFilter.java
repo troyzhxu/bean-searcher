@@ -8,13 +8,13 @@ import java.util.Map;
  */
 public interface ParamFilter {
 
-	/**
-	 * @param beanMeta 元信息
-	 * @param paraMap 过滤前的检索参数
-	 * @param <T> 泛型
-	 * @return 过滤后的检索参数
-	 * @throws IllegalParamException 抛出非法参数异常后将终止 SQL 查询
-	 */
-	<T> Map<String, Object> doFilter(BeanMeta<T> beanMeta, Map<String, Object> paraMap) throws IllegalParamException;
-	
+    /**
+     * @param beanMeta 元信息
+     * @param paraMap 过滤前的检索参数
+     * @param <T> 泛型
+     * @return 过滤后的检索参数
+     * @throws IllegalParamException 抛出非法参数异常后将终止 SQL 查询
+     */
+    <T> Map<String, Object> doFilter(BeanMeta<T> beanMeta, Map<String, Object> paraMap) throws IllegalParamException;
+    
 }

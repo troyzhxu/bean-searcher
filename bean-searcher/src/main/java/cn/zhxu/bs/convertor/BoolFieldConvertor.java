@@ -15,51 +15,51 @@ import java.util.Objects;
  */
 public class BoolFieldConvertor implements FieldConvertor.BFieldConvertor {
 
-	private String[] falseValues = new String[] { "0", "OFF", "FALSE", "N", "NO", "F" };
+    private String[] falseValues = new String[] { "0", "OFF", "FALSE", "N", "NO", "F" };
 
-	@Override
-	public boolean supports(FieldMeta meta, Class<?> valueType) {
-		if (Boolean.class == valueType || String.class == valueType || Number.class.isAssignableFrom(valueType)) {
-			Class<?> targetType = meta.getType();
-			return targetType == boolean.class || targetType == Boolean.class;
-		}
-		return false;
-	}
+    @Override
+    public boolean supports(FieldMeta meta, Class<?> valueType) {
+        if (Boolean.class == valueType || String.class == valueType || Number.class.isAssignableFrom(valueType)) {
+            Class<?> targetType = meta.getType();
+            return targetType == boolean.class || targetType == Boolean.class;
+        }
+        return false;
+    }
 
-	@Override
-	public Object convert(FieldMeta meta, Object value) {
-		if (value instanceof Boolean) {
-			return value;
-		}
-		if (value instanceof String) {
-			String bool = (String) value;
-			for (String t: falseValues) {
-				if (t.equalsIgnoreCase(bool)) {
-					return Boolean.FALSE;
-				}
-			}
-			return Boolean.TRUE;
-		}
-		return ((Number) value).intValue() != 0;
-	}
+    @Override
+    public Object convert(FieldMeta meta, Object value) {
+        if (value instanceof Boolean) {
+            return value;
+        }
+        if (value instanceof String) {
+            String bool = (String) value;
+            for (String t: falseValues) {
+                if (t.equalsIgnoreCase(bool)) {
+                    return Boolean.FALSE;
+                }
+            }
+            return Boolean.TRUE;
+        }
+        return ((Number) value).intValue() != 0;
+    }
 
-	public String[] getFalseValues() {
-		return falseValues;
-	}
+    public String[] getFalseValues() {
+        return falseValues;
+    }
 
-	public void setFalseValues(String[] falseValues) {
-		this.falseValues = Objects.requireNonNull(falseValues);
-	}
+    public void setFalseValues(String[] falseValues) {
+        this.falseValues = Objects.requireNonNull(falseValues);
+    }
 
-	/**
-	 * 追加假值
-	 * @param falseValues 假值
-	 * @since v3.1.0
-	 */
-	public void addFalseValues(String[] falseValues) {
-		int newLength = falseValues.length + this.falseValues.length;
-		this.falseValues = Arrays.copyOf(this.falseValues, newLength);
-		System.arraycopy(falseValues, 0, this.falseValues, this.falseValues.length, falseValues.length);
-	}
+    /**
+     * 追加假值
+     * @param falseValues 假值
+     * @since v3.1.0
+     */
+    public void addFalseValues(String[] falseValues) {
+        int newLength = falseValues.length + this.falseValues.length;
+        this.falseValues = Arrays.copyOf(this.falseValues, newLength);
+        System.arraycopy(falseValues, 0, this.falseValues, this.falseValues.length, falseValues.length);
+    }
 
 }

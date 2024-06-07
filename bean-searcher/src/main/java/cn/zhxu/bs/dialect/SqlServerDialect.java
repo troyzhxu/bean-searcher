@@ -11,9 +11,9 @@ import cn.zhxu.bs.param.Paging;
  * */
 public class SqlServerDialect extends SqlPagination implements Dialect {
 
-	@Override
-	public SqlWrapper<Object> forPaginate(String fieldSelectSql, String fromWhereSql, Paging paging) {
-		return forPaginate(OFFSET_FETCH, fieldSelectSql, fromWhereSql, paging);
-	}
+    @Override
+    public SqlWrapper<Object> forPaginate(String fieldSelectSql, String fromWhereSql, Paging paging) {
+        return forPaginate(OFFSET_FETCH, fieldSelectSql, fromWhereSql, paging);
+    }
 
 }

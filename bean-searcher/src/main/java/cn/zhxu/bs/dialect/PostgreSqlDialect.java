@@ -11,14 +11,14 @@ import cn.zhxu.bs.param.Paging;
  * */
 public class PostgreSqlDialect extends SqlPagination implements Dialect {
 
-	@Override
-	public SqlWrapper<Object> forPaginate(String fieldSelectSql, String fromWhereSql, Paging paging) {
-		return forPaginate(OFFSET_LIMIT, fieldSelectSql, fromWhereSql, paging);
-	}
+    @Override
+    public SqlWrapper<Object> forPaginate(String fieldSelectSql, String fromWhereSql, Paging paging) {
+        return forPaginate(OFFSET_LIMIT, fieldSelectSql, fromWhereSql, paging);
+    }
 
-	@Override
-	public boolean hasILike() {
-		return true;
-	}
+    @Override
+    public boolean hasILike() {
+        return true;
+    }
 
 }

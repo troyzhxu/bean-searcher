@@ -13,10 +13,10 @@ import java.util.Map;
  * */
 public interface ParamAware {
 
-	/**
-	 * 装配之后
-	 * @param paraMap 检索参数
-	 * */
-	void afterAssembly(Map<String, Object> paraMap);
-	
+    /**
+     * 装配之后
+     * @param paraMap 检索参数
+     * */
+    void afterAssembly(Map<String, Object> paraMap);
+    
 }

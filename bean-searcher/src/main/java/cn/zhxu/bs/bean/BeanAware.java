@@ -9,9 +9,9 @@ package cn.zhxu.bs.bean;
  * */
 public interface BeanAware {
 
-	/**
-	 * 装配之后
-	 * */
-	void afterAssembly();
+    /**
+     * 装配之后
+     * */
+    void afterAssembly();
 
 }
