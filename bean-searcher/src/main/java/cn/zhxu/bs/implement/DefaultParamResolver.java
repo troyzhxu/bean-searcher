@@ -2,7 +2,7 @@ package cn.zhxu.bs.implement;
 
 import cn.zhxu.bs.*;
 import cn.zhxu.bs.convertor.*;
-import cn.zhxu.bs.filter.ArrValueParamFilter;
+import cn.zhxu.bs.filter.ArrayValueParamFilter;
 import cn.zhxu.bs.filter.SizeLimitParamFilter;
 import cn.zhxu.bs.group.DefaultGroupResolver;
 import cn.zhxu.bs.group.Group;
@@ -69,7 +69,7 @@ public class DefaultParamResolver implements ParamResolver {
 		convertors.add(new DateTimeParamConvertor());
 		convertors.add(new EnumParamConvertor());
 		paramFilters.add(new SizeLimitParamFilter());
-		paramFilters.add(new ArrValueParamFilter());
+		paramFilters.add(new ArrayValueParamFilter());
 	}
 
 	public DefaultParamResolver(List<FieldConvertor.ParamConvertor> convertors, List<ParamFilter> paramFilters) {

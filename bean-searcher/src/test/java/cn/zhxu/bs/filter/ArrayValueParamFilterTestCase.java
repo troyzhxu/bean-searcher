@@ -7,9 +7,9 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ArrValueParamFilterTestCase {
+public class ArrayValueParamFilterTestCase {
 
-    ArrValueParamFilter filter = new ArrValueParamFilter();
+    ArrayValueParamFilter filter = new ArrayValueParamFilter();
 
     @Test
     public void test_01() {
