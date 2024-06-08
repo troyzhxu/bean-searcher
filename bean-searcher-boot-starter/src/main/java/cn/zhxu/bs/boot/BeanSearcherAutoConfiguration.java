@@ -217,16 +217,12 @@ public class BeanSearcherAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(GroupPair.Resolver.class)
-    public GroupPair.Resolver groupPairResolver() {
-        return new GroupPairResolver();
-    }
-
-    @Bean
     @ConditionalOnMissingBean(SqlResolver.class)
-    public SqlResolver sqlResolver(Dialect dialect, GroupPair.Resolver groupPairResolver) {
+    public SqlResolver sqlResolver(Dialect dialect, ObjectProvider<GroupPair.Resolver> groupPairResolver,
+                                   ObjectProvider<JoinParaSerializer> joinParaSerializer) {
         DefaultSqlResolver resolver = new DefaultSqlResolver(dialect);
-        resolver.setGroupPairResolver(groupPairResolver);
+        ifAvailable(groupPairResolver, resolver::setGroupPairResolver);
+        ifAvailable(joinParaSerializer, resolver::setJoinParaSerializer);
         return resolver;
     }
 

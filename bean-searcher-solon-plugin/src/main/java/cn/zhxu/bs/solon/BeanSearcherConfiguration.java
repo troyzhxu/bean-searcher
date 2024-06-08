@@ -168,16 +168,12 @@ public class BeanSearcherConfiguration {
     }
 
     @Bean
-    @Condition(onMissingBean = GroupPair.Resolver.class)
-    public GroupPair.Resolver groupPairResolver() {
-        return new GroupPairResolver();
-    }
-
-    @Bean
     @Condition(onMissingBean = SqlResolver.class)
-    public SqlResolver sqlResolver(Dialect dialect, GroupPair.Resolver groupPairResolver) {
+    public SqlResolver sqlResolver(Dialect dialect, @Inject(required = false) GroupPair.Resolver groupPairResolver,
+                                   @Inject(required = false) JoinParaSerializer joinParaSerializer) {
         DefaultSqlResolver resolver = new DefaultSqlResolver(dialect);
-        resolver.setGroupPairResolver(groupPairResolver);
+        ifAvailable(groupPairResolver, resolver::setGroupPairResolver);
+        ifAvailable(joinParaSerializer, resolver::setJoinParaSerializer);
         return resolver;
     }
 

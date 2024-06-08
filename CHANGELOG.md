@@ -5,8 +5,8 @@
 * Bean Searcher
   * 增强 `参数构建器` 新增 `or(..)` 与 `and(..)` 方法：https://gitee.com/troyzhxu/bean-searcher/issues/I9T66B
   * 增强 `DefaultParamResolver` 新增 `gexprMerge` 属性，可用于控制参数构建器中使用 `groupExpr(..)` 方法指定的组表达式是否合并或覆盖前端参数传来的组表达式：https://gitee.com/troyzhxu/bean-searcher/issues/I9TAV6
+  * 新增 `JoinParaSerializer`：拼接参数序列化器，可处理集合类型的参数值，自动将其连接为用英文逗号分隔的字符串
   * 新增 `ArrayValueParamFilter`：用于配合 `MapUtils.flat(..)`} `MapUtils.flatBuilder(..)` 方法，兼容数组参数值的用法，例如前端传参：age=20 & age=30 & age-op=bt
-  * 新增 `JoinParaValueParamFilter`：用于让拼接参数支持直接使用集合参数值，在该过滤器中将集合参数值用英文逗号进行连接处理
   * 新增 `SuffixOpParamFilter`：用于简化前端传参，例如 age-gt=25 替代 age=25 & age-op=gt
   * 新增 `JsonArrayParamFilter`：用于简化前端传参，例如 age=[20,30] 替代 age-0=20 & age-1=30
   * 新增 `BeanMeta.getSqlSnippets()` 方法，用于获取该实体类上所有的 SQL 片段
@@ -20,6 +20,7 @@
   * 新增配置项 `bean-searcher.params.filter.use-join-para-value` 是否启用 `JoinParaValueParamFilter`, 默认 `true`
   * 新增配置项 `bean-searcher.params.filter.use-suffix-op` 是否启用 `SuffixOpParamFilter`, 默认 `false`
   * 新增配置项 `bean-searcher.params.filter.use-json-array` 是否启用 `JoinParaValueParamFilter`, 默认 `false`
+  * 支持以 Bean 的形式自定义 `JoinParaSerializer` 组件
 * Bean Searcher Solon Plugin
   * 新增配置项 `bean-searcher.params.group.mergeable` 指定组表达式是否可合并，默认 `true`
   * 新增配置项 `bean-searcher.params.filter.use-size-limit` 是否启用 `SizeLimitParamFilter`，默认 `true`
@@ -27,6 +28,7 @@
   * 新增配置项 `bean-searcher.params.filter.use-join-para-value` 是否启用 `JoinParaValueParamFilter`, 默认 `true`
   * 新增配置项 `bean-searcher.params.filter.use-suffix-op` 是否启用 `SuffixOpParamFilter`, 默认 `false`
   * 新增配置项 `bean-searcher.params.filter.use-json-array` 是否启用 `JoinParaValueParamFilter`, 默认 `false`
+  * 支持以 Bean 的形式自定义 `JoinParaSerializer` 组件
 
 ### 🌻 Better
 
