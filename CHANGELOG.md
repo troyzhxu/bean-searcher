@@ -16,6 +16,7 @@
   * 新增 `AlwaysTrue`（恒真：`at`）与 `AlwaysFalse`（恒假：`af`）运算符：https://gitee.com/troyzhxu/bean-searcher/issues/I9TMFI
   * 升级 `OracleDialect`：使用新的 `offset ? rows fetch next ? rows only` 分页语法，仅支持 Oracle 12c（2013年6月发布）及以上版本
   * 优化 `ExprParser`：新增逻辑关系符常量，逻辑表达式中的且关系符 `&` 与 或关系符 `|` 不再支持自定义。
+  * 优化 `FieldParam`：其内部类 `Value` 新增 `getIndex()` 方法
 * Bean Searcher Boot Starter
   * 新增配置项 `bean-searcher.params.group.mergeable` 指定组表达式是否可合并，默认 `true`
   * 新增配置项 `bean-searcher.params.filter.use-size-limit` 是否启用 `SizeLimitParamFilter`，默认 `true`

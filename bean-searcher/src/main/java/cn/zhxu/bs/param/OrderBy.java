@@ -1,5 +1,6 @@
 package cn.zhxu.bs.param;
 
+import cn.zhxu.bs.util.MapBuilder;
 import cn.zhxu.bs.util.StringUtils;
 
 import java.util.Set;
@@ -57,9 +58,19 @@ public class OrderBy {
         return new OrderBy(sort, ORDER_DESC);
     }
 
+    /**
+     * 该方法被 {@link MapBuilder#buildForRpc()} 使用到，不能随意更改
+     * @return String
+     */
     @Override
     public String toString() {
-        return "OrderBy{ sort='" + sort + "', order='" + order + "'}";
+        if (sort == null) {
+            return "";
+        }
+        if (order == null) {
+            return sort;
+        }
+        return sort + ":" + order;
     }
 
 }

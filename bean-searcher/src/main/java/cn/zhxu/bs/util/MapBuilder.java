@@ -1,5 +1,6 @@
 package cn.zhxu.bs.util;
 
+import cn.zhxu.bs.FieldOp;
 import cn.zhxu.bs.SearchException;
 import cn.zhxu.bs.SearchParam;
 import cn.zhxu.bs.param.FieldParam;
@@ -9,6 +10,7 @@ import cn.zhxu.bs.util.FieldFns.FieldFn;
 
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * 检索参数构建器
@@ -257,7 +259,7 @@ public class MapBuilder extends Builder<MapBuilder> {
 
     /**
      * 分页
-     * @param page 页码，从 0 开始
+     * @param page 页码
      * @param size 每页大小
      * @return MapBuilder
      */
@@ -268,7 +270,7 @@ public class MapBuilder extends Builder<MapBuilder> {
 
     /**
      * 分页
-     * @param offset 偏移量，从 0 开始
+     * @param offset 偏移量
      * @param size 每页大小
      * @return MapBuilder
      */
@@ -283,6 +285,99 @@ public class MapBuilder extends Builder<MapBuilder> {
      */
     public Map<String, Object> build() {
         return map;
+    }
+
+    /**
+     * 构建适用于 RPC 远程调用的检索参数
+     * @return 检索参数
+     * @since v4.3
+     */
+    public Map<String, Object> buildForRpc() {
+        return buildForRpc(RpcNames.DEFAULT);
+    }
+
+    /**
+     * 构建适用于 RPC 远程调用的检索参数
+     * @return 检索参数
+     * @since v4.3
+     */
+    public Map<String, Object> buildForRpc(RpcNames names) {
+        // 分页参数
+        Object paging = map.remove(PAGING);
+        if (paging instanceof Page) {
+            map.put(names.page(), ((Page) paging).getPage());
+            map.put(names.size(), ((Page) paging).getSize());
+        } else
+        if (paging instanceof Limit) {
+            map.put(names.offset(), ((Limit) paging).getOffset());
+            map.put(names.size(), ((Limit) paging).getSize());
+        }
+        // 排序参数
+        buildRpcOnList(ORDER_BY, names.orderBy());
+        // Select 参数
+        buildRpcOnList(ONLY_SELECT, names.onlySelect());
+        buildRpcOnList(SELECT_EXCLUDE, names.selectExclude());
+        // 字段参数
+        List<String> fieldKeys = map.keySet().stream()
+                .filter(key -> key != null && key.contains(FIELD_PARAM))
+                .collect(Collectors.toList());
+        for (String fieldKey : fieldKeys) {
+            buildRpcOnField(names, fieldKey);
+        }
+        // 分组参数
+        Object gexpr = map.remove(GROUP_EXPR);
+        if (gexpr instanceof String) {
+            map.put(names.gexpr(), gexpr);
+        }
+        map.remove(MapUtils.ARRAY_KEYS);
+        return map;
+    }
+
+    private void buildRpcOnField(RpcNames names, String fieldKey) {
+        Object value = map.remove(fieldKey);
+        if (!(value instanceof FieldParam)) {
+            return;
+        }
+        int idx = fieldKey.indexOf(FIELD_PARAM);
+        String group = idx > 0 ? fieldKey.substring(0, idx) : null;
+        if (ROOT_GROUP.equals(group)) {
+            return;
+        }
+        FieldParam param = (FieldParam) value;
+        String prefix;
+        if (group != null) {
+            prefix = group + names.groupSeparator() + param.getName() + names.separator();
+        } else {
+            prefix = param.getName() + names.separator();
+        }
+        Object operator = param.getOperator();
+        if (operator instanceof FieldOp) {
+            FieldOp op = (FieldOp) operator;
+            if (op.isNonPublic()) {
+                throw new IllegalStateException("You can't use non-public FieldOp to buildForRpc");
+            }
+            map.put(prefix + names.op(), op.name());
+        } else if (operator instanceof Class && FieldOp.class.isAssignableFrom((Class<?>) operator)) {
+            String op = ((Class<?>) operator).getSimpleName();
+            map.put(prefix + names.op(), op);
+        } else if (operator instanceof String) {
+            map.put(prefix + names.op(), operator);
+        }
+        if (param.isIgnoreCase()) {
+            map.put(prefix + names.ic(), true);
+        }
+        for (FieldParam.Value v : param.getValueList()) {
+            map.put(prefix + v.getIndex(), v.getValue());
+        }
+    }
+
+    private void buildRpcOnList(String fromKey, String toKey) {
+        Object onlySelect = map.remove(fromKey);
+        if (onlySelect instanceof List) {
+            StringJoiner joiner = new StringJoiner(",");
+            ((List<?>) onlySelect).forEach(item -> joiner.add(item.toString()));
+            map.put(toKey, joiner.toString());
+        }
     }
 
     public static class Page {
