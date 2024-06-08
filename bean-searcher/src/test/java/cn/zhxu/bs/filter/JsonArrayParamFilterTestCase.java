@@ -24,8 +24,7 @@ public class JsonArrayParamFilterTestCase {
 
     @Test
     public void test_02() {
-        JsonArrayParamFilter filter = new JsonArrayParamFilter();
-        filter.setSeparator("_");
+        JsonArrayParamFilter filter = new JsonArrayParamFilter("_");
         Map<String, Object> params = MapUtils.builder()
                 .put("age", "[21,22,30]")
                 .put("age_op", "il")

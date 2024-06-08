@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MetaResolverTestCase {
 
@@ -737,7 +738,22 @@ public class MetaResolverTestCase {
     @Test
     public void test_25() {
         BeanMeta<User25> beanMeta = metaResolver.resolve(User25.class);
-        List<String> joinParaNames = beanMeta.getJoinParaNames();
+        List<SqlSnippet.SqlPara> sqlParas = beanMeta.getSqlSnippets().stream()
+                .flatMap(snippet -> snippet.getParas().stream())
+                .collect(Collectors.toList());
+
+        List<String> jdbcParaNames = sqlParas.stream()
+                .filter(SqlSnippet.SqlPara::isJdbcPara)
+                .map(SqlSnippet.SqlPara::getName)
+                .collect(Collectors.toList());
+        Assertions.assertEquals(2, jdbcParaNames.size());
+        Assertions.assertTrue(jdbcParaNames.contains("groupId"));
+        Assertions.assertTrue(jdbcParaNames.contains("minScore"));
+
+        List<String> joinParaNames = sqlParas.stream()
+                .filter(sqlPara -> !sqlPara.isJdbcPara())
+                .map(SqlSnippet.SqlPara::getName)
+                .collect(Collectors.toList());
         Assertions.assertEquals(6, joinParaNames.size());
         Assertions.assertTrue(joinParaNames.contains("table"));
         Assertions.assertTrue(joinParaNames.contains("extra"));
