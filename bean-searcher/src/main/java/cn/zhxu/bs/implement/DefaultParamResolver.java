@@ -3,7 +3,6 @@ package cn.zhxu.bs.implement;
 import cn.zhxu.bs.*;
 import cn.zhxu.bs.convertor.*;
 import cn.zhxu.bs.filter.ArrayValueParamFilter;
-import cn.zhxu.bs.filter.JoinParaValueParamFilter;
 import cn.zhxu.bs.filter.SizeLimitParamFilter;
 import cn.zhxu.bs.group.DefaultGroupResolver;
 import cn.zhxu.bs.group.Group;
@@ -71,7 +70,6 @@ public class DefaultParamResolver implements ParamResolver {
         convertors.add(new EnumParamConvertor());
         paramFilters.add(new SizeLimitParamFilter());
         paramFilters.add(new ArrayValueParamFilter());
-        paramFilters.add(new JoinParaValueParamFilter());
     }
 
     public DefaultParamResolver(List<FieldConvertor.ParamConvertor> convertors, List<ParamFilter> paramFilters) {

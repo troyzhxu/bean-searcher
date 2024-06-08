@@ -140,22 +140,6 @@ public class BeanSearcherProperties {
             private boolean useArrayValue = true;
 
             /**
-             * 是否启用拼接参数值过滤器，默认为 true，用于转换集合参数值，一般与拼接参数配合使用，启用时，可让框架支持以下用法：
-             * <pre> {@code
-             * @SearchBean(where="id in (:idList:)")
-             * }</pre>
-             * 然后检索参数中可以为拼接参数 idList 直接添加集合参数值：
-             * <pre>{@code
-             * Map<String, Object> params = MapUtils.builder()
-             *     .put("idList", Arrays.asList(1, 2, 3));
-             *     .build();
-             * }</pre>
-             * @see JoinParaValueParamFilter
-             * @since v4.3.0
-             */
-            private boolean useJoinParaValue = true;
-
-            /**
              * 是否启用 Json 数组参数值，默认为 false，用于简化前端传参，例如 age=[20,30] 替代 age-0=20 & age-1=30 <br>
              * 但需要注意的是，即使该参数为 true, 也不一定能成功启用该过滤器，您必须还得添加 <a href="https://gitee.com/troyzhxu/xjsonkit">xjsonkit</a> 的 json 相关实现的依赖才可以，目前这些依赖有（你可以任选其一）：
              * <pre>
@@ -197,14 +181,6 @@ public class BeanSearcherProperties {
 
             public void setUseArrayValue(boolean useArrayValue) {
                 this.useArrayValue = useArrayValue;
-            }
-
-            public boolean isUseJoinParaValue() {
-                return useJoinParaValue;
-            }
-
-            public void setUseJoinParaValue(boolean useJoinParaValue) {
-                this.useJoinParaValue = useJoinParaValue;
             }
 
             public boolean isUseJsonArray() {
