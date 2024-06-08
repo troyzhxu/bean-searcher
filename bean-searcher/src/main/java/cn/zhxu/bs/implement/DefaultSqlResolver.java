@@ -25,6 +25,7 @@ import java.util.Objects;
 public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 
     private GroupPair.Resolver groupPairResolver = new GroupPairResolver();
+    private JoinParaSerializer joinParaSerializer = new JoinParaSerializer();
 
     public DefaultSqlResolver() { }
 
@@ -272,8 +273,8 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
                 paraReceiver.add(para);
             } else {
                 // 将这部分逻辑提上来，当 sqlSnippet 只有一个拼接参数 且 该参数为空时，使其不参与 where 子句
-                String strParam = para != null ? para.toString() : "";
-                sqlSnippet = sqlSnippet.replace(sqlPara.getSqlName(), strParam);
+                String value = joinParaSerializer.serialize(para);
+                sqlSnippet = sqlSnippet.replace(sqlPara.getSqlName(), value);
             }
         }
         return sqlSnippet;
@@ -365,6 +366,14 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
 
     public void setGroupPairResolver(GroupPair.Resolver groupPairResolver) {
         this.groupPairResolver = Objects.requireNonNull(groupPairResolver);
+    }
+
+    public JoinParaSerializer getJoinParaSerializer() {
+        return joinParaSerializer;
+    }
+
+    public void setJoinParaSerializer(JoinParaSerializer joinParaSerializer) {
+        this.joinParaSerializer = Objects.requireNonNull(joinParaSerializer);
     }
 
 }
