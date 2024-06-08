@@ -16,9 +16,23 @@ import java.util.Objects;
  */
 public class SuffixOpParamFilter implements ParamFilter {
 
-    private FieldOpPool fieldOpPool = FieldOpPool.DEFAULT;
-    private String separator = "-";
-    private String operatorSuffix = "op";
+    private final FieldOpPool fieldOpPool;
+    private final String separator;
+    private final String operatorKey;
+
+    public SuffixOpParamFilter() {
+        this(FieldOpPool.DEFAULT, "-", "op");
+    }
+
+    public SuffixOpParamFilter(String separator, String operatorKey) {
+        this(FieldOpPool.DEFAULT, separator, operatorKey);
+    }
+
+    public SuffixOpParamFilter(FieldOpPool fieldOpPool, String separator, String operatorKey) {
+        this.fieldOpPool = Objects.requireNonNull(fieldOpPool);
+        this.separator = Objects.requireNonNull(separator);
+        this.operatorKey = Objects.requireNonNull(operatorKey);
+    }
 
     @Override
     public <T> Map<String, Object> doFilter(BeanMeta<T> beanMeta, Map<String, Object> paraMap) {
@@ -49,7 +63,7 @@ public class SuffixOpParamFilter implements ParamFilter {
             } else {
                 newMap.put(field, value);
             }
-            newMap.put(field + separator + operatorSuffix, opName);
+            newMap.put(field + separator + operatorKey, opName);
         }
         if (newMap != null) {
             paraMap.putAll(newMap);
@@ -61,24 +75,12 @@ public class SuffixOpParamFilter implements ParamFilter {
         return fieldOpPool;
     }
 
-    public void setFieldOpPool(FieldOpPool fieldOpPool) {
-        this.fieldOpPool = Objects.requireNonNull(fieldOpPool);
-    }
-
     public String getSeparator() {
         return separator;
     }
 
-    public void setSeparator(String separator) {
-        this.separator = Objects.requireNonNull(separator);
-    }
-
-    public String getOperatorSuffix() {
-        return operatorSuffix;
-    }
-
-    public void setOperatorSuffix(String operatorSuffix) {
-        this.operatorSuffix = Objects.requireNonNull(operatorSuffix);
+    public String getOperatorKey() {
+        return operatorKey;
     }
 
 }

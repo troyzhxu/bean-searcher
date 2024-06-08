@@ -17,7 +17,15 @@ import java.util.Objects;
  */
 public class JsonArrayParamFilter implements ParamFilter {
 
-    private String separator = "-";
+    private final String separator;
+
+    public JsonArrayParamFilter() {
+        this("-");
+    }
+
+    public JsonArrayParamFilter(String separator) {
+        this.separator = Objects.requireNonNull(separator);
+    }
 
     @Override
     public <T> Map<String, Object> doFilter(BeanMeta<T> beanMeta, Map<String, Object> paraMap) {
@@ -63,10 +71,6 @@ public class JsonArrayParamFilter implements ParamFilter {
 
     public String getSeparator() {
         return separator;
-    }
-
-    public void setSeparator(String separator) {
-        this.separator = Objects.requireNonNull(separator);
     }
 
 }

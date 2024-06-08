@@ -14,9 +14,11 @@ import java.util.Map;
  */
 public class SizeLimitParamFilter implements ParamFilter {
 
-    private int maxParaMapSize = 150;
+    private final int maxParaMapSize;
 
-    public SizeLimitParamFilter() { }
+    public SizeLimitParamFilter() {
+        this(150);
+    }
 
     public SizeLimitParamFilter(int maxParaMapSize) {
         this.maxParaMapSize = maxParaMapSize;
@@ -34,10 +36,6 @@ public class SizeLimitParamFilter implements ParamFilter {
 
     public int getMaxParaMapSize() {
         return maxParaMapSize;
-    }
-
-    public void setMaxParaMapSize(int maxParaMapSize) {
-        this.maxParaMapSize = maxParaMapSize;
     }
 
 }
