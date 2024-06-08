@@ -180,7 +180,7 @@ public class BeanSearcherAutoConfiguration {
     }
 
     @Bean
-    @Order(-1000)
+    @Order(-100)
     @ConditionalOnMissingBean(SizeLimitParamFilter.class)
     @ConditionalOnProperty(name = "bean-searcher.params.filter.use-size-limit", havingValue = "true", matchIfMissing = true)
     public SizeLimitParamFilter sizeLimitParamFilter(BeanSearcherProperties config) {
@@ -188,7 +188,7 @@ public class BeanSearcherAutoConfiguration {
     }
 
     @Bean
-    @Order(-500)
+    @Order(100)
     @ConditionalOnMissingBean(ArrayValueParamFilter.class)
     @ConditionalOnProperty(name = "bean-searcher.params.filter.use-array-value", havingValue = "true", matchIfMissing = true)
     public ArrayValueParamFilter arrayValueParamFilter(BeanSearcherProperties config) {
@@ -196,7 +196,7 @@ public class BeanSearcherAutoConfiguration {
     }
 
     @Bean
-    @Order(0)
+    @Order(200)
     @ConditionalOnMissingBean(SuffixOpParamFilter.class)
     @ConditionalOnProperty(name = "bean-searcher.params.filter.use-suffix-op", havingValue = "true")
     public SuffixOpParamFilter suffixOpParamFilter(FieldOpPool fieldOpPool, BeanSearcherProperties config) {
@@ -340,7 +340,7 @@ public class BeanSearcherAutoConfiguration {
         }
 
         @Bean
-        @Order(500)
+        @Order(300)
         @ConditionalOnMissingBean(JsonArrayParamFilter.class)
         @ConditionalOnProperty(name = "bean-searcher.params.filter.use-json-array", havingValue = "true")
         public JsonArrayParamFilter jsonArrayParamFilter(BeanSearcherProperties config) {
