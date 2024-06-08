@@ -3,16 +3,19 @@
 ### ✨ Features
 
 * Bean Searcher
-  * 增强 `参数构建器` 新增 `or(..)` 与 `and(..)` 方法：https://gitee.com/troyzhxu/bean-searcher/issues/I9T66B
-  * 增强 `DefaultParamResolver` 新增 `gexprMerge` 属性，可用于控制参数构建器中使用 `groupExpr(..)` 方法指定的组表达式是否合并或覆盖前端参数传来的组表达式：https://gitee.com/troyzhxu/bean-searcher/issues/I9TAV6
+  * 优化 `BeanMeta`: 新增 `getSqlSnippets()` 方法，用户可以使用该方法获取该实体类上所有已解析的 SQL 片段
+  * 优化 `SearchSql`: 新增 `getSearchParam()` 方法，用户可以在 `SqlInterceptor` 中使用该方法获取到解析后的检索参数
+  * 增强 `MapBuilder`：新增 `or(..)` 与 `and(..)` 方法，用于简化逻辑分组在后端的使用：https://gitee.com/troyzhxu/bean-searcher/issues/I9T66B
+  * 增强 `MapBuilder`：新增 `buildForRpc()` 与 `buildForRpc(NameConfigs)` 方法，用于构建适用于请求远程 API 服务的参数
+  * 优化 `MapBuilder`：方法 `field(FieldFn, Collection)` 与 `field(String, Collection)` 的第二个参数兼容传入 `null` 的用法
+  * 增强 `DefaultParamResolver`：新增 `gexprMerge` 属性，可用于控制参数构建器中使用 `groupExpr(..)` 方法指定的组表达式是否合并或覆盖前端参数传来的组表达式：https://gitee.com/troyzhxu/bean-searcher/issues/I9TAV6
   * 新增 `JoinParaSerializer`：拼接参数序列化器，可处理集合类型的参数值，自动将其连接为用英文逗号分隔的字符串
-  * 新增 `ArrayValueParamFilter`：用于配合 `MapUtils.flat(..)`} `MapUtils.flatBuilder(..)` 方法，兼容数组参数值的用法，例如前端传参：age=20 & age=30 & age-op=bt
+  * 新增 `ArrayValueParamFilter`：用于配合 `MapUtils.flat(..)` 与 `MapUtils.flatBuilder(..)` 方法，兼容数组参数值的用法，例如前端传参：age=20 & age=30 & age-op=bt
   * 新增 `SuffixOpParamFilter`：用于简化前端传参，例如 age-gt=25 替代 age=25 & age-op=gt
   * 新增 `JsonArrayParamFilter`：用于简化前端传参，例如 age=[20,30] 替代 age-0=20 & age-1=30
   * 新增 `AlwaysTrue`（恒真：`at`）与 `AlwaysFalse`（恒假：`af`）运算符：https://gitee.com/troyzhxu/bean-searcher/issues/I9TMFI
-  * 新增 `BeanMeta.getSqlSnippets()` 方法，用于获取该实体类上所有的 SQL 片段
-  * 升级 `OracleDialect`: 仅支持 Oracle 12c（2013年6月发布）及以上版本
-  * 优化 `ExprParser`：新增逻辑关系符常理，逻辑表达式中的且关系符 `&` 与 或关系符 `|` 不再支持自定义。
+  * 升级 `OracleDialect`：使用新的 `offset ? rows fetch next ? rows only` 分页语法，仅支持 Oracle 12c（2013年6月发布）及以上版本
+  * 优化 `ExprParser`：新增逻辑关系符常量，逻辑表达式中的且关系符 `&` 与 或关系符 `|` 不再支持自定义。
 * Bean Searcher Boot Starter
   * 新增配置项 `bean-searcher.params.group.mergeable` 指定组表达式是否可合并，默认 `true`
   * 新增配置项 `bean-searcher.params.filter.use-size-limit` 是否启用 `SizeLimitParamFilter`，默认 `true`
@@ -30,7 +33,6 @@
 
 ### 🌻 Better
 
-* 优化 `参数构建器` 兼容集合类型的字段值传入 `null` 的用法
 * 升级 Junit -> 5.10.2
 * 升级 Solon -> 2.8.0
 
