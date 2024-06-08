@@ -3,7 +3,10 @@ package cn.zhxu.bs.solon;
 import cn.zhxu.bs.*;
 import cn.zhxu.bs.convertor.*;
 import cn.zhxu.bs.dialect.*;
+import cn.zhxu.bs.filter.ArrayValueParamFilter;
+import cn.zhxu.bs.filter.JsonArrayParamFilter;
 import cn.zhxu.bs.filter.SizeLimitParamFilter;
+import cn.zhxu.bs.filter.SuffixOpParamFilter;
 import cn.zhxu.bs.group.DefaultGroupResolver;
 import cn.zhxu.bs.group.ExprParser;
 import cn.zhxu.bs.group.GroupPair;
@@ -27,6 +30,7 @@ import java.util.function.Consumer;
 
 @Configuration
 public class BeanSearcherConfiguration {
+
     //放到这儿，减少注入处理代码
     @Inject
     BeanSearcherProperties config;
@@ -67,10 +71,33 @@ public class BeanSearcherConfiguration {
         return new EnumParamConvertor();
     }
 
-    @Bean(index = -1000)
-    @Condition(onMissingBean = SizeLimitParamFilter.class)
+    @Bean(index = -100)
+    @Condition(onMissingBean = SizeLimitParamFilter.class,
+            onProperty = "${bean-searcher.params.filter.use-size-limit:true}=true")
     public SizeLimitParamFilter sizeLimitParamFilter() {
         return new SizeLimitParamFilter(config.getParams().getFilter().getMaxParaMapSize());
+    }
+
+    @Bean(index = 100)
+    @Condition(onMissingBean = ArrayValueParamFilter.class,
+            onProperty = "${bean-searcher.params.filter.use-array-value:true}=true")
+    public ArrayValueParamFilter arrayValueParamFilter() {
+        return new ArrayValueParamFilter(config.getParams().getSeparator());
+    }
+
+    @Bean(index = -100)
+    @Condition(onMissingBean = SuffixOpParamFilter.class,
+            onProperty = "${bean-searcher.params.filter.use-suffix-op}=true")
+    public SuffixOpParamFilter suffixOpParamFilter(FieldOpPool fieldOpPool) {
+        BeanSearcherProperties.Params params = config.getParams();
+        return new SuffixOpParamFilter(fieldOpPool, params.getSeparator(), params.getOperatorKey());
+    }
+
+    @Bean(index = -100)
+    @Condition(onMissingBean = JsonArrayParamFilter.class, onClass = JsonKit.class,
+            onProperty = "${bean-searcher.params.filter.use-json-array}=true")
+    public JsonArrayParamFilter jsonArrayParamFilter() {
+        return new JsonArrayParamFilter(config.getParams().getSeparator());
     }
 
     @Bean

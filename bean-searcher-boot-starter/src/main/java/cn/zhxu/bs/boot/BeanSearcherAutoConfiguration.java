@@ -344,8 +344,7 @@ public class BeanSearcherAutoConfiguration {
         @ConditionalOnMissingBean(JsonArrayParamFilter.class)
         @ConditionalOnProperty(name = "bean-searcher.params.filter.use-json-array", havingValue = "true")
         public JsonArrayParamFilter jsonArrayParamFilter(BeanSearcherProperties config) {
-            Params params = config.getParams();
-            return new JsonArrayParamFilter(params.getSeparator());
+            return new JsonArrayParamFilter(config.getParams().getSeparator());
         }
 
     }
