@@ -121,24 +121,6 @@ public class BeanMeta<T> {
         return snippets = list;
     }
 
-    transient List<String> joinParas;
-
-    /**
-     * 获取该实体类上所有的 拼接参数 的名称
-     * @return 拼接参数 的名称段列表
-     * @since v4.3.0
-     */
-    public List<String> getJoinParaNames() {
-        if (joinParas != null) {
-            return joinParas;
-        }
-        return joinParas = getSqlSnippets().stream()
-                .flatMap(snippet -> snippet.getParas().stream())
-                .filter(sqlPara -> !sqlPara.isJdbcPara())
-                .map(SqlSnippet.SqlPara::getName)
-                .collect(Collectors.toList());
-    }
-
     public Class<T> getBeanClass() {
         return beanClass;
     }
@@ -179,6 +161,10 @@ public class BeanMeta<T> {
         return distinct;
     }
 
+    public Collection<FieldMeta> getFieldMetas() {
+        return Collections.unmodifiableCollection(fieldMetaMap.values());
+    }
+
     public Set<String> getFieldSet() {
         return Collections.unmodifiableSet(fieldMetaMap.keySet());
     }
@@ -214,10 +200,6 @@ public class BeanMeta<T> {
     public String getFieldSql(String field) {
         FieldMeta meta = requireFieldMeta(field);
         return meta.getFieldSql().getSql();
-    }
-
-    public Collection<FieldMeta> getFieldMetas() {
-        return Collections.unmodifiableCollection(fieldMetaMap.values());
     }
 
     public SqlSnippet getOrderBySnippet() {
