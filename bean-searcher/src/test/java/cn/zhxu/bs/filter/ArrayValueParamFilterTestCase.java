@@ -29,7 +29,7 @@ public class ArrayValueParamFilterTestCase {
         Assertions.assertArrayEquals(new Object[] { "20", "30" }, (Object[]) params.get("age-bt"));
         Assertions.assertEquals("M", params.get("sex-0"));
         Assertions.assertEquals("F", params.get("sex-1"));
-        System.out.println("\ttest_01 passed!");
+        System.out.println("\ttest_01 ok!");
     }
 
     @Test

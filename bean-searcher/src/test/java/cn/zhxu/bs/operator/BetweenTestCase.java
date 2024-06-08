@@ -33,7 +33,7 @@ public class BetweenTestCase {
         ));
         Assertions.assertEquals("age between ? and ?", sb.toString());
         Assertions.assertArrayEquals(new Object[]{ 10, 20 }, params.toArray());
-        System.out.println("\ttest_02 passed");
+        System.out.println("\ttest_02 ok!");
     }
 
     @Test
@@ -44,7 +44,7 @@ public class BetweenTestCase {
         ));
         Assertions.assertEquals("age >= ?", sb.toString());
         Assertions.assertArrayEquals(new Object[]{ 10 }, params.toArray());
-        System.out.println("\ttest_03 passed");
+        System.out.println("\ttest_03 ok!");
     }
 
     @Test
@@ -55,7 +55,7 @@ public class BetweenTestCase {
         ));
         Assertions.assertEquals("age >= ?", sb.toString());
         Assertions.assertArrayEquals(new Object[]{ 10 }, params.toArray());
-        System.out.println("\ttest_04 passed");
+        System.out.println("\ttest_04 ok!");
     }
 
     @Test
@@ -66,7 +66,7 @@ public class BetweenTestCase {
         ));
         Assertions.assertEquals("age <= ?", sb.toString());
         Assertions.assertArrayEquals(new Object[]{ 10 }, params.toArray());
-        System.out.println("\ttest_05 passed");
+        System.out.println("\ttest_05 ok!");
     }
 
     @Test
@@ -77,7 +77,7 @@ public class BetweenTestCase {
         ));
         Assertions.assertEquals("age >= ?", sb.toString());
         Assertions.assertArrayEquals(new Object[]{ 10 }, params.toArray());
-        System.out.println("\ttest_06 passed");
+        System.out.println("\ttest_06 ok!");
     }
 
     @Test
@@ -88,7 +88,7 @@ public class BetweenTestCase {
         ));
         Assertions.assertEquals("age <= ?", sb.toString());
         Assertions.assertArrayEquals(new Object[]{ 10 }, params.toArray());
-        System.out.println("\ttest_07 passed");
+        System.out.println("\ttest_07 ok!");
     }
 
     @Test
@@ -101,7 +101,7 @@ public class BetweenTestCase {
         ));
         Assertions.assertEquals("(select age from user where id = ?) between ? and ?", sb.toString());
         Assertions.assertArrayEquals(new Object[]{ 120, 10, 20 }, params.toArray());
-        System.out.println("\ttest_08 passed");
+        System.out.println("\ttest_08 ok!");
     }
 
     @Test
@@ -112,7 +112,7 @@ public class BetweenTestCase {
         ));
         Assertions.assertEquals("upper(name) between ? and ?", sb.toString());
         Assertions.assertArrayEquals(new Object[]{ "A", "B" }, params.toArray());
-        System.out.println("\ttest_09 passed");
+        System.out.println("\ttest_09 ok!");
     }
 
     @Test
@@ -123,7 +123,7 @@ public class BetweenTestCase {
         ));
         Assertions.assertEquals("upper(name) between ? and ?", sb.toString());
         Assertions.assertArrayEquals(new Object[]{ "ABC", "ABC" }, params.toArray());
-        System.out.println("\ttest_10 passed");
+        System.out.println("\ttest_10 ok!");
     }
 
 }

@@ -19,7 +19,7 @@ public class OrLikeTestCase {
         Assertions.assertTrue(orLike.isNamed("ol"));
         Assertions.assertTrue(orLike.isNamed("OrLike"));
         Assertions.assertFalse(orLike.lonely());
-        System.out.println("\ttest_01 passed");
+        System.out.println("\ttest_01 ok!");
     }
 
     @Test
@@ -31,7 +31,7 @@ public class OrLikeTestCase {
         ));
         Assertions.assertEquals("name like ? or name like ? or name like ?", sb.toString());
         Assertions.assertArrayEquals(new Object[]{ "a", "B", "c" }, params.toArray());
-        System.out.println("\ttest_02 passed");
+        System.out.println("\ttest_02 ok!");
     }
 
     @Test
@@ -43,7 +43,7 @@ public class OrLikeTestCase {
         ));
         Assertions.assertEquals("upper(name) like ? or upper(name) like ? or upper(name) like ?", sb.toString());
         Assertions.assertArrayEquals(new Object[]{ "A", "B", "C" }, params.toArray());
-        System.out.println("\ttest_03 passed");
+        System.out.println("\ttest_03 ok!");
     }
 
     @Test
@@ -59,7 +59,7 @@ public class OrLikeTestCase {
                 "(select name from user where id = ?) like ? or " +
                 "(select name from user where id = ?) like ?", sb.toString());
         Assertions.assertArrayEquals(new Object[]{ 12, "a", 12, "B", 12, "c" }, params.toArray());
-        System.out.println("\ttest_04 passed");
+        System.out.println("\ttest_04 ok!");
     }
 
     @Test
@@ -75,7 +75,7 @@ public class OrLikeTestCase {
                 "upper((select name from user where id = ?)) like ? or " +
                 "upper((select name from user where id = ?)) like ?", sb.toString());
         Assertions.assertArrayEquals(new Object[]{ 12, "A", 12, "B", 12, "C" }, params.toArray());
-        System.out.println("\ttest_05 passed");
+        System.out.println("\ttest_05 ok!");
     }
 
     @Test
@@ -87,7 +87,7 @@ public class OrLikeTestCase {
         ));
         Assertions.assertEquals("name like ? or name like ? or name like ?", sb.toString());
         Assertions.assertArrayEquals(new Object[]{ "a", "B", "c" }, params.toArray());
-        System.out.println("\ttest_06 passed");
+        System.out.println("\ttest_06 ok!");
     }
 
     @Test
@@ -99,7 +99,7 @@ public class OrLikeTestCase {
         ));
         Assertions.assertEquals("name ilike ? or name ilike ? or name ilike ?", sb.toString());
         Assertions.assertArrayEquals(new Object[]{ "a", "B", "c" }, params.toArray());
-        System.out.println("\ttest_07 passed");
+        System.out.println("\ttest_07 ok!");
     }
 
     @Test
@@ -115,7 +115,7 @@ public class OrLikeTestCase {
                 "(select name from user where id = ?) like ? or " +
                 "(select name from user where id = ?) like ?", sb.toString());
         Assertions.assertArrayEquals(new Object[]{ 12, "a", 12, "B", 12, "c" }, params.toArray());
-        System.out.println("\ttest_08 passed");
+        System.out.println("\ttest_08 ok!");
     }
 
     @Test
@@ -131,7 +131,7 @@ public class OrLikeTestCase {
                 "(select name from user where id = ?) ilike ? or " +
                 "(select name from user where id = ?) ilike ?", sb.toString());
         Assertions.assertArrayEquals(new Object[]{ 12, "a", 12, "B", 12, "c" }, params.toArray());
-        System.out.println("\ttest_09 passed");
+        System.out.println("\ttest_09 ok!");
     }
 
 }

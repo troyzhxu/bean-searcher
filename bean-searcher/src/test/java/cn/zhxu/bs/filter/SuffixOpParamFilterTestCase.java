@@ -21,7 +21,7 @@ public class SuffixOpParamFilterTestCase {
         Assertions.assertEquals("il", params.get("id-op"));
         Assertions.assertEquals("30", params.get("age"));
         Assertions.assertEquals("gt", params.get("age-op"));
-        System.out.println("\ttest_01 passed!");
+        System.out.println("\ttest_01 ok!");
     }
 
     @Test
@@ -36,7 +36,7 @@ public class SuffixOpParamFilterTestCase {
         Assertions.assertEquals("il", params.get("id_op"));
         Assertions.assertEquals("30", params.get("age"));
         Assertions.assertEquals("gt", params.get("age_op"));
-        System.out.println("\ttest_02 passed!");
+        System.out.println("\ttest_02 ok!");
     }
 
     @Test
@@ -54,7 +54,7 @@ public class SuffixOpParamFilterTestCase {
         Assertions.assertEquals("il", params.get("id-op"));
         Assertions.assertEquals("30", params.get("age"));
         Assertions.assertEquals("gt", params.get("age-op"));
-        System.out.println("\ttest_03 passed!");
+        System.out.println("\ttest_03 ok!");
     }
 
     @Test
@@ -75,7 +75,7 @@ public class SuffixOpParamFilterTestCase {
         Assertions.assertEquals("gt", params.get("age-op"));
         Assertions.assertEquals("Jack", params.get("name"));
         Assertions.assertEquals("eq", params.get("name-op"));
-        System.out.println("\ttest_04 passed!");
+        System.out.println("\ttest_04 ok!");
     }
 
 }
