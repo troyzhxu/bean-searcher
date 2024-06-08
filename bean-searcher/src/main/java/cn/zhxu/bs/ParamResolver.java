@@ -1,7 +1,6 @@
 package cn.zhxu.bs;
 
 import cn.zhxu.bs.param.FetchType;
-import cn.zhxu.bs.util.NameConfigs;
 
 import java.util.Map;
 
@@ -24,7 +23,7 @@ public interface ParamResolver {
      * 配置类
      * @since v4.3
      */
-    class Configuration extends NameConfigs {
+    class Configuration extends ParamNames<Configuration> {
 
         /**
          * 用于控制参数构建器中使用 `groupExpr(..)` 方法指定的组表达式是否合并或覆盖前端参数传来的组表达式

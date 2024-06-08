@@ -6,7 +6,7 @@
   * 优化 `BeanMeta`: 新增 `getSqlSnippets()` 方法，用户可以使用该方法获取该实体类上所有已解析的 SQL 片段
   * 优化 `SearchSql`: 新增 `getSearchParam()` 方法，用户可以在 `SqlInterceptor` 中使用该方法获取到解析后的检索参数
   * 增强 `MapBuilder`：新增 `or(..)` 与 `and(..)` 方法，用于简化逻辑分组在后端的使用：https://gitee.com/troyzhxu/bean-searcher/issues/I9T66B
-  * 增强 `MapBuilder`：新增 `buildForRpc()` 与 `buildForRpc(NameConfigs)` 方法，用于构建适用于请求远程 API 服务的参数
+  * 增强 `MapBuilder`：新增 `buildForRpc()` 与 `buildForRpc(RpcNames)` 方法，用于构建适用于请求远程 API 服务的参数
   * 优化 `MapBuilder`：方法 `field(FieldFn, Collection)` 与 `field(String, Collection)` 的第二个参数兼容传入 `null` 的用法
   * 增强 `DefaultParamResolver`：新增 `gexprMerge` 属性，可用于控制参数构建器中使用 `groupExpr(..)` 方法指定的组表达式是否合并或覆盖前端参数传来的组表达式：https://gitee.com/troyzhxu/bean-searcher/issues/I9TAV6
   * 新增 `JoinParaSerializer`：拼接参数序列化器，可处理集合类型的参数值，自动将其连接为用英文逗号分隔的字符串

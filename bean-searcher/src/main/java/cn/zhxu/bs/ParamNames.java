@@ -1,4 +1,4 @@
-package cn.zhxu.bs.util;
+package cn.zhxu.bs;
 
 import java.util.Objects;
 
@@ -6,12 +6,7 @@ import java.util.Objects;
  * 字段名称配置
  * @since v4.3
  */
-public class NameConfigs {
-
-    /**
-     * 默认配置
-     */
-    public static NameConfigs DEFAULT = new NameConfigs();
+public class ParamNames<T extends ParamNames<T>> {
 
     /**
      * 排序字段参数名
@@ -65,98 +60,99 @@ public class NameConfigs {
      */
     protected String groupSeparator = ".";
 
-    public static NameConfigs newConfig() {
-        return new NameConfigs();
-    }
-
     public String sort() {
         return sort;
     }
 
-    public NameConfigs sort(String sort) {
+    @SuppressWarnings("unchecked")
+    private T self() {
+        return (T) this;
+    }
+
+    public T sort(String sort) {
         this.sort = Objects.requireNonNull(sort);
-        return this;
+        return self();
     }
 
     public String order() {
         return order;
     }
 
-    public NameConfigs order(String order) {
+    public T order(String order) {
         this.order = Objects.requireNonNull(order);
-        return this;
+        return self();
     }
 
     public String orderBy() {
         return orderBy;
     }
 
-    public NameConfigs orderBy(String orderBy) {
+    public T orderBy(String orderBy) {
         this.orderBy = Objects.requireNonNull(orderBy);
-        return this;
+        return self();
     }
 
     public String separator() {
         return separator;
     }
 
-    public NameConfigs separator(String separator) {
+    public T separator(String separator) {
         this.separator = Objects.requireNonNull(separator);
-        return this;
+        return self();
     }
 
     public String ic() {
         return ic;
     }
 
-    public NameConfigs ic(String ic) {
+    public T ic(String ic) {
         this.ic = Objects.requireNonNull(ic);
-        return this;
+        return self();
     }
 
     public String op() {
         return op;
     }
 
-    public NameConfigs op(String op) {
+    public T op(String op) {
         this.op = Objects.requireNonNull(op);
-        return this;
+        return self();
     }
 
     public String onlySelect() {
         return onlySelect;
     }
 
-    public NameConfigs onlySelect(String onlySelect) {
+    public T onlySelect(String onlySelect) {
         this.onlySelect = Objects.requireNonNull(onlySelect);
-        return this;
+        return self();
     }
 
     public String selectExclude() {
         return selectExclude;
     }
 
-    public NameConfigs selectExclude(String selectExclude) {
+    public T selectExclude(String selectExclude) {
         this.selectExclude = Objects.requireNonNull(selectExclude);
-        return this;
+        return self();
     }
 
     public String gexpr() {
         return gexpr;
     }
 
-    public NameConfigs gexpr(String gexpr) {
+    public T gexpr(String gexpr) {
         this.gexpr = Objects.requireNonNull(gexpr);
-        return this;
+        return self();
     }
 
     public String groupSeparator() {
         return groupSeparator;
     }
 
-    public NameConfigs groupSeparator(String groupSeparator) {
+    public T groupSeparator(String groupSeparator) {
         this.groupSeparator = Objects.requireNonNull(groupSeparator);
-        return this;
+        return self();
     }
 
 }
