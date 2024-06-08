@@ -55,6 +55,10 @@ public class FieldParam {
             return value;
         }
 
+        public int getIndex() {
+            return index;
+        }
+
         /**
          * 在 {@link cn.zhxu.bs.group.Group } 的布尔运算中，会用到该方法
          * @param o Object
