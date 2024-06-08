@@ -3,6 +3,7 @@ package cn.zhxu.bs.implement;
 import cn.zhxu.bs.util.ObjectUtils;
 
 import java.util.Map;
+import java.util.Objects;
 
 
 public class PageSizeExtractor extends BasePageExtractor {
@@ -23,7 +24,7 @@ public class PageSizeExtractor extends BasePageExtractor {
     }
 
     public void setPageName(String pageName) {
-        this.pageName = pageName;
+        this.pageName = Objects.requireNonNull(pageName);
     }
 
     public String getPageName() {

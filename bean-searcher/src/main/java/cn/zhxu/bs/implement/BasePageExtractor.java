@@ -7,6 +7,7 @@ import cn.zhxu.bs.util.MapBuilder;
 import cn.zhxu.bs.util.ObjectUtils;
 
 import java.util.Map;
+import java.util.Objects;
 
 public abstract class BasePageExtractor implements PageExtractor {
 
@@ -94,7 +95,7 @@ public abstract class BasePageExtractor implements PageExtractor {
     }
 
     public void setSizeName(String sizeName) {
-        this.sizeName = sizeName;
+        this.sizeName = Objects.requireNonNull(sizeName);
     }
 
     public void setStart(int start) {

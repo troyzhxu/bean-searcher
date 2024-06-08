@@ -3,6 +3,7 @@ package cn.zhxu.bs.implement;
 import cn.zhxu.bs.util.ObjectUtils;
 
 import java.util.Map;
+import java.util.Objects;
 
 
 public class PageOffsetExtractor extends BasePageExtractor {
@@ -23,7 +24,7 @@ public class PageOffsetExtractor extends BasePageExtractor {
     }
 
     public void setOffsetName(String offsetName) {
-        this.offsetName = offsetName;
+        this.offsetName = Objects.requireNonNull(offsetName);
     }
 
     public String getOffsetName() {
