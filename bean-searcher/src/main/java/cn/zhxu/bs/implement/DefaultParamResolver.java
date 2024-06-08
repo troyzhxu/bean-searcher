@@ -140,7 +140,7 @@ public class DefaultParamResolver implements ParamResolver {
         if (value != null) {
             return value;
         }
-        return paraMap.get(configuration.getSelectExcludeName());
+        return paraMap.get(configuration.selectExclude());
     }
 
     protected Object getOnlySelect(Map<String, Object> paraMap) {
@@ -148,7 +148,7 @@ public class DefaultParamResolver implements ParamResolver {
         if (value != null) {
             return value;
         }
-        return paraMap.get(configuration.getOnlySelectName());
+        return paraMap.get(configuration.onlySelect());
     }
 
     public Group<List<FieldParam>> resolveParamsGroup(Collection<FieldMeta> fieldMetas, Map<String, Object> paraMap) throws IllegalParamException {
@@ -159,7 +159,7 @@ public class DefaultParamResolver implements ParamResolver {
                     if (params == null) {
                         MapWrapper mapWrapper;
                         if (gKey != null) {
-                            mapWrapper = new MapWrapper(paraMap, gKey, configuration.getGroupSeparator());
+                            mapWrapper = new MapWrapper(paraMap, gKey, configuration.groupSeparator());
                         } else {
                             mapWrapper = new MapWrapper(paraMap);
                         }
@@ -173,10 +173,10 @@ public class DefaultParamResolver implements ParamResolver {
 
     protected String getGroupExpr(Map<String, Object> paraMap) throws IllegalParamException {
         String gExpr = ObjectUtils.string(paraMap.get(MapBuilder.GROUP_EXPR));
-        String expr = ObjectUtils.string(paraMap.get(configuration.getGexprName()));
+        String expr = ObjectUtils.string(paraMap.get(configuration.gexpr()));
         if (StringUtils.isBlank(gExpr)) {
             gExpr = expr;
-        } else if (configuration.isGexprMerge() && StringUtils.isNotBlank(expr)) {
+        } else if (configuration.gexprMerge() && StringUtils.isNotBlank(expr)) {
             gExpr = BRACKET_LEFT + gExpr + BRACKET_RIGHT + AND_OP + BRACKET_LEFT + expr + BRACKET_RIGHT;
         }
         if (StringUtils.isNotBlank(gExpr)) {
@@ -191,7 +191,7 @@ public class DefaultParamResolver implements ParamResolver {
     private List<FieldParam> extractFieldParams(Collection<FieldMeta> fieldMetas, MapWrapper paraMap) {
         Map<String, Set<Integer>> fieldIndicesMap = new HashMap<>();
         for (String key : paraMap.keySet()) {
-            int index = key.lastIndexOf(configuration.getSeparator());
+            int index = key.lastIndexOf(configuration.separator());
             if (index > 0 && key.length() > index + 1) {
                 String suffix = key.substring(index + 1);
                 if (INDEX_PATTERN.matcher(suffix).matches()) {
@@ -247,7 +247,7 @@ public class DefaultParamResolver implements ParamResolver {
         List<FieldParam.Value> values = param != null ? param.getValueList() : new ArrayList<>();
         if (values.isEmpty() && indices != null) {
             for (int index : indices) {
-                Object value = paraMap.get1(field + configuration.getSeparator() + index);
+                Object value = paraMap.get1(field + configuration.separator() + index);
                 if (index == 0 && value == null) {
                     value = paraMap.get1(field);
                 }
@@ -271,7 +271,7 @@ public class DefaultParamResolver implements ParamResolver {
             ignoreCase = param.isIgnoreCase();
         }
         if (ignoreCase == null) {
-            ignoreCase = ObjectUtils.toBoolean(paraMap.get1(field + configuration.separatorIcSuffix()));
+            ignoreCase = ObjectUtils.toBoolean(paraMap.get1(field + configuration.icSuffix()));
         }
         return new FieldParam(field, operator, values, ignoreCase);
     }
@@ -315,7 +315,7 @@ public class DefaultParamResolver implements ParamResolver {
                 return fieldOpPool.getFieldOp(op);
             }
         }
-        Object value = paraMap.get1(field + configuration.separatorOpSuffix());
+        Object value = paraMap.get1(field + configuration.opSuffix());
         return fieldOpPool.getFieldOp(value);
     }
 
@@ -344,7 +344,7 @@ public class DefaultParamResolver implements ParamResolver {
             List<OrderBy> orderBys = (List<OrderBy>) list;
             return orderBys;
         }
-        String string = ObjectUtils.string(paraMap.get(configuration.getOrderByName()));
+        String string = ObjectUtils.string(paraMap.get(configuration.orderBy()));
         if (StringUtils.isNotBlank(string)) {
             return Arrays.stream(string.split(","))
                     .map(str -> {
@@ -360,8 +360,8 @@ public class DefaultParamResolver implements ParamResolver {
                     .filter(Objects::nonNull)
                     .collect(Collectors.toList());
         }
-        String sort = ObjectUtils.string(paraMap.get(configuration.getSortName()));
-        String order = ObjectUtils.string(paraMap.get(configuration.getOrderName()));
+        String sort = ObjectUtils.string(paraMap.get(configuration.sort()));
+        String order = ObjectUtils.string(paraMap.get(configuration.order()));
         if (StringUtils.isNotBlank(sort)) {
             return Collections.singletonList(new OrderBy(sort, order));
         }

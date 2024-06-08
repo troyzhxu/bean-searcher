@@ -357,19 +357,19 @@ public class BeanSearcherConfiguration {
         paramResolver.setFieldOpPool(fieldOpPool);
         paramResolver.setGroupResolver(groupResolver);
         BeanSearcherProperties.Params conf = config.getParams();
-        ParamResolver.Configuration configuration = paramResolver.getConfiguration();
-        configuration.setOperatorSuffix(conf.getOperatorKey());
-        configuration.setIgnoreCaseSuffix(conf.getIgnoreCaseKey());
-        configuration.setOrderName(conf.getOrder());
-        configuration.setSortName(conf.getSort());
-        configuration.setOrderByName(conf.getOrderBy());
-        configuration.setSeparator(conf.getSeparator());
-        configuration.setOnlySelectName(conf.getOnlySelect());
-        configuration.setSelectExcludeName(conf.getSelectExclude());
         BeanSearcherProperties.Params.Group group = conf.getGroup();
-        configuration.setGexprName(group.getExprName());
-        configuration.setGexprMerge(group.isMergeable());
-        configuration.setGroupSeparator(group.getSeparator());
+        paramResolver.getConfiguration()
+                .gexprMerge(group.isMergeable())
+                .groupSeparator(group.getSeparator())
+                .gexpr(group.getExprName())
+                .selectExclude(conf.getSelectExclude())
+                .onlySelect(conf.getOnlySelect())
+                .separator(conf.getSeparator())
+                .op(conf.getOperatorKey())
+                .ic(conf.getIgnoreCaseKey())
+                .orderBy(conf.getOrderBy())
+                .order(conf.getOrder())
+                .sort(conf.getSort());
         return paramResolver;
     }
 

@@ -64,49 +64,49 @@ public class BeanSearcherProperties {
 
         /**
          * 排序字段参数名，默认为 `sort`，
-         * @see Configuration#setSortName(String)
+         * @see Configuration#sort(String)
          */
         private String sort = "sort";
 
         /**
          * 排序方法参数名，默认为 `order`，
-         * @see Configuration#setOrderName(String)
+         * @see Configuration#order(String)
          */
         private String order = "order";
 
         /**
          * 排序参数名，默认为 `orderBy`，
-         * @see Configuration#setOrderByName(String)
+         * @see Configuration#orderBy(String)
          */
         private String orderBy = "orderBy";
 
         /**
          * 字段参数名分隔符，默认为 `-`，
-         * @see Configuration#setSeparator(String)
+         * @see Configuration#separator(String)
          */
         private String separator = "-";
 
         /**
          * 是否忽略大小写字段参数名的后缀，默认为 `ic`，
-         * @see Configuration#setIgnoreCaseSuffix(String)
+         * @see Configuration#ic(String)
          */
         private String ignoreCaseKey = "ic";
 
         /**
          * 检索运算符参数名后缀，默认为 `op`，
-         * @see Configuration#setOperatorSuffix(String)
+         * @see Configuration#op(String)
          */
         private String operatorKey = "op";
 
         /**
          * 指定只 Select 某些字段的参数名，默认为 `onlySelect`，
-         * @see Configuration#setOnlySelectName(String)
+         * @see Configuration#onlySelect(String)
          */
         private String onlySelect = "onlySelect";
 
         /**
          * 指定 Select 排除某些字段的参数名，默认为 `selectExclude`，
-         * @see Configuration#setSelectExcludeName(String)
+         * @see Configuration#selectExclude(String)
          */
         private String selectExclude = "selectExclude";
 
@@ -162,7 +162,7 @@ public class BeanSearcherProperties {
 
             /**
              * 检索参数的最大允许数量，用于风险控制，避免前端恶意传参生成过于复杂的 SQL
-             * @see SizeLimitParamFilter#setMaxParaMapSize(int)
+             * @see SizeLimitParamFilter
              */
             private int maxParaMapSize = 150;
 
@@ -222,19 +222,19 @@ public class BeanSearcherProperties {
 
             /**
              * 组表达式参数名，默认为 `gexpr`，
-             * @see Configuration#setGexprName(String)
+             * @see Configuration#gexpr(String)
              */
             private String exprName = "gexpr";
 
             /**
              * 用于控制参数构建器中使用 `groupExpr(..)` 方法指定的组表达式是否合并或覆盖前端参数传来的组表达式
-             * @see Configuration#setGexprMerge(boolean)
+             * @see Configuration#gexprMerge(boolean)
              */
             private boolean mergeable = true;
 
             /**
              * 组参数分隔符，默认为 `.`，
-             * @see Configuration#setGroupSeparator(String)
+             * @see Configuration#separator(String)
              */
             private String separator = ".";
 

@@ -276,7 +276,7 @@ public class SimpleSearchTestCase {
             }
         };
         DefaultParamResolver paramResolver = new DefaultParamResolver();
-        paramResolver.getConfiguration().setGexprMerge(false);
+        paramResolver.getConfiguration().gexprMerge(false);
 
         BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
                 .paramResolver(paramResolver)
