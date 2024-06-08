@@ -60,7 +60,7 @@ public class DefaultGroupResolver implements GroupResolver {
     }
 
     public void setParserFactory(ExprParser.Factory parserFactory) {
-        this.parserFactory = parserFactory;
+        this.parserFactory = Objects.requireNonNull(parserFactory);
     }
 
     public Cache<Group<String>> getCache() {

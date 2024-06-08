@@ -8,7 +8,10 @@ import cn.zhxu.bs.boot.BeanSearcherProperties.Sql;
 import cn.zhxu.bs.convertor.*;
 import cn.zhxu.bs.dialect.*;
 import cn.zhxu.bs.filter.SizeLimitParamFilter;
-import cn.zhxu.bs.group.*;
+import cn.zhxu.bs.group.DefaultGroupResolver;
+import cn.zhxu.bs.group.ExprParser;
+import cn.zhxu.bs.group.GroupPair;
+import cn.zhxu.bs.group.GroupResolver;
 import cn.zhxu.bs.implement.*;
 import cn.zhxu.bs.util.LRUCache;
 import cn.zhxu.xjson.JsonKit;
@@ -20,7 +23,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 
 import javax.sql.DataSource;
@@ -127,20 +129,14 @@ public class BeanSearcherAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(ExprParser.Factory.class)
-    public ExprParser.Factory parserFactory() {
-        return new DefaultParserFactory();
-    }
-
-    @Bean
     @ConditionalOnMissingBean(GroupResolver.class)
-    public GroupResolver groupResolver(BeanSearcherProperties config, ExprParser.Factory parserFactory) {
+    public GroupResolver groupResolver(BeanSearcherProperties config, ObjectProvider<ExprParser.Factory> parserFactory) {
         DefaultGroupResolver groupResolver = new DefaultGroupResolver();
         Params.Group conf = config.getParams().getGroup();
         groupResolver.setEnabled(conf.isEnable());
         groupResolver.setCache(new LRUCache<>(conf.getCacheSize()));
         groupResolver.setMaxExprLength(conf.getMaxExprLength());
-        groupResolver.setParserFactory(parserFactory);
+        ifAvailable(parserFactory, groupResolver::setParserFactory);
         return groupResolver;
     }
 
@@ -181,7 +177,7 @@ public class BeanSearcherAutoConfiguration {
     }
 
     @Bean
-    @Order(Ordered.HIGHEST_PRECEDENCE)
+    @Order(-1000)
     @ConditionalOnMissingBean(SizeLimitParamFilter.class)
     public SizeLimitParamFilter sizeLimitParamFilter(BeanSearcherProperties config) {
         return new SizeLimitParamFilter(config.getParams().getFilter().getMaxParaMapSize());
@@ -312,11 +308,11 @@ public class BeanSearcherAutoConfiguration {
      */
     @Configuration
     @ConditionalOnClass(JsonKit.class)
-    @ConditionalOnProperty(name = "bean-searcher.field-convertor.use-json", havingValue = "true", matchIfMissing = true)
-    @ConditionalOnMissingBean(JsonFieldConvertor.class)
-    public static class JsonFieldConvertorConfig {
+    public static class BeanSearcherConfigOnJsonKit {
 
         @Bean
+        @ConditionalOnProperty(name = "bean-searcher.field-convertor.use-json", havingValue = "true", matchIfMissing = true)
+        @ConditionalOnMissingBean(JsonFieldConvertor.class)
         public JsonFieldConvertor jsonFieldConvertor(BeanSearcherProperties config) {
             BeanSearcherProperties.FieldConvertor conf = config.getFieldConvertor();
             return new JsonFieldConvertor(conf.isJsonFailOnError());

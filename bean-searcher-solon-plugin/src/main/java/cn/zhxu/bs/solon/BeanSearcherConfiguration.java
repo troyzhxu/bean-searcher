@@ -4,7 +4,10 @@ import cn.zhxu.bs.*;
 import cn.zhxu.bs.convertor.*;
 import cn.zhxu.bs.dialect.*;
 import cn.zhxu.bs.filter.SizeLimitParamFilter;
-import cn.zhxu.bs.group.*;
+import cn.zhxu.bs.group.DefaultGroupResolver;
+import cn.zhxu.bs.group.ExprParser;
+import cn.zhxu.bs.group.GroupPair;
+import cn.zhxu.bs.group.GroupResolver;
 import cn.zhxu.bs.implement.*;
 import cn.zhxu.bs.solon.BeanSearcherProperties.Sql;
 import cn.zhxu.bs.util.LRUCache;
@@ -64,7 +67,7 @@ public class BeanSearcherConfiguration {
         return new EnumParamConvertor();
     }
 
-    @Bean(index = Integer.MIN_VALUE)
+    @Bean(index = -1000)
     @Condition(onMissingBean = SizeLimitParamFilter.class)
     public SizeLimitParamFilter sizeLimitParamFilter() {
         return new SizeLimitParamFilter(config.getParams().getFilter().getMaxParaMapSize());
@@ -150,20 +153,14 @@ public class BeanSearcherConfiguration {
     }
 
     @Bean
-    @Condition(onMissingBean = ExprParser.Factory.class)
-    public ExprParser.Factory parserFactory() {
-        return new DefaultParserFactory();
-    }
-
-    @Bean
     @Condition(onMissingBean = GroupResolver.class)
-    public GroupResolver groupResolver(ExprParser.Factory parserFactory) {
+    public GroupResolver groupResolver(@Inject(required = false) ExprParser.Factory parserFactory) {
         DefaultGroupResolver groupResolver = new DefaultGroupResolver();
         BeanSearcherProperties.Params.Group conf = config.getParams().getGroup();
         groupResolver.setEnabled(conf.isEnable());
         groupResolver.setCache(new LRUCache<>(conf.getCacheSize()));
         groupResolver.setMaxExprLength(conf.getMaxExprLength());
-        groupResolver.setParserFactory(parserFactory);
+        ifAvailable(parserFactory, groupResolver::setParserFactory);
         return groupResolver;
     }
 
@@ -240,9 +237,7 @@ public class BeanSearcherConfiguration {
         return convertor;
     }
 
-    //
     // 在 springboot 那边，是用单独类处理的；在 solon 这边，用函数
-    //
     @Bean
     @Condition(onMissingBean = JsonFieldConvertor.class, onClass = JsonKit.class,
             onProperty = "${bean-searcher.field-convertor.use-json:true}=true")
