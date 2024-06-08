@@ -18,14 +18,14 @@
   * 新增配置项 `bean-searcher.params.filter.use-size-limit` 是否启用 `SizeLimitParamFilter`，默认 `true`
   * 新增配置项 `bean-searcher.params.filter.use-array-value` 是否启用 `ArrayValueParamFilter`, 默认 `true`
   * 新增配置项 `bean-searcher.params.filter.use-suffix-op` 是否启用 `SuffixOpParamFilter`, 默认 `false`
-  * 新增配置项 `bean-searcher.params.filter.use-json-array` 是否启用 `JoinParaValueParamFilter`, 默认 `false`
+  * 新增配置项 `bean-searcher.params.filter.use-json-array` 是否启用 `JsonArrayParamFilter`, 默认 `false`
   * 支持以 Bean 的形式自定义 `JoinParaSerializer` 组件
 * Bean Searcher Solon Plugin
   * 新增配置项 `bean-searcher.params.group.mergeable` 指定组表达式是否可合并，默认 `true`
   * 新增配置项 `bean-searcher.params.filter.use-size-limit` 是否启用 `SizeLimitParamFilter`，默认 `true`
   * 新增配置项 `bean-searcher.params.filter.use-array-value` 是否启用 `ArrayValueParamFilter`, 默认 `true`
   * 新增配置项 `bean-searcher.params.filter.use-suffix-op` 是否启用 `SuffixOpParamFilter`, 默认 `false`
-  * 新增配置项 `bean-searcher.params.filter.use-json-array` 是否启用 `JoinParaValueParamFilter`, 默认 `false`
+  * 新增配置项 `bean-searcher.params.filter.use-json-array` 是否启用 `JsonArrayParamFilter`, 默认 `false`
   * 支持以 Bean 的形式自定义 `JoinParaSerializer` 组件
 
 ### 🌻 Better

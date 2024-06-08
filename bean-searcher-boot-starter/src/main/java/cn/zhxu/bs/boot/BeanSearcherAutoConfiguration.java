@@ -7,7 +7,10 @@ import cn.zhxu.bs.boot.BeanSearcherProperties.Params;
 import cn.zhxu.bs.boot.BeanSearcherProperties.Sql;
 import cn.zhxu.bs.convertor.*;
 import cn.zhxu.bs.dialect.*;
+import cn.zhxu.bs.filter.ArrayValueParamFilter;
+import cn.zhxu.bs.filter.JsonArrayParamFilter;
 import cn.zhxu.bs.filter.SizeLimitParamFilter;
+import cn.zhxu.bs.filter.SuffixOpParamFilter;
 import cn.zhxu.bs.group.DefaultGroupResolver;
 import cn.zhxu.bs.group.ExprParser;
 import cn.zhxu.bs.group.GroupPair;
@@ -179,8 +182,26 @@ public class BeanSearcherAutoConfiguration {
     @Bean
     @Order(-1000)
     @ConditionalOnMissingBean(SizeLimitParamFilter.class)
+    @ConditionalOnProperty(name = "bean-searcher.params.filter.use-size-limit", havingValue = "true", matchIfMissing = true)
     public SizeLimitParamFilter sizeLimitParamFilter(BeanSearcherProperties config) {
         return new SizeLimitParamFilter(config.getParams().getFilter().getMaxParaMapSize());
+    }
+
+    @Bean
+    @Order(-500)
+    @ConditionalOnMissingBean(ArrayValueParamFilter.class)
+    @ConditionalOnProperty(name = "bean-searcher.params.filter.use-array-value", havingValue = "true", matchIfMissing = true)
+    public ArrayValueParamFilter arrayValueParamFilter(BeanSearcherProperties config) {
+        return new ArrayValueParamFilter(config.getParams().getSeparator());
+    }
+
+    @Bean
+    @Order(0)
+    @ConditionalOnMissingBean(SuffixOpParamFilter.class)
+    @ConditionalOnProperty(name = "bean-searcher.params.filter.use-suffix-op", havingValue = "true")
+    public SuffixOpParamFilter suffixOpParamFilter(FieldOpPool fieldOpPool, BeanSearcherProperties config) {
+        Params params = config.getParams();
+        return new SuffixOpParamFilter(fieldOpPool, params.getSeparator(), params.getOperatorKey());
     }
 
     @Bean
@@ -316,6 +337,15 @@ public class BeanSearcherAutoConfiguration {
         public JsonFieldConvertor jsonFieldConvertor(BeanSearcherProperties config) {
             BeanSearcherProperties.FieldConvertor conf = config.getFieldConvertor();
             return new JsonFieldConvertor(conf.isJsonFailOnError());
+        }
+
+        @Bean
+        @Order(500)
+        @ConditionalOnMissingBean(JsonArrayParamFilter.class)
+        @ConditionalOnProperty(name = "bean-searcher.params.filter.use-json-array", havingValue = "true")
+        public JsonArrayParamFilter jsonArrayParamFilter(BeanSearcherProperties config) {
+            Params params = config.getParams();
+            return new JsonArrayParamFilter(params.getSeparator());
         }
 
     }
