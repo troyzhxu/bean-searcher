@@ -10,8 +10,9 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * 数组参数值过滤器，用于配合 {@link MapUtils#flat(Map)} 与 {@link MapUtils#flatBuilder(Map)} 方法，来兼容数组参数值的用法。<br>
- * 例如前端传参：age=20 & age=30 & age-op=bt
+ * 数组参数值过滤器，用于配合 {@link MapUtils#flat(Map)} 与 {@link MapUtils#flatBuilder(Map)} 方法，来兼容数组参数值的用法，
+ * 例如前端传参：
+ * <pre>{@code age=20 & age=30 & age-op=bt }</pre>
  * @author Troy.Zhou @ 2024-06-07
  * @since v4.3
  */

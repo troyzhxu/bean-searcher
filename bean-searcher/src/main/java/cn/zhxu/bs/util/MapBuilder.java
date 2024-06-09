@@ -228,7 +228,7 @@ public class MapBuilder extends Builder<MapBuilder> {
     }
 
     /**
-     * 降序，在 {@link #orderBy(FieldFn)} 方法之后调用
+     * 降序，在 {@link #orderBy(FieldFn) } 方法之后调用
      * @since v3.7.1
      * @return MapBuilder
      */
@@ -298,6 +298,7 @@ public class MapBuilder extends Builder<MapBuilder> {
 
     /**
      * 构建适用于 RPC 远程调用的检索参数
+     * @param names 名称配置
      * @return 检索参数
      * @since v4.3
      */
@@ -333,7 +334,7 @@ public class MapBuilder extends Builder<MapBuilder> {
         return map;
     }
 
-    private void buildRpcOnField(RpcNames names, String fieldKey) {
+    protected void buildRpcOnField(RpcNames names, String fieldKey) {
         Object value = map.remove(fieldKey);
         if (!(value instanceof FieldParam)) {
             return;
@@ -371,7 +372,7 @@ public class MapBuilder extends Builder<MapBuilder> {
         }
     }
 
-    private void buildRpcOnList(String fromKey, String toKey) {
+    protected void buildRpcOnList(String fromKey, String toKey) {
         Object onlySelect = map.remove(fromKey);
         if (onlySelect instanceof List) {
             StringJoiner joiner = new StringJoiner(",");

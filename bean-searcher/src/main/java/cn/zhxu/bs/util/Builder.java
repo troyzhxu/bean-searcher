@@ -182,7 +182,7 @@ public class Builder<B extends Builder<B>> {
     }
 
     /**
-     * 自定义 SQL 条件，一般配和 {@link #field(FieldFn, FieldFn...)} 一起使用，例如：
+     * 自定义 SQL 条件，一般配和 {@link #field(FieldFn, FieldFn[]) } 一起使用，例如：
      * <pre>{@code
      * Map<String, Object> params = MapUtils.builder()
      *     // 生成 SQL 条件：username = nickname or username = 'Jack'
@@ -198,7 +198,7 @@ public class Builder<B extends Builder<B>> {
     }
 
     /**
-     * 自定义 SQL 条件，一般配和 {@link #field(FieldFn, FieldFn...)} 一起使用，例如：
+     * 自定义 SQL 条件，一般配和 {@link #field(FieldFn, FieldFn[]) } 一起使用，例如：
      * <pre>{@code
      * Map<String, Object> params = MapUtils.builder()
      *     // 生成 SQL 条件：id < ? or age > ?，两个占位符参数分别为：100，20
