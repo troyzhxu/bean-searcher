@@ -303,6 +303,7 @@ public class MapBuilder extends Builder<MapBuilder> {
      * @since v4.3
      */
     public Map<String, Object> buildForRpc(RpcNames names) {
+        map.remove(MapUtils.ARRAY_KEYS);
         // 分页参数
         Object paging = map.remove(PAGING);
         if (paging instanceof Page) {
@@ -318,20 +319,28 @@ public class MapBuilder extends Builder<MapBuilder> {
         // Select 参数
         buildRpcOnList(ONLY_SELECT, names.onlySelect());
         buildRpcOnList(SELECT_EXCLUDE, names.selectExclude());
-        // 字段参数
+        // 分组参数
+        Object gexpr = map.remove(GROUP_EXPR);
+        if (gexpr instanceof String) {
+            map.put(names.gexpr(), gexpr);
+        }
+        // 字段参数（遍历集合放在最后，因为前面一直在删 KEY）
         List<String> fieldKeys = map.keySet().stream()
                 .filter(key -> key != null && key.contains(FIELD_PARAM))
                 .collect(Collectors.toList());
         for (String fieldKey : fieldKeys) {
             buildRpcOnField(names, fieldKey);
         }
-        // 分组参数
-        Object gexpr = map.remove(GROUP_EXPR);
-        if (gexpr instanceof String) {
-            map.put(names.gexpr(), gexpr);
-        }
-        map.remove(MapUtils.ARRAY_KEYS);
         return map;
+    }
+
+    protected void buildRpcOnList(String fromKey, String toKey) {
+        Object onlySelect = map.remove(fromKey);
+        if (onlySelect instanceof List) {
+            StringJoiner joiner = new StringJoiner(",");
+            ((List<?>) onlySelect).forEach(item -> joiner.add(item.toString()));
+            map.put(toKey, joiner.toString());
+        }
     }
 
     protected void buildRpcOnField(RpcNames names, String fieldKey) {
@@ -369,15 +378,6 @@ public class MapBuilder extends Builder<MapBuilder> {
         }
         for (FieldParam.Value v : param.getValueList()) {
             map.put(prefix + v.getIndex(), v.getValue());
-        }
-    }
-
-    protected void buildRpcOnList(String fromKey, String toKey) {
-        Object onlySelect = map.remove(fromKey);
-        if (onlySelect instanceof List) {
-            StringJoiner joiner = new StringJoiner(",");
-            ((List<?>) onlySelect).forEach(item -> joiner.add(item.toString()));
-            map.put(toKey, joiner.toString());
         }
     }
 
