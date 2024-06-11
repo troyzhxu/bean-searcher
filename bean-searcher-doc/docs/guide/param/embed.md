@@ -45,9 +45,9 @@ List<User> users = searcher.searchList(User.class, params);
 * 参考：[实体类 > 嵌入参数](/guide/bean/params.html) 章节；
 <!-- * 参考：[实践 > 动态检索 > 分表检索](/simples.html#分表检索) 案例。[TODO] -->
 
-### 集合参数值
+### 集合参数值（since v4.3.0）
 
-自 `v4.3.0` 起，Bean Searcher 直接直接为拼接参数添加集合参数值，框架会自动将其连接为用英文逗号分隔的字符串。例如：
+自 `v4.3.0` 起，Bean Searcher 支持直接为拼接参数添加集合参数值，框架会自动将其连接为用英文逗号分隔的字符串。例如：
 
 ```java
 @SearchBean(where = "age in (:ages:)")
