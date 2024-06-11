@@ -48,7 +48,7 @@ bean-searcher.params.filter.use-array-value = true
 
 ```properties
 # 是否启用该过滤器，默认为 false
-bean-searcher.params.filter.use-suffix-op = false
+bean-searcher.params.filter.use-suffix-op = true
 ```
 
 ### JsonArrayParamFilter
@@ -69,7 +69,7 @@ JSON 数组参数值过滤器，用于简化前端传参。启用后，当前端
 
 ```properties
 # 是否启用该过滤器，默认为 false
-bean-searcher.params.filter.use-json-array = false
+bean-searcher.params.filter.use-json-array = true
 ```
 
 由于涉及到 JSON 转换，不可避免的需要使用 JSON 解析相关的框架，但是不同的开发者可能偏好不同的 JSON 框架，所以该转换器并没有与特定的 JSON 框架绑定，而是支持用户自己选择（目前默认有 5 种框架可选），只需要添加如下特定依赖即可（若不添加则该过滤器不生效）： 
