@@ -36,6 +36,12 @@ public class User {
 字段参数，是根据实体类里的 **JAVA 字段名**（不是表字段）衍生出来的，已经和数据库的表字段解耦了。
 :::
 
+另外，如果你觉得默认的衍生参数不太好用，还可以使用 [参数过滤器](/guide/advance/filter#参数过滤器) 自定义新的规则。实际上自 `v4.3.0` 起，Bean Searcher 就自带了一些简化衍生参数的过滤器：
+
+* [ArrayValueParamFilter](/guide/advance/filter#arrayvalueparamfilter)
+* [SuffixOpParamFilter](/guide/advance/filter#suffixopparamfilter)
+* [JsonArrayParamFilter](/guide/advance/filter#jsonarrayparamfilter)
+
 ## 字段运算符
 
 字段运算符是用来描述某个字段的检索方式，即：SQL 的拼接方法。Bean Searcher 共默认提供了 19 种不同的字段运算符，见下表：
