@@ -58,22 +58,22 @@ public class MapBuilderTestCase {
         Map<String, Object> params = MapUtils.builder()
                 .field("id", 1)                             // $
                 .field("nickName", "You")                   // $
-                .or(b -> {
-                    b.field("name", "Jack");                // _0
-                    b.field("name", "Tom");                 // _1
-                    b.and(c -> {
-                        c.field("active", true);            // _2
-                        c.or(o -> {
+                .or(b -> b
+                    .field("name", "Jack")                // _0
+                    .field("name", "Tom")                 // _1
+                    .and(c -> c
+                        .field("active", true)            // _2
+                        .or(o -> {
                             o.field("age", 20);             // _3
                             o.field("age", 30);             // _4
-                        });
-                        c.field("accountLocked", false);    // _2
-                    });
-                })
-                .or(b -> {
-                    b.field("sex", "男");                    // _5
-                    b.field("sex", "女");                    // _6
-                })
+                        })
+                        .field("accountLocked", false)    // _2
+                    )
+                )
+                .or(b -> b
+                    .field("sex", "男")                    // _5
+                    .field("sex", "女")                    // _6
+                )
                 .build();
         assertParam(params, "$", "id", 1);
         assertParam(params, "$", "nickName", "You");
