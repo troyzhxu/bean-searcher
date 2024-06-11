@@ -111,6 +111,15 @@ export default defineConfig({
               { text: '慢 SQL 日志与监听', link: '/slowsql' },
               { text: '多数据源', link: '/datasource' },
             ]
+          },
+          {
+            text: '场景',
+            base: '/guide/usage',
+            collapsed: false,
+            items: [
+              { text: '请求第三方 BS 服务', link: '/rpc' },
+              { text: '大表滚动', link: '/tables' },
+            ]
           }
         ]
       }
