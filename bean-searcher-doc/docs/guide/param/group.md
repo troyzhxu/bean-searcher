@@ -6,14 +6,12 @@
 
 ![](/group_requirement.png)
 
-## 灵光乍现
-
 为了解决这个问题，作者昼思夜想，终于在 `v3.5.0` 里，为大家带来了 逻辑分组 的功能，它的主要思想如下：
 
 * 用 **组名** 以 **前缀** 的形式为 字段参数 分组（组名与字段参数之间默认用 `.` 作为分割符，组名可由字母与数字组成）
 * 用一个新的参数 **逻辑表达式** 来表示 各组之间的 逻辑关系（默认的参数名为 `gexpr`，是 `Group Expression` 的简写）
 
-## 举个例子
+## 用法举例
 
 在传递参数时，把参数分为 `A`, `B`, `C` 三组：
 
@@ -67,6 +65,25 @@ Map<String, Object> params = MapUtils.builder()
         .build();
 ```
 
+自 `v4.3.0` 起，参数构建器添加了 `and(..)` 与 `or(..)` 方法，可以更加便捷的构建逻辑分组，所以上面的代码也等价于：
+
+```java
+Map<String, Object> params = MapUtils.builder()
+        .or(o -> o
+            .and(a -> a
+                .field(User::getName, "Jack").ic()
+                .field(User::getGender, "Male")
+            )
+            .and(a -> a
+                .field(User::getName, "Alice")
+                .field(User::getGender, "Female")
+            )
+        )
+        .field(User::getAge, "20").op(GreateEqual.class)
+        .build();
+// 无需再调用 groupExpr(..) 方法，and(..) 与 or(..) 方法将自动生成组名与组表达式
+```
+
 ::: tip 提示
 只有 [字段参数](/guide/param/field) 与 [自定义 SQL 条件](/guide/param/sql) 才可以分组，[分页参数](/guide/param/page)、[排序参数](/guide/param/sort)、[内嵌参数](/guide/param/embed) 与 [Select 参数](/guide/param/select) 都是不能被分组的。
 :::
@@ -97,7 +114,7 @@ Map<String, Object> params = MapUtils.builder()
 
 例如: `A | B & C` 与 `A | (B & C)` 等价。
 
-## 智能优化
+### 智能化简
 
 Bean Searcher 还内置一个优化器，当你的逻辑表达式写的冗余复杂时，它会自动将其优化为最简形式，从而简化最终生成的 SQL 语句。
 
@@ -114,6 +131,16 @@ Bean Searcher 还内置一个优化器，当你的逻辑表达式写的冗余复
 `A & ( B & C )` | `A & B & C`
 `(A \| B & (( C \| (D \| E))) & D) \| (F)` | `A \| B & D \| F`
 `A \| (A \| C) & B & (A \| D)` | `A \| D & C & B`
+
+### 表达式合并（since v4.3.0）
+
+有时候前端传了组表达式参数，但后端也使用了 `groupExpr(..)` 方法指定了新的表达式，这时候应该使用哪一个表达式呢？在 `v4.3.0` 之前，后端指定的表达式会覆盖前端指定的表达式。
+
+自 `v4.3.0` 起，用户可以选择是否 **覆盖** 或者 **合并**（v4.3.0 后的默认行为，见 [配置项](#配置项) 的 `bean-searcher.params.group.mergeable` 配置）这两个表达式。
+
+#### 合并规则
+
+以 **并且** 关系进行合并。例如前端传表达式 `A|B`，后端用 `groupExpr(..)` 方法指定表达式 `A|C`，则最终的表达式为 `(A|B)&(A|C)`。
 
 ## 根参数（since v3.8.0）
 
@@ -158,7 +185,7 @@ Map<String, Object> params = MapUtils.builder()
 
 所以当后端需要手动添加检索条件时，我们推荐您使用参数构建器。
 
-## 自定义
+## 配置项
 
 使用 `bean-searcher-boot-starter` 依赖时，我们可以使用它提供了以下的配置键 来对进行自定义：
 
@@ -168,15 +195,4 @@ Map<String, Object> params = MapUtils.builder()
 `bean-searcher.params.group.expr-name` | 逻辑表达式参数名 | `字符串` | `gexpr`
 `bean-searcher.params.group.expr-cache-size` | 表达式解析缓存（个数） | `整型` | `50`
 `bean-searcher.params.group.separator` | 组名分隔符 | `字符串` | `.`
-
-如果你还想自定义逻辑符，比如你想用 `/ +` 来表示 或与且，则只需要注册一个 `ExprParser.Factory` 类型的 Spring Bean 即可：
-
-```java
-@Bean
-public ExprParser.Factory myExprParserFactory() {
-    DefaultParserFactory factory = new DefaultParserFactory();
-    factory.setOrKey('/');      // 设置或逻辑符
-    factory.setAndKey('+');     // 设置且逻辑符
-    return factory;
-}
-```
+`bean-searcher.params.group.mergeable` | 组表达式是否可合并 | `布尔` | `true`
