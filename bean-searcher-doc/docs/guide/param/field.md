@@ -2,17 +2,9 @@
 
 字段参数是根据 检索实体类里具有数据库字段映射的 属性 衍生出来的一系列参数，它们起到对查询结果进行 **筛选** 的作用。
 
-## 可配置项
+## 字段衍生参数
 
-在 SpringBoot / Grails 项目中，若使用了 `bean-searcher-boot-starter` 依赖，可在项目的 `application.properties` 或 `application.yml` 文件中通过如下配置项对字段参数进行定制：
-
-配置键名 | 含义 | 可选值 | 默认值
--|-|-|-
-`bean-searcher.params.separator` | 字段参数名分隔符 | `字符串` | `-`
-`bean-searcher.params.operator-key` | 字段运算符参数名后缀 | `字符串` | `op`
-`bean-searcher.params.ignore-case-key` | 是否忽略大小写字段参数名后缀 | `字符串` | `ic`
-
-## 字段衍生规则
+### 衍生规则
 
 示例，对于如下的一个实体类:
 
@@ -36,7 +28,19 @@ public class User {
 字段参数，是根据实体类里的 **JAVA 字段名**（不是表字段）衍生出来的，已经和数据库的表字段解耦了。
 :::
 
-另外，如果你觉得默认的衍生参数不太好用，还可以使用 [参数过滤器](/guide/advance/filter#参数过滤器) 自定义新的规则。实际上自 `v4.3.0` 起，Bean Searcher 就自带了一些简化衍生参数的过滤器：
+### 可配置项
+
+在 SpringBoot / Grails 项目中，若使用了 `bean-searcher-boot-starter` 依赖，可在项目的 `application.properties` 或 `application.yml` 文件中通过如下配置项对字段参数进行定制：
+
+配置键名 | 含义 | 可选值 | 默认值
+-|-|-|-
+`bean-searcher.params.separator` | 字段参数名分隔符 | `字符串` | `-`
+`bean-searcher.params.operator-key` | 字段运算符参数名后缀 | `字符串` | `op`
+`bean-searcher.params.ignore-case-key` | 是否忽略大小写字段参数名后缀 | `字符串` | `ic`
+
+### 扩展衍生参数
+
+另外，如果你觉得默认的字段衍生参数不太好用，那么还可以使用 [参数过滤器](/guide/advance/filter#参数过滤器) 来自定义新的规则。实际上自 `v4.3.0` 起，Bean Searcher 就自带了一些简化衍生参数的过滤器：
 
 * [ArrayValueParamFilter](/guide/advance/filter#arrayvalueparamfilter)
 * [SuffixOpParamFilter](/guide/advance/filter#suffixopparamfilter)
