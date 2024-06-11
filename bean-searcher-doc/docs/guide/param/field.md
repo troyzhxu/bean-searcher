@@ -63,6 +63,8 @@ public class User {
 `NotNull` | `nn` | `x is not null` | 否 | 不为空（**since v3.3**）
 `Empty` | `ey` | `x is null or x = ''` | 否 | 为空（仅适用于 **字符串** 类型的字段）
 `NotEmpty` | `ny` | `x is not null and x != ''` | 否 | 不为空（仅适用于 **字符串** 类型的字段）
+`AlwaysTrue` | `at` | `1` | 否 | 恒真（**since v4.3**）
+`AlwaysFalse` | `af` | `0` | 否 | 恒假（**since v4.3**）
 
 ::: tip 除此之外
 你还可以自定义运算符，参见 [高级 > 玩转运算符](/guide/advance/fieldop) 章节。
