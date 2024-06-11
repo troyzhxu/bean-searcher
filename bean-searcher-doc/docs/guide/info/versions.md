@@ -38,10 +38,11 @@
   * 支持以 Bean 的形式自定义 `JoinParaSerializer` 组件
   * 升级 Solon -> 2.8.3
 
-::: info 参考章节：
-* [逻辑分组](/guide/param/group.html)
+::: details 参考章节：
+* [逻辑分组](/guide/param/group)
+* [参数过滤器](/guide/advance/filter)
+* [请求第三方 BS 服务](/guide/usage/rpc)
 :::
-
 
 ### v4.2 的新特性（v4.2.9）
 
