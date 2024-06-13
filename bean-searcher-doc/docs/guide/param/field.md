@@ -48,7 +48,7 @@ public class User {
 
 ## 字段运算符
 
-字段运算符是用来描述某个字段的检索方式，即：SQL 的拼接方法。Bean Searcher 共默认提供了 19 种不同的字段运算符，见下表：
+字段运算符是用来描述某个字段的检索方式，即：SQL 的拼接方法。Bean Searcher 共默认提供了 **22** 种不同的字段运算符，见下表：
 
 > 下表中的 `忽略空值` 的含义是：如果该字段的参数值为 `null` 或 `空串`，是否忽略该条件。
 
@@ -75,6 +75,7 @@ public class User {
 `NotEmpty` | `ny` | `x is not null and x != ''` | 否 | 不为空（仅适用于 **字符串** 类型的字段）
 `AlwaysTrue` | `at` | `1` | 否 | 恒真（**since v4.3**）
 `AlwaysFalse` | `af` | `0` | 否 | 恒假（**since v4.3**）
+`SqlCond` | `sql` | `自定义 SQL 条件` | 否 | 只能在参数构建器中使用，参考 [自定义 SQL 条件](/guide/param/sql) 章节（**since v3.8.0**）
 
 ::: tip 除此之外
 你还可以自定义运算符，参见 [高级 > 玩转运算符](/guide/advance/fieldop) 章节。

@@ -4,7 +4,7 @@
 
 为了保障系统的安全性，自定义 SQL 条件只允许后端通过 参数构建器的 `sql(...)` 方法来实现。
 
-> 这实际上是一种特殊的 [字段参数](/guide/param/field)，所以这种条件也可以被 [逻辑分组](/guide/param/group)。
+> 自定义 SQL 条件，实际上是一种特殊的 [字段运算符](/guide/param/field#字段运算符)，所以这种方式形成的参数也是 [字段参数](/guide/param/field), 从而也可以在 [逻辑分组](/guide/param/group) 中使用。
 
 ## 字段引用
 
