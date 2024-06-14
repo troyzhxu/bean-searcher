@@ -25,7 +25,7 @@
 
 ## Gradle
 
-```groovy
+```gradle
 // Bean Searcher 核心依赖，任何框架都可使用该依赖
 implementation 'cn.zhxu:bean-searcher:4.3.0'
 // SpringBoot / Grails 项目直接使用以下依赖，更为方便（只添加这一个依赖即可）

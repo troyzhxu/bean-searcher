@@ -32,7 +32,7 @@ CRUD | Only R | CRUD | CRUD
 
 ### 哪些项目可以使用
 
-* Java 项目（当然 Kotlin、Groovy 也是可以的）；
+* Java 项目（当然 Kotlin、gradle 也是可以的）；
 
 * 使用了 关系数据库的项目（如：MySQL、Oracle 等）；
 
