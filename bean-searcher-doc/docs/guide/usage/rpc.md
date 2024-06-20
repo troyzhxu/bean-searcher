@@ -2,38 +2,42 @@
 
 ## 场景案例
 
-A 服务中有一个用户列表接口（GET /user/list），该接口是用 Bean Searcher 实现的，并且遵从了 Bean Searcher 的参数约定。
+A 服务中有一个用户列表接口（GET /user/list），该接口是用 Bean Searcher 驱动的，并且遵从了 Bean Searcher 的参数约定。
 
-假设现在你正在开发一个 B 服务，在 B 服务中你需要调用 A 服务中的这个用户列表接口，那么你该如何组织参数呢？能够使用上参数构建器呢？
+假设现在你正在开发一个 B 服务，在 B 服务中你需要调用 A 服务中的这个用户列表接口，那么你该如何组织参数呢？能否使用参数构建器呢？
 
 ## 不使用参数构建器
 
-例如，你需要按照多个用户状态去检索用户，你的代码可能会这样写：
+例如，你需要在一堆 用户ID 里去检索年龄最大的 20 个用户，你的代码可能会这样写：
 
 ```java
-List<String> userStatusList = getUserStatusList();  // 用户状态
-// 用户状态参数
+List<Long> userIds = getUserIds();  // 用户ID
+// 用户 ID 参数
 Map<String, Object> params = new HashMap<>();
-for (int i = 0; i < userStatusList.size(); i++) {
-    params.put("status-" + i, userStatusList.get(i));
+for (int i = 0; i < userIds.size(); i++) {
+    params.put("id-" + i, userIds.get(i));
 }
-params.put("status-op", "il");
+params.put("id-op", "il");
+// 按年龄降序
+params.put("sort", "age");
+params.put("order", "desc");
 // 分页参数
 params.put("page", 0);
 params.put("size", 20);
-// 调用 A 服务中的接口
+// 调用远程服务中的接口
 List<User> users = romoteApi.getUserList(params);
 ```
 
 ## 使用参数构建器
 
-自 `v4.3.0` 起，你也可能使用参数构建器提供的 `buildForRpc()` 方法，来生成远程调用的请求参数了：
+自 `v4.3.0` 起，你也可以使用参数构建器提供的 `buildForRpc()` 方法，来生成远程调用的请求参数了：
 
 ```java
 List<Long> userIds = getUserIds();  // 用户ID
 // 组织检索参数
 Map<String, Object> params = MapUtils.builder()
         .field(User::getId, userIds).op(InList.class)
+        .orderBy(User::getAge).desc()
         .page(0, 20)
         .buildForRpc();
 // 调用 A 服务中的接口
@@ -49,9 +53,10 @@ Map<String, Object> params = MapUtils.builder()
         .field(User::getId, userIds).op(InList.class)
         .page(0, 20)
         .buildForRpc(
-            RpcNames.separator("_")   // 字段参数名分隔符使用了下划线
-                .page("pageNo")       // 分页页码参数使用 pageNo
-                .size("pageSize")     // 分页大小参数使用 pageSize
+            RpcNames.newConfig()
+                .separator("_")   // 字段参数名分隔符使用了下划线
+                .page("pageNo")   // 分页页码参数使用 pageNo
+                .size("pageSize") // 分页大小参数使用 pageSize
         );
 // 调用 A 服务中的接口
 List<User> users = romoteApi.getUserList(params);
