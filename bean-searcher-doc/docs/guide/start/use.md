@@ -235,7 +235,7 @@ public class UserController {
 ### （15）字段过滤（ [field]-op=ew ）
 
 * GET /user/index? name=Jack & name-op=ew
-* 返回结果：结构同 **（1）**（但只返回 name 以 Jack 结尾的数据，`sw` 是 `EndWith` 的缩写）
+* 返回结果：结构同 **（1）**（但只返回 name 以 Jack 结尾的数据，`ew` 是 `EndWith` 的缩写）
 
 ### （16）字段过滤（ [field]-op=ey ）
 
