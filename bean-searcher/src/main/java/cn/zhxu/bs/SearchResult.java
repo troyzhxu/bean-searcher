@@ -17,11 +17,19 @@ public class SearchResult<T> {
     
     private final Number[] summaries;
 
+    public SearchResult(Number totalCount, Number[] summaries) {
+        this(totalCount, 0, summaries);
+    }
+
     public SearchResult(Number totalCount, int pageSize, Number[] summaries) {
         int size = Math.min(totalCount.intValue(), pageSize);
         this.dataList = new ArrayList<>(size);
         this.totalCount = totalCount;
         this.summaries = summaries;
+    }
+
+    public static <T> SearchResult<T> empty() {
+        return new SearchResult<>(0, EMPTY_SUMMARIES);
     }
 
     public Number getTotalCount() {
