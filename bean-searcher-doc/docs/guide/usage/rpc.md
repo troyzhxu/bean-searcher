@@ -4,7 +4,7 @@
 
 A 服务中有一个用户列表接口（GET /user/list），该接口是用 Bean Searcher 驱动的，并且遵从了 Bean Searcher 的参数约定。
 
-假设现在你正在开发一个 B 服务，在 B 服务中你需要调用 A 服务中的这个用户列表接口，那么你该如何组织参数呢？能否使用参数构建器呢？
+假设现在你正在开发一个 B 服务，在 B 服务中你需要远程调用 A 服务中的这个用户列表接口，那么你该如何组织参数呢？能否使用参数构建器呢？
 
 ## 不使用参数构建器
 
@@ -40,13 +40,13 @@ Map<String, Object> params = MapUtils.builder()
         .orderBy(User::getAge).desc()
         .page(0, 20)
         .buildForRpc();
-// 调用 A 服务中的接口
+// 调用远程服务中的接口
 List<User> users = romoteApi.getUserList(params);
 ```
 
 ## 自定义参数名
 
-如果 A 服务中有一个用户列表接口，自定义了一些参数名（比如：分页参数名使用 `pageNo` 与 `pageSize`，字段参数名分隔符使用了下划线 `_`），那么也可以使用参数构建器提供的 `buildForRpc(RpcNames)` 方法：
+如果远程服务中的 Bean Searcher 接口，自定义了一些参数名（比如：分页参数名使用 `pageNo` 与 `pageSize`，字段参数名分隔符使用了下划线 `_`），那么也可以使用参数构建器提供的 `buildForRpc(RpcNames)` 方法：
 
 ```java
 Map<String, Object> params = MapUtils.builder()
