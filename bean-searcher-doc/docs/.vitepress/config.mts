@@ -75,6 +75,7 @@ export default defineConfig({
               { text: '概念', link: '/info' },
               { text: '多表关联', link: '/multitable' },
               { text: '其它形式', link: '/otherform' },
+              { text: '条件属性', link: '/fields' },
               { text: '嵌入参数', link: '/params' },
               { text: '注解缺省', link: '/aignore' },
               { text: '实体类继承', link: '/inherit' },

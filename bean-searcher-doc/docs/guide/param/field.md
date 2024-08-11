@@ -1,6 +1,9 @@
 # 字段参数
 
-字段参数是根据 检索实体类里具有数据库字段映射的 属性 衍生出来的一系列参数，它们起到对查询结果进行 **筛选** 的作用。
+字段参数是根据 检索实体类里具有数据库字段映射的 [条件属性](/guide/bean/fields.html) 衍生出来的一系列参数，它们起到对查询结果进行 **筛选** 的作用。
+
+> 条件属性 包含 [字段属性](/guide/bean/fields.html#字段属性) 与 [附加属性](/guide/bean/fields.html#附加属性-since-v4-1-0) 两种；
+> 字段参数具体生成的是 where 条件还是 having 条件，请参阅 [条件属性 > Where 或 Having](/guide/bean/fields.html#where-或-having) 章节。
 
 ## 字段衍生参数
 
