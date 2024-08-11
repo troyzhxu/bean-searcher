@@ -16,10 +16,19 @@ public class RpcNames extends ParamNames<RpcNames> {
     public static RpcNames DEFAULT = new RpcNames();
 
     /**
+     * 请直接使用 {@link #newNames()} 方法
+     * @return RpcNames
+     */
+    @Deprecated
+    public static RpcNames newConfig() {
+        return newNames();
+    }
+
+    /**
      * 新建配置
      * @return RpcNames
      */
-    public static RpcNames newConfig() {
+    public static RpcNames newNames() {
         return new RpcNames();
     }
 
