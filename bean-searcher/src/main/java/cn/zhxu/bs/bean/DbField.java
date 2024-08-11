@@ -33,7 +33,7 @@ public @interface DbField {
      * 别名 u 由  @SearchBean 注解的 tables 值指定
      * v3.0.0 后可空，为空时以字段名映射列名
      * @return 数据库字段
-     * */
+     */
     String value() default "";
 
     /**
