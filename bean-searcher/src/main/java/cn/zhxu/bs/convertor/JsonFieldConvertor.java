@@ -79,10 +79,7 @@ public class JsonFieldConvertor implements FieldConvertor.BFieldConvertor {
         Class<?> type = meta.getType();
         if (List.class.isAssignableFrom(type)) {
             Type genericType = meta.getField().getGenericType();
-            if (genericType instanceof ParameterizedType) {
-                Type itemType = ((ParameterizedType) genericType).getActualTypeArguments()[0];
-                return JsonKit.toList((Class<?>) itemType, json);
-            }
+            return JsonKit.toBean(genericType, json);
         }
         return JsonKit.toBean(type, json);
     }
