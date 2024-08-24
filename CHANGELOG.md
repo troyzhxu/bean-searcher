@@ -1,3 +1,16 @@
+# v4.3.1 @ 2024-08-24
+
+### 🌻 Better
+
+* 类 `SearchResult` 新增 `empty()` 方法
+* 类 `RpcNames` 新增 `newNames()` 替代原来的 `newConfig()` 方法
+* 参数构建器的 `buildForRpc()` 方法，提升一点性能
+* 依赖升级：`junit -> 5.10.3`, `slf4j -> 2.0.16`, `solon -> 2.9.0`
+
+### 🐛 Bug Fixes
+
+* 修复 `JsonFieldConvertor` 在转换形如 `List<A<B>>` 的复杂 List 泛型时会报错的问题: https://github.com/troyzhxu/bean-searcher/issues/99
+
 # v4.3.0 @ 2024-06-10
 
 ### ✨ Features
