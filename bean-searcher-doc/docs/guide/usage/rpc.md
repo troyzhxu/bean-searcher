@@ -53,7 +53,7 @@ Map<String, Object> params = MapUtils.builder()
         .field(User::getId, userIds).op(InList.class)
         .page(0, 20)
         .buildForRpc(
-            RpcNames.newConfig()
+            RpcNames.newNames()
                 .separator("_")   // 字段参数名分隔符使用了下划线
                 .page("pageNo")   // 分页页码参数使用 pageNo
                 .size("pageSize") // 分页大小参数使用 pageSize
