@@ -62,7 +62,7 @@ Map<String, Object> params = MapUtils.builder()
 List<User> users = romoteApi.getUserList(params);
 ```
 
-或者，你也可以再服务启动时修改全局 RPC 参数名的默认配置：
+或者，你也可以在服务启动时修改全局 RPC 参数名的默认配置：
 
 ```java
 RpcNames.DEFAULT          // 默认配置对象
