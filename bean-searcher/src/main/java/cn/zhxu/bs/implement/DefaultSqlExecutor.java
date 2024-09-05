@@ -18,10 +18,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * JDBC Sql 执行器
- * 
+ *
  * @author Troy.Zhou
  * @since 1.1.1
- * 
  */
 public class DefaultSqlExecutor implements SqlExecutor {
 
@@ -30,10 +29,11 @@ public class DefaultSqlExecutor implements SqlExecutor {
     /**
      * 默认数据源
      */
-    private DataSource dataSource;
+    protected DataSource dataSource;
 
     /**
      * 具名数据源
+     *
      * @since v3.0.0
      */
     private final Map<String, DataSource> dataSourceMap = new ConcurrentHashMap<>();
@@ -45,38 +45,43 @@ public class DefaultSqlExecutor implements SqlExecutor {
 
     /**
      * 使用事务时的隔离级别，默认为 READ_COMMITTED
+     *
      * @since v3.1.0
      */
     private int transactionIsolation = Connection.TRANSACTION_READ_COMMITTED;
 
     /**
      * 慢 SQL 阈值（单位：毫秒），默认：500 毫秒
+     *
      * @since v3.7.0
      */
     private long slowSqlThreshold = 500;
 
     /**
      * 慢 SQL 监听器
+     *
      * @since v3.7.0
      */
     private SlowListener slowListener;
 
 
-    public DefaultSqlExecutor() { }
-    
+    public DefaultSqlExecutor() {
+    }
+
     public DefaultSqlExecutor(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
-    
+
     @Override
     public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
         if (!searchSql.isShouldQueryList() && !searchSql.isShouldQueryCluster()) {
             return new SqlResult<>(searchSql);
         }
+        final BeanMeta<T> beanMeta = searchSql.getBeanMeta();
         Connection connection;
         try {
-            connection = getConnection(searchSql.getBeanMeta());
+            connection = getConnection(beanMeta);
         } catch (SQLException e) {
             throw new SearchException("Can not get connection from dataSource!", e);
         }
@@ -84,7 +89,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
             return doExecute(searchSql, connection);
         } catch (SQLException e) {
             // 如果有异常，则立马关闭，否则与 SqlResult 一起关闭
-            closeQuietly(connection);
+            closeQuietly(connection, beanMeta);
             throw new SearchException("A exception occurred when executing sql.", e);
         }
     }
@@ -129,7 +134,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
                 }
             }
         } catch (SQLException e) {
-            closeQuietly(clusterResult);
+            closeQuietly(clusterResult, searchSql.getBeanMeta());
             throw e;
         } finally {
             if (transactional) {
@@ -143,7 +148,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
                 try {
                     super.close();
                 } finally {
-                    closeQuietly(connection);
+                    closeQuietly(connection, searchSql.getBeanMeta());
                 }
             }
         };
@@ -158,10 +163,12 @@ public class DefaultSqlExecutor implements SqlExecutor {
             public boolean next() throws SQLException {
                 return resultSet.next();
             }
+
             @Override
             public Object get(String columnLabel) throws SQLException {
                 return resultSet.getObject(columnLabel);
             }
+
             @Override
             public void close() {
                 result.close();
@@ -170,7 +177,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
     }
 
     protected SqlResult.Result executeClusterSql(SearchSql<?> searchSql, Connection connection) throws SQLException {
-        Result result = executeQuery(connection, searchSql.getClusterSqlString(),
+        Result<?> result = executeQuery(connection, searchSql.getClusterSqlString(),
                 searchSql.getClusterSqlParams(), searchSql.getBeanMeta());
         ResultSet resultSet = result.resultSet;
         boolean hasValue;
@@ -188,6 +195,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
                 }
                 return null;
             }
+
             @Override
             public void close() {
                 result.close();
@@ -195,24 +203,27 @@ public class DefaultSqlExecutor implements SqlExecutor {
         };
     }
 
-    protected static class Result {
+    protected class Result<T> {
 
         final PreparedStatement statement;
         final ResultSet resultSet;
+        final BeanMeta<T> beanMeta;
 
-        public Result(PreparedStatement statement, ResultSet resultSet) {
+        public Result(PreparedStatement statement, ResultSet resultSet, BeanMeta<T> beanMeta) {
             this.statement = statement;
             this.resultSet = resultSet;
+            this.beanMeta = beanMeta;
         }
 
         public void close() {
-            closeQuietly(resultSet);
-            closeQuietly(statement);
+            closeQuietly(resultSet, beanMeta);
+            closeQuietly(statement, beanMeta);
         }
+
 
     }
 
-    protected Result executeQuery(Connection connection, String sql, List<Object> params,
+    protected Result<?> executeQuery(Connection connection, String sql, List<Object> params,
                                   BeanMeta<?> beanMeta) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(sql);
         long t0 = System.currentTimeMillis();
@@ -227,9 +238,9 @@ public class DefaultSqlExecutor implements SqlExecutor {
                 statement.setQueryTimeout(timeout);
             }
             ResultSet resultSet = statement.executeQuery();
-            return new Result(statement, resultSet);
+            return new Result<>(statement, resultSet, beanMeta);
         } catch (SQLException e) {
-            closeQuietly(statement);
+            closeQuietly(statement, beanMeta);
             throw e;
         } finally {
             long cost = System.currentTimeMillis() - t0;
@@ -250,7 +261,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
         }
     }
 
-    protected static void closeQuietly(AutoCloseable resource) {
+    protected <T> void closeQuietly(AutoCloseable resource, BeanMeta<T> beanMeta) {
         try {
             if (resource != null) {
                 resource.close();
@@ -262,6 +273,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
 
     /**
      * 设置默认数据源
+     *
      * @param dataSource 数据源
      */
     public void setDataSource(DataSource dataSource) {
@@ -274,9 +286,10 @@ public class DefaultSqlExecutor implements SqlExecutor {
 
     /**
      * 设置具名数据源
-     * @see SearchBean#dataSource()
-     * @param name 数据源名称
+     *
+     * @param name       数据源名称
      * @param dataSource 数据源
+     * @see SearchBean#dataSource()
      * @since v3.1.0
      */
     public void setDataSource(String name, DataSource dataSource) {
@@ -291,6 +304,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
 
     /**
      * 设置是否使用只读事务
+     *
      * @param transactional 是否使用事务
      */
     public void setTransactional(boolean transactional) {
@@ -307,6 +321,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
 
     /**
      * 设置只读事务的隔离级别（只在开启了事务后有效）
+     *
      * @param level 隔离级别
      * @see Connection#TRANSACTION_NONE
      * @see Connection#TRANSACTION_READ_UNCOMMITTED
@@ -324,6 +339,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
 
     /**
      * 设置慢 SQL 阈值（最小慢 SQL 执行时间）
+     *
      * @param slowSqlThreshold 慢 SQL 阈值，单位：毫秒
      * @since v3.7.0
      */
