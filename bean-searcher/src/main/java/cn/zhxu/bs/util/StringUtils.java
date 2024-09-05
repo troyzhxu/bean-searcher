@@ -42,7 +42,7 @@ public class StringUtils {
      * @return String
      */
     public static String firstCharToLoweCase(String str) {
-        if (str == null || str.length() == 0) {
+        if (str == null || str.isEmpty()) {
             return str;
         }
         char first = str.charAt(0);
@@ -159,6 +159,17 @@ public class StringUtils {
             count++;
         }
         return count;
+    }
+
+    public static boolean isNumeric(String str) {
+        int len = str.length();
+        for (int i = 0; i < len; i++) {
+            char c = str.charAt(i);
+            if (c < '0' || c > '9') {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

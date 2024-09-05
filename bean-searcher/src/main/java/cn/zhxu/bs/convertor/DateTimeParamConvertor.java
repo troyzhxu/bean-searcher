@@ -62,42 +62,25 @@ public class DateTimeParamConvertor implements FieldConvertor.ParamConvertor {
         );
     }
 
-    private boolean isNumeric(String str) {
-        for (char c : str.toCharArray()) {
-            if (!Character.isDigit(c)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     @Override
     public Object convert(FieldMeta meta, Object value) {
         if (value instanceof String) {
-            String s = ((String) value).trim().replaceAll("/", "-");
-            if (StringUtils.isBlank(s)) {
+            String str = ((String) value).trim();
+            if (StringUtils.isBlank(str)) {
                 return null;
             }
-            if (s.endsWith("L")) {
-                s = s.substring(0, s.length() - 1);
-            }
-            if (isNumeric(s)) {
+            if (StringUtils.isNumeric(str)) {
                 // 处理字符串形式的时间戳
-                long timestamp;
-                timestamp = Long.parseLong(s);
-                Instant instant = Instant.ofEpochMilli(timestamp);
-                LocalDateTime localDateTime = instant.atZone(getZoneId()).toLocalDateTime();
-                return toTimestamp(localDateTime);
-            } else {
-                String datetime = normalize(s);
-                if (DATETIME_PATTERN.matcher(datetime).matches()) {
-                    TemporalAccessor accessor = FORMATTER.parse(datetime);
-                    LocalDateTime dateTime = LocalDate.ofEpochDay(accessor.getLong(EPOCH_DAY))
-                            .atTime(LocalTime.ofSecondOfDay(accessor.getLong(ChronoField.SECOND_OF_DAY)));
-                    return toTimestamp(dateTime);
-                }
+                return toTargetType(Long.parseLong(str));
             }
-
+            String datetime = normalize(str.replaceAll("/", "-"));
+            if (DATETIME_PATTERN.matcher(datetime).matches()) {
+                TemporalAccessor accessor = FORMATTER.parse(datetime);
+                LocalDateTime dateTime = LocalDate.ofEpochDay(accessor.getLong(EPOCH_DAY))
+                        .atTime(LocalTime.ofSecondOfDay(accessor.getLong(ChronoField.SECOND_OF_DAY)));
+                return toTargetType(dateTime);
+            }
+            return null;
         }
         if (value instanceof Date) {
             if (target == Target.LOCAL_DATE_TIME) {
@@ -106,33 +89,39 @@ public class DateTimeParamConvertor implements FieldConvertor.ParamConvertor {
                     LocalDate localDate = ((java.sql.Date) value).toLocalDate();
                     return LocalDateTime.of(localDate, LocalTime.of(0, 0, 0, 0));
                 }
-                return LocalDateTime.ofInstant(((Date) value).toInstant(), timeZone.toZoneId());
+                return LocalDateTime.ofInstant(((Date) value).toInstant(), getZoneId());
             }
             return new Timestamp(((Date) value).getTime());
         }
         if (value instanceof LocalDate) {
-            return toTimestamp(((LocalDate) value).atTime(0, 0, 0));
+            return toTargetType(((LocalDate) value).atTime(0, 0, 0));
         }
         if (value instanceof LocalDateTime) {
-            return toTimestamp((LocalDateTime) value);
+            return toTargetType((LocalDateTime) value);
         }
         if (value instanceof Long) {
-            Instant instant = Instant.ofEpochMilli((Long) value);
-            LocalDateTime localDateTime = instant.atZone(getZoneId()).toLocalDateTime();
-            return toTimestamp(localDateTime);
+            return toTargetType((Long) value);
         }
         return null;
     }
 
-    private Object toTimestamp(LocalDateTime dateTime) {
+    protected Object toTargetType(long epochMilli) {
         if (target == Target.SQL_TIMESTAMP) {
-            ZoneOffset offset = ZoneOffset.ofTotalSeconds(timeZone.getRawOffset() / 1000);
-            return new Timestamp(dateTime.toInstant(offset).toEpochMilli());
+            return new Timestamp(epochMilli);
+        }
+        Instant instant = Instant.ofEpochMilli(epochMilli);
+        return LocalDateTime.ofInstant(instant, getZoneId());
+    }
+
+    protected Object toTargetType(LocalDateTime dateTime) {
+        if (target == Target.SQL_TIMESTAMP) {
+            Instant instant = dateTime.toInstant(getZoneOffset());
+            return new Timestamp(instant.toEpochMilli());
         }
         return dateTime;
     }
 
-    private String normalize(String datetime) {
+    protected String normalize(String datetime) {
         int len = datetime.length();
         if (len == 19) {
             return datetime + ".000";
@@ -155,14 +144,29 @@ public class DateTimeParamConvertor implements FieldConvertor.ParamConvertor {
         return datetime;
     }
 
+    private transient ZoneId zoneId;
+    private transient ZoneOffset offset;
+
     public ZoneId getZoneId() {
-        return timeZone.toZoneId();
+        if (zoneId != null) {
+            return zoneId;
+        }
+        return zoneId = timeZone.toZoneId();
     }
 
     public void setZoneId(ZoneId zoneId) {
         if (zoneId != null) {
             timeZone = TimeZone.getTimeZone(zoneId);
+            this.zoneId = zoneId;
+            this.offset = null;
         }
+    }
+
+    public ZoneOffset getZoneOffset() {
+        if (offset != null) {
+            return offset;
+        }
+        return offset = ZoneOffset.ofTotalSeconds(timeZone.getRawOffset() / 1000);
     }
 
     public Target getTarget() {
