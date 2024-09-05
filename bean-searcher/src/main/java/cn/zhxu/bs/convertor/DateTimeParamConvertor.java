@@ -62,6 +62,15 @@ public class DateTimeParamConvertor implements FieldConvertor.ParamConvertor {
         );
     }
 
+    private boolean isNumeric(String str) {
+        for (char c : str.toCharArray()) {
+            if (!Character.isDigit(c)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     public Object convert(FieldMeta meta, Object value) {
         if (value instanceof String) {
@@ -69,13 +78,26 @@ public class DateTimeParamConvertor implements FieldConvertor.ParamConvertor {
             if (StringUtils.isBlank(s)) {
                 return null;
             }
-            String datetime = normalize(s);
-            if (DATETIME_PATTERN.matcher(datetime).matches()) {
-                TemporalAccessor accessor = FORMATTER.parse(datetime);
-                LocalDateTime dateTime = LocalDate.ofEpochDay(accessor.getLong(EPOCH_DAY))
-                        .atTime(LocalTime.ofSecondOfDay(accessor.getLong(ChronoField.SECOND_OF_DAY)));
-                return toTimestamp(dateTime);
+            if (s.endsWith("L")) {
+                s = s.substring(0, s.length() - 1);
             }
+            if (isNumeric(s)) {
+                // 处理字符串形式的时间戳
+                long timestamp;
+                timestamp = Long.parseLong(s);
+                Instant instant = Instant.ofEpochMilli(timestamp);
+                LocalDateTime localDateTime = instant.atZone(getZoneId()).toLocalDateTime();
+                return toTimestamp(localDateTime);
+            } else {
+                String datetime = normalize(s);
+                if (DATETIME_PATTERN.matcher(datetime).matches()) {
+                    TemporalAccessor accessor = FORMATTER.parse(datetime);
+                    LocalDateTime dateTime = LocalDate.ofEpochDay(accessor.getLong(EPOCH_DAY))
+                            .atTime(LocalTime.ofSecondOfDay(accessor.getLong(ChronoField.SECOND_OF_DAY)));
+                    return toTimestamp(dateTime);
+                }
+            }
+
         }
         if (value instanceof Date) {
             if (target == Target.LOCAL_DATE_TIME) {
@@ -93,6 +115,11 @@ public class DateTimeParamConvertor implements FieldConvertor.ParamConvertor {
         }
         if (value instanceof LocalDateTime) {
             return toTimestamp((LocalDateTime) value);
+        }
+        if (value instanceof Long) {
+            Instant instant = Instant.ofEpochMilli((Long) value);
+            LocalDateTime localDateTime = instant.atZone(getZoneId()).toLocalDateTime();
+            return toTimestamp(localDateTime);
         }
         return null;
     }
