@@ -2,6 +2,8 @@ package cn.zhxu.bs.boot;
 
 import cn.zhxu.bs.BeanMeta;
 import cn.zhxu.bs.SearchException;
+import cn.zhxu.bs.SearchSql;
+import cn.zhxu.bs.SqlResult;
 import cn.zhxu.bs.implement.DefaultSqlExecutor;
 import cn.zhxu.bs.util.StringUtils;
 import org.springframework.jdbc.datasource.DataSourceUtils;
@@ -40,7 +42,9 @@ public class SpringSqlExecutor extends DefaultSqlExecutor {
 
     @Override
     protected void closeQuietly(AutoCloseable resource) {
-        if (!(resource instanceof Connection)) {
+        if (resource instanceof Connection) {
+            DataSourceUtils.releaseConnection((Connection) resource, dataSource);
+        }else {
             super.closeQuietly(resource);
         }
     }
