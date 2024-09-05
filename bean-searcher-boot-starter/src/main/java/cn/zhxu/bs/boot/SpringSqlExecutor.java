@@ -14,7 +14,7 @@ import java.sql.SQLException;
  * 支持 Spring 事务的 Sql 执行器
  *
  * @author zengyufei
- * @since 1.1.1
+ * @since 4.3.2
  */
 public class SpringSqlExecutor extends DefaultSqlExecutor {
 
