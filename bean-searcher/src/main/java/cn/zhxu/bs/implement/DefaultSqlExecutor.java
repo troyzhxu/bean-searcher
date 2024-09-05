@@ -18,10 +18,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * JDBC Sql 执行器
- * 
+ *
  * @author Troy.Zhou
  * @since 1.1.1
- * 
+ *
  */
 public class DefaultSqlExecutor implements SqlExecutor {
 
@@ -30,7 +30,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
     /**
      * 默认数据源
      */
-    private DataSource dataSource;
+    protected DataSource dataSource;
 
     /**
      * 具名数据源
@@ -63,12 +63,12 @@ public class DefaultSqlExecutor implements SqlExecutor {
 
 
     public DefaultSqlExecutor() { }
-    
+
     public DefaultSqlExecutor(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
-    
+
     @Override
     public <T> SqlResult<T> execute(SearchSql<T> searchSql) {
         if (!searchSql.isShouldQueryList() && !searchSql.isShouldQueryCluster()) {
@@ -195,7 +195,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
         };
     }
 
-    protected static class Result {
+    protected class Result {
 
         final PreparedStatement statement;
         final ResultSet resultSet;
@@ -209,6 +209,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
             closeQuietly(resultSet);
             closeQuietly(statement);
         }
+
 
     }
 
@@ -250,7 +251,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
         }
     }
 
-    protected static void closeQuietly(AutoCloseable resource) {
+    protected void closeQuietly(AutoCloseable resource) {
         try {
             if (resource != null) {
                 resource.close();

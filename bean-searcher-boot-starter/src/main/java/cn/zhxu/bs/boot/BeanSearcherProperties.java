@@ -47,6 +47,8 @@ public class BeanSearcherProperties {
      */
     private boolean useBeanSearcher = true;
 
+    private boolean useSpringTransactionalExecutor = false;
+
 
     public Params getParams() {
         return params;
@@ -1009,4 +1011,11 @@ public class BeanSearcherProperties {
         this.useBeanSearcher = useBeanSearcher;
     }
 
+    public boolean isUseSpringTransactionalExecutor() {
+        return useSpringTransactionalExecutor;
+    }
+
+    public void setUseSpringTransactionalExecutor(boolean useSpringTransactionalExecutor) {
+        this.useSpringTransactionalExecutor = useSpringTransactionalExecutor;
+    }
 }
