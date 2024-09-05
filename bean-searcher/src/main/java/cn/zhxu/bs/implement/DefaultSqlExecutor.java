@@ -37,17 +37,6 @@ public class DefaultSqlExecutor implements SqlExecutor {
     private final Map<String, DataSource> dataSourceMap = new ConcurrentHashMap<>();
 
     /**
-     * 是否使用只读事务
-     */
-    private boolean transactional = false;
-
-    /**
-     * 使用事务时的隔离级别，默认为 READ_COMMITTED
-     * @since v3.1.0
-     */
-    private int transactionIsolation = Connection.TRANSACTION_READ_COMMITTED;
-
-    /**
      * 慢 SQL 阈值（单位：毫秒），默认：500 毫秒
      * @since v3.7.0
      */
@@ -107,11 +96,6 @@ public class DefaultSqlExecutor implements SqlExecutor {
     }
 
     protected <T> SqlResult<T> doExecute(SearchSql<T> searchSql, Connection connection) throws SQLException {
-        if (transactional) {
-            connection.setAutoCommit(false);
-            connection.setTransactionIsolation(transactionIsolation);
-            connection.setReadOnly(true);
-        }
         SqlResult.ResultSet listResult = null;
         SqlResult.Result clusterResult = null;
         try {
@@ -133,11 +117,6 @@ public class DefaultSqlExecutor implements SqlExecutor {
         } catch (SQLException e) {
             closeQuietly(clusterResult);
             throw e;
-        } finally {
-            if (transactional) {
-                connection.commit();
-                connection.setReadOnly(false);
-            }
         }
         return new SqlResult<T>(searchSql, listResult, clusterResult) {
             @Override
@@ -296,19 +275,29 @@ public class DefaultSqlExecutor implements SqlExecutor {
     }
 
     /**
-     * 设置是否使用只读事务
+     * 设置是否使用只读事务（将在 v4.4 中移除）
      * @param transactional 是否使用事务
      */
+    @Deprecated
     public void setTransactional(boolean transactional) {
-        this.transactional = transactional;
     }
 
+    /**
+     * 将在 v4.4 中移除
+     * @return false
+     */
+    @Deprecated
     public boolean isTransactional() {
-        return transactional;
+        return false;
     }
 
+    /**
+     * 将在 v4.4 中移除
+     * @return {@link Connection#TRANSACTION_READ_COMMITTED }
+     */
+    @Deprecated
     public int getTransactionIsolation() {
-        return transactionIsolation;
+        return Connection.TRANSACTION_READ_COMMITTED;
     }
 
     /**
@@ -320,8 +309,8 @@ public class DefaultSqlExecutor implements SqlExecutor {
      * @see Connection#TRANSACTION_REPEATABLE_READ
      * @see Connection#TRANSACTION_SERIALIZABLE
      */
+    @Deprecated
     public void setTransactionIsolation(int level) {
-        this.transactionIsolation = level;
     }
 
     public long getSlowSqlThreshold() {
