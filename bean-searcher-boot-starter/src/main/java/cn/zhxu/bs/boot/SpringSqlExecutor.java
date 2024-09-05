@@ -16,9 +16,9 @@ import java.sql.SQLException;
  * @author zengyufei
  * @since 1.1.1
  */
-public class DefaultSpringTransactionalSqlExecutor extends DefaultSqlExecutor {
+public class SpringSqlExecutor extends DefaultSqlExecutor {
 
-    public DefaultSpringTransactionalSqlExecutor(DataSource dataSource) {
+    public SpringSqlExecutor(DataSource dataSource) {
         super(dataSource);
     }
 
