@@ -71,7 +71,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
             return doExecute(searchSql, connection);
         } catch (SQLException e) {
             // 如果有异常，则立马关闭，否则与 SqlResult 一起关闭
-            closeQuietly(connection, beanMeta);
+            closeConnection(connection, beanMeta);
             throw new SearchException("A exception occurred when executing sql.", e);
         }
     }
@@ -124,7 +124,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
                 try {
                     super.close();
                 } finally {
-                    closeQuietly(connection, searchSql.getBeanMeta());
+                    closeConnection(connection, searchSql.getBeanMeta());
                 }
             }
         };
@@ -231,11 +231,11 @@ public class DefaultSqlExecutor implements SqlExecutor {
         }
     }
 
-    protected void closeQuietly(AutoCloseable resource) {
-        closeQuietly(resource, null);
+    protected void closeConnection(Connection connection, BeanMeta<?> beanMeta) {
+        closeQuietly(connection);
     }
 
-    protected void closeQuietly(AutoCloseable resource, BeanMeta<?> beanMeta) {
+    protected void closeQuietly(AutoCloseable resource) {
         try {
             if (resource != null) {
                 resource.close();

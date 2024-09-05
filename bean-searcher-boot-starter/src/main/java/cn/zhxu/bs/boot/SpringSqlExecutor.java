@@ -27,13 +27,9 @@ public class SpringSqlExecutor extends DefaultSqlExecutor {
     }
 
     @Override
-    protected void closeQuietly(AutoCloseable resource, BeanMeta<?> beanMeta) {
-        if (resource instanceof Connection) {
-            DataSource dataSource = requireDataSource(beanMeta);
-            DataSourceUtils.releaseConnection((Connection) resource, dataSource);
-        } else {
-            super.closeQuietly(resource, beanMeta);
-        }
+    protected void closeConnection(Connection connection, BeanMeta<?> beanMeta) {
+        DataSource dataSource = requireDataSource(beanMeta);
+        DataSourceUtils.releaseConnection(connection, dataSource);
     }
 
 }
