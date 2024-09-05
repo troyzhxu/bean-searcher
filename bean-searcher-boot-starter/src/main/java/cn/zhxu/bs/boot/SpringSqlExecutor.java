@@ -2,8 +2,6 @@ package cn.zhxu.bs.boot;
 
 import cn.zhxu.bs.BeanMeta;
 import cn.zhxu.bs.SearchException;
-import cn.zhxu.bs.SearchSql;
-import cn.zhxu.bs.SqlResult;
 import cn.zhxu.bs.implement.DefaultSqlExecutor;
 import cn.zhxu.bs.util.StringUtils;
 import org.springframework.jdbc.datasource.DataSourceUtils;
@@ -26,7 +24,7 @@ public class SpringSqlExecutor extends DefaultSqlExecutor {
 
     @Override
     protected Connection getConnection(BeanMeta<?> beanMeta) throws SQLException {
-        String name = beanMeta.getDataSource();
+        final String name = beanMeta.getDataSource();
         if (StringUtils.isBlank(name)) {
             if (dataSource == null) {
                 throw new SearchException("There is not a default dataSource for " + beanMeta.getBeanClass());
@@ -41,11 +39,16 @@ public class SpringSqlExecutor extends DefaultSqlExecutor {
     }
 
     @Override
-    protected void closeQuietly(AutoCloseable resource) {
+    protected <T> void closeQuietly(AutoCloseable resource, BeanMeta<T> beanMeta) {
         if (resource instanceof Connection) {
-            DataSourceUtils.releaseConnection((Connection) resource, dataSource);
-        }else {
-            super.closeQuietly(resource);
+            final String name = beanMeta.getDataSource();
+            DataSource thisDataSource = dataSource;
+            if (StringUtils.isNotBlank(name)) {
+                thisDataSource = this.getDataSourceMap().get(name);
+            }
+            DataSourceUtils.releaseConnection((Connection) resource, thisDataSource);
+        } else {
+            super.closeQuietly(resource, beanMeta);
         }
     }
 }
