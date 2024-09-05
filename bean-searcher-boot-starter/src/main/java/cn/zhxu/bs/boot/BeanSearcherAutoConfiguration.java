@@ -249,12 +249,7 @@ public class BeanSearcherAutoConfiguration {
                                    ObjectProvider<List<NamedDataSource>> namedDataSources,
                                    ObjectProvider<SqlExecutor.SlowListener> slowListener,
                                    BeanSearcherProperties config) {
-        DefaultSqlExecutor executor;
-        if (config.isUseSpringTransactionalExecutor()) {
-            executor = new DefaultSpringTransactionalSqlExecutor(dataSource.getIfAvailable());
-        } else {
-            executor = new DefaultSqlExecutor(dataSource.getIfAvailable());
-        }
+        DefaultSqlExecutor executor = new DefaultSpringTransactionalSqlExecutor(dataSource.getIfAvailable());
         ifAvailable(namedDataSources, ndsList -> {
             for (NamedDataSource nds: ndsList) {
                 executor.setDataSource(nds.getName(), nds.getDataSource());
