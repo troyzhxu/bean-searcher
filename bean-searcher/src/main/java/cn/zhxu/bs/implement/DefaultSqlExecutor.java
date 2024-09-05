@@ -176,7 +176,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
         };
     }
 
-    protected class Result {
+    protected static class Result {
 
         final PreparedStatement statement;
         final ResultSet resultSet;
@@ -235,7 +235,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
         closeQuietly(connection);
     }
 
-    protected void closeQuietly(AutoCloseable resource) {
+    protected static void closeQuietly(AutoCloseable resource) {
         try {
             if (resource != null) {
                 resource.close();
