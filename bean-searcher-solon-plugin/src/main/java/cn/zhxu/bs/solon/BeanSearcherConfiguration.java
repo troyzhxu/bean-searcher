@@ -378,7 +378,7 @@ public class BeanSearcherConfiguration {
     public SqlExecutor sqlExecutor(List<NamedDataSource> namedDataSources,
                                    DataSource dataSource,
                                    @Inject(required = false) SqlExecutor.SlowListener slowListener) {
-        DefaultSqlExecutor executor = new DefaultSqlExecutor(dataSource);
+        SolonSqlExecutor executor = new SolonSqlExecutor(dataSource);
         ifAvailable(namedDataSources, ndsList -> {
             for (NamedDataSource nds : ndsList) {
                 executor.setDataSource(nds.getName(), nds.getDataSource());
