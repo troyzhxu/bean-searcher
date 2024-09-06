@@ -58,7 +58,8 @@ public class DateTimeParamConvertor implements FieldConvertor.ParamConvertor {
                 String.class == valueType ||
                         Date.class.isAssignableFrom(valueType) ||
                         LocalDate.class == valueType ||
-                        LocalDateTime.class == valueType
+                        LocalDateTime.class == valueType ||
+                        Long.class == valueType
         );
     }
 

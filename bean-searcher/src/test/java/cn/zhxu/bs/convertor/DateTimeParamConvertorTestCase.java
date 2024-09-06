@@ -43,6 +43,7 @@ public class DateTimeParamConvertorTestCase {
         Assertions.assertEquals(supports, convertor.supports(meta, LocalDate.class));
         Assertions.assertEquals(supports, convertor.supports(meta, LocalDateTime.class));
         Assertions.assertEquals(supports, convertor.supports(meta, String.class));
+        Assertions.assertEquals(supports, convertor.supports(meta, Long.class));
     }
 
     @Test
