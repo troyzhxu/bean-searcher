@@ -2,7 +2,6 @@ package com.example.demo;
 
 import cn.zhxu.bs.BeanSearcher;
 import cn.zhxu.bs.SearchResult;
-import cn.zhxu.bs.util.MapUtils;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Inject;
 import org.noear.solon.annotation.Mapping;
@@ -17,7 +16,6 @@ import java.sql.SQLException;
 public class DemoController {
 
     @Db
-    @Inject
     private DbContext db;
 
     @Inject
@@ -29,7 +27,7 @@ public class DemoController {
     }
 
     /**
-     * 请求参数在哪里? 参见 {@link Config#currentRequestParamFilter() }<p>
+     * 请求参数在哪里? 参见 {@link ReqParamFilter }<p>
      * 如果没有配置那个参数过滤器，这里只需这么写即可：
      * <pre>{@code
      * Map<String, Object> params = new HashMap<>(Context.current().paramMap());
@@ -43,15 +41,16 @@ public class DemoController {
         return beanSearcher.search(Employee.class, Employee::getAge);
     }
 
+    /**
+     * 事务测试
+     */
     @Tran
     @Mapping("/create")
     public Employee create(int id, String name) throws SQLException {
-        // 事务测试
+        // 使用其它 ORM 插入数据
         db.sql("INSERT INTO `employee` VALUES (?, ?,22,'Male',now(),1)", id, name).execute();
-        var params = MapUtils.builder()
-                .field(Employee::getId, id)
-                .build();
-        return beanSearcher.searchFirst(Employee.class, params);
+        // 使用 Bean Searcher 把刚插入的数据再查出来
+        return beanSearcher.searchFirst(Employee.class);
     }
 
 }
