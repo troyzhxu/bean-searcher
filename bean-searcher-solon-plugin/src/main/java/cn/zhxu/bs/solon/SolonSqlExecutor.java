@@ -22,7 +22,7 @@ public class SolonSqlExecutor extends DefaultSqlExecutor {
     @Override
     protected Connection getConnection(BeanMeta<?> beanMeta) throws SQLException {
         DataSource dataSource = requireDataSource(beanMeta);
-        return TranUtils.getConnection(dataSource);
+        return TranUtils.getConnectionProxy(dataSource);
     }
 
 }
