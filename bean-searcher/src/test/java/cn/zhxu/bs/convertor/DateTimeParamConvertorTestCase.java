@@ -56,6 +56,8 @@ public class DateTimeParamConvertorTestCase {
         assertConvert("2022/06/16 20:39:10", 20, 39, 10);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         long time = sdf.parse("2022-06-16 20:39:10").getTime();
+        assertConvert(time, 20, 39, 10);
+        assertConvert(String.valueOf(time), 20, 39, 10);
         assertConvert(new Date(time), 20, 39, 10);
         assertConvert(new Timestamp(time), 20, 39, 10);
         assertConvert(LocalDate.parse("2022-06-16"), 0, 0, 0);
