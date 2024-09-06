@@ -49,7 +49,7 @@ public class DemoController {
     public Employee create(int id, String name) throws SQLException {
         // 使用其它 ORM 插入数据
         db.sql("INSERT INTO `employee` VALUES (?, ?,22,'Male',now(),1)", id, name).execute();
-        // 使用 Bean Searcher 把刚插入的数据再查出来
+        // 使用 Bean Searcher 把刚插入的数据再查出来（v4.3.2 开始 默认支持事务内查询）
         return beanSearcher.searchFirst(Employee.class);
     }
 
