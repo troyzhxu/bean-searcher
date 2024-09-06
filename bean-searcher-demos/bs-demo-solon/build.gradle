@@ -14,21 +14,22 @@ description = "demo"
 
 
 dependencies {
-    implementation platform("org.noear:solon-parent:2.8.3")
+    implementation platform("org.noear:solon-parent:2.9.2")
 
-    implementation "org.noear:solon-api"
-    implementation "org.noear:solon.view.thymeleaf"
+    implementation("org.noear:solon-web")
+    implementation("org.noear:solon-view-thymeleaf")
+    implementation("org.noear:solon-logging-logback")
     implementation "org.noear:wood-solon-plugin"
 
     implementation "cn.zhxu:bean-searcher-solon-plugin:4.3.2"
     // 若想使用 JSON 字段转对象的功能，可以添加此依赖
-    implementation "cn.zhxu:xjsonkit-snack3:1.4.3"
+    implementation "cn.zhxu:xjsonkit-snack3:1.5.0"
 
     implementation "com.zaxxer:HikariCP:4.0.3"
 
     runtimeOnly "com.h2database:h2:2.2.224"
 
-    testImplementation "org.noear:solon-test"
+    testImplementation("org.noear:solon-test")
 }
 
 
@@ -42,11 +43,18 @@ jar {
         attributes "Main-Class": "com.example.demo.App"
     }
 
+    dependsOn(configurations.runtimeClasspath)
+
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from(configurations.runtimeClasspath.collect {
         if (it.isDirectory()) it else zipTree(it)
-    })
-    
+    }){
+        exclude 'META-INF/MANIFEST.MF'
+        exclude 'META-INF/*.SF'
+        exclude 'META-INF/*.DSA'
+        exclude 'META-INF/*.RSA'
+    }
+
     def sourcesMain = sourceSets.main
     sourcesMain.allSource.forEach { println("add from sources: ${it.name}") }
     from(sourcesMain.output)

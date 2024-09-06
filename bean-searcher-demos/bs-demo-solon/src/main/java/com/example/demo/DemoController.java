@@ -2,13 +2,23 @@ package com.example.demo;
 
 import cn.zhxu.bs.BeanSearcher;
 import cn.zhxu.bs.SearchResult;
+import cn.zhxu.bs.util.MapUtils;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Inject;
 import org.noear.solon.annotation.Mapping;
 import org.noear.solon.core.handle.ModelAndView;
+import org.noear.solon.data.annotation.Tran;
+import org.noear.wood.DbContext;
+import org.noear.wood.annotation.Db;
+
+import java.sql.SQLException;
 
 @Controller
 public class DemoController {
+
+    @Db
+    @Inject
+    private DbContext db;
 
     @Inject
     private BeanSearcher beanSearcher;
@@ -31,6 +41,17 @@ public class DemoController {
     public SearchResult<Employee> employees() {
         // 分页查询员工信息，并对年龄进行统计
         return beanSearcher.search(Employee.class, Employee::getAge);
+    }
+
+    @Tran
+    @Mapping("/create")
+    public Employee create(int id, String name) throws SQLException {
+        // 事务测试
+        db.sql("INSERT INTO `employee` VALUES (?, ?,22,'Male',now(),1)", id, name).execute();
+        var params = MapUtils.builder()
+                .field(Employee::getId, id)
+                .build();
+        return beanSearcher.searchFirst(Employee.class, params);
     }
 
 }
