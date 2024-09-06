@@ -217,7 +217,7 @@ Bean Searcher can work with any JavaWeb frameworks, such as: SpringBoot, SpringM
 All you need is to add a dependence:
 
 ```groovy
-implementation 'cn.zhxu:bean-searcher-boot-stater:4.3.1'
+implementation 'cn.zhxu:bean-searcher-boot-stater:4.3.2'
 ```
 
 and then you can inject Searcher into a `Controller` or `Service`:
@@ -241,7 +241,7 @@ private BeanSearcher beanSearcher;
 All you need is to add a dependence:
 
 ```groovy
-implementation 'cn.zhxu:bean-searcher-solon-plugin:4.3.1'
+implementation 'cn.zhxu:bean-searcher-solon-plugin:4.3.2'
 ```
 
 and then you can inject Searcher into a `Controller` or `Service`:
@@ -265,7 +265,7 @@ private BeanSearcher beanSearcher;
 Adding this dependence:
 
 ```groovy
-implementation 'cn.zhxu:bean-searcher:4.3.1'
+implementation 'cn.zhxu:bean-searcher:4.3.2'
 ```
 
 then you can build a `Searcher` with `SearcherBuilder`:
