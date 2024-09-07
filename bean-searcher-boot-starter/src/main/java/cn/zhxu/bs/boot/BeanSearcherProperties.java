@@ -307,6 +307,12 @@ public class BeanSearcherProperties {
             private DateTimeParamConvertor.Target dateTimeTarget = DateTimeParamConvertor.Target.SQL_TIMESTAMP;
             private TimeParamConvertor.Target timeTarget = TimeParamConvertor.Target.SQL_TIME;
 
+            /**
+             * 时区 ID，将作为 {@link DateTimeParamConvertor } 的参数，默认取值：{@link ZoneId#systemDefault() }
+             * @see DateTimeParamConvertor#setZoneId(ZoneId)
+             */
+            private ZoneId zoneId = null;
+
             public DateParamConvertor.Target getDateTarget() {
                 return dateTarget;
             }
@@ -329,6 +335,14 @@ public class BeanSearcherProperties {
 
             public void setTimeTarget(TimeParamConvertor.Target timeTarget) {
                 this.timeTarget = timeTarget;
+            }
+
+            public ZoneId getZoneId() {
+                return zoneId;
+            }
+
+            public void setZoneId(ZoneId zoneId) {
+                this.zoneId = zoneId;
             }
 
         }

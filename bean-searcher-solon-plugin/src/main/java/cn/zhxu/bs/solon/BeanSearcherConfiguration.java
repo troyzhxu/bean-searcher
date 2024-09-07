@@ -62,7 +62,10 @@ public class BeanSearcherConfiguration {
     @Bean
     @Condition(onMissingBean = DateTimeParamConvertor.class)
     public DateTimeParamConvertor dateTimeParamConvertor() {
-        return new DateTimeParamConvertor(config.getParams().getConvertor().getDateTimeTarget());
+        BeanSearcherProperties.Params.Convertor conf = config.getParams().getConvertor();
+        DateTimeParamConvertor convertor = new DateTimeParamConvertor(conf.getDateTimeTarget());
+        convertor.setZoneId(conf.getZoneId());
+        return convertor;
     }
 
     @Bean

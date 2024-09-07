@@ -170,7 +170,10 @@ public class BeanSearcherAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(DateTimeParamConvertor.class)
     public DateTimeParamConvertor dateTimeParamConvertor(BeanSearcherProperties props) {
-        return new DateTimeParamConvertor(props.getParams().getConvertor().getDateTimeTarget());
+        Params.Convertor conf = props.getParams().getConvertor();
+        DateTimeParamConvertor convertor = new DateTimeParamConvertor(conf.getDateTimeTarget());
+        convertor.setZoneId(conf.getZoneId());
+        return convertor;
     }
 
     @Bean

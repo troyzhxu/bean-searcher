@@ -1,3 +1,16 @@
+# v4.3.2 @ 2024-09-09
+
+### ✨ Features
+
+* Bean Searcher
+  * 优化 `DateTimeParamConvertor`: 使支持整型的时间戳参数值
+* Bean Searcher Boot Starter
+  * 新增 `SpringSqlExecutor`: 支持 Spring 事务的 Sql 执行器，且默认使用
+  * 新增配置项：`bean-searcher.params.convertor.zone-id`: 可配置 `DateTimeParamConvertor` 使用的时区
+* Bean Searcher Solon Plugin
+  * 新增 `SolonSqlExecutor`: 支持 Solon 事务的 Sql 执行器，且默认使用
+  * 新增配置项：`bean-searcher.params.convertor.zone-id`: 可配置 `DateTimeParamConvertor` 使用的时区
+
 # v4.3.1 @ 2024-08-24
 
 ### 🌻 Better
