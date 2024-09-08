@@ -21,6 +21,7 @@
   * 升级 `OracleDialect`：使用新的 `offset ? rows fetch next ? rows only` 分页语法，仅支持 Oracle 12c（2013年6月发布）及以上版本
   * 优化 `ExprParser`：新增逻辑关系符常量，逻辑表达式中的且关系符 `&` 与 或关系符 `|` 不再支持自定义。
   * 优化 `FieldParam`：其内部类 `Value` 新增 `getIndex()` 方法
+  * 增强 `DateTimeParamConvertor`: 使支持整型的时间戳参数值（since v4.3.2）
   * 升级 Junit -> 5.10.2 并完善单元测试
 * Bean Searcher Boot Starter
   * 新增配置项 `bean-searcher.params.group.mergeable` 指定组表达式是否可合并，默认 `true`
@@ -29,6 +30,8 @@
   * 新增配置项 `bean-searcher.params.filter.use-suffix-op` 是否启用 `SuffixOpParamFilter`, 默认 `false`
   * 新增配置项 `bean-searcher.params.filter.use-json-array` 是否启用 `JsonArrayParamFilter`, 默认 `false`
   * 支持以 Bean 的形式自定义 `JoinParaSerializer` 组件
+  * 新增 `SpringSqlExecutor`: 支持 Spring 事务的 Sql 执行器，且默认使用（since v4.3.2）
+  * 新增配置项：`bean-searcher.params.convertor.zone-id`: 可配置 `DateTimeParamConvertor` 使用的时区（since v4.3.2）
 * Bean Searcher Solon Plugin
   * 新增配置项 `bean-searcher.params.group.mergeable` 指定组表达式是否可合并，默认 `true`
   * 新增配置项 `bean-searcher.params.filter.use-size-limit` 是否启用 `SizeLimitParamFilter`，默认 `true`
@@ -36,7 +39,8 @@
   * 新增配置项 `bean-searcher.params.filter.use-suffix-op` 是否启用 `SuffixOpParamFilter`, 默认 `false`
   * 新增配置项 `bean-searcher.params.filter.use-json-array` 是否启用 `JsonArrayParamFilter`, 默认 `false`
   * 支持以 Bean 的形式自定义 `JoinParaSerializer` 组件
-  * 升级 Solon -> 2.8.3
+  * 新增 `SolonSqlExecutor`: 支持 Solon 事务的 Sql 执行器，且默认使用（since v4.3.2）
+  * 新增配置项：`bean-searcher.params.convertor.zone-id`: 可配置 `DateTimeParamConvertor` 使用的时区（since v4.3.2）
 
 > 参考章节：[字段参数](/guide/param/field)、[逻辑分组](/guide/param/group)、[参数过滤器](/guide/advance/filter)、[拼接参数](/guide/param/embed#拼接参数)、[请求第三方 BS 服务](/guide/usage/rpc)
 
