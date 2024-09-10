@@ -579,31 +579,31 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 * 使用 Jackson 框架
 
 ```gradle
-implementation 'cn.zhxu:xjsonkit-jackson:1.4.3'
+implementation 'cn.zhxu:xjsonkit-jackson:1.5.0'
 ```
 
 * 使用 Gson 框架
 
 ```gradle
-implementation 'cn.zhxu:xjsonkit-gson:1.4.3'
+implementation 'cn.zhxu:xjsonkit-gson:1.5.0'
 ```
 
 * 使用 Fastjson 框架
 
 ```gradle
-implementation 'cn.zhxu:xjsonkit-fastjson:1.4.3'
+implementation 'cn.zhxu:xjsonkit-fastjson:1.5.0'
 ```
 
 * 使用 Fastjson2 框架
 
 ```gradle
-implementation 'cn.zhxu:xjsonkit-fastjson2:1.4.3'
+implementation 'cn.zhxu:xjsonkit-fastjson2:1.5.0'
 ```
 
 * 使用 Snack3 框架
 
 ```gradle
-implementation 'cn.zhxu:xjsonkit-snack3:1.4.3'
+implementation 'cn.zhxu:xjsonkit-snack3:1.5.0'
 ```
 
 如果你喜欢的 JSON 解析框架不在其内，也支持自定义底层实现，参考：https://gitee.com/troyzhxu/xjsonkit
