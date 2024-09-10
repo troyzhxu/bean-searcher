@@ -6,7 +6,7 @@
 
 ## 玩法举例
 
-假设每个需要有数据权限的业务表（例如订单表 `order`）都有一个 `owner_id`（所有者 ID）字段，而每个所有者都唯一归属于某一个部门，而部门具有树形层级结构（即有上级部门与下级部分）。
+假设每个需要有数据权限的业务表（例如订单表 `order`）都有一个 `owner_id`（所有者 ID）与 `dept_id`（从属部门ID）字段，而每个所有者都唯一归属于某一个部门，而部门具有树形层级结构（即有上级部门与下级部分）。
 
 ### 关键数据表
 
@@ -22,7 +22,7 @@ parent_id | 上级部门ID
 关键字段 | 备注
 -|-
 id | 用户ID
-dept_id | 从属部门ID
+dept_id | 所在部门ID
 
 * order - 业务数据表
 
@@ -30,6 +30,7 @@ dept_id | 从属部门ID
 -|-
 id | 订单ID
 owner_id | 所有者 ID
+dept_id | 从属部门ID
 
 ### 权限配置项
 
@@ -72,7 +73,9 @@ public class OrderVO {
 
 这里有一个技巧，就是使用一个占位符（这里用 `<ds>`）来标记需要插入数据权限条件的地方，这样我们的自定义代码就不需用再引入其它框架来解析 SQL 语法了，这样我们的代码简单，性能也非常高。
 
-### 自定义 SQL 拦截器
+### 数据权限拦截器
+
+接着，就可以自定义数据权限拦截器了：
 
 ```java
 @Component
@@ -105,13 +108,64 @@ public class DataScopeSqlInterceptor implements SqlInterceptor {
         String preSql = sql.substring(0, index);
         // 占位符 之后的 SQL
         String nexSql = sql.substring(index + PLACEHOLDER.length());
-        // 获取当前请求者的信息（不同的项目架构，这里使用的方法都不一样）
+        // 获取当前请求者的信息（不同的项目架构，这里使用的方法各不一样）
         PrincipalUser user = PrincipalHolder.requireUser();
+        // 数据权限 SQL 条件
+        String scopeSql = buildScopeSql(dataScope.on(), user);
+        // 拼接新的完整 SQL
+        if (scopeSql == null) {
+            return preSql + nexSql;
+        }
+        String trim = preSql.trim().toLowerCase();
+        if (trim.endsWith("where") || trim.endsWith("and")) {
+            return preSql + " " + scopeSql + " " + nexSql;
+        }
+        return preSql + " and " + scopeSql + " " + nexSql;
+    }
 
+    private String buildScopeSql(String on, PrincipalUser user) {
+        // 获取当前用户的数据权限配置类型
+        ScopeType scopeType = user.getScopeType();
+        // 只查属于自己的数据
+        if (scopeType == ScopeType.ONLY_SELF) {
+            return ownerId(on) + " = " + user.getId();
+        }
+        // 只查自己部门的数据
+        if (scopeType == ScopeType.SELF_DEPT) {
+            return deptId(on) + " = " + user.getDeptId();
+        }
+        // 查看自己部门以及所有子部门的数据
+        if (scopeType == ScopeType.SUB_DEPTS) {
+            // 这里使用了递归 SQL 语法，如果数据库引擎不支持该语法
+            // 也可以先单独将所有子部门ID 都查出来，然后在此拼接
+            return deptId(on) + "in (with recursive d_tree as (" +
+                " select id, parent_id from dept" +
+                "  where id = " + user.getDeptId() +
+                " union all" +
+                " select d.id, d.parent_id from dept d, d_tree t" +
+                "  where t.id = d.parent_id" +
+                ") select id from d_tree)"; 
+        }
+        // 查看所有数据
+        return null;
+    }
+
+    private String ownerId(String on) {
+        if (StringUtils.isBlank(on)) {
+          return "owner_id";
+        }
+        return on + ".owner_id";
+    }
+
+    private String deptId(String on) {
+        if (StringUtils.isBlank(on)) {
+          return "dept_id";
+        }
+        return on + ".dept_id";
     }
 
 }
 ```
 
-
+以上，就实现了一种数据权限机制，其它花样的数据权限也同理。
 
