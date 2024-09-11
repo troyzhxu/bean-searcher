@@ -188,7 +188,7 @@ public class DefaultParamResolver implements ParamResolver {
         return gExpr;
     }
 
-    private List<FieldParam> extractFieldParams(Collection<FieldMeta> fieldMetas, MapWrapper paraMap) {
+    protected List<FieldParam> extractFieldParams(Collection<FieldMeta> fieldMetas, MapWrapper paraMap) {
         Map<String, Set<Integer>> fieldIndicesMap = new HashMap<>();
         for (String key : paraMap.keySet()) {
             int index = key.lastIndexOf(configuration.separator());

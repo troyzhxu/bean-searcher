@@ -3,7 +3,7 @@
 ### ✨ Features
 
 * Bean Searcher
-  * 优化 `DateTimeParamConvertor`: 使支持整型的时间戳参数值
+  * 增强 `DateTimeParamConvertor`: 使支持整型的时间戳参数值
 * Bean Searcher Boot Starter
   * 新增 `SpringSqlExecutor`: 支持 Spring 事务的 Sql 执行器，且默认使用
   * 新增配置项：`bean-searcher.params.convertor.zone-id`: 可配置 `DateTimeParamConvertor` 使用的时区

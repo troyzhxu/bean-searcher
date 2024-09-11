@@ -120,11 +120,11 @@
   * 新增方法：`searchSum(Class<T> beanClass, FieldFns.FieldFn<T, ?> field) -> Number`
   * 新增方法：`searchSum(Class<T> beanClass, Map<String, Object> paraMap, FieldFns.FieldFn<T, ?> field) -> Number`
   * 新增 `JsonFieldConvertor` 字段转换器，配合 `@DbField(type = DbType.JSON)` 可支持 JSON 字段自动转对象，需要添加 JSON 依赖（以下依赖任选一个即可）：
-    * `cn.zhxu:xjsonkit-fastjson:1.4.2`
-    * `cn.zhxu:xjsonkit-fastjson2:1.4.2`
-    * `cn.zhxu:xjsonkit-gson:1.4.2`
-    * `cn.zhxu:xjsonkit-jackson:1.4.2`
-    * `cn.zhxu:xjsonkit-snack3:1.4.2`
+    * `cn.zhxu:xjsonkit-fastjson:1.5.0`
+    * `cn.zhxu:xjsonkit-fastjson2:1.5.0`
+    * `cn.zhxu:xjsonkit-gson:1.5.0`
+    * `cn.zhxu:xjsonkit-jackson:1.5.0`
+    * `cn.zhxu:xjsonkit-snack3:1.5.0`
     * 参考：https://gitee.com/troyzhxu/xjsonkit
   * 增强 `JsonFieldConvertor` 字段转换器，新增 `failOnError` 字段，可配置遇到某些值 JSON 解析错误时，是否抛出异常
   * 新增 `ListFieldConvertor` 字段转换器，可支持将 字符串字段自动转为简单 List 对象
