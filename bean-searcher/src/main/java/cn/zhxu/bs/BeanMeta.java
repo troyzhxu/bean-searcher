@@ -61,7 +61,7 @@ public class BeanMeta<T> {
     /**
      * 映射: Bean属性 -> 属性元信息
      * */
-    private final Map<String, FieldMeta> fieldMetaMap = new HashMap<>();
+    private final Map<String, FieldMeta> fieldMetaMap = new LinkedHashMap<>();
 
     /**
      * 可以被 Select 的属性集
