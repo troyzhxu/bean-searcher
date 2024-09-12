@@ -22,10 +22,13 @@
 
 ```java
 @SearchBean(
-    tables = ":table: o, user u",      // 参数 table 由检索时动态指定
+    tables = "order_:year: o, user u",      // 参数 year 由检索时动态指定
     where = "o.user_id = u.id", autoMapTo = "o"
 )
 public class Order {
+
+    public static final String TABLE_SUFFIX = "year"
+
     private Long id;
     private String orderNo;
     @DbField("u.username")
@@ -51,9 +54,9 @@ public class OrderController {
     @GetMapping("/index")
     public SearchResult<Order> index(HttpServletRequest request, int year) {
         Map<String, Object> params = MapUtils.flatBuilder(request.getParameterMap())
-                .put("table", "order_" + year)              // 根据年份指定查询订单的表名
+                .put(Order.TABLE_SUFFIX, year)              // 指定表名后缀
                 .build();
-        return beanSearcher.search(Order.class, params);    // 开始检索，并返回数据
+        return beanSearcher.search(Order.class, params);    // 检索并返回数据
     }
 	
 }
