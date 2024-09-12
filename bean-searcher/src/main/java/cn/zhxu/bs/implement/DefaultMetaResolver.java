@@ -68,14 +68,7 @@ public class DefaultMetaResolver implements MetaResolver {
         if (table == null) {
             throw new SearchException("The class [" + beanClass.getName() + "] can not be searched, because it can not be resolved by " + dbMapping.getClass());
         }
-        BeanMeta<T> beanMeta = new BeanMeta<>(beanClass, table.getDataSource(),
-                snippetResolver.resolve(table.getTables()),
-                snippetResolver.resolve(table.getWhere()),
-                snippetResolver.resolve(table.getGroupBy()),
-                snippetResolver.resolve(table.getHaving()),
-                snippetResolver.resolve(table.getOrderBy()),
-                table.isSortable(), table.isDistinct(),
-                table.getTimeout());
+        BeanMeta<T> beanMeta = createBeanMeta(beanClass, table);
         List<FieldWrapper> wrappers = new ArrayList<>();
         table.getFields().forEach(column -> wrappers.add(new FieldWrapper(null, column)));
         wrappers.addAll(getBeanFields(beanClass).stream()
@@ -122,6 +115,17 @@ public class DefaultMetaResolver implements MetaResolver {
             throw new SearchException("[" + beanClass.getName() + "] is not a valid SearchBean, because there is no field mapping to database. Please refer https://bs.zhxu.cn/guide/latest/bean.html#%E7%9C%81%E7%95%A5-dbfield for help.");
         }
         return beanMeta;
+    }
+
+    protected <T> BeanMeta<T> createBeanMeta(Class<T> beanClass, DbMapping.Table table) {
+        return new BeanMeta<>(beanClass, table.getDataSource(),
+                snippetResolver.resolve(table.getTables()),
+                snippetResolver.resolve(table.getWhere()),
+                snippetResolver.resolve(table.getGroupBy()),
+                snippetResolver.resolve(table.getHaving()),
+                snippetResolver.resolve(table.getOrderBy()),
+                table.isSortable(), table.isDistinct(),
+                table.getTimeout());
     }
 
     protected String resolveAlias(DbMapping.Column column, Set<String> checks) {
