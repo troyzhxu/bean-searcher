@@ -18,7 +18,7 @@ public class LRUCache<T> extends LinkedHashMap<String, T> implements Cache<T> {
     private final Lock lock = new ReentrantLock();
 
     public LRUCache(int maxCacheCount) {
-        super(0, 0.75f, true);
+        super(maxCacheCount, 1, true);
         this.maxCacheCount = maxCacheCount;
     }
 
