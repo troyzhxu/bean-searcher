@@ -23,7 +23,8 @@
 ```java
 @SearchBean(
     tables = "order_:year: o, user u",      // 参数 year 由检索时动态指定
-    where = "o.user_id = u.id", autoMapTo = "o"
+    where = "o.user_id = u.id",
+    autoMapTo = "o"
 )
 public class Order {
 
