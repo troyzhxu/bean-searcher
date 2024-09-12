@@ -27,7 +27,7 @@
 )
 public class Order {
 
-    public static final String TABLE_SUFFIX = "year"
+    public static final String TABLE_SUFFIX = "year";
 
     private Long id;
     private String orderNo;
