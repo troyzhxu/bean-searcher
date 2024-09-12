@@ -228,15 +228,15 @@ public class SimpleSearchTestCase {
                 Assertions.assertEquals("select id c_0, name c_1 from search_bean where (" +
                         "((id = ?) or (id is null))" +
                         " and " +
-                        "((name like ?) and (id = ?) or (id = ?))" +
+                        "((id = ?) and (name like ?) or (id = ?))" +
                         " and " +
                         "(name = ?)" +
                         ")", searchSql.getListSqlString());
                 List<Object> listParams = searchSql.getListSqlParams();
                 Assertions.assertEquals(5, listParams.size());
                 Assertions.assertEquals(10L, listParams.get(0));
-                Assertions.assertEquals("Tom%", listParams.get(1));
-                Assertions.assertEquals(20L, listParams.get(2));
+                Assertions.assertEquals(20L, listParams.get(1));
+                Assertions.assertEquals("Tom%", listParams.get(2));
                 Assertions.assertEquals(30L, listParams.get(3));
                 Assertions.assertEquals("Jack", listParams.get(4));
                 return new SqlResult<>(searchSql, EMPTY_RESULT_SET, columnLabel -> null);

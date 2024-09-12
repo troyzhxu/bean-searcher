@@ -9,12 +9,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class LRUCacheTestCase {
 
-    Cache<String> lruCache = new LRUCache<>(50);
-
-    Random random = new Random();
-
     @Test
     public void test_01() throws InterruptedException {
+        Random random = new Random();
+        Cache<String> lruCache = new LRUCache<>(50);
         AtomicInteger putCount = new AtomicInteger(0);
         int threadCount = 50;
         CountDownLatch latch = new CountDownLatch(threadCount);
@@ -39,6 +37,28 @@ public class LRUCacheTestCase {
         System.out.println("次数：" + putCount);
         System.out.println("耗时：" + t);
         System.out.println("\ttest_01 ok!");
+    }
+
+    @Test
+    public void test_02() {
+        Cache<String> cache = new LRUCache<>(3);
+        cache.cache("a", "a");
+        cache.cache("b", "b");
+        cache.cache("c", "c");
+        Assertions.assertEquals("c", cache.get("c"));
+        Assertions.assertEquals("a", cache.get("a"));
+        Assertions.assertEquals("b", cache.get("b"));
+        cache.cache("d", "d");
+        Assertions.assertNull(cache.get("c"));
+        Assertions.assertEquals("b", cache.get("b"));
+        Assertions.assertEquals("d", cache.get("d"));
+        Assertions.assertEquals("a", cache.get("a"));
+        cache.cache("e", "e");
+        Assertions.assertNull(cache.get("c"));
+        Assertions.assertNull(cache.get("b"));
+        Assertions.assertEquals("a", cache.get("a"));
+        Assertions.assertEquals("d", cache.get("d"));
+        Assertions.assertEquals("e", cache.get("e"));
     }
 
 }
