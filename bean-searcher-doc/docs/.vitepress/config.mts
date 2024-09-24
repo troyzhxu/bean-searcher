@@ -121,6 +121,7 @@ export default defineConfig({
               { text: '请求第三方 BS 服务', link: '/rpc' },
               { text: '大表滚动', link: '/tables' },
               { text: '数据权限', link: '/datascope' },
+              { text: '其它玩法', link: '/others' },
             ]
           }
         ]
