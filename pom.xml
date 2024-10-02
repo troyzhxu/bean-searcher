@@ -15,6 +15,7 @@
 
 	<modules>
 		<module>bean-searcher</module>
+		<module>bean-searcher-runtimes</module>
 		<module>bean-searcher-boot-starter</module>
 		<module>bean-searcher-solon-plugin</module>
 	</modules>
@@ -26,6 +27,7 @@
 		<xjsonkit.version>1.5.0</xjsonkit.version>
 		<spring.boot.version>2.7.18</spring.boot.version>
 		<solon.version>2.9.3</solon.version>
+		<oracle.version>23.5.0.24.07</oracle.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
