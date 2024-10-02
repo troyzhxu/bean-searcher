@@ -3,8 +3,8 @@ package cn.zhxu.bs.boot;
 import cn.zhxu.bs.*;
 import cn.zhxu.bs.FieldConvertor.BFieldConvertor;
 import cn.zhxu.bs.FieldConvertor.MFieldConvertor;
-import cn.zhxu.bs.boot.BeanSearcherProperties.Sql;
 import cn.zhxu.bs.boot.prop.Params;
+import cn.zhxu.bs.boot.prop.Sql;
 import cn.zhxu.bs.convertor.*;
 import cn.zhxu.bs.dialect.*;
 import cn.zhxu.bs.filter.ArrayValueParamFilter;
@@ -318,7 +318,7 @@ public class BeanSearcherAutoConfiguration {
     @ConditionalOnProperty(name = "bean-searcher.field-convertor.use-enum", havingValue = "true", matchIfMissing = true)
     @ConditionalOnMissingBean(EnumFieldConvertor.class)
     public EnumFieldConvertor enumFieldConvertor(BeanSearcherProperties config) {
-        BeanSearcherProperties.FieldConvertor conf = config.getFieldConvertor();
+        cn.zhxu.bs.boot.prop.FieldConvertor conf = config.getFieldConvertor();
         EnumFieldConvertor convertor = new EnumFieldConvertor();
         convertor.setFailOnError(conf.isEnumFailOnError());
         convertor.setIgnoreCase(conf.isEnumIgnoreCase());
@@ -337,7 +337,7 @@ public class BeanSearcherAutoConfiguration {
         @ConditionalOnProperty(name = "bean-searcher.field-convertor.use-json", havingValue = "true", matchIfMissing = true)
         @ConditionalOnMissingBean(JsonFieldConvertor.class)
         public JsonFieldConvertor jsonFieldConvertor(BeanSearcherProperties config) {
-            BeanSearcherProperties.FieldConvertor conf = config.getFieldConvertor();
+            cn.zhxu.bs.boot.prop.FieldConvertor conf = config.getFieldConvertor();
             return new JsonFieldConvertor(conf.isJsonFailOnError());
         }
 
@@ -369,7 +369,7 @@ public class BeanSearcherAutoConfiguration {
     @ConditionalOnMissingBean(ListFieldConvertor.class)
     public ListFieldConvertor listFieldConvertor(BeanSearcherProperties config,
                 ObjectProvider<List<ListFieldConvertor.Convertor<?>>> convertorsProvider) {
-        BeanSearcherProperties.FieldConvertor conf = config.getFieldConvertor();
+        cn.zhxu.bs.boot.prop.FieldConvertor conf = config.getFieldConvertor();
         ListFieldConvertor convertor = new ListFieldConvertor(conf.getListItemSeparator());
         ifAvailable(convertorsProvider, convertor::setConvertors);
         return convertor;
@@ -436,7 +436,7 @@ public class BeanSearcherAutoConfiguration {
     @ConditionalOnProperty(name = "bean-searcher.field-convertor.use-date-format", havingValue = "true", matchIfMissing = true)
     @ConditionalOnMissingBean(DateFormatFieldConvertor.class)
     public DateFormatFieldConvertor dateFormatFieldConvertor(BeanSearcherProperties config) {
-        BeanSearcherProperties.FieldConvertor conf = config.getFieldConvertor();
+        cn.zhxu.bs.boot.prop.FieldConvertor conf = config.getFieldConvertor();
         Map<String, String> dateFormats = conf.getDateFormats();
         ZoneId zoneId = conf.getZoneId();
         DateFormatFieldConvertor convertor = new DateFormatFieldConvertor();
