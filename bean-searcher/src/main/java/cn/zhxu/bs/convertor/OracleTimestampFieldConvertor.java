@@ -1,4 +1,4 @@
-package cn.zhxu.bs.runtime.oracle;
+package cn.zhxu.bs.convertor;
 
 import cn.zhxu.bs.FieldConvertor;
 import cn.zhxu.bs.FieldMeta;
@@ -10,6 +10,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
+/**
+ * 用于兼容 Oracle 的 TIMESTAMP 类型
+ *
+ * @author Troy.Zhou @ 2022-10-02
+ * @since v4.4.0
+ */
 public class OracleTimestampFieldConvertor implements FieldConvertor.BFieldConvertor {
 
     @Override

@@ -14,7 +14,6 @@ import cn.zhxu.bs.group.GroupResolver;
 import cn.zhxu.bs.implement.*;
 import cn.zhxu.bs.solon.BeanSearcherProperties.Sql;
 import cn.zhxu.bs.util.LRUCache;
-import cn.zhxu.xjson.JsonKit;
 import org.noear.solon.annotation.Bean;
 import org.noear.solon.annotation.Condition;
 import org.noear.solon.annotation.Configuration;
@@ -97,7 +96,7 @@ public class BeanSearcherConfiguration {
     }
 
     @Bean(index = -100)
-    @Condition(onMissingBean = JsonArrayParamFilter.class, onClass = JsonKit.class,
+    @Condition(onMissingBean = JsonArrayParamFilter.class, onClass = cn.zhxu.xjson.JsonKit.class,
             onProperty = "${bean-searcher.params.filter.use-json-array}=true")
     public JsonArrayParamFilter jsonArrayParamFilter() {
         return new JsonArrayParamFilter(config.getParams().getSeparator());
@@ -269,11 +268,18 @@ public class BeanSearcherConfiguration {
 
     // 在 springboot 那边，是用单独类处理的；在 solon 这边，用函数
     @Bean
-    @Condition(onMissingBean = JsonFieldConvertor.class, onClass = JsonKit.class,
+    @Condition(onMissingBean = JsonFieldConvertor.class, onClass = cn.zhxu.xjson.JsonKit.class,
             onProperty = "${bean-searcher.field-convertor.use-json:true}=true")
     public JsonFieldConvertor jsonFieldConvertor() {
         BeanSearcherProperties.FieldConvertor conf = config.getFieldConvertor();
         return new JsonFieldConvertor(conf.isJsonFailOnError());
+    }
+
+    @Bean
+    @Condition(onMissingBean = OracleTimestampFieldConvertor.class, onClass = oracle.sql.TIMESTAMP.class,
+            onProperty = "${bean-searcher.field-convertor.use-oracle-timestamp:true}=true")
+    public OracleTimestampFieldConvertor oracleTimestampFieldConvertor() {
+        return new OracleTimestampFieldConvertor();
     }
 
     @Bean

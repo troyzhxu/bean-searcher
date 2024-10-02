@@ -27,6 +27,12 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
+			<groupId>com.oracle.database.jdbc</groupId>
+			<artifactId>ojdbc11</artifactId>
+			<version>${oracle.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
 			<groupId>cn.zhxu</groupId>
 			<artifactId>xjsonkit-jackson</artifactId>
 			<version>${xjsonkit.version}</version>

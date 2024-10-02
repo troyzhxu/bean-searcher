@@ -3,8 +3,8 @@ package cn.zhxu.bs.boot;
 import cn.zhxu.bs.*;
 import cn.zhxu.bs.FieldConvertor.BFieldConvertor;
 import cn.zhxu.bs.FieldConvertor.MFieldConvertor;
-import cn.zhxu.bs.boot.BeanSearcherProperties.Params;
 import cn.zhxu.bs.boot.BeanSearcherProperties.Sql;
+import cn.zhxu.bs.boot.prop.Params;
 import cn.zhxu.bs.convertor.*;
 import cn.zhxu.bs.dialect.*;
 import cn.zhxu.bs.filter.ArrayValueParamFilter;
@@ -17,7 +17,6 @@ import cn.zhxu.bs.group.GroupPair;
 import cn.zhxu.bs.group.GroupResolver;
 import cn.zhxu.bs.implement.*;
 import cn.zhxu.bs.util.LRUCache;
-import cn.zhxu.xjson.JsonKit;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -331,7 +330,7 @@ public class BeanSearcherAutoConfiguration {
      * java.lang.ArrayStoreException: sun.reflect.annotation.TypeNotPresentExceptionProxy
      */
     @Configuration
-    @ConditionalOnClass(JsonKit.class)
+    @ConditionalOnClass(cn.zhxu.xjson.JsonKit.class)
     public static class BeanSearcherConfigOnJsonKit {
 
         @Bean
@@ -348,6 +347,19 @@ public class BeanSearcherAutoConfiguration {
         @ConditionalOnProperty(name = "bean-searcher.params.filter.use-json-array", havingValue = "true")
         public JsonArrayParamFilter jsonArrayParamFilter(BeanSearcherProperties config) {
             return new JsonArrayParamFilter(config.getParams().getSeparator());
+        }
+
+    }
+
+    @Configuration
+    @ConditionalOnClass(oracle.sql.TIMESTAMP.class)
+    public static class BeanSearcherConfigOnOracle {
+
+        @Bean
+        @ConditionalOnProperty(name = "bean-searcher.field-convertor.use-oracle-timestamp", havingValue = "true", matchIfMissing = true)
+        @ConditionalOnMissingBean(OracleTimestampFieldConvertor.class)
+        public OracleTimestampFieldConvertor oracleTimestampFieldConvertor() {
+            return new OracleTimestampFieldConvertor();
         }
 
     }

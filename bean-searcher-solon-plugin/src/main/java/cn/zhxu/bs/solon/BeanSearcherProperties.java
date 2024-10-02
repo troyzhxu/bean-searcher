@@ -789,6 +789,12 @@ public class BeanSearcherProperties {
         private boolean useTime = true;
 
         /**
+         * 是否启用 {@link OracleTimestampFieldConvertor }，默认为 true
+         * @since v4.4.0
+         */
+        private boolean useOracleTimestamp = true;
+
+        /**
          * 时区 ID，将作为 {@link DateFieldConvertor } 与 {@link DateFormatFieldConvertor } 的参数，默认取值：{@link ZoneId#systemDefault() }，
          * @see DateFieldConvertor#setZoneId(ZoneId)
          * @see DateFormatFieldConvertor#setZoneId(ZoneId)
@@ -932,6 +938,14 @@ public class BeanSearcherProperties {
 
         public void setUseTime(boolean useTime) {
             this.useTime = useTime;
+        }
+
+        public boolean isUseOracleTimestamp() {
+            return useOracleTimestamp;
+        }
+
+        public void setUseOracleTimestamp(boolean useOracleTimestamp) {
+            this.useOracleTimestamp = useOracleTimestamp;
         }
 
         public ZoneId getZoneId() {
