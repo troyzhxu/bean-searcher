@@ -8,7 +8,7 @@
 
 ### 🐛 Bug Fixes
 
-* 修复：`DefaultGroupResolver` 的默认 `LRUCache` 缓存没有遵循 `LRU` 规则的问题 
+* 修复：`DefaultGroupResolver` 的默认 `LRUCache` 缓存没有遵循访问顺序规则的问题 
 
 ### 🌻 Better
 
