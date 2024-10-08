@@ -111,6 +111,25 @@ public class UserController {
 当然不直接从 `request` 里取参数也是可以的，只是代码这么写看起来比较简洁。
 :::
 
+你还可以配置 [自动接收请求参数](/guide/usage/others#自动接收请求参数), 然后，你的代码就可以进一步简化：
+
+```java
+@RestController
+@RequestMapping("/user")
+public class UserController {
+
+    @Autowired
+    private MapSearcher mapSearcher;              // 注入 BeanSearcher 的检索器
+
+    @GetMapping("/index")
+    public SearchResult<Map<String, Object>> index() {
+        // 一行代码，实现一个用户检索接口
+        return mapSearcher.search(User.class);
+    }
+
+}
+```
+
 上面的代码，实现了一个 `/user/index` 接口，它的方法体里真的只有一行代码，但这个接口能支持哪些请求参数呢？不同的请求参数又能输出怎样的结果呢，接下来让我们来简单列举一下：
 
 ### （1）无参请求
