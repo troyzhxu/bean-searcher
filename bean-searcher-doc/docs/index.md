@@ -41,9 +41,9 @@ public class UserController {
     private BeanSearcher beanSearcher;               // 注入 Bean Searcher 的检索器
 
     @GetMapping("/index")
-    public SearchResult<User> index(HttpServletRequest request) {
+    public SearchResult<User> index() {
         // 只一行代码，实现包含 分页、组合过滤、任意字段排序、甚至统计、多表联查的 复杂检索功能  // [!code focus]
-        return beanSearcher.search(User.class, MapUtils.flat(request.getParameterMap())); // [!code focus]
+        return beanSearcher.search(User.class); // [!code focus]
     }
 
 }
