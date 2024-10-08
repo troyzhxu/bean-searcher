@@ -79,31 +79,33 @@ public class DefaultMetaResolver implements MetaResolver {
                 })
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList()));
-        // 排序：使指定了别名的 字段排在前面
-        wrappers.sort((w1, w2) -> {
-            int i1 = StringUtils.isBlank(w1.column.getAlias()) ? 1 : 0;
-            int i2 = StringUtils.isBlank(w2.column.getAlias()) ? 1 : 0;
-            return i1 - i2;
-        });
+        // 不再对 wrappers 进行排序，以保持用户在实体类中的字段声明顺序
+
         Set<String> fieldChecks = new HashSet<>();  // 用于校验属性是否重复
         Set<String> aliasChecks = new HashSet<>();  // 用于校验别名是否重复
+
         for (FieldWrapper wrapper: wrappers) {
             if (fieldChecks.contains(wrapper.column.getName())) {
                 throw new SearchException("Duplicate field name [" + wrapper.column.getName() + "] on [" + beanClass.getName() + "].");
             } else {
                 fieldChecks.add(wrapper.column.getName());
             }
-            String fieldAlias = resolveAlias(wrapper.column, aliasChecks);
-            if (fieldAlias != null) {
-                aliasChecks.add(fieldAlias);
-            } else {
-                throw new SearchException("The alias [" + wrapper.column.getAlias() + "] of [" + beanClass.getName()
-                        + "." + wrapper.column.getName() + "] is already exists on other fields.");
+            // 在自动别名生成之前对指定的别名进行校验，并放入校验集
+            String alias = wrapper.column.getAlias();
+            if (StringUtils.isNotBlank(alias)) {
+                if (aliasChecks.contains(alias)) {
+                    throw new SearchException("The alias [" + alias + "] of [" + beanClass.getName()
+                            + "." + wrapper.column.getName() + "] is already exists on other fields.");
+                }
+                aliasChecks.add(alias);
             }
+        }
+        for (FieldWrapper wrapper: wrappers) {
+            String alias = resolveAlias(wrapper.column, aliasChecks);
             SqlSnippet fieldSql = snippetResolver.resolve(wrapper.column.getFieldSql());
             FieldMeta fieldMeta = new FieldMeta(
                     beanMeta, wrapper.column.getName(),
-                    wrapper.field, fieldSql, fieldAlias,
+                    wrapper.field, fieldSql, alias,
                     wrapper.column.isConditional(),
                     wrapper.column.getOnlyOn(),
                     wrapper.column.getDbType(),
@@ -137,10 +139,7 @@ public class DefaultMetaResolver implements MetaResolver {
             while (checks.contains(alias)) {
                 alias = "c_" + (++index);
             }
-            return alias;
-        }
-        if (checks.contains(alias)) {
-            return null;
+            checks.add(alias);
         }
         return alias;
     }
