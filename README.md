@@ -33,7 +33,8 @@ English | [中文](./README.zh-CN.md)
 
 * Change log：[CHANGELOG](./CHANGELOG.md)
 * Performance：[see the report](./performance/README.md)
-
+* 阿里云 7 折优惠：https://www.aliyun.com/minisite/goods?userCode=zugtbi5w**
+* Gitee 企业版：https://gitee.com/enterprises?invite_code=Z2l0ZWUtMTM5MzQxMg%3D%3D
 
 ### ✨ Features
 

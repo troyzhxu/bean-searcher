@@ -29,6 +29,8 @@
 
 * 更新日志：[CHANGELOG](./CHANGELOG.md)
 * 性能如何：[直接说一骑绝尘你可能觉得是 Tree New Bee, 还是看报告好了](./performance/README.md)
+* 阿里云 7 折优惠：https://www.aliyun.com/minisite/goods?userCode=zugtbi5w**
+* Gitee 企业版：https://gitee.com/enterprises?invite_code=Z2l0ZWUtMTM5MzQxMg%3D%3D
 
 ### ✨ 特性
 
