@@ -8,6 +8,13 @@
           <img src="/wx_discuss.png" />
         </div>
       </template> -->
+      <template #sidebar-nav-before>
+        <div class="aliyun-ad">
+          <a href="https://www.aliyun.com/minisite/goods?userCode=zugtbi5w" target="_blank" >
+          🧧 阿里云 7 折优惠 🧧
+          </a>
+        </div>
+      </template>
       <template #home-hero-after>
         <HomeSponsors style="text-align: center" />
       </template>
@@ -199,5 +206,16 @@ function docReady(t) {
   .wwads-cn {
     position: static !important;
   }
+}
+.aliyun-ad {
+  background: rgba(219, 33, 0);
+  color: white;
+  text-align: center;
+  margin-top: 8px;
+  margin-right: -18px;
+  padding: 3px 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 </style>

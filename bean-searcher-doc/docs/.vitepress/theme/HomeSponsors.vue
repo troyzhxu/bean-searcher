@@ -8,6 +8,7 @@
         </a>
       </template>
     </div>
+    <a href="https://www.aliyun.com/minisite/goods?userCode=zugtbi5w" target="_blank">🧧 阿里云 7 折优惠 🧧</a>
   </div>
 </template>
 
@@ -50,14 +51,14 @@ function weight(sponsor) {
 
 <style lang="css" scoped>
 .container {
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 .title {
   font-weight: 600;
   font-size: 20px;
 }
 .logos {
-  margin: 20px auto;
+  margin: 20px auto 10px auto;
   max-width: 1000px;
 }
 .logos img {
