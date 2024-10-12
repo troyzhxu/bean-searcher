@@ -8,7 +8,7 @@
         </a>
       </template>
     </div>
-    <a href="https://www.aliyun.com/minisite/goods?userCode=zugtbi5w" target="_blank">🧧 阿里云 7 折优惠 🧧</a>
+    <a href="https://www.aliyun.com/minisite/goods?userCode=zugtbi5w" target="_blank" style="color: red;">🧧 阿里云低至 1 折 🧧</a>
   </div>
 </template>
 

@@ -8,7 +8,7 @@
         </a>
       </template>
     </div>
-    <a href="https://www.aliyun.com/minisite/goods?userCode=zugtbi5w" target="_blank">🧧 阿里云 7 折优惠 🧧</a>
+    <a href="https://www.aliyun.com/minisite/goods?userCode=zugtbi5w" target="_blank">🧧 阿里云低至 1 折 🧧</a>
   </div>
 </template>
 
@@ -21,6 +21,10 @@ const imgProjects = projects.filter(p => !!p.image)
 .container {
   margin-top: 60px;
   text-align: center;
+}
+.container a {
+  text-decoration: none;
+  color: red;
 }
 .title {
   font-weight: 600;

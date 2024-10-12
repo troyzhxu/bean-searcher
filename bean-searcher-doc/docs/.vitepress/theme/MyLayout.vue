@@ -11,7 +11,7 @@
       <template #sidebar-nav-before>
         <div class="aliyun-ad">
           <a href="https://www.aliyun.com/minisite/goods?userCode=zugtbi5w" target="_blank" >
-          🧧 阿里云 7 折优惠 🧧
+          🧧 阿里云低至 1 折 🧧
           </a>
         </div>
       </template>
@@ -208,8 +208,8 @@ function docReady(t) {
   }
 }
 .aliyun-ad {
-  background: rgba(219, 33, 0);
-  color: white;
+  background: rgb(250, 117, 83);
+  color: rgb(250, 220, 86);
   text-align: center;
   margin-top: 8px;
   margin-right: -18px;
