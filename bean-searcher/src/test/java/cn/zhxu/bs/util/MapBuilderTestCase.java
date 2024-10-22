@@ -6,9 +6,7 @@ import cn.zhxu.bs.param.FieldParam;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class MapBuilderTestCase {
 
@@ -106,6 +104,41 @@ public class MapBuilderTestCase {
                 .keySet();
         Assertions.assertTrue(keys.contains(MapBuilder.FIELD_PARAM + "name"));
         System.out.println("\ttest_03 ok!");
+    }
+
+    @Test
+    public void test_ternary() {
+        testTernaryParam(true, "Jack", "Tom");
+        testTernaryParam(false, "Jack", "Tom");
+        testTernaryParam(true, "Tom", "Jack");
+        testTernaryParam(false, "Tom", "Jack");
+    }
+
+    private void testTernaryParam(boolean isList, String value1, String value2) {
+        String name = FieldFns.name(User::getName);
+        Map<String, Object> params1 = MapUtils.builder()
+                .field(name, isList ? Arrays.asList(value1, value2) : value1)
+                .build();
+        assertListParams(isList, value1, value2, params1, name);
+        Map<String, Object> params2 = MapUtils.builder()
+                .field(name, isList ? new String[] { value1, value2 } : value1)
+                .build();
+        assertListParams(isList, value1, value2, params2, name);
+    }
+
+    private static void assertListParams(boolean isList, String value1, String value2, Map<String, Object> params, String name) {
+        FieldParam param = (FieldParam) params.get(MapBuilder.FIELD_PARAM + name);
+        Assertions.assertNotNull(param);
+        Assertions.assertEquals(name, param.getName());
+        Object[] values = param.getValues();
+        if (isList) {
+            Assertions.assertEquals(2, values.length);
+            Assertions.assertEquals(value1, values[0]);
+            Assertions.assertEquals(value2, values[1]);
+        } else {
+            Assertions.assertEquals(1, values.length);
+            Assertions.assertEquals(value1, values[0]);
+        }
     }
 
     @Test
