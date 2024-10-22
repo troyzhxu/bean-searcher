@@ -4,7 +4,7 @@
 
 ## V4 版本
 
-### v4.3 的新特性（v4.3.3）
+### v4.3 的新特性（v4.3.4）
 
 * Bean Searcher
   * 优化 `BeanMeta`: 新增 `getSqlSnippets()` 方法，用户可以使用该方法获取该实体类上所有已解析的 SQL 片段
