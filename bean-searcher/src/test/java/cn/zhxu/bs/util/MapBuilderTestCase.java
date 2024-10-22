@@ -107,7 +107,7 @@ public class MapBuilderTestCase {
     }
 
     @Test
-    public void test_ternary() {
+    public void test_ternary_string() {
         testTernaryParam(true, "Jack", "Tom");
         testTernaryParam(false, "Jack", "Tom");
         testTernaryParam(true, "Tom", "Jack");
@@ -127,6 +127,33 @@ public class MapBuilderTestCase {
     }
 
     private static void assertListParams(boolean isList, String value1, String value2, Map<String, Object> params, String name) {
+        FieldParam param = (FieldParam) params.get(MapBuilder.FIELD_PARAM + name);
+        Assertions.assertNotNull(param);
+        Assertions.assertEquals(name, param.getName());
+        Object[] values = param.getValues();
+        if (isList) {
+            Assertions.assertEquals(2, values.length);
+            Assertions.assertEquals(value1, values[0]);
+            Assertions.assertEquals(value2, values[1]);
+        } else {
+            Assertions.assertEquals(1, values.length);
+            Assertions.assertEquals(value1, values[0]);
+        }
+    }
+
+    @Test
+    public void test_ternary_int() {
+        testTernaryParamInt(true, 1, 2);
+        testTernaryParamInt(false, 1, 2);
+        testTernaryParamInt(true, 200, 100);
+        testTernaryParamInt(false, 200, 100);
+    }
+
+    private void testTernaryParamInt(boolean isList, int value1, int value2) {
+        String name = FieldFns.name(User::getId);
+        Map<String, Object> params = MapUtils.builder()
+                .field(name, isList ? new int[] { value1, value2 } : value1)
+                .build();
         FieldParam param = (FieldParam) params.get(MapBuilder.FIELD_PARAM + name);
         Assertions.assertNotNull(param);
         Assertions.assertEquals(name, param.getName());

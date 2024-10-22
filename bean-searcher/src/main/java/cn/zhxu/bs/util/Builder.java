@@ -6,6 +6,7 @@ import cn.zhxu.bs.operator.SqlCond;
 import cn.zhxu.bs.param.FieldParam;
 import cn.zhxu.bs.util.FieldFns.FieldFn;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -86,14 +87,20 @@ public class Builder<B extends Builder<B>> {
      */
     @SuppressWarnings("unchecked")
     public B field(String fieldName, Object... values) {
-        if (fieldName != null && values != null) {
-            if (values.length == 1) {
-                // 如果是集合或数组参数，再次解包，以兼容类型不确定的三元表达式的传参方式
-                if (values[0] instanceof Collection) {
-                    return field(fieldName, (Collection<?>) values[0]);
+        if (fieldName != null) {
+            if (values.length == 1 && values[0] != null) {
+                Object value = values[0];
+                // 如果是集合或数组类型，则将之解包，以兼容类型不确定的三元表达式的传参方式
+                if (value instanceof Collection) {
+                    return field(fieldName, (Collection<?>) value);
                 }
-                if (values[0] instanceof Object[]) {
-                    return field(fieldName, (Object[]) values[0]);
+                // 对象数组
+                if (value instanceof Object[]) {
+                    return field(fieldName, (Object[]) value);
+                }
+                // 原生数组
+                if (value.getClass().isArray()) {
+                    return field(fieldName, toObjects(value));
                 }
             }
             List<FieldParam.Value> pValues = new ArrayList<>();
@@ -111,6 +118,15 @@ public class Builder<B extends Builder<B>> {
             }
         }
         return (B) this;
+    }
+
+    private static Object[] toObjects(Object arr) {
+        int len = Array.getLength(arr);
+        Object[] obs = new Object[len];
+        for (int i = 0; i < len; i++) {
+            obs[i] = Array.get(arr, i);
+        }
+        return obs;
     }
 
     /**
