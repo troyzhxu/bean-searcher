@@ -4,7 +4,6 @@
 
 * 优化：`参数构建器` 的 `field(..)` 方法，兼容直接使用 **返回类型不一致** 的三元表达式直接入参。
 
-
 ```java
 var params = MapUtils.builder()
         // ifTrue 若真，返回 List, 否则返回 int，类型一致，v4.3.4 开始兼容这种写法
