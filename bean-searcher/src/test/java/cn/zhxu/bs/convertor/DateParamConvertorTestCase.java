@@ -46,22 +46,54 @@ public class DateParamConvertorTestCase {
 
     @Test
     public void test_convert() throws ParseException {
-        assertConvert("2022-06-16");
-        assertConvert("2022-06-16 20:39");
-        assertConvert("2022-06-16 20:39:00");
-        assertConvert("2022/06/16");
-        assertConvert("2022/06/16 20:39");
-        assertConvert("2022/06/16 20:39:00");
+        assertConvert20220616("2022-06-16");
+        assertConvert20220616("2022-06-16 20:39");
+        assertConvert20220616("2022-06-16 20:39:00");
+        assertConvert20220616("2022/06/16");
+        assertConvert20220616("2022/06/16 20:39");
+        assertConvert20220616("2022/06/16 20:39:00");
+        assertConvert20220616("2022-6-16");
+        assertConvert20220616("2022-6-16 20:39");
+        assertConvert20220616("2022-6-16 20:39:00");
+        assertConvert20220616("2022/6/16");
+        assertConvert20220616("2022/6/16 20:39");
+        assertConvert20220616("2022/6/16 20:39:00");
+
+        assertConvert20220608("2022-06-08");
+        assertConvert20220608("2022-06-08 20:39");
+        assertConvert20220608("2022-06-08 20:39:00");
+        assertConvert20220608("2022/06/08");
+        assertConvert20220608("2022/06/08 20:39");
+        assertConvert20220608("2022/06/08 20:39:00");
+        assertConvert20220608("2022-06-8");
+        assertConvert20220608("2022-06-8 20:39");
+        assertConvert20220608("2022-06-8 20:39:00");
+        assertConvert20220608("2022/06/8");
+        assertConvert20220608("2022/06/8 20:39");
+        assertConvert20220608("2022/06/8 20:39:00");
+        assertConvert20220608("2022-6-08");
+        assertConvert20220608("2022-6-08 20:39");
+        assertConvert20220608("2022-6-08 20:39:00");
+        assertConvert20220608("2022/6/08");
+        assertConvert20220608("2022/6/08 20:39");
+        assertConvert20220608("2022/6/08 20:39:00");
+        assertConvert20220608("2022-6-8");
+        assertConvert20220608("2022-6-8 20:39");
+        assertConvert20220608("2022-6-8 20:39:00");
+        assertConvert20220608("2022/6/8");
+        assertConvert20220608("2022/6/8 20:39");
+        assertConvert20220608("2022/6/8 20:39:00");
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         long time = sdf.parse("2022-06-16 20:39:00").getTime();
-        assertConvert(new Date(time));
-        assertConvert(new Timestamp(time));
-        assertConvert(LocalDate.parse("2022-06-16"));
-        assertConvert(LocalDate.of(2022, 6, 16));
+        assertConvert20220616(new Date(time));
+        assertConvert20220616(new Timestamp(time));
+        assertConvert20220616(LocalDate.parse("2022-06-16"));
+        assertConvert20220616(LocalDate.of(2022, 6, 16));
         System.out.println("\ttest_convert ok!");
     }
 
-    private void assertConvert(Object value) {
+    private void assertConvert20220616(Object value) {
         FieldMeta meta = new FieldMeta(null, null, null, null, null, false, null, DbType.DATE, Cluster.AUTO);
         Object date = convertor.convert(meta, value);
         Assertions.assertTrue(date instanceof java.sql.Date);
@@ -70,6 +102,17 @@ public class DateParamConvertorTestCase {
         Assertions.assertEquals(2022, calendar.get(Calendar.YEAR));
         Assertions.assertEquals(Calendar.JUNE, calendar.get(Calendar.MONTH));
         Assertions.assertEquals(16, calendar.get(Calendar.DAY_OF_MONTH));
+    }
+
+    private void assertConvert20220608(Object value) {
+        FieldMeta meta = new FieldMeta(null, null, null, null, null, false, null, DbType.DATE, Cluster.AUTO);
+        Object date = convertor.convert(meta, value);
+        Assertions.assertTrue(date instanceof java.sql.Date);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime((java.sql.Date) date);
+        Assertions.assertEquals(2022, calendar.get(Calendar.YEAR));
+        Assertions.assertEquals(Calendar.JUNE, calendar.get(Calendar.MONTH));
+        Assertions.assertEquals(8, calendar.get(Calendar.DAY_OF_MONTH));
     }
 
 }

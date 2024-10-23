@@ -27,9 +27,14 @@ import java.util.regex.Pattern;
  */
 public class DateParamConvertor implements FieldConvertor.ParamConvertor {
 
-    static final Pattern DATE_PATTERN = Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{2}");
+    static final Pattern DATE_PATTERN = Pattern.compile("[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}");
 
-    static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    static final DateTimeFormatter FORMATTER = new DateTimeFormatterBuilder()
+                .appendPattern("yyyy-")
+                .appendValue(ChronoField.MONTH_OF_YEAR, 1, 2, SignStyle.NOT_NEGATIVE)
+                .appendPattern("-")
+                .appendValue(ChronoField.DAY_OF_MONTH, 1, 2, SignStyle.NOT_NEGATIVE)
+                .toFormatter();
 
     /**
      * 转换目标
@@ -86,19 +91,6 @@ public class DateParamConvertor implements FieldConvertor.ParamConvertor {
             return toDate(((LocalDateTime) value).toLocalDate());
         }
         return null;
-    }
-
-    public static void main(String[] args) {
-        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
-                .appendPattern("yyyy/")
-                .appendValue(ChronoField.MONTH_OF_YEAR, 1, 2, SignStyle.NOT_NEGATIVE)
-                .appendPattern("/")
-                .appendValue(ChronoField.DAY_OF_MONTH, 1, 2, SignStyle.NOT_NEGATIVE)
-                .toFormatter();
-
-        LocalDate date = formatter.parse("2019-3-1", TemporalQueries.localDate());
-
-        System.out.println(date);
     }
 
     private Object toDate(LocalDate date) {
