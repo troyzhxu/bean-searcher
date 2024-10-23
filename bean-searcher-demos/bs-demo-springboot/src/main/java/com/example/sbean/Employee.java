@@ -15,8 +15,7 @@ import java.time.LocalDateTime;
 		where = "e.department_id = d.id",
 		autoMapTo = "e",							// 字段没使用 DbField 注解时，自动映射到 employee 表
 		orderBy = "e.entry_date desc",
-		sortType = SortType.ALLOW_PARAM,
-		dataSource = "orderDs"
+		sortType = SortType.ALLOW_PARAM
 )
 public class Employee extends BaseBean {
 

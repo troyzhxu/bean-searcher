@@ -8,6 +8,8 @@ import cn.zhxu.bs.util.StringUtils;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.SignStyle;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalQueries;
 import java.time.temporal.TemporalQuery;
@@ -84,6 +86,19 @@ public class DateParamConvertor implements FieldConvertor.ParamConvertor {
             return toDate(((LocalDateTime) value).toLocalDate());
         }
         return null;
+    }
+
+    public static void main(String[] args) {
+        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+                .appendPattern("yyyy/")
+                .appendValue(ChronoField.MONTH_OF_YEAR, 1, 2, SignStyle.NOT_NEGATIVE)
+                .appendPattern("/")
+                .appendValue(ChronoField.DAY_OF_MONTH, 1, 2, SignStyle.NOT_NEGATIVE)
+                .toFormatter();
+
+        LocalDate date = formatter.parse("2019-3-1", TemporalQueries.localDate());
+
+        System.out.println(date);
     }
 
     private Object toDate(LocalDate date) {
