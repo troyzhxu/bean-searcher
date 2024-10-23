@@ -2,28 +2,37 @@
 
 ### ✨ Features
 
-* 优化：`参数构建器` 的 `field(..)` 方法，兼容直接使用 **返回类型不一致** 的三元表达式直接入参。
+* Bean Searcher
+  * 新增：`OracleTimestampFieldConvertor`, 用于兼容 Oracle 的 `TIMESTAMP` 字段。
+  * 优化：`参数构建器` 的 `field(..)` 方法，兼容直接使用 **实际类型不确定（集合/单值）** 的参数值。
 
-```java
-var params = MapUtils.builder()
-        // ifTrue 若真，返回 List, 否则返回 int，类型一致，v4.3.4 开始兼容这种写法
-        .field(User::getId, ifTrue ? List.of(1,2,3) : 4)
-        .build();
-```
+  ```java
+  var params = MapUtils.builder()
+          // ifTrue 若真，返回 List, 否则返回 单值，类型一致，v4.3.4 开始兼容这种写法
+          .field(User::getId, ifTrue ? List.of(1,2,3) : 4)
+          .build();
+  ```
 
-```java
-var params = MapUtils.builder()
-        // ifTrue 若真，返回 int[], 否则返回 int，类型一致，v4.3.4 开始兼容这种写法
-        .field(User::getId, ifTrue ? new int[] {1,2,3} : 4)
-        .build();
-```
+  ```java
+  var params = MapUtils.builder()
+          // ifTrue 若真，返回 原生数组, 否则返回 单值，类型一致，v4.3.4 开始兼容这种写法
+          .field(User::getId, ifTrue ? new int[] {1,2,3} : 4)
+          .build();
+  ```
+  
+  ```java
+  var params = MapUtils.builder()
+          // ifTrue 若真，返回 对象数组, 否则返回 单值，类型一致，v4.3.4 开始兼容这种写法
+          .field(User::getId, ifTrue ? new Integer[] {1,2,3} : 4)
+          .build();
+  ```
 
-```java
-var params = MapUtils.builder()
-        // ifTrue 若真，返回 Integer[], 否则返回 int，类型一致，v4.3.4 开始兼容这种写法
-        .field(User::getId, ifTrue ? new Integer[] {1,2,3} : 4)
-        .build();
-```
+* Bean Searcher Boot Starter
+  * 新增配置项 `bean-searcher.field-convertor.use-oracle-timestamp` 用于控制是否启用 `OracleTimestampFieldConvertor`，默认 `true`
+  * 简化 `BeanSearcherProperties` 类，将内部子类定义成外部类
+* Bean Searcher Solon Plugin
+  * 新增配置项 `bean-searcher.field-convertor.use-oracle-timestamp` 用于控制是否启用 `OracleTimestampFieldConvertor`，默认 `true`
+  * 简化 `BeanSearcherProperties` 类，将内部子类定义成外部类
 
 # v4.3.3 @ 2024-10-08
 
