@@ -53,7 +53,7 @@ public class DemoController {
 
     @Autowired
     private Searcher searcher;
-    
+
     /**
      * 列表检索接口
      */
@@ -62,7 +62,7 @@ public class DemoController {
         // 组合检索、排序、分页 和 统计 都在这一句代码中实现了
         return searcher.search(Employee.class,              // 指定实体类
                 MapUtils.flat(request.getParameterMap()),   // 收集页面请求参数
-                new String[] { "age" });                    // 统计字段：年龄
+                Employee::getAge);                          // 统计字段：年龄
     }
 
 }
@@ -112,7 +112,7 @@ public SearchResult<Employee> index1(String name, String department, Integer pag
 ```java
 @SearchBean(
     tables = "employee e, department d",  // 员工表 与 部门表
-    joinCond = "e.department_id = d.id"   // 连接条件
+    where = "e.department_id = d.id"   // 连接条件
 )
 public class Employee {
 
