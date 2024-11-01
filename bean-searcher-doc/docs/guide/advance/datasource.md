@@ -47,14 +47,14 @@ spring.datasource.order.password = 123456
 然后配置以下一些 Bean 即可:
 
 ```java
-// user 数据源配置信息
+// 收集 user 数据源的配置信息
 @Bean(name = "userDsProps")
 @ConfigurationProperties(prefix = "spring.datasource.user")
 public DataSourceProperties userDsProps() {
     return new DataSourceProperties();
 }
 
-// order 数据源配置信息
+// 收集 order 数据源的配置信息
 @Bean(name = "orderDsProps")
 @ConfigurationProperties(prefix = "spring.datasource.order")
 public DataSourceProperties orderDsProps() {
@@ -63,15 +63,37 @@ public DataSourceProperties orderDsProps() {
 
 @Bean
 public NamedDataSource userNamedDataSource(@Qualifier("userDsProps") DataSourceProperties dataSourceProperties) {
+    // 根据配置信息构建一个数据源对象
     DataSource dataSource = dataSourceProperties.initializeDataSourceBuilder().build();
-    // 具名数据源：cn.zhxu.bs.boot.NamedDataSource
+    // 具名数据源：cn.zhxu.bs.boot.NamedDataSource（前面只是铺垫，这才是关键步骤）
     return new NamedDataSource("userDs", dataSource);
 }
 
 @Bean
-public NamedDataSource orderNamedDataSource(@Qualifier("orderDsProps") DataSourceProperties dataSourceProperties) {    
+public NamedDataSource orderNamedDataSource(@Qualifier("orderDsProps") DataSourceProperties dataSourceProperties) {
+    // 根据配置信息构建一个数据源对象
     DataSource dataSource = dataSourceProperties.initializeDataSourceBuilder().build();
-    // 具名数据源：cn.zhxu.bs.boot.NamedDataSource
+    // 具名数据源：cn.zhxu.bs.boot.NamedDataSource （前面只是铺垫，这才是关键步骤）
+    return new NamedDataSource("orderDs", dataSource);
+}
+```
+
+特别的，如果你的项目中的其它 ORM 已经配置了多数据源，例如你的 Spring 容器中已经存在了 `org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource` 类型的 Bean，那么你只需要如下配置即可：
+
+```java
+@Bean
+public NamedDataSource userNamedDataSource(AbstractRoutingDataSource routingDataSource) {
+    // 直接从 DynamicRoutingDataSource 中取出目标数据源
+    DataSource dataSource = routingDataSource.getResolvedDataSources().get("userDs");
+    // 具名数据源：cn.zhxu.bs.boot.NamedDataSource（关键步骤：套一个具名数据源的壳）
+    return new NamedDataSource("userDs", dataSource);
+}
+
+@Bean
+public NamedDataSource orderNamedDataSource(AbstractRoutingDataSource routingDataSource) {
+    // 直接从 DynamicRoutingDataSource 中取出目标数据源
+    DataSource dataSource = routingDataSource.getResolvedDataSources().getDataSource("orderDs");
+    // 具名数据源：cn.zhxu.bs.boot.NamedDataSource （关键步骤：套一个具名数据源的壳）
     return new NamedDataSource("orderDs", dataSource);
 }
 ```
