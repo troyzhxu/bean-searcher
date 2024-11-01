@@ -22,6 +22,8 @@ public class Order {
 }
 ```
 
+这里注解属性 `@SearchBean.dataSource` 的值指向的是下文提到的 `NamedDataSource`（具名数据源）指定的名字。
+
 ## 配置（SpringBoot 为例）
 
 首先在配置文件 `application.properties` 中配置数据源信息:
