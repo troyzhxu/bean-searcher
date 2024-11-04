@@ -18,7 +18,7 @@ public class MyParamFilter implements ParamFilter {
         if (attributes instanceof ServletRequestAttributes &&
                 !paraMap.containsKey(IGNORE_REQUEST_PARAMS)) {
             // 在一个 Web 请求上下文中，并且没有开启 IGNORE_REQUEST_PARAMS，则取出前端传来的所有参数
-            HttpServletRequest request ((ServletRequestAttributes) attributes).getRequest();
+            HttpServletRequest request = ((ServletRequestAttributes) attributes).getRequest();
             builder = MapUtils.flatBuilder(request.getParameterMap());
         } else {
             builder = MapUtils.builder();
