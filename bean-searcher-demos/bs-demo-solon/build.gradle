@@ -21,7 +21,7 @@ dependencies {
     implementation("org.noear:solon-logging-logback")
     implementation "org.noear:wood-solon-plugin"
 
-    implementation "cn.zhxu:bean-searcher-solon-plugin:4.3.4"
+    implementation "cn.zhxu:bean-searcher-solon-plugin:4.3.5"
     // 若想使用 JSON 字段转对象的功能，可以添加此依赖
     implementation "cn.zhxu:xjsonkit-snack3:1.5.0"
 
