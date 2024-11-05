@@ -8,7 +8,7 @@ import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FieldConvertor {
+public class BeanSearcherFieldConvertor {
 
     /**
      * 是否启用 {@link NumberFieldConvertor }，默认为 true

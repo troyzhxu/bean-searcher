@@ -1,10 +1,7 @@
-package cn.zhxu.bs.solon;
+package cn.zhxu.bs.solon.prop;
 
 import cn.zhxu.bs.BeanSearcher;
 import cn.zhxu.bs.MapSearcher;
-import cn.zhxu.bs.solon.prop.FieldConvertor;
-import cn.zhxu.bs.solon.prop.Params;
-import cn.zhxu.bs.solon.prop.Sql;
 import org.noear.solon.annotation.Inject;
 
 @org.noear.solon.annotation.Configuration
@@ -14,17 +11,17 @@ public class BeanSearcherProperties {
     /**
      * 检索参数相关配置
      */
-    private final Params params = new Params();
+    private final BeanSearcherParams params = new BeanSearcherParams();
 
     /**
      * SQL 相关配置
      */
-    private final Sql sql = new Sql();
+    private final BeanSearcherSql sql = new BeanSearcherSql();
 
     /**
      * 字段转换器相关配置
      */
-    private final FieldConvertor fieldConvertor = new FieldConvertor();
+    private final BeanSearcherFieldConvertor fieldConvertor = new BeanSearcherFieldConvertor();
 
     /**
      * 是否使用 {@link MapSearcher } 检索器，默认为 true
@@ -37,15 +34,15 @@ public class BeanSearcherProperties {
     private boolean useBeanSearcher = true;
 
 
-    public Params getParams() {
+    public BeanSearcherParams getParams() {
         return params;
     }
 
-    public Sql getSql() {
+    public BeanSearcherSql getSql() {
         return sql;
     }
 
-    public FieldConvertor getFieldConvertor() {
+    public BeanSearcherFieldConvertor getFieldConvertor() {
         return fieldConvertor;
     }
 

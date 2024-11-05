@@ -17,7 +17,7 @@ import cn.zhxu.bs.util.MapUtils;
 import java.time.ZoneId;
 import java.util.Map;
 
-public class Params {
+public class BeanSearcherParams {
 
     /**
      * 排序字段参数名，默认为 `sort`，

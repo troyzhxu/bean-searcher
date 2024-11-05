@@ -8,7 +8,7 @@ import cn.zhxu.bs.bean.SortType;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Sql {
+public class BeanSearcherSql {
 
     public enum Dialect {
         MySQL,

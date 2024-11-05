@@ -1,0 +1,442 @@
+{
+  "properties": [
+    {
+      "name": "bean-searcher.field-convertor.bool-false-values",
+      "type": "java.lang.String[]",
+      "description": "可转换为 false 的值，可配多个，默认为：`0,OFF,FALSE,N,NO,F`，将作为 {@link BoolFieldConvertor } 的参数， @see BoolFieldConvertor#setFalseValues(String[])",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherFieldConvertor"
+    },
+    {
+      "name": "bean-searcher.field-convertor.date-formats",
+      "type": "java.util.Map<java.lang.String,java.lang.String>",
+      "description": "日期\/时间格式，{@link Map} 形式，键为 scope（生效范围，可以是 全类名.字段名、全类名:字段类型名、包名:字段类型名 或 包名，范围越小，使用优先级越高）, 值为 format（日期格式）， 它将作为 {@link DateFormatFieldConvertor } 的参数 @see DateFormatFieldConvertor#setFormat(String, String)",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherFieldConvertor"
+    },
+    {
+      "name": "bean-searcher.field-convertor.enum-fail-on-error",
+      "type": "java.lang.Boolean",
+      "description": "当数据库值不能转换为对应的枚举时，是否抛出异常 @see EnumFieldConvertor#setFailOnError(boolean) @since v3.7.0",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherFieldConvertor",
+      "defaultValue": true
+    },
+    {
+      "name": "bean-searcher.field-convertor.enum-ignore-case",
+      "type": "java.lang.Boolean",
+      "description": "当数据库值为字符串，匹配枚举时是否忽略大小写 @see EnumFieldConvertor#setIgnoreCase(boolean) @since v3.7.0",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherFieldConvertor",
+      "defaultValue": false
+    },
+    {
+      "name": "bean-searcher.field-convertor.json-fail-on-error",
+      "type": "java.lang.Boolean",
+      "description": "使用 {@link JsonFieldConvertor } 时，当遇到某些值 JSON 解析异常时，是否抛出异常 @see JsonFieldConvertor#setFailOnError(boolean) @since v4.0.1",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherFieldConvertor",
+      "defaultValue": true
+    },
+    {
+      "name": "bean-searcher.field-convertor.list-item-separator",
+      "type": "java.lang.String",
+      "description": "@see ListFieldConvertor#setItemSeparator(String) @since v4.0.0",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherFieldConvertor",
+      "defaultValue": ","
+    },
+    {
+      "name": "bean-searcher.field-convertor.use-b2-m",
+      "type": "java.lang.Boolean",
+      "description": "是否启用 {@link B2MFieldConvertor }，默认为 false。 未启用时，{@link MapSearcher } 检索结果的字段值 未经过 {@link cn.zhxu.bs.FieldConvertor.BFieldConvertor } 的转换，所以字段类型都是原始类，可能与实体类声明的类型不一致； 启用后，将与 {@link BeanSearcher } 一样，检索结果的值类型 将被转换为 实体类中声明的类型。 注意，当 {@link #useDateFormat } 为 true 时，日期时间类型的字段可能仍会被 {@link DateFormatFieldConvertor } 格式化为字符串。",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherFieldConvertor",
+      "defaultValue": false
+    },
+    {
+      "name": "bean-searcher.field-convertor.use-bool",
+      "type": "java.lang.Boolean",
+      "description": "是否启用 {@link BoolFieldConvertor }，默认为 true",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherFieldConvertor",
+      "defaultValue": true
+    },
+    {
+      "name": "bean-searcher.field-convertor.use-bool-num",
+      "type": "java.lang.Boolean",
+      "description": "是否启用 {@link BoolNumFieldConvertor }，默认为 true",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherFieldConvertor",
+      "defaultValue": true
+    },
+    {
+      "name": "bean-searcher.field-convertor.use-date",
+      "type": "java.lang.Boolean",
+      "description": "是否启用 {@link DateFieldConvertor }，默认为 true",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherFieldConvertor",
+      "defaultValue": true
+    },
+    {
+      "name": "bean-searcher.field-convertor.use-date-format",
+      "type": "java.lang.Boolean",
+      "description": "是否启用 {@link DateFormatFieldConvertor }，启用后，它会把 {@link MapSearcher } 检索结果中的日期字段格式化为指定格式的字符串，默认为 true， 注意：并不是所有实体类中的日期字段都会被转换，它只转换 {@link #dateFormats } 指定的范围内的实体类与字段",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherFieldConvertor",
+      "defaultValue": true
+    },
+    {
+      "name": "bean-searcher.field-convertor.use-enum",
+      "type": "java.lang.Boolean",
+      "description": "是否启用 {@link EnumFieldConvertor }，默认为 true",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherFieldConvertor",
+      "defaultValue": true
+    },
+    {
+      "name": "bean-searcher.field-convertor.use-json",
+      "type": "java.lang.Boolean",
+      "description": "是否启用 {@link JsonFieldConvertor }（必要条件），默认为 true，但需要注意的是，即使该参数为 true, 也不一定能成功启用 {@link JsonFieldConvertor }， 您必须还得添加 <a href=\"https:\/\/gitee.com\/troyzhxu\/xjsonkit\">xjsonkit<\/a> 的 json 相关实现的依赖才可以，目前这些依赖有（你可以任选其一）： <pre> implementation 'cn.zhxu:xjsonkit-fastjson:最新版本' \/\/ Fastjson 实现 implementation 'cn.zhxu:xjsonkit-fastjson2:最新版本'\/\/ Fastjson2 实现 implementation 'cn.zhxu:xjsonkit-gson:最新版本'     \/\/ Gson 实现 implementation 'cn.zhxu:xjsonkit-jackson:最新版本'  \/\/ Jackson 实现 implementation 'cn.zhxu:xjsonkit-snack3:最新版本'   \/\/ Snack3 实现 <\/pre> @since v4.0.0",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherFieldConvertor",
+      "defaultValue": true
+    },
+    {
+      "name": "bean-searcher.field-convertor.use-list",
+      "type": "java.lang.Boolean",
+      "description": "是否启用 {@link ListFieldConvertor }，默认为 true @since v4.0.0",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherFieldConvertor",
+      "defaultValue": true
+    },
+    {
+      "name": "bean-searcher.field-convertor.use-number",
+      "type": "java.lang.Boolean",
+      "description": "是否启用 {@link NumberFieldConvertor }，默认为 true",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherFieldConvertor",
+      "defaultValue": true
+    },
+    {
+      "name": "bean-searcher.field-convertor.use-oracle-timestamp",
+      "type": "java.lang.Boolean",
+      "description": "是否启用 {@link OracleTimestampFieldConvertor }，默认为 true @since v4.4.0",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherFieldConvertor",
+      "defaultValue": true
+    },
+    {
+      "name": "bean-searcher.field-convertor.use-str-num",
+      "type": "java.lang.Boolean",
+      "description": "是否启用 {@link StrNumFieldConvertor }，默认为 true",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherFieldConvertor",
+      "defaultValue": true
+    },
+    {
+      "name": "bean-searcher.field-convertor.use-time",
+      "type": "java.lang.Boolean",
+      "description": "是否启用 {@link TimeFieldConvertor }，默认为 true",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherFieldConvertor",
+      "defaultValue": true
+    },
+    {
+      "name": "bean-searcher.field-convertor.zone-id",
+      "type": "java.time.ZoneId",
+      "description": "时区 ID，将作为 {@link DateFieldConvertor } 与 {@link DateFormatFieldConvertor } 的参数，默认取值：{@link ZoneId#systemDefault() }， @see DateFieldConvertor#setZoneId(ZoneId) @see DateFormatFieldConvertor#setZoneId(ZoneId)",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherFieldConvertor"
+    },
+    {
+      "name": "bean-searcher.params.convertor.date-target",
+      "type": "cn.zhxu.bs.convertor.DateParamConvertor$Target",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherParams$Convertor"
+    },
+    {
+      "name": "bean-searcher.params.convertor.date-time-target",
+      "type": "cn.zhxu.bs.convertor.DateTimeParamConvertor$Target",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherParams$Convertor"
+    },
+    {
+      "name": "bean-searcher.params.convertor.time-target",
+      "type": "cn.zhxu.bs.convertor.TimeParamConvertor$Target",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherParams$Convertor"
+    },
+    {
+      "name": "bean-searcher.params.convertor.zone-id",
+      "type": "java.time.ZoneId",
+      "description": "时区 ID，将作为 {@link DateTimeParamConvertor } 的参数，默认取值：{@link ZoneId#systemDefault() } @see DateTimeParamConvertor#setZoneId(ZoneId)",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherParams$Convertor"
+    },
+    {
+      "name": "bean-searcher.params.fail-on-error",
+      "type": "java.lang.Boolean",
+      "description": "参数非法时是否抛出异常 @since v4.2.3",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherParams",
+      "defaultValue": false
+    },
+    {
+      "name": "bean-searcher.params.filter.max-para-map-size",
+      "type": "java.lang.Integer",
+      "description": "检索参数的最大允许数量，用于风险控制，避免前端恶意传参生成过于复杂的 SQL @see SizeLimitParamFilter",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherParams$Filter",
+      "defaultValue": 150
+    },
+    {
+      "name": "bean-searcher.params.filter.use-array-value",
+      "type": "java.lang.Boolean",
+      "description": "是否启用 数组参数值，默认为 true，用于配合 {@link MapUtils#flat(Map)} 与 {@link MapUtils#flatBuilder(Map)} 方法，来兼容数组参数值的用法。例如前端传参：age=20 & age=30 & age-op=bt 例如前端传参：age=20 & age=30 & age-op=bt @see ArrayValueParamFilter @since v4.3.0",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherParams$Filter",
+      "defaultValue": true
+    },
+    {
+      "name": "bean-searcher.params.filter.use-json-array",
+      "type": "java.lang.Boolean",
+      "description": "是否启用 Json 数组参数值，默认为 false，用于简化前端传参，例如 age=[20,30] 替代 age-0=20 & age-1=30 <br> 但需要注意的是，即使该参数为 true, 也不一定能成功启用该过滤器，您必须还得添加 <a href=\"https:\/\/gitee.com\/troyzhxu\/xjsonkit\">xjsonkit<\/a> 的 json 相关实现的依赖才可以，目前这些依赖有（你可以任选其一）： <pre> implementation 'cn.zhxu:xjsonkit-fastjson:最新版本' \/\/ Fastjson 实现 implementation 'cn.zhxu:xjsonkit-fastjson2:最新版本'\/\/ Fastjson2 实现 implementation 'cn.zhxu:xjsonkit-gson:最新版本'     \/\/ Gson 实现 implementation 'cn.zhxu:xjsonkit-jackson:最新版本'  \/\/ Jackson 实现 implementation 'cn.zhxu:xjsonkit-snack3:最新版本'   \/\/ Snack3 实现 <\/pre> @see JsonArrayParamFilter @since v4.3.0",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherParams$Filter",
+      "defaultValue": false
+    },
+    {
+      "name": "bean-searcher.params.filter.use-size-limit",
+      "type": "java.lang.Boolean",
+      "description": "是否启用检索参数数量限制，默认为 true，用于限制检索参数的个数，配合 {@link #maxParaMapSize } 参数一起使用 @see SizeLimitParamFilter @since v4.3.0",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherParams$Filter",
+      "defaultValue": true
+    },
+    {
+      "name": "bean-searcher.params.filter.use-suffix-op",
+      "type": "java.lang.Boolean",
+      "description": "是否启用后缀运算符，默认为 false，用于简化前端传参，例如 age-gt=25 替代 age=25 & age-op=gt @see SuffixOpParamFilter @since v4.3.0",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherParams$Filter",
+      "defaultValue": false
+    },
+    {
+      "name": "bean-searcher.params.group.cache-size",
+      "type": "java.lang.Integer",
+      "description": "组表达式缓存大小，默认为 50",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherParams$Group",
+      "defaultValue": 50
+    },
+    {
+      "name": "bean-searcher.params.group.enable",
+      "type": "java.lang.Boolean",
+      "description": "是否启用参数组功能，默认为 true",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherParams$Group",
+      "defaultValue": true
+    },
+    {
+      "name": "bean-searcher.params.group.expr-name",
+      "type": "java.lang.String",
+      "description": "组表达式参数名，默认为 `gexpr`， @see ParamResolver.Configuration#gexpr(String)",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherParams$Group",
+      "defaultValue": "gexpr"
+    },
+    {
+      "name": "bean-searcher.params.group.max-expr-length",
+      "type": "java.lang.Integer",
+      "description": "表达式最大允许长度，风险控制，用于避免前端恶意传参生成过于复杂的 SQL @see DefaultGroupResolver#setMaxExprLength(int)",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherParams$Group",
+      "defaultValue": 50
+    },
+    {
+      "name": "bean-searcher.params.group.mergeable",
+      "type": "java.lang.Boolean",
+      "description": "用于控制参数构建器中使用 `groupExpr(..)` 方法指定的组表达式是否合并或覆盖前端参数传来的组表达式 @see ParamResolver.Configuration#gexprMerge(boolean)",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherParams$Group",
+      "defaultValue": true
+    },
+    {
+      "name": "bean-searcher.params.group.separator",
+      "type": "java.lang.String",
+      "description": "组参数分隔符，默认为 `.`， @see ParamResolver.Configuration#separator(String)",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherParams$Group",
+      "defaultValue": "."
+    },
+    {
+      "name": "bean-searcher.params.ignore-case-key",
+      "type": "java.lang.String",
+      "description": "是否忽略大小写字段参数名的后缀，默认为 `ic`， @see ParamResolver.Configuration#ic(String)",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherParams",
+      "defaultValue": "ic"
+    },
+    {
+      "name": "bean-searcher.params.only-select",
+      "type": "java.lang.String",
+      "description": "指定只 Select 某些字段的参数名，默认为 `onlySelect`， @see ParamResolver.Configuration#onlySelect(String)",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherParams",
+      "defaultValue": "onlySelect"
+    },
+    {
+      "name": "bean-searcher.params.operator-key",
+      "type": "java.lang.String",
+      "description": "检索运算符参数名后缀，默认为 `op`， @see ParamResolver.Configuration#op(String)",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherParams",
+      "defaultValue": "op"
+    },
+    {
+      "name": "bean-searcher.params.order",
+      "type": "java.lang.String",
+      "description": "排序方法参数名，默认为 `order`， @see ParamResolver.Configuration#order(String)",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherParams",
+      "defaultValue": "order"
+    },
+    {
+      "name": "bean-searcher.params.order-by",
+      "type": "java.lang.String",
+      "description": "排序参数名，默认为 `orderBy`， @see ParamResolver.Configuration#orderBy(String)",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherParams",
+      "defaultValue": "orderBy"
+    },
+    {
+      "name": "bean-searcher.params.pagination.default-size",
+      "type": "java.lang.Integer",
+      "description": "默认分页大小，默认为 15",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherParams$Pagination",
+      "defaultValue": 15
+    },
+    {
+      "name": "bean-searcher.params.pagination.max-allowed-offset",
+      "type": "java.lang.Long",
+      "description": "分页保护：最大允许偏移量，如果是 page 分页，则最大允许页码是 maxAllowedOffset \/ size",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherParams$Pagination",
+      "defaultValue": 20000
+    },
+    {
+      "name": "bean-searcher.params.pagination.max-allowed-size",
+      "type": "java.lang.Integer",
+      "description": "分页保护：每页最大允许查询条数，默认为 100， 注意：该配置对 {@link BeanSearcher#searchAll(Class)} 与 {@link MapSearcher#searchAll(Class)} 方法无效",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherParams$Pagination",
+      "defaultValue": 100
+    },
+    {
+      "name": "bean-searcher.params.pagination.offset",
+      "type": "java.lang.String",
+      "description": "页偏移参数名（仅在 type = `offset` 时有效），默认为 `offset`",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherParams$Pagination",
+      "defaultValue": "offset"
+    },
+    {
+      "name": "bean-searcher.params.pagination.page",
+      "type": "java.lang.String",
+      "description": "页码参数名（仅在 type = `page` 时有效），默认为 `page`",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherParams$Pagination",
+      "defaultValue": "page"
+    },
+    {
+      "name": "bean-searcher.params.pagination.size",
+      "type": "java.lang.String",
+      "description": "分页大小参数名，默认为 `size`",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherParams$Pagination",
+      "defaultValue": "size"
+    },
+    {
+      "name": "bean-searcher.params.pagination.start",
+      "type": "java.lang.Integer",
+      "description": "起始页码 或 起始页偏移，默认为 0， 注意：该配置对方法 {@link MapBuilder#page(long, int)} } 与 {@link MapBuilder#limit(long, int)} 无效",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherParams$Pagination",
+      "defaultValue": 0
+    },
+    {
+      "name": "bean-searcher.params.pagination.type",
+      "type": "java.lang.String",
+      "description": "分页类型，可选：`page` 和 `offset`，默认为 `page`",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherParams$Pagination",
+      "defaultValue": "page"
+    },
+    {
+      "name": "bean-searcher.params.select-exclude",
+      "type": "java.lang.String",
+      "description": "指定 Select 排除某些字段的参数名，默认为 `selectExclude`， @see ParamResolver.Configuration#selectExclude(String)",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherParams",
+      "defaultValue": "selectExclude"
+    },
+    {
+      "name": "bean-searcher.params.separator",
+      "type": "java.lang.String",
+      "description": "字段参数名分隔符，默认为 `-`， @see ParamResolver.Configuration#separator(String)",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherParams",
+      "defaultValue": "-"
+    },
+    {
+      "name": "bean-searcher.params.sort",
+      "type": "java.lang.String",
+      "description": "排序字段参数名，默认为 `sort`， @see ParamResolver.Configuration#sort(String)",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherParams",
+      "defaultValue": "sort"
+    },
+    {
+      "name": "bean-searcher.sql.default-mapping.around-char",
+      "type": "java.lang.String",
+      "description": "标识符的 围绕符，以区分系统保留字，只对自动映射的表名与字段起作用（since v4.0.0）",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherSql$DefaultMapping"
+    },
+    {
+      "name": "bean-searcher.sql.default-mapping.ignore-fields",
+      "type": "java.lang.String[]",
+      "description": "需要全局忽略的实体类属性名列表，无默认值，注意：如果属性添加的 {@link DbField } 注解，则不受该配置影响",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherSql$DefaultMapping"
+    },
+    {
+      "name": "bean-searcher.sql.default-mapping.inherit-type",
+      "type": "cn.zhxu.bs.bean.InheritType",
+      "description": "全局实体类继承机制，可选：`NONE`、`TABLE`、`FIELD`、`ALL`，默认为 `ALL`，注意：该配置的优先级比 {@link SearchBean#inheritType()} 低",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherSql$DefaultMapping"
+    },
+    {
+      "name": "bean-searcher.sql.default-mapping.redundant-suffixes",
+      "type": "java.lang.String[]",
+      "description": "实体类的冗余后缀，在自动映射表名时使用，即：当框架用实体类名称自动生成一个表名时，会自动忽略实体类的后缀，如 VO，DTO 等，无默认值",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherSql$DefaultMapping"
+    },
+    {
+      "name": "bean-searcher.sql.default-mapping.sort-type",
+      "type": "cn.zhxu.bs.bean.SortType",
+      "description": "全局排序策略，可选：`ONLY_ENTITY`、`ALLOW_PARAM`，默认为 `ALLOW_PARAM`，注意：该配置的优先级比 {@link SearchBean#sortType()} 低",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherSql$DefaultMapping"
+    },
+    {
+      "name": "bean-searcher.sql.default-mapping.table-prefix",
+      "type": "java.lang.String",
+      "description": "表名前缀，在自动映射表名时使用（即：当实体类没有用 {@link SearchBean#tables() } 指定表名时，框架会用该前缀与实体类名称自动生成一个表名），无默认值",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherSql$DefaultMapping"
+    },
+    {
+      "name": "bean-searcher.sql.default-mapping.underline-case",
+      "type": "java.lang.Boolean",
+      "description": "驼峰是否转下划线，启用后，自动映射出的表名与列名都是下划线风格，默认为 true， 注意：使用 {@link SearchBean#tables() } 与 {@link DbField#value() } 显示指定的表名与列表仍保持原有大小写形式",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherSql$DefaultMapping",
+      "defaultValue": true
+    },
+    {
+      "name": "bean-searcher.sql.default-mapping.upper-case",
+      "type": "java.lang.Boolean",
+      "description": "是否启动大写映射，启用后，自动映射出的表名与列名都是大写形式，默认为 false， 注意：使用 {@link SearchBean#tables() } 与 {@link DbField#value() } 显示指定的表名与列表仍保持原有大小写形式",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherSql$DefaultMapping",
+      "defaultValue": false
+    },
+    {
+      "name": "bean-searcher.sql.dialect",
+      "type": "cn.zhxu.bs.boot.prop.BeanSearcherSql$Dialect",
+      "description": "数据库方言，可选：MySQL、Oracle、PostgreSql，默认为 MySQL，另可通过声明 Spring Bean 来使用其它自定义方言",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherSql"
+    },
+    {
+      "name": "bean-searcher.sql.dialect-dynamic",
+      "type": "java.lang.Boolean",
+      "description": "是否启用动态方言",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherSql",
+      "defaultValue": false
+    },
+    {
+      "name": "bean-searcher.sql.dialects",
+      "type": "java.util.Map<java.lang.String,cn.zhxu.bs.boot.prop.BeanSearcherSql$Dialect>",
+      "description": "多方言配置：数据源名称 -> 方言类型",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherSql"
+    },
+    {
+      "name": "bean-searcher.sql.slow-sql-threshold",
+      "type": "java.lang.Long",
+      "description": "慢 SQL 阈值（单位：毫秒），默认：500 毫秒 @since v3.7.0",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherSql",
+      "defaultValue": 500
+    },
+    {
+      "name": "bean-searcher.use-bean-searcher",
+      "type": "java.lang.Boolean",
+      "description": "是否使用 {@link BeanSearcher } 检索器，默认为 true",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherProperties",
+      "defaultValue": true
+    },
+    {
+      "name": "bean-searcher.use-map-searcher",
+      "type": "java.lang.Boolean",
+      "description": "是否使用 {@link MapSearcher } 检索器，默认为 true",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherProperties",
+      "defaultValue": true
+    }
+  ],
+  "hints": []
+}

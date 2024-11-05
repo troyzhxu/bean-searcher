@@ -1,5 +1,6 @@
 package cn.zhxu.bs.solon;
 
+import cn.zhxu.bs.solon.prop.BeanSearcherProperties;
 import org.noear.solon.core.AppContext;
 import org.noear.solon.core.Plugin;
 

@@ -12,8 +12,10 @@ import cn.zhxu.bs.group.ExprParser;
 import cn.zhxu.bs.group.GroupPair;
 import cn.zhxu.bs.group.GroupResolver;
 import cn.zhxu.bs.implement.*;
-import cn.zhxu.bs.solon.prop.Params;
-import cn.zhxu.bs.solon.prop.Sql;
+import cn.zhxu.bs.solon.prop.BeanSearcherFieldConvertor;
+import cn.zhxu.bs.solon.prop.BeanSearcherParams;
+import cn.zhxu.bs.solon.prop.BeanSearcherProperties;
+import cn.zhxu.bs.solon.prop.BeanSearcherSql;
 import cn.zhxu.bs.util.LRUCache;
 import org.noear.solon.annotation.Bean;
 import org.noear.solon.annotation.Condition;
@@ -62,7 +64,7 @@ public class BeanSearcherConfiguration {
     @Bean
     @Condition(onMissingBean = DateTimeParamConvertor.class)
     public DateTimeParamConvertor dateTimeParamConvertor() {
-        Params.Convertor conf = config.getParams().getConvertor();
+        BeanSearcherParams.Convertor conf = config.getParams().getConvertor();
         DateTimeParamConvertor convertor = new DateTimeParamConvertor(conf.getDateTimeTarget());
         convertor.setZoneId(conf.getZoneId());
         return convertor;
@@ -92,7 +94,7 @@ public class BeanSearcherConfiguration {
     @Condition(onMissingBean = SuffixOpParamFilter.class,
             onProperty = "${bean-searcher.params.filter.use-suffix-op}=true")
     public SuffixOpParamFilter suffixOpParamFilter(FieldOpPool fieldOpPool) {
-        Params params = config.getParams();
+        BeanSearcherParams params = config.getParams();
         return new SuffixOpParamFilter(fieldOpPool, params.getSeparator(), params.getOperatorKey());
     }
 
@@ -106,14 +108,14 @@ public class BeanSearcherConfiguration {
     @Bean
     @Condition(onMissingBean = PageExtractor.class)
     public PageExtractor pageExtractor() {
-        Params.Pagination conf = config.getParams().getPagination();
+        BeanSearcherParams.Pagination conf = config.getParams().getPagination();
         String type = conf.getType();
         BasePageExtractor extractor;
-        if (Params.Pagination.TYPE_PAGE.equals(type)) {
+        if (BeanSearcherParams.Pagination.TYPE_PAGE.equals(type)) {
             PageSizeExtractor p = new PageSizeExtractor();
             p.setPageName(conf.getPage());
             extractor = p;
-        } else if (Params.Pagination.TYPE_OFFSET.equals(type)) {
+        } else if (BeanSearcherParams.Pagination.TYPE_OFFSET.equals(type)) {
             PageOffsetExtractor p = new PageOffsetExtractor();
             p.setOffsetName(conf.getOffset());
             extractor = p;
@@ -143,8 +145,8 @@ public class BeanSearcherConfiguration {
     @Bean
     @Condition(onMissingBean = Dialect.class)
     public Dialect dialect(List<DataSourceDialect> dialects) {
-        Sql conf = config.getSql();
-        Sql.Dialect defaultType = conf.getDialect();
+        BeanSearcherSql conf = config.getSql();
+        BeanSearcherSql.Dialect defaultType = conf.getDialect();
         if (defaultType == null) {
             throw new IllegalConfigException("Invalid config: [bean-searcher.sql.dialect] can not be null.");
         }
@@ -160,7 +162,7 @@ public class BeanSearcherConfiguration {
         return defaultDialect;
     }
 
-    private Dialect createDialect(Sql.Dialect dialectType, String propKey) {
+    private Dialect createDialect(BeanSearcherSql.Dialect dialectType, String propKey) {
         switch (dialectType) {
             case MySQL:
                 return new MySqlDialect();
@@ -186,7 +188,7 @@ public class BeanSearcherConfiguration {
     @Condition(onMissingBean = GroupResolver.class)
     public GroupResolver groupResolver(@Inject(required = false) ExprParser.Factory parserFactory) {
         DefaultGroupResolver groupResolver = new DefaultGroupResolver();
-        Params.Group conf = config.getParams().getGroup();
+        BeanSearcherParams.Group conf = config.getParams().getGroup();
         groupResolver.setEnabled(conf.isEnable());
         groupResolver.setCache(new LRUCache<>(conf.getCacheSize()));
         groupResolver.setMaxExprLength(conf.getMaxExprLength());
@@ -260,7 +262,7 @@ public class BeanSearcherConfiguration {
     @Condition(onMissingBean = EnumFieldConvertor.class,
             onProperty = "${bean-searcher.field-convertor.use-enum:true}=true")
     public EnumFieldConvertor enumFieldConvertor() {
-        cn.zhxu.bs.solon.prop.FieldConvertor conf = config.getFieldConvertor();
+        BeanSearcherFieldConvertor conf = config.getFieldConvertor();
         EnumFieldConvertor convertor = new EnumFieldConvertor();
         convertor.setFailOnError(conf.isEnumFailOnError());
         convertor.setIgnoreCase(conf.isEnumIgnoreCase());
@@ -272,7 +274,7 @@ public class BeanSearcherConfiguration {
     @Condition(onMissingBean = JsonFieldConvertor.class, onClass = cn.zhxu.xjson.JsonKit.class,
             onProperty = "${bean-searcher.field-convertor.use-json:true}=true")
     public JsonFieldConvertor jsonFieldConvertor() {
-        cn.zhxu.bs.solon.prop.FieldConvertor conf = config.getFieldConvertor();
+        BeanSearcherFieldConvertor conf = config.getFieldConvertor();
         return new JsonFieldConvertor(conf.isJsonFailOnError());
     }
 
@@ -290,7 +292,7 @@ public class BeanSearcherConfiguration {
     public ListFieldConvertor listFieldConvertor(List<ListFieldConvertor.Convertor> convertors0) {
         List<ListFieldConvertor.Convertor<?>> convertors = new ArrayList<>();
         convertors0.forEach(convertors::add);
-        cn.zhxu.bs.solon.prop.FieldConvertor conf = config.getFieldConvertor();
+        BeanSearcherFieldConvertor conf = config.getFieldConvertor();
         ListFieldConvertor convertor = new ListFieldConvertor(conf.getListItemSeparator());
         if (convertors != null) {
             convertor.setConvertors(convertors);
@@ -302,7 +304,7 @@ public class BeanSearcherConfiguration {
     @Condition(onMissingBean = DbMapping.class)
     public DbMapping dbMapping() {
         DefaultDbMapping mapping = new DefaultDbMapping();
-        Sql.DefaultMapping conf = config.getSql().getDefaultMapping();
+        BeanSearcherSql.DefaultMapping conf = config.getSql().getDefaultMapping();
         mapping.setTablePrefix(conf.getTablePrefix());
         mapping.setUpperCase(conf.isUpperCase());
         mapping.setUnderlineCase(conf.isUnderlineCase());
@@ -328,7 +330,7 @@ public class BeanSearcherConfiguration {
     @Condition(onMissingBean = DateFormatFieldConvertor.class,
             onProperty = "${bean-searcher.field-convertor.use-date-format:true}=true")
     public DateFormatFieldConvertor dateFormatFieldConvertor() {
-        cn.zhxu.bs.solon.prop.FieldConvertor conf = config.getFieldConvertor();
+        BeanSearcherFieldConvertor conf = config.getFieldConvertor();
         Map<String, String> dateFormats = conf.getDateFormats();
         ZoneId zoneId = conf.getZoneId();
         DateFormatFieldConvertor convertor = new DateFormatFieldConvertor();
@@ -366,8 +368,8 @@ public class BeanSearcherConfiguration {
         paramResolver.setPageExtractor(pageExtractor);
         paramResolver.setFieldOpPool(fieldOpPool);
         paramResolver.setGroupResolver(groupResolver);
-        Params conf = config.getParams();
-        Params.Group group = conf.getGroup();
+        BeanSearcherParams conf = config.getParams();
+        BeanSearcherParams.Group group = conf.getGroup();
         paramResolver.getConfiguration()
                 .gexprMerge(group.isMergeable())
                 .groupSeparator(group.getSeparator())
