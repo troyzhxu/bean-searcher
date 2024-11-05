@@ -27,15 +27,73 @@ import static java.time.temporal.ChronoField.EPOCH_DAY;
  */
 public class DateTimeParamConvertor implements FieldConvertor.ParamConvertor {
 
-    static final Pattern DATETIME_PATTERN = Pattern.compile("[0-9]{4}-[0-9]{1,2}-[0-9]{1,2} [0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}");
+    static final Pattern DATETIME_PATTERN = Pattern.compile(
+            "[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}(?: [0-9]{1,2}(?::[0-9]{1,2}(?::[0-9]{1,2}(?:\\.[0-9]{1,3})?)?)?)?"
+    );
 
     static final DateTimeFormatter FORMATTER = new DateTimeFormatterBuilder()
                 .appendPattern("yyyy-")
                 .appendValue(ChronoField.MONTH_OF_YEAR, 1, 2,SignStyle.NOT_NEGATIVE)
                 .appendPattern("-")
                 .appendValue(ChronoField.DAY_OF_MONTH, 1, 2, SignStyle.NOT_NEGATIVE)
-                .appendPattern(" HH:mm:ss.SSS")
+                .appendPattern(" ")
+                .appendValue(ChronoField.HOUR_OF_DAY, 1, 2, SignStyle.NOT_NEGATIVE)
+                .appendPattern(":")
+                .appendValue(ChronoField.MINUTE_OF_HOUR, 1, 2, SignStyle.NOT_NEGATIVE)
+                .appendPattern(":")
+                .appendValue(ChronoField.SECOND_OF_MINUTE, 1, 2, SignStyle.NOT_NEGATIVE)
+                .appendPattern(".")
+                .appendValue(ChronoField.MILLI_OF_SECOND, 1, 3, SignStyle.NOT_NEGATIVE)
                 .toFormatter();
+
+    public static void main(String[] args) {
+        System.out.println(DATETIME_PATTERN.matcher("2024-11-05 18:14:10.500").matches());
+        System.out.println(DATETIME_PATTERN.matcher("2024-11-05 18:14:10").matches());
+        System.out.println(DATETIME_PATTERN.matcher("2024-11-05 18:14").matches());
+        System.out.println(DATETIME_PATTERN.matcher("2024-11-05 18").matches());
+        System.out.println(DATETIME_PATTERN.matcher("2024-11-05").matches());
+    }
+
+    protected String normalize1(String datetime) {
+        int len = datetime.length();
+        if (len == 4) {
+            return datetime + "-01-01 00:00:00.000";
+        }
+        int spaceIdx = datetime.indexOf(' ');
+        if (spaceIdx < 0) {
+            return datetime + " 00:00:00.000";
+        }
+        int colonIdx1 = datetime.indexOf(':', spaceIdx);
+        if (colonIdx1 < 0) {
+            return datetime + ":00:00.000";
+        }
+        int colonIdx2 = datetime.indexOf(':', colonIdx1);
+        if (colonIdx2 < 0) {
+            return datetime + ":00.000";
+        }
+        if (datetime.indexOf('.', colonIdx2) > 0) {
+            return datetime;
+        }
+        if (len == 19) {
+            return datetime + ".000";
+        }
+        if (len == 16) {
+            return datetime + ":00.000";
+        }
+        if (len == 13) {
+            return datetime + ":00:00.000";
+        }
+        if (len == 10) {
+            return datetime + " 00:00:00.000";
+        }
+        if (len == 7) {
+            return datetime + "-01 00:00:00.000";
+        }
+        if (len == 4) {
+            return datetime + "-01-01 00:00:00.000";
+        }
+        return datetime;
+    }
 
     /**
      * 时区
@@ -82,8 +140,9 @@ public class DateTimeParamConvertor implements FieldConvertor.ParamConvertor {
                 // 处理字符串形式的时间戳
                 return toTargetType(Long.parseLong(str));
             }
-            String datetime = normalize(str.replaceAll("/", "-"));
-            if (DATETIME_PATTERN.matcher(datetime).matches()) {
+            String strValue = str.replaceAll("/", "-");
+            if (DATETIME_PATTERN.matcher(strValue).matches()) {
+                String datetime = normalize(strValue);
                 TemporalAccessor accessor = FORMATTER.parse(datetime);
                 LocalDateTime dateTime = LocalDate.ofEpochDay(accessor.getLong(EPOCH_DAY))
                         .atTime(LocalTime.ofSecondOfDay(accessor.getLong(ChronoField.SECOND_OF_DAY)));
