@@ -4,7 +4,7 @@
 
 ## V4 版本
 
-### v4.3 的新特性（v4.3.4）
+### v4.3 的新特性（v4.3.5）
 
 * Bean Searcher
   * 优化 `BeanMeta`: 新增 `getSqlSnippets()` 方法，用户可以使用该方法获取该实体类上所有已解析的 SQL 片段
@@ -26,6 +26,8 @@
   * 优化 `DefaultParamResolver` 提升 `extractFieldParams(..)` 方法的权限，可供子类重写，便于用户自定义（since v4.3.3）
   * 优化 `DefaultMetaResolver`: 抽取 `createBeanMeta(..)` 方法，便于用户自定义 `BeanMeta` 子类（since v4.3.3）
   * 修复 `DefaultGroupResolver` 的默认 `LRUCache` 缓存没有遵循访问顺序规则的问题（since v4.3.3）
+  * 增强 `DateParamConvertor`，同时支持 `yyyy-MM-dd`、`yyyy-M-dd`、`yyyy-MM-d`、`yyyy-M-d`、`yyyy/MM/dd`、`yyyy/M/dd`、`yyyy/MM/d`、`yyyy/M/d` 格式的参数值，例如：`2024-01-01`、`2024-1-01`、`2024-01-1`、`2024-1-1`、`2024/01/01`、`2024/1/01`、`2024/01/1`、`2024/1/1`（since v4.3.5）
+  * 增强 `DateTimeParamConvertor`，使其支持满足 `[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}(?: [0-9]{1,2}(?::[0-9]{1,2}(?::[0-9]{1,2}(?:\.[0-9]{1,3})?)?)?)?` 正则表达式下的所有格式的日期时间参数值（since v4.3.5）
   * 升级 Junit -> 5.10.2 并完善单元测试
 * Bean Searcher Boot Starter
   * 新增配置项 `bean-searcher.params.group.mergeable` 指定组表达式是否可合并，默认 `true`
@@ -45,7 +47,7 @@
   * 支持以 Bean 的形式自定义 `JoinParaSerializer` 组件
   * 新增 `SolonSqlExecutor`: 支持 Solon 事务的 Sql 执行器，且默认使用（since v4.3.2）
   * 新增配置项：`bean-searcher.params.convertor.zone-id`: 可配置 `DateTimeParamConvertor` 使用的时区（since v4.3.2）
-
+  * 支持在 IDEA 内配置项提示功能（需要安装 IDEA Solon 插件）（since v4.3.5）
 > 参考章节：[字段参数](/guide/param/field)、[逻辑分组](/guide/param/group)、[参数过滤器](/guide/advance/filter)、[拼接参数](/guide/param/embed#拼接参数)、[请求第三方 BS 服务](/guide/usage/rpc)
 
 ### v4.2 的新特性（v4.2.9）

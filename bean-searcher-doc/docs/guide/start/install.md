@@ -7,19 +7,19 @@
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher</artifactId>
-    <version>4.3.4</version>
+    <version>4.3.5</version>
 </dependency>
 <!-- SpringBoot / Grails 的项目直接使用以下依赖，更为方便（只添加这一个依赖即可） -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-boot-starter</artifactId>
-    <version>4.3.4</version>
+    <version>4.3.5</version>
 </dependency>
 <!-- Solon 项目直接使用以下依赖（只添加这一个依赖即可，功能同 bean-searcher-boot-starter） -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-solon-plugin</artifactId>
-    <version>4.3.4</version>
+    <version>4.3.5</version>
 </dependency>
 ```
 
@@ -27,11 +27,11 @@
 
 ```groovy
 // Bean Searcher 核心依赖，任何框架都可使用该依赖
-implementation 'cn.zhxu:bean-searcher:4.3.4'
+implementation 'cn.zhxu:bean-searcher:4.3.5'
 // SpringBoot / Grails 项目直接使用以下依赖，更为方便（只添加这一个依赖即可）
-implementation 'cn.zhxu:bean-searcher-boot-starter:4.3.4'
+implementation 'cn.zhxu:bean-searcher-boot-starter:4.3.5'
 // Solon 项目直接使用以下依赖（只添加这一个依赖即可，功能同 bean-searcher-boot-starter）
-implementation 'cn.zhxu:bean-searcher-solon-plugin:4.3.4'
+implementation 'cn.zhxu:bean-searcher-solon-plugin:4.3.5'
 ```
 
 ::: tip 提示
