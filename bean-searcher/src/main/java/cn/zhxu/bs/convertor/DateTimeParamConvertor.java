@@ -8,6 +8,8 @@ import cn.zhxu.bs.util.StringUtils;
 import java.sql.Timestamp;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.SignStyle;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
 import java.util.Date;
@@ -25,9 +27,15 @@ import static java.time.temporal.ChronoField.EPOCH_DAY;
  */
 public class DateTimeParamConvertor implements FieldConvertor.ParamConvertor {
 
-    static final Pattern DATETIME_PATTERN = Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}");
+    static final Pattern DATETIME_PATTERN = Pattern.compile("[0-9]{4}-[0-9]{1,2}-[0-9]{1,2} [0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}");
 
-    static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+    static final DateTimeFormatter FORMATTER = new DateTimeFormatterBuilder()
+                .appendPattern("yyyy-")
+                .appendValue(ChronoField.MONTH_OF_YEAR, 1, 2,SignStyle.NOT_NEGATIVE)
+                .appendPattern("-")
+                .appendValue(ChronoField.DAY_OF_MONTH, 1, 2, SignStyle.NOT_NEGATIVE)
+                .appendPattern(" HH:mm:ss.SSS")
+                .toFormatter();
 
     /**
      * 时区

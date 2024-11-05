@@ -3,12 +3,17 @@ package cn.zhxu.bs.boot.prop;
 import cn.zhxu.bs.BeanSearcher;
 import cn.zhxu.bs.MapSearcher;
 import cn.zhxu.bs.convertor.*;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FieldConvertor {
+/**
+ * 字段转换器相关配置
+ */
+@ConfigurationProperties(prefix = "bean-searcher.field-convertor")
+public class BeanSearcherFieldConvertor {
 
     /**
      * 是否启用 {@link NumberFieldConvertor }，默认为 true

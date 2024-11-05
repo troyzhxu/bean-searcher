@@ -4,11 +4,16 @@ import cn.zhxu.bs.bean.DbField;
 import cn.zhxu.bs.bean.InheritType;
 import cn.zhxu.bs.bean.SearchBean;
 import cn.zhxu.bs.bean.SortType;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class Sql {
+/**
+ * SQL 相关配置
+ */
+@ConfigurationProperties(prefix = "bean-searcher.sql")
+public class BeanSearcherSql {
 
     public enum Dialect {
         MySQL,

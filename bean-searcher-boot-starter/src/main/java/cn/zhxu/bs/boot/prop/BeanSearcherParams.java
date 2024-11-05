@@ -13,11 +13,16 @@ import cn.zhxu.bs.filter.SuffixOpParamFilter;
 import cn.zhxu.bs.group.DefaultGroupResolver;
 import cn.zhxu.bs.util.MapBuilder;
 import cn.zhxu.bs.util.MapUtils;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.time.ZoneId;
 import java.util.Map;
 
-public class Params {
+/**
+ * 检索参数相关配置
+ */
+@ConfigurationProperties(prefix = "bean-searcher.params")
+public class BeanSearcherParams {
 
     /**
      * 排序字段参数名，默认为 `sort`，

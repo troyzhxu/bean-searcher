@@ -3,8 +3,10 @@ package cn.zhxu.bs.boot;
 import cn.zhxu.bs.*;
 import cn.zhxu.bs.FieldConvertor.BFieldConvertor;
 import cn.zhxu.bs.FieldConvertor.MFieldConvertor;
-import cn.zhxu.bs.boot.prop.Params;
-import cn.zhxu.bs.boot.prop.Sql;
+import cn.zhxu.bs.boot.prop.BeanSearcherFieldConvertor;
+import cn.zhxu.bs.boot.prop.BeanSearcherParams;
+import cn.zhxu.bs.boot.prop.BeanSearcherProperties;
+import cn.zhxu.bs.boot.prop.BeanSearcherSql;
 import cn.zhxu.bs.convertor.*;
 import cn.zhxu.bs.dialect.*;
 import cn.zhxu.bs.filter.ArrayValueParamFilter;
@@ -37,21 +39,26 @@ import java.util.function.Consumer;
 
 
 @Configuration
-@EnableConfigurationProperties(BeanSearcherProperties.class)
+@EnableConfigurationProperties({
+        BeanSearcherProperties.class,
+        BeanSearcherFieldConvertor.class,
+        BeanSearcherParams.class,
+        BeanSearcherSql.class
+})
 public class BeanSearcherAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(PageExtractor.class)
-    public PageExtractor pageExtractor(BeanSearcherProperties config) {
-        Params.Pagination conf = config.getParams().getPagination();
+    public PageExtractor pageExtractor(BeanSearcherParams config) {
+        BeanSearcherParams.Pagination conf = config.getPagination();
         String type = conf.getType();
         BasePageExtractor extractor;
-        if (Params.Pagination.TYPE_PAGE.equals(type)) {
+        if (BeanSearcherParams.Pagination.TYPE_PAGE.equals(type)) {
             PageSizeExtractor p = new PageSizeExtractor();
             p.setPageName(conf.getPage());
             extractor = p;
         }  else
-        if (Params.Pagination.TYPE_OFFSET.equals(type)) {
+        if (BeanSearcherParams.Pagination.TYPE_OFFSET.equals(type)) {
             PageOffsetExtractor p = new PageOffsetExtractor();
             p.setOffsetName(conf.getOffset());
             extractor = p;
@@ -80,25 +87,24 @@ public class BeanSearcherAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(Dialect.class)
-    public Dialect dialect(BeanSearcherProperties config, ObjectProvider<List<DataSourceDialect>> dialects) {
-        Sql conf = config.getSql();
-        Sql.Dialect defaultType = conf.getDialect();
+    public Dialect dialect(BeanSearcherSql config, ObjectProvider<List<DataSourceDialect>> dialects) {
+        BeanSearcherSql.Dialect defaultType = config.getDialect();
         if (defaultType == null) {
             throw new IllegalConfigException("Invalid config: [bean-searcher.sql.dialect] can not be null.");
         }
         Dialect defaultDialect = createDialect(defaultType, "dialect");
-        if (conf.isDialectDynamic()) {
+        if (config.isDialectDynamic()) {
             DynamicDialect dynamicDialect = new DynamicDialect();
             dynamicDialect.setDefaultDialect(defaultDialect);
             ifAvailable(dialects, list -> list.forEach(item -> dynamicDialect.put(item.getDataSource(), item.getDialect())));
-            conf.getDialects().forEach((ds, dType) ->
+            config.getDialects().forEach((ds, dType) ->
                     dynamicDialect.put(ds, createDialect(dType, "dialects." + ds)));
             return dynamicDialect;
         }
         return defaultDialect;
     }
 
-    private Dialect createDialect(Sql.Dialect dialectType, String propKey) {
+    private Dialect createDialect(BeanSearcherSql.Dialect dialectType, String propKey) {
         switch (dialectType) {
             case MySQL:
                 return new MySqlDialect();
@@ -132,9 +138,9 @@ public class BeanSearcherAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(GroupResolver.class)
-    public GroupResolver groupResolver(BeanSearcherProperties config, ObjectProvider<ExprParser.Factory> parserFactory) {
+    public GroupResolver groupResolver(BeanSearcherParams config, ObjectProvider<ExprParser.Factory> parserFactory) {
         DefaultGroupResolver groupResolver = new DefaultGroupResolver();
-        Params.Group conf = config.getParams().getGroup();
+        BeanSearcherParams.Group conf = config.getGroup();
         groupResolver.setEnabled(conf.isEnable());
         groupResolver.setCache(new LRUCache<>(conf.getCacheSize()));
         groupResolver.setMaxExprLength(conf.getMaxExprLength());
@@ -156,20 +162,20 @@ public class BeanSearcherAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(DateParamConvertor.class)
-    public DateParamConvertor dateParamConvertor(BeanSearcherProperties props) {
-        return new DateParamConvertor(props.getParams().getConvertor().getDateTarget());
+    public DateParamConvertor dateParamConvertor(BeanSearcherParams config) {
+        return new DateParamConvertor(config.getConvertor().getDateTarget());
     }
 
     @Bean
     @ConditionalOnMissingBean(TimeParamConvertor.class)
-    public TimeParamConvertor timeParamConvertor(BeanSearcherProperties props) {
-        return new TimeParamConvertor(props.getParams().getConvertor().getTimeTarget());
+    public TimeParamConvertor timeParamConvertor(BeanSearcherParams config) {
+        return new TimeParamConvertor(config.getConvertor().getTimeTarget());
     }
 
     @Bean
     @ConditionalOnMissingBean(DateTimeParamConvertor.class)
-    public DateTimeParamConvertor dateTimeParamConvertor(BeanSearcherProperties props) {
-        Params.Convertor conf = props.getParams().getConvertor();
+    public DateTimeParamConvertor dateTimeParamConvertor(BeanSearcherParams config) {
+        BeanSearcherParams.Convertor conf = config.getConvertor();
         DateTimeParamConvertor convertor = new DateTimeParamConvertor(conf.getDateTimeTarget());
         convertor.setZoneId(conf.getZoneId());
         return convertor;
@@ -185,25 +191,24 @@ public class BeanSearcherAutoConfiguration {
     @Order(-100)
     @ConditionalOnMissingBean(SizeLimitParamFilter.class)
     @ConditionalOnProperty(name = "bean-searcher.params.filter.use-size-limit", havingValue = "true", matchIfMissing = true)
-    public SizeLimitParamFilter sizeLimitParamFilter(BeanSearcherProperties config) {
-        return new SizeLimitParamFilter(config.getParams().getFilter().getMaxParaMapSize());
+    public SizeLimitParamFilter sizeLimitParamFilter(BeanSearcherParams config) {
+        return new SizeLimitParamFilter(config.getFilter().getMaxParaMapSize());
     }
 
     @Bean
     @Order(100)
     @ConditionalOnMissingBean(ArrayValueParamFilter.class)
     @ConditionalOnProperty(name = "bean-searcher.params.filter.use-array-value", havingValue = "true", matchIfMissing = true)
-    public ArrayValueParamFilter arrayValueParamFilter(BeanSearcherProperties config) {
-        return new ArrayValueParamFilter(config.getParams().getSeparator());
+    public ArrayValueParamFilter arrayValueParamFilter(BeanSearcherParams config) {
+        return new ArrayValueParamFilter(config.getSeparator());
     }
 
     @Bean
     @Order(200)
     @ConditionalOnMissingBean(SuffixOpParamFilter.class)
     @ConditionalOnProperty(name = "bean-searcher.params.filter.use-suffix-op", havingValue = "true")
-    public SuffixOpParamFilter suffixOpParamFilter(FieldOpPool fieldOpPool, BeanSearcherProperties config) {
-        Params params = config.getParams();
-        return new SuffixOpParamFilter(fieldOpPool, params.getSeparator(), params.getOperatorKey());
+    public SuffixOpParamFilter suffixOpParamFilter(FieldOpPool fieldOpPool, BeanSearcherParams config) {
+        return new SuffixOpParamFilter(fieldOpPool, config.getSeparator(), config.getOperatorKey());
     }
 
     @Bean
@@ -213,25 +218,24 @@ public class BeanSearcherAutoConfiguration {
                                        List<ParamFilter> paramFilters,
                                        List<FieldConvertor.ParamConvertor> convertors,
                                        GroupResolver groupResolver,
-                                       BeanSearcherProperties config) {
+                                       BeanSearcherParams config) {
         DefaultParamResolver paramResolver = new DefaultParamResolver(convertors, paramFilters);
         paramResolver.setPageExtractor(pageExtractor);
         paramResolver.setFieldOpPool(fieldOpPool);
         paramResolver.setGroupResolver(groupResolver);
-        Params conf = config.getParams();
-        Params.Group group = conf.getGroup();
+        BeanSearcherParams.Group group = config.getGroup();
         paramResolver.getConfiguration()
                 .gexprMerge(group.isMergeable())
                 .groupSeparator(group.getSeparator())
                 .gexpr(group.getExprName())
-                .selectExclude(conf.getSelectExclude())
-                .onlySelect(conf.getOnlySelect())
-                .separator(conf.getSeparator())
-                .op(conf.getOperatorKey())
-                .ic(conf.getIgnoreCaseKey())
-                .orderBy(conf.getOrderBy())
-                .order(conf.getOrder())
-                .sort(conf.getSort());
+                .selectExclude(config.getSelectExclude())
+                .onlySelect(config.getOnlySelect())
+                .separator(config.getSeparator())
+                .op(config.getOperatorKey())
+                .ic(config.getIgnoreCaseKey())
+                .orderBy(config.getOrderBy())
+                .order(config.getOrder())
+                .sort(config.getSort());
         return paramResolver;
     }
 
@@ -250,7 +254,7 @@ public class BeanSearcherAutoConfiguration {
     public SqlExecutor sqlExecutor(ObjectProvider<DataSource> dataSource,
                                    ObjectProvider<List<NamedDataSource>> namedDataSources,
                                    ObjectProvider<SqlExecutor.SlowListener> slowListener,
-                                   BeanSearcherProperties config) {
+                                   BeanSearcherSql config) {
         SpringSqlExecutor executor = new SpringSqlExecutor(dataSource.getIfAvailable());
         ifAvailable(namedDataSources, ndsList -> {
             for (NamedDataSource nds: ndsList) {
@@ -258,7 +262,7 @@ public class BeanSearcherAutoConfiguration {
             }
         });
         ifAvailable(slowListener, executor::setSlowListener);
-        executor.setSlowSqlThreshold(config.getSql().getSlowSqlThreshold());
+        executor.setSlowSqlThreshold(config.getSlowSqlThreshold());
         return executor;
     }
 
@@ -286,8 +290,8 @@ public class BeanSearcherAutoConfiguration {
     @Bean
     @ConditionalOnProperty(name = "bean-searcher.field-convertor.use-bool", havingValue = "true", matchIfMissing = true)
     @ConditionalOnMissingBean(BoolFieldConvertor.class)
-    public BoolFieldConvertor boolFieldConvertor(BeanSearcherProperties config) {
-        String[] falseValues = config.getFieldConvertor().getBoolFalseValues();
+    public BoolFieldConvertor boolFieldConvertor(BeanSearcherFieldConvertor config) {
+        String[] falseValues = config.getBoolFalseValues();
         BoolFieldConvertor convertor = new BoolFieldConvertor();
         if (falseValues != null) {
             convertor.addFalseValues(falseValues);
@@ -298,9 +302,9 @@ public class BeanSearcherAutoConfiguration {
     @Bean
     @ConditionalOnProperty(name = "bean-searcher.field-convertor.use-date", havingValue = "true", matchIfMissing = true)
     @ConditionalOnMissingBean(DateFieldConvertor.class)
-    public DateFieldConvertor dateFieldConvertor(BeanSearcherProperties config) {
+    public DateFieldConvertor dateFieldConvertor(BeanSearcherFieldConvertor config) {
         DateFieldConvertor convertor = new DateFieldConvertor();
-        ZoneId zoneId = config.getFieldConvertor().getZoneId();
+        ZoneId zoneId = config.getZoneId();
         if (zoneId != null) {
             convertor.setZoneId(zoneId);
         }
@@ -317,11 +321,10 @@ public class BeanSearcherAutoConfiguration {
     @Bean
     @ConditionalOnProperty(name = "bean-searcher.field-convertor.use-enum", havingValue = "true", matchIfMissing = true)
     @ConditionalOnMissingBean(EnumFieldConvertor.class)
-    public EnumFieldConvertor enumFieldConvertor(BeanSearcherProperties config) {
-        cn.zhxu.bs.boot.prop.FieldConvertor conf = config.getFieldConvertor();
+    public EnumFieldConvertor enumFieldConvertor(BeanSearcherFieldConvertor config) {
         EnumFieldConvertor convertor = new EnumFieldConvertor();
-        convertor.setFailOnError(conf.isEnumFailOnError());
-        convertor.setIgnoreCase(conf.isEnumIgnoreCase());
+        convertor.setFailOnError(config.isEnumFailOnError());
+        convertor.setIgnoreCase(config.isEnumIgnoreCase());
         return convertor;
     }
 
@@ -336,17 +339,16 @@ public class BeanSearcherAutoConfiguration {
         @Bean
         @ConditionalOnProperty(name = "bean-searcher.field-convertor.use-json", havingValue = "true", matchIfMissing = true)
         @ConditionalOnMissingBean(JsonFieldConvertor.class)
-        public JsonFieldConvertor jsonFieldConvertor(BeanSearcherProperties config) {
-            cn.zhxu.bs.boot.prop.FieldConvertor conf = config.getFieldConvertor();
-            return new JsonFieldConvertor(conf.isJsonFailOnError());
+        public JsonFieldConvertor jsonFieldConvertor(BeanSearcherFieldConvertor config) {
+            return new JsonFieldConvertor(config.isJsonFailOnError());
         }
 
         @Bean
         @Order(300)
         @ConditionalOnMissingBean(JsonArrayParamFilter.class)
         @ConditionalOnProperty(name = "bean-searcher.params.filter.use-json-array", havingValue = "true")
-        public JsonArrayParamFilter jsonArrayParamFilter(BeanSearcherProperties config) {
-            return new JsonArrayParamFilter(config.getParams().getSeparator());
+        public JsonArrayParamFilter jsonArrayParamFilter(BeanSearcherParams config) {
+            return new JsonArrayParamFilter(config.getSeparator());
         }
 
     }
@@ -367,10 +369,9 @@ public class BeanSearcherAutoConfiguration {
     @Bean
     @ConditionalOnProperty(name = "bean-searcher.field-convertor.use-list", havingValue = "true", matchIfMissing = true)
     @ConditionalOnMissingBean(ListFieldConvertor.class)
-    public ListFieldConvertor listFieldConvertor(BeanSearcherProperties config,
+    public ListFieldConvertor listFieldConvertor(BeanSearcherFieldConvertor config,
                 ObjectProvider<List<ListFieldConvertor.Convertor<?>>> convertorsProvider) {
-        cn.zhxu.bs.boot.prop.FieldConvertor conf = config.getFieldConvertor();
-        ListFieldConvertor convertor = new ListFieldConvertor(conf.getListItemSeparator());
+        ListFieldConvertor convertor = new ListFieldConvertor(config.getListItemSeparator());
         ifAvailable(convertorsProvider, convertor::setConvertors);
         return convertor;
     }
@@ -387,9 +388,9 @@ public class BeanSearcherAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(DbMapping.class)
-    public DbMapping dbMapping(BeanSearcherProperties config) {
+    public DbMapping dbMapping(BeanSearcherSql config) {
         DefaultDbMapping mapping = new DefaultDbMapping();
-        Sql.DefaultMapping conf = config.getSql().getDefaultMapping();
+        BeanSearcherSql.DefaultMapping conf = config.getDefaultMapping();
         mapping.setTablePrefix(conf.getTablePrefix());
         mapping.setUpperCase(conf.isUpperCase());
         mapping.setUnderlineCase(conf.isUnderlineCase());
@@ -419,14 +420,14 @@ public class BeanSearcherAutoConfiguration {
                                      BeanReflector beanReflector,
                                      ObjectProvider<List<SqlInterceptor>> interceptors,
                                      ObjectProvider<List<ResultFilter>> processors,
-                                     BeanSearcherProperties props) {
+                                     BeanSearcherParams config) {
         DefaultBeanSearcher searcher = new DefaultBeanSearcher();
         searcher.setMetaResolver(metaResolver);
         searcher.setParamResolver(paramResolver);
         searcher.setSqlResolver(sqlResolver);
         searcher.setSqlExecutor(sqlExecutor);
         searcher.setBeanReflector(beanReflector);
-        searcher.setFailOnParamError(props.getParams().isFailOnError());
+        searcher.setFailOnParamError(config.isFailOnError());
         ifAvailable(interceptors, searcher::setInterceptors);
         ifAvailable(processors, searcher::setResultFilters);
         return searcher;
@@ -435,11 +436,9 @@ public class BeanSearcherAutoConfiguration {
     @Bean
     @ConditionalOnProperty(name = "bean-searcher.field-convertor.use-date-format", havingValue = "true", matchIfMissing = true)
     @ConditionalOnMissingBean(DateFormatFieldConvertor.class)
-    public DateFormatFieldConvertor dateFormatFieldConvertor(BeanSearcherProperties config) {
-        cn.zhxu.bs.boot.prop.FieldConvertor conf = config.getFieldConvertor();
-        Map<String, String> dateFormats = conf.getDateFormats();
-        ZoneId zoneId = conf.getZoneId();
+    public DateFormatFieldConvertor dateFormatFieldConvertor(BeanSearcherFieldConvertor config) {
         DateFormatFieldConvertor convertor = new DateFormatFieldConvertor();
+        Map<String, String> dateFormats = config.getDateFormats();
         if (dateFormats != null) {
             dateFormats.forEach((key, value) -> {
                 // 由于在 yml 的 key 中的 `:` 会被自动过滤，所以这里做下特殊处理，在 yml 中可以用 `-` 替代
@@ -447,6 +446,7 @@ public class BeanSearcherAutoConfiguration {
                 convertor.setFormat(scope, value);
             });
         }
+        ZoneId zoneId = config.getZoneId();
         if (zoneId != null) {
             convertor.setZoneId(zoneId);
         }
@@ -474,13 +474,13 @@ public class BeanSearcherAutoConfiguration {
                                    ObjectProvider<List<MFieldConvertor>> convertors,
                                    ObjectProvider<List<SqlInterceptor>> interceptors,
                                    ObjectProvider<List<ResultFilter>> resultFilters,
-                                   BeanSearcherProperties props) {
+                                   BeanSearcherParams config) {
         DefaultMapSearcher searcher = new DefaultMapSearcher();
         searcher.setMetaResolver(metaResolver);
         searcher.setParamResolver(paramResolver);
         searcher.setSqlResolver(sqlResolver);
         searcher.setSqlExecutor(sqlExecutor);
-        searcher.setFailOnParamError(props.getParams().isFailOnError());
+        searcher.setFailOnParamError(config.isFailOnError());
         List<MFieldConvertor> list = convertors.getIfAvailable();
         if (list != null) {
             List<MFieldConvertor> newList = new ArrayList<>(list);
