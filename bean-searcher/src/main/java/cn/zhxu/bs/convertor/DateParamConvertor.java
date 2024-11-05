@@ -71,7 +71,7 @@ public class DateParamConvertor implements FieldConvertor.ParamConvertor {
             }
             Matcher matcher = DATE_PATTERN.matcher(s);
             if (matcher.find()) {
-                return toDate(LocalDate.parse(matcher.group(), FORMATTER));
+                return toTargetType(LocalDate.parse(matcher.group(), FORMATTER));
             }
         }
         if (value instanceof Date) {
@@ -82,15 +82,15 @@ public class DateParamConvertor implements FieldConvertor.ParamConvertor {
             return sqlDate.toLocalDate();
         }
         if (value instanceof LocalDate) {
-            return toDate((LocalDate) value);
+            return toTargetType((LocalDate) value);
         }
         if (value instanceof LocalDateTime) {
-            return toDate(((LocalDateTime) value).toLocalDate());
+            return toTargetType(((LocalDateTime) value).toLocalDate());
         }
         return null;
     }
 
-    private Object toDate(LocalDate date) {
+    private Object toTargetType(LocalDate date) {
         if (target == Target.SQL_DATE) {
             long days = date.getLong(ChronoField.EPOCH_DAY);
             return new java.sql.Date(TimeUnit.DAYS.toMillis(days));
