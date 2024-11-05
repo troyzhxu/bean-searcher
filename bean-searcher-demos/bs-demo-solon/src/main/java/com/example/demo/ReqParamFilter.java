@@ -32,7 +32,7 @@ public class ReqParamFilter implements ParamFilter {
         for (String key : ctxMap.keySet()) {
             List<String> values = ctxMap.getAll(key);
             if (values != null) {
-                params.put(key, values.toArray(String[]::new));
+                params.put(key, values.toArray(new String[0]));
             }
         }
         return MapUtils.flatBuilder(params).putAll(paraMap).build();
