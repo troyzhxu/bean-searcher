@@ -4,7 +4,7 @@
 
 ### Bean Searcher
 
-* 增强 `DateParamConvertor`，使同时支持以下的所有格式（共 8 种）的 `Date` 参数值：
+* 增强 `DateParamConvertor`，使同时支持以下 8 种格式的 `Date` 参数值：
   * `yyyy-MM-dd` - 例如：`2024-01-01`
   * `yyyy-M-dd` -- 例如：`2024-1-01` （新增）
   * `yyyy-MM-d` -- 例如：`2024-01-1` （新增）
@@ -13,7 +13,7 @@
   * `yyyy/M/dd` -- 例如：`2024/1/01` （新增）
   * `yyyy/MM/d` -- 例如：`2024/01/1` （新增）
   * `yyyy/M/d` --- 例如：`2024/1/1` - （新增）
-* 增强 `DateTimeParamConvertor`，使同时支持以下的所有格式（共 312 种）的 `DateTime` 参数值：
+* 增强 `DateTimeParamConvertor`，使同时支持以下的 312 种格式的 `DateTime` 参数值：
   * `yyyy-MM-dd` ---------- 自动补全为 `yyyy-MM-dd 00:00:00.000`
   * `yyyy-MM-dd H` -------- 自动补全为 `yyyy-MM-dd H:00:00.000`（新增）
   * `yyyy-MM-dd HH` ------- 自动补全为 `yyyy-MM-dd HH:00:00.000`
