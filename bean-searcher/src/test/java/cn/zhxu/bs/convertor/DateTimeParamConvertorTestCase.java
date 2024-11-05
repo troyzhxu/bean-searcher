@@ -48,27 +48,56 @@ public class DateTimeParamConvertorTestCase {
 
     @Test
     public void test_convert() throws ParseException {
-        assertConvert("2022-06-16", 0, 0, 0);
-        assertConvert("2022-06-16 20:39", 20, 39, 0);
-        assertConvert("2022-06-16 20:39:10", 20, 39, 10);
-        assertConvert("2022-06-16 20:39:10", 20, 39, 10);
-        assertConvert("2022/06/16", 0, 0, 0);
-        assertConvert("2022/06/16 20:39", 20, 39, 0);
-        assertConvert("2022/06/16 20:39:10", 20, 39, 10);
+        assertConvert("2022-06-08", 0, 0, 0);
+        assertConvert("2022-06-08 20:39", 20, 39, 0);
+        assertConvert("2022-06-08 20:39:10", 20, 39, 10);
+        assertConvert("2022-06-08 20:39:10", 20, 39, 10);
+        assertConvert("2022/06/08", 0, 0, 0);
+        assertConvert("2022/06/08 20:39", 20, 39, 0);
+        assertConvert("2022/06/08 20:39:10", 20, 39, 10);
+        assertConvert("2022/06/08 20:39:10.666", 20, 39, 10, 666);
+        assertConvert("2022-6-08", 0, 0, 0);
+        assertConvert("2022-6-08 20:39", 20, 39, 0);
+        assertConvert("2022-6-8 20:39:10", 20, 39, 10);
+        assertConvert("2022-6-8 20:39:10", 20, 39, 10);
+        assertConvert("2022/6/08", 0, 0, 0);
+        assertConvert("2022/6/08 20:39", 20, 39, 0);
+        assertConvert("2022/6/8 20:39:10", 20, 39, 10);
+        assertConvert("2022/6/8 20:39:10.6", 20, 39, 10, 6);
+        assertConvert("2022-6-08", 0, 0, 0);
+        assertConvert("2022-6-08 6:09", 6, 9, 0);
+        assertConvert("2022-06-8 20:3:10", 20, 3, 10);
+        assertConvert("2022-06-8 2:9:10", 2, 9, 10);
+        assertConvert("2022-06-8 2:9:8", 2, 9, 8);
+        assertConvert("2022-6-8 02:09:8", 2, 9, 8);
+        assertConvert("2022-6-8 02:09:8.55", 2, 9, 8, 55);
+        assertConvert("2022-6-8 02:09:8.999", 2, 9, 8, 999);
+        assertConvert("2022/6/08", 0, 0, 0);
+        assertConvert("2022/6/08 6:09", 6, 9, 0);
+        assertConvert("2022/6/8 20:3:10", 20, 3, 10);
+        assertConvert("2022/6/8 2:9:10", 2, 9, 10);
+        assertConvert("2022/06/8 2:9:8", 2, 9, 8);
+        assertConvert("2022/06/8 02:09:8", 2, 9, 8);
+        assertConvert("2022/06/8 02:09:8.55", 2, 9, 8, 55);
+        assertConvert("2022/6/8 02:09:8.999", 2, 9, 8, 999);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        long time = sdf.parse("2022-06-16 20:39:10").getTime();
+        long time = sdf.parse("2022-06-08 20:39:10").getTime();
         assertConvert(time, 20, 39, 10);
         assertConvert(String.valueOf(time), 20, 39, 10);
         assertConvert(new Date(time), 20, 39, 10);
         assertConvert(new Timestamp(time), 20, 39, 10);
-        assertConvert(LocalDate.parse("2022-06-16"), 0, 0, 0);
-        assertConvert(LocalDate.of(2022, 6, 16), 0, 0, 0);
-        assertConvert(LocalDateTime.parse("2022-06-16T20:39:10"), 20, 39, 10);
-        assertConvert(LocalDateTime.of(2022, 6, 16, 20, 39, 10), 20, 39, 10);
+        assertConvert(LocalDate.parse("2022-06-08"), 0, 0, 0);
+        assertConvert(LocalDate.of(2022, 6, 8), 0, 0, 0);
+        assertConvert(LocalDateTime.parse("2022-06-08T20:39:10"), 20, 39, 10);
+        assertConvert(LocalDateTime.of(2022, 6, 8, 20, 39, 10), 20, 39, 10);
         System.out.println("\ttest_convert ok!");
     }
 
     private void assertConvert(Object value, int hour, int minutes, int seconds) {
+        assertConvert(value, hour, minutes, seconds, 0);
+    }
+
+    private void assertConvert(Object value, int hour, int minutes, int seconds, int mills) {
         FieldMeta meta = new FieldMeta(null, null,null, null, null, false, null, DbType.DATETIME, Cluster.AUTO);
         Object date = convertor.convert(meta, value);
         Assertions.assertInstanceOf(Timestamp.class, date);
@@ -76,10 +105,11 @@ public class DateTimeParamConvertorTestCase {
         calendar.setTime((java.sql.Timestamp) date);
         Assertions.assertEquals(2022, calendar.get(Calendar.YEAR));
         Assertions.assertEquals(Calendar.JUNE, calendar.get(Calendar.MONTH));
-        Assertions.assertEquals(16, calendar.get(Calendar.DAY_OF_MONTH));
+        Assertions.assertEquals(8, calendar.get(Calendar.DAY_OF_MONTH));
         Assertions.assertEquals(hour, calendar.get(Calendar.HOUR_OF_DAY));
         Assertions.assertEquals(minutes, calendar.get(Calendar.MINUTE));
         Assertions.assertEquals(seconds, calendar.get(Calendar.SECOND));
+        Assertions.assertEquals(mills, calendar.get(Calendar.MILLISECOND));
     }
 
 }
