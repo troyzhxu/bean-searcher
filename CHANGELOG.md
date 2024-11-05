@@ -53,13 +53,13 @@
     * `yyyy-MM-dd HH:mm:ss.SS` -- 例如：`2024-01-01 01:01:01.09`（新增）
     * `yyyy-MM-dd HH:mm:ss.SSS` - 例如：`2024-01-01 01:01:01.009`
     > 以上是 `yyyy-MM-dd [Time]` 系列的格式，还支持以下 7 个系列的，每个系列各 39 种格式，不再详细列举：
-    > * `yyyy-M-dd [Time]` 系列格式
-    > * `yyyy-MM-d [Time]` 系列格式
-    > * `yyyy-M-d [Time]` 系列格式
-    > * `yyyy/MM/dd [Time]` 系列格式
-    > * `yyyy/M/dd [Time]` 系列格式
-    > * `yyyy/MM/d [Time]` 系列格式
-    > * `yyyy/M/d [Time]` 系列格式
+    > * `yyyy-M-dd [Time]` -- 系列格式（新增）
+    > * `yyyy-MM-d [Time]` -- 系列格式（新增）
+    > * `yyyy-M-d [Time]` --- 系列格式（新增）
+    > * `yyyy/MM/dd [Time]` - 系列格式（新增）
+    > * `yyyy/M/dd [Time]` -- 系列格式（新增）
+    > * `yyyy/MM/d [Time]` -- 系列格式（新增）
+    > * `yyyy/M/d [Time]` --- 系列格式（新增）
 
 * Bean Searcher Solon Plugin
   * 优化配置项，支持在 IDEA 内配置提示项功能（前提是安装 Solon 插件）
