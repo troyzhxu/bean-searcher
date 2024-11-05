@@ -11,13 +11,10 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.SignStyle;
 import java.time.temporal.ChronoField;
-import java.time.temporal.TemporalAccessor;
 import java.util.Date;
 import java.util.Objects;
 import java.util.TimeZone;
 import java.util.regex.Pattern;
-
-import static java.time.temporal.ChronoField.EPOCH_DAY;
 
 /**
  * [String | java.util.Date | LocalDate to java.sql.Date] 参数值转换器
@@ -45,55 +42,6 @@ public class DateTimeParamConvertor implements FieldConvertor.ParamConvertor {
                 .appendPattern(".")
                 .appendValue(ChronoField.MILLI_OF_SECOND, 1, 3, SignStyle.NOT_NEGATIVE)
                 .toFormatter();
-
-    public static void main(String[] args) {
-        System.out.println(DATETIME_PATTERN.matcher("2024-11-05 18:14:10.500").matches());
-        System.out.println(DATETIME_PATTERN.matcher("2024-11-05 18:14:10").matches());
-        System.out.println(DATETIME_PATTERN.matcher("2024-11-05 18:14").matches());
-        System.out.println(DATETIME_PATTERN.matcher("2024-11-05 18").matches());
-        System.out.println(DATETIME_PATTERN.matcher("2024-11-05").matches());
-    }
-
-    protected String normalize1(String datetime) {
-        int len = datetime.length();
-        if (len == 4) {
-            return datetime + "-01-01 00:00:00.000";
-        }
-        int spaceIdx = datetime.indexOf(' ');
-        if (spaceIdx < 0) {
-            return datetime + " 00:00:00.000";
-        }
-        int colonIdx1 = datetime.indexOf(':', spaceIdx);
-        if (colonIdx1 < 0) {
-            return datetime + ":00:00.000";
-        }
-        int colonIdx2 = datetime.indexOf(':', colonIdx1);
-        if (colonIdx2 < 0) {
-            return datetime + ":00.000";
-        }
-        if (datetime.indexOf('.', colonIdx2) > 0) {
-            return datetime;
-        }
-        if (len == 19) {
-            return datetime + ".000";
-        }
-        if (len == 16) {
-            return datetime + ":00.000";
-        }
-        if (len == 13) {
-            return datetime + ":00:00.000";
-        }
-        if (len == 10) {
-            return datetime + " 00:00:00.000";
-        }
-        if (len == 7) {
-            return datetime + "-01 00:00:00.000";
-        }
-        if (len == 4) {
-            return datetime + "-01-01 00:00:00.000";
-        }
-        return datetime;
-    }
 
     /**
      * 时区
@@ -140,13 +88,9 @@ public class DateTimeParamConvertor implements FieldConvertor.ParamConvertor {
                 // 处理字符串形式的时间戳
                 return toTargetType(Long.parseLong(str));
             }
-            String strValue = str.replaceAll("/", "-");
-            if (DATETIME_PATTERN.matcher(strValue).matches()) {
-                String datetime = normalize(strValue);
-                TemporalAccessor accessor = FORMATTER.parse(datetime);
-                LocalDateTime dateTime = LocalDate.ofEpochDay(accessor.getLong(EPOCH_DAY))
-                        .atTime(LocalTime.ofSecondOfDay(accessor.getLong(ChronoField.SECOND_OF_DAY)));
-                return toTargetType(dateTime);
+            String datetime = str.replaceAll("/", "-");
+            if (DATETIME_PATTERN.matcher(datetime).matches()) {
+                return toTargetType(LocalDateTime.parse(normalize(datetime), FORMATTER));
             }
             return null;
         }
@@ -190,24 +134,21 @@ public class DateTimeParamConvertor implements FieldConvertor.ParamConvertor {
     }
 
     protected String normalize(String datetime) {
-        int len = datetime.length();
-        if (len == 19) {
-            return datetime + ".000";
-        }
-        if (len == 16) {
-            return datetime + ":00.000";
-        }
-        if (len == 13) {
-            return datetime + ":00:00.000";
-        }
-        if (len == 10) {
+        int spaceIdx = datetime.indexOf(' ');
+        if (spaceIdx < 0) {
             return datetime + " 00:00:00.000";
         }
-        if (len == 7) {
-            return datetime + "-01 00:00:00.000";
+        int colonIdx1 = datetime.indexOf(':', spaceIdx + 1);
+        if (colonIdx1 < 0) {
+            return datetime + ":00:00.000";
         }
-        if (len == 4) {
-            return datetime + "-01-01 00:00:00.000";
+        int colonIdx2 = datetime.indexOf(':', colonIdx1 + 1);
+        if (colonIdx2 < 0) {
+            return datetime + ":00.000";
+        }
+        int dotIdx = datetime.indexOf('.', colonIdx2 + 1);
+        if (dotIdx < 0) {
+            return datetime + ".000";
         }
         return datetime;
     }
