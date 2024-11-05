@@ -11,8 +11,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.SignStyle;
 import java.time.temporal.ChronoField;
-import java.time.temporal.TemporalQueries;
-import java.time.temporal.TemporalQuery;
 import java.util.Date;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -71,10 +69,9 @@ public class DateParamConvertor implements FieldConvertor.ParamConvertor {
             if (StringUtils.isBlank(s)) {
                 return null;
             }
-            TemporalQuery<LocalDate> query = TemporalQueries.localDate();
             Matcher matcher = DATE_PATTERN.matcher(s);
             if (matcher.find()) {
-                return toDate(FORMATTER.parse(matcher.group(), query));
+                return toDate(LocalDate.parse(matcher.group(), FORMATTER));
             }
         }
         if (value instanceof Date) {
