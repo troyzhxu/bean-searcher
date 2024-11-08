@@ -9,10 +9,7 @@ import cn.zhxu.bs.boot.prop.BeanSearcherProperties;
 import cn.zhxu.bs.boot.prop.BeanSearcherSql;
 import cn.zhxu.bs.convertor.*;
 import cn.zhxu.bs.dialect.*;
-import cn.zhxu.bs.filter.ArrayValueParamFilter;
-import cn.zhxu.bs.filter.JsonArrayParamFilter;
-import cn.zhxu.bs.filter.SizeLimitParamFilter;
-import cn.zhxu.bs.filter.SuffixOpParamFilter;
+import cn.zhxu.bs.filter.*;
 import cn.zhxu.bs.group.DefaultGroupResolver;
 import cn.zhxu.bs.group.ExprParser;
 import cn.zhxu.bs.group.GroupPair;
@@ -209,6 +206,14 @@ public class BeanSearcherAutoConfiguration {
     @ConditionalOnProperty(name = "bean-searcher.params.filter.use-suffix-op", havingValue = "true")
     public SuffixOpParamFilter suffixOpParamFilter(FieldOpPool fieldOpPool, BeanSearcherParams config) {
         return new SuffixOpParamFilter(fieldOpPool, config.getSeparator(), config.getOperatorKey());
+    }
+
+    @Bean
+    @Order(400)
+    @ConditionalOnMissingBean(IndexArrayParamFilter.class)
+    @ConditionalOnProperty(name = "bean-searcher.params.filter.use-index-array", havingValue = "true")
+    public IndexArrayParamFilter indexArrayParamFilter(BeanSearcherParams config) {
+        return new IndexArrayParamFilter(config.getSeparator());
     }
 
     @Bean

@@ -3,10 +3,7 @@ package cn.zhxu.bs.solon;
 import cn.zhxu.bs.*;
 import cn.zhxu.bs.convertor.*;
 import cn.zhxu.bs.dialect.*;
-import cn.zhxu.bs.filter.ArrayValueParamFilter;
-import cn.zhxu.bs.filter.JsonArrayParamFilter;
-import cn.zhxu.bs.filter.SizeLimitParamFilter;
-import cn.zhxu.bs.filter.SuffixOpParamFilter;
+import cn.zhxu.bs.filter.*;
 import cn.zhxu.bs.group.DefaultGroupResolver;
 import cn.zhxu.bs.group.ExprParser;
 import cn.zhxu.bs.group.GroupPair;
@@ -90,7 +87,7 @@ public class BeanSearcherConfiguration {
         return new ArrayValueParamFilter(config.getParams().getSeparator());
     }
 
-    @Bean(index = -100)
+    @Bean(index = 200)
     @Condition(onMissingBean = SuffixOpParamFilter.class,
             onProperty = "${bean-searcher.params.filter.use-suffix-op}=true")
     public SuffixOpParamFilter suffixOpParamFilter(FieldOpPool fieldOpPool) {
@@ -98,11 +95,18 @@ public class BeanSearcherConfiguration {
         return new SuffixOpParamFilter(fieldOpPool, params.getSeparator(), params.getOperatorKey());
     }
 
-    @Bean(index = -100)
+    @Bean(index = 300)
     @Condition(onMissingBean = JsonArrayParamFilter.class, onClass = cn.zhxu.xjson.JsonKit.class,
             onProperty = "${bean-searcher.params.filter.use-json-array}=true")
     public JsonArrayParamFilter jsonArrayParamFilter() {
         return new JsonArrayParamFilter(config.getParams().getSeparator());
+    }
+
+    @Bean(index = 400)
+    @Condition(onMissingBean = IndexArrayParamFilter.class,
+            onProperty = "${bean-searcher.params.filter.use-index-array}=true")
+    public IndexArrayParamFilter indexArrayParamFilter(BeanSearcherParams config) {
+        return new IndexArrayParamFilter(config.getSeparator());
     }
 
     @Bean
