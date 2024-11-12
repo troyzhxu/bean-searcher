@@ -6,10 +6,7 @@ import cn.zhxu.bs.ParamResolver;
 import cn.zhxu.bs.convertor.DateParamConvertor;
 import cn.zhxu.bs.convertor.DateTimeParamConvertor;
 import cn.zhxu.bs.convertor.TimeParamConvertor;
-import cn.zhxu.bs.filter.ArrayValueParamFilter;
-import cn.zhxu.bs.filter.JsonArrayParamFilter;
-import cn.zhxu.bs.filter.SizeLimitParamFilter;
-import cn.zhxu.bs.filter.SuffixOpParamFilter;
+import cn.zhxu.bs.filter.*;
 import cn.zhxu.bs.group.DefaultGroupResolver;
 import cn.zhxu.bs.util.MapBuilder;
 import cn.zhxu.bs.util.MapUtils;
@@ -116,6 +113,13 @@ public class BeanSearcherParams {
         private boolean useJsonArray = false;
 
         /**
+         * 是否兼容下标数组格式的参数，默认为 false，用于简化前端传参，例如 age[0]=20 & age[1]=30 将等效于 age-0=20 & age-1=30
+         * @see IndexArrayParamFilter
+         * @since v4.4.0
+         */
+        private boolean useIndexArray = false;
+
+        /**
          * 是否启用后缀运算符，默认为 false，用于简化前端传参，例如 age-gt=25 替代 age=25 & age-op=gt
          * @see SuffixOpParamFilter
          * @since v4.3.0
@@ -150,6 +154,14 @@ public class BeanSearcherParams {
 
         public void setUseJsonArray(boolean useJsonArray) {
             this.useJsonArray = useJsonArray;
+        }
+
+        public boolean isUseIndexArray() {
+            return useIndexArray;
+        }
+
+        public void setUseIndexArray(boolean useIndexArray) {
+            this.useIndexArray = useIndexArray;
         }
 
         public boolean isUseSuffixOp() {
