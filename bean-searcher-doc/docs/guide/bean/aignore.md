@@ -80,7 +80,50 @@ MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
 
 例如你已经在项目中使用了 Jpa，那么你可能希望 Bean Searcher 自动识别 Jpa 的注解。这很简单，如果你使用的是 `bean-searcher-boot-starter` 或 `bean-searcher-solon-plugin` 依赖，则只需声明一个 Bean 即可：
 
-```java
+::: code-group
+```java [v4.3.5+]
+@Bean
+public DbMapping bsJpaDbMapping(BeanSearcherSql config) {
+    var mapping = new DefaultDbMapping() {
+
+        @Override
+        public String toTableName(Class<?> beanClass) {
+            // 识别 JPA 的 @Table 注解
+            var table = beanClass.getAnnotation(javax.persistence.Table.class);
+            if (table != null && StringUtils.notBlank(table.name())) {
+                return table.name();
+            }
+            // 识别 JPA 的 @Entity 注解
+            var entity = beanClass.getAnnotation(javax.persistence.Entity.class);
+            if (entity != null && StringUtils.notBlank(entity.name())) {
+                return entity.name();
+            }
+            return super.toTableName(beanClass);
+        }
+
+        @Override
+        public String toColumnName(BeanField field) {
+            // 识别 JPA 的 @Column 注解
+            var column = field.getAnnotation(javax.persistence.Column.class);
+            if (column != null && StringUtils.notBlank(column.name())) {
+                return column.name();
+            }
+            return super.toColumnName(field);
+        }
+
+    };
+    BeanSearcherSql.DefaultMapping conf = config.getDefaultMapping();
+    mapping.setTablePrefix(conf.getTablePrefix());
+    mapping.setUpperCase(conf.isUpperCase());
+    mapping.setUnderlineCase(conf.isUnderlineCase());
+    mapping.setRedundantSuffixes(conf.getRedundantSuffixes());
+    mapping.setIgnoreFields(conf.getIgnoreFields());
+    mapping.setDefaultInheritType(conf.getInheritType());
+    mapping.setDefaultSortType(conf.getSortType());
+    return mapping;
+}
+```
+```java [v4.3.4-]
 @Bean
 public DbMapping bsJpaDbMapping(BeanSearcherProperties config) {
     var mapping = new DefaultDbMapping() {
@@ -122,5 +165,6 @@ public DbMapping bsJpaDbMapping(BeanSearcherProperties config) {
     return mapping;
 }
 ```
+:::
 
 如果你用的是其它 ORM，则只需要简单修改 `String toTableName(Class<?> beanClass)` 与 `String toColumnName(BeanField field)` 方法里的代码即可。

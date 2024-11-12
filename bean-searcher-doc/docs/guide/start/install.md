@@ -2,37 +2,61 @@
 
 ## Maven
 
-```xml
-<!-- Bean Searcher 核心依赖，任何框架都可使用该依赖 -->
-<dependency>
-    <groupId>cn.zhxu</groupId>
-    <artifactId>bean-searcher</artifactId>
-    <version>4.3.5</version>
-</dependency>
-<!-- SpringBoot / Grails 的项目直接使用以下依赖，更为方便（只添加这一个依赖即可） -->
+::: code-group
+```xml [SpringBoot]
+<!-- SpringBoot / Grails 的项目直接使用以下依赖 -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-boot-starter</artifactId>
     <version>4.3.5</version>
 </dependency>
-<!-- Solon 项目直接使用以下依赖（只添加这一个依赖即可，功能同 bean-searcher-boot-starter） -->
+```
+```xml [Grails]
+<!-- SpringBoot / Grails 的项目直接使用以下依赖 -->
+<dependency>
+    <groupId>cn.zhxu</groupId>
+    <artifactId>bean-searcher-boot-starter</artifactId>
+    <version>4.3.5</version>
+</dependency>
+```
+```xml [Solon]
+<!-- Solon 项目直接使用以下依赖（功能同 bean-searcher-boot-starter） -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-solon-plugin</artifactId>
     <version>4.3.5</version>
 </dependency>
 ```
+```xml [Others]
+<!-- Bean Searcher 核心依赖，任何框架都可使用该依赖 -->
+<dependency>
+    <groupId>cn.zhxu</groupId>
+    <artifactId>bean-searcher</artifactId>
+    <version>4.3.5</version>
+</dependency>
+```
+:::
 
 ## Gradle
 
-```groovy
-// Bean Searcher 核心依赖，任何框架都可使用该依赖
-implementation 'cn.zhxu:bean-searcher:4.3.5'
-// SpringBoot / Grails 项目直接使用以下依赖，更为方便（只添加这一个依赖即可）
+::: code-group
+```groovy [SpringBoot]
+// SpringBoot / Grails 项目直接使用以下依赖
 implementation 'cn.zhxu:bean-searcher-boot-starter:4.3.5'
-// Solon 项目直接使用以下依赖（只添加这一个依赖即可，功能同 bean-searcher-boot-starter）
+```
+```groovy [Grails]
+// SpringBoot / Grails 项目直接使用以下依赖
+implementation 'cn.zhxu:bean-searcher-boot-starter:4.3.5'
+```
+```groovy [Solon]
+// Solon 项目直接使用以下依赖（功能同 bean-searcher-boot-starter）
 implementation 'cn.zhxu:bean-searcher-solon-plugin:4.3.5'
 ```
+```groovy [Others]
+// Bean Searcher 核心依赖，任何框架都可使用该依赖
+implementation 'cn.zhxu:bean-searcher:4.3.5'
+```
+:::
 
 ::: tip 提示
 * 依赖 `bean-searcher-boot-starter` 的 `v3.0.0 ~ v3.0.4` 与 `v3.1.0 ~ v3.1.2` 支持 `spring-boot [v2.0, v3.0)`。其它 `v4.0` 之前的版本支持 `spring-boot [v1.4+, v3.0)`，v4.0 之后的版本支持 `spring-boot v1.4+（包括 spring-boot v3.x）`（兼容范围更广）。
