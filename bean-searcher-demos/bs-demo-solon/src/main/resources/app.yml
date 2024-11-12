@@ -1,6 +1,6 @@
 
 db:
-  jdbcUrl: jdbc:h2:~/test
+  jdbcUrl: jdbc:h2:~/bs-demo-solon
   driverClassName: org.h2.Driver
   username: sa
   password: 123456
