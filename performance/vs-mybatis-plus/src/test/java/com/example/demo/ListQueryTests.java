@@ -16,9 +16,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * List 查询测试
+ */
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class DemoApplicationTests {
+class ListQueryTests {
 
 	@Autowired
 	private BeanSearcher beanSearcher;

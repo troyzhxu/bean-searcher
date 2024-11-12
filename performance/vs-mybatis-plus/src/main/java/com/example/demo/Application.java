@@ -1,10 +1,13 @@
 package com.example.demo;
 
+import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.example.demo.entity.Department;
 import com.example.demo.entity.Gender;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,6 +22,17 @@ public class Application {
     public static void main(String[] args) {
 //        System.out.println(Math.floorDiv(System.currentTimeMillis(), 86400));
         SpringApplication.run(Application.class, args);
+    }
+
+    /**
+     * MyBatis 需要为分页条件插件
+     */
+    @Bean
+    public MybatisPlusInterceptor mybatisPlusInterceptor() {
+        MybatisPlusInterceptor mybatisPlusInterceptor = new MybatisPlusInterceptor();
+        // 分页插件
+        mybatisPlusInterceptor.addInnerInterceptor(new PaginationInnerInterceptor());
+        return mybatisPlusInterceptor;
     }
 
     // 生成数据
