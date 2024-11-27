@@ -63,19 +63,33 @@ public DataSourceProperties orderDsProps() {
     return new DataSourceProperties();
 }
 
+// 注意：上面两个 Bean 的配置并不是必须的！
+// 它们只是为了收集数据源的配置信息，最终目的是为了构建下面的 NamedDataSource 类型的 Bean
+// 如果由于上面这两个 Bean 影响了你系统的正常运行，那你可以选择去掉它们，
+// 使用另外的方式来收集数据源的配置信息，例如：
+// 1、用一个自定义的 DataSourceProperties 类来接受配置信息
+// 2、使用 Environment 对象动态获取配置
+// 3、使用 @Value 注解读取单个配置
+// 4、使用读取文件的方式读取配置
+// 等待
+
 @Bean
 public NamedDataSource userNamedDataSource(@Qualifier("userDsProps") DataSourceProperties dataSourceProperties) {
-    // 根据配置信息构建一个数据源对象
+    // 根据配置信息构建一个数据源 DataSource 对象
+    // 这里为了方便，借用了 DataSourceBuilder 工具，你也可以使用其它的构建方式
     DataSource dataSource = dataSourceProperties.initializeDataSourceBuilder().build();
-    // 具名数据源：cn.zhxu.bs.boot.NamedDataSource（前面只是铺垫，这才是关键步骤）
+    // 具名数据源：cn.zhxu.bs.boot.NamedDataSource
+    // 前面都只是铺垫，这才是关键步骤
     return new NamedDataSource("userDs", dataSource);
 }
 
 @Bean
 public NamedDataSource orderNamedDataSource(@Qualifier("orderDsProps") DataSourceProperties dataSourceProperties) {
-    // 根据配置信息构建一个数据源对象
+    // 根据配置信息构建一个数据源 DataSource 对象
+    // 这里为了方便，借用了 DataSourceBuilder 工具，你也可以使用其它的构建方式
     DataSource dataSource = dataSourceProperties.initializeDataSourceBuilder().build();
-    // 具名数据源：cn.zhxu.bs.boot.NamedDataSource （前面只是铺垫，这才是关键步骤）
+    // 具名数据源：cn.zhxu.bs.boot.NamedDataSource
+    // 前面都只是铺垫，这才是关键步骤
     return new NamedDataSource("orderDs", dataSource);
 }
 ```
