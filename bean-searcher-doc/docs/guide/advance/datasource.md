@@ -71,7 +71,7 @@ public DataSourceProperties orderDsProps() {
 // 2、使用 Environment 对象动态获取配置
 // 3、使用 @Value 注解读取单个配置
 // 4、使用读取文件的方式读取配置
-// 等待
+// ...
 
 @Bean
 public NamedDataSource userNamedDataSource(@Qualifier("userDsProps") DataSourceProperties dataSourceProperties) {
