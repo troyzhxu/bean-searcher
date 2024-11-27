@@ -52,7 +52,7 @@ export default defineConfig({
             base: '/guide/info',
             collapsed: false,
             items: [
-              { text: '什么为用', link: '/why' },
+              { text: '为什么用', link: '/why' },
               { text: 'Bean Searcher', link: '/bean-searcher' },
               { text: 'What\'s New?', link: '/versions' },
             ]
