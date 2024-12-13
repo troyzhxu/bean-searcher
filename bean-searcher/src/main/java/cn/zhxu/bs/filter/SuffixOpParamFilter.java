@@ -3,7 +3,7 @@ package cn.zhxu.bs.filter;
 import cn.zhxu.bs.BeanMeta;
 import cn.zhxu.bs.FieldOpPool;
 import cn.zhxu.bs.ParamFilter;
-
+import cn.zhxu.bs.ParamNames;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -22,19 +22,31 @@ public class SuffixOpParamFilter implements ParamFilter {
     private final FieldOpPool fieldOpPool;
     private final String separator;
     private final String operatorKey;
+    private final String ignoreCaseKey;
+
+    private static final String defaultIgnoreCaseKey = new ParamNames<>().ic();
 
     public SuffixOpParamFilter() {
-        this(FieldOpPool.DEFAULT, "-", "op");
+        this(FieldOpPool.DEFAULT, "-", "op", defaultIgnoreCaseKey);
     }
 
     public SuffixOpParamFilter(String separator, String operatorKey) {
-        this(FieldOpPool.DEFAULT, separator, operatorKey);
+        this(FieldOpPool.DEFAULT, separator, operatorKey, defaultIgnoreCaseKey);
+    }
+
+    public SuffixOpParamFilter(String separator, String operatorKey, String ignoreCaseKey) {
+        this(FieldOpPool.DEFAULT, separator, operatorKey, ignoreCaseKey);
     }
 
     public SuffixOpParamFilter(FieldOpPool fieldOpPool, String separator, String operatorKey) {
+        this(fieldOpPool, separator, operatorKey, defaultIgnoreCaseKey);
+    }
+
+    public SuffixOpParamFilter(FieldOpPool fieldOpPool, String separator, String operatorKey, String ignoreCaseKey) {
         this.fieldOpPool = Objects.requireNonNull(fieldOpPool);
         this.separator = Objects.requireNonNull(separator);
         this.operatorKey = Objects.requireNonNull(operatorKey);
+        this.ignoreCaseKey = Objects.requireNonNull(ignoreCaseKey);
     }
 
     @Override
@@ -49,7 +61,18 @@ public class SuffixOpParamFilter implements ParamFilter {
             if (idx < 1 || idx >= key.length() - 1) {
                 continue;
             }
-            String opName = key.substring(idx + 1);
+
+            String opName = null;
+            String ignoreCase = null;
+            String subKey = key.substring(idx + 1);
+            int secondIdx = subKey.indexOf(separator);
+            if (secondIdx < 1 || secondIdx >= subKey.length() - 1){
+                opName = subKey;
+            }else {
+                opName = subKey.substring(0, secondIdx);
+                ignoreCase = subKey.substring(secondIdx + 1);
+            }
+
             if (fieldOpPool.getFieldOp(opName) == null) {
                 continue;
             }
@@ -67,6 +90,10 @@ public class SuffixOpParamFilter implements ParamFilter {
                 newMap.put(field, value);
             }
             newMap.put(field + separator + operatorKey, opName);
+
+            if (ignoreCaseKey.equals(ignoreCase)){
+                newMap.put(field + separator + ignoreCase, true);
+            }
         }
         if (newMap != null) {
             paraMap.putAll(newMap);
