@@ -4,6 +4,7 @@ import cn.zhxu.bs.FieldConvertor;
 import cn.zhxu.bs.FieldMeta;
 import cn.zhxu.bs.IllegalParamException;
 import cn.zhxu.bs.bean.DbType;
+import cn.zhxu.bs.util.StringUtils;
 
 /**
  * [String | Enum to Number（枚举序号） | String（枚举名）] 参数值转换器
@@ -39,6 +40,10 @@ public class EnumParamConvertor implements FieldConvertor.ParamConvertor {
         }
         if (value instanceof String) {
             String enumValue = value.toString();
+            // fix at v4.3.6
+            if (StringUtils.isBlank(enumValue)) {
+                return null;
+            }
             for (Object v : targetType.getEnumConstants()) {
                 Enum<?> e = (Enum<?>) v;
                 if (e.name().equalsIgnoreCase(enumValue)) {
