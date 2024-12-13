@@ -36,6 +36,10 @@ public class IndexArrayParamFilter implements ParamFilter {
         Map<String, Object> newMap = null;
         for (Map.Entry<String, Object> entry : paraMap.entrySet()) {
             String key = entry.getKey();
+            // 预判断：降低不必要的正则匹配次数
+            if (key == null || key.charAt(key.length() - 1) != ']') {
+                continue;
+            }
             Matcher matcher = KEY_PATTERN.matcher(key);
             if (!matcher.matches()) {
                 continue;
