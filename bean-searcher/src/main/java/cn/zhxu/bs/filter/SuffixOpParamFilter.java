@@ -76,15 +76,13 @@ public class SuffixOpParamFilter implements ParamFilter {
             }
             newMap.put(field + separator + operatorKey, opName);
             // v4.3.6 开始支持形如 name-ct-ic 的参数
-            if (
-                idx2 > 0 && idx2 < key.length() - 1
-                && key.regionMatches(
-                        idx2 + 1,
-                        ignoreCaseKey,
-                        0,
-                        ignoreCaseKey.length()
-                )
-            ) {
+            if (idx2 > 0 && idx2 < key.length() - 1 &&
+                        key.regionMatches(
+                                idx2 + 1,
+                                ignoreCaseKey,
+                                0,
+                                ignoreCaseKey.length()
+                        )) {
                 newMap.put(field + separator + ignoreCaseKey, true);
             }
         }
