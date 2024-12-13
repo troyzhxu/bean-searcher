@@ -4,6 +4,7 @@ import cn.zhxu.bs.BeanMeta;
 import cn.zhxu.bs.IllegalParamException;
 import cn.zhxu.bs.ParamFilter;
 import cn.zhxu.bs.util.MapUtils;
+import cn.zhxu.bs.util.RpcNames;
 
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,7 @@ public class ArrayValueParamFilter implements ParamFilter {
     private final String separator;
 
     public ArrayValueParamFilter() {
-        this("-");
+        this(RpcNames.DEFAULT.separator());
     }
 
     public ArrayValueParamFilter(String separator) {

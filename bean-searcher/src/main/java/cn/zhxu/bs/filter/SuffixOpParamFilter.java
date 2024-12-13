@@ -3,7 +3,8 @@ package cn.zhxu.bs.filter;
 import cn.zhxu.bs.BeanMeta;
 import cn.zhxu.bs.FieldOpPool;
 import cn.zhxu.bs.ParamFilter;
-import cn.zhxu.bs.ParamNames;
+import cn.zhxu.bs.util.RpcNames;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -24,22 +25,12 @@ public class SuffixOpParamFilter implements ParamFilter {
     private final String operatorKey;
     private final String ignoreCaseKey;
 
-    private static final String defaultIgnoreCaseKey = new ParamNames<>().ic();
-
     public SuffixOpParamFilter() {
-        this(FieldOpPool.DEFAULT, "-", "op", defaultIgnoreCaseKey);
-    }
-
-    public SuffixOpParamFilter(String separator, String operatorKey) {
-        this(FieldOpPool.DEFAULT, separator, operatorKey, defaultIgnoreCaseKey);
+        this(FieldOpPool.DEFAULT, RpcNames.DEFAULT.separator(), RpcNames.DEFAULT.op(), RpcNames.DEFAULT.ic());
     }
 
     public SuffixOpParamFilter(String separator, String operatorKey, String ignoreCaseKey) {
         this(FieldOpPool.DEFAULT, separator, operatorKey, ignoreCaseKey);
-    }
-
-    public SuffixOpParamFilter(FieldOpPool fieldOpPool, String separator, String operatorKey) {
-        this(fieldOpPool, separator, operatorKey, defaultIgnoreCaseKey);
     }
 
     public SuffixOpParamFilter(FieldOpPool fieldOpPool, String separator, String operatorKey, String ignoreCaseKey) {

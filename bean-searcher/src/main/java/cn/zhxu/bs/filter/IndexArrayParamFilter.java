@@ -3,6 +3,7 @@ package cn.zhxu.bs.filter;
 import cn.zhxu.bs.BeanMeta;
 import cn.zhxu.bs.IllegalParamException;
 import cn.zhxu.bs.ParamFilter;
+import cn.zhxu.bs.util.RpcNames;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +24,7 @@ public class IndexArrayParamFilter implements ParamFilter {
     private final String separator;
 
     public IndexArrayParamFilter() {
-        this("-");
+        this(RpcNames.DEFAULT.separator());
     }
 
     public IndexArrayParamFilter(String separator) {

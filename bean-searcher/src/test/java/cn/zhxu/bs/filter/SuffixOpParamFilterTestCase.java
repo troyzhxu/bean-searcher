@@ -26,7 +26,7 @@ public class SuffixOpParamFilterTestCase {
 
     @Test
     public void test_02() {
-        SuffixOpParamFilter filter = new SuffixOpParamFilter("_", "op");
+        SuffixOpParamFilter filter = new SuffixOpParamFilter("_", "op", "ic");
         Map<String, Object> params = MapUtils.builder()
                 .put("id_il", "[1,2,3]")
                 .put("age_gt", "30")

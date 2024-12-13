@@ -2,6 +2,7 @@ package cn.zhxu.bs.filter;
 
 import cn.zhxu.bs.BeanMeta;
 import cn.zhxu.bs.ParamFilter;
+import cn.zhxu.bs.util.RpcNames;
 import cn.zhxu.data.Array;
 import cn.zhxu.xjson.JsonKit;
 
@@ -24,7 +25,7 @@ public class JsonArrayParamFilter implements ParamFilter {
     private final String separator;
 
     public JsonArrayParamFilter() {
-        this("-");
+        this(RpcNames.DEFAULT.separator());
     }
 
     public JsonArrayParamFilter(String separator) {
