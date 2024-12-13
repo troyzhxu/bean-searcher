@@ -91,8 +91,8 @@ public class BeanSearcherConfiguration {
     @Condition(onMissingBean = SuffixOpParamFilter.class,
             onProperty = "${bean-searcher.params.filter.use-suffix-op}=true")
     public SuffixOpParamFilter suffixOpParamFilter(FieldOpPool fieldOpPool) {
-        BeanSearcherParams params = config.getParams();
-        return new SuffixOpParamFilter(fieldOpPool, params.getSeparator(), params.getOperatorKey());
+        BeanSearcherParams cfg = config.getParams();
+        return new SuffixOpParamFilter(fieldOpPool, cfg.getSeparator(), cfg.getOperatorKey(), cfg.getIgnoreCaseKey());
     }
 
     @Bean(index = 300)

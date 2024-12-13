@@ -204,8 +204,8 @@ public class BeanSearcherAutoConfiguration {
     @Order(200)
     @ConditionalOnMissingBean(SuffixOpParamFilter.class)
     @ConditionalOnProperty(name = "bean-searcher.params.filter.use-suffix-op", havingValue = "true")
-    public SuffixOpParamFilter suffixOpParamFilter(FieldOpPool fieldOpPool, BeanSearcherParams config) {
-        return new SuffixOpParamFilter(fieldOpPool, config.getSeparator(), config.getOperatorKey());
+    public SuffixOpParamFilter suffixOpParamFilter(FieldOpPool fieldOpPool, BeanSearcherParams cfg) {
+        return new SuffixOpParamFilter(fieldOpPool, cfg.getSeparator(), cfg.getOperatorKey(), cfg.getIgnoreCaseKey());
     }
 
     @Bean
