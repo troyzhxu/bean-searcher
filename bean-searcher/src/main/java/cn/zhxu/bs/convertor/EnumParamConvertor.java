@@ -27,7 +27,6 @@ public class EnumParamConvertor implements FieldConvertor.ParamConvertor {
 
     @Override
     public Object convert(FieldMeta meta, Object value) {
-        Class<?> targetType = meta.getType();
         if (value instanceof Enum<?>) {
             DbType dbType = meta.getDbType();
             if (dbType == DbType.INT) {
@@ -44,7 +43,7 @@ public class EnumParamConvertor implements FieldConvertor.ParamConvertor {
             if (StringUtils.isBlank(enumValue)) {
                 return null;
             }
-            for (Object v : targetType.getEnumConstants()) {
+            for (Object v : meta.getType().getEnumConstants()) {
                 Enum<?> e = (Enum<?>) v;
                 if (e.name().equalsIgnoreCase(enumValue)) {
                     return e.ordinal();
