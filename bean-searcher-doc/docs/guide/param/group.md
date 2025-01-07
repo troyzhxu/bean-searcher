@@ -193,6 +193,7 @@ Map<String, Object> params = MapUtils.builder()
 -|-|-|-
 `bean-searcher.params.group.enable` | 是否开启逻辑分组功能 | `布尔` | `true`
 `bean-searcher.params.group.expr-name` | 逻辑表达式参数名 | `字符串` | `gexpr`
-`bean-searcher.params.group.expr-cache-size` | 表达式解析缓存（个数） | `整型` | `50`
+`bean-searcher.params.group.max-expr-length ` | 组表达式最大长度 | `整型` | `50`
+`bean-searcher.params.group.cache-size` | 表达式解析缓存（个数） | `整型` | `50`
 `bean-searcher.params.group.separator` | 组名分隔符 | `字符串` | `.`
 `bean-searcher.params.group.mergeable` | 组表达式是否可合并 | `布尔` | `true`
