@@ -113,7 +113,7 @@ bean-searcher:
 
 ```java
 @Bean
-public DataSourceDialect userDialect() {
+public DataSourceDialect shopDialect() {
     // shop 数据源使用 MyDialect 自定义方言
     return new DataSourceDialect("shop", new MyDialect());
 }
