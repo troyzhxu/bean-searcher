@@ -9,10 +9,8 @@ import cn.zhxu.xjson.JsonKit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 /**
  * [Json 字符串 to 对象] 字段转换器
@@ -76,12 +74,8 @@ public class JsonFieldConvertor implements FieldConvertor.BFieldConvertor {
     }
 
     protected Object doConvert(FieldMeta meta, String json) {
-        Class<?> type = meta.getType();
-        if (List.class.isAssignableFrom(type)) {
-            Type genericType = meta.getField().getGenericType();
-            return JsonKit.toBean(genericType, json);
-        }
-        return JsonKit.toBean(type, json);
+        Type genericType = meta.getField().getGenericType();
+        return JsonKit.toBean(genericType, json);
     }
 
     public boolean isFailOnError() {

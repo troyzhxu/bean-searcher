@@ -8,10 +8,7 @@ import cn.zhxu.bs.implement.DefaultMetaResolver;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class JsonFieldConvertorTestCase {
 
@@ -23,7 +20,9 @@ public class JsonFieldConvertorTestCase {
     final FieldMeta rolesMeta = beanMeta.requireFieldMeta("roles");
     final FieldMeta kvsMeta = beanMeta.requireFieldMeta("kvs");
     final FieldMeta kvListsMeta = beanMeta.requireFieldMeta("kvLists");
-
+    final FieldMeta mapArrMeta = beanMeta.requireFieldMeta("mapArr");
+    final FieldMeta mapListMeta = beanMeta.requireFieldMeta("mapList");
+    final FieldMeta mapKvMeta = beanMeta.requireFieldMeta("mapKv");
 
     static class User {
 
@@ -38,6 +37,15 @@ public class JsonFieldConvertorTestCase {
 
         @DbField(type = DbType.JSON)
         private List<List<KV<String, Integer>>> kvLists;
+
+        @DbField(type = DbType.JSON)
+        private Map<String, Integer[]> mapArr;
+
+        @DbField(type = DbType.JSON)
+        private Map<String, List<Integer>> mapList;
+
+        @DbField(type = DbType.JSON)
+        private Map<String, KV<String, Integer>> mapKv;
 
     }
 
@@ -94,6 +102,9 @@ public class JsonFieldConvertorTestCase {
         test_supports(rolesMeta);
         test_supports(kvsMeta);
         test_supports(kvListsMeta);
+        test_supports(mapArrMeta);
+        test_supports(mapListMeta);
+        test_supports(mapKvMeta);
         System.out.println("\ttest_support ok!");
     }
 
@@ -167,6 +178,54 @@ public class JsonFieldConvertorTestCase {
         ));
         assertKvList(list.get(1), Collections.singletonList(new KV<>("idx", 52)));
         System.out.println("\ttest_convert_kvLists ok!");
+    }
+
+    @Test
+    public void test_convert_map_arr() {
+        String value = "{\"ids\":[1,2],\"ages\":[20,30]}";
+        Object results = convertor.convert(mapArrMeta, value);
+        Assertions.assertNotNull(results);
+        Assertions.assertTrue(Map.class.isAssignableFrom(results.getClass()));
+        Map<?, ?> map = (Map<?, ?>) results;
+        Assertions.assertEquals(2, map.size());
+        assertIntArray(map.get("ids"), 1, 2);
+        assertIntArray(map.get("ages"), 20, 30);
+    }
+
+    private void assertIntArray(Object array, Object... expects) {
+        Assertions.assertTrue(array.getClass().isArray());
+        Assertions.assertInstanceOf(Integer[].class, array);
+        Integer[] integers = (Integer[]) array;
+        Assertions.assertArrayEquals(expects, integers);
+    }
+
+    @Test
+    public void test_convert_map_list() {
+        String value = "{\"ids\":[1,2],\"ages\":[20,30]}";
+        Object results = convertor.convert(mapListMeta, value);
+        Assertions.assertNotNull(results);
+        Assertions.assertTrue(Map.class.isAssignableFrom(results.getClass()));
+        Map<?, ?> map = (Map<?, ?>) results;
+        Assertions.assertEquals(2, map.size());
+        assertIntList(map.get("ids"), 1, 2);
+        assertIntList(map.get("ages"), 20, 30);
+    }
+
+    private void assertIntList(Object array, Object... expects) {
+        Assertions.assertInstanceOf(List.class, array);
+        List<Integer> list =  (List<Integer>) array;
+        Assertions.assertArrayEquals(expects, list.toArray());
+    }
+
+    @Test
+    public void test_convert_map_kv() {
+        String value = "{\"kk\":{\"k\":\"id\",\"v\":110}}";
+        Object results = convertor.convert(mapKvMeta, value);
+        Assertions.assertNotNull(results);
+        Assertions.assertTrue(Map.class.isAssignableFrom(results.getClass()));
+        Map<?, ?> map = (Map<?, ?>) results;
+        Assertions.assertEquals(1, map.size());
+        Assertions.assertEquals(new KV<>("id", 110), map.get("kk"));
     }
 
 }
