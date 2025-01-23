@@ -108,3 +108,13 @@ bean-searcher:
       # order 数据源使用 PostgreSQL 方言
       order: PostgreSQL
 ```
+
+以上指定的方言都是框架自带的方言，你也可以自定义方言，并用如下方法配置某个数据源使用自定义方言：
+
+```java
+@Bean
+public DataSourceDialect userDialect() {
+    // shop 数据源使用 MyDialect 自定义方言
+    return new DataSourceDialect("shop", new MyDialect());
+}
+```

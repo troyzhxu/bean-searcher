@@ -28,6 +28,8 @@
   * 修复 `DefaultGroupResolver` 的默认 `LRUCache` 缓存没有遵循访问顺序规则的问题（since v4.3.3）
   * 增强 `DateParamConvertor`，同时支持 `yyyy-MM-dd`、`yyyy-M-dd`、`yyyy-MM-d`、`yyyy-M-d`、`yyyy/MM/dd`、`yyyy/M/dd`、`yyyy/MM/d`、`yyyy/M/d` 格式的参数值，例如：`2024-01-01`、`2024-1-01`、`2024-01-1`、`2024-1-1`、`2024/01/01`、`2024/1/01`、`2024/01/1`、`2024/1/1`（since v4.3.5）
   * 增强 `DateTimeParamConvertor`，使其支持满足 `[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}(?: [0-9]{1,2}(?::[0-9]{1,2}(?::[0-9]{1,2}(?:\.[0-9]{1,3})?)?)?)?` 正则表达式下的所有格式的日期时间参数值（since v4.3.5）
+  * 增强 `JsonFieldConvertor`: 使支持所有复合泛型的转换（since v4.3.6）
+  * 修复 `EnumParamConvertor`: 不兼容空字符串参数的问题
   * 升级 Junit -> 5.10.2 并完善单元测试
 * Bean Searcher Boot Starter
   * 新增配置项 `bean-searcher.params.group.mergeable` 指定组表达式是否可合并，默认 `true`
