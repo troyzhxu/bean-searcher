@@ -14,4 +14,10 @@ public interface MetaResolver {
      * */
     <T> BeanMeta<T> resolve(Class<T> beanClass);
 
+    /**
+     * 清除缓存
+     * @since v4.4.0
+     */
+    void clearCache();
+
 }

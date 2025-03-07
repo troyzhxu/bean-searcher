@@ -49,6 +49,13 @@ public class DefaultMetaResolver implements MetaResolver {
         }
     }
 
+    @Override
+    public void clearCache() {
+        synchronized (cache) {
+            cache.clear();
+        }
+    }
+
     public static class FieldWrapper {
 
         public final Field field;
