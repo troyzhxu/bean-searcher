@@ -15,7 +15,7 @@
 
 	<modules>
 		<module>bean-searcher</module>
-		<module>bean-searcher-dict</module>
+		<module>bean-searcher-label</module>
 		<module>bean-searcher-boot-starter</module>
 		<module>bean-searcher-solon-plugin</module>
 	</modules>

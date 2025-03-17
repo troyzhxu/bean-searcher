@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<name>Bean Searcher</name>
-	<artifactId>bean-searcher-dict</artifactId>
+	<artifactId>bean-searcher-label</artifactId>
 	<packaging>jar</packaging>
 
 	<parent>
@@ -15,6 +15,11 @@
 	</parent>
 
 	<dependencies>
+		<dependency>
+			<groupId>cn.zhxu</groupId>
+			<artifactId>bean-searcher</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
