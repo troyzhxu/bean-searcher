@@ -4,6 +4,7 @@ import cn.zhxu.bs.DbMapping;
 import cn.zhxu.bs.FieldOp;
 import cn.zhxu.bs.SearchException;
 import cn.zhxu.bs.bean.*;
+import cn.zhxu.bs.util.AnnoUtils;
 import cn.zhxu.bs.util.StringUtils;
 
 import java.lang.annotation.Annotation;
@@ -140,7 +141,7 @@ public class DefaultDbMapping implements DbMapping {
             }
             @Override
             public <T extends Annotation> T getAnnotation(Class<T> annotationClass) {
-                return field.getAnnotation(annotationClass);
+                return AnnoUtils.getAnnotation(field, annotationClass);
             }
             @Override
             public Class<?> getDeclaringClass() {
