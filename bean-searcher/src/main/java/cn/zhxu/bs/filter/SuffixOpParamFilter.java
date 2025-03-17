@@ -14,7 +14,7 @@ import java.util.Objects;
  * <pre>{@code age-gt=25 替代 age=25 & age-op=gt }</pre>
  * 如果与 {@link JsonArrayParamFilter } 一起使用，则本过滤器需要放在它的前面，才能支持
  * <pre>{@code age-bt=[20,30] }</pre>
- * v4.3.6 开始支持 <pre>{@code name-ct-ic=xxx }</pre> 的用法
+ * v4.4.0 开始支持 <pre>{@code name-ct-ic=xxx }</pre> 的用法
  * 这样的用法
  * @author Troy.Zhou @ 2024-06-07
  * @since v4.3

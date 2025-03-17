@@ -9,12 +9,13 @@
 
 	<groupId>cn.zhxu</groupId>
 	<artifactId>bean-searcher-parent</artifactId>
-	<version>4.3.6</version>
+	<version>4.4.0</version>
 
 	<packaging>pom</packaging>
 
 	<modules>
 		<module>bean-searcher</module>
+		<module>bean-searcher-dict</module>
 		<module>bean-searcher-boot-starter</module>
 		<module>bean-searcher-solon-plugin</module>
 	</modules>
@@ -50,7 +51,7 @@
 		<connection>scm:git:https://github.com/troyzhxu/bean-searcher.git</connection>
 		<developerConnection>scm:git:https://github.com/troyzhxu/bean-searcher.git</developerConnection>
 		<url>https://github.com/troyzhxu/bean-searcher</url>
-		<tag>v4.3.6</tag>
+		<tag>v4.4.0</tag>
 	</scm>
 
 	<dependencies>
