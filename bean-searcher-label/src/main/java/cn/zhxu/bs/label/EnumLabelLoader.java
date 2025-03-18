@@ -35,7 +35,8 @@ public class EnumLabelLoader implements LabelLoader<Enum<?>> {
                     Function<Enum<?>, String> fun = labelFunMap.get(e.getClass());
                     String label = fun != null ? fun.apply(e) : null;
                     return label != null ? new Label<>(e, label) : null;
-                }).filter(Objects::nonNull)
+                })
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 
