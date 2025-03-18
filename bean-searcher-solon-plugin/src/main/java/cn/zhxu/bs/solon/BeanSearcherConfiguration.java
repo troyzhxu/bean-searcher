@@ -221,13 +221,17 @@ public class BeanSearcherConfiguration {
         return new DefaultBeanReflector();
     }
 
+    /**
+     * solon v3.1.0 版本
+     * 参数类型 LabelLoader 后不能加 < ? >, 否则会加载不到
+     */
     @Bean
     @Condition(onMissingBean = LabelResultFilter.class, onClass = LabelResultFilter.class)
-    public ResultFilter labelResultFilter(List<LabelLoader<?>> labelLoaders) {
+    public ResultFilter labelResultFilter(List<LabelLoader> labelLoaders) {
         if (labelLoaders == null) {
             return new LabelResultFilter();
         }
-        return new LabelResultFilter(labelLoaders);
+        return new LabelResultFilter((List<LabelLoader<?>>) (List<?>) labelLoaders);
     }
 
     @Bean
