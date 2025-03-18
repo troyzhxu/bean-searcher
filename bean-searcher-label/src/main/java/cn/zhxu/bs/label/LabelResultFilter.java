@@ -28,7 +28,7 @@ public class LabelResultFilter implements ResultFilter {
     }
 
     public LabelResultFilter(List<LabelLoader<?>> labelLoaders) {
-        this.labelLoaders = Objects.requireNonNull(labelLoaders);
+        this.labelLoaders = new ArrayList<>(labelLoaders);
     }
 
     @Override
