@@ -1,35 +1,38 @@
 # v4.4.0 @ Next
 
-## Bean Searcher
-  - ✨ 新增 `IndexArrayParamFilter`: 支持解析形如 `key[0]=v1 & key[1]=v2` 的参数
-  - ✨ 增强 `SuffixOpParamFilter`: 使支持将 是否忽略大小写 也合并到一个参数中，例如：`name-ct-ic=xxx`
-  - ✨ 增强 `MetaResolver`: 新增 `clearCache()` 方法，用于手动清除 `BeanMeta` 缓存
-  - ✨ 增强 `@DbIgnore`: 支持标注其它自定义注解，使其具有 `@DbIgnore` 的功能
-  - ✨ 新增 `AnnoUtils`: 可用于解析组合注解
-## Bean Searcher Label（首发）
-  - ✨ 提供 `@LabelFor` 注解，该注解继承自 `@DbIgnore`，可用于标注并解析 Label 字段（例如：将 `statusName` 字段标记为 `status` 的 Label）
-  - ✨ 提供 `LabelLoader` 接口，可用于加载自定义的 Label
-## Bean Searcher Boot Starter
-  - ✨ 新增配置项 `bean-searcher.params.filter.use-index-array` 用于控制是否启用 `IndexArrayParamFilter`，默认 `true`
-  - ✨ 新增 Bean Searcher Label 的自动化配置
-## Bean Searcher Solon Plugin
-  - ✨ 新增配置项 `bean-searcher.params.filter.use-index-array` 用于控制是否启用 `IndexArrayParamFilter`，默认 `true`
-  - ✨ 新增 Bean Searcher Label 的自动化配置
+## ✨ Features
+
+* Bean Searcher
+  - 新增 `IndexArrayParamFilter`: 支持解析形如 `key[0]=v1 & key[1]=v2` 的参数
+  - 增强 `SuffixOpParamFilter`: 使支持将 是否忽略大小写 也合并到一个参数中，例如：`name-ct-ic=xxx`
+  - 增强 `MetaResolver`: 新增 `clearCache()` 方法，用于手动清除 `BeanMeta` 缓存
+  - 增强 `@DbIgnore`: 支持标注其它自定义注解，使其具有 `@DbIgnore` 的功能
+  - 新增 `AnnoUtils`: 可用于解析组合注解
+* Bean Searcher Label（**首发**）
+  - 提供 `@LabelFor` 注解，该注解继承自 `@DbIgnore`，可用于标注并解析 Label 字段（例如：将 `statusName` 字段标记为 `status` 的 Label）
+  - 提供 `LabelLoader` 接口，可用于加载自定义的 Label
+  - 提供 `EnumLabelLoader` 实现，用于加载枚举的 Label
+* Bean Searcher Boot Starter
+  - 新增配置项 `bean-searcher.params.filter.use-index-array` 用于控制是否启用 `IndexArrayParamFilter`，默认 `true`
+  - 新增 Bean Searcher Label 的自动化配置
+* Bean Searcher Solon Plugin
+  - 新增配置项 `bean-searcher.params.filter.use-index-array` 用于控制是否启用 `IndexArrayParamFilter`，默认 `true`
+  - 新增 Bean Searcher Label 的自动化配置
   - 🌻 升级 Solon 到 3.1.0
 
 # v4.3.6 @ 2025-01-23
 
-### 🌻 Better
+## 🌻 Better
 
 * 增强 `JsonFieldConvertor`: 使支持所有复合泛型的转换
 
-### 🐛 Bug Fixes
+## 🐛 Bug Fixes
 
 * 修复：`EnumParamConvertor`: 不兼容空字符串参数的问题
 
 # v4.3.5 @ 2024-11-06
 
-### ✨ Features
+## ✨ Features
 
 * Bean Searcher
   * 增强 `DateParamConvertor`，使同时支持以下 8 种格式的 `Date` 参数值：
@@ -93,14 +96,14 @@
 * Bean Searcher Solon Plugin
   * 优化配置项，支持在 IDEA 内配置提示项功能（前提是安装 Solon 插件）
 
-### 🐛 Bug Fixes
+## 🐛 Bug Fixes
 
 * Bean Searcher Boot Starter
   * 修复在 `v4.3.4` 版本后出现的在 IDEA 内配置项提示功能失效的问题：https://gitee.com/troyzhxu/bean-searcher/issues/IB1Y6M
 
 # v4.3.4 @ 2024-10-22
 
-### ✨ Features
+## ✨ Features
 
 * Bean Searcher
   * 新增：`OracleTimestampFieldConvertor`, 用于兼容 Oracle 的 `TIMESTAMP` 字段。
@@ -136,23 +139,23 @@
 
 # v4.3.3 @ 2024-10-08
 
-### ✨ Features
+## ✨ Features
 
 * 优化：`BeanMeta` 可保持检索实体类中的字段声明顺序（即条件生成顺序）
 * 优化：`DefaultParamResolver` 提升 `extractFieldParams(..)` 方法的权限，可供子类重写，便于用户自定义
 * 优化：`DefaultMetaResolver`: 抽取 `createBeanMeta(..)` 方法，便于用户自定义 `BeanMeta` 子类
 
-### 🐛 Bug Fixes
+## 🐛 Bug Fixes
 
 * 修复：`DefaultGroupResolver` 的默认 `LRUCache` 缓存没有遵循访问顺序规则的问题 
 
-### 🌻 Better
+## 🌻 Better
 
 * 升级 Solon -> 2.9.4
 
 # v4.3.2 @ 2024-09-09
 
-### ✨ Features
+## ✨ Features
 
 * Bean Searcher
   * 增强 `DateTimeParamConvertor`: 使支持整型的时间戳参数值
@@ -165,20 +168,20 @@
 
 # v4.3.1 @ 2024-08-24
 
-### 🌻 Better
+## 🌻 Better
 
 * 类 `SearchResult` 新增 `empty()` 方法
 * 类 `RpcNames` 新增 `newNames()` 替代原来的 `newConfig()` 方法
 * 参数构建器的 `buildForRpc()` 方法，提升一点性能
 * 依赖升级：`junit -> 5.10.3`, `slf4j -> 2.0.16`, `solon -> 2.9.0`
 
-### 🐛 Bug Fixes
+## 🐛 Bug Fixes
 
 * 修复 `JsonFieldConvertor` 在转换形如 `List<A<B>>` 的复杂 List 泛型时会报错的问题: https://github.com/troyzhxu/bean-searcher/issues/99
 
 # v4.3.0 @ 2024-06-10
 
-### ✨ Features
+## ✨ Features
 
 * Bean Searcher
   * 优化 `BeanMeta`: 新增 `getSqlSnippets()` 方法，用户可以使用该方法获取该实体类上所有已解析的 SQL 片段
@@ -210,24 +213,24 @@
   * 新增配置项 `bean-searcher.params.filter.use-json-array` 是否启用 `JsonArrayParamFilter`, 默认 `false`
   * 支持以 Bean 的形式自定义 `JoinParaSerializer` 组件
 
-### 🌻 Better
+## 🌻 Better
 
 * 升级 Junit -> 5.10.2
 * 升级 Solon -> 2.8.3
 
 # v4.2.9 @ 2024-04-25
 
-### 🌻 Better
+## 🌻 Better
 
 * 增强 `JsonFieldConvertor`，兼容 DB 返回的 `byte[]` 类型的字段（例如 H2 的 `JSON` 字段）
 
 # v4.2.8 @ 2024-04-24
 
-### 🐛 Bug Fixes
+## 🐛 Bug Fixes
 
 * 修复在 PgSQL 数据库上，使用字段参数动态生成 `having` 条件并且该条件字段在 `select` 列表中时，生成的 `having` 条件含有别名的问题（这个语法特性在 MySQL 上支持，PgSQL 上不支持）。
 
-### 🌻 Better
+## 🌻 Better
 
 * 优化 `ListFieldConvertor` 的字段匹配条件：未指定 `dbType` 的 `List` 字段
 * 优化 `bean-searcher-solon-plugin` 组件支持零配置使用
@@ -238,22 +241,22 @@
 
 # v4.2.7 @ 2024-01-16
 
-### 🐛 Bug Fixes
+## 🐛 Bug Fixes
 
 * 修复：使用 `@SearchBean.fields` 时，某些情况下会出现 `NullPointerException` 的问题
 
-### 🌻 Better
+## 🌻 Better
 
 * 升级 solon -> 2.6.5
 * 升级 slf4j-api -> 2.0.11
 
 # v4.2.6 @ 2024-01-08
 
-### ✨ Features
+## ✨ Features
 
 * 增强 `JsonFieldConvertor`：使支持复杂 `JSON` 数组到泛型 `List<T>` 的字段转换
 
-### 🌻 Better
+## 🌻 Better
 
 * 升级 solon -> 2.6.4
 * 升级 spring-boot -> 3.2.1
@@ -261,12 +264,12 @@
 
 # v4.2.5 @ 2023-12-13
 
-### 🐛 Bug Fixes
+## 🐛 Bug Fixes
 
 * 修复当默认排序字段 `@SearchBean.orderBy` 仅为一个拼接参数，且查询时未传任何参数时，仍然生成 `order by` 子句的问题。
   https://gitee.com/troyzhxu/bean-searcher/issues/I8NT9X
 
-### 🌻 Better
+## 🌻 Better
 
 * 升级 spring-boot -> 3.1.6
 * 升级 solon -> 2.6.2
@@ -281,7 +284,7 @@
 
 # v4.2.3 @ 2023-08-02
 
-### ✨ Features
+## ✨ Features
 
 * Bean Searcher
   * 增强 `BaseSearcher`，新增 `failOnParamError` 属性，可配置当参数错误时是否向外抛出异常，默认 `false`
@@ -299,13 +302,13 @@
   * 新增配置项 `bean-searcher.params.convertor.date-time-target`
   * 新增配置项 `bean-searcher.params.convertor.time-target`
 
-### 🐛 Bug Fixes
+## 🐛 Bug Fixes
 
 * Bean Searcher
   * 修复：实体类字段类型是整形，参数传字母时会报 `IllegalArqumentException` 的问题
   * 修复：逻辑分组在某些情况下会丢失部分条件的问题：https://gitee.com/troyzhxu/bean-searcher/issues/I7PZQ1
 
-### 🌻 Better
+## 🌻 Better
 
 * 升级 Solon -> v2.4.1
 * 升级 SpringBoot -> v3.1.2
@@ -317,7 +320,7 @@
 
 # v4.2.1 @ 2023-07-13
 
-### ✨ Features
+## ✨ Features
 
 * Bean Searcher
   * 增强：`DateFieldConvertor` 支持 `Instant` 类型的转换：https://gitee.com/troyzhxu/bean-searcher/pulls/9
@@ -328,7 +331,7 @@
 * Bean Searcher Solon Plugin
   * 自动配置 `EnumParamConvertor`
 
-### 🐛 Bug Fixes
+## 🐛 Bug Fixes
 
 * Bean Searcher
   * 修复使用动态方言时，默认方言不能用的问题
@@ -337,14 +340,14 @@
 * Bean Searcher Solon Plugin
   * 修复 动态方言 不能自动化配置的问题
 
-### 🌻 Better
+## 🌻 Better
 
 * 升级 Solon -> v2.3.8
 * 升级 SpringBoot -> v3.1.1
 
 # v4.2.0 @ 2023-05-08
 
-### ✨ Features
+## ✨ Features
 
 * Bean Searcher
   * 新增 `DynamicDialect` 与 `DynamicDialectSupport` 类，用于支持动态方言
@@ -361,26 +364,26 @@
   * 当启用动态数据源时，支持以 `DataSourceDialect` 注入 Bean 的方式添加数据源与方言的映射关系
   * 升级 `solon` -> `2.2.17`
 
-### 🐛 Bug Fixes
+## 🐛 Bug Fixes
 
 * 自定义 Equal 运算符不默认的问题：https://github.com/troyzhxu/bean-searcher/issues/73
 
 # v4.1.2 & v4.0.2 @ 2023-03-09
 
-### 🌻 Better
+## 🌻 Better
 
 * 提升 `DefaultSqlExecutor` 的执行性能
 
 # v4.1.1 @ 2023-03-06
 
-### 🌻 Better
+## 🌻 Better
 
 * 优化 `SearchBean` 校验
 * 优化 `DefaultDbMapping.BeanField` 的访问权限
 
 # v4.1.0 @ 2023-03-03
 
-### ✨ Features
+## ✨ Features
 
 * Bean Searcher
   * 优化：`@DbField.type` 为 `UNKNOWN` 时，也支持使用 `ParamConvertor` 进行参数值转换
@@ -407,31 +410,31 @@ Thank you to all the contributors who worked on this release:
 
 # v4.0.1 @ 2023-02-25
 
-### ✨ Features
+## ✨ Features
 
 * Bean Searcher
   * 增强 `JsonFieldConvertor` 字段转换器，新增 `failOnError` 字段，可配置遇到某些值 JSON 解析异常时，是否自动捕获（即忽略）
 * Bean Searcher Boot Starter
   * 新增 `bean-searcher.field-convertor.json-fail-on-error` 配置项，表示是当 JSON 解析错误时，是否抛出异常，默认 `true`
 
-### 🐛 Bug Fixes
+## 🐛 Bug Fixes
 
 * Bean Searcher Boot Starter
   * 修复 未添加 [`xjsonkit`](https://gitee.com/troyzhxu/xjsonkit) 相关依赖时，会启动报错的问题：https://gitee.com/troyzhxu/bean-searcher/issues/I6F4LS
 
 # v4.0.0 @ 2023-01-31
 
-### ✨ Features
+## ✨ Features
 
 * 重构 `cn.zhxu.bs.param.Operator` -> `cn.zhxu.bs.FieldOps`
 
-### 🐛 Bug Fixes
+## 🐛 Bug Fixes
 
 * 修正 `MapUtils.of(..)` 为 `static` 方法。
 
 # v4.0.0.alpha3 @ 2023-01-29
 
-### ✨ Features
+## ✨ Features
 
 * Bean Searcher
   * 新增 `JsonFieldConvertor` 字段转换器，配合 `@DbField(type = DbType.JSON)` 可支持 JSON 字段自动转对象，需要添加 JSON 依赖（以下依赖任性一个即可）：
@@ -457,7 +460,7 @@ Thank you to all the contributors who worked on this release:
 
 # v4.0.0.alpha2 @ 2022-12-02
 
-### ✨ Features
+## ✨ Features
 
 * Bean Searcher
   * 移除 Searcher 接口内的 search()、searchFirst()、searchList() 与 searchAll() 方法
@@ -478,7 +481,7 @@ Thank you to all the contributors who worked on this release:
 
 # v4.0.0.alpha1 @ 2022-12-01
 
-### ✨ Features
+## ✨ Features
 
 * Bean Searcher
   * Maven 坐标 groupId 变更 -> `cn.zhxu`
@@ -497,7 +500,7 @@ Thank you to all the contributors who worked on this release:
 
 # v3.8.1 @ 2022-08-23
 
-### ✨ Features
+## ✨ Features
 
 * Bean Searcher
   * 新增：分页大深度保护，默认最大允许分页偏移 `20000` 条
@@ -518,7 +521,7 @@ Thank you to all the contributors who worked on this release:
 
 # v3.8.0 @ 2022-07-23
 
-### ✨ Features
+## ✨ Features
 
 * Bean Searcher
   * 增强 `@SearchBean` 注解：新增 `having` 属性，用于指定分组条件
@@ -545,7 +548,7 @@ Thank you to all the contributors who worked on this release:
 
 # v3.7.1 @ 2022-06-22
 
-### 🌻 Better
+## 🌻 Better
 
 * Bean Searcher
   * 优化 `参数构建器`：新增 `orderBy(FieldFn<T, ?> fieldFn)`、`orderBy(String fieldName)`、`asc()` 与 `desc()` 方法
@@ -555,7 +558,7 @@ Thank you to all the contributors who worked on this release:
 
 # v3.7.0 @ 2022-06-04
 
-### ✨ Features
+## ✨ Features
 
 * Bean Searcher
   * 新增 `SqlServerDialect` 方言实现，支持 SqlServer 2012+
@@ -584,30 +587,30 @@ Thank you to all the contributors who worked on this release:
 
 # v3.6.3 v3.5.5 @ 2022-05-11
 
-### 🐛 Bug Fixes
+## 🐛 Bug Fixes
 
 * 修复 JDK8 上当实体类有 `LocalDate` 类型的字段时会报 `NoSuchMethodError` 的问题: https://github.com/troyzhxu/bean-searcher/issues/43
 
 # v3.6.2 @ 2022-05-11
 
-### 🌻 Better
+## 🌻 Better
 
 * Bean Searcher Boot Starter: 升级 `spring-boot -> 2.6.7`
 
 # v3.5.4 @ 2022-05-11
 
-### 🌻 Better
+## 🌻 Better
 
 * Bean Searcher Boot Starter: 升级 `spring-boot -> 2.6.7`
 
-### 🐛 Bug Fixes
+## 🐛 Bug Fixes
 
 * 修复：当实体类 `@SearchBean` 注解内指定 `groupBy` 属性时，不支持 字段求和 的问题
 * 修复 `MapUtils.builder(..)` 的 `page(..)` 与 `limit(..)` 方法不受 `max-allowed-size` 配置约束的问题
 
 # v3.6.1 @ 2022-05-09
 
-### ✨ Features
+## ✨ Features
 
 * Bean Searcher
   * 新增 `BoolNumFieldConvertor` 字段转换器：支持 `Boolean -> Number` 方向的转换
@@ -615,13 +618,13 @@ Thank you to all the contributors who worked on this release:
 * Bean Searcher Boot Starter
   * 新增 `bean-searcher.field-convertor.use-bool-num` 配置键，可自动配置 `BoolNumFieldConvertor`，默认为 `true`
 
-### 🐛 Bug Fixes
+## 🐛 Bug Fixes
 
 * 修复 `MapUtils.builder(..)` 的 `page(..)` 与 `limit(..)` 方法不受 `max-allowed-size` 配置约束的问题
 
 # v3.6.0 @ 2022-04-21
 
-### ✨ Features
+## ✨ Features
 
 * Bean Searcher
   * 实体类 `@SearchBean` 注解内的 SQL 片段支持 `:` 的转义处理：`\\:`
@@ -646,38 +649,38 @@ Thank you to all the contributors who worked on this release:
 
 # v3.5.3 @ 2022-04-06
 
-### 🌻 Better
+## 🌻 Better
 
 * Bean Searcher Boot Starter: 升级 spring-boot -> 2.6.6
 
-### 🐛 Bug Fixes
+## 🐛 Bug Fixes
 
 * 修复：对于 `Boolean` 类型的字段，当检索时该字段传入的参数值为 `空串` 时，`BoolValueFilter` 会将其转换为 `true` 的问题：https://github.com/troyzhxu/bean-searcher/issues/29
 
 # v3.5.2 @ 2022-03-17
 
-### ✨ Features
+## ✨ Features
 
 * Bean Searcher: 参数构建器新增 `field(FieldFn<T, ?> fieldFn, Collection<?> values)` 与 `field(String fieldName, Collection<?> values)` 方法，支持字段值集合参数
 
-### 🌻 Better
+## 🌻 Better
 
 * Bean Searcher Boot Starter: 升级 spring-boot -> 2.6.4
 
-### 🐛 Bug Fixes
+## 🐛 Bug Fixes
 
 * 修复当排序字段不在 SELECT 子句中时 ORDER BY 子句仍然会使用该字段的别名的问题
 
 # v3.5.1 @ 2022-02-24
 
-### 🌻 Better
+## 🌻 Better
 
 * 强化对复杂逻辑表达式的简化能力
 * 升级 slf4j-api -> 1.7.36
 
 # v3.5.0 @ 2022-02-23
 
-### ✨ Features
+## ✨ Features
 
 * Bean Searcher
   * 新增 `GroupResolver`、`ExprParser` 等组件，实现参数分组与逻辑关系的表达、运算、智能化简与解析的能力
@@ -695,25 +698,25 @@ Thank you to all the contributors who worked on this release:
 
 # v3.4.3 @ 2022-02-21
 
-### 🐛 Bug Fixes
+## 🐛 Bug Fixes
 
 * 修复 `StartWith` 运算符不后模糊匹配的问题（该 BUG 在 `v3.4.2` 中滋生）
 
 # v3.4.2 @ 2022-02-18
 
-### 🌻 Better
+## 🌻 Better
 
 * 带嵌入参数的字段也能参与过滤条件
 * 带嵌入参数的字段也能参与字段统计
 
 # v3.4.1 @ 2022-02-11
 
-### 🌻 Better
+## 🌻 Better
 
 * Bean Searcher
   * 优化 SQL 生成逻辑：当 `@SearchBean` 注解的 `joinCond` 属性只有一个拼接参数 且 该参数值为空时，则使其不参与 `where` 子句
 
-### 🐛 Bug Fixes
+## 🐛 Bug Fixes
 
 * 修复 `DateFieldConvertor` 无法将 `java.sql.Date` 转换为 `LocalDate / LocalDateTime` 的问题
 * 修复 `DateFieldConvertor` 转换 `LocalDate / LocalDateTime` 时会产生时区偏差的问题
@@ -721,7 +724,7 @@ Thank you to all the contributors who worked on this release:
 
 # v3.3.3 @ 2022-02-11
 
-### 🌻 Better
+## 🌻 Better
 
 * Bean Searcher
   * bump slf4j-api from 1.7.32 to 1.7.35
@@ -731,7 +734,7 @@ Thank you to all the contributors who worked on this release:
   * bump spring-boot from 2.6.2 to 2.6.3
   * 去掉无用的配置提示
 
-### 🐛 Bug Fixes
+## 🐛 Bug Fixes
 
 * 修复 `DateFieldConvertor` 无法将 `java.sql.Date` 转换为 `LocalDate / LocalDateTime` 的问题
 * 修复 `DateFieldConvertor` 转换 `LocalDate / LocalDateTime` 时会产生时区偏差的问题
@@ -739,12 +742,12 @@ Thank you to all the contributors who worked on this release:
 
 # v3.2.4 @ 2022-02-11
 
-### 🌻 Better
+## 🌻 Better
 
 * Bean Searcher Boot Starter
   * 去掉无用的配置提示
 
-### 🐛 Bug Fixes
+## 🐛 Bug Fixes
 
 * 修复 `DateFieldConvertor` 无法将 `java.sql.Date` 转换为 `LocalDate / LocalDateTime` 的问题
 * 修复 `DateFieldConvertor` 转换 `LocalDate / LocalDateTime` 时会产生时区偏差的问题
@@ -752,7 +755,7 @@ Thank you to all the contributors who worked on this release:
 
 # v3.1.4 @ 2022-02-11
 
-### 🌻 Better
+## 🌻 Better
 
 * Bean Searcher
   * 增强 `BoolFieldConvertor`，使支持 `Boolean -> boolean` 方向的转换
@@ -760,7 +763,7 @@ Thank you to all the contributors who worked on this release:
   * 不再强制依赖 `DataSource`, 支持 Grails 项目
   * 去掉无用的配置提示
 
-### 🐛 Bug Fixes
+## 🐛 Bug Fixes
 
 * 修复 `DateFieldConvertor` 无法将 `java.sql.Date` 转换为 `LocalDate / LocalDateTime` 的问题
 * 修复 `DateFieldConvertor` 转换 `LocalDate / LocalDateTime` 时会产生时区偏差的问题
@@ -768,7 +771,7 @@ Thank you to all the contributors who worked on this release:
 
 # v3.4.0 @ 2022-02-09
 
-### ✨ Features
+## ✨ Features
 
 * Bean Searcher
   * 增强 `MapBuilder.orderBy(..)` 方法，支持多次调用来指定按多个字段进行排序 
@@ -781,7 +784,7 @@ Thank you to all the contributors who worked on this release:
   * 新增 `bean-searcher.sql.default-mapping.ignore-fields` 配置项，可在配置文件中指定全局忽略的属性
   * 新增 `bean-searcher.params.order-by` 配置项，可在配置文件中指定排序参数的参数名
 
-### 🌻 Better
+## 🌻 Better
 
 * Bean Searcher
   * 优化异常信息
@@ -793,14 +796,14 @@ Thank you to all the contributors who worked on this release:
 
 # v3.3.2 @ 2022-02-07
 
-### 🌻 Better
+## 🌻 Better
 
 * Bean Searcher
   * 增强 `BoolFieldConvertor`，使支持 `Boolean` -> `boolean` 方向的转换
 
 # v3.2.3 @ 2022-01-30
 
-### 🌻 Better
+## 🌻 Better
 
 * Bean Searcher
   * 增强 `BoolFieldConvertor`，使支持 `Boolean` -> `boolean` 方向的转换
@@ -810,7 +813,7 @@ Thank you to all the contributors who worked on this release:
 
 # v3.3.1 @ 2022-01-21
 
-### ✨ Features
+## ✨ Features
 
 * Bean Searcher
   * `MapBuilder` 新增 `op(Class<? extends FieldOp> op)` 方法
@@ -819,7 +822,7 @@ Thank you to all the contributors who worked on this release:
   * 新增 `bean-searcher.sql.use-date-value-corrector` 配置项，可配置 是否使用 `DateValueCorrector`
   * 支持在 Grails 项目中使用 `bean-searcher-boot-starter` 依赖
 
-### 🌻 Better
+## 🌻 Better
 
 * Bean Searcher
   * 优化字段运算符的匹配逻辑：使用严格模式
@@ -827,14 +830,14 @@ Thank you to all the contributors who worked on this release:
 * Bean Searcher Boot Starter
   * 优化自动配置机制，支持无 `DataSource` 自动配置
 
-### 🐛 Bug Fixes
+## 🐛 Bug Fixes
 
 * 修复当用户对同一个运算符 new 很多次时会导致 `FieldOpPool` 膨胀的问题
 
 
 # v3.2.2 @ 2021-12-20
 
-### 🌻 Better
+## 🌻 Better
 
 * Bean Searcher
   * 优化 `DateValueCorrector`，使其支持 `LocalDateTime` 类型字段
@@ -844,7 +847,7 @@ Thank you to all the contributors who worked on this release:
 
 # v3.3.0 @ 2022-01-19
 
-### ✨ Features
+## ✨ Features
 
 * Bean Searcher
   * 新增 `FieldOp` 接口，用户可用之扩展自己的字段运算符
@@ -861,20 +864,20 @@ Thank you to all the contributors who worked on this release:
 
 # v3.2.1 @ 2021-12-18
 
-### 🌻 Better
+## 🌻 Better
 
 * Bean Searcher
   * 无 `@DbIgnore` 注解也自动忽略实体类中的 `static` 与 `transient` 属性
   * 实体类支持子类重写父类中已存在的属性
 
-### 🐛 Bug Fixes
+## 🐛 Bug Fixes
 
 * Bean Searcher
   * 修复非字符串字段使用 Empty/NotEmpty 运算符时会报错的问题：https://gitee.com/troyzhxu/bean-searcher/issues/I4N1MG
 
 # v3.1.3 @ 2021-12-14
 
-### 🌻 Better
+## 🌻 Better
 
 * Bean Searcher
   * 无 `@DbIgnore` 也自动忽略实体类中的静态字段
@@ -884,7 +887,7 @@ Thank you to all the contributors who worked on this release:
   
 # v3.0.5 @ 2021-12-12
 
-### 🌻 Better
+## 🌻 Better
 
 * Bean Searcher
   * 无 `@DbIgnore` 也自动忽略实体类中的静态字段
@@ -894,7 +897,7 @@ Thank you to all the contributors who worked on this release:
 
 # v3.2.0 @ 2021-12-08
 
-### ✨ Features
+## ✨ Features
 
 * Bean Searcher
   * 重构 `FieldConvertor`：移除冗余参数 `targetType`
@@ -909,7 +912,7 @@ Thank you to all the contributors who worked on this release:
   * 新增 `bean-searcher.use-map-searcher` 配置项，表示是否自动创建 `MapSearcher` 检索器，默认 `true`
   * 新增 `bean-searcher.use-bean-searcher` 配置项，表示是否自动创建 `BeanSearcher` 检索器，默认 `true`
 
-### 🌻 Better
+## 🌻 Better
 
 * Bean Searcher Boot Starter
   * 使用 Searcher 类型注入检索器时，默认注入 MapSearcher，不再报错
@@ -917,7 +920,7 @@ Thank you to all the contributors who worked on this release:
 
 # v3.1.2 & v3.0.4 @ 2021-12-02
 
-### 🌻 Better
+## 🌻 Better
 
 * 优化 `JDBC` 调用，兼容 `sharding-jdbc`
 * 优化 `Operator.from(Object)` 方法
@@ -925,17 +928,17 @@ Thank you to all the contributors who worked on this release:
 
 # v3.1.1 & v3.0.3 @ 2021-12-01
 
-### ✨ Features
+## ✨ Features
 
 * 优化 `DefaultSqlResolver` 的方法的权限修饰符，便于子类复用
 
-### 🐛 Bug Fixes
+## 🐛 Bug Fixes
 
 * 优化别名生成规则，兼容 Oracle 数据库
 
 # v3.1.0 @ 2021-11-15
 
-### ✨ Features
+## ✨ Features
 
 * Bean Searcher
 
@@ -961,23 +964,23 @@ Thank you to all the contributors who worked on this release:
 
 # v3.0.2 @ 2021-11-10
 
-### 🐛 Bug Fixes
+## 🐛 Bug Fixes
 
 * 修复：在 v3.0.0 中，单独使用 `searchCount` 和 `searchSum` 方法时，获取 SQL 结果会出错的问题
 
 # v3.0.1 @ 2021-11-05
 
-### ✨ Features
+## ✨ Features
 
 * DateFormatFieldConvertor 新增 setFormat 方法
 
-### 🐛 Bug Fixes
+## 🐛 Bug Fixes
 
 * 修复：在 v3.0.0 中，再没有指定 @SearchBean 注解的 joinCond 属性时，带条件的 SQL 生成中 where 后少一个 左括号的问题
 
 # v3.0.0 重大更新 @ 2021-11-04
 
-### ✨ Features
+## ✨ Features
 
 * 支持 热加载
 * 支持 无注解
