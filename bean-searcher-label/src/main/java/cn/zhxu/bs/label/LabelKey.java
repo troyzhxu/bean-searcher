@@ -38,7 +38,23 @@ public class LabelKey {
     private boolean match(Class<?> loaderClass) {
         Type type = loaderClass.getGenericInterfaces()[0];
         if (type instanceof ParameterizedType) {
-            return ((ParameterizedType) type).getActualTypeArguments()[0] == idType;
+            Type argType = ((ParameterizedType) type).getActualTypeArguments()[0];
+            return matchType(argType);
+
+        }
+        return false;
+    }
+
+    public boolean matchType(Type argType) {
+        if (argType == idType) {
+            return true;
+        }
+        if (argType instanceof Class) {
+            return ((Class<?>) argType).isAssignableFrom(idType);
+        }
+        if (argType instanceof ParameterizedType) {
+            Type rawType = ((ParameterizedType) argType).getRawType();
+            return matchType(rawType);
         }
         return false;
     }
