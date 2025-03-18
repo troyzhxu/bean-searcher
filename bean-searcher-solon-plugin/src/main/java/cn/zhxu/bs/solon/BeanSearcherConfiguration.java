@@ -8,7 +8,7 @@ import cn.zhxu.bs.group.ExprParser;
 import cn.zhxu.bs.group.GroupPair;
 import cn.zhxu.bs.group.GroupResolver;
 import cn.zhxu.bs.implement.*;
-import cn.zhxu.bs.label.LabelForResultFilter;
+import cn.zhxu.bs.label.LabelResultFilter;
 import cn.zhxu.bs.label.LabelLoader;
 import cn.zhxu.bs.solon.prop.BeanSearcherParams;
 import cn.zhxu.bs.solon.prop.BeanSearcherProperties;
@@ -222,12 +222,12 @@ public class BeanSearcherConfiguration {
     }
 
     @Bean
-    @Condition(onMissingBean = LabelForResultFilter.class, onClass = LabelForResultFilter.class)
-    public ResultFilter labelForResultFilter(List<LabelLoader<?>> labelLoaders) {
+    @Condition(onMissingBean = LabelResultFilter.class, onClass = LabelResultFilter.class)
+    public ResultFilter labelResultFilter(List<LabelLoader<?>> labelLoaders) {
         if (labelLoaders == null) {
-            return new LabelForResultFilter();
+            return new LabelResultFilter();
         }
-        return new LabelForResultFilter(labelLoaders);
+        return new LabelResultFilter(labelLoaders);
     }
 
     @Bean
