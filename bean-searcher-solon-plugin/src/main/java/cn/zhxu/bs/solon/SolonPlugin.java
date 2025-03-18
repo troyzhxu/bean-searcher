@@ -14,6 +14,9 @@ public class SolonPlugin implements Plugin {
         //先构建配置
         context.beanMake(BeanSearcherProperties.class);
 
+        context.beanMake(BeanSearcherParamFilters.class);
+        context.beanMake(BeanSearcherConvertors.class);
+
         //再构建托管对象
         context.beanMake(BeanSearcherConfiguration.class);
     }

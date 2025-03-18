@@ -21,6 +21,12 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>cn.zhxu</groupId>
+			<artifactId>bean-searcher-label</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.noear</groupId>
 			<artifactId>solon.data</artifactId>
 			<version>${solon.version}</version>
