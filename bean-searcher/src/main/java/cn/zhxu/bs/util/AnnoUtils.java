@@ -28,7 +28,6 @@ public class AnnoUtils {
      * @return 指定注解
      */
     public static <T extends Annotation> T getAnnotation(AnnotatedElement element, Class<T> annoClass) {
-        System.out.println("element: " + element);
         if (element == null) {
             return null;
         }
