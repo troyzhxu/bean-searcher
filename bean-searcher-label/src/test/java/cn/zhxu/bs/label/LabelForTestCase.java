@@ -5,6 +5,7 @@ import cn.zhxu.bs.IllegalParamException;
 import cn.zhxu.bs.bean.DbIgnore;
 import cn.zhxu.bs.implement.DefaultMetaResolver;
 import cn.zhxu.bs.util.AnnoUtils;
+import cn.zhxu.bs.util.MapUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -115,6 +116,40 @@ public class LabelForTestCase {
         Assertions.assertEquals("未通过", dataList.get(3).codeName);
         Assertions.assertEquals("审核中", dataList.get(4).codeName);
         System.out.println("\ttest_03 ok!");
+    }
+
+
+    @Test
+    public void test_04() throws IllegalParamException {
+        LabelForResultFilter resultFilter = new LabelForResultFilter();
+        resultFilter.addLabelLoader(nameLoader);
+        resultFilter.addLabelLoader(statusLoader);
+        List<Map<String, Object>> dataList = Arrays.asList(
+                MapUtils.of("id", 1, "code", "A"),
+                MapUtils.of("id", 2, "code", "B"),
+                MapUtils.of("id", 3, "code", "C"),
+                MapUtils.of("id", 4, "code", "D"),
+                MapUtils.of("id", 1, "code", "B")
+        );
+        resultFilter.processDataList(User.class, dataList);
+        Assertions.assertEquals("张三", dataList.get(0).get("name"));
+        Assertions.assertEquals("李四", dataList.get(1).get("name"));
+        Assertions.assertEquals("王五", dataList.get(2).get("name"));
+        Assertions.assertEquals("孙六", dataList.get(3).get("name"));
+        Assertions.assertEquals("张三", dataList.get(4).get("name"));
+
+        Assertions.assertEquals("张三", dataList.get(0).get("nickname"));
+        Assertions.assertEquals("李四", dataList.get(1).get("nickname"));
+        Assertions.assertEquals("王五", dataList.get(2).get("nickname"));
+        Assertions.assertEquals("孙六", dataList.get(3).get("nickname"));
+        Assertions.assertEquals("张三", dataList.get(4).get("nickname"));
+
+        Assertions.assertEquals("待审核", dataList.get(0).get("codeName"));
+        Assertions.assertEquals("审核中", dataList.get(1).get("codeName"));
+        Assertions.assertEquals("审核通过", dataList.get(2).get("codeName"));
+        Assertions.assertEquals("未通过", dataList.get(3).get("codeName"));
+        Assertions.assertEquals("审核中", dataList.get(4).get("codeName"));
+        System.out.println("\ttest_04 ok!");
     }
 
 }
