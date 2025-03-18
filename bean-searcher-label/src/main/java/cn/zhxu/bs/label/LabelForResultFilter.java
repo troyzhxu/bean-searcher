@@ -11,6 +11,8 @@ import cn.zhxu.bs.util.StringUtils;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * 标签字段结果过滤器
@@ -19,6 +21,7 @@ import java.util.*;
 public class LabelForResultFilter implements ResultFilter {
 
     private final List<LabelLoader<?>> labelLoaders;
+    private final Map<Class<?>, Map<String, List<LabelField>>> cache = new ConcurrentHashMap<>();
 
     public LabelForResultFilter() {
         this.labelLoaders = new ArrayList<>();
@@ -30,28 +33,78 @@ public class LabelForResultFilter implements ResultFilter {
 
     @Override
     public <T> SearchResult<T> doBeanFilter(SearchResult<T> result, BeanMeta<T> beanMeta, Map<String, Object> paraMap, FetchType fetchType) {
-        List<T> dataList = result.getDataList();
-        if (dataList == null || dataList.isEmpty()) {
-            return result;
-        }
-        // TODO:
-
-        return result;
+        return processResult(result, beanMeta);
     }
 
     @Override
     public <T> SearchResult<Map<String, Object>> doMapFilter(SearchResult<Map<String, Object>> result, BeanMeta<T> beanMeta, Map<String, Object> paraMap, FetchType fetchType) {
-        List<Map<String, Object>> dataList = result.getDataList();
-        if (dataList == null || dataList.isEmpty()) {
-            return result;
-        }
-        // TODO:
+        return processResult(result, beanMeta);
+    }
 
+    public <T> SearchResult<T> processResult(SearchResult<T> result, BeanMeta<?> beanMeta) {
+        List<?> dataList = result.getDataList();
+        if (dataList != null && !dataList.isEmpty()) {
+            processDataList(beanMeta.getBeanClass(), dataList);
+        }
         return result;
     }
 
-    protected List<LabelField> getLabelForFields(BeanMeta<?> beanMeta) {
-        Class<?> beanClass = beanMeta.getBeanClass();
+    public void processDataList(Class<?> beanClass, List<?> dataList) {
+        loadLabelForFields(beanClass).forEach((key, fields) -> {
+            List<Object> idList = dataList.stream()
+                    .flatMap(data -> fields.stream().map(field -> field.getId(data)))
+                    .filter(Objects::nonNull)
+                    .distinct()
+                    .collect(Collectors.toList());
+            List<Label<?>> labels = loadLabels(beanClass, key, idList);
+            for (LabelField field : fields) {
+                fillLabels(field, dataList, labels);
+            }
+        });
+    }
+
+    protected void fillLabels(LabelField field, List<?> dataList, List<Label<?>> labels) {
+       for (Object data : dataList) {
+           Object id = field.getId(data);
+           for (Label<?> label : labels) {
+               if (Objects.equals(label.getId(), id)) {
+                   field.setLabel(data, label.getLabel());
+                   break;
+               }
+           }
+       }
+    }
+
+    @SuppressWarnings("unchecked")
+    protected List<Label<?>> loadLabels(Class<?> beanClass, String key, List<Object> ids) {
+        for (LabelLoader<?> labelLoader : labelLoaders) {
+            if (labelLoader.supports(key)) {
+                LabelLoader<Object> loader = (LabelLoader<Object>) labelLoader;
+                List<Label<Object>> labels = loader.load(key, ids);
+                return (List<Label<?>>) (List<?>) labels;
+            }
+        }
+        throw new SearchException("Can not load labels for key: " + key + " on " + beanClass + ", please add a LabelLoader for it.");
+    }
+
+    protected Map<String, List<LabelField>> loadLabelForFields(Class<?> beanClass) {
+        Map<String, List<LabelField>> fieldsMap = cache.get(beanClass);
+        if (fieldsMap != null) {
+            return fieldsMap;
+        }
+        synchronized (cache) {
+            Map<String, List<LabelField>> map = cache.get(beanClass);
+            if (map == null) {
+                map = resolveLabelForFields(beanClass)
+                        .stream()
+                        .collect(Collectors.groupingBy(LabelField::getKey));
+                cache.put(beanClass, map);
+            }
+            return map;
+        }
+    }
+
+    protected List<LabelField> resolveLabelForFields(Class<?> beanClass) {
         List<LabelField> fieldList = new ArrayList<>();
         Set<String> fieldNames = new HashSet<>();
         while (beanClass != Object.class) {
@@ -64,10 +117,12 @@ public class LabelForResultFilter implements ResultFilter {
                 LabelFor labelFor = AnnoUtils.getAnnotation(field, LabelFor.class);
                 if (labelFor != null) {
                     try {
-                        Field forField = beanClass.getField(labelFor.value());
+                        Field idField = beanClass.getDeclaredField(labelFor.value());
+                        idField.setAccessible(true);
+                        field.setAccessible(true);
                         String key = labelFor.key();
                         fieldList.add(new LabelField(
-                                field, forField,
+                                field, idField,
                                 StringUtils.isBlank(key) ? field.getName() : key
                         ));
                     } catch (NoSuchFieldException e) {
@@ -85,8 +140,16 @@ public class LabelForResultFilter implements ResultFilter {
         labelLoaders.add(labelLoader);
     }
 
+    public void removeLabelLoader(LabelLoader<?> labelLoader) {
+        labelLoaders.remove(labelLoader);
+    }
+
     public void clearLabelLoaders() {
         labelLoaders.clear();
+    }
+
+    public void clearCache() {
+        cache.clear();
     }
 
 }

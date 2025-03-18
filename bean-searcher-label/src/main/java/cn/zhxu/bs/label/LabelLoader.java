@@ -20,6 +20,6 @@ public interface LabelLoader<ID> {
      * @param ids 标签ID列表
      * @return 标签列表
      */
-    List<String> load(String key, List<ID> ids);
+    List<Label<ID>> load(String key, List<ID> ids);
 
 }
