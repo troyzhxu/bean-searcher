@@ -36,6 +36,12 @@
 
 		<dependency>
 			<groupId>cn.zhxu</groupId>
+			<artifactId>bean-searcher-label</artifactId>
+			<version>4.4.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>cn.zhxu</groupId>
 			<artifactId>xjsonkit-jackson</artifactId>
 			<version>1.5.0</version>
 		</dependency>

@@ -3,6 +3,7 @@ package com.example.sbean;
 import cn.zhxu.bs.bean.DbField;
 import cn.zhxu.bs.bean.SearchBean;
 import cn.zhxu.bs.bean.SortType;
+import cn.zhxu.bs.label.LabelFor;
 import cn.zhxu.bs.operator.Contain;
 import cn.zhxu.bs.operator.StartWith;
 import com.example.enums.Gender;
@@ -26,6 +27,9 @@ public class Employee extends BaseBean {
 
 	private Gender gender;
 
+	@LabelFor("gender")
+	private String genderName;
+
 	@DbField("d.name")
 	private String department;
 
@@ -42,6 +46,10 @@ public class Employee extends BaseBean {
 
 	public Gender getGender() {
 		return gender;
+	}
+
+	public String getGenderName() {
+		return genderName;
 	}
 
 	public String getDepartment() {

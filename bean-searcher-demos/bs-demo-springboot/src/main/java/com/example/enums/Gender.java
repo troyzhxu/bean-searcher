@@ -8,11 +8,21 @@ public enum Gender {
     /**
      * 男性
      */
-    Male,
+    Male("男"),
 
     /**
      * 女性
      */
-    Female
+    Female("女");
+
+    private final String chinese;
+
+    Gender(String chinese) {
+        this.chinese = chinese;
+    }
+
+    public String getChinese() {
+        return chinese;
+    }
 
 }
