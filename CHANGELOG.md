@@ -1,3 +1,22 @@
+# v4.4.0 @ Next
+
+## Bean Searcher
+  - ✨ 新增 `IndexArrayParamFilter`: 支持解析形如 `key[0]=v1 & key[1]=v2` 的参数
+  - ✨ 增强 `SuffixOpParamFilter`: 使支持将 是否忽略大小写 也合并到一个参数中，例如：`name-ct-ic=xxx`
+  - ✨ 增强 `MetaResolver`: 新增 `clearCache()` 方法，用于手动清除 `BeanMeta` 缓存
+  - ✨ 增强 `@DbIgnore`: 支持标注其它自定义注解，使其具有 `@DbIgnore` 的功能
+  - ✨ 新增 `AnnoUtils`: 可用于解析组合注解
+## Bean Searcher Label（首发）
+  - ✨ 提供 `@LabelFor` 注解，该注解继承自 `@DbIgnore`，可用于标注并解析 Label 字段（例如：将 `statusName` 字段标记为 `status` 的 Label）
+  - ✨ 提供 `LabelLoader` 接口，可用于加载自定义的 Label
+## Bean Searcher Boot Starter
+  - ✨ 新增配置项 `bean-searcher.params.filter.use-index-array` 用于控制是否启用 `IndexArrayParamFilter`，默认 `true`
+  - ✨ 新增 Bean Searcher Label 的自动化配置
+## Bean Searcher Solon Plugin
+  - ✨ 新增配置项 `bean-searcher.params.filter.use-index-array` 用于控制是否启用 `IndexArrayParamFilter`，默认 `true`
+  - ✨ 新增 Bean Searcher Label 的自动化配置
+  - 🌻 升级 Solon 到 3.1.0
+
 # v4.3.6 @ 2025-01-23
 
 ### 🌻 Better
