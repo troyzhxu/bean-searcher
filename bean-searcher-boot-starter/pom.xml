@@ -21,6 +21,12 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>cn.zhxu</groupId>
+			<artifactId>bean-searcher-label</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jdbc</artifactId>
 			<version>${spring.boot.version}</version>

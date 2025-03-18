@@ -7,9 +7,8 @@ import cn.zhxu.bs.boot.prop.BeanSearcherFieldConvertor;
 import cn.zhxu.bs.boot.prop.BeanSearcherParams;
 import cn.zhxu.bs.boot.prop.BeanSearcherProperties;
 import cn.zhxu.bs.boot.prop.BeanSearcherSql;
-import cn.zhxu.bs.convertor.*;
+import cn.zhxu.bs.convertor.DateFormatFieldConvertor;
 import cn.zhxu.bs.dialect.*;
-import cn.zhxu.bs.filter.*;
 import cn.zhxu.bs.group.DefaultGroupResolver;
 import cn.zhxu.bs.group.ExprParser;
 import cn.zhxu.bs.group.GroupPair;
@@ -17,23 +16,18 @@ import cn.zhxu.bs.group.GroupResolver;
 import cn.zhxu.bs.implement.*;
 import cn.zhxu.bs.util.LRUCache;
 import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
 
 import javax.sql.DataSource;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Consumer;
-
 
 @Configuration
 @EnableConfigurationProperties({
@@ -41,6 +35,13 @@ import java.util.function.Consumer;
         BeanSearcherFieldConvertor.class,
         BeanSearcherParams.class,
         BeanSearcherSql.class
+})
+@Import({
+        BeanSearcherConvertors.class,
+        BeanSearcherParamFilters.class,
+        BeanSearcherConfigOnLabel.class,
+        BeanSearcherConfigOnJsonKit.class,
+        BeanSearcherConfigOnOracle.class
 })
 public class BeanSearcherAutoConfiguration {
 
@@ -146,77 +147,6 @@ public class BeanSearcherAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(BoolParamConvertor.class)
-    public BoolParamConvertor boolParamConvertor() {
-        return new BoolParamConvertor();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(NumberParamConvertor.class)
-    public NumberParamConvertor numberParamConvertor() {
-        return new NumberParamConvertor();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(DateParamConvertor.class)
-    public DateParamConvertor dateParamConvertor(BeanSearcherParams config) {
-        return new DateParamConvertor(config.getConvertor().getDateTarget());
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(TimeParamConvertor.class)
-    public TimeParamConvertor timeParamConvertor(BeanSearcherParams config) {
-        return new TimeParamConvertor(config.getConvertor().getTimeTarget());
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(DateTimeParamConvertor.class)
-    public DateTimeParamConvertor dateTimeParamConvertor(BeanSearcherParams config) {
-        BeanSearcherParams.Convertor conf = config.getConvertor();
-        DateTimeParamConvertor convertor = new DateTimeParamConvertor(conf.getDateTimeTarget());
-        convertor.setZoneId(conf.getZoneId());
-        return convertor;
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(EnumParamConvertor.class)
-    public EnumParamConvertor enumParamConvertor() {
-        return new EnumParamConvertor();
-    }
-
-    @Bean
-    @Order(-100)
-    @ConditionalOnMissingBean(SizeLimitParamFilter.class)
-    @ConditionalOnProperty(name = "bean-searcher.params.filter.use-size-limit", havingValue = "true", matchIfMissing = true)
-    public SizeLimitParamFilter sizeLimitParamFilter(BeanSearcherParams config) {
-        return new SizeLimitParamFilter(config.getFilter().getMaxParaMapSize());
-    }
-
-    @Bean
-    @Order(100)
-    @ConditionalOnMissingBean(ArrayValueParamFilter.class)
-    @ConditionalOnProperty(name = "bean-searcher.params.filter.use-array-value", havingValue = "true", matchIfMissing = true)
-    public ArrayValueParamFilter arrayValueParamFilter(BeanSearcherParams config) {
-        return new ArrayValueParamFilter(config.getSeparator());
-    }
-
-    @Bean
-    @Order(200)
-    @ConditionalOnMissingBean(SuffixOpParamFilter.class)
-    @ConditionalOnProperty(name = "bean-searcher.params.filter.use-suffix-op", havingValue = "true")
-    public SuffixOpParamFilter suffixOpParamFilter(FieldOpPool fieldOpPool, BeanSearcherParams cfg) {
-        return new SuffixOpParamFilter(fieldOpPool, cfg.getSeparator(), cfg.getOperatorKey(), cfg.getIgnoreCaseKey());
-    }
-
-    @Bean
-    @Order(400)
-    @ConditionalOnMissingBean(IndexArrayParamFilter.class)
-    @ConditionalOnProperty(name = "bean-searcher.params.filter.use-index-array", havingValue = "true")
-    public IndexArrayParamFilter indexArrayParamFilter(BeanSearcherParams config) {
-        return new IndexArrayParamFilter(config.getSeparator());
-    }
-
-    @Bean
     @ConditionalOnMissingBean(ParamResolver.class)
     public ParamResolver paramResolver(PageExtractor pageExtractor,
                                        FieldOpPool fieldOpPool,
@@ -269,116 +199,6 @@ public class BeanSearcherAutoConfiguration {
         ifAvailable(slowListener, executor::setSlowListener);
         executor.setSlowSqlThreshold(config.getSlowSqlThreshold());
         return executor;
-    }
-
-    @Bean
-    @ConditionalOnProperty(name = "bean-searcher.field-convertor.use-number", havingValue = "true", matchIfMissing = true)
-    @ConditionalOnMissingBean(NumberFieldConvertor.class)
-    public NumberFieldConvertor numberFieldConvertor() {
-        return new NumberFieldConvertor();
-    }
-
-    @Bean
-    @ConditionalOnProperty(name = "bean-searcher.field-convertor.use-str-num", havingValue = "true", matchIfMissing = true)
-    @ConditionalOnMissingBean(StrNumFieldConvertor.class)
-    public StrNumFieldConvertor strNumFieldConvertor() {
-        return new StrNumFieldConvertor();
-    }
-
-    @Bean
-    @ConditionalOnProperty(name = "bean-searcher.field-convertor.use-bool-num", havingValue = "true", matchIfMissing = true)
-    @ConditionalOnMissingBean(BoolNumFieldConvertor.class)
-    public BoolNumFieldConvertor boolNumFieldConvertor() {
-        return new BoolNumFieldConvertor();
-    }
-
-    @Bean
-    @ConditionalOnProperty(name = "bean-searcher.field-convertor.use-bool", havingValue = "true", matchIfMissing = true)
-    @ConditionalOnMissingBean(BoolFieldConvertor.class)
-    public BoolFieldConvertor boolFieldConvertor(BeanSearcherFieldConvertor config) {
-        String[] falseValues = config.getBoolFalseValues();
-        BoolFieldConvertor convertor = new BoolFieldConvertor();
-        if (falseValues != null) {
-            convertor.addFalseValues(falseValues);
-        }
-        return convertor;
-    }
-
-    @Bean
-    @ConditionalOnProperty(name = "bean-searcher.field-convertor.use-date", havingValue = "true", matchIfMissing = true)
-    @ConditionalOnMissingBean(DateFieldConvertor.class)
-    public DateFieldConvertor dateFieldConvertor(BeanSearcherFieldConvertor config) {
-        DateFieldConvertor convertor = new DateFieldConvertor();
-        ZoneId zoneId = config.getZoneId();
-        if (zoneId != null) {
-            convertor.setZoneId(zoneId);
-        }
-        return convertor;
-    }
-
-    @Bean
-    @ConditionalOnProperty(name = "bean-searcher.field-convertor.use-time", havingValue = "true", matchIfMissing = true)
-    @ConditionalOnMissingBean(TimeFieldConvertor.class)
-    public TimeFieldConvertor timeFieldConvertor() {
-        return new TimeFieldConvertor();
-    }
-
-    @Bean
-    @ConditionalOnProperty(name = "bean-searcher.field-convertor.use-enum", havingValue = "true", matchIfMissing = true)
-    @ConditionalOnMissingBean(EnumFieldConvertor.class)
-    public EnumFieldConvertor enumFieldConvertor(BeanSearcherFieldConvertor config) {
-        EnumFieldConvertor convertor = new EnumFieldConvertor();
-        convertor.setFailOnError(config.isEnumFailOnError());
-        convertor.setIgnoreCase(config.isEnumIgnoreCase());
-        return convertor;
-    }
-
-    /**
-     * 注解 @ConditionalOnClass 不能与 @Bean 放在一起，否则当没有条件中的 Class 时，会出现错误：
-     * java.lang.ArrayStoreException: sun.reflect.annotation.TypeNotPresentExceptionProxy
-     */
-    @Configuration
-    @ConditionalOnClass(cn.zhxu.xjson.JsonKit.class)
-    public static class BeanSearcherConfigOnJsonKit {
-
-        @Bean
-        @ConditionalOnProperty(name = "bean-searcher.field-convertor.use-json", havingValue = "true", matchIfMissing = true)
-        @ConditionalOnMissingBean(JsonFieldConvertor.class)
-        public JsonFieldConvertor jsonFieldConvertor(BeanSearcherFieldConvertor config) {
-            return new JsonFieldConvertor(config.isJsonFailOnError());
-        }
-
-        @Bean
-        @Order(300)
-        @ConditionalOnMissingBean(JsonArrayParamFilter.class)
-        @ConditionalOnProperty(name = "bean-searcher.params.filter.use-json-array", havingValue = "true")
-        public JsonArrayParamFilter jsonArrayParamFilter(BeanSearcherParams config) {
-            return new JsonArrayParamFilter(config.getSeparator());
-        }
-
-    }
-
-    @Configuration
-    @ConditionalOnClass(oracle.sql.TIMESTAMP.class)
-    public static class BeanSearcherConfigOnOracle {
-
-        @Bean
-        @ConditionalOnProperty(name = "bean-searcher.field-convertor.use-oracle-timestamp", havingValue = "true", matchIfMissing = true)
-        @ConditionalOnMissingBean(OracleTimestampFieldConvertor.class)
-        public OracleTimestampFieldConvertor oracleTimestampFieldConvertor() {
-            return new OracleTimestampFieldConvertor();
-        }
-
-    }
-
-    @Bean
-    @ConditionalOnProperty(name = "bean-searcher.field-convertor.use-list", havingValue = "true", matchIfMissing = true)
-    @ConditionalOnMissingBean(ListFieldConvertor.class)
-    public ListFieldConvertor listFieldConvertor(BeanSearcherFieldConvertor config,
-                ObjectProvider<List<ListFieldConvertor.Convertor<?>>> convertorsProvider) {
-        ListFieldConvertor convertor = new ListFieldConvertor(config.getListItemSeparator());
-        ifAvailable(convertorsProvider, convertor::setConvertors);
-        return convertor;
     }
 
     @Bean
@@ -438,37 +258,6 @@ public class BeanSearcherAutoConfiguration {
         return searcher;
     }
 
-    @Bean
-    @ConditionalOnProperty(name = "bean-searcher.field-convertor.use-date-format", havingValue = "true", matchIfMissing = true)
-    @ConditionalOnMissingBean(DateFormatFieldConvertor.class)
-    public DateFormatFieldConvertor dateFormatFieldConvertor(BeanSearcherFieldConvertor config) {
-        DateFormatFieldConvertor convertor = new DateFormatFieldConvertor();
-        Map<String, String> dateFormats = config.getDateFormats();
-        if (dateFormats != null) {
-            dateFormats.forEach((key, value) -> {
-                // 由于在 yml 的 key 中的 `:` 会被自动过滤，所以这里做下特殊处理，在 yml 中可以用 `-` 替代
-                String scope = key.replace('-', ':');
-                convertor.setFormat(scope, value);
-            });
-        }
-        ZoneId zoneId = config.getZoneId();
-        if (zoneId != null) {
-            convertor.setZoneId(zoneId);
-        }
-        return convertor;
-    }
-
-    @Bean
-    @ConditionalOnProperty(name = "bean-searcher.field-convertor.use-b2-m", havingValue = "true")
-    @ConditionalOnMissingBean(B2MFieldConvertor.class)
-    public B2MFieldConvertor b2mFieldConvertor(ObjectProvider<List<BFieldConvertor>> convertors) {
-        List<BFieldConvertor> list = convertors.getIfAvailable();
-        if (list != null) {
-            return new B2MFieldConvertor(list);
-        }
-        return new B2MFieldConvertor(Collections.emptyList());
-    }
-
     @Bean @Primary
     @ConditionalOnMissingBean(MapSearcher.class)
     @ConditionalOnProperty(name = "bean-searcher.use-map-searcher", havingValue = "true", matchIfMissing = true)
@@ -506,7 +295,7 @@ public class BeanSearcherAutoConfiguration {
         return searcher;
     }
 
-    private <T> void ifAvailable(ObjectProvider<T> provider, Consumer<T> consumer) {
+    static <T> void ifAvailable(ObjectProvider<T> provider, Consumer<T> consumer) {
         // 为了兼容 1.x 的 SpringBoot，最低兼容到 v1.4
         // 不直接使用 ObjectProvider.ifAvailable 方法
         T dependency = provider.getIfAvailable();
