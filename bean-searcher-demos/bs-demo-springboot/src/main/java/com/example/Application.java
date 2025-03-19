@@ -24,9 +24,7 @@ public class Application implements WebMvcConfigurer {
 
     @Bean
     public EnumLabelLoader enumLabelLoader() {
-        EnumLabelLoader loader = new EnumLabelLoader();
-        loader.put(Gender.class, Gender::getLabel);
-        return loader;
+        return new EnumLabelLoader().with(Gender.class, Gender::getLabel);
     }
 
 }
