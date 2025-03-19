@@ -15,14 +15,14 @@ public enum Gender {
      */
     Female("女");
 
-    private final String chinese;
+    private final String label;
 
-    Gender(String chinese) {
-        this.chinese = chinese;
+    Gender(String label) {
+        this.label = label;
     }
 
-    public String getChinese() {
-        return chinese;
+    public String getLabel() {
+        return label;
     }
 
 }

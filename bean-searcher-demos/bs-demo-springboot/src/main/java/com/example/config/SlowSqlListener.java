@@ -1,9 +1,11 @@
 package com.example.config;
 
 import cn.zhxu.bs.SqlExecutor;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class SlowSqlListener implements SqlExecutor.SlowListener {
 
     @Override
