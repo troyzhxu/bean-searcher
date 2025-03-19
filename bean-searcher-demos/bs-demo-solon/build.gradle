@@ -16,7 +16,7 @@ description = "demo"
 
 
 dependencies {
-    implementation platform("org.noear:solon-parent:3.1.0")
+    implementation platform("org.noear:solon-parent:2.9.4")
 
     implementation("org.noear:solon-web")
     implementation("org.noear:solon-view-thymeleaf")
