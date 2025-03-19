@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import cn.zhxu.bs.label.EnumLabelLoader;
 import com.zaxxer.hikari.HikariDataSource;
 import org.noear.snack.core.Feature;
 import org.noear.solon.annotation.Bean;
@@ -41,6 +42,11 @@ public class Config {
     public void jsonInit(@Inject SnackRenderFactory factory){
         // 枚举序列化为名字
         factory.addFeatures(Feature.EnumUsingName);  //增加特性
+    }
+
+    @Bean
+    public EnumLabelLoader enumLabelLoader() {
+        return new EnumLabelLoader().with(Gender.class, Gender::getLabel);
     }
 
 }
