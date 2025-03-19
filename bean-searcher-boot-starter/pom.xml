@@ -4,7 +4,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 
-	<name>Bean Searcher</name>
+	<name>Bean Searcher Boot Starter</name>
 	<artifactId>bean-searcher-boot-starter</artifactId>
 	<packaging>jar</packaging>
 

@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<name>Bean Searcher</name>
+	<name>Bean Searcher Parent</name>
 	<description>比 MyBatis 效率快 100 倍的条件检索引擎，使一行代码实现复杂列表检索成为可能！</description>
 	<url>https://github.com/troyzhxu/bean-searcher</url>
 
