@@ -194,6 +194,13 @@
       "defaultValue": false
     },
     {
+      "name": "bean-searcher.params.filter.use-index-array",
+      "type": "java.lang.Boolean",
+      "description": "是否兼容下标数组格式的参数，默认为 false，用于简化前端传参，例如 age[0]=20 & age[1]=30 将等效于 age-0=20 & age-1=30 @since v4.4.0",
+      "sourceType": "cn.zhxu.bs.boot.prop.BeanSearcherParams$Filter",
+      "defaultValue": false
+    },
+    {
       "name": "bean-searcher.params.group.cache-size",
       "type": "java.lang.Integer",
       "description": "组表达式缓存大小，默认为 50",
