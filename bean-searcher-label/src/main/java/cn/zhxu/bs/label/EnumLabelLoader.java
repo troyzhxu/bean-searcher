@@ -41,8 +41,9 @@ public class EnumLabelLoader implements LabelLoader<Enum<?>> {
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends Enum<?>> void put(Class<T> enumType, Function<T, String> labelFun) {
+    public <T extends Enum<?>> EnumLabelLoader with(Class<T> enumType, Function<T, String> labelFun) {
         labelFunMap.put((Class<Enum<?>>) enumType, (Function<Enum<?>, String>) labelFun);
+        return this;
     }
 
     public void clear() {

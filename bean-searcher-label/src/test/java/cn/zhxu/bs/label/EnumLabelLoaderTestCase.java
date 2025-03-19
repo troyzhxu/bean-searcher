@@ -52,9 +52,9 @@ public class EnumLabelLoaderTestCase {
 
     @Test
     public void test_01() {
-        EnumLabelLoader loader = new EnumLabelLoader();
-        loader.put(PayStatus.class, s -> s.label);
-        loader.put(DeliveryStatus.class, s -> s.label);
+        EnumLabelLoader loader = new EnumLabelLoader()
+                .with(PayStatus.class, s -> s.label)
+                .with(DeliveryStatus.class, s -> s.label);
 
         LabelResultFilter resultFilter = new LabelResultFilter();
         resultFilter.addLabelLoader(loader);
