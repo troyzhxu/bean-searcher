@@ -9,6 +9,7 @@ import org.noear.solon.core.Plugin;
  * @since 2.1
  */
 public class SolonPlugin implements Plugin {
+
     @Override
     public void start(AppContext context) {
         //先构建配置
@@ -19,5 +20,7 @@ public class SolonPlugin implements Plugin {
 
         //再构建托管对象
         context.beanMake(BeanSearcherConfiguration.class);
+
     }
+
 }
