@@ -51,12 +51,18 @@ public class LabelResultFilter implements ResultFilter {
 
     public void processDataList(Class<?> beanClass, List<?> dataList) {
         loadLabelFieldMap(beanClass).forEach((key, fields) -> {
-            List<Object> idList = dataList.stream()
+            List<Object> ids = dataList.stream()
                     .flatMap(data -> fields.stream().map(field -> field.id(data)))
                     .filter(Objects::nonNull)
                     .distinct()
                     .collect(Collectors.toList());
-            List<Label<?>> labels = loadLabels(beanClass, key, idList);
+            if (ids.isEmpty()) {
+                return;
+            }
+            List<Label<?>> labels = loadLabels(beanClass, key, ids);
+            if (labels.isEmpty()) {
+                return;
+            }
             for (LabelField field : fields) {
                 fillLabels(field, dataList, labels);
             }
