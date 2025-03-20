@@ -1,4 +1,4 @@
-# v4.4.0 @ Next
+# v4.4.0 @ 2025-03-19
 
 ## ✨ Features
 
@@ -18,7 +18,6 @@
 * Bean Searcher Solon Plugin
   - 新增配置项 `bean-searcher.params.filter.use-index-array` 用于控制是否启用 `IndexArrayParamFilter`，默认 `false`
   - 新增 Bean Searcher Label 的自动化配置
-  - 🌻 升级 Solon 到 3.1.0
 
 # v4.3.6 @ 2025-01-23
 
