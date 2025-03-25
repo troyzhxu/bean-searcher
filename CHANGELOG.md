@@ -4,6 +4,7 @@
 
 * Bean Searcher Label
   - 优化 `LabelLoader` 接口的调用，确保 `load(key, ids)` 方法中的 `ids` 参数有值
+  - 优化 `@LabelFor` 注解，支持指向父类和子类中的字段
 
 # v4.4.0 @ 2025-03-19
 
