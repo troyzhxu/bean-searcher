@@ -1,8 +1,7 @@
 package cn.zhxu.bs.boot;
 
-import cn.zhxu.bs.ResultFilter;
-import cn.zhxu.bs.label.LabelResultFilter;
 import cn.zhxu.bs.label.LabelLoader;
+import cn.zhxu.bs.label.LabelResultFilter;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -21,7 +20,7 @@ public class BeanSearcherConfigOnLabel {
 
     @Bean
     @ConditionalOnMissingBean(LabelResultFilter.class)
-    public ResultFilter labelResultFilter(ObjectProvider<List<LabelLoader<?>>> loadersProvider) {
+    public LabelResultFilter labelResultFilter(ObjectProvider<List<LabelLoader<?>>> loadersProvider) {
         List<LabelLoader<?>> loaders = loadersProvider.getIfAvailable();
         if (loaders == null) {
             return new LabelResultFilter();

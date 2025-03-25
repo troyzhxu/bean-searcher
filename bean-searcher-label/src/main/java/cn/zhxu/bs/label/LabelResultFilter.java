@@ -125,7 +125,7 @@ public class LabelResultFilter implements ResultFilter {
                 LabelFor labelFor = AnnoUtils.getAnnotation(field, LabelFor.class);
                 if (labelFor != null) {
                     try {
-                        Field idField = beanClass.getDeclaredField(labelFor.value());
+                        Field idField = requireField(beanClass, labelFor.value());
                         idField.setAccessible(true);
                         field.setAccessible(true);
                         String key = labelFor.key();
@@ -142,6 +142,18 @@ public class LabelResultFilter implements ResultFilter {
             beanClass = beanClass.getSuperclass();
         }
         return fieldList;
+    }
+
+    protected Field requireField(Class<?> beanClass, String fieldName) throws NoSuchFieldException {
+        try {
+            return beanClass.getDeclaredField(fieldName);
+        } catch (NoSuchFieldException e) {
+            Class<?> superClass = beanClass.getSuperclass();
+            if (superClass == null || superClass == Object.class) {
+                throw e;
+            }
+            return requireField(superClass, fieldName);
+        }
     }
 
     public void addLabelLoader(LabelLoader<?> labelLoader) {
