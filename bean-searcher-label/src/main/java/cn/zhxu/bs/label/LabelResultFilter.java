@@ -115,8 +115,9 @@ public class LabelResultFilter implements ResultFilter {
     protected List<LabelField.KEY> resolveLabelFieldKeys(Class<?> beanClass) {
         List<LabelField.KEY> fieldList = new ArrayList<>();
         Set<String> fieldNames = new HashSet<>();
-        while (beanClass != Object.class) {
-            for (Field field : beanClass.getDeclaredFields()) {
+        Class<?> thisClass = beanClass;
+        while (thisClass != Object.class) {
+            for (Field field : thisClass.getDeclaredFields()) {
                 String name = field.getName();
                 if (field.isSynthetic() || Modifier.isStatic(field.getModifiers())
                         || fieldNames.contains(name)) {
@@ -125,6 +126,7 @@ public class LabelResultFilter implements ResultFilter {
                 LabelFor labelFor = AnnoUtils.getAnnotation(field, LabelFor.class);
                 if (labelFor != null) {
                     try {
+                        // @LabelFor 注解支持引用父类和子类中的字段
                         Field idField = requireField(beanClass, labelFor.value());
                         idField.setAccessible(true);
                         field.setAccessible(true);
@@ -139,7 +141,7 @@ public class LabelResultFilter implements ResultFilter {
                 }
                 fieldNames.add(name);
             }
-            beanClass = beanClass.getSuperclass();
+            thisClass = thisClass.getSuperclass();
         }
         return fieldList;
     }
