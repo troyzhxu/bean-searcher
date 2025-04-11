@@ -4,6 +4,27 @@
 
 ## V4 版本
 
+### v4.4 的新特性（v4.4.1）
+
+* Bean Searcher
+  - 新增 `IndexArrayParamFilter`: 支持解析形如 `key[0]=v1 & key[1]=v2` 的参数
+  - 增强 `SuffixOpParamFilter`: 使支持将 是否忽略大小写 也合并到一个参数中，例如：`name-ct-ic=xxx`
+  - 增强 `MetaResolver`: 新增 `clearCache()` 方法，用于手动清除 `BeanMeta` 缓存
+  - 增强 `@DbIgnore`: 支持标注其它自定义注解，使其具有 `@DbIgnore` 的功能
+  - 新增 `AnnoUtils`: 可用于解析组合注解
+* Bean Searcher Label（**首发**）
+  - 提供 `@LabelFor` 注解，该注解继承自 `@DbIgnore`，可用于标注并解析 Label 字段（例如：将 `statusName` 字段标记为 `status` 的 Label）
+  - 提供 `LabelLoader` 接口，可用于加载自定义的 Label
+  - 提供 `EnumLabelLoader` 实现，用于加载枚举的 Label
+  - 优化 `LabelLoader` 接口的调用，确保 `load(key, ids)` 方法中的 `ids` 参数有值（since v4.4.1）
+  - 优化 `@LabelFor` 注解，支持指向父类和子类中的字段（since v4.4.1）
+* Bean Searcher Boot Starter
+  - 新增配置项 `bean-searcher.params.filter.use-index-array` 用于控制是否启用 `IndexArrayParamFilter`，默认 `false`
+  - 新增 Bean Searcher Label 的自动化配置
+* Bean Searcher Solon Plugin
+  - 新增配置项 `bean-searcher.params.filter.use-index-array` 用于控制是否启用 `IndexArrayParamFilter`，默认 `false`
+  - 新增 Bean Searcher Label 的自动化配置
+
 ### v4.3 的新特性（v4.3.6）
 
 * Bean Searcher
@@ -352,8 +373,8 @@
 
 ## V2 版本
 
-该版本过于古老，具体已不可考，只余坊间仍流传着上古年间女娲补天前所留的只言片语。
+该版本过于古老，具体已不可考。
 
 ## V1 版本
 
-该版本过于古老，具体已不可考，只余坊间仍流传着盘古开天辟地的故事。
+该版本过于古老，具体已不可考。
