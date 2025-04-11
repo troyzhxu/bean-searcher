@@ -112,6 +112,20 @@ implementation 'cn.zhxu:xjsonkit-snack3:1.5.1'
 
 如果你喜欢的 JSON 解析框架不在其内，也支持自定义底层实现，参考：https://gitee.com/troyzhxu/xjsonkit
 
+### 参数过滤器优先级
+
+如果使用的是 `bean-searcher-boot-starter` 或 `bean-searcher-solon-plugin` 依赖，则以上框架内置的过滤器的优先级如下：
+
+过滤器 | 优先级（越小越先执行）
+-|-
+`SizeLimitParamFilter` | `-100`
+`ArrayValueParamFilter` | `100`
+`SuffixOpParamFilter` | `200`
+`JsonArrayParamFilter` | `300`
+`IndexArrayParamFilter` | `400`
+
+而新注入的参数过滤器的优先级则由 IOC 框架的注入方式决定。例如 SpringBoot 框架可用 `@order` 注解来控制优先级，Solon 框架可用 `@Bean` 注解的 `index` 属性来控制。
+
 ### 自定义参数过滤器
 
 你还可自定义任何参数过滤规则，在 SpringBoot / SpringMVC / Grails 项目中，只需要配置一个 Bean（以 SpringBoot 为例）：

@@ -48,7 +48,7 @@ public List<UserVO> users() {
     var params = MapUtils.builder()
           .field(UserVO::getAge, 10, 20).op(Between.class)  // 额外参数
           .build();
-    return beanSearcher.searchList(UserVO.class);
+    return beanSearcher.searchList(UserVO.class, params);
 }
 ```
 
@@ -60,7 +60,7 @@ public List<UserVO> users() {
     var params = MapUtils.builder()
           .put(MyParamFilter.IGNORE_REQUEST_PARAMS, true)   // 取消自动接收功能
           .build();
-    return beanSearcher.searchList(UserVO.class);
+    return beanSearcher.searchList(UserVO.class, params);
 }
 ```
 
