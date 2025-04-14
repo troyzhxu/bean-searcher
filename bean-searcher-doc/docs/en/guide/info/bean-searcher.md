@@ -53,7 +53,7 @@ As long as a database supports normal SQL syntax, it is supported. In addition, 
 * For databases with the same pagination syntax as Oracle, select the Oracle dialect.
 * For databases with the same pagination syntax as SqlServer (v2012+), select the SqlServer dialect.
 
-If a database has a unique pagination syntax, you only need to customize a dialect by implementing two methods. Refer to the [Advanced > SQL Dialect](/guide/advance/dialect) section.
+If a database has a unique pagination syntax, you only need to customize a dialect by implementing two methods. Refer to the [Advanced > SQL Dialect](/en/guide/advance/dialect) section.
 
 ## DEMO Quick Experience
 
