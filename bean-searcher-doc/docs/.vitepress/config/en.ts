@@ -1,5 +1,4 @@
 import { defineConfig } from 'vitepress'
-import { projects } from '../projects'
 
 export default defineConfig({
 
@@ -24,11 +23,6 @@ export default defineConfig({
             link: 'https://gitee.com/troyzhxu/bean-searcher/blob/dev/CONTRIBUTING.md'
           }
         ]
-      },
-      { text: '💖Support', link: '/en/support' },
-      {
-        text: 'Recommended',
-        items: projects
       },
       { text: 'Blog', link: 'https://juejin.cn/column/7028509095564935199' },
     ],
