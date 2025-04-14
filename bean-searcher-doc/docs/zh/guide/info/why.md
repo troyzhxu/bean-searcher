@@ -55,5 +55,3 @@ private String username;
 ```
 
 可参考：[高级 > 约束与风控](/guide/advance/safe) 章节。
-
-这时需要注意，上文所提到的：**Search Bean 是直接与数据库有跨表映射关系的 VO**。

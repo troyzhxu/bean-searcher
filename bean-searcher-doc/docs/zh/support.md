@@ -1,6 +1,6 @@
 <script setup>
-import DonateList from './.vitepress/theme/DonateList.vue'
-import HomeSponsors from './.vitepress/theme/HomeSponsors.vue'
+import DonateList from '../.vitepress/theme/DonateList.vue'
+import HomeSponsors from '../.vitepress/theme/HomeSponsors.vue'
 </script>
 
 # 支持我们

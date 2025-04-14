@@ -56,7 +56,7 @@ public class UserController {
 <div style="text-align: center; margin-top:1rem; color: gray"> 广告推销者谢绝进群 </div>
 
 <script setup>
-import OtherProjects from './.vitepress/theme/OtherProjects.vue'
+import OtherProjects from '../.vitepress/theme/OtherProjects.vue'
 </script>
 
 <OtherProjects />
