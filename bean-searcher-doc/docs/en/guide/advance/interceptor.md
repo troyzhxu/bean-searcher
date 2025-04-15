@@ -1,42 +1,42 @@
-# SQL 拦截器
+# SQL Interceptor
 
-Bean Searcher 支持配置 多个 SQL 拦截器 来自定义修改 SQL 的生成规则。
+Bean Searcher supports configuring multiple SQL interceptors to customize the SQL generation rules.
 
 ## SqlInterceptor
 
 ```java
 /**
- * Sql 拦截器
+ * Sql interceptor
  * @author Troy.Zhou @ 2021-11-03
  * @since v3.0.0
  */
 public interface SqlInterceptor {
 
     /**
-     * Sql 拦截
-     * @param <T> 泛型
-     * @param searchSql 检索 SQL 信息（非空）
-     * @param paraMap 原始检索参数（非空）
-     * @param fetchType 检索类型（v3.6.0 新增参数）
-     * @return 新的检索 SQL（非空）
+     * Sql interception
+     * @param <T> Generic type
+     * @param searchSql Retrieval SQL information (not null)
+     * @param paraMap Original retrieval parameters (not null)
+     * @param fetchType Retrieval type (new parameter since v3.6.0)
+     * @return New retrieval SQL (not null)
      */
     <T> SearchSql<T> intercept(SearchSql<T> searchSql, Map<String, Object> paraMap, FetchType fetchType);
 
 }
 ```
 
-在 SQL 拦截器中，我们可以对 `SearchSql` 进行修改，来实现我们自定义的逻辑。
+In the SQL interceptor, we can modify `SearchSql` to implement our custom logic.
 
-* 案例：[使用 SQL 拦截器 实现 多字段排序](https://github.com/troyzhxu/bean-searcher/issues/9)（自 `v3.4.0` 起，框架已内置 [多字段排序](/en/guide/param/sort#多字段排序-since-v3-4) 功能）。
+* Case: [Using SQL Interceptor to Implement Multi-Field Sorting](https://github.com/troyzhxu/bean-searcher/issues/9) (Since `v3.4.0`, the framework has built-in [Multi-Field Sorting](/en/guide/param/sort#Multi-Field Sorting - Since v3.4) functionality).
 
-## 配置（SpringBoot / Grails）
+## Configuration (SpringBoot / Grails)
 
-在 SpringBoot / Grails 项目中，使用 `bean-searcher-boot-starter` 依赖时，只需要把定义好的 `SqlInterceptor` 声明为一个 Bean 即可：
+In SpringBoot / Grails projects, when using the `bean-searcher-boot-starter` dependency, you only need to declare the defined `SqlInterceptor` as a Bean:
 
 ```java
 @Bean
-public SqlInterceptor myFitstSqlInterceptor() {
-    return new MyFitstSqlInterceptor();
+public SqlInterceptor myFirstSqlInterceptor() {
+    return new MyFirstSqlInterceptor();
 }
 
 @Bean
@@ -45,26 +45,26 @@ public SqlInterceptor mySecondSqlInterceptor() {
 }
 ```
 
-## 配置（非 Boot 的 Spring 项目）
+## Configuration (Non-Boot Spring Projects)
 
 ```xml
 <bean id="mapSearcher" class="cn.zhxu.bs.implement.DefaultMapSearcher">
-    <!-- 省略其它属性配置，BeanSearcher 检索器也同此配置 -->
+    <!-- Other attribute configurations are omitted. The BeanSearcher retriever is configured in the same way -->
     <property name="interceptors">
         <list>
-            <bean class="com.example.MyFitstSqlInterceptor" />
+            <bean class="com.example.MyFirstSqlInterceptor" />
             <bean class="com.example.MySecondSqlInterceptor" />
         </list>
     </property>
 </bean>
 ```
 
-## 配置（Others）
+## Configuration (Others)
 
 ```java
 MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
-        // 省略其它属性配置，BeanSearcher 检索器也同此配置
-        .addInterceptor(new MyFitstSqlInterceptor())
+        // Other attribute configurations are omitted. The BeanSearcher retriever is configured in the same way
+        .addInterceptor(new MyFirstSqlInterceptor())
         .addInterceptor(new MySecondSqlInterceptor())
         .build();
 ```

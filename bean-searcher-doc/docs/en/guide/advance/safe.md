@@ -1,34 +1,34 @@
-# 约束与风控
+# Constraints and Risk Control
 
-## 检索条件约束
+## Retrieval Condition Constraints
 
-从前面的 [字段参数](/en/guide/param/field) 章节，我们知道，Bean Searcher 对实体类中的每一个字段，都直接支持了很多的检索方式。但有时候我们可能并不需要这么多，甚至某些时候我们需要禁止一些方式。Bean Searcher 使用 [运算符约束](#运算符约束) 和 [条件约束](#条件约束) 来实现此需求。
+From the previous [Field Parameters](/en/guide/param/field) section, we know that Bean Searcher directly supports many retrieval methods for each field in the entity class. However, sometimes we may not need so many, and in some cases, we need to prohibit certain methods. Bean Searcher uses [Operator Constraints](#Operator Constraints) and [Condition Constraints](#Condition Constraints) to achieve this requirement.
 
-### 运算符约束
+### Operator Constraints
 
-例如：字段 `name` 只允许 **精确匹配** 与 **后模糊匹配**，则，可以在 SearchBean 上使用如下注解：
+For example, if the field `name` only allows **exact matching** and **post-fuzzy matching**, you can use the following annotation on the SearchBean:
 
 ```java
 public class User {
 
-    @DbField(onlyOn = {Equal.class, StartWith.class})           // v3.3.0+ 的写法
-    @DbField(onlyOn = {FieldOps.Equal, FieldOps.StartWith})     // v3.3.0 以前的写法
+    @DbField(onlyOn = {Equal.class, StartWith.class})           // v3.3.0+ syntax
+    @DbField(onlyOn = {FieldOps.Equal, FieldOps.StartWith})     // Syntax before v3.3.0
     private String name;
 
-    // 为减少篇幅，省略其它字段...
+    // Omit other fields to reduce length...
 }
 ```
 
-如上，通过 `@DbField` 注解的 `onlyOn` 属性，指定 `name` 字段只能适用与 **精确匹配** 和 **后模糊匹配** 方式，其它检索方式它将直接忽略。
+As shown above, through the `onlyOn` attribute of the `@DbField` annotation, it is specified that the `name` field can only be used with **exact matching** and **post-fuzzy matching** methods, and other retrieval methods will be directly ignored.
 
-::: tip 默认运算符
-* 若 `@DbField.onlyOn` 为空，则该字段的 默认运算符 为 **Equal**。
-* 若 `@DbField.onlyOn` 不空，则其 **第一个值** 就是该字段的 默认运算符。
+::: tip Default Operator
+* If `@DbField.onlyOn` is empty, the **default operator** for this field is **Equal**.
+* If `@DbField.onlyOn` is not empty, its **first value** is the default operator for this field.
 :::
 
-上面的代码是限制了 `name` 只能有两种检索方式，如果再严格一点，**只允许 精确匹配**，那其实有两种写法。
+The above code restricts `name` to only two retrieval methods. If we want to be more strict and **only allow exact matching**, there are actually two ways to write it.
 
-#### （1）还是使用运算符约束：
+#### (1) Still use operator constraints:
 
 ```java
 @SearchBean(tables="user u, role r", where="u.role_id = r.id", autoMapTo="u") 
@@ -37,25 +37,25 @@ public class User {
     @DbField(onlyOn = Equal.class)
     private String name;
 
-    // 为减少篇幅，省略其它字段...
+    // Omit other fields to reduce length...
 }
 ```
 
-#### （2）在 Controller 的接口方法里把运算符参数覆盖：
+#### (2) Override the operator parameter in the interface method of the Controller:
 
 ```java
 @GetMapping("/index")
 public SearchResult<Map<String, Object>> index(HttpServletRequest request) {
     Map<String, Object> params = MapUtils.flatBuilder(request.getParameterMap())
-        .field(User::getName).op(Equal.class)   // 把 name 字段的运算符直接覆盖为 Equal
+        .field(User::getName).op(Equal.class)   // Directly override the operator of the name field to Equal
         .build()
     return mapSearcher.search(User.class, params);
 }
 ```
 
-### 条件约束
+### Condition Constraints
 
-有时候我们不想让某个字段参与 where 条件，可以这样：
+Sometimes we don't want a certain field to participate in the where condition, we can do this:
 
 ```java
 public class User {
@@ -63,37 +63,37 @@ public class User {
     @DbField(conditional = false)
     private int age;
 
-    // 为减少篇幅，省略其它字段...
+    // Omit other fields to reduce length...
 }
 ```
 
-如上，通过 `@DbField` 注解的 `conditional` 属性， 就直接不允许 `age` 字段参与条件了，无论前端怎么传参，Bean Searcher 都不搭理。
+As shown above, through the `conditional` attribute of the `@DbField` annotation, the `age` field is directly not allowed to participate in the condition. No matter how the front end passes parameters, Bean Searcher will ignore it.
 
-#### 其它项目，配置方法：
+#### Configuration method for other projects:
 
 ```java
 DefaultParamResolver paramResolver = new DefaultParamResolver();
-// 添加参数过滤器
+// Add parameter filters
 paramResolver.setParamFilters(new ParamFilter[] { 
     new MyParamFilter1(),
     new MyParamFilter2(),
 });
-// 构建 Map 检索器
+// Build a Map searcher
 MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
-        // 省略其它配置
-        .paramResolver(paramResolver)   // BeanSearcher 检索器也同此配置
+        // Omit other configurations
+        .paramResolver(paramResolver)   // The BeanSearcher searcher also has the same configuration
         .build();
 ```
 
-## 风控配置项
+## Risk Control Configuration Items
 
-Bean Searcher 默认提供了一些风险控制项，并支持配置。
+Bean Searcher provides some risk control items by default and supports configuration.
 
-在 SpringBoot / Grails/ Solon 项目中，若使用了 `bean-searcher-boot-starter` 或 `bean-searcher-solon-plugin` 依赖，则可在项目配置文件（例如：`application.properties`）中使用如下配置项：
+In SpringBoot / Grails / Solon projects, if the `bean-searcher-boot-starter` or `bean-searcher-solon-plugin` dependency is used, the following configuration items can be used in the project configuration file (e.g., `application.properties`):
 
-配置键名 | 含义 | 可选值 | 默认值 | 开始版本
+Configuration Key Name | Meaning | Optional Values | Default Value | Starting Version
 -|-|-|-|-
-`bean-searcher.params.pagination.max-allowed-size` | 每页最大查询条数（分页保护） | `正整数` | `100` | v2.0.0
-`bean-searcher.params.pagination.max-allowed-offset` | 最大分页深度 | `正整数` | `20000` | v3.8.1
-`bean-searcher.params.filter.max-para-map-size` | 检索参数最大允许的键值对数 | `正整数` | `150` | v3.8.1
-`bean-searcher.params.group.max-expr-length` | 逻辑分组表达式的最大长度（字符数） | `正整数` | `50` | v3.8.1
+`bean-searcher.params.pagination.max-allowed-size` | Maximum number of items per page for querying (pagination protection) | `Positive integer` | `100` | v2.0.0
+`bean-searcher.params.pagination.max-allowed-offset` | Maximum pagination depth | `Positive integer` | `20000` | v3.8.1
+`bean-searcher.params.filter.max-para-map-size` | Maximum allowed number of key-value pairs for retrieval parameters | `Positive integer` | `150` | v3.8.1
+`bean-searcher.params.group.max-expr-length` | Maximum length (number of characters) of the logical grouping expression | `Positive integer` | `50` | v3.8.1

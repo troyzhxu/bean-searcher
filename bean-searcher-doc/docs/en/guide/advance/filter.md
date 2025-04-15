@@ -1,122 +1,122 @@
-# 参数与结果过滤器
+# Parameter and Result Filters
 
-## 参数过滤器
+## Parameter Filters
 
 ### SizeLimitParamFilter
 
-> since v3.8.1，默认启用
+> since v3.8.1, enabled by default
 
-风控过滤器，用于控制检索参数的数量，默认启用。它有以下配置项：
+A risk control filter used to control the number of retrieval parameters, enabled by default. It has the following configuration items:
 
 ```properties
-# 是否启用该过滤器，默认为 true
+# Whether to enable this filter, default is true
 bean-searcher.params.filter.use-size-limit = true
-# 检索参数的最大允许数量，默认 150
+# The maximum allowed number of retrieval parameters, default is 150
 bean-searcher.params.filter.max-para-map-size = 150
 ```
 
 ### ArrayValueParamFilter
 
-> since v4.3.0，默认启用
+> since v4.3.0, enabled by default
 
-用于配合 `MapUtils.flat(..)` 与 `MapUtils.flatBuilder(..)` 方法，兼容数组参数值的用法，例如前端传参时 **同名参数** 传 **多个值** 的情况：
+Used in conjunction with the `MapUtils.flat(..)` and `MapUtils.flatBuilder(..)` methods to be compatible with the usage of array parameter values. For example, when the front - end passes parameters, **parameters with the same name** can pass **multiple values**:
 
 ```
 GET /user/list ? age=20 & age=30 & age-op=bt
 ```
 
-它有以下配置项：
+It has the following configuration items:
 
 ```properties
-# 是否启用该过滤器，默认为 true
+# Whether to enable this filter, default is true
 bean-searcher.params.filter.use-array-value = true
 ```
 
-> 启用之后原来的参数语法仍然支持。
+> The original parameter syntax is still supported after enabling.
 
 ### SuffixOpParamFilter
 
-> since v4.3.0，默认禁用
+> since v4.3.0, disabled by default
 
-后缀运算符参数过滤器，用于简化前端传参。当启用时，原始字段参数名 与 运算符 可以结合为一个新的参数，例如：
+A suffix operator parameter filter used to simplify front - end parameter passing. When enabled, the original field parameter name and the operator can be combined into a new parameter. For example:
 
-* 参数 `age=30` 与 `age-op=eq` 结合在一起： `age-eq=25`。
-* 参数 `age=25` 与 `age-op=gt` 结合在一起： `age-gt=25`。
-* 参数 `name=J` 与 `name-op=sw` 结合在一起： `name-sw=J`。
+* Combine the parameters `age = 30` and `age-op = eq`: `age-eq = 25`.
+* Combine the parameters `age = 25` and `age-op = gt`: `age-gt = 25`.
+* Combine the parameters `name = J` and `name-op = sw`: `name-sw = J`.
 
-其中 `age-eq`、`age-gt`、`name-sw` 中的 `-` 与 `age-op`、`name-op` 中的 `-` 是同一个连字符，可以通过配置项 [`bean-searcher.params.separator`](/en/guide/param/field) 进行自定义。
+The `-` in `age-eq`, `age-gt`, `name-sw` is the same hyphen as the `-` in `age-op`, `name-op`, which can be customized through the configuration item [`bean-searcher.params.separator`](/en/guide/param/field).
 
-如果要启用该过滤器，需要添加以下配置：
+If you want to enable this filter, you need to add the following configuration:
 
 ```properties
-# 是否启用该过滤器，默认为 false
+# Whether to enable this filter, default is false
 bean-searcher.params.filter.use-suffix-op = true
 ```
 
-> 启用之后原来的参数语法仍然支持。
+> The original parameter syntax is still supported after enabling.
 
 ### JsonArrayParamFilter
 
-> since v4.3.0，默认禁用
+> since v4.3.0, disabled by default
 
-JSON 数组参数值过滤器，用于简化前端传参。启用后，当前端需要为同一个字段参数添加多个值时，可以放在一个 JSON 数组进行传递，例如：
+A JSON array parameter value filter used to simplify front - end parameter passing. After enabling, when the front - end needs to add multiple values for the same field parameter, it can be passed in a JSON array. For example:
 
-* `age=[20,30] & age-op=bt` 替代原来的 `age-0=20 & age-1=30 & age-op=bt`
-* `id=[1,2,3] & id-op=il` 替代原来的 `id-0=1 & id-1=2 & id-2=3 & id-op=il`
+* `age=[20,30] & age-op=bt` replaces the original `age-0 = 20 & age-1 = 30 & age-op = bt`
+* `id=[1,2,3] & id-op=il` replaces the original `id-0 = 1 & id-1 = 2 & id-2 = 3 & id-op = il`
 
-如果你同时启用了 [SuffixOpParamFilter](#suffixopparamfilter)，则上例中的参数还可以进一步简化：
+If you also enable the [SuffixOpParamFilter](#suffixopparamfilter), the above parameters can be further simplified:
 
-* `age-bt=[20,30]` 替代原来的 `age-0=20 & age-1=30 & age-op=bt`
-* `id-il=[1,2,3]` 替代原来的 `id-0=1 & id-1=2 & id-2=3 & id-op=il`
+* `age-bt=[20,30]` replaces the original `age-0 = 20 & age-1 = 30 & age-op = bt`
+* `id-il=[1,2,3]` replaces the original `id-0 = 1 & id-1 = 2 & id-2 = 3 & id-op = il`
 
-如果要启用该过滤器，需要添加以下配置：
+If you want to enable this filter, you need to add the following configuration:
 
 ```properties
-# 是否启用该过滤器，默认为 false
+# Whether to enable this filter, default is false
 bean-searcher.params.filter.use-json-array = true
 ```
 
-> 启用之后原来的参数语法仍然支持。
+> The original parameter syntax is still supported after enabling.
 
-由于涉及到 JSON 转换，不可避免的需要使用 JSON 解析相关的框架，但不同的开发者可能偏好不同的 JSON 框架，所以该过滤器并没有与特定的 JSON 框架绑定，而是支持用户自己选择（目前默认有 5 种框架可选），只需要添加如下特定依赖即可（若不添加则该过滤器不生效）： 
+Since JSON conversion is involved, it is inevitable to use JSON parsing related frameworks. However, different developers may prefer different JSON frameworks. So this filter is not bound to a specific JSON framework, but supports users to choose their own (currently there are 5 frameworks available by default). You only need to add the following specific dependencies (if not added, this filter will not work): 
 
-* 使用 Jackson 框架
+* Use the Jackson framework
 
 ```groovy
 implementation 'cn.zhxu:xjsonkit-jackson:1.5.1'
 ```
 
-* 使用 Gson 框架
+* Use the Gson framework
 
 ```groovy
 implementation 'cn.zhxu:xjsonkit-gson:1.5.1'
 ```
 
-* 使用 Fastjson 框架
+* Use the Fastjson framework
 
 ```groovy
 implementation 'cn.zhxu:xjsonkit-fastjson:1.5.1'
 ```
 
-* 使用 Fastjson2 框架
+* Use the Fastjson2 framework
 
 ```groovy
 implementation 'cn.zhxu:xjsonkit-fastjson2:1.5.1'
 ```
 
-* 使用 Snack3 框架
+* Use the Snack3 framework
 
 ```groovy
 implementation 'cn.zhxu:xjsonkit-snack3:1.5.1'
 ```
 
-如果你喜欢的 JSON 解析框架不在其内，也支持自定义底层实现，参考：https://gitee.com/troyzhxu/xjsonkit
+If your favorite JSON parsing framework is not included, you can also customize the underlying implementation. Refer to: https://gitee.com/troyzhxu/xjsonkit
 
-### 参数过滤器优先级
+### Parameter Filter Priority
 
-如果使用的是 `bean-searcher-boot-starter` 或 `bean-searcher-solon-plugin` 依赖，则以上框架内置的过滤器的优先级如下：
+If you are using the `bean-searcher-boot-starter` or `bean-searcher-solon-plugin` dependency, the priority of the above built - in filters in the framework is as follows:
 
-过滤器 | 优先级（越小越先执行）
+Filter | Priority (the smaller, the earlier to execute)
 -|-
 `SizeLimitParamFilter` | `-100`
 `ArrayValueParamFilter` | `100`
@@ -124,11 +124,11 @@ implementation 'cn.zhxu:xjsonkit-snack3:1.5.1'
 `JsonArrayParamFilter` | `300`
 `IndexArrayParamFilter` | `400`
 
-而新注入的参数过滤器的优先级则由 IOC 框架的注入方式决定。例如 SpringBoot 框架可用 `@order` 注解来控制优先级，Solon 框架可用 `@Bean` 注解的 `index` 属性来控制。
+The priority of newly injected parameter filters is determined by the injection method of the IOC framework. For example, in the SpringBoot framework, you can use the `@order` annotation to control the priority, and in the Solon framework, you can use the `index` attribute of the `@Bean` annotation to control it.
 
-### 自定义参数过滤器
+### Custom Parameter Filter
 
-你还可自定义任何参数过滤规则，在 SpringBoot / SpringMVC / Grails 项目中，只需要配置一个 Bean（以 SpringBoot 为例）：
+You can also customize any parameter filtering rules. In SpringBoot / SpringMVC / Grails projects, you only need to configure a Bean (taking SpringBoot as an example):
 
 ```java
 @Bean
@@ -136,61 +136,61 @@ public ParamFilter myParamFilter() {
     return new ParamFilter() {
         @Override
         public <T> Map<String, Object> doFilter(BeanMeta<T> beanMeta, Map<String, Object> paraMap) {
-            // beanMeta 是正在检索的实体类的元信息, paraMap 是当前的检索参数
-            // TODO: 这里可以写一些自定义的参数过滤规则
-            return paraMap;      // 返回过滤后的检索参数
+            // beanMeta is the meta - information of the entity class being retrieved, paraMap is the current retrieval parameter
+            // TODO: You can write some custom parameter filtering rules here
+            return paraMap;      // Return the filtered retrieval parameters
         }
     };
 }
 ```
 
-其它项目，配置方法：
+For other projects, the configuration method is as follows:
 
 ```java
 DefaultParamResolver paramResolver = new DefaultParamResolver();
-// 添加参数过滤器
+// Add parameter filters
 paramResolver.addParamFilter(new MyParamFilter1());
 paramResolver.addParamFilter(new MyParamFilter2());
-// 构建 Map 检索器
+// Build a Map searcher
 MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
-        // 省略其它配置
-        .paramResolver(paramResolver)   // BeanSearcher 检索器也同此配置
+        // Omit other configurations
+        .paramResolver(paramResolver)   // The BeanSearcher searcher is also configured in the same way
         .build();
 ```
 
-## 结果过滤器（v3.6.0）
+## Result Filter (v3.6.0)
 
-有时可能想对 Bean Searcher 的检索结果做进一步的处理，这时候可以使用 `ResultFilter` 来处理。
+Sometimes, you may want to further process the retrieval results of Bean Searcher. In this case, you can use the `ResultFilter` to handle it.
 
 ### ResultFilter
 
-它是一个接口，共定义了两个方法，它分别作用于 `BeanSearcher` 与 `MapSearcher` 检索器：
+It is an interface that defines two methods, which act on the `BeanSearcher` and `MapSearcher` searchers respectively:
 
 ```java
 public interface ResultFilter {
 
     /**
      * ResultFilter
-     * 对 {@link BeanSearcher } 的检索结果做进一步转换处理
-     * @param result 检索结果
-     * @param beanMeta 检索实体类的元信息
-     * @param paraMap 检索参数
-     * @param fetchType 检索类型
-     * @param <T> 泛型
-     * @return 转换后的检索结果
+     * Further convert and process the retrieval results of {@link BeanSearcher }
+     * @param result The retrieval result
+     * @param beanMeta The meta - information of the retrieved entity class
+     * @param paraMap The retrieval parameters
+     * @param fetchType The retrieval type
+     * @param <T> Generic type
+     * @return The converted retrieval result
      */
     default <T> SearchResult<T> doBeanFilter(SearchResult<T> result, BeanMeta<T> beanMeta, Map<String, Object> paraMap, FetchType fetchType) {
         return result;
     }
 
     /**
-     * 对 {@link MapSearcher } 的检索结果做进一步转换处理
-     * @param result 检索结果
-     * @param beanMeta 检索实体类的元信息
-     * @param paraMap 检索参数
-     * @param fetchType 检索类型
-     * @param <T> 泛型
-     * @return 转换后的检索结果
+     * Further convert and process the retrieval results of {@link MapSearcher }
+     * @param result The retrieval result
+     * @param beanMeta The meta - information of the retrieved entity class
+     * @param paraMap The retrieval parameters
+     * @param fetchType The retrieval type
+     * @param <T> Generic type
+     * @return The converted retrieval result
      */
     default <T> SearchResult<Map<String, Object>> doMapFilter(SearchResult<Map<String, Object>> result, BeanMeta<T> beanMeta, Map<String, Object> paraMap, FetchType fetchType) {
         return result;
@@ -199,9 +199,9 @@ public interface ResultFilter {
 }
 ```
 
-### 配置（SpringBoot / Grails）
+### Configuration (SpringBoot / Grails)
 
-在 SpringBoot / Grails 项目中，使用 `bean-searcher-boot-starter` 依赖时，只需要把定义好的 `ResultFilter` 声明为一个 Bean 即可：
+In SpringBoot / Grails projects, when using the `bean-searcher-boot-starter` dependency, you only need to declare the defined `ResultFilter` as a Bean:
 
 ```java
 @Bean
@@ -215,11 +215,11 @@ public ResultFilter mySecondResultFilter() {
 }
 ```
 
-### 配置（非 Boot 的 Spring 项目）
+### Configuration (Non - Boot Spring Projects)
 
 ```xml
 <bean id="mapSearcher" class="cn.zhxu.bs.implement.DefaultMapSearcher">
-    <!-- 省略其它属性配置，BeanSearcher 检索器也同此配置 -->
+    <!-- Omit other attribute configurations, the BeanSearcher searcher is also configured in the same way -->
     <property name="resultFilters">
         <list>
             <bean class="com.example.FitstResultFilter" />
@@ -229,12 +229,12 @@ public ResultFilter mySecondResultFilter() {
 </bean>
 ```
 
-### 配置（Others）
+### Configuration (Others)
 
 ```java
 MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
         .addResultFilter(new FitstResultFilter());      // since v3.6.1
         .addResultFilter(new SecondResultFilter());     // since v3.6.1
-        // 省略其它属性配置，BeanSearcher 检索器也同此配置
+        // Omit other attribute configurations, the BeanSearcher searcher is also configured in the same way
         .build();
 ```

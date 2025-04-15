@@ -1,28 +1,28 @@
-# 慢 SQL 日志与监听（since v3.7.0）
+# Slow SQL Logging and Monitoring (since v3.7.0)
 
-自 `v3.7.0` 起 Bean Searcher 提供了慢 SQL 日志与 监听功能。
+Since `v3.7.0`, Bean Searcher has provided slow SQL logging and monitoring functionality.
 
-## 慢 SQL 阈值
+## Slow SQL Threshold
 
-慢 SQL 阈值指的是慢 SQL 的最小执行耗时，它是判断一个 SQL 是否为慢 SQL 的标准，单位 `ms`，默认值为 `500`。当然也可以通过配置修改。
+The slow SQL threshold refers to the minimum execution time for a SQL statement to be considered a slow SQL. It is the criterion for determining whether a SQL statement is a slow SQL, with the unit being `ms` and the default value being `500`. Of course, it can also be modified through configuration.
 
-### SpringBoot / Grails 配置项（使用 `bean-searcher-boot-starter` 依赖）
+### SpringBoot / Grails Configuration Items (using the `bean-searcher-boot-starter` dependency)
 
-配置键名 | 含义 | 类型 | 默认值
+Configuration Key | Meaning | Type | Default Value
 -|-|-|-
-`bean-searcher.sql.slow-sql-threshol` | 慢 SQL 阈值（单位：毫秒） | `int` | `500`
+`bean-searcher.sql.slow-sql-threshold` | Slow SQL threshold (unit: milliseconds) | `int` | `500`
 
-### 非 Boot 的 Spring 配置方法（使用 `bean-searcher` 依赖）
+### Non-Boot Spring Configuration Method (using the `bean-searcher` dependency)
 
 ```xml
 <bean id="sqlExecutor" class="cn.zhxu.bs.implement.DefaultSqlExecutor">
     <property name="dataSource" ref="dataSource" />
-    <!-- 配置慢 SQL 阈值 -->
+    <!-- Configure the slow SQL threshold -->
     <property name="slowSqlThreshold" value="500" />
 </bean>
-<!-- 声明 MapSearcher 检索器，它查询的结果是 Map 对象 -->
+<!-- Declare the MapSearcher retriever, which returns query results as Map objects -->
 <bean id="mapSearcher" class="cn.zhxu.bs.implement.DefaultMapSearcher">
-    <!-- 省略其它属性配置，BeanSearcher 检索器也同此配置 -->
+    <!-- Omit other property configurations; the BeanSearcher retriever has the same configuration -->
     <property name="sqlExecutor" ref="sqlExecutor" />
 </bean>
 ```
@@ -31,60 +31,60 @@
 
 ```java
 DefaultSqlExecutor sqlExecutor = new DefaultSqlExecutor(getDefaultDataSource());
-// 配置慢 SQL 阈值
+// Configure the slow SQL threshold
 sqlExecutor.setSlowSqlThreshold(500);
 MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
-        // 省略其它属性配置，BeanSearcher 检索器也同此配置
+        // Omit other property configurations; the BeanSearcher retriever has the same configuration
         .sqlExecutor(sqlExecutor)
         .build();
 ```
 
-## 开启慢 SQL 日志
+## Enable Slow SQL Logging
 
-慢 SQL 的日志级别为 `WARN`，所以，只需将 `cn.zhxu.bs.implement.DefaultSqlExecutor` 的日志级别调整为 `WARN | INFO | DEBUG` 即可开启。
+The log level for slow SQL is `WARN`. Therefore, you can enable slow SQL logging by adjusting the log level of `cn.zhxu.bs.implement.DefaultSqlExecutor` to `WARN | INFO | DEBUG`.
 
-日志效果（`执行耗时`、`SQL`、`执行参数`、`实体类`）：
+Log Effect (`Execution Time`, `SQL`, `Execution Parameters`, `Entity Class`):
 
 ```log
 14:55:02.151 WARN - bean-searcher [600ms] slow-sql: [select count(*) s_count from employee e where (e.type = ?)] params: [1] on [com.example.sbean.Employee]
 ```
 
-参考：[起步 > 使用 > SQL 日志](/en/guide/start/use#sql-日志) 章节。
+Reference: [Getting Started > Usage > SQL Logging](/en/guide/start/use#sql-Logging) section.
 
-## 监听慢 SQL 事件
+## Monitor Slow SQL Events
 
-有时候我们需要在代码中监听慢 SQL 事件，以便做进一步的自定义处理（比如：发送警告通知）。
+Sometimes, we need to monitor slow SQL events in the code for further custom processing (e.g., sending warning notifications).
 
-### SpringBoot / Grails（使用 `bean-searcher-boot-starter` 依赖）只需配置一个 Bean 即可
+### SpringBoot / Grails (using the `bean-searcher-boot-starter` dependency). Just configure a Bean.
 
 ```java
 @Bean
 public SqlExecutor.SlowListener slowSqlListener() {
     return (
-        Class<?> beanClass,     // 发生慢 SQL 的实体类 
-        String slowSql,         // 慢 SQL 字符串
-        List<Object> params,    // SQL 执行参数
-        long timeCost           // 执行耗时（单位：ms）
+        Class<?> beanClass,     // The entity class where the slow SQL occurred 
+        String slowSql,         // The slow SQL string
+        List<Object> params,    // SQL execution parameters
+        long timeCost           // Execution time (unit: ms)
     ) -> {
-        // TODO: 监听处理
+        // TODO: Monitoring processing
     }
 }
 ```
 
-### 非 Boot 的 Spring 项目
+### Non-Boot Spring Projects
 
 ```xml
 <bean id="sqlExecutor" class="cn.zhxu.bs.implement.DefaultSqlExecutor">
     <property name="dataSource" ref="dataSource" />
-    <!-- 配置 慢 SQL 监听器 -->
+    <!-- Configure the slow SQL listener -->
     <property name="slowListener">
-        <!-- 自定义 MySlowSqlListener 实现 SqlExecutor.SlowListener 接口 -->
+        <!-- Customize MySlowSqlListener to implement the SqlExecutor.SlowListener interface -->
         <bean class="com.example.MySlowSqlListener" />
     </property>
 </bean>
-<!-- 声明 MapSearcher 检索器，它查询的结果是 Map 对象 -->
+<!-- Declare the MapSearcher retriever, which returns query results as Map objects -->
 <bean id="mapSearcher" class="cn.zhxu.bs.implement.DefaultMapSearcher">
-    <!-- 省略其它属性配置，BeanSearcher 检索器也同此配置 -->
+    <!-- Omit other property configurations; the BeanSearcher retriever has the same configuration -->
     <property name="sqlExecutor" ref="sqlExecutor" />
 </bean>
 ```
@@ -93,17 +93,17 @@ public SqlExecutor.SlowListener slowSqlListener() {
 
 ```java
 DefaultSqlExecutor sqlExecutor = new DefaultSqlExecutor(getDefaultDataSource());
-// 配置慢 SQL 监听器
+// Configure the slow SQL listener
 sqlExecutor.setSlowListener((
-    Class<?> beanClass,     // 发生慢 SQL 的实体类 
-    String slowSql,         // 慢 SQL 字符串
-    List<Object> params,    // SQL 执行参数
-    long timeCost           // 执行耗时（单位：ms）
+    Class<?> beanClass,     // The entity class where the slow SQL occurred 
+    String slowSql,         // The slow SQL string
+    List<Object> params,    // SQL execution parameters
+    long timeCost           // Execution time (unit: ms)
 ) -> {
-    // TODO: 监听处理
+    // TODO: Monitoring processing
 });
 MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
-        // 省略其它属性配置，BeanSearcher 检索器也同此配置
+        // Omit other property configurations; the BeanSearcher retriever has the same configuration
         .sqlExecutor(sqlExecutor)
         .build();
 ```

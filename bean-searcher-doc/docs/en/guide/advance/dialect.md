@@ -1,35 +1,35 @@
-# SQL 方言（Dialect）
+# SQL Dialect
 
-Bean Searcher 可以为我们自动生成完整的 SQL 语句，但对应不同的数据库，SQL 语法可能略有不同。为此，Bean Searcher 使用方言（Dialect）来扩展支持这些不同的数据库。
+Bean Searcher can automatically generate complete SQL statements for us. However, the SQL syntax may vary slightly for different databases. To address this, Bean Searcher uses dialects to extend support for these different databases.
 
-## 方言实现
+## Dialect Implementations
 
-Bean Searcher 自带四种 Dialect 实现：
+Bean Searcher comes with four built-in Dialect implementations:
 
-* [`MySqlDialect`](https://github.com/troyzhxu/bean-searcher/blob/dev/bean-searcher/src/main/java/cn/zhxu/bs/dialect/MySqlDialect.java) - **默认方言**，可用于 类 MySql 的数据库
-* [`OracleDialect`](https://github.com/troyzhxu/bean-searcher/blob/dev/bean-searcher/src/main/java/cn/zhxu/bs/dialect/OracleDialect.java) - 可用于 类 Oracle 12c（2013年6月发布）及以上版本 的数据库
-* [`PostgreSqlDialect`](https://github.com/troyzhxu/bean-searcher/blob/dev/bean-searcher/src/main/java/cn/zhxu/bs/dialect/PostgreSqlDialect.java) - 可用于 类 PostgreSqlDialect 的数据库（**since v3.6.0**）
-* [`SqlServerDialect`](https://github.com/troyzhxu/bean-searcher/blob/dev/bean-searcher/src/main/java/cn/zhxu/bs/dialect/SqlServerDialect.java) - 可用于 类 SqlServer (v2012+) 的数据库（**since v3.7.0**）
-* 其它数据库可自定义 Dialect，可 [参考 MySqlDialect 的实现](https://github.com/troyzhxu/bean-searcher/blob/dev/bean-searcher/src/main/java/cn/zhxu/bs/dialect/MySqlDialect.java)
+* [`MySqlDialect`](https://github.com/troyzhxu/bean-searcher/blob/dev/bean-searcher/src/main/java/cn/zhxu/bs/dialect/MySqlDialect.java) - **Default dialect**, suitable for MySQL-like databases.
+* [`OracleDialect`](https://github.com/troyzhxu/bean-searcher/blob/dev/bean-searcher/src/main/java/cn/zhxu/bs/dialect/OracleDialect.java) - Suitable for databases similar to Oracle 12c (released in June 2013) and above.
+* [`PostgreSqlDialect`](https://github.com/troyzhxu/bean-searcher/blob/dev/bean-searcher/src/main/java/cn/zhxu/bs/dialect/PostgreSqlDialect.java) - Suitable for PostgreSQL-like databases (**since v3.6.0**).
+* [`SqlServerDialect`](https://github.com/troyzhxu/bean-searcher/blob/dev/bean-searcher/src/main/java/cn/zhxu/bs/dialect/SqlServerDialect.java) - Suitable for databases similar to SQL Server (v2012+) (**since v3.7.0**).
+* For other databases, you can customize a Dialect. You can [refer to the implementation of MySqlDialect](https://github.com/troyzhxu/bean-searcher/blob/dev/bean-searcher/src/main/java/cn/zhxu/bs/dialect/MySqlDialect.java).
 
-::: tip Bean Searcher 中的方言很简单
-* 自 **v3.3.0** 起，它被简化，只需实现 **两个** 方法即可；
-* 自 **v3.7.0** 起，再被简化，只需实现 **一个** 方法即可。
+::: tip The dialect in Bean Searcher is very simple
+* Since **v3.3.0**, it has been simplified, and only **two** methods need to be implemented.
+* Since **v3.7.0**, it has been further simplified, and only **one** method needs to be implemented.
 :::
 
-## 配置方法
+## Configuration Methods
 
-以下介绍各框架下的方言配置。
+The following introduces the dialect configuration in each framework.
 
 ### SpringBoot / Grails
 
-使用 `bean-searcher-boot-starter` 依赖时，如需切换 Bean Searcher 自带的方言，则可通过以下配置项来指定：
+When using the `bean-searcher-boot-starter` dependency, if you need to switch the built-in dialect of Bean Searcher, you can specify it through the following configuration item:
 
-配置键名 | 含义 | 可选值 | 默认值
+Configuration Key | Meaning | Available Values | Default Value
 -|-|-|-
-`bean-searcher.sql.dialect` | SQL 方言 | `MySQL`、`Oracle`、`PostgreSQL`、`SqlServer` | `MySQL`
+`bean-searcher.sql.dialect` | SQL dialect | `MySQL`, `Oracle`, `PostgreSQL`, `SqlServer` | `MySQL`
 
-自定义的方言，只需将之注册为 Bean 即可：
+For a custom dialect, you just need to register it as a Bean:
 
 ```java
 @Bean
@@ -38,13 +38,13 @@ public Dialect myDialect() {
 }
 ```
 
-### 非 Boot 的 Spring 项目
+### Non-Boot Spring Projects
 
 ```xml
-<!-- 定义 Oracle 方言 -->
+<!-- Define the Oracle dialect -->
 <bean id="dialect" class="cn.zhxu.bs.dialect.MyDialect" />
 
-<!-- v3.3 起需要配置运算符池 -->
+<!-- Since v3.3, you need to configure the operator pool -->
 <bean id="fieldOpPool" class="cn.zhxu.bs.FieldOpPool" 
     p:dialect-ref="dialect" />
 
@@ -55,7 +55,7 @@ public Dialect myDialect() {
     p:dialect-ref="dialect" />
 
 <bean id="mapSearcher" class="cn.zhxu.bs.implement.DefaultMapSearcher">
-    <!-- 省略其它属性配置，BeanSearcher 检索器也同此配置 -->
+    <!-- Other property configurations are omitted. The BeanSearcher retriever is configured in the same way -->
     <property name="paramResolver" ref="paramResolver" />
     <property name="sqlResolver" ref="sqlResolver" />
 </bean>
@@ -65,56 +65,56 @@ public Dialect myDialect() {
 
 ```java
 Dialect dialect = new MyDialect();
-// v3.3 起需要配置运算符池
+// Since v3.3, you need to configure the operator pool
 FieldOpPool fieldOpPool = new FieldOpPool();
-fieldOpPool.setDialect(dialect);    // 配置使用 Oracle 方言
+fieldOpPool.setDialect(dialect);    // Configure to use the Oracle dialect
 DefaultParamResolver paramResolver = new DefaultParamResolver();
 paramResolver.setFieldOpPool(fieldOpPool);
 DefaultSqlResolver sqlResolver = new DefaultSqlResolver();
-sqlResolver.setDialect(dialect);    // 配置使用 Oracle 方言
+sqlResolver.setDialect(dialect);    // Configure to use the Oracle dialect
 MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
-        // 省略其它属性配置，BeanSearcher 检索器也同此配置
+        // Other property configurations are omitted. The BeanSearcher retriever is configured in the same way
         .paramResolver(paramResolver)
         .sqlResolver(sqlResolver)
         .build();
 ```
 
-## 动态方言（v4.2.0）
+## Dynamic Dialect (v4.2.0)
 
-动态方言一般在 [多数据源](/en/guide/advance/datasource) 的场景下才会使用。其实现原理非常简单，仅两个实现类：
+The dynamic dialect is generally used in the scenario of [multiple data sources](/en/guide/advance/datasource). Its implementation principle is very simple, with only two implementation classes:
 
-* `DynamicDialect`（核心类）
+* `DynamicDialect` (core class)
 * `DynamicDialectSupport`
 
-配置方法（使用 `bean-searcher-boot-starter` 与  `bean-searcher-solon-plugin` 依赖时）：
+Configuration method (when using the `bean-searcher-boot-starter` and `bean-searcher-solon-plugin` dependencies):
 
-配置键名 | 含义 | 可选值 | 默认值
+Configuration Key | Meaning | Available Values | Default Value
 -|-|-|-
-`bean-searcher.sql.dialect-dynamic` | 是否使用动态方言 | `true`、`false` | `false`
-`bean-searcher.sql.dialects` | 不同数据源的方言关系 | `Map<String, Dialect>` | 空
+`bean-searcher.sql.dialect-dynamic` | Whether to use the dynamic dialect | `true`, `false` | `false`
+`bean-searcher.sql.dialects` | The dialect relationship of different data sources | `Map<String, Dialect>` | Empty
 
-例如：
+For example:
 
 ```yml
 bean-searcher:
   sql:
-    # 默认 MySQL 方言
+    # Default MySQL dialect
     dialect: MySQL
-    # 启用动态方言
+    # Enable the dynamic dialect
     dialect-dynamic: true
     dialects:
-      # user 数据源使用 Oracle 方言
+      # Use the Oracle dialect for the user data source
       user: Oracle
-      # order 数据源使用 PostgreSQL 方言
+      # Use the PostgreSQL dialect for the order data source
       order: PostgreSQL
 ```
 
-以上指定的方言都是框架自带的方言，你也可以自定义方言，并用如下方法配置某个数据源使用自定义方言：
+The dialects specified above are all built-in dialects of the framework. You can also customize a dialect and configure a data source to use the custom dialect in the following way:
 
 ```java
 @Bean
 public DataSourceDialect shopDialect() {
-    // shop 数据源使用 MyDialect 自定义方言
+    // Use the custom MyDialect for the shop data source
     return new DataSourceDialect("shop", new MyDialect());
 }
 ```
