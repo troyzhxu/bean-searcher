@@ -1,52 +1,52 @@
-# 请求第三方 BS 服务
+# Call Remote BS Services
 
-## 场景案例
+## Scenario Example
 
-A 服务中有一个用户列表接口（GET /user/list），该接口是用 Bean Searcher 驱动的，并且遵从了 Bean Searcher 的参数约定。
+In Service A, there is a user list interface (GET /user/list). This interface is driven by Bean Searcher and follows the parameter conventions of Bean Searcher.
 
-假设现在你正在开发一个 B 服务，在 B 服务中你需要远程调用 A 服务中的这个用户列表接口，那么你该如何组织参数呢？能否使用参数构建器呢？
+Suppose you are currently developing Service B, and in Service B, you need to remotely call this user list interface in Service A. So, how should you organize the parameters? Can you use the parameter builder?
 
-## 不使用参数构建器
+## Without Using the Parameter Builder
 
-例如，你需要在一堆 用户ID 里去检索年龄最大的 20 个用户，你的代码可能会这样写：
+For example, if you need to retrieve the 20 users with the maximum age from a list of user IDs, your code might look like this:
 
 ```java
-List<Long> userIds = getUserIds();  // 用户ID
-// 用户 ID 参数
+List<Long> userIds = getUserIds();  // User IDs
+// User ID parameters
 Map<String, Object> params = new HashMap<>();
 for (int i = 0; i < userIds.size(); i++) {
     params.put("id-" + i, userIds.get(i));
 }
 params.put("id-op", "il");
-// 按年龄降序
+// Sort by age in descending order
 params.put("sort", "age");
 params.put("order", "desc");
-// 分页参数
+// Pagination parameters
 params.put("page", 0);
 params.put("size", 20);
-// 调用远程服务中的接口
+// Call the interface in the remote service
 List<User> users = romoteApi.getUserList(params);
 ```
 
-## 使用参数构建器
+## Using the Parameter Builder
 
-自 `v4.3.0` 起，你也可以使用参数构建器提供的 `buildForRpc()` 方法，来生成远程调用的请求参数了：
+Since `v4.3.0`, you can also use the `buildForRpc()` method provided by the parameter builder to generate request parameters for remote calls:
 
 ```java
-List<Long> userIds = getUserIds();  // 用户ID
-// 组织检索参数
+List<Long> userIds = getUserIds();  // User IDs
+// Organize retrieval parameters
 Map<String, Object> params = MapUtils.builder()
         .field(User::getId, userIds).op(InList.class)
         .orderBy(User::getAge).desc()
         .page(0, 20)
         .buildForRpc();
-// 调用远程服务中的接口
+// Call the interface in the remote service
 List<User> users = romoteApi.getUserList(params);
 ```
 
-## 自定义参数名
+## Customizing Parameter Names
 
-如果远程服务中的 Bean Searcher 接口，自定义了一些参数名（比如：分页参数名使用 `pageNo` 与 `pageSize`，字段参数名分隔符使用了下划线 `_`），那么也可以使用参数构建器提供的 `buildForRpc(RpcNames)` 方法：
+If the Bean Searcher interface in the remote service has customized some parameter names (for example, the pagination parameter names use `pageNo` and `pageSize`, and the field parameter name separator uses an underscore `_`), you can also use the `buildForRpc(RpcNames)` method provided by the parameter builder:
 
 ```java
 Map<String, Object> params = MapUtils.builder()
@@ -54,21 +54,21 @@ Map<String, Object> params = MapUtils.builder()
         .page(0, 20)
         .buildForRpc(
             RpcNames.newNames()
-                .separator("_")   // 字段参数名分隔符使用了下划线
-                .page("pageNo")   // 分页页码参数使用 pageNo
-                .size("pageSize") // 分页大小参数使用 pageSize
+                .separator("_")   // Use an underscore as the field parameter name separator
+                .page("pageNo")   // Use pageNo as the pagination page number parameter
+                .size("pageSize") // Use pageSize as the pagination size parameter
         );
-// 调用 A 服务中的接口
+// Call the interface in Service A
 List<User> users = romoteApi.getUserList(params);
 ```
 
-或者，你也可以在服务启动时修改全局 RPC 参数名的默认配置：
+Alternatively, you can modify the default configuration of global RPC parameter names when the service starts:
 
 ```java
-RpcNames.DEFAULT          // 默认配置对象
-    .separator("_")       // 字段参数名分隔符使用了下划线
-    .page("pageNo")       // 分页页码参数使用 pageNo
-    .size("pageSize");    // 分页大小参数使用 pageSize
+RpcNames.DEFAULT          // Default configuration object
+    .separator("_")       // Use an underscore as the field parameter name separator
+    .page("pageNo")       // Use pageNo as the pagination page number parameter
+    .size("pageSize");    // Use pageSize as the pagination size parameter
 ```
 
-该配置只影响 `buildForRpc(..)` 方法，对本服务的 `BeanSearcher` 与 `MapSearcher` 检索器没有影响。
+This configuration only affects the `buildForRpc(..)` method and has no impact on the `BeanSearcher` and `MapSearcher` retrievers in this service.

@@ -1,28 +1,28 @@
-# 大表滚动
+# Large Table Rolling
 
-## 需求场景
+## Requirement Scenario
 
-某张表的数据量非常巨大（例如：订单表、日志表、事件表），需要对表进行（按年/按月）滚动，例如：
+The data volume of a certain table is extremely large (e.g., order table, log table, event table). The table needs to be rolled (by year/month). For example:
 
-* 表 `order_2018` 存放 2018 年的订单
-* 表 `order_2019` 存放 2019 年的订单
-* 表 `order_2020` 存放 2020 年的订单
-* 表 `order_2021` 存放 2021 年的订单
+* Table `order_2018` stores orders from 2018.
+* Table `order_2019` stores orders from 2019.
+* Table `order_2020` stores orders from 2020.
+* Table `order_2021` stores orders from 2021.
 
-#### 需求目的
+#### Requirement Objectives
 
-* 便于删除旧数据，释放空间
-* 便于旧数据归档
+* Facilitate the deletion of old data to free up space.
+* Facilitate the archiving of old data.
 
-## 实现方案
+## Implementation Solution
 
-> 具体如何实现表名滚动，不是本文讨论的重点。这里只说大表滚动后业务端还如何统一查询历史数据。
+> How to specifically implement table name rolling is not the focus of this article. Here, we only discuss how the business side can still perform unified queries on historical data after large table rolling.
 
-此时，我们的 SearchBean 可以这样定义（使用 [拼接参数](/en/guide/param/embed#%E6%8B%BC%E6%8E%A5%E5%8F%82%E6%95%B0)）：
+At this time, our SearchBean can be defined as follows (using [Concatenating Parameters](/en/guide/param/embed#Concatenating_Parameters)):
 
 ```java
 @SearchBean(
-    tables = "order_:year: o, user u",      // 参数 year 由检索时动态指定
+    tables = "order_:year: o, user u",      // The parameter 'year' is dynamically specified during retrieval.
     where = "o.user_id = u.id",
     autoMapTo = "o"
 )
@@ -34,11 +34,11 @@ public class Order {
     private String orderNo;
     @DbField("u.username")
     private String username;
-    // 省略其它 ...
+    // Other fields are omitted...
 }
 ```
 
-然后，后台订单管理系统加载数据时，同样只需几行代码便可轻松搞定：
+Then, when the background order management system loads data, it can be easily accomplished with just a few lines of code:
 
 ```java
 @RestController
@@ -49,15 +49,15 @@ public class OrderController {
     private BeanSearcher beanSearcher;
 
     /**
-     * 订单检索接口
-     * @param year 查询的订单年份，如：2018，2019
+     * Order retrieval interface
+     * @param year The year of the orders to be queried, e.g., 2018, 2019
      **/
     @GetMapping("/index")
     public SearchResult<Order> index(HttpServletRequest request, int year) {
         Map<String, Object> params = MapUtils.flatBuilder(request.getParameterMap())
-                .put(Order.TABLE_SUFFIX, year)              // 指定表名后缀
+                .put(Order.TABLE_SUFFIX, year)              // Specify the table name suffix
                 .build();
-        return beanSearcher.search(Order.class, params);    // 检索并返回数据
+        return beanSearcher.search(Order.class, params);    // Retrieve and return data
     }
 	
 }

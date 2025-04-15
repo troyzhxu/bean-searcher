@@ -1,14 +1,14 @@
-# 其它玩法
+# Other Usages
 
-Bean Searcher 的参数过滤器 ParamFilter，非常易于自定义，可以让我们用简单几行代码，就玩出其它 ORM 难以实现的花样。
+The parameter filter `ParamFilter` of Bean Searcher is very easy to customize. With just a few simple lines of code, we can achieve things that are difficult to implement with other ORMs.
 
-## 自动接收请求参数
+## Automatically Receive Request Parameters
 
 ```java
 @Component
 public class MyParamFilter implements ParamFilter {
 
-    // 定义一个常量，作为一个开关，当启用时，则取消自动加载功能
+    // Define a constant as a switch. When enabled, the automatic loading function is cancelled.
     public static final String IGNORE_REQUEST_PARAMS = "IGNORE_REQUEST_PARAMS";
 
     @Override
@@ -17,82 +17,82 @@ public class MyParamFilter implements ParamFilter {
         RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
         if (attributes instanceof ServletRequestAttributes &&
                 !paraMap.containsKey(IGNORE_REQUEST_PARAMS)) {
-            // 在一个 Web 请求上下文中，并且没有开启 IGNORE_REQUEST_PARAMS，则取出前端传来的所有参数
+            // In a Web request context and IGNORE_REQUEST_PARAMS is not enabled, retrieve all parameters sent from the front end.
             HttpServletRequest request = ((ServletRequestAttributes) attributes).getRequest();
             builder = MapUtils.flatBuilder(request.getParameterMap());
         } else {
             builder = MapUtils.builder();
         }
-        // 自定义查询参数，优先级最高，可以覆盖上面的参数
+        // Custom query parameters have the highest priority and can override the above parameters.
         builder.putAll(paraMap);
         return builder.build();
     }
 }
 ```
 
-* 然后，我们在 `Controller` 中写查询的时候，就可以不用再手动接收前端的请求参数了，可以使业务代码进一步的简化，例如：
+* Then, when writing queries in the `Controller`, we no longer need to manually receive the front-end request parameters, which can further simplify the business code. For example:
 
 ```java
 @GetMapping("/users")
 public List<UserVO> users() {
-    // 前端的请求参数，都已经在 MyParamFilter 中自动接收了
+    // The front-end request parameters have been automatically received in MyParamFilter.
     return beanSearcher.searchList(UserVO.class);
 }
 ```
 
-* 有时候除了前端的请求参数，也需要后端根据业务构造一些额外添的参数，此时也只需处理这些额外参数既可以：
+* Sometimes, in addition to the front-end request parameters, the back-end also needs to construct some additional parameters based on the business. In this case, we only need to handle these additional parameters:
 
 ```java
 @GetMapping("/users")
 public List<UserVO> users() {
     var params = MapUtils.builder()
-          .field(UserVO::getAge, 10, 20).op(Between.class)  // 额外参数
+          .field(UserVO::getAge, 10, 20).op(Between.class)  // Additional parameters
           .build();
     return beanSearcher.searchList(UserVO.class, params);
 }
 ```
 
-* 还有时候，我们不希望框架自动加载前端的请求参数，这时候，就可以使用上文定义的开关常量 `IGNORE_REQUEST_PARAMS`:
+* There are also times when we don't want the framework to automatically load the front-end request parameters. In this case, we can use the switch constant `IGNORE_REQUEST_PARAMS` defined above:
 
 ```java
 @GetMapping("/users")
 public List<UserVO> users() {
     var params = MapUtils.builder()
-          .put(MyParamFilter.IGNORE_REQUEST_PARAMS, true)   // 取消自动接收功能
+          .put(MyParamFilter.IGNORE_REQUEST_PARAMS, true)   // Cancel the automatic receiving function
           .build();
     return beanSearcher.searchList(UserVO.class, params);
 }
 ```
 
-## 多租户隔离
+## Multi-Tenant Isolation
 
 ```java
 @Component
 public class MyParamFilter implements ParamFilter {
     @Override
     public <T> Map<String, Object> doFilter(BeanMeta<T> beanMeta, Map<String, Object> paraMap) {
-        // 租户ID字段：tenantId
-        var tenantId = getTenantIdFromCurrentRequest();  // 从当前请求中获取租户ID
+        // Tenant ID field: tenantId
+        var tenantId = getTenantIdFromCurrentRequest();  // Get the tenant ID from the current request
         paraMap.put("tenantId", tenantId);
         return paraMap;
     }
 }
 ```
 
-该配置生效的前提是：检索实体类中存在 `tenantId` 字段，当然你可以把它定义在基类中。
+The premise for this configuration to take effect is that the retrieval entity class has a `tenantId` field. Of course, you can define it in the base class.
 
-## 逻辑删除
+## Logical Deletion
 
 ```java
 @Component
 public class MyParamFilter implements ParamFilter {
     @Override
     public <T> Map<String, Object> doFilter(BeanMeta<T> beanMeta, Map<String, Object> paraMap) {
-        // 为逻辑删除字段，指定参数值
+        // Specify the parameter value for the logical deletion field.
         paraMap.put("deleted", false);
         return paraMap;
     }
 }
 ```
 
-该配置生效的前提是：检索实体类中存在 `deleted` 字段，当然你可以把它定义在基类中。
+The premise for this configuration to take effect is that the retrieval entity class has a `deleted` field. Of course, you can define it in the base class.

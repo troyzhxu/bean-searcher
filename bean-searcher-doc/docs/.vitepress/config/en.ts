@@ -103,7 +103,7 @@ export default defineConfig({
             collapsed: false,
             items: [
               { text: 'Call Remote BS Service', link: '/rpc' },
-              { text: 'Large Table Scrolling', link: '/tables' },
+              { text: 'Large Table Rolling', link: '/tables' },
               { text: 'Data Permission', link: '/datascope' },
               { text: 'Other Gameplay', link: '/others' },
             ]

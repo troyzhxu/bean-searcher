@@ -1,81 +1,81 @@
-# 数据权限
+# Data Permissions
 
-所谓数据权限，就是指是不同的用户，根据其各自数据权限的配置信息，通过同一接口或方法来查询数据时，得到不同数据集的一种机制。
+The so - called data permissions refer to a mechanism where different users obtain different data sets when querying data through the same interface or method according to their respective data permission configuration information.
 
-虽然数据权限的定义很明确，但其具体的规则（玩法、花样）却多种多样，不同的项目团队，可能采用不用的数据权限规则，而 Bean Searcher 支持自定义这种规则。下文将以某一特定的规则举例，具体说明在 Bean Searcher 中如何实现数据权限。
+Although the definition of data permissions is clear, its specific rules (ways of playing, variations) are diverse. Different project teams may adopt different data permission rules, and Bean Searcher supports customizing such rules. The following will take a specific rule as an example to illustrate how to implement data permissions in Bean Searcher.
 
-## 规则举例
+## Rule Example
 
-假设每个需要数据权限的业务表（例如订单表 `order`）都有 `owner_id`（所有者 ID）与 `dept_id`（从属部门ID）字段，而每个所有者都唯一归属于某一个部门，而部门具有树形层级结构。
+Assume that each business table requiring data permissions (such as the order table `order`) has fields `owner_id` (owner ID) and `dept_id` (affiliated department ID). Each owner uniquely belongs to a certain department, and departments have a tree - like hierarchical structure.
 
-### 关键数据表
+### Key Data Tables
 
-* dept - 部门表
+* dept - Department Table
 
-关键字段 | 备注
+Key Fields | Remarks
 -|-
-id | 部门ID
-parent_id | 上级部门ID
+id | Department ID
+parent_id | Parent Department ID
 
-* user - 用户表
+* user - User Table
 
-关键字段 | 备注
+Key Fields | Remarks
 -|-
-id | 用户ID
-dept_id | 所在部门ID
+id | User ID
+dept_id | Department ID where the user is located
 
-* order - 业务数据表
+* order - Business Data Table
 
-关键字段 | 备注
+Key Fields | Remarks
 -|-
-id | 订单ID
-owner_id | 所有者 ID
-dept_id | 归属部门ID
+id | Order ID
+owner_id | Owner ID
+dept_id | Affiliated Department ID
 
-### 权限配置项
+### Permission Configuration Items
 
-当配置用户的某个业务的数据权限时（通常配置在角色上），可以有以下四个选项：
+When configuring a user's data permissions for a certain business (usually configured on a role), the following four options are available:
 
-1. `ONLY_SELF` - 只能查看属于自己的数据
-2. `SELF_DEPT` - 可以查看自己部门的数据
-3. `SUB_DEPTS` 查看自己部门及所有子部门的数据
-4. `ALL` - 可以查看所有数据
+1. `ONLY_SELF` - Can only view data belonging to oneself.
+2. `SELF_DEPT` - Can view data of one's own department.
+3. `SUB_DEPTS` - Can view data of one's own department and all sub - departments.
+4. `ALL` - Can view all data.
 
-## 代码实现
+## Code Implementation
 
-### 自定义注解
+### Custom Annotation
 
 ```java
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
 public @interface DataScope {
     /**
-     * 用于指定数据权限作用在哪张表上（因为可能是联表查询）
+     * Used to specify which table the data permission applies to (because it may be a joint table query).
      */
     String on() default "";
 }
 ```
 
-该注解用于标记哪些 **检索实体类** 需要启用数据权限。
+This annotation is used to mark which **retrieval entity classes** need to enable data permissions.
 
-### 注解使用说明
+### Annotation Usage Instructions
 
 ```java
 @SearchBean(
-  tables = "order o, xxx x",     // 假设需要联表查询
-  where = "o.xxx_id = x.id <ds>" // 占位符 <ds> 用于标记需要插入数据权限条件的地方
+  tables = "order o, xxx x",     // Assume a joint table query is required.
+  where = "o.xxx_id = x.id <ds>" // Placeholder <ds> is used to mark where the data permission condition needs to be inserted.
 )
-@DataScope(on = "o")             // 启用数据权限, 并且作用在 order 表上
+@DataScope(on = "o")             // Enable data permissions and apply them to the order table.
 public class OrderVO {
     ...
 }
 ```
 
-这里有一个技巧，就是使用一个占位符（`<ds>`）来标记需要插入数据权限条件的地方，这样我们的自定义代码就无需引入第三方框架来解析 SQL 语法了，因此我们的代码可以更简单。
+Here is a trick: use a placeholder (`<ds>`) to mark where the data permission condition needs to be inserted. In this way, our custom code does not need to introduce a third - party framework to parse SQL syntax, so our code can be simpler.
 
-### 数据权限拦截器
+### Data Permission Interceptor
 
-接着，就可以自定义数据权限拦截器了：
+Next, a custom data permission interceptor can be created:
 
 ```java
 @Component
@@ -83,36 +83,36 @@ public class DataScopeSqlInterceptor implements SqlInterceptor {
 
     @Override
     public <T> SearchSql<T> intercept(SearchSql<T> searchSql, Map<String, Object> paraMap, FetchType fetchType) {
-        // 获取 @DataScope 注解
+        // Get the @DataScope annotation.
         DataScope dataScope = searchSql.getBeanMeta().getBeanClass().getAnnotation(DataScope.class);
         if (dataScope == null) {
-            // 如果没有启用数据权限，则直接返回
+            // If data permissions are not enabled, return directly.
             return searchSql;
         }
-        // 处理列表查询 SQL 的数据权限
+        // Process the data permissions of the list query SQL.
         searchSql.setListSqlString(process(dataScope, searchSql.getListSqlString()));
-        // 处聚组表查询 SQL 的数据权限
+        // Process the data permissions of the grouped table query SQL.
         searchSql.setClusterSqlString(process(dataScope, searchSql.getClusterSqlString()));
         return searchSql;
     }
 
-    static final String PLACEHOLDER = "<ds>";   // 占位符
+    static final String PLACEHOLDER = "<ds>";   // Placeholder
 
     private String process(DataScope dataScope, String sql) {
         int index = sql.indexOf(PLACEHOLDER);
         if (index < 0) {
-            // 没有占位符，直接返回
+            // If there is no placeholder, return directly.
             return sql;
         }
-        // 占位符 之前的 SQL
+        // SQL before the placeholder.
         String preSql = sql.substring(0, index);
-        // 占位符 之后的 SQL
+        // SQL after the placeholder.
         String nexSql = sql.substring(index + PLACEHOLDER.length());
-        // 获取当前请求者的信息（不同的项目架构，这里使用的方法各不一样）
+        // Get the information of the current requester (the methods used here vary in different project architectures).
         PrincipalUser user = PrincipalHolder.requireUser();
-        // 数据权限 SQL 条件
+        // Data permission SQL condition.
         String scopeSql = buildScopeSql(dataScope.on(), user);
-        // 拼接新的完整 SQL
+        // Concatenate the new complete SQL.
         if (scopeSql == null) {
             return preSql + nexSql;
         }
@@ -124,20 +124,20 @@ public class DataScopeSqlInterceptor implements SqlInterceptor {
     }
 
     private String buildScopeSql(String on, PrincipalUser user) {
-        // 获取当前用户的数据权限配置类型
+        // Get the data permission configuration type of the current user.
         ScopeType scopeType = user.getScopeType();
-        // 只查属于自己的数据
+        // Query only data belonging to oneself.
         if (scopeType == ScopeType.ONLY_SELF) {
             return ownerId(on) + " = " + user.getId();
         }
-        // 只查自己部门的数据
+        // Query only data of one's own department.
         if (scopeType == ScopeType.SELF_DEPT) {
             return deptId(on) + " = " + user.getDeptId();
         }
-        // 查看自己部门以及所有子部门的数据
+        // Query data of one's own department and all sub - departments.
         if (scopeType == ScopeType.SUB_DEPTS) {
-            // 这里使用了递归 SQL 语法，如果数据库引擎不支持该语法
-            // 也可以先单独将所有子部门ID 都查出来，然后在此拼接
+            // Recursive SQL syntax is used here. If the database engine does not support this syntax,
+            // all sub - department IDs can also be queried separately first and then concatenated here.
             return deptId(on) + "in (with recursive d_tree as (" +
                 " select id, parent_id from dept" +
                 "  where id = " + user.getDeptId() +
@@ -146,7 +146,7 @@ public class DataScopeSqlInterceptor implements SqlInterceptor {
                 "  where t.id = d.parent_id" +
                 ") select id from d_tree)"; 
         }
-        // 查看所有数据
+        // Query all data.
         return null;
     }
 
@@ -167,4 +167,4 @@ public class DataScopeSqlInterceptor implements SqlInterceptor {
 }
 ```
 
-以上，就实现了一种数据权限机制，其它类型的数据权限也同理可实现。
+The above implements a data permission mechanism. Other types of data permissions can be implemented in the same way.
