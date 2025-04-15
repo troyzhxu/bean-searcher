@@ -1,32 +1,32 @@
-# 属性忽略
+# Attribute Ignoring
 
-Bean Searcher 中共有四种方法可以忽略实体类中的某个属性。
+There are four ways in Bean Searcher to ignore a certain attribute in an entity class.
 
-## 修饰符 static 与 transient
+## Modifiers static and transient
 
-被关键字 `static` 或 `transient` 修饰的属性会被自动忽略，例如：
+Attributes modified by the keywords `static` or `transient` will be automatically ignored. For example:
 
 ```java
 public class Address {
-    public static String SUZHOU = "苏州市"; // 自动忽略
-    private String city;    // 不会忽略
-    private String street;  // 不会忽略
-    private transient fullAddress;          // 自动忽略
+    public static String SUZHOU = "Suzhou City"; // Automatically ignored
+    private String city;    // Not ignored
+    private String street;  // Not ignored
+    private transient fullAddress;          // Automatically ignored
     // Getter Setter ...
 }
 ```
 
-## @DbIgnore 忽略单个字段
+## @DbIgnore to ignore a single field
 
-Bean Searcher 自 v3.0.0 新增了 `@DbIgnore` 注解，我们可以直接用它来标记实体类中的某个属性，从而忽略它参与数据库映射。
+Since v3.0.0, Bean Searcher has added the `@DbIgnore` annotation. We can directly use it to mark a certain attribute in an entity class, thus ignoring its participation in database mapping.
 
-::: warning 注意
-该注解不可以与  `@DbField` 注解使用在同一个属性上。
+::: warning Note
+This annotation cannot be used on the same attribute as the `@DbField` annotation.
 :::
 
-## @SearchBean.ignoreFields 忽略多个字段
+## @SearchBean.ignoreFields to ignore multiple fields
 
-Bean Searcher 自 v3.4.0 为注解 `@SearchBean` 新增了 `ignoreFields` 参数，我们可以设定它的值来忽略这个实体类中的多个属性。
+Since v3.4.0, Bean Searcher has added the `ignoreFields` parameter to the `@SearchBean` annotation. We can set its value to ignore multiple attributes in this entity class.
 
 ```java
 @SearchBean(
@@ -37,29 +37,29 @@ public class User extends BaseEntity {
 }
 ```
 
-::: tip 既然可以用 `@DbIgnore` 直接忽略指定字段，为什么还需要 `@SearchBean.ignoreFields` 呢？
-* 原因一：在某些框架中，可能会在运行时对实体类动态添加某些字段，对于这些在运行时动态添加上去的字段，我们无法给它标记 `@DbIgnore` 注解
-* 原因二：有时候要忽略的属性在父类中，但这个属性在其它的子实体类中又不能被忽略
+::: tip Since we can directly ignore the specified field with `@DbIgnore`, why do we still need `@SearchBean.ignoreFields`?
+* Reason 1: In some frameworks, certain fields may be dynamically added to the entity class at runtime. For these fields dynamically added at runtime, we cannot mark them with the `@DbIgnore` annotation.
+* Reason 2: Sometimes the attribute to be ignored is in the parent class, but this attribute cannot be ignored in other child entity classes.
 :::
 
-## 全局属性忽略
+## Global attribute ignoring
 
-Bean Searcher 自 v3.4.0 开始支持全局属性忽略某些未被 `@DbField` 注解的属性。
+Since v3.4.0, Bean Searcher has supported globally ignoring certain attributes that are not annotated with `@DbField`.
 
 ### SpringBoot / Grails
 
-使用 `bean-searcher-boot-starter` 依赖时，可通过以下键名配置：
+When using the `bean-searcher-boot-starter` dependency, you can configure it through the following key names:
 
-配置键名 | 含义 | 可选值 | 默认值
+Configuration key name | Meaning | Optional values | Default value
 -|-|-|-
-`bean-searcher.sql.default-mapping.ignore-fields` | 需要全局忽略的属性名（可指定多个） | `字符串数组` | `null`
+`bean-searcher.sql.default-mapping.ignore-fields` | Attribute names that need to be globally ignored (multiple can be specified) | `String array` | `null`
 
-### 非 Boot 的 Spring 项目
+### Non-Boot Spring projects
 
 ```xml
 <bean id="dbMapping" class="cn.zhxu.bs.implement.DefaultDbMapping">
     <property name="ignoreFields"> 
-        <!-- 这里配置需要全局忽略的属性名 -->
+        <!-- Configure the attribute names that need to be globally ignored here -->
         <array>
             <value>field1</value>
             <value>field2</value>
@@ -70,18 +70,18 @@ Bean Searcher 自 v3.4.0 开始支持全局属性忽略某些未被 `@DbField` �
     <property name="dbMapping" ref="dbMapping" />
 </bean>
 <bean id="mapSearcher" class="cn.zhxu.bs.implement.DefaultMapSearcher">
-    <!-- 省略其它属性配置，BeanSearcher 检索器也同此配置 -->
+    <!-- Omit other attribute configurations, the BeanSearcher retriever is also configured in the same way -->
     <property name="metaResolver" ref="metaResolver" />
 </bean>
 ```
 
-### 其它框架
+### Other frameworks
 
 ```java
 DefaultDbMapping dbMapping = new DefaultDbMapping();
-dbMapping.setIgnoreFields(new String[] { "field1", "field2" }); // 这里配置需要全局忽略的属性名
+dbMapping.setIgnoreFields(new String[] { "field1", "field2" }); // Configure the attribute names that need to be globally ignored here
 MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
-        // 省略其它配置
-        .metaResolver(new DefaultMetaResolver(dbMapping))       // BeanSearcher 检索器也同此配置
+        // Omit other configurations
+        .metaResolver(new DefaultMetaResolver(dbMapping))       // The BeanSearcher retriever is also configured in the same way
         .build();
 ```

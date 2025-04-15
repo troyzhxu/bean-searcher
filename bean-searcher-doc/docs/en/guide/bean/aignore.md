@@ -1,84 +1,84 @@
-# 注解缺省
+# Default Annotation Omission
 
-Bean Searcher 自 v3.0 起开始支持注解省略。
+Bean Searcher has supported annotation omission since version 3.0.
 
-## 省略 @SearchBean
+## Omitting @SearchBean
 
-当 Bean Searcher 找不到 `@SearchBean` 注解（v3.2 开始会自动寻找父类的 `@SearchBean` 注解），或 `@SearchBean` 注解内没有指定 `tables` 属性时，会认为该实体类是一个 **单表映射** 实体类。此时的表名将服从自动映射规则：
+When Bean Searcher cannot find the `@SearchBean` annotation (starting from version 3.2, it will automatically search for the `@SearchBean` annotation in the parent class), or the `tables` attribute is not specified in the `@SearchBean` annotation, it will consider the entity class as a **single-table mapping** entity class. In this case, the table name will follow the automatic mapping rule:
 
-* `表名` =  `前缀` + `根据配置是否转为大写（驼峰转小写下划线（去掉冗余后缀的类名））`
+* `Table Name` = `Prefix` + `Convert to lowercase underscore according to configuration (remove redundant suffixes from the class name and convert camel case)`
 
-其中的 `前缀` 与 `根据配置是否转为大写` 是一个可配置项，可使用以下方式配置。
+The `Prefix` and `Convert to uppercase according to configuration` are configurable items, which can be configured in the following ways.
 
 ### SpringBoot / Grails
 
-使用 `bean-searcher-boot-starter` 依赖时，可通过以下键名配置：
+When using the `bean-searcher-boot-starter` dependency, you can configure it through the following key names:
 
-配置键名 | 含义 | 可选值 | 默认值
+Configuration Key Name | Meaning | Optional Values | Default Value
 -|-|-|-
-`bean-searcher.sql.default-mapping.table-prefix` | 表名前缀 | `字符串` | `null`
-`bean-searcher.sql.default-mapping.underline-case` | 表名和字段名是否驼峰转小写下划线（since v3.7.0） | `布尔值` | `true`
-`bean-searcher.sql.default-mapping.upper-case` | 表名和字段名是否大写 | `布尔值` | `false`
-`bean-searcher.sql.default-mapping.redundant-suffixes` | 类名的冗余后缀（可配多个）（since v3.3.0） | `冗余后缀` | `null`
+`bean-searcher.sql.default-mapping.table-prefix` | Table name prefix | `String` | `null`
+`bean-searcher.sql.default-mapping.underline-case` | Whether to convert table names and field names from camel case to lowercase underscore (since v3.7.0) | `Boolean` | `true`
+`bean-searcher.sql.default-mapping.upper-case` | Whether to convert table names and field names to uppercase | `Boolean` | `false`
+`bean-searcher.sql.default-mapping.redundant-suffixes` | Redundant suffixes of the class name (multiple can be configured) (since v3.3.0) | `Redundant Suffix` | `null`
 
-::: tip 冗余后缀
-例如冗余后缀配置为 VO,DTO 时，则对于名为 `UserVO`, `UserDTO` 的实体类, 在自动映射表名是，会自动将 VO，DTO 后缀给去掉。
+::: tip Redundant Suffix
+For example, when the redundant suffixes are configured as VO and DTO, for entity classes named `UserVO` and `UserDTO`, the VO and DTO suffixes will be automatically removed during automatic table name mapping.
 :::
 
-### 非 Boot 的 Spring 项目
+### Non-Boot Spring Projects
 
 ```xml
 <bean id="dbMapping" class="cn.zhxu.bs.implement.DefaultDbMapping">
-    <property name="tablePrefix" value="t_" />      <!-- 表名前缀 -->
-    <property name="underlineCase" value="true" />  <!-- 是否驼峰转小写下划线 -->
-    <property name="upperCase" value="false" />     <!-- 是否大写 -->
+    <property name="tablePrefix" value="t_" />      <!-- Table name prefix -->
+    <property name="underlineCase" value="true" />  <!-- Whether to convert camel case to lowercase underscore -->
+    <property name="upperCase" value="false" />     <!-- Whether to convert to uppercase -->
 </bean>
 <bean id="metaResolver" class="cn.zhxu.bs.implement.DefaultMetaResolver">
     <property name="dbMapping" ref="dbMapping" />
 </bean>
 <bean id="mapSearcher" class="cn.zhxu.bs.implement.DefaultMapSearcher">
-    <!-- 省略其它属性配置，BeanSearcher 检索器也同此配置 -->
+    <!-- Other property configurations are omitted, and the BeanSearcher retriever is configured in the same way -->
     <property name="metaResolver" ref="metaResolver" />
 </bean>
 ```
 
-### 其它框架
+### Other Frameworks
 
 ```java
 DefaultDbMapping dbMapping = new DefaultDbMapping();
-dbMapping.setTablePrefix("t_");     // 表名前缀
-dbMapping.setUpperCase(false);      // 是否大写
-dbMapping.setUnderlineCase(true);   // 是否驼峰转小写下划线
+dbMapping.setTablePrefix("t_");     // Table name prefix
+dbMapping.setUpperCase(false);      // Whether to convert to uppercase
+dbMapping.setUnderlineCase(true);   // Whether to convert camel case to lowercase underscore
 
 MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
-        // 省略其它配置
-        .metaResolver(new DefaultMetaResolver(dbMapping))   // BeanSearcher 检索器也同此配置
+        // Other configurations are omitted
+        .metaResolver(new DefaultMetaResolver(dbMapping))   // The BeanSearcher retriever is configured in the same way
         .build();
 ```
 
-## 省略 @DbField
+## Omitting @DbField
 
-当检索实体类满足以下四个条件之一时（满足一个即可）：
+When the retrieval entity class meets one of the following four conditions (only one needs to be met):
 
-* 实体类省略了 `@SearchBean` 注解
-* 实体类的 `@SearchBean` 没有指定 `tables` 属性
-* 实体类的 `@SearchBean.tables` 只含一张表（since v3.8.0）
-* 实体类的 `@SearchBean` 指定了 `autoMapTo` 属性
+* The `@SearchBean` annotation is omitted from the entity class.
+* The `tables` attribute is not specified in the `@SearchBean` of the entity class.
+* The `@SearchBean.tables` of the entity class contains only one table (since v3.8.0).
+* The `autoMapTo` attribute is specified in the `@SearchBean` of the entity class.
 
-则实体类中省略 `@DbField` 注解 且没被 `@DbIgnore` 注解的字段将会自动映射到数据库，自动映射规则为：
+Then, fields in the entity class that omit the `@DbField` annotation and are not annotated with `@DbIgnore` will be automatically mapped to the database. The automatic mapping rule is:
 
-* `数据库字段名` = `根据配置是否转为大写（驼峰转小写下划线（实体类字段名））`
-* 如果实体类指定了 `autoMapTo` 属性，则该字段映射到 `autoMapTo` 指定的表中
+* `Database Field Name` = `Convert to uppercase according to configuration (convert camel case to lowercase underscore (entity class field name))`
+* If the `autoMapTo` attribute is specified in the entity class, the field will be mapped to the table specified by `autoMapTo`.
 
-其中的 `根据配置是否转为大写` 是一个可配置项，配置方法 [同上文](/en/guide/bean/aignore#省略-searchbean)。
+The `Convert to uppercase according to configuration` is a configurable item, and the configuration method is [the same as above](/en/guide/bean/aignore#Omitting-@SearchBean).
 
-::: tip 提示
-如果想忽略某个字段，可使用 `@DbIgnore` 注解，它不可与 `@DbField` 在同一个字段上使用。
+::: tip Tip
+If you want to ignore a certain field, you can use the `@DbIgnore` annotation. It cannot be used on the same field as `@DbField`.
 :::
 
-## 识别其它 ORM 的注解
+## Recognizing Annotations of Other ORMs
 
-例如你已经在项目中使用了 Jpa，那么你可能希望 Bean Searcher 自动识别 Jpa 的注解。这很简单，如果你使用的是 `bean-searcher-boot-starter` 或 `bean-searcher-solon-plugin` 依赖，则只需声明一个 Bean 即可：
+For example, if you have already used Jpa in your project, you may want Bean Searcher to automatically recognize Jpa annotations. This is very simple. If you are using the `bean-searcher-boot-starter` or `bean-searcher-solon-plugin` dependency, you only need to declare a Bean:
 
 ::: code-group
 ```java [v4.3.5+]
@@ -88,12 +88,12 @@ public DbMapping bsJpaDbMapping(BeanSearcherSql config) {
 
         @Override
         public String toTableName(Class<?> beanClass) {
-            // 识别 JPA 的 @Table 注解
+            // Recognize JPA's @Table annotation
             var table = beanClass.getAnnotation(javax.persistence.Table.class);
             if (table != null && StringUtils.notBlank(table.name())) {
                 return table.name();
             }
-            // 识别 JPA 的 @Entity 注解
+            // Recognize JPA's @Entity annotation
             var entity = beanClass.getAnnotation(javax.persistence.Entity.class);
             if (entity != null && StringUtils.notBlank(entity.name())) {
                 return entity.name();
@@ -103,7 +103,7 @@ public DbMapping bsJpaDbMapping(BeanSearcherSql config) {
 
         @Override
         public String toColumnName(BeanField field) {
-            // 识别 JPA 的 @Column 注解
+            // Recognize JPA's @Column annotation
             var column = field.getAnnotation(javax.persistence.Column.class);
             if (column != null && StringUtils.notBlank(column.name())) {
                 return column.name();
@@ -123,6 +123,7 @@ public DbMapping bsJpaDbMapping(BeanSearcherSql config) {
     return mapping;
 }
 ```
+
 ```java [v4.3.4-]
 @Bean
 public DbMapping bsJpaDbMapping(BeanSearcherProperties config) {
@@ -130,12 +131,12 @@ public DbMapping bsJpaDbMapping(BeanSearcherProperties config) {
 
         @Override
         public String toTableName(Class<?> beanClass) {
-            // 识别 JPA 的 @Table 注解
+            // Recognize JPA's @Table annotation
             var table = beanClass.getAnnotation(javax.persistence.Table.class);
             if (table != null && StringUtils.notBlank(table.name())) {
                 return table.name();
             }
-            // 识别 JPA 的 @Entity 注解
+            // Recognize JPA's @Entity annotation
             var entity = beanClass.getAnnotation(javax.persistence.Entity.class);
             if (entity != null && StringUtils.notBlank(entity.name())) {
                 return entity.name();
@@ -145,7 +146,7 @@ public DbMapping bsJpaDbMapping(BeanSearcherProperties config) {
 
         @Override
         public String toColumnName(BeanField field) {
-            // 识别 JPA 的 @Column 注解
+            // Recognize JPA's @Column annotation
             var column = field.getAnnotation(javax.persistence.Column.class);
             if (column != null && StringUtils.notBlank(column.name())) {
                 return column.name();
@@ -167,4 +168,4 @@ public DbMapping bsJpaDbMapping(BeanSearcherProperties config) {
 ```
 :::
 
-如果你用的是其它 ORM，则只需要简单修改 `String toTableName(Class<?> beanClass)` 与 `String toColumnName(BeanField field)` 方法里的代码即可。
+If you are using other ORMs, you only need to simply modify the code in the `String toTableName(Class<?> beanClass)` and `String toColumnName(BeanField field)` methods.

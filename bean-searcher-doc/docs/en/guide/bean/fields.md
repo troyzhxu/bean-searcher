@@ -1,90 +1,91 @@
-# 条件属性
+```markdown
+# Conditional Attributes
 
-实体类中，可以根据 [字段参数](/en/guide/param/field) 动态生成条件的属性，被称为条件属性。具体点，它还可以细分为 [字段属性](#字段属性) 与 [附加属性](#附加属性) 两种。
+In an entity class, attributes that can dynamically generate conditions based on [Field Parameters](/en/guide/param/field) are called conditional attributes. Specifically, they can be further divided into two types: [Field Attributes](#field-attributes) and [Additional Attributes](#additional-attributes).
 
-## 字段属性
+## Field Attributes
 
-所谓字段属性，即是检索实体类中声明与数据库表字段有关联的 Java 字段，例如下例中 `OrderVO` 中声明的所有字段：
+Field attributes refer to the Java fields declared in the retrieval entity class that are associated with database table fields. For example, all the fields declared in `OrderVO` in the following example:
 
 ```java
 @SearchBean(
-    tables = "order o, shop s, user u",  // 三表关联
-    where = "o.shop_id = s.id and o.buyer_id = u.id",  // 关联关系
-    autoMapTo = "o"  // 未被 @DbField 注解的字段都映射到 order 表
+    tables = "order o, shop s, user u",  // Three-table association
+    where = "o.shop_id = s.id and o.buyer_id = u.id",  // Association relationship
+    autoMapTo = "o"  // Fields not annotated with @DbField are mapped to the order table
 )
 public class OrderVO {
-    private long id;         // 订单ID   o.id
-    private String orderNo;  // 订单号   o.order_no
-    private long amount;     // 订单金额 o.amount
+    private long id;         // Order ID   o.id
+    private String orderNo;  // Order number   o.order_no
+    private long amount;     // Order amount o.amount
     @DbField("s.name")
-    private String shop;     // 店铺名   s.name
+    private String shop;     // Shop name   s.name
     @DbField("u.name")
-    private String buyer;    // 买家名   u.name
-    // 省略 Getter Setter
+    private String buyer;    // Buyer name   u.name
+    // Getter and Setter are omitted
 }
 ```
 
-一般字段属性都是被 `@DbField` 注解的字段，但这个注解在某些场景下也可以被省略，参考 [注解缺省](/en/guide/bean/aignore) 章节。当然某些 Java 字段也可以被忽略，参考 [属性忽略](/en/guide/bean/fignore) 章节。
+Generally, field attributes are fields annotated with `@DbField`, but this annotation can be omitted in some scenarios. Refer to the [Annotation Omission](/en/guide/bean/aignore) section. Of course, some Java fields can also be ignored. Refer to the [Attribute Ignoring](/en/guide/bean/fignore) section.
 
-### 作用与特点
+### Functions and Characteristics
 
-* 在列表查询时，作为 Select 列表中的查询字段，当然也可以在 Select 列表中指定或排除某个特定字段，参考 [指定 Select 字段](/en/guide/param/select.html) 章节。
-* 用 BeanSearcher 检索器列表查询时，字段属性用于承载查询结果。
-* 根据 [字段参数](/en/guide/param/field) 生成 where 或者 having 条件
+* In list queries, they serve as query fields in the Select list. Of course, you can also specify or exclude a specific field in the Select list. Refer to the [Specify Select Fields](/en/guide/param/select.html) section.
+* When using the BeanSearcher retriever for list queries, field attributes are used to carry the query results.
+* Generate where or having conditions based on [Field Parameters](/en/guide/param/field).
 
+## Additional Attributes (since v4.1.0)
 
-## 附加属性（since v4.1.0）
-
-字段属性虽然可以根据参数动态生成条件，但是必须要在 Java 类中声明一个字段。如果你不想写这个字段，则可以使用 `@SearchBean.fields` 来定义附加属性，例如：
+Although field attributes can dynamically generate conditions based on parameters, a field must be declared in the Java class. If you don't want to write this field, you can use `@SearchBean.fields` to define additional attributes. For example:
 
 ```java
 @SearchBean(
-    tables = "user u, role r",  // 二表关联
-    where = "u.role_id = r.id"
-    fields = {                  // 定义附加属性
-        @DbField(name = "name"),                     // 属性名为 name, 自动映射到 u.name
-        @DbField(name = "rType", value = "r.type")   // 属性名为 rType, 映射到 r.type
+    tables = "user u, role r",  // Two-table association
+    where = "u.role_id = r.id",
+    fields = {                  // Define additional attributes
+        @DbField(name = "name"),                     // The attribute name is name, automatically mapped to u.name
+        @DbField(name = "rType", value = "r.type")   // The attribute name is rType, mapped to r.type
     },
-    autoMapTo="u"  // 自动映射到 u
+    autoMapTo="u"  // Automatically mapped to u
 )
 public class UserVO { ... }
 ```
 
-上面的代码为 `UserVO` 定义了 `name` 与 `rType` 两个附加属性。它们必须用注解 `@DbField` 来定义，并且 `@DbField.name` 不能省略，它的作用等同于字段属性中的 Java 字段名。
+The above code defines two additional attributes, `name` and `rType`, for `UserVO`. They must be defined using the annotation `@DbField`, and `@DbField.name` cannot be omitted. Its function is equivalent to the Java field name in field attributes.
 
-### 作用与特点
+### Functions and Characteristics
 
-* 它们和字段属性一样，都可以根据检索参数动态生成 where 或者 having 条件；
-* 在列表查询时，它们不会出现在 Select 列表中。
+* Like field attributes, they can dynamically generate where or having conditions based on retrieval parameters.
+* In list queries, they do not appear in the Select list.
 
-## Where 或 Having
+## Where or Having
 
-条件属性在生成条件时，是生成 where 条件还是 having 条件呢？这要分以下两种情况来说。
+When conditional attributes generate conditions, are they where conditions or having conditions? This depends on the following two situations.
 
-### 没有使用分组（groupBy）时
+### When not using grouping (groupBy)
 
-即在没有指定 `@SearchBean.groupBy` 的值时，所有条件属性生成的条件都是 where 条件。
+That is, when the value of `@SearchBean.groupBy` is not specified, all conditions generated by conditional attributes are where conditions.
 
-### 使用分组（groupBy）时
+### When using grouping (groupBy)
 
-当指定了 `@SearchBean.groupBy` 时，具体是生成 where 条件还是 having 条件，这又取决于每个条件属性的 `@DbField.cluster` 的值，它有以下三种取值：
+When `@SearchBean.groupBy` is specified, whether a where condition or a having condition is generated depends on the value of `@DbField.cluster` for each conditional attribute. It has the following three values:
 
-* `Cluster.TRUE` - 表明该属性是聚合字段，它只会生成 having 条件；
-* `Cluster.FALSE` - 表明该属性是非聚合字段，它只会生成 where 条件；
-* `Cluster.AUTO` - **默认值**，自动推断该字段是否是聚合字段：**当条件属性未在 groupBy 列表中时，并且该属性同时是 Java 类中的字段时，将自动推断为 `TRUE`，其它情况都推断为 `FALSE`**。
+* `Cluster.TRUE` - Indicates that the attribute is an aggregated field, and it only generates having conditions.
+* `Cluster.FALSE` - Indicates that the attribute is a non-aggregated field, and it only generates where conditions.
+* `Cluster.AUTO` - **Default value**, automatically infer whether the field is an aggregated field: **When the conditional attribute is not in the groupBy list and the attribute is also a field in the Java class, it will be automatically inferred as `TRUE`; in other cases, it will be inferred as `FALSE`**.
 
-#### 字段推断举例
+#### Examples of field inference
 
-* [附加属性](#附加属性-since-v4-1-0) 全部自动推断为 `Cluster.FALSE`，即默认都生成 where 条件；
-* 下例中，`courseId` 自动推断为 `Cluster.FALSE`，`totalScore` 自动推断为 `Cluster.TRUE`
+* All [Additional Attributes](#additional-attributes-since-v4-1-0) are automatically inferred as `Cluster.FALSE`, that is, by default, they all generate where conditions.
+* In the following example, `courseId` is automatically inferred as `Cluster.FALSE`, and `totalScore` is automatically inferred as `Cluster.TRUE`.
 
 ```java
 @SearchBean(tables = "student_course sc", groupBy = "sc.course_id") 
 public class CourseScore {
-    @DbField("sc.course_id")    // 在 groupBy 列表中
+    @DbField("sc.course_id")    // In the groupBy list
     private long courseId;
-    @DbField("sum(sc.score)")   // 不在 groupBy 列表中
+    @DbField("sum(sc.score)")   // Not in the groupBy list
     private long totalScore;
     // ...
 }
+```
 ```

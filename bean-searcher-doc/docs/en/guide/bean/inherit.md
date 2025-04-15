@@ -1,13 +1,13 @@
-# 实体类继承
+# Entity Class Inheritance
 
-Bean Searcher 自 v3.2.0 开始支持实体类继承。一个实体类中可被继承的内容有：
+Since v3.2.0, Bean Searcher supports entity class inheritance. The content that can be inherited in an entity class includes:
 
-* 多表关联信息 
-* 字段映射信息
+* Multi-table association information
+* Field mapping information
 
-## 字段继承
+## Field Inheritance
 
-例如有一个基类，里面有一些公共属性：
+For example, there is a base class with some common attributes:
 
 ```java
 public class BaseEntity {
@@ -18,23 +18,23 @@ public class BaseEntity {
 }
 ```
 
-然后我们可以定义一个新的实体类来继承它：
+Then we can define a new entity class to inherit from it:
 
 ```java
 public class User extends BaseEntity {
-    // 父类与子类的字段映射到同一张表
+    // The fields of the parent class and the child class are mapped to the same table
     private long id;
     private String username;
     private int roleId;
 }
 ```
 
-再如：
+Another example:
 
 ```java
 @SearchBean(tables="user u, role r", where="u.role_id = r.id", autoMapTo="u")
 public class User extends BaseEntity {
-    // 父类与子类中的未被注解的字段都映射到 user 表
+    // The unannotated fields in the parent class and the child class are all mapped to the user table
     private long id;
     private String username;
     private int roleId;
@@ -43,9 +43,9 @@ public class User extends BaseEntity {
 }
 ```
 
-## 表继承
+## Table Inheritance
 
-有时候 `@SearchBean` 注解内写入的内容太多，子类能否复用呢？也是可以的，例如：
+Sometimes, there is too much content written in the `@SearchBean` annotation. Can the child class reuse it? Yes, it can. For example:
 
 ```java
 @SearchBean(tables="user u, role r", where="u.role_id = r.id", autoMapTo="u")
@@ -58,10 +58,10 @@ public class User {
 }
 ```
 
-现在我们需要一个新的实体类，它同样映射到 `user` 和 `role` 表，只是字段多了许多，希望复用它，又不想改动原有的实体类，可以这么做：
+Now we need a new entity class that is also mapped to the `user` and `role` tables, but with many more fields. We want to reuse it without modifying the original entity class. We can do it like this:
 
 ```java
-// 将复用父类的 @SearchBean 注解
+// The @SearchBean annotation of the parent class will be reused
 public class UserDetail extends User {
     private int age;
     private int status;
@@ -70,19 +70,19 @@ public class UserDetail extends User {
 }
 ```
 
-::: tip 注意
-一个实体类只会有一个 `@SearchBean` 注解生效，如果子类和父类都添加了该注解，则子类的注解生效，父类的注解将被覆盖。
+::: tip Note
+Only one `@SearchBean` annotation will take effect for an entity class. If both the child class and the parent class have this annotation, the annotation of the child class will take effect, and the annotation of the parent class will be overwritten.
 :::
 
-## 继承方式
+## Inheritance Modes
 
-默认的继承方式是 字段 与 表 都继承，但我们可以指定使用其它方式。
+The default inheritance mode is to inherit both fields and tables, but we can specify other modes.
 
-### 指定单个实体类的继承方式
+### Specify the Inheritance Mode for a Single Entity Class
 
 ```java
 @SearchBean(
-    // 指定只继承字段
+    // Specify to only inherit fields
     inheritType = InheritType.FIELD
 )
 public class UserDetail extends User {
@@ -92,27 +92,27 @@ public class UserDetail extends User {
 }
 ```
 
-其中 `InheritType` 是一个枚举类型，共有一下一些值：
+Among them, `InheritType` is an enumeration type with the following values:
 
-* `DEFAULT` - 使用默认配置
-* `NONE` - 不继承
-* `TABLE` - 只继承表（@SearchBean 注解）
-* `FIELD` - 只继承类属性
-* `ALL` - 都继承
+* `DEFAULT` - Use the default configuration
+* `NONE` - Do not inherit
+* `TABLE` - Only inherit tables (`@SearchBean` annotation)
+* `FIELD` - Only inherit class attributes
+* `ALL` - Inherit both
 
-## 配置默认值
+## Configure Default Values
 
-你也可以使用全局配置来修改默认的继承类型。
+You can also use global configuration to modify the default inheritance type.
 
-### SpringBoot / Grails（since v3.6.0）
+### SpringBoot / Grails (since v3.6.0)
 
-使用 `bean-searcher-boot-starter` 依赖时，可通过以下键名配置：
+When using the `bean-searcher-boot-starter` dependency, you can configure it through the following key names:
 
-配置键名 | 含义 | 可选值 | 默认值
+Configuration Key Name | Meaning | Optional Values | Default Value
 -|-|-|-
-`bean-searcher.sql.default-mapping.inherit-type` | 默认继承类型 | `ALL`、`TABLE`、`FIELD`、`NONE` | `ALL`
+`bean-searcher.sql.default-mapping.inherit-type` | Default inheritance type | `ALL`, `TABLE`, `FIELD`, `NONE` | `ALL`
 
-### 非 Boot 的 Spring 项目
+### Non-Boot Spring Projects
 
 ```xml
 <bean id="dbMapping" class="cn.zhxu.bs.implement.DefaultDbMapping">
@@ -124,18 +124,18 @@ public class UserDetail extends User {
     <property name="dbMapping" ref="dbMapping" />
 </bean>
 <bean id="mapSearcher" class="cn.zhxu.bs.implement.DefaultMapSearcher">
-    <!-- 省略其它属性配置，BeanSearcher 检索器也同此配置 -->
+    <!-- Other attribute configurations are omitted. The BeanSearcher retriever has the same configuration -->
     <property name="metaResolver" ref="metaResolver" />
 </bean>
 ```
 
-### 其它框架
+### Other Frameworks
 
 ```java
 DefaultDbMapping dbMapping = new DefaultDbMapping();
-dbMapping.setDefaultInheritType(InheritType.ALL);               // 这里配置需要默认继承类型
+dbMapping.setDefaultInheritType(InheritType.ALL);               // Configure the default inheritance type here
 MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
-        // 省略其它配置
-        .metaResolver(new DefaultMetaResolver(dbMapping))       // BeanSearcher 检索器也同此配置
+        // Other configurations are omitted
+        .metaResolver(new DefaultMetaResolver(dbMapping))       // The BeanSearcher retriever has the same configuration
         .build();
 ```

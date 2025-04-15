@@ -1,27 +1,27 @@
-# 多表关联
+# Multi-table Association
 
-注解 `@SearchBean` 的 `tables` 属性，可以很容易的指定多张表的关联关系。
+The `tables` attribute of the annotation `@SearchBean` can easily specify the association relationships between multiple tables.
 
-## 内连接
+## Inner Join
 
 ```java
 @SearchBean(
-    tables = "user u, role r",  // 两表关联
-    where = "u.role_id = r.id", // 静态 Where 条件（v3.8.0 之前的写法是 joinCond）
-    autoMapTo = "u"             // 字段默认自动映射到 u
+    tables = "user u, role r",  // Association between two tables
+    where = "u.role_id = r.id", // Static Where condition (Before v3.8.0, it was written as joinCond)
+    autoMapTo = "u"             // Fields are automatically mapped to u by default
 ) 
 public class User {
 
-    private Long username;      // 自动映射到 u.username
+    private Long username;      // Automatically mapped to u.username
 
-    @DbField("r.name")          // 映射到 r.name
+    @DbField("r.name")          // Mapped to r.name
     private String rolename;
 
     // Getter and Setter ...
 }
 ```
 
-或者：
+Or:
 
 ```java
 @SearchBean(
@@ -30,16 +30,16 @@ public class User {
 ) 
 public class User {
 
-    private Long username;      // 自动映射到 u.username
+    private Long username;      // Automatically mapped to u.username
 
-    @DbField("r.name")          // 映射到 r.name
+    @DbField("r.name")          // Mapped to r.name
     private String rolename;
 
     // Getter and Setter ...
 }
 ```
 
-## 左连接
+## Left Join
 
 ```java
 @SearchBean(
@@ -48,16 +48,16 @@ public class User {
 ) 
 public class User {
 
-    private Long username;  // 自动映射到 u.username
+    private Long username;  // Automatically mapped to u.username
 
-    @DbField(mapTo = "d")   // 映射到 d.address
+    @DbField(mapTo = "d")   // Mapped to d.address
     private String address;
 
     // Getter and Setter ...
 }
 ```
 
-## 右连接
+## Right Join
 
 ```java
 @SearchBean(tables = "user_detail d right join user u on u.id = d.user_id")
@@ -66,7 +66,7 @@ public class User {
 }
 ```
 
-## From 子查询
+## Subquery in the From Clause
 
 ```java
 @SearchBean(
@@ -77,7 +77,7 @@ public class User {
 }
 ```
 
-## 关联 From 子查询
+## Association with a Subquery in the From Clause
 
 ```java
 @SearchBean(

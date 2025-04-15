@@ -1,10 +1,10 @@
-# 概念
+# Concept
 
-检索实体类，即是被 `@SearchBean` 注解的类，又称 **SearchBean**，在 [上一节](/en/guide/start/use)，我们体验了 Bean Searcher 的单表检索功能，但相比于传统的 ORM，其实它更擅长处理复杂的联表检索 与 一些奇奇怪怪的 子查询，此时 SearchBean 的定义也非常容易。
+The retrieval entity class, which is the class annotated with `@SearchBean`, is also known as **SearchBean**. In [the previous section](/en/guide/start/use), we experienced the single-table retrieval function of Bean Searcher. However, compared with traditional ORMs, it is actually better at handling complex joint-table retrievals and some strange subqueries. At this time, the definition of SearchBean is also very easy.
 
-另外，Bean Searcher 也支持 [省略注解](/en/guide/bean/aignore)。一个没有任何注解的实体类也可以自动进行数据库映射。
+In addition, Bean Searcher also supports [omitting annotations](/en/guide/bean/aignore). An entity class without any annotations can also be automatically mapped to the database.
 
-::: tip 重要提示
-这里所说的 实体类（**SearchBean**）是一个与数据库有跨表映射关系的 **VO（View Ojbect）**，它与传统 ORM 中的实体类（**Entity**）或 域类（**Domain**）在概念上有着本质的区别。 
-可参阅：[介绍 > 为什么用 > 设计思想（出发点）](/en/guide/info/why#设计思想-出发点) 章节。
+::: tip Important Note
+The entity class (**SearchBean**) mentioned here is a **VO (View Object)** that has a cross-table mapping relationship with the database. It is fundamentally different in concept from the entity class (**Entity**) or domain class (**Domain**) in traditional ORMs.
+Refer to the [Introduction > Why Use > Design Concept (Starting Point)](/en/guide/info/why#Design-Concept-Starting-Point) section.
 :::

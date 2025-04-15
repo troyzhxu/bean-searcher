@@ -1,26 +1,26 @@
-# 嵌入参数
+# Embedded Parameters
 
-检索实体类 除了可以实现上述的各种形式的 SQL 以外，还可以在注解 `@SearchBean` 与 `@DbField` 的 SQL 片段内嵌入 **动态** 参数。 
+In addition to implementing various forms of SQL as described above, the retrieval entity class can also embed **dynamic** parameters within the SQL snippets of the annotations `@SearchBean` and `@DbField`.
 
-## 使用场景
+## Use Cases
 
-* 动态指定查询的表字段 或 动态指定查询的数据库表名
-* 想按某个表字段检索，但又不想把该表字段做成实体类的字段属性
+* Dynamically specify the table fields for querying or dynamically specify the database table names for querying.
+* You want to retrieve data based on a certain table field but don't want to make this table field a field property of the entity class.
 
-## 参数类型
+## Parameter Types
 
-实体类的注解内可以嵌入两种形式的参数：
+Two forms of parameters can be embedded within the annotations of the entity class:
 
-* 形如 `:name` 的可作为 JDBC 参数的 [普通内嵌参数](/en/guide/param/embed#普通内嵌参数)（该参数无 SQL 注入风险，应首选使用）
-* 形如 `:name:` 的 [拼接参数](/en/guide/param/embed#拼接参数)（该参数会拼接在 SQL 内，开发者在检索时应 **先检查该参数值的合法性，以免 SQL 注入漏洞产生**）
+* Ordinary embedded parameters in the form of `:name`, which can be used as JDBC parameters ([Ordinary Embedded Parameters](/en/guide/param/embed#Ordinary-Embedded-Parameters)). These parameters have no risk of SQL injection and should be used as the first choice.
+* Concatenated parameters in the form of `:name:` ([Concatenated Parameters](/en/guide/param/embed#Concatenated-Parameters)). These parameters will be concatenated within the SQL. Developers should **first check the legitimacy of the parameter values during retrieval to avoid SQL injection vulnerabilities**.
 
-## 嵌入到 @SearchBean.tables
+## Embedding into @SearchBean.tables
 
-示例（按某字段动态检索）：
+Example (dynamically retrieve based on a certain field):
 
 ```java
 @SearchBean(
-    tables = "(select id, name from user where age = :age) t"   // 参数 age 的值由检索时动态指定
+    tables = "(select id, name from user where age = :age) t"   // The value of the parameter age is dynamically specified during retrieval.
 ) 
 public class User {
     
@@ -33,11 +33,11 @@ public class User {
 }
 ```
 
-示例（动态指定检索表名）：
+Example (dynamically specify the retrieval table name):
 
 ```java
 @SearchBean(
-    tables = ":table:"      // 参数 table 由检索时动态指定，这在分表检索时非常有用
+    tables = ":table:"      // The parameter table is dynamically specified during retrieval. This is very useful for sharded table retrieval.
 ) 
 public class Order {
     
@@ -50,11 +50,11 @@ public class Order {
 }
 ```
 
-参考：[场景 > 大表滚动](/en/guide/usage/tables) 章节。
+Refer to the [Scenario > Large Table Scrolling](/en/guide/usage/tables) section.
 
-## 嵌入到 @SearchBean.where
+## Embedding into @SearchBean.where
 
-示例（只查某个年龄的学生）：
+Example (query only students of a certain age):
 
 ```java
 @SearchBean(
@@ -70,12 +70,12 @@ public class Student {
 }
 ```
 
-示例（只查指定某些年龄的学生）：
+Example (query only students of specified ages):
 
 ```java
 @SearchBean(
     tables = "student", 
-    where = "age in (:ages:)"    // 参数 ages 形如："18,20,25"
+    where = "age in (:ages:)"    // The parameter ages is in the form of: "18,20,25"
 ) 
 public class Student {
 
@@ -86,14 +86,14 @@ public class Student {
 }
 ```
 
-## 嵌入到 @SearchBean.groupBy
+## Embedding into @SearchBean.groupBy
 
-动态指定分组条件：
+Dynamically specify the grouping conditions:
 
 ```java
 @SearchBean(
     tables = "student", 
-    groupBy = ":groupBy:"           // 动态指定分组条件
+    groupBy = ":groupBy:"           // Dynamically specify the grouping conditions
 ) 
 public class StuAge {
 
@@ -103,9 +103,9 @@ public class StuAge {
 }
 ```
 
-## 嵌入到 @DbField
+## Embedding into @DbField
 
-动态指定检索字段
+Dynamically specify the retrieval fields
 
 ```java
 @SearchBean(tables = "sutdent") 
@@ -117,7 +117,7 @@ public class StuAge {
 }
 ```
 
-为 Select 子查询动态指定条件
+Dynamically specify the conditions for a Select subquery
 
 ```java
 @SearchBean(tables = "student s") 
@@ -126,7 +126,7 @@ public class Student {
     @DbField("s.name")
     private String name;
 
-    // 查询某一个科目的成绩（具体哪门科目在检索时有参数 courseId 指定
+    // Query the score of a certain course (which course is specified by the parameter courseId during retrieval)
     @DbField("select sc.score from student_course sc where sc.student_id = s.id and sc.course_id = :courseId")
     private int score;
 
@@ -134,27 +134,27 @@ public class Student {
 }
 ```
 
-::: warning 注意
-带有嵌入参数的实体类 **属性**，只有 `v3.4.2+` 的版本中才支持参与 过滤条件 与 字段统计。
+::: warning Note
+The **attributes** of entity classes with embedded parameters only support participating in filtering conditions and field statistics in versions `v3.4.2+`.
 :::
 
-## 前缀符转义（since v3.6.0）
+## Prefix Escape (since v3.6.0)
 
-因为 Bean Searcher 默认使用 `:` 作为嵌入参数的前缀符。所以当 `@SearchBean` 注解的 SQL 片段中用到 `:` 时都会被 Bean Searcher 当做嵌入参数处理。但某些数据库的 SQL 语法确实又包含 `:` 符。比如 PostgreSQL 的 json 语法：
+Since Bean Searcher uses `:` as the prefix for embedded parameters by default, any `:` used in the SQL snippets of the `@SearchBean` annotation will be treated as an embedded parameter by Bean Searcher. However, the SQL syntax of some databases does contain the `:` symbol. For example, the json syntax of PostgreSQL:
 
 ```sql
-select '{"name":"Jack"}'::json->'name'  -- 这里的 `:json` 是不应该被当做嵌入参数处理的
+select '{"name":"Jack"}'::json->'name'  -- Here, `:json` should not be treated as an embedded parameter.
 ```
 
-为了兼容这类情况，Bean Searcher 自 v3.6.0 起新增了转义语义：
+To be compatible with such situations, Bean Searcher has added an escape semantics since v3.6.0:
 
-* **用 `\\:` 来表示一个原始的 `:` 符（不会被当作嵌入参数前缀符）**
+* **Use `\\:` to represent an original `:` symbol (it will not be treated as the prefix for an embedded parameter).**
 
-例如：
+For example:
 
 ```java
-@DbField("data\\:\\:json->'name'")      // 最终生成的 SQL 片段：data::json->'name'
+@DbField("data\\:\\:json->'name'")      // The final generated SQL snippet: data::json->'name'
 private String name;
 ```
 
-参考：https://github.com/troyzhxu/bean-searcher/issues/30
+Refer to: https://github.com/troyzhxu/bean-searcher/issues/30

@@ -1,18 +1,18 @@
-# 可选接口
+# Optional Interfaces
 
-接口 `BeanAware` 与 `ParamAware` 是 Search Bean 的可选实现接口。实现这个接口的 SearchBean，可以在 afterAssembly 方法里添加 Bean 装配完之后的自定义逻辑。
+The interfaces `BeanAware` and `ParamAware` are optional implementation interfaces for Search Beans. SearchBeans that implement these interfaces can add custom logic after the Bean is assembled in the `afterAssembly` method.
 
 ## BeanAware
 
-实现  `BeanAware` 接口，可在 Bean 装配完之后做一些自定义逻辑逻辑处理：
+Implementing the `BeanAware` interface allows you to perform some custom logic processing after the Bean is assembled:
 
 ```java
 public class User implements BeanAware {
-    // 省略其它代码
+    // Omit other code
     @Override
     public void afterAssembly() {
-        // 该方法会在 User 的字段值装配完后自动执行 
-        // 代码走到这里说明，说明被 @DbField 注解的字段都已经被赋过值
+        // This method will be automatically executed after the field values of User are assembled
+        // When the code reaches here, it means that the fields annotated with @DbField have all been assigned values
         System.out.println("id = " + id + ", name = " + name);
     }
 }
@@ -20,14 +20,14 @@ public class User implements BeanAware {
 
 ## ParamAware
 
-实现  `ParamAware` 接口，可在 Bean 装配完之后监听到当前的检索参数：
+Implementing the `ParamAware` interface allows you to listen to the current retrieval parameters after the Bean is assembled:
 
 ```java
 public class User implements ParamAware {
-    // 省略其它代码
+    // Omit other code
     @Override
     public void afterAssembly(Map<String, Object> paraMap) {
-        // 该方法可接收到当前的检索参数
+        // This method can receive the current retrieval parameters
         System.out.println(paraMap);
     }
 }
