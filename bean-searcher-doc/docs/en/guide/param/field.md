@@ -1,114 +1,114 @@
-# 字段参数
+# Field Parameters
 
-字段参数是根据 检索实体类里具有数据库字段映射的 [条件属性](/en/guide/bean/fields.html) 衍生出来的一系列参数，它们起到对查询结果进行 **筛选** 的作用。
+Field parameters are a series of parameters derived from the [conditional attributes](/en/guide/bean/fields.html) that have database field mappings in the retrieval entity class. They play a role in **filtering** the query results.
 
-> 条件属性 包含 [字段属性](/en/guide/bean/fields.html#字段属性) 与 [附加属性](/en/guide/bean/fields.html#附加属性-since-v4-1-0) 两种；
-> 字段参数具体生成的是 where 条件还是 having 条件，请参阅 [条件属性 > Where 或 Having](/en/guide/bean/fields.html#where-或-having) 章节。
+> Conditional attributes include two types: [field attributes](/en/guide/bean/fields.html#Field Attributes) and [additional attributes](/en/guide/bean/fields.html#Additional Attributes - Since v4.1.0);
+> For whether the field parameters specifically generate a `where` condition or a `having` condition, please refer to the [Conditional Attributes > Where or Having](/en/guide/bean/fields.html#Where or Having) section.
 
-## 字段衍生参数
+## Derived Field Parameters
 
-### 衍生规则
+### Derivation Rules
 
-示例，对于如下的一个实体类:
+For example, for the following entity class:
 
 ```java
 public class User {
     private String name;
-    // 省略其它..
+    // Omit other..
 }
 ```
 
-以它的 `name` 字段为例，可衍生出以下一系列的字段参数：
+Taking its `name` field as an example, the following series of field parameters can be derived:
 
-* **`name-{n}`**： name 字段的第 n 个参数值，如：`name-0`、`name-1`、`name-2` 等等（[理解不了？参考这里](/en/guide/start/use#_11-字段过滤-field-op-bt)）
-* **`name`**： 等价于 `name-0`，name 字段的第 0 个参数值
-* **`name-op`**： name 的 [字段运算符](#字段运算符)，如: `Equal`、`GreaterEqual`、`GreaterThan` 等等
-* **`name-ic`**： name 字段在检索时是否应该忽略大小写
+* **`name-{n}`**: The nth parameter value of the `name` field, such as `name-0`, `name-1`, `name-2`, etc. (If you can't understand, [refer here](/en/guide/start/use#_11-Field Filtering - field-op-bt))
+* **`name`**: Equivalent to `name-0`, the 0th parameter value of the `name` field
+* **`name-op`**: The [field operator](#Field Operators) of `name`, such as `Equal`, `GreaterEqual`, `GreaterThan`, etc.
+* **`name-ic`**: Whether the case should be ignored when retrieving the `name` field
 
-以上在衍生字段参数时，用到了中划线（`-`）作为连接符，如果你喜欢下划线（`_`），可把 `bean-searcher.params.separator` 配置为下划线即可。配置为下划线后，衍生出的参数就是 `name_{n}`、`name`、`name_op`、`name_ic` 了。同理: `op` 与 `ic` 后缀您也可以自定义。
+When deriving field parameters above, the hyphen (`-`) is used as a connector. If you prefer the underscore (`_`), you can configure `bean-searcher.params.separator` to the underscore. After configuring it to the underscore, the derived parameters will be `name_{n}`, `name`, `name_op`, `name_ic`. Similarly, you can also customize the `op` and `ic` suffixes.
 
 ::: tip
-字段参数，是根据实体类里的 **JAVA 字段名**（不是表字段）衍生出来的，已经和数据库的表字段解耦了。
+Field parameters are derived from the **JAVA field names** (not table fields) in the entity class and are decoupled from the database table fields.
 :::
 
-### 可配置项
+### Configurable Items
 
-在 SpringBoot / Grails 项目中，若使用了 `bean-searcher-boot-starter` 依赖，可在项目的 `application.properties` 或 `application.yml` 文件中通过如下配置项对字段参数进行定制：
+In a SpringBoot / Grails project, if the `bean-searcher-boot-starter` dependency is used, you can customize the field parameters through the following configuration items in the `application.properties` or `application.yml` file of the project:
 
-配置键名 | 含义 | 可选值 | 默认值
+Configuration Key Name | Meaning | Optional Values | Default Value
 -|-|-|-
-`bean-searcher.params.separator` | 字段参数名分隔符 | `字符串` | `-`
-`bean-searcher.params.operator-key` | 字段运算符参数名后缀 | `字符串` | `op`
-`bean-searcher.params.ignore-case-key` | 是否忽略大小写字段参数名后缀 | `字符串` | `ic`
+`bean-searcher.params.separator` | Separator for field parameter names | `String` | `-`
+`bean-searcher.params.operator-key` | Suffix for the field operator parameter name | `String` | `op`
+`bean-searcher.params.ignore-case-key` | Suffix for the field parameter name indicating whether to ignore case | `String` | `ic`
 
-### 扩展衍生参数
+### Extended Derived Parameters
 
-另外，如果你觉得默认的字段衍生参数不太好用，那么还可以使用 [参数过滤器](/en/guide/advance/filter#参数过滤器) 来自定义新的规则。实际上自 `v4.3.0` 起，Bean Searcher 就自带了一些简化衍生参数的过滤器：
+In addition, if you find the default derived field parameters not very useful, you can use the [parameter filter](/en/guide/advance/filter#Parameter Filter) to customize new rules. In fact, since `v4.3.0`, Bean Searcher has come with some filters for simplifying derived parameters:
 
-* [ArrayValueParamFilter](/en/guide/advance/filter#arrayvalueparamfilter)
-* [SuffixOpParamFilter](/en/guide/advance/filter#suffixopparamfilter)
-* [JsonArrayParamFilter](/en/guide/advance/filter#jsonarrayparamfilter)
+* [ArrayValueParamFilter](/en/guide/advance/filter#ArrayValueParamFilter)
+* [SuffixOpParamFilter](/en/guide/advance/filter#SuffixOpParamFilter)
+* [JsonArrayParamFilter](/en/guide/advance/filter#JsonArrayParamFilter)
 
-## 字段运算符
+## Field Operators
 
-字段运算符是用来描述某个字段的检索方式，即：SQL 的拼接方法。Bean Searcher 共默认提供了 **22** 种不同的字段运算符，见下表：
+Field operators are used to describe the retrieval method of a certain field, that is, the SQL splicing method. Bean Searcher provides a total of **22** different field operators by default, as shown in the following table:
 
-> 下表中的 `忽略空值` 的含义是：如果该字段的参数值为 `null` 或 `空串`，是否忽略该条件。
+> The meaning of `Ignore empty values` in the following table is: if the parameter value of this field is `null` or an `empty string`, whether to ignore this condition.
 
-运算符 | 缩写 | SQL 片段 | 是否忽略空值 | 含义
+Operator | Abbreviation | SQL Snippet | Whether to Ignore Empty Values | Meaning
 -|-|-|-|-
-`Equal` | `eq` | `x = ?` | 是 | 等于（是缺省默认的运算符）
-`NotEqual` | `ne` | `x != ?` | 是 | 不等于
-`GreaterThan` | `gt` | `x > ?` | 是 | 大于
-`GreaterEqual` | `ge` | `x >= ?` | 是 | 大于等于
-`LessThan` | `lt` | `x < ?` | 是 | 小于
-`LessEqual` | `le` | `x <= ?` | 是 | 小于等于
-`Between` | `bt` | `x between ?1 and ?2` / `x >= ?1` / `x <= ?2` | 是 | 在...之间（范围查询）
-`NotBetween` | `nb` | `x not between ?1 and ?2` / `x < ?1` / `x > ?2` | 是 | 不在...之间（范围查询）（**since v3.3**）
-`Contain` | `ct` | `x like '%?%'` | 是 | 包含（模糊查询）（**since v3.2**）
-`StartWith` | `sw` | `x like '?%'` | 是 | 以...开头（模糊查询）
-`EndWith` | `ew` | `x like '%?'` | 是 | 以...结尾（模糊查询）
-`OrLike` | `ol` | `x like ?1 or x like ?2 or ...` | 是 | 模糊或匹配（可有多个参数值）（**since v3.7**）
-`NotLike` | `nk` | `x not like ?` | 是 | 反模糊匹配（**since v3.8**）
-`InList`  | `il` | `x in (?, ?, ...)` | 是 | 多值查询（**自 v3.3 新增**，之前是 `MultiValue` / `mv`）
-`NotIn` | `ni` | `x not in (?, ?, ...)` | 是 | 多值查询（**since v3.3**）
-`IsNull` | `nl` | `x is null` | 否 | 为空（**since v3.3**）
-`NotNull` | `nn` | `x is not null` | 否 | 不为空（**since v3.3**）
-`Empty` | `ey` | `x is null or x = ''` | 否 | 为空（仅适用于 **字符串** 类型的字段）
-`NotEmpty` | `ny` | `x is not null and x != ''` | 否 | 不为空（仅适用于 **字符串** 类型的字段）
-`AlwaysTrue` | `at` | `1` | 否 | 恒真（**since v4.3**）
-`AlwaysFalse` | `af` | `0` | 否 | 恒假（**since v4.3**）
-`SqlCond` | `sql` | `自定义 SQL 条件` | 否 | 只能在参数构建器中使用，参考 [自定义 SQL 条件](/en/guide/param/sql) 章节（**since v3.8.0**）
+`Equal` | `eq` | `x = ?` | Yes | Equal to (the default operator)
+`NotEqual` | `ne` | `x != ?` | Yes | Not equal to
+`GreaterThan` | `gt` | `x > ?` | Yes | Greater than
+`GreaterEqual` | `ge` | `x >= ?` | Yes | Greater than or equal to
+`LessThan` | `lt` | `x < ?` | Yes | Less than
+`LessEqual` | `le` | `x <= ?` | Yes | Less than or equal to
+`Between` | `bt` | `x between ?1 and ?2` / `x >= ?1` / `x <= ?2` | Yes | Between... (range query)
+`NotBetween` | `nb` | `x not between ?1 and ?2` / `x < ?1` / `x > ?2` | Yes | Not between... (range query) (**since v3.3**)
+`Contain` | `ct` | `x like '%?%'` | Yes | Contain (fuzzy query) (**since v3.2**)
+`StartWith` | `sw` | `x like '?%'` | Yes | Start with... (fuzzy query)
+`EndWith` | `ew` | `x like '%?'` | Yes | End with... (fuzzy query)
+`OrLike` | `ol` | `x like ?1 or x like ?2 or ...` | Yes | Fuzzy or match (can have multiple parameter values) (**since v3.7**)
+`NotLike` | `nk` | `x not like ?` | Yes | Anti-fuzzy match (**since v3.8**)
+`InList`  | `il` | `x in (?, ?, ...)` | Yes | Multi-value query (**New since v3.3**, previously `MultiValue` / `mv`)
+`NotIn` | `ni` | `x not in (?, ?, ...)` | Yes | Multi-value query (**since v3.3**)
+`IsNull` | `nl` | `x is null` | No | Is null (**since v3.3**)
+`NotNull` | `nn` | `x is not null` | No | Is not null (**since v3.3**)
+`Empty` | `ey` | `x is null or x = ''` | No | Is empty (only applicable to fields of **string** type)
+`NotEmpty` | `ny` | `x is not null and x != ''` | No | Is not empty (only applicable to fields of **string** type)
+`AlwaysTrue` | `at` | `1` | No | Always true (**since v4.3**)
+`AlwaysFalse` | `af` | `0` | No | Always false (**since v4.3**)
+`SqlCond` | `sql` | `Custom SQL condition` | No | Can only be used in the parameter builder. Refer to the [Custom SQL Condition](/en/guide/param/sql) section (**since v3.8.0**)
 
-::: tip 除此之外
-你还可以自定义运算符，参见 [高级 > 玩转运算符](/en/guide/advance/fieldop) 章节。
+::: tip In addition
+You can also customize operators. Refer to the [Advanced > Mastering Operators](/en/guide/advance/fieldop) section.
 :::
 
-由于 Bean Searcher 为运算符提供了全称与缩写，所以对于每一种运算符，都有几种等效的用法，
+Since Bean Searcher provides full names and abbreviations for operators, there are several equivalent usages for each operator.
 
-例如，查询 `name` 等于 Jack 的用户：
+For example, to query users whose `name` is equal to Jack:
 
-* 后端参数构建：
+* Backend parameter construction:
 
 ```java
 Map<String, Object> params = MapUtils.builder()
-        .field("name", "Jack")          // (1) 字段 name 的值为 Jack
-        .field(User::getName, "Jack")   // 等效写法 == (1) 
-        .op("eq")                       // (2) 指定 name 字段的运算符为 eq (默认就是 eq, 所以也可以省略)
-        .op("Equal")                    // 等效写法 == (2) 
-        .op(FieldOps.Equal)             // 等效写法 == (2) 
-        .op(Equal.class)                // 等效写法 == (2) 
+        .field("name", "Jack")          // (1) The value of the field `name` is Jack
+        .field(User::getName, "Jack")   // Equivalent to (1) 
+        .op("eq")                       // (2) Specify the operator of the `name` field as `eq` (the default is `eq`, so it can also be omitted)
+        .op("Equal")                    // Equivalent to (2) 
+        .op(FieldOps.Equal)             // Equivalent to (2) 
+        .op(Equal.class)                // Equivalent to (2) 
         .build();
-User jack = searcher.searchFirst(User.class, params);           // 执行查询
+User jack = searcher.searchFirst(User.class, params);           // Execute the query
 ```
 
-* 前端传参形式：
+* Front-end parameter passing form:
 
 ```js
-GET /users ? name=Jack & name-op=eq        // (1) 字段 name 的值为 Jack，运算符为 eq
-GET /users ? name=Jack & name-op=Equal     // 等效写法 == (1) 
-GET /users ? name-0=Jack & name-op=eq      // 等效写法 == (1) 
-GET /users ? name-0=Jack & name-op=Equal   // 等效写法 == (1) 
-GET /users ? name=Jack          // (2) 当 name 无运算符约束，或运算符约束中第一个为 Equal 时，与 (1) 等效 
-GET /users ? name-0=Jack        // 等效写法 == (2) 
+GET /users ? name=Jack & name-op=eq        // (1) The value of the field `name` is Jack, and the operator is `eq`
+GET /users ? name=Jack & name-op=Equal     // Equivalent to (1) 
+GET /users ? name-0=Jack & name-op=eq      // Equivalent to (1) 
+GET /users ? name-0=Jack & name-op=Equal   // Equivalent to (1) 
+GET /users ? name=Jack          // (2) When there is no operator constraint for `name`, or the first operator constraint is `Equal`, it is equivalent to (1) 
+GET /users ? name-0=Jack        // Equivalent to (2) 
 ```

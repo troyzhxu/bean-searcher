@@ -1,78 +1,78 @@
-# 分页参数
+# Pagination Parameters
 
-Bean Searcher 提供了两种分页：**Page 分页** 与 **Offset 分页**。
+Bean Searcher provides two types of pagination: **Page Pagination** and **Offset Pagination**.
 
-## 可配置项
+## Configurable Items
 
-在 SpringBoot / Grails 项目中，若使用了 `bean-searcher-boot-starter` 依赖，则可在项目配置文件 `application.properties` 或 `application.yml` 中对分页进行个性化配置：
+In SpringBoot / Grails projects, if the `bean-searcher-boot-starter` dependency is used, you can customize the pagination configuration in the project configuration file `application.properties` or `application.yml`:
 
-配置键名 | 含义 | 可选值 | 默认值
+Configuration Key Name | Meaning | Optional Values | Default Value
 -|-|-|-
-`bean-searcher.params.pagination.type` | 分页类型 | `page`、`offset` | `page`
-`bean-searcher.params.pagination.default-size` | 默认每页查询条数 | `正整数` | `15`
-`bean-searcher.params.pagination.max-allowed-size` | 每页最大查询条数（分页保护） | `正整数` | `100`
-`bean-searcher.params.pagination.page` | 页码参数名（在 type = page 时有效） | `字符串` | `page`
-`bean-searcher.params.pagination.size` | 每页大小参数名 | `字符串` | `size`
-`bean-searcher.params.pagination.offset` | 偏移参数名（在 type = offset 时有效） | `字符串` | `offset`
-`bean-searcher.params.pagination.start` | 起始页码 或 起始偏移量 | `自然数` | `0`
+`bean-searcher.params.pagination.type` | Pagination type | `page`, `offset` | `page`
+`bean-searcher.params.pagination.default-size` | Default number of items per page | `Positive integer` | `15`
+`bean-searcher.params.pagination.max-allowed-size` | Maximum number of items per page (pagination protection) | `Positive integer` | `100`
+`bean-searcher.params.pagination.page` | Page number parameter name (valid when type = page) | `String` | `page`
+`bean-searcher.params.pagination.size` | Number of items per page parameter name | `String` | `size`
+`bean-searcher.params.pagination.offset` | Offset parameter name (valid when type = offset) | `String` | `offset`
+`bean-searcher.params.pagination.start` | Starting page number or starting offset | `Natural number` | `0`
 
-## Page 分页
+## Page Pagination
 
-> 分页类型为 `page` 时生效
+> Effective when the pagination type is `page`
 
-Page 分页提供两个分页参数（参数名可配置）：
+Page pagination provides two pagination parameters (parameter names can be configured):
 
-* `page`: 页码
-* `size`: 每页查询条数
+* `page`: Page number
+* `size`: Number of items per page
 
-用法示例（默认配置下）：
+Usage example (under default configuration):
 
 ```java
 Map<String, Object> params = MapUtils.builder()
-        .page(0, 15)                    // 第 0 页，每页 15 条（推荐写法）
-        .put("page", 0)                 // 等效写法
-        .put("size", 15)                // 等效写法
+        .page(0, 15)                    // Page 0, 15 items per page (recommended way)
+        .put("page", 0)                 // Equivalent way
+        .put("size", 15)                // Equivalent way
         .build();
 SearchResult<User> result = searcher.search(User.class, params);
 ```
 
-## Offset 分页
+## Offset Pagination
 
-> 分页类型为 `offset` 时生效
+> Effective when the pagination type is `offset`
 
-Offset 分页也提供两个分页参数（参数名可配置）：
+Offset pagination also provides two pagination parameters (parameter names can be configured):
 
-* `offset`: 偏移量
-* `size`: 每页查询条数
+* `offset`: Offset
+* `size`: Number of items per page
 
-用法示例（默认配置下）：
+Usage example (under default configuration):
 
 ```java
 Map<String, Object> params = MapUtils.builder()
-        .limit(0, 15)                   // 偏移 0 条，查询 15 条（推荐写法）
-        .put("offset", 0)               // 等效写法
-        .put("size", 15)                // 等效写法
+        .limit(0, 15)                   // Offset 0 items, query 15 items (recommended way)
+        .put("offset", 0)               // Equivalent way
+        .put("size", 15)                // Equivalent way
         .build();
 SearchResult<User> result = searcher.search(User.class, params);
 ```
 
-## 起始 页码/偏移量
+## Starting Page Number/Offset
 
-配置项 起始页码/偏移量（`bean-searcher.params.pagination.start`）默认是 `0`，在 Page 分页机制下，`page` 参数为 0 表示查询第 1 页。当把 起始页码 配置为 `1` 时，则 `page` 参数为 1 才表示查询第 1 页。Offset 分页同理。
+The configuration item Starting Page Number/Offset (`bean-searcher.params.pagination.start`) defaults to `0`. In the Page pagination mechanism, a `page` parameter of 0 means querying the first page. When the starting page number is configured to `1`, then a `page` parameter of 1 means querying the first page. The same applies to Offset pagination.
 
-::: warning 注意
-* **v3.7.0** 以前 `参数构建工具` 的 `page(long page, int size)` 与 `limit(long offset, int size)` 方法不受该配置影响。
-* **v3.7.0** 及以后版本该配置则对  `参数构建工具`  同样有作用。
+::: warning Attention
+* Before **v3.7.0**, the `page(long page, int size)` and `limit(long offset, int size)` methods of the `Parameter Building Tool` are not affected by this configuration.
+* In versions **v3.7.0** and later, this configuration also affects the `Parameter Building Tool`.
 :::
 
-## 最大查询条数
+## Maximum Number of Query Items
 
-配置项 最大查询条数（`bean-searcher.params.pagination.max-allowed-size`）默认是 `100`，它可以风控一些恶意查询：比如黑客想通过一次查询 **1 亿** 条数据从而让我们系统崩溃时，Bean Searcher 会自动把它缩小为 `100`。
+The configuration item Maximum Number of Query Items (`bean-searcher.params.pagination.max-allowed-size`) defaults to `100`. It can control some malicious queries. For example, when a hacker wants to query **100 million** items at once to crash our system, Bean Searcher will automatically reduce it to `100`.
 
-## 默认分页大小
+## Default Pagination Size
 
-配置项 默认分页大小（`bean-searcher.params.pagination.default-size`）默认是 `15`，在用户为添加分页参数时，默认每页查询 15 条数据。
+The configuration item Default Pagination Size (`bean-searcher.params.pagination.default-size`) defaults to `15`. When the user does not add pagination parameters, the default number of items per page is 15.
 
 ::: tip
-`Searcher` 实例的 `searchAll(...)` 方法不受分页参数影响
+The `searchAll(...)` method of the `Searcher` instance is not affected by pagination parameters.
 :::
