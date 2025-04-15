@@ -1,93 +1,93 @@
-# 使用
+# Usage
 
-如果您还不了解  Bean Searcher 适合在在哪些场景使用的话，请先阅读 [介绍 > Bean Searcher](/en/guide/info/bean-searcher) 章节。
+If you're not sure where Bean Searcher is suitable for use, please first read the [Introduction > Bean Searcher](/en/guide/info/bean-searcher) section.
 
-## 检索器
+## Searcher
 
-当在项目中成功集成后，接下来便可以在我们的业务代码（Controller 或 Service）中拿到检索器实例了。
+After successfully integrating it into your project, you can then obtain the searcher instance in your business code (Controller or Service).
 
-Spring 或 Grails 项目都可以直接注入（Grails 项目中不需要使用 `@Autowired` 注解）：
+In Spring or Grails projects, you can directly inject it (in Grails projects, you don't need to use the `@Autowired` annotation):
 
 ```java
 /**
- * 注入 Map 检索器，它检索出来的数据以 Map 对象呈现
+ * Inject the Map searcher, which retrieves data presented as Map objects.
  */
 @Autowired
 private MapSearcher mapSearcher;
 /**
- * 注入 Bean 检索器，它检索出来的数据以 泛型 对象呈现
+ * Inject the Bean searcher, which retrieves data presented as generic objects.
  */
 @Autowired
 private BeanSearcher beanSearcher;
 ```
 
-其它项目，可以把在项目启动时构建出来的检索器直接传进来，或使用自己的注入方式进行注入。
+For other projects, you can directly pass in the searcher constructed during project startup or use your own injection method.
 
-::: warning 注意
-如果你的 Spring 容器中同时有 `MapSearcher` 与 `BeanSearcher` 两个实例（使用 `bean-searcher-boot-starter` 依赖时默认向 Spring 容器注入添加两个检索器实例），则不能使用如下方式注入：
+::: warning Note
+If you have both `MapSearcher` and `BeanSearcher` instances in your Spring container (when using the `bean-searcher-boot-starter` dependency, two searcher instances are added to the Spring container by default), you cannot use the following injection method:
 ```java
 @Autowired
 private Searcher Searcher;
 ```
-因为有 `MapSearcher` 与 `BeanSearcher` 都是 `Searcher` 的实例，Spring 容器分不清你想要的到底是哪一个。
+Because both `MapSearcher` and `BeanSearcher` are instances of `Searcher`, the Spring container can't tell which one you want.
 
-当使用 `bean-searcher-boot-starter` 的版本是 `v3.0.5` 或 `v3.1.3+` 时，则不存在此问题，它会默认注入 `MapSearcher` 实例。
+When using the `bean-searcher-boot-starter` version `v3.0.5` or `v3.1.3+`, this issue doesn't exist, and it will inject the `MapSearcher` instance by default.
 :::
 
-拿到检索器后，接着我们看一下 `MapSearcher` 与 `BeanSearcher` 检索器都提供了哪些方法：
+After obtaining the searcher, let's take a look at the methods provided by both the `MapSearcher` and `BeanSearcher` searchers:
 
-### 共同拥有的方法
+### Common methods
 
-* `searchCount(Class<T> beanClass, Map<String, Object> params): Number` 查询指定条件下的数据 **总条数**
-* `searchSum(Class<T> beanClass, Map<String, Object> params, String field): Number` 查询指定条件下的 **某字段** 的 **统计值**
-* `searchSum(Class<T> beanClass, Map<String, Object> params, String[] fields): Number[]` 查询指定条件下的 **多字段** 的 **统计值**
+* `searchCount(Class<T> beanClass, Map<String, Object> params): Number` Query the **total number** of data under the specified conditions.
+* `searchSum(Class<T> beanClass, Map<String, Object> params, String field): Number` Query the **statistical value** of a **specific field** under the specified conditions.
+* `searchSum(Class<T> beanClass, Map<String, Object> params, String[] fields): Number[]` Query the **statistical values** of **multiple fields** under the specified conditions.
 
-> 检索参数 `params` 是一个条件集合，包含字段过滤、分页、排序 等参数
+> The retrieval parameter `params` is a set of conditions, including field filtering, pagination, sorting, and other parameters.
 
-### 只在 MapSearcher 内的方法
+### Methods only available in MapSearcher
 
-* `search(Class<T> beanClass, Map<String, Object> params): SearchResult<Map<String, Object>>` **分页** 查询指定条件下数据 **列表** 与 **总条数**
-* `search(Class<T> beanClass, Map<String, Object> params, String[] summaryFields): SearchResult<Map<String, Object>>` **同上** + 多字段 **统计**
-* `searchFirst(Class<T> beanClass, Map<String, Object> params): Map<String, Object>` 查询指定条件下的 **第一条** 数据 
-* `searchList(Class<T> beanClass, Map<String, Object> params): List<Map<String, Object>>` **分页** 查询指定条件下数据 **列表** 
-* `searchAll(Class<T> beanClass, Map<String, Object> params): List<Map<String, Object>>` 查询指定条件下 **所有** 数据 **列表**
+* `search(Class<T> beanClass, Map<String, Object> params): SearchResult<Map<String, Object>>` **Paginated** query of the data **list** and **total number** under the specified conditions.
+* `search(Class<T> beanClass, Map<String, Object> params, String[] summaryFields): SearchResult<Map<String, Object>>` **Same as above** + **statistics** of multiple fields.
+* `searchFirst(Class<T> beanClass, Map<String, Object> params): Map<String, Object>` Query the **first** piece of data under the specified conditions.
+* `searchList(Class<T> beanClass, Map<String, Object> params): List<Map<String, Object>>` **Paginated** query of the data **list** under the specified conditions.
+* `searchAll(Class<T> beanClass, Map<String, Object> params): List<Map<String, Object>>` Query the **entire** data **list** under the specified conditions.
 
-> 以上方法的查询出的单条数据都以 `Map` 对象呈现
+> The single pieces of data retrieved by the above methods are all presented as `Map` objects.
 
-### 只在 BeanSearcher 内的方法
+### Methods only available in BeanSearcher
 
-* `search(Class<T> beanClass, Map<String, Object> params): SearchResult<T>` **分页** 查询指定条件下数据 **列表** 与 **总条数**
-* `search(Class<T> beanClass, Map<String, Object> params, String[] summaryFields): SearchResult<T>` **同上** + 多字段 **统计**
-* `searchFirst(Class<T> beanClass, Map<String, Object> params): T` 查询指定条件下的 **第一条** 数据
-* `searchList(Class<T> beanClass, Map<String, Object> params): List<T>` **分页** 查询指定条件下数据 **列表** 
-* `searchAll(Class<T> beanClass, Map<String, Object> params): List<T>` 查询指定条件下 **所有** 数据 **列表**
+* `search(Class<T> beanClass, Map<String, Object> params): SearchResult<T>` **Paginated** query of the data **list** and **total number** under the specified conditions.
+* `search(Class<T> beanClass, Map<String, Object> params, String[] summaryFields): SearchResult<T>` **Same as above** + **statistics** of multiple fields.
+* `searchFirst(Class<T> beanClass, Map<String, Object> params): T` Query the **first** piece of data under the specified conditions.
+* `searchList(Class<T> beanClass, Map<String, Object> params): List<T>` **Paginated** query of the data **list** under the specified conditions.
+* `searchAll(Class<T> beanClass, Map<String, Object> params): List<T>` Query the **entire** data **list** under the specified conditions.
 
-> 以上方法的查询出的单条数据都以泛型 `T` 对象呈现
+> The single pieces of data retrieved by the above methods are all presented as generic `T` objects.
 
-完整的接口定义，可查阅：[Searcher](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/Searcher.java)、[MapSearcher](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/MapSearcher.java) 与 、[BeanSearcher](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/BeanSearcher.java) 。
+For the complete interface definitions, please refer to: [Searcher](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/Searcher.java), [MapSearcher](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/MapSearcher.java), and [BeanSearcher](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/BeanSearcher.java).
 
-## 检索实体类
+## Search Entity Classes
 
-在 Bean Searcher 的世界里，与数据库有映射关系的实体类称为 SearchBean（一个 SearchBean 可以映射一张表，也可以映射多张表），例如，您的项目中可能已经存在这样的一个实体类了：
+In the world of Bean Searcher, entity classes that have a mapping relationship with the database are called SearchBeans (a SearchBean can map to one table or multiple tables). For example, you may already have an entity class like this in your project:
 
 ```java
-public class User {             // 默认映射到 user 表
+public class User {             // By default, it maps to the user table.
 
-    private Long id;            // 默认映射到 id 字段
-    private String name;        // 默认映射到 name 字段
-    private int age;            // 默认映射到 age 字段
+    private Long id;            // By default, it maps to the id field.
+    private String name;        // By default, it maps to the name field.
+    private int age;            // By default, it maps to the age field.
 
     // Getter and Setter ...
 }
 ```
 
-相比 v2.x, Bean Searcher v3.x 的实体类可以省略注解，也可以自定义识别其它框架的注解。
+Compared to v2.x, the entity classes in Bean Searcher v3.x can omit annotations and can also be configured to recognize annotations from other frameworks.
 
-在注解缺省的情况下，Bean Searcher 认为它是一个单表实体类（即只映射到数据库中的一张表，联表实体类 的例子 请参考 [实体类 > 多表关联](/en/guide/bean/multitable) 章节。
+In the absence of annotations, Bean Searcher considers it a single-table entity class (i.e., it only maps to one table in the database. For an example of a multi-table entity class, please refer to the [Entity Classes > Multi-table Association](/en/guide/bean/multitable) section).
 
-## 开始检索
+## Start Searching
 
-有了实体类后，接下来我们便用 `MapSearcher` 的 `search(Class<T> beanClass, Map<String, Object> params): SearchResult<Map<String, Object>>` 方法来体验一下如何 **只用一行代码** 实现一个检索接口，代码如下：
+After having the entity class, let's use the `search(Class<T> beanClass, Map<String, Object> params): SearchResult<Map<String, Object>>` method of `MapSearcher` to experience how to implement a search interface with **just one line of code**. The code is as follows:
 
 ```java
 @RestController
@@ -95,23 +95,23 @@ public class User {             // 默认映射到 user 表
 public class UserController {
 
     @Autowired
-    private MapSearcher mapSearcher;              // 注入 BeanSearcher 的检索器
+    private MapSearcher mapSearcher;              // Inject the BeanSearcher searcher.
 
     @GetMapping("/index")
     public SearchResult<Map<String, Object>> index(HttpServletRequest request) {
-        // 一行代码，实现一个用户检索接口（MapUtils.flat 只是收集前端的请求参数）
+        // One line of code to implement a user search interface (MapUtils.flat just collects the request parameters from the front end).
         return mapSearcher.search(User.class, MapUtils.flat(request.getParameterMap()));
     }
 
 }
 ```
 
-::: tip 代码解析
-上面的 `MapUtils` 是 Bean Searcher 提供的一个工具类，`MapUtils.flat(request.getParameterMap())` 只是为了把前端传来的请求参数统一收集起来，然后剩下的，就全部交给 `MapSearcher` 检索器了。<br>
-当然不直接从 `request` 里取参数也是可以的，只是代码这么写看起来比较简洁。
+::: tip Code Explanation
+The `MapUtils` mentioned above is a utility class provided by Bean Searcher. `MapUtils.flat(request.getParameterMap())` is just used to collect all the request parameters sent from the front end. Then, the rest is all handed over to the `MapSearcher` searcher. <br>
+Of course, you don't have to get the parameters directly from the `request`. It's just that the code looks more concise this way.
 :::
 
-你还可以配置 [自动接收请求参数](/en/guide/usage/others#自动接收请求参数), 然后，你的代码就可以进一步简化：
+You can also configure [Automatic Request Parameter Reception](/en/guide/usage/others#Automatic Request Parameter Reception), and then your code can be further simplified:
 
 ```java
 @RestController
@@ -119,179 +119,179 @@ public class UserController {
 public class UserController {
 
     @Autowired
-    private MapSearcher mapSearcher;              // 注入 BeanSearcher 的检索器
+    private MapSearcher mapSearcher;              // Inject the BeanSearcher searcher.
 
     @GetMapping("/index")
     public SearchResult<Map<String, Object>> index() {
-        // 一行代码，实现一个用户检索接口
+        // One line of code to implement a user search interface.
         return mapSearcher.search(User.class);
     }
 
 }
 ```
 
-上面的代码，实现了一个 `/user/index` 接口，它的方法体里真的只有一行代码，但这个接口能支持哪些请求参数呢？不同的请求参数又能输出怎样的结果呢，接下来让我们来简单列举一下：
+The above code implements a `/user/index` interface. There's really only one line of code in its method body. But what request parameters can this interface support? And what results can different request parameters produce? Let's briefly list them below:
 
-### （1）无参请求
+### (1) Request without parameters
 
 * GET /user/index
-* 返回结果：
+* Return result:
 
 ```json
 {
-    "dataList": [           // 用户列表，默认返回第 1 页，默认分页大小为 15 （可配置）
+    "dataList": [           // User list, by default, it returns the first page, and the default page size is 15 (configurable).
         { "id": 1, "name": "Jack", "age": 25 },,,
     ],
-    "totalCount": 100       // 用户总数
+    "totalCount": 100       // Total number of users.
 }
 ```
 
-### （2）分页请求（page | size）
+### (2) Pagination request (page | size)
 
 * GET /user/index? page=2 & size=10 
-* 返回结果：结构同 **（1）**（只是每页 10 条，返回第 2 页）
+* Return result: The structure is the same as **(1)** (but with 10 items per page, returning the second page).
 
 ::: tip
-参数名 `size` 和 `page` 可自定义， `page` 默认从 `0` 开始，同样可自定义，并且可与其它参数组合使用
+The parameter names `size` and `page` can be customized. By default, `page` starts from `0`, which can also be customized and can be combined with other parameters.
 :::
 
-### （3）数据排序（sort | order）
+### (3) Data sorting (sort | order)
 
 * GET /user/index? sort=age & order=desc 
-* 返回结果：结构同 **（1）**（只是 dataList 数据列表以 age 字段降序输出）
+* Return result: The structure is the same as **(1)** (but the dataList is sorted in descending order by the age field).
 
 ::: tip
-参数名 `sort` 和 `order` 可自定义，可和其它参数组合使用
+The parameter names `sort` and `order` can be customized and can be combined with other parameters.
 :::
 
-### （4）指定（排除）字段（onlySelect | selectExclude）
+### (4) Specify (exclude) fields (onlySelect | selectExclude)
 
 * GET /user/index? onlySelect=id,name
 * GET /user/index? selectExclude=age
-* 返回结果：（ dataList 数据列表只含 id 与 name 字段）
+* Return result: (The dataList only contains the id and name fields)
 
 ```json
 {
-    "dataList": [           // 用户列表，默认返回第 1 页（只包含 id 和 name 字段）
+    "dataList": [           // User list, by default, it returns the first page (only containing the id and name fields).
         { "id": 1, "name": "Jack" },,,
     ],
-    "totalCount": 100       // 用户总数
+    "totalCount": 100       // Total number of users.
 }
 ```
 
 ::: tip
-参数名 `onlySelect` 和 `selectExclude` 可自定义，可和其它参数组合使用
+The parameter names `onlySelect` and `selectExclude` can be customized and can be combined with other parameters.
 :::
 
-### （5）字段过滤（ [field]-op=eq ）
+### (5) Field filtering ([field]-op=eq)
 
 * GET /user/index? age=20
 * GET /user/index? age=20 & age-op=eq
-* 返回结果：结构同 **（1）**（但只返回 age=20 的数据）
+* Return result: The structure is the same as **(1)** (but only returns data where age=20).
 
 ::: tip
-参数 `age-op=eq` 表示 `age` 的 **字段运算符** 是 `eq`（`Equal` 的缩写），表示参数 `age` 与参数值 `20` 之间的关系是 `Equal`，由于 `Equal` 是一个默认的关系，所以 `age-op=eq` 也可以省略
+The parameter `age-op=eq` means that the **field operator** of `age` is `eq` (an abbreviation for `Equal`), indicating that the relationship between the parameter `age` and the parameter value `20` is `Equal`. Since `Equal` is the default relationship, `age-op=eq` can also be omitted.
 
-参数名 `age-op` 的后缀 `-op` 可自定义，且可与其它字段参数 和 上文所列的参数（分页、排序、指定字段）组合使用，下文所列的字段参数也是一样，不再复述。
+The suffix `-op` of the parameter name `age-op` can be customized and can be combined with other field parameters and the parameters listed above (pagination, sorting, specifying fields). The same applies to the field parameters listed below, and it won't be repeated.
 :::
 
-### （6）字段过滤（ [field]-op=ne ）
+### (6) Field filtering ([field]-op=ne)
 
 * GET /user/index? age=20 & age-op=ne
-* 返回结果：结构同 **（1）**（但只返回 age != 20 的数据，`ne` 是 `NotEqual` 的缩写）
+* Return result: The structure is the same as **(1)** (but only returns data where age != 20, `ne` is an abbreviation for `NotEqual`).
 
-### （7）字段过滤（ [field]-op=ge ）
+### (7) Field filtering ([field]-op=ge)
 
 * GET /user/index? age=20 & age-op=ge
-* 返回结果：结构同 **（1）**（但只返回 age >= 20 的数据，`ge` 是 `GreateEqual` 的缩写）
+* Return result: The structure is the same as **(1)** (but only returns data where age >= 20, `ge` is an abbreviation for `GreateEqual`).
 
-### （8）字段过滤（ [field]-op=le ）
+### (8) Field filtering ([field]-op=le)
 
 * GET /user/index? age=20 & age-op=le
-* 返回结果：结构同 **（1）**（但只返回 age <= 20 的数据，`le` 是 `LessEqual` 的缩写）
+* Return result: The structure is the same as **(1)** (but only returns data where age <= 20, `le` is an abbreviation for `LessEqual`).
 
-### （9）字段过滤（ [field]-op=gt ）
+### (9) Field filtering ([field]-op=gt)
 
 * GET /user/index? age=20 & age-op=gt
-* 返回结果：结构同 **（1）**（但只返回 age > 20 的数据，`gt` 是 `GreateThan` 的缩写）
+* Return result: The structure is the same as **(1)** (but only returns data where age > 20, `gt` is an abbreviation for `GreateThan`).
 
-### （10）字段过滤（ [field]-op=lt ）
+### (10) Field Filtering ([field]-op=lt)
 
 * GET /user/index? age=20 & age-op=lt
-* 返回结果：结构同 **（1）**（但只返回 age < 20 的数据，`lt` 是 `LessThan` 的缩写）
+* Return result: The structure is the same as **(1)** (but only return data where age < 20. `lt` is the abbreviation of `LessThan`).
 
-### （11）字段过滤（ [field]-op=bt ）
+### (11) Field Filtering ([field]-op=bt)
 
 * GET /user/index? age-0=20 & age-1=30 & age-op=bt
-* 返回结果：结构同 **（1）**（但只返回 20 <= age <= 30 的数据，`bt` 是 `Between` 的缩写）
+* Return result: The structure is the same as **(1)** (but only return data where 20 <= age <= 30. `bt` is the abbreviation of `Between`).
 
-::: tip 提示
-参数 `age-0=20` 表示 `age` 的第 0 个参数值是 `20`。上文中提到的 `age=20` 实际上是 `age-0=20` 的简写形式。
-参数名 `age-0` 与 ` age-1` 中的连字符 `-` 可自定义。
+::: tip
+The parameter `age-0=20` means that the 0th parameter value of `age` is `20`. The `age=20` mentioned above is actually a shorthand for `age-0=20`.
+The hyphen `-` in the parameter names `age-0` and `age-1` can be customized.
 
-**优化**：觉得 age-0=20 & age-1=30 有点复杂，想用 **age=[20,30]** 替代？可以的！请参考 [高级 > 参数过滤器](/en/guide/advance/filter) 章节。
+**Optimization**: Think that `age-0=20 & age-1=30` is a bit complicated and want to use **age=[20,30]** instead? It's okay! Please refer to the [Advanced > Parameter Filter](/en/guide/advance/filter) section.
 :::
 
-### （12）字段过滤（ [field]-op=il ）
+### (12) Field Filtering ([field]-op=il)
 
 * GET /user/index? age-0=20 & age-1=30 & age-2=40 & age-op=il
-* 返回结果：结构同 **（1）**（但只返回 age in (20, 30, 40) 的数据，`il` 是 `InList` 的缩写）
+* Return result: The structure is the same as **(1)** (but only return data where age in (20, 30, 40). `il` is the abbreviation of `InList`).
 
-::: tip 优化
-同理 age-0=20 & age-1=30 & age-2=40 可优化为 **age=[20,30,40]**，参考 [高级 > 参数过滤器](/en/guide/advance/filter) 章节。
+::: tip Optimization
+Similarly, `age-0=20 & age-1=30 & age-2=40` can be optimized to **age=[20,30,40]**. Refer to the [Advanced > Parameter Filter](/en/guide/advance/filter) section.
 :::
 
-### （13）字段过滤（ [field]-op=ct ）
+### (13) Field Filtering ([field]-op=ct)
 
 * GET /user/index? name=Jack & name-op=ct
-* 返回结果：结构同 **（1）**（但只返回 name 包含 Jack 的数据，`ct` 是 `Contain` 的缩写）
+* Return result: The structure is the same as **(1)** (but only return data where the name contains Jack. `ct` is the abbreviation of `Contain`).
 
-### （14）字段过滤（ [field]-op=sw ）
+### (14) Field Filtering ([field]-op=sw)
 
 * GET /user/index? name=Jack & name-op=sw
-* 返回结果：结构同 **（1）**（但只返回 name 以 Jack 开头的数据，`sw` 是 `StartWith` 的缩写）
+* Return result: The structure is the same as **(1)** (but only return data where the name starts with Jack. `sw` is the abbreviation of `StartWith`).
 
-### （15）字段过滤（ [field]-op=ew ）
+### (15) Field Filtering ([field]-op=ew)
 
 * GET /user/index? name=Jack & name-op=ew
-* 返回结果：结构同 **（1）**（但只返回 name 以 Jack 结尾的数据，`ew` 是 `EndWith` 的缩写）
+* Return result: The structure is the same as **(1)** (but only return data where the name ends with Jack. `ew` is the abbreviation of `EndWith`).
 
-### （16）字段过滤（ [field]-op=ey ）
+### (16) Field Filtering ([field]-op=ey)
 
 * GET /user/index? name-op=ey
-* 返回结果：结构同 **（1）**（但只返回 name 为空 或为 null 的数据，`ey` 是 `Empty` 的缩写）
+* Return result: The structure is the same as **(1)** (but only return data where the name is empty or null. `ey` is the abbreviation of `Empty`).
 
-### （17）字段过滤（ [field]-op=ny ）
+### (17) Field Filtering ([field]-op=ny)
 
 * GET /user/index? name-op=ny
-* 返回结果：结构同 **（1）**（但只返回 name 非空 的数据，`ny` 是 `NotEmpty` 的缩写）
+* Return result: The structure is the same as **(1)** (but only return data where the name is not empty. `ny` is the abbreviation of `NotEmpty`).
 
-### （18）忽略大小写（ [field]-ic=true ）
+### (18) Ignore Case ([field]-ic=true)
 
 * GET /user/index? name=Jack & name-ic=true
-* 返回结果：结构同 **（1）**（但只返回 name 等于 Jack (忽略大小写) 的数据，`ic` 是 `IgnoreCase` 的缩写）
+* Return result: The structure is the same as **(1)** (but only return data where the name is equal to Jack (ignoring case). `ic` is the abbreviation of `IgnoreCase`).
 
 ::: tip
-参数名 `name-ic` 中的后缀 `-ic` 可自定义，该参数可与其它的参数组合使用，比如这里检索的是 name 等于 Jack 时忽略大小写，但同样适用于检索 name 已 Jack 开头或结尾时忽略大小写。
+The suffix `-ic` in the parameter name `name-ic` can be customized. This parameter can be combined with other parameters. For example, here the search is for the name equal to Jack while ignoring case, but it also applies to the search when the name starts or ends with Jack while ignoring case.
 :::
 
-Bean Searcher 还支持 **更多** 的检索方式（甚至可以自定义，参考： [参数 > 字段参数 > 字段运算符](/en/guide/param/field#字段运算符) 章节），这里就不再列举了。
+Bean Searcher also supports **more** retrieval methods (and even custom ones. Refer to the [Parameters > Field Parameters > Field Operators](/en/guide/param/field#Field Operators) section). They are not listed here.
 
-本例的 `/user/index` 接口里我们只写了一行代码，它便可以支持这么多种的检索方式，你现在体会到了 **一行代码便可实现复杂列表检索** 的含义了吗？有没有觉得你现在写的一行代码可以干过别人的一百行呢？
+In the `/user/index` interface of this example, we only wrote one line of code, and it can support so many retrieval methods. Do you now understand the meaning of "one line of code can implement complex list retrieval"? Do you feel that one line of code you write now can do the work of a hundred lines of others?
 
 ::: tip
-本例所举的是一个简单的单表查询，实际上，无论是单表还是多表，只要在映射在同一个实体类里，就可以支持上文所列的所有检索方式。
+This example is a simple single-table query. In fact, whether it is a single table or multiple tables, as long as they are mapped to the same entity class, all the retrieval methods listed above can be supported.
 
-至于如何让多张数据库表映射到同一个实体类，请看下一章节：[实体类](/en/guide/bean/info)。
+As for how to map multiple database tables to the same entity class, please refer to the next section: [Entity Class](/en/guide/bean/info).
 :::
 
-## SQL 日志
+## SQL Log
 
-如果需要查看 Bean Searcher 的 SQL 执行日志，只需在您的日志配置文件中将 `cn.zhxu.bs.implement.DefaultSqlExecutor` 的日志级别调整为 `DEBUG` 即可。
+If you need to view the SQL execution log of Bean Searcher, you only need to adjust the log level of `cn.zhxu.bs.implement.DefaultSqlExecutor` to `DEBUG` in your log configuration file.
 
-> 若日志级别配置为 `INFO` 或 `WARN`，则只打印 慢 SQL 日志，配置为 `DEBUG` 则 慢 SQL 与 普通 SQL 都打印。
+> If the log level is configured to `INFO` or `WARN`, only slow SQL logs will be printed. If it is configured to `DEBUG`, both slow SQL and ordinary SQL logs will be printed.
 
-* 示例1：SpringBoot 项目 `application.yml`
+* Example 1: SpringBoot project `application.yml`
 
 ```yml
 logging:
@@ -299,20 +299,20 @@ logging:
     cn.zhxu.bs: DEBUG
 ```
 
-* 示例2：SpringBoot 项目 `application.properties`
+* Example 2: SpringBoot project `application.properties`
 
 ```yml
 logging.level.cn.zhxu.bs: DEBUG
 ```
 
-* 示例3：SpringBoot 项目的日志配置，可参考 [logback-spring.xml](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher-demos/bs-demo-springboot/src/main/resources/logback-spring.xml)
+* Example 3: The log configuration of the SpringBoot project can refer to [logback-spring.xml](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher-demos/bs-demo-springboot/src/main/resources/logback-spring.xml).
 
-* 示例4：Grails 项目的日志配置，可参考 [logback.groovy](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher-demos/grails-demo/grails-app/conf/logback.groovy)
+* Example 4: The log configuration of the Grails project can refer to [logback.groovy](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher-demos/grails-demo/grails-app/conf/logback.groovy).
 
-输出级别配置好后，SQL 日志的效果如下：
+After the output level is configured, the effect of the SQL log is as follows:
 
 ![](/sql_log.png)
 
-> Bean Searcher 使用日志门面 `slf4j-api` 打印日志（这也是 Bean Searcher 的唯一依赖），它并不依赖 `logback`，所以 `log4j` 等其它日志框架也是支持的哦。
+> Bean Searcher uses the logging facade `slf4j-api` to print logs (this is also the only dependency of Bean Searcher). It does not depend on `logback`, so other logging frameworks such as `log4j` are also supported.
 
-慢 SQL 相关配置，可参考：[高级 > 慢 SQL 日志与监听](/en/guide/advance/slowsql) 章节。
+For the configuration related to slow SQL, please refer to the [Advanced > Slow SQL Log and Monitoring](/en/guide/advance/slowsql) section.
