@@ -28,7 +28,7 @@
 </dependency>
 ```
 ```xml [Others]
-<!-- Bean Searcher 核心依赖，任何框架都可使用该依赖 -->
+<!-- Bean Searcher 核心依赖，任何 Java 框架都可使用该依赖 -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher</artifactId>
