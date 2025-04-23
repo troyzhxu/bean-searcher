@@ -124,7 +124,7 @@ implementation 'cn.zhxu:xjsonkit-snack3:1.5.1'
 `JsonArrayParamFilter` | `300`
 `IndexArrayParamFilter` | `400`
 
-而新注入的参数过滤器的优先级则由 IOC 框架的注入方式决定。例如 SpringBoot 框架可用 `@order` 注解来控制优先级，Solon 框架可用 `@Bean` 注解的 `index` 属性来控制。
+而新注入的参数过滤器的优先级则由 IOC 框架的注入方式决定。例如 SpringBoot 框架可用 `@Order` 注解来控制优先级，Solon 框架可用 `@Bean` 注解的 `index` 属性来控制。
 
 ### 自定义参数过滤器
 

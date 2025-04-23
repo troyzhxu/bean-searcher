@@ -124,7 +124,7 @@ Filter | Priority (the smaller, the earlier to execute)
 `JsonArrayParamFilter` | `300`
 `IndexArrayParamFilter` | `400`
 
-The priority of newly injected parameter filters is determined by the injection method of the IOC framework. For example, in the SpringBoot framework, you can use the `@order` annotation to control the priority, and in the Solon framework, you can use the `index` attribute of the `@Bean` annotation to control it.
+The priority of newly injected parameter filters is determined by the injection method of the IOC framework. For example, in the SpringBoot framework, you can use the `@Order` annotation to control the priority, and in the Solon framework, you can use the `index` attribute of the `@Bean` annotation to control it.
 
 ### Custom Parameter Filter
 
