@@ -33,7 +33,7 @@ Before the emergence of Search Beans, the retrieval conditions sent from the fro
 
 Therefore, the code in the backend retrieval interface only needs to collect the retrieval parameters from the page, just like the code shown on the documentation homepage. It doesn't need to do much processing. Moreover, the SearchBean returned by Bean Searcher is the VO object needed by the front end, and there is no need for further conversion. This is why Bean Searcher **makes it possible to implement complex list retrieval with one line of code**.
 
-## Does the Front End Need to Pass More Parameters?
+## Does the Front-end Need to Pass More Parameters?
 
 Many people who are new to Bean Searcher will, preconceivedly, **misthink** that using Bean Searcher will put pressure on the front end and **require the front end to pass many parameters that it didn't need to pass originally**.
 

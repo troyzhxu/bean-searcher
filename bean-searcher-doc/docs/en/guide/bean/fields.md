@@ -1,4 +1,3 @@
-```markdown
 # Conditional Attributes
 
 In an entity class, attributes that can dynamically generate conditions based on [Field Parameters](/en/guide/param/field) are called conditional attributes. Specifically, they can be further divided into two types: [Field Attributes](#field-attributes) and [Additional Attributes](#additional-attributes).
@@ -87,5 +86,4 @@ public class CourseScore {
     private long totalScore;
     // ...
 }
-```
 ```
