@@ -1,5 +1,8 @@
 package cn.zhxu.bs.util;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.Charset;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -13,13 +16,24 @@ public class MapUtils {
      * @return Map 对象
      */
     public static Map<String, Object> flat(Map<String, String[]> map) {
+        return flat(map, true);
+    }
+
+    /**
+     * 将一个 value 为数组的 Map 对象，拉平为 value 为单值的 Map 对象
+     * @param map 已有 Map 参数
+     * @param urlDecode 是否进行 URL 解码
+     * @return Map 对象
+     * @since v4.4.2
+     */
+    public static Map<String, Object> flat(Map<String, String[]> map, boolean urlDecode) {
         Map<String, Object> newMap = new HashMap<>();
         for (Entry<String, String[]> entry : map.entrySet()) {
             String key = entry.getKey();
             if (key == null) {
                 continue;
             }
-            String[] values = entry.getValue();
+            String[] values = urlDecode(entry.getValue(), urlDecode);
             if (values == null || values.length == 0) {
                 newMap.put(key, null);
             } else if (values.length == 1) {
@@ -30,6 +44,21 @@ public class MapUtils {
             }
         }
         return newMap;
+    }
+
+    static String[] urlDecode(String[] values, boolean urlDecode) {
+        if (values == null || values.length == 0 || !urlDecode) {
+            return values;
+        }
+        String[] decodedValues = new String[values.length];
+        for (int i = 0; i < values.length; i++) {
+            try {
+                decodedValues[i] = URLDecoder.decode(values[i], Charset.defaultCharset().name());
+            } catch (UnsupportedEncodingException e) {
+                throw new IllegalStateException(e.getMessage(), e);
+            }
+        }
+        return decodedValues;
     }
 
     /**
@@ -47,6 +76,17 @@ public class MapUtils {
      */
     public static MapBuilder flatBuilder(Map<String, String[]> map) {
         return new MapBuilder(flat(map));
+    }
+
+    /**
+     * 将一个 value 为数组的 Map 对象，拉平为 value 为单值的 Map 对象，并返回一个 lambda Map 参数构造器
+     * @param map 已有 Map 参数
+     * @param urlDecode 是否进行 URL 解码
+     * @return MapBuilder
+     * @since v4.4.2
+     */
+    public static MapBuilder flatBuilder(Map<String, String[]> map, boolean urlDecode) {
+        return new MapBuilder(flat(map, urlDecode));
     }
 
     /**
