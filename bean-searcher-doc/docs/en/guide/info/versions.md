@@ -4,7 +4,7 @@ For detailed version information, please refer to [Github](https://github.com/tr
 
 ## V4 Version
 
-### New Features in v4.4 (v4.4.1)
+### New Features in v4.4 (v4.4.2)
 
 * Bean Searcher
   - Added `IndexArrayParamFilter`: Supports parsing parameters in the form `key[0]=v1 & key[1]=v2`.

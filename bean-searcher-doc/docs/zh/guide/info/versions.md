@@ -4,7 +4,7 @@
 
 ## V4 版本
 
-### v4.4 的新特性（v4.4.1）
+### v4.4 的新特性（v4.4.2）
 
 * Bean Searcher
   - 新增 `IndexArrayParamFilter`: 支持解析形如 `key[0]=v1 & key[1]=v2` 的参数
