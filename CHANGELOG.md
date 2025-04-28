@@ -1,3 +1,13 @@
+# v4.4.2 @ 2023-04-28
+
+## ✨ Features
+
+* 增强 `MapUtils` 工具类
+  - 添加 `flat(Map<String, String[]> map, boolean urlDecode)` 方法，支持 指定知否进行 URL 解码
+  - 添加 `flatBuilder(Map<String, String[]> map, boolean urlDecode)` 支持 指定知否进行 URL 解码
+  - 原 `flat(Map<String, String[]> map)` 方法，默认进行 URL 解码
+  - 原 `flatBuilder(Map<String, String[]> map)` 方法，默认进行 URL 解码
+
 # v4.4.1 @ 2023-03-25
 
 ## 🌻 Better
@@ -948,7 +958,6 @@ Thank you to all the contributors who worked on this release:
 ## ✨ Features
 
 * Bean Searcher
-
   * 新增 `BFieldConvertor` 与 `MFieldConvertor` 字段转换器子接口，提高字段转换效能
   * 新增 `DateFieldConvertor`，支持 `Date` 与 `LocalDateTime` 类型之间的转换
   * 增强 `DateFormatFieldConvertor`，使支持 `Temporal` 及其子类的对象的格式化
@@ -956,9 +965,7 @@ Thank you to all the contributors who worked on this release:
   * 增强 `DefaultSqlExecutor`，新增 `setTransactionIsolation(int level)` 方法，可配置隔离级别
   * 增强 `DbMapping`，使其完全接管数据映射的解析工作，并将 `DefaultDbMapping` 从 `DefaultMetaResolver` 的内部独立出来
   * 增强 `DefaultDbMapping`，使支持配置注解缺省时的表名前缀与是否开启大写映射，即支持默认映射大写的表名与列名
-  
 * Bean Searcher Boot Starter
-
   * 支持配置 `NamedDataSource` 类型的 Bean 来添加多个具名数据源
   * 自动添加 `spring-boot-starter-jdbc` 依赖
   * 默认自动配置添加 `NumberFieldConvertor`
@@ -1028,4 +1035,3 @@ Thank you to all the contributors who worked on this release:
 
 * 支持 JDK8+ 
 * 兼容 JDK9+ 的模块引入机制
-
