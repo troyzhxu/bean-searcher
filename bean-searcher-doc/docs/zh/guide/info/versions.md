@@ -12,6 +12,11 @@
   - 增强 `MetaResolver`: 新增 `clearCache()` 方法，用于手动清除 `BeanMeta` 缓存
   - 增强 `@DbIgnore`: 支持标注其它自定义注解，使其具有 `@DbIgnore` 的功能
   - 新增 `AnnoUtils`: 可用于解析组合注解
+  - 增强 `MapUtils` 工具类（since v4.4.2）
+    - 添加 `flat(Map<String, String[]> map, boolean urlDecode)` 方法，支持 指定知否进行 URL 解码
+    - 添加 `flatBuilder(Map<String, String[]> map, boolean urlDecode)` 支持 指定知否进行 URL 解码
+    - 原 `flat(Map<String, String[]> map)` 方法，默认进行 URL 解码
+    - 原 `flatBuilder(Map<String, String[]> map)` 方法，默认进行 URL 解码
 * Bean Searcher Label（**首发**）
   - 提供 `@LabelFor` 注解，该注解继承自 `@DbIgnore`，可用于标注并解析 Label 字段（例如：将 `statusName` 字段标记为 `status` 的 Label）
   - 提供 `LabelLoader` 接口，可用于加载自定义的 Label
