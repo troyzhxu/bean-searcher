@@ -8,7 +8,7 @@
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-boot-starter</artifactId>
-    <version>4.4.2</version>
+    <version>4.4.3</version>
 </dependency>
 ```
 ```xml [Grails]
@@ -16,7 +16,7 @@
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-boot-starter</artifactId>
-    <version>4.4.2</version>
+    <version>4.4.3</version>
 </dependency>
 ```
 ```xml [Solon]
@@ -24,7 +24,7 @@
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-solon-plugin</artifactId>
-    <version>4.4.2</version>
+    <version>4.4.3</version>
 </dependency>
 ```
 ```xml [Others]
@@ -32,7 +32,7 @@
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher</artifactId>
-    <version>4.4.2</version>
+    <version>4.4.3</version>
 </dependency>
 ```
 :::
@@ -42,19 +42,19 @@
 ::: code-group
 ```groovy [SpringBoot]
 // Use the following dependency directly for SpringBoot/Grails projects
-implementation 'cn.zhxu:bean-searcher-boot-starter:4.4.2'
+implementation 'cn.zhxu:bean-searcher-boot-starter:4.4.3'
 ```
 ```groovy [Grails]
 // Use the following dependency directly for SpringBoot/Grails projects
-implementation 'cn.zhxu:bean-searcher-boot-starter:4.4.2'
+implementation 'cn.zhxu:bean-searcher-boot-starter:4.4.3'
 ```
 ```groovy [Solon]
 // Use the following dependency directly for Solon projects (equivalent to bean-searcher-boot-starter)
-implementation 'cn.zhxu:bean-searcher-solon-plugin:4.4.2'
+implementation 'cn.zhxu:bean-searcher-solon-plugin:4.4.3'
 ```
 ```groovy [Others]
 // Core dependency of Bean Searcher, compatible with any framework
-implementation 'cn.zhxu:bean-searcher:4.4.2'
+implementation 'cn.zhxu:bean-searcher:4.4.3'
 ```
 :::
 

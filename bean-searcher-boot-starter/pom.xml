@@ -11,7 +11,7 @@
 	<parent>
 		<groupId>cn.zhxu</groupId>
 		<artifactId>bean-searcher-parent</artifactId>
-		<version>4.4.2</version>
+		<version>4.4.3</version>
 	</parent>
 
 	<dependencies>
