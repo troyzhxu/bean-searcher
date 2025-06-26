@@ -14,7 +14,7 @@ import java.util.Map;
 public interface BeanSearcher extends Searcher {
 
     /**
-     * 适合需要分页的查询，此方法省略了检索参数，您可以在参数过滤器中注入它们
+     * 返回满足条件的数据列表（分页）以及总条数（此方法省略了检索参数，您可以在参数过滤器中注入它们）
      * @param <T> bean 类型
      * @param beanClass 要检索的 bean 类型
      * @return { 总条数，数据列表 }
@@ -23,7 +23,7 @@ public interface BeanSearcher extends Searcher {
     <T> SearchResult<T> search(Class<T> beanClass);
 
     /**
-     * 适合需要分页的查询
+     * 返回满足条件的数据列表（分页）以及总条数。
      * @param <T> bean 类型
      * @param beanClass 要检索的 bean 类型
      * @param paraMap 检索参数
@@ -32,7 +32,7 @@ public interface BeanSearcher extends Searcher {
     <T> SearchResult<T> search(Class<T> beanClass, Map<String, Object> paraMap);
 
     /**
-     * 适合需要分页的查询，此方法省略了检索参数，您可以在参数过滤器中注入它们
+     * 返回满足条件的数据列表（分页）、总条数 以及 指定字段的统计（此方法省略了检索参数，您可以在参数过滤器中注入它们）
      * @param <T> bean 类型
      * @param beanClass 要检索的 bean 类型
      * @param summaryField 统计字段
@@ -42,7 +42,7 @@ public interface BeanSearcher extends Searcher {
     <T> SearchResult<T> search(Class<T> beanClass, String summaryField);
 
     /**
-     * 适合需要分页的查询
+     * 返回满足条件的数据列表（分页）、总条数 以及 指定字段的统计
      * @param <T> bean 类型
      * @param beanClass 要检索的 bean 类型
      * @param paraMap 检索参数
@@ -53,7 +53,7 @@ public interface BeanSearcher extends Searcher {
     <T> SearchResult<T> search(Class<T> beanClass, Map<String, Object> paraMap, String summaryField);
 
     /**
-     * 适合需要分页的查询，此方法省略了检索参数，您可以在参数过滤器中注入它们
+     * 返回满足条件的数据列表（分页）、总条数 以及 指定字段的统计（此方法省略了检索参数，您可以在参数过滤器中注入它们）
      * @param <T> bean 类型
      * @param beanClass 要检索的 bean 类型
      * @param summaryField 统计字段
@@ -63,7 +63,7 @@ public interface BeanSearcher extends Searcher {
     <T> SearchResult<T> search(Class<T> beanClass, FieldFns.FieldFn<T, ?> summaryField);
 
     /**
-     * 适合需要分页的查询
+     * 返回满足条件的数据列表（分页）、总条数 以及 指定字段的统计
      * @param <T> bean 类型
      * @param beanClass 要检索的 bean 类型
      * @param paraMap 检索参数
@@ -74,7 +74,7 @@ public interface BeanSearcher extends Searcher {
     <T> SearchResult<T> search(Class<T> beanClass, Map<String, Object> paraMap, FieldFns.FieldFn<T, ?> summaryField);
 
     /**
-     * 适合需要分页的查询，此方法省略了检索参数，您可以在参数过滤器中注入它们
+     * 返回满足条件的数据列表（分页）、总条数 以及 指定字段的统计（此方法省略了检索参数，您可以在参数过滤器中注入它们）
      * @param <T> bean 类型
      * @param beanClass 要检索的 bean 类型
      * @param summaryFields 统计字段
@@ -84,7 +84,7 @@ public interface BeanSearcher extends Searcher {
     <T> SearchResult<T> search(Class<T> beanClass, String[] summaryFields);
 
     /**
-     * 适合需要分页的查询
+     * 返回满足条件的数据列表（分页）、总条数 以及 指定字段的统计
      * @param <T> bean 类型
      * @param beanClass 要检索的 bean 类型
      * @param paraMap 检索参数
@@ -94,7 +94,7 @@ public interface BeanSearcher extends Searcher {
     <T> SearchResult<T> search(Class<T> beanClass, Map<String, Object> paraMap, String[] summaryFields);
 
     /**
-     * 此方法省略了检索参数，您可以在参数过滤器中注入它们
+     * 返回满足条件的第一条数据（支持分页偏移）（此方法省略了检索参数，您可以在参数过滤器中注入它们）
      * @param <T> bean 类型
      * @param beanClass 要检索的 bean 类型
      * @return 满足条件的第一条数据
@@ -103,6 +103,7 @@ public interface BeanSearcher extends Searcher {
     <T> T searchFirst(Class<T> beanClass);
 
     /**
+     * 返回满足条件的第一条数据（支持分页偏移）
      * @param <T> bean 类型
      * @param beanClass 要检索的 bean 类型
      * @param paraMap 检索参数（包括排序分页参数）
@@ -111,7 +112,7 @@ public interface BeanSearcher extends Searcher {
     <T> T searchFirst(Class<T> beanClass, Map<String, Object> paraMap);
 
     /**
-     * 适合不需要分页的查询，您可以在参数过滤器中注入它们
+     * 返回满足条件的数据列表（分页）（此方法省略了检索参数，您可以在参数过滤器中注入它们）
      * @param <T> bean 类型
      * @param beanClass 要检索的 bean 类型
      * @return 数据列表
@@ -120,7 +121,7 @@ public interface BeanSearcher extends Searcher {
     <T> List<T> searchList(Class<T> beanClass);
 
     /**
-     * 适合不需要分页的查询
+     * 返回满足条件的数据列表（分页）
      * @param <T> bean 类型
      * @param beanClass 要检索的 bean 类型
      * @param paraMap 检索参数（包括排序分页参数）
@@ -129,7 +130,7 @@ public interface BeanSearcher extends Searcher {
     <T> List<T> searchList(Class<T> beanClass, Map<String, Object> paraMap);
 
     /**
-     * 检索满足条件的所有数据，不支持偏移，您可以在参数过滤器中注入它们
+     * 返回满足条件的所有数据（不支持分页偏移）（此方法省略了检索参数，您可以在参数过滤器中注入它们）
      * @param <T> bean 类型
      * @param beanClass 要检索的 bean 类型
      * @return 数据列表
@@ -138,7 +139,7 @@ public interface BeanSearcher extends Searcher {
     <T> List<T> searchAll(Class<T> beanClass);
 
     /**
-     * 检索满足条件的所有数据，不支持偏移
+     * 回满足条件的所有数据（不支持分页偏移）
      * @param <T> bean 类型
      * @param beanClass 要检索的 bean 类型
      * @param paraMap 检索参数（包括排序分页参数）

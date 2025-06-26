@@ -24,6 +24,7 @@ public interface Searcher {
     <T> Number searchCount(Class<T> beanClass);
 
     /**
+     * 查询满足条件的数据总条数
      * @param <T> bean 类型
      * @param beanClass 要检索的 bean 类型
      * @param paraMap 检索参数（包括排序分页参数）
@@ -42,6 +43,7 @@ public interface Searcher {
     <T> Number searchSum(Class<T> beanClass, String field);
 
     /**
+     * 对满足条件的数据的 field 字段做统计
      * @param <T> bean 类型
      * @param beanClass 要检索的 bean 类型
      * @param field 参与求和的字段
@@ -61,6 +63,7 @@ public interface Searcher {
     <T> Number searchSum(Class<T> beanClass, FieldFns.FieldFn<T, ?> field);
 
     /**
+     * 对满足条件的数据的 field 字段做统计
      * @param <T> bean 类型
      * @param beanClass 要检索的 bean 类型
      * @param field 参与求和的字段
@@ -81,6 +84,7 @@ public interface Searcher {
     <T> Number[] searchSum(Class<T> beanClass, String[] fields);
 
     /**
+     * 对满足条件的数据的 fields 字段做统计
      * @param <T> bean 类型
      * @param beanClass 要检索的 bean 类型
      * @param fields 参与求和的字段数组
