@@ -12,6 +12,11 @@ For detailed version information, please refer to [Github](https://github.com/tr
   - Enhanced `MetaResolver`: Added `clearCache()` method to manually clear the `BeanMeta` cache.
   - Enhanced `@DbIgnore`: Supports annotating other custom annotations to inherit `@DbIgnore` functionality.
   - Added `AnnoUtils`: For parsing composite annotations.
+  - Enhanced `MapUtils` utility class (since v4.4.2)
+    - Added `flat(Map<String, String[]> map, boolean urlDecode)` method to support specifying whether to perform URL decoding
+    - Added `flatBuilder(Map<String, String[]> map, boolean urlDecode)` method to support specifying whether to perform URL decoding
+    - The original `flat(Map<String, String[]> map)` method now performs URL decoding by default
+    - The original `flatBuilder(Map<String, String[]> map)` method now performs URL decoding by default
 * Bean Searcher Label (**First Release**)
   - Introduced `@LabelFor` annotation (inherits `@DbIgnore`) to label and resolve Label fields (e.g., marking `statusName` as the Label for `status`).
   - Added `LabelLoader` interface for loading custom Labels.
