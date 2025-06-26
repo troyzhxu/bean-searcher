@@ -124,6 +124,33 @@ public class MapBuilder extends Builder<MapBuilder> {
     }
 
     /**
+     * 将前端传来的普通参数组添加到根组内
+     * @since v4.4.3
+     * @return MapBuilder
+     */
+    public MapBuilder groupRoot() {
+        return groupRoot(RpcNames.DEFAULT.groupSeparator());
+    }
+
+    /**
+     * 将前端传来的普通参数组添加到根组内
+     * @param groupSeparator 组分隔符
+     * @since v4.4.3
+     * @return MapBuilder
+     */
+    public MapBuilder groupRoot(String groupSeparator) {
+        for (String key : map.keySet()) {
+            if (key == null || ORDER_BY.equals(key) || PAGING.equals(key)
+                    || ONLY_SELECT.equals(key) || SELECT_EXCLUDE.equals(key) || GROUP_EXPR.equals(key)
+                    || key.contains(FIELD_PARAM) || key.contains(groupSeparator)) {
+                continue;
+            }
+            map.put(ROOT_GROUP + groupSeparator + key, map.get(key));
+        }
+        return this;
+    }
+
+    /**
      * 用于构建一组以或为关系的条件，例如：
      * <pre>{@code
      * Map<String, Object> params = MapUtils.builder()
