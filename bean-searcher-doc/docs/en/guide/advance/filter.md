@@ -112,6 +112,25 @@ implementation 'cn.zhxu:xjsonkit-snack3:1.5.1'
 
 If your favorite JSON parsing framework is not included, you can also customize the underlying implementation. Refer to: https://gitee.com/troyzhxu/xjsonkit
 
+### IndexArrayParamFilter
+
+> since v4.4.0, disabled by default
+
+The index array parameter filter is used to be compatible with array parameters in the following form (some HTTP clients will default to passing array parameters in this way):
+
+```
+GET /user/list ? age[0]=20 & age[1]=30 & age-op=bt
+```
+
+If you want to enable this filter, you need to add the following configuration:
+
+```properties
+# Whether to enable this filter, default is false
+bean-searcher.params.filter.use-index-value = true
+```
+
+> The original parameter syntax is still supported after enabling.
+
 ### Parameter Filter Priority
 
 If you are using the `bean-searcher-boot-starter` or `bean-searcher-solon-plugin` dependency, the priority of the above built - in filters in the framework is as follows:
