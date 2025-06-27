@@ -112,6 +112,25 @@ implementation 'cn.zhxu:xjsonkit-snack3:1.5.1'
 
 如果你喜欢的 JSON 解析框架不在其内，也支持自定义底层实现，参考：https://gitee.com/troyzhxu/xjsonkit
 
+### IndexArrayParamFilter
+
+> since v4.4.0，默认禁用
+
+下标数组参数过滤器，用于兼容以下形式的数组参数（某些 HTTP 客户端会默认用这种方式传递数组参数）：
+
+```
+GET /user/list ? age[0]=20 & age[1]=30 & age-op=bt
+```
+
+如果要启用该过滤器，需要添加以下配置：
+
+```properties
+# 是否启用该过滤器，默认为 false
+bean-searcher.params.filter.use-index-value = true
+```
+
+> 启用之后原来的参数语法仍然支持。
+
 ### 参数过滤器优先级
 
 如果使用的是 `bean-searcher-boot-starter` 或 `bean-searcher-solon-plugin` 依赖，则以上框架内置的过滤器的优先级如下：

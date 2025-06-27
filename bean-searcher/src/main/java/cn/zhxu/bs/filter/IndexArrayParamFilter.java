@@ -12,7 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 下标数组参数过滤器, 用于兼容如下形式的数组参数：
+ * 下标数组参数过滤器, 用于兼容以下形式的数组参数：
  * <pre>{@code key[0]=v1 & key[1]=v2 }</pre>
  * @author Troy.Zhou @ 2024-11-08
  * @since v4.4
