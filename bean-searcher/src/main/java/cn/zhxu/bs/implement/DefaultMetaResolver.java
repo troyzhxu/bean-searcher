@@ -134,7 +134,8 @@ public class DefaultMetaResolver implements MetaResolver {
                 snippetResolver.resolve(table.getHaving()),
                 snippetResolver.resolve(table.getOrderBy()),
                 table.isSortable(), table.isDistinct(),
-                table.getTimeout());
+                table.getTimeout(), table.getMaxSize(),
+                table.getMaxOffset());
     }
 
     protected String resolveAlias(DbMapping.Column column, Set<String> checks) {

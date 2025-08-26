@@ -1,6 +1,7 @@
 package cn.zhxu.bs;
 
 import cn.zhxu.bs.bean.*;
+import cn.zhxu.bs.implement.BasePageExtractor;
 
 import java.lang.reflect.Field;
 import java.util.Collections;
@@ -58,6 +59,12 @@ public interface DbMapping {
         private final String tables;
 
         /**
+         * @see SearchBean#fields()
+         * @since v4.1.0
+         */
+        private final List<Column> fields;
+
+        /**
          * Where 条件
          * */
         private final String where;
@@ -93,19 +100,26 @@ public interface DbMapping {
         private final int timeout;
 
         /**
-         * @see SearchBean#fields()
-         * @since v4.1.0
+         * 单页最大允许查询条数，0 或负数表示使用全局配置的默认值: {@link BasePageExtractor#getMaxAllowedSize()}
+         * @since v4.5.0
          */
-        private final List<Column> fields;
+        private final int maxSize;
+
+        /**
+         * 最大允许偏移量（分页深度），0 或负数表示使用全局配置的默认值: {@link BasePageExtractor#getMaxAllowedOffset()}
+         * @since v4.5.0
+         */
+        private final int maxOffset;
 
         public Table(String tables) {
-            this("", tables, "", "", "", false, "", true, 0, Collections.emptyList());
+            this("", tables, Collections.emptyList(), "", "", "", false, "", true, 0, 0, 0);
         }
 
-        public Table(String dataSource, String tables, String where, String groupBy, String having,
-                     boolean distinct, String orderBy, boolean sortable, int timeout, List<Column> fields) {
+        public Table(String dataSource, String tables, List<Column> fields, String where, String groupBy, String having,
+                     boolean distinct, String orderBy, boolean sortable, int timeout, int maxSize, int maxOffset) {
             this.dataSource = dataSource;
             this.tables = tables;
+            this.fields = fields;
             this.where = where;
             this.groupBy = groupBy;
             this.having = having;
@@ -113,7 +127,8 @@ public interface DbMapping {
             this.orderBy = orderBy;
             this.sortable = sortable;
             this.timeout = timeout;
-            this.fields = fields;
+            this.maxSize = maxSize;
+            this.maxOffset = maxOffset;
         }
 
         public String getDataSource() {
@@ -122,6 +137,10 @@ public interface DbMapping {
 
         public String getTables() {
             return tables;
+        }
+
+        public List<Column> getFields() {
+            return fields;
         }
 
         public String getWhere() {
@@ -152,8 +171,12 @@ public interface DbMapping {
             return timeout;
         }
 
-        public List<Column> getFields() {
-            return fields;
+        public int getMaxSize() {
+            return maxSize;
+        }
+
+        public int getMaxOffset() {
+            return maxOffset;
         }
 
     }

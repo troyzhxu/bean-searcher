@@ -1,5 +1,6 @@
 package cn.zhxu.bs;
 
+import cn.zhxu.bs.implement.BasePageExtractor;
 import cn.zhxu.bs.util.StringUtils;
 
 import java.util.*;
@@ -74,9 +75,22 @@ public class BeanMeta<T> {
      */
     private final int timeout;
 
+    /**
+     * 单页最大允许查询条数，0 或负数表示使用全局配置的默认值: {@link BasePageExtractor#getMaxAllowedSize()}
+     * @since v4.5.0
+     */
+    private final int maxSize;
+
+    /**
+     * 最大允许偏移量（分页深度），0 或负数表示使用全局配置的默认值: {@link BasePageExtractor#getMaxAllowedOffset()}
+     * @since v4.5.0
+     */
+    private final int maxOffset;
+
     public BeanMeta(Class<T> beanClass, String dataSource, SqlSnippet tableSnippet,
                     SqlSnippet whereSnippet, SqlSnippet groupBySnippet, SqlSnippet havingSnippet,
-                    SqlSnippet orderBySnippet, boolean sortable, boolean distinct, int timeout) {
+                    SqlSnippet orderBySnippet, boolean sortable, boolean distinct,
+                    int timeout, int maxSize, int maxOffset) {
         this.beanClass = beanClass;
         this.dataSource = dataSource;
         this.tableSnippet = tableSnippet;
@@ -87,6 +101,8 @@ public class BeanMeta<T> {
         this.sortable = sortable;
         this.distinct = distinct;
         this.timeout = timeout;
+        this.maxSize = maxSize;
+        this.maxOffset = maxOffset;
     }
 
     public void addFieldMeta(FieldMeta meta) {
@@ -216,6 +232,14 @@ public class BeanMeta<T> {
 
     public int getTimeout() {
         return timeout;
+    }
+
+    public int getMaxSize() {
+        return maxSize;
+    }
+
+    public int getMaxOffset() {
+        return maxOffset;
     }
 
 }

@@ -1,6 +1,7 @@
 package cn.zhxu.bs.bean;
 
 import cn.zhxu.bs.DbMapping;
+import cn.zhxu.bs.implement.BasePageExtractor;
 import cn.zhxu.bs.implement.DefaultDbMapping;
 import cn.zhxu.bs.implement.DefaultSqlExecutor;
 
@@ -119,5 +120,17 @@ public @interface SearchBean {
      * @return 单条 SQL 执行超时时间，单位：秒，0 表示永远不超时
      */
     int timeout() default 0;
+
+    /**
+     * @return 单页最大允许查询条数，0 或负数表示使用全局配置的默认值: {@link BasePageExtractor#getMaxAllowedSize()}
+     * @since v4.5.0
+     */
+    int maxSize() default 0;
+
+    /**
+     * @return 最大允许偏移量（分页深度），0 或负数表示使用全局配置的默认值: {@link BasePageExtractor#getMaxAllowedOffset()}
+     * @since v4.5.0
+     */
+    int maxOffset() default 0;
 
 }

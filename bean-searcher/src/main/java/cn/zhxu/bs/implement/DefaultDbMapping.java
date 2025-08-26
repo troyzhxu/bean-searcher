@@ -72,6 +72,7 @@ public class DefaultDbMapping implements DbMapping {
         if (bean != null) {
             return new Table(bean.dataSource().trim(),
                     tables(beanClass, bean),
+                    columns(beanClass, bean.fields()),
                     bean.where().trim(),
                     bean.groupBy().trim(),
                     bean.having().trim(),
@@ -79,7 +80,8 @@ public class DefaultDbMapping implements DbMapping {
                     bean.orderBy(),
                     sortable(bean.sortType()),
                     bean.timeout(),
-                    columns(beanClass, bean.fields())
+                    bean.maxSize(),
+                    bean.maxOffset()
             );
         }
         return new Table(toTableName(beanClass));

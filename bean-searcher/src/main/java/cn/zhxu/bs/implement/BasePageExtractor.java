@@ -27,7 +27,7 @@ public abstract class BasePageExtractor implements PageExtractor {
     private int defaultSize = 15;
 
     /**
-     * 最大允许查询条数
+     * 默认单页最大允许查询条数
      */
     private int maxAllowedSize = 100;
 
