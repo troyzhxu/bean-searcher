@@ -85,12 +85,12 @@ public class BeanMeta<T> {
      * 最大允许偏移量（分页深度），0 或负数表示使用全局配置的默认值: {@link BasePageExtractor#getMaxAllowedOffset()}
      * @since v4.5.0
      */
-    private final int maxOffset;
+    private final long maxOffset;
 
     public BeanMeta(Class<T> beanClass, String dataSource, SqlSnippet tableSnippet,
                     SqlSnippet whereSnippet, SqlSnippet groupBySnippet, SqlSnippet havingSnippet,
                     SqlSnippet orderBySnippet, boolean sortable, boolean distinct,
-                    int timeout, int maxSize, int maxOffset) {
+                    int timeout, int maxSize, long maxOffset) {
         this.beanClass = beanClass;
         this.dataSource = dataSource;
         this.tableSnippet = tableSnippet;
@@ -238,7 +238,7 @@ public class BeanMeta<T> {
         return maxSize;
     }
 
-    public int getMaxOffset() {
+    public long getMaxOffset() {
         return maxOffset;
     }
 

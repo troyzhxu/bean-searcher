@@ -131,6 +131,6 @@ public @interface SearchBean {
      * @return 最大允许偏移量（分页深度），0 或负数表示使用全局配置的默认值: {@link BasePageExtractor#getMaxAllowedOffset()}
      * @since v4.5.0
      */
-    int maxOffset() default 0;
+    long maxOffset() default 0;
 
 }

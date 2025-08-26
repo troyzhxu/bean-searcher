@@ -109,14 +109,14 @@ public interface DbMapping {
          * 最大允许偏移量（分页深度），0 或负数表示使用全局配置的默认值: {@link BasePageExtractor#getMaxAllowedOffset()}
          * @since v4.5.0
          */
-        private final int maxOffset;
+        private final long maxOffset;
 
         public Table(String tables) {
             this("", tables, Collections.emptyList(), "", "", "", false, "", true, 0, 0, 0);
         }
 
         public Table(String dataSource, String tables, List<Column> fields, String where, String groupBy, String having,
-                     boolean distinct, String orderBy, boolean sortable, int timeout, int maxSize, int maxOffset) {
+                     boolean distinct, String orderBy, boolean sortable, int timeout, int maxSize, long maxOffset) {
             this.dataSource = dataSource;
             this.tables = tables;
             this.fields = fields;
@@ -175,7 +175,7 @@ public interface DbMapping {
             return maxSize;
         }
 
-        public int getMaxOffset() {
+        public long getMaxOffset() {
             return maxOffset;
         }
 

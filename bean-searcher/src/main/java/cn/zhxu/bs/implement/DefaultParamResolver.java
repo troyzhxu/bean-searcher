@@ -94,7 +94,7 @@ public class DefaultParamResolver implements ParamResolver {
     public SearchParam doResolve(BeanMeta<?> beanMeta, FetchType fetchType, Map<String, Object> paraMap) throws IllegalParamException {
         List<String> fetchFields = resolveFetchFields(beanMeta, fetchType, paraMap);
         Group<List<FieldParam>> paramsGroup = resolveParamsGroup(beanMeta.getFieldMetas(), paraMap);
-        Paging paging = resolvePaging(fetchType, paraMap);
+        Paging paging = resolvePaging(beanMeta, fetchType, paraMap);
         SearchParam searchParam = new SearchParam(paraMap, fetchType, fetchFields, paramsGroup, paging);
         if (fetchType.shouldQueryList() && beanMeta.isSortable()) {
             // 只有列表检索，才需要排序
@@ -111,8 +111,12 @@ public class DefaultParamResolver implements ParamResolver {
     }
 
     public Paging resolvePaging(FetchType fetchType, Map<String, Object> paraMap) throws IllegalParamException {
+        return resolvePaging(null, fetchType, paraMap);
+    }
+
+    public Paging resolvePaging(BeanMeta<?> beanMeta, FetchType fetchType, Map<String, Object> paraMap) throws IllegalParamException {
         if (fetchType.canPaging()) {
-            Paging paging = pageExtractor.extract(paraMap);
+            Paging paging = pageExtractor.extract(beanMeta, paraMap);
             if (fetchType.isFetchFirst()) {
                 paging.setSize(1);
             }

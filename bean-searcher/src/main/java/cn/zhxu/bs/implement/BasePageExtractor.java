@@ -1,5 +1,6 @@
 package cn.zhxu.bs.implement;
 
+import cn.zhxu.bs.BeanMeta;
 import cn.zhxu.bs.IllegalParamException;
 import cn.zhxu.bs.PageExtractor;
 import cn.zhxu.bs.param.Paging;
@@ -8,6 +9,7 @@ import cn.zhxu.bs.util.ObjectUtils;
 
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 
 public abstract class BasePageExtractor implements PageExtractor {
 
@@ -39,16 +41,33 @@ public abstract class BasePageExtractor implements PageExtractor {
 
     @Override
     public Paging extract(Map<String, Object> paraMap) throws IllegalParamException {
+        return extract(null, paraMap);
+    }
+
+    @Override
+    public Paging extract(BeanMeta<?> beanMeta, Map<String, Object> paraMap) throws IllegalParamException {
         Paging paging = doExtract(paraMap);
         int size = paging.getSize();
-        if (size < 0 || size > maxAllowedSize) {
-            throw new IllegalParamException("Invalid page size: " + size + ", it must between 0 and " + maxAllowedSize);
+        int maxSize = getValue(beanMeta, BeanMeta::getMaxSize, maxAllowedSize);
+        if (size < 0 || size > maxSize) {
+            throw new IllegalParamException("Invalid page size: " + size + ", it must between 0 and " + maxSize);
         }
         long offset = paging.getOffset();
-        if (offset < 0 || offset > maxAllowedOffset) {
-            throw new IllegalParamException("Invalid page offset: " + offset + ", it must between 0 and " + maxAllowedOffset);
+        long maxOffset = getValue(beanMeta, BeanMeta::getMaxOffset, maxAllowedOffset);
+        if (offset < 0 || offset > maxOffset) {
+            throw new IllegalParamException("Invalid page offset: " + offset + ", it must between 0 and " + maxOffset);
         }
         return paging;
+    }
+
+    private <T extends Number> T getValue(BeanMeta<?> beanMeta, Function<BeanMeta<?>, T> getter, T defaultValue) {
+        if (beanMeta != null) {
+            T value = getter.apply(beanMeta);
+            if (value.longValue() > 0) {
+                return value;
+            }
+        }
+        return defaultValue;
     }
 
     private Paging doExtract(Map<String, Object> paraMap) {

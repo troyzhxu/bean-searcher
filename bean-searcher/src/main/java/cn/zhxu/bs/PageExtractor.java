@@ -20,6 +20,15 @@ public interface PageExtractor {
     Paging extract(Map<String, Object> paraMap) throws IllegalParamException;
 
     /**
+     * @param beanMeta 元信息
+     * @param paraMap 检索参数
+     * @return 分页信息
+     * @throws IllegalParamException 抛出非法参数异常后将终止 SQL 查询
+     * @since 4.5.0
+     */
+    Paging extract(BeanMeta<?> beanMeta, Map<String, Object> paraMap) throws IllegalParamException;
+
+    /**
      * @return 最大条数的参数名
      * */
     String getSizeName();
