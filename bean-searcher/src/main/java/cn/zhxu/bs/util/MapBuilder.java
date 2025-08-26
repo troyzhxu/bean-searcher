@@ -125,7 +125,7 @@ public class MapBuilder extends Builder<MapBuilder> {
 
     /**
      * 将前端传来的普通参数组添加到根组内
-     * @since v4.4.3
+     * @since v4.5.0
      * @return MapBuilder
      */
     public MapBuilder groupRoot() {
@@ -135,7 +135,7 @@ public class MapBuilder extends Builder<MapBuilder> {
     /**
      * 将前端传来的普通参数组添加到根组内
      * @param groupSeparator 组分隔符
-     * @since v4.4.3
+     * @since v4.5.0
      * @return MapBuilder
      */
     public MapBuilder groupRoot(String groupSeparator) {

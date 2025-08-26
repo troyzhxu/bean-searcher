@@ -31,13 +31,13 @@
 		<dependency>
 			<groupId>cn.zhxu</groupId>
 			<artifactId>bean-searcher-boot-starter</artifactId>
-			<version>4.4.3</version>
+			<version>4.5.0</version>
 		</dependency>
 
 		<dependency>
 			<groupId>cn.zhxu</groupId>
 			<artifactId>bean-searcher-label</artifactId>
-			<version>4.4.3</version>
+			<version>4.5.0</version>
 		</dependency>
 
 		<dependency>
