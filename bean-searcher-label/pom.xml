@@ -23,7 +23,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>bean-searcher</finalName>
+		<finalName>bean-searcher-label</finalName>
 	</build>
 	
 </project>
