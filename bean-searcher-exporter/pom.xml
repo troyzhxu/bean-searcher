@@ -1,0 +1,29 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<name>Bean Searcher Exporter</name>
+	<artifactId>bean-searcher-exporter</artifactId>
+	<packaging>jar</packaging>
+
+	<parent>
+		<groupId>cn.zhxu</groupId>
+		<artifactId>bean-searcher-parent</artifactId>
+		<version>4.5.0</version>
+	</parent>
+
+	<dependencies>
+		<dependency>
+			<groupId>cn.zhxu</groupId>
+			<artifactId>bean-searcher</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<finalName>bean-searcher-exporter</finalName>
+	</build>
+	
+</project>
