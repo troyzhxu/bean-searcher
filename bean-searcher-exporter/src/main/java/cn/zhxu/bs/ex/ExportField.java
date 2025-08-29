@@ -3,11 +3,6 @@ package cn.zhxu.bs.ex;
 import cn.zhxu.bs.util.StringUtils;
 
 import java.lang.reflect.Field;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAccessor;
-import java.util.Date;
 
 /**
  * 导出字段
@@ -17,14 +12,18 @@ import java.util.Date;
 public class ExportField {
 
     private final ExprComputer computer;
+    private final Formatter formatter;
     private final Field field;
     private final String exName;
     private final int exIdx;
     private final String expr;
     private final String format;
 
-    public ExportField(ExprComputer computer, Field field, String exName, int exIdx, String expr, String format) {
+    public ExportField(ExprComputer computer, Formatter formatter, Field field,
+                       String exName, int exIdx,
+                       String expr, String format) {
         this.computer = computer;
+        this.formatter = formatter;
         this.field = field;
         this.exName = exName;
         this.exIdx = exIdx;
@@ -42,16 +41,7 @@ public class ExportField {
         if (StringUtils.isBlank(format)) {
             return value == null ? "" : value.toString();
         }
-        if (value instanceof Date) {
-            return new SimpleDateFormat(format).format((Date) value);
-        }
-        if (value instanceof TemporalAccessor) {
-            return DateTimeFormatter.ofPattern(format).format((TemporalAccessor) value);
-        }
-        if (value instanceof Number) {
-            return new DecimalFormat(format).format(value);
-        }
-        return String.format(format, value);
+        return formatter.format(format, value);
     }
 
     /**

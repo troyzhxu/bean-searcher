@@ -48,7 +48,11 @@ public class BeanSearcherConfigOnExporter {
 
     @Bean
     @ConditionalOnMissingBean(ExportFieldResolver.class)
-    public ExportFieldResolver exportFieldResolver(ExprComputer exprComputer) {
+    public ExportFieldResolver exportFieldResolver(ExprComputer exprComputer, ObjectProvider<Formatter> formatter) {
+        var f = formatter.getIfAvailable();
+        if (f != null) {
+            return new DefaultExportFieldResolver(exprComputer, f);
+        }
         return new DefaultExportFieldResolver(exprComputer);
     }
 

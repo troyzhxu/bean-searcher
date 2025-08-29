@@ -12,13 +12,19 @@ import java.util.*;
 public class DefaultExportFieldResolver implements ExportFieldResolver {
 
     private final ExprComputer exprComputer;
+    private final Formatter formatter;
 
     public DefaultExportFieldResolver() {
-        this(null);
+        this(null, Formatter.DEFAULT);
     }
 
     public DefaultExportFieldResolver(ExprComputer exprComputer) {
+        this(exprComputer, Formatter.DEFAULT);
+    }
+
+    public DefaultExportFieldResolver(ExprComputer exprComputer, Formatter formatter) {
         this.exprComputer = exprComputer;
+        this.formatter = formatter;
     }
 
     @Override
@@ -52,7 +58,21 @@ public class DefaultExportFieldResolver implements ExportFieldResolver {
         if (export == null) {
             return null;
         }
-        return new ExportField(exprComputer, field, export.name(), export.idx(), export.expr(), export.format());
+        return new ExportField(
+                exprComputer, formatter, field,
+                export.name(),
+                export.idx(),
+                export.expr(),
+                export.format()
+        );
+    }
+
+    public ExprComputer getExprComputer() {
+        return exprComputer;
+    }
+
+    public Formatter getFormatter() {
+        return formatter;
     }
 
 }
