@@ -10,7 +10,7 @@ public class BeanSearcherExProps {
     /**
      * 默认每批次查询的条数，默认 1000
      */
-    private int defaultBatchSize = 1000;
+    private int batchSize = 1000;
 
     /**
      * 每批次查询后的延迟时间，默认 100毫秒，用于降低数据库压力
@@ -37,12 +37,12 @@ public class BeanSearcherExProps {
      */
     private String tooManyRequestsMessage = "大人请息怒，当前导出数据的人实在太多了，请稍后再试一下子哈！";
 
-    public int getDefaultBatchSize() {
-        return defaultBatchSize;
+    public int getBatchSize() {
+        return batchSize;
     }
 
-    public void setDefaultBatchSize(int defaultBatchSize) {
-        this.defaultBatchSize = defaultBatchSize;
+    public void setBatchSize(int batchSize) {
+        this.batchSize = batchSize;
     }
 
     public Duration getBatchDelay() {

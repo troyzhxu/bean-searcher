@@ -41,7 +41,6 @@ public class BeanSearcherConfigOnExporter {
         ExpressionParser expressionParser = new SpelExpressionParser();
         return (expr, obj, value) -> {
             EvaluationContext context = new StandardEvaluationContext(obj);
-            context.setVariable("o", obj);
             context.setVariable("v", value);
             return expressionParser.parseExpression(expr).getValue(context);
         };
@@ -113,7 +112,7 @@ public class BeanSearcherConfigOnExporter {
                                      BeanSearcherExProps props) {
         DefaultBeanExporter beanExporter = new DefaultBeanExporter(
                 beanSearcher,
-                props.getDefaultBatchSize(),
+                props.getBatchSize(),
                 props.getBatchDelay(),
                 props.getMaxExportingThreads(),
                 props.getMaxThreads()

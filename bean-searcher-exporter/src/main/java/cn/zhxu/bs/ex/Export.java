@@ -23,7 +23,7 @@ public @interface Export {
     int idx() default 0;
 
     /**
-     * 支持 SpEL 表达式（Spring 环境下）或 SnEL 表达式（Solon 环境下），使用 #v 引用当前字段值，#o 引用当前数据对象
+     * 支持 SpEL 表达式（Spring 环境下）或 SnEL 表达式（Solon 环境下），使用 #v 引用当前字段值，使用字段名引用其它字段值
      * @return 值转换器
      */
     String expr() default "";
