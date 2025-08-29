@@ -108,8 +108,8 @@ public class DefaultBeanExporter implements BeanExporter {
         // 此处不必过于追求完美的并发控制，虽然在高并发下有可能多于 maxThreads 个线程进入此处，但概率极小且危害不大
         try {
             threads.incrementAndGet();
-            List<FieldProp> fieldProps = resolveFieldProps(beanClass);
-            writer.writeStart(fieldProps);
+            List<ExportField> fields = resolveExportFields(beanClass);
+            writer.writeStart(fields);
             while (exportingThreads.get() >= maxExportingThreads) {
                 // 进入等待状态，等钱前面导出的人结束
                 tryDelay(Duration.ofMillis(10));
@@ -118,11 +118,11 @@ public class DefaultBeanExporter implements BeanExporter {
                 // 进入导出状态，最多 maxExportingThreads 个人同时导出
                 exportingThreads.incrementAndGet();
                 doLoadDataAndExport(
-                        writer, fieldProps, beanClass,
+                        writer, fields, beanClass,
                         paraMap != null ? paraMap : new HashMap<>(),
                         batchSize
                 );
-                writer.writeStop(fieldProps);
+                writer.writeStop(fields);
             } finally {
                 exportingThreads.decrementAndGet();
             }
@@ -131,8 +131,8 @@ public class DefaultBeanExporter implements BeanExporter {
         }
     }
 
-    protected List<FieldProp> resolveFieldProps(Class<?> clazz) {
-        List<FieldProp> fieldProps = new ArrayList<>();
+    protected List<ExportField> resolveExportFields(Class<?> clazz) {
+        List<ExportField> exportFields = new ArrayList<>();
         Set<String> names = new HashSet<>();
         while (clazz != Object.class) {
             for (Field field : clazz.getDeclaredFields()) {
@@ -143,20 +143,20 @@ public class DefaultBeanExporter implements BeanExporter {
                         || names.contains(name)) {
                     continue;
                 }
-                ExProp prop = field.getAnnotation(ExProp.class);
+                Export prop = field.getAnnotation(Export.class);
                 if (prop != null) {
                     field.setAccessible(true);
-                    fieldProps.add(new FieldProp(exprComputer, field, prop));
+                    exportFields.add(new ExportField(exprComputer, field, prop));
                     names.add(name);
                 }
             }
             clazz = clazz.getSuperclass();
         }
-        fieldProps.sort(Comparator.comparingInt(FieldProp::idx));
-        return fieldProps;
+        exportFields.sort(Comparator.comparingInt(ExportField::idx));
+        return exportFields;
     }
 
-    protected <T> void doLoadDataAndExport(FileWriter writer, List<FieldProp> fieldProps,
+    protected <T> void doLoadDataAndExport(FileWriter writer, List<ExportField> fields,
                                            Class<T> beanClass, Map<String, Object> paraMap,
                                            int batchSize) throws IOException {
         MapBuilder builder = MapUtils.builder(paraMap);
@@ -166,7 +166,7 @@ public class DefaultBeanExporter implements BeanExporter {
                     beanClass,
                     builder.page(pageNum, batchSize).build()
             );
-            writer.writeAndFlush(fieldProps, list);
+            writer.writeAndFlush(fields, list);
             if (list.size() >= batchSize) {
                 tryDelay(batchDelay);
                 pageNum++;

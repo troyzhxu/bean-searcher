@@ -11,29 +11,29 @@ import java.util.Date;
 import java.util.Objects;
 
 
-public class FieldProp {
+public class ExportField {
 
     private final ExprComputer computer;
     private final Field field;
-    private final ExProp prop;
+    private final Export export;
 
-    public FieldProp(ExprComputer computer, Field field, ExProp prop) {
+    public ExportField(ExprComputer computer, Field field, Export export) {
         this.computer = computer;
         this.field = Objects.requireNonNull(field);
-        this.prop = Objects.requireNonNull(prop);
+        this.export = Objects.requireNonNull(export);
     }
 
     public int idx() {
-        return prop.idx();
+        return export.idx();
     }
 
     public String name() {
-        return prop.name();
+        return export.name();
     }
 
     public String withFormat(Object obj) {
         Object value = convert(reflect(obj), obj);
-        String format = prop.format();
+        String format = export.format();
         if (StringUtils.isBlank(format)) {
             return value == null ? "" : value.toString();
         }
@@ -58,7 +58,7 @@ public class FieldProp {
     }
 
     private Object convert(Object value, Object obj) {
-        String expr = prop.expr();
+        String expr = export.expr();
         if (computer == null || StringUtils.isBlank(expr)) {
             return value;
         }

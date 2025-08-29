@@ -41,10 +41,10 @@ public class CsvFileWriter implements FileWriter {
     }
 
     @Override
-    public void writeStart(List<FieldProp> columns) throws IOException {
-        int size = columns.size();
+    public void writeStart(List<ExportField> fields) throws IOException {
+        int size = fields.size();
         for (int col = 0; col < size; col++) {
-            String text = columns.get(col).name();
+            String text = fields.get(col).name();
             writer.write(escape(text));
             if (col < size - 1) {
                 writer.write(COMMA);
@@ -55,11 +55,11 @@ public class CsvFileWriter implements FileWriter {
     }
 
     @Override
-    public void writeAndFlush(List<FieldProp> fieldProps, List<?> dataList) throws IOException {
-        int size = fieldProps.size();
+    public void writeAndFlush(List<ExportField> fields, List<?> dataList) throws IOException {
+        int size = fields.size();
         for (Object data : dataList) {
             for (int col = 0; col < size; col++) {
-                String text = fieldProps.get(col).withFormat(data);
+                String text = fields.get(col).withFormat(data);
                 writer.write(escape(text));
                 if (col < size - 1) {
                     writer.write(COMMA);
@@ -83,7 +83,7 @@ public class CsvFileWriter implements FileWriter {
     }
 
     @Override
-    public void writeStop(List<FieldProp> fieldProps) { }
+    public void writeStop(List<ExportField> fields) { }
 
     @Override
     public void writeTooManyRequests() throws IOException {

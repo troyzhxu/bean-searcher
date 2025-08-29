@@ -12,25 +12,25 @@ public interface FileWriter {
 
     /**
      * 文件输出开始时调用
-     * @param fieldProps 文件字段列表
+     * @param fields 文件字段列表
      * @throws IOException 抛出 IOException
      */
-    void writeStart(List<FieldProp> fieldProps) throws IOException;
+    void writeStart(List<ExportField> fields) throws IOException;
 
     /**
      * 文件输出时调用
-     * @param fieldProps 文件字段列表
+     * @param fields 文件字段列表
      * @param dataList 文件数据列表
      * @throws IOException 抛出 IOException
      */
-    void writeAndFlush(List<FieldProp> fieldProps, List<?> dataList) throws IOException ;
+    void writeAndFlush(List<ExportField> fields, List<?> dataList) throws IOException ;
 
     /**
      * 文件输出结束时调用
-     * @param fieldProps 文件字段列表
+     * @param fields 文件字段列表
      * @throws IOException 抛出 IOException
      */
-    void writeStop(List<FieldProp> fieldProps) throws IOException;
+    void writeStop(List<ExportField> fields) throws IOException;
 
     /**
      * 很多人同时导出时调用，告诉调用者请稍后再试

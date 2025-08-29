@@ -69,12 +69,12 @@ public class BeanSearcherConfigOnExporter {
                 HttpServletResponse response = requireResponse();
                 return new CsvFileWriter(response.getOutputStream()) {
                     @Override
-                    public void writeStart(List<FieldProp> columns) throws IOException {
+                    public void writeStart(List<ExportField> fields) throws IOException {
                         String encodedName = URLEncoder.encode(CsvFileWriter.withFileExt(filename), StandardCharsets.UTF_8);
                         response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
                         response.addHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + encodedName);
                         response.addHeader(HttpHeaders.TRANSFER_ENCODING, "chunked");
-                        super.writeStart(columns);
+                        super.writeStart(fields);
                     }
                     @Override
                     public void writeTooManyRequests() throws IOException {
