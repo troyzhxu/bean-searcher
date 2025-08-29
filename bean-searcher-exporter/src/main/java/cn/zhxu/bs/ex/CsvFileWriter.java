@@ -16,11 +16,28 @@ public class CsvFileWriter implements FileWriter {
 
     public static final String COMMA = ",";
     public static final String  CRLF = "\r\n";
+    public static final String FILE_EXT = ".csv";
 
     private final Writer writer;
 
+    public CsvFileWriter(Writer writer) {
+        this.writer = writer;
+    }
+
     public CsvFileWriter(OutputStream output) {
         this.writer = new OutputStreamWriter(output, StandardCharsets.UTF_8);
+    }
+
+    /**
+     * 添加文件扩展名
+     * @param filename 文件名
+     * @return 文件名
+     */
+    public static String withFileExt(String filename) {
+        if (filename == null) {
+            throw new IllegalArgumentException("filename can not be null.");
+        }
+        return filename.endsWith(FILE_EXT) ? filename : filename + FILE_EXT;
     }
 
     @Override
@@ -68,12 +85,8 @@ public class CsvFileWriter implements FileWriter {
         return text;
     }
 
-    /**
-     * 关闭
-     * @throws IOException IO 异常
-     */
-    public void close() throws IOException {
-        writer.close();
+    public Writer getWriter() {
+        return writer;
     }
 
 }

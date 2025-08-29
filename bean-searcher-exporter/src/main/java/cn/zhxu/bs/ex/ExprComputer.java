@@ -10,7 +10,7 @@ public interface ExprComputer {
     /**
      * 计算表达式
      * @param expr 表达式
-     * @param obj 对象
+     * @param obj 数据对象
      * @param value 字段值
      * @return 计算结果
      */

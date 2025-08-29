@@ -45,10 +45,11 @@ public interface FileWriter {
 
         /**
          * 创建文件输出对象
-         * @param name 文件名
+         * @param filename 文件名
          * @return 文件输出对象
+         * @throws IOException 抛出 IOException
          */
-        FileWriter create(String name);
+        FileWriter create(String filename) throws IOException;
 
     }
 

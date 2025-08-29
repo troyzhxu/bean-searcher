@@ -36,6 +36,7 @@ public class DefaultBeanExporter implements BeanExporter {
 
     private FileWriter.Factory fileWriterFactory;
     private ExprComputer exprComputer;
+    private FileNamer fileNamer = FileNamer.SELF;
 
     public DefaultBeanExporter(BeanSearcher beanSearcher) {
         this(beanSearcher, 10, 30);
@@ -70,11 +71,14 @@ public class DefaultBeanExporter implements BeanExporter {
 
     @Override
     public <T> void export(String name, Class<T> beanClass, Map<String, Object> paraMap, int batchSize) throws IOException {
+        if (name == null) {
+            throw new ExportException("You must set a name before exporting.");
+        }
         FileWriter.Factory factory = fileWriterFactory;
         if (factory == null) {
             throw new ExportException("You must set a fileWriterFactory before exporting.");
         }
-        export(factory.create(name), beanClass, paraMap, batchSize);
+        export(factory.create(fileNamer.filename(name)), beanClass, paraMap, batchSize);
     }
 
     @Override
@@ -226,6 +230,14 @@ public class DefaultBeanExporter implements BeanExporter {
 
     public void setExprComputer(ExprComputer exprComputer) {
         this.exprComputer = exprComputer;
+    }
+
+    public FileNamer getFileNamer() {
+        return fileNamer;
+    }
+
+    public void setFileNamer(FileNamer fileNamer) {
+        this.fileNamer = Objects.requireNonNull(fileNamer);
     }
 
 }
