@@ -28,7 +28,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.oracle.database.jdbc</groupId>
-			<artifactId>ojdbc8</artifactId>	<!-- 使用兼容 JDK8 的依赖 -->
+			<artifactId>ojdbc17</artifactId>	<!-- 使用兼容 JDK8 的依赖 -->
 			<version>${oracle.version}</version>
 			<scope>provided</scope>
 		</dependency>
