@@ -44,7 +44,7 @@ public class CsvFileWriter implements FileWriter {
     public void writeStart(List<ExportField> fields) throws IOException {
         int size = fields.size();
         for (int col = 0; col < size; col++) {
-            String text = fields.get(col).name();
+            String text = fields.get(col).getExName();
             writer.write(escape(text));
             if (col < size - 1) {
                 writer.write(COMMA);
@@ -59,7 +59,7 @@ public class CsvFileWriter implements FileWriter {
         int size = fields.size();
         for (Object data : dataList) {
             for (int col = 0; col < size; col++) {
-                String text = fields.get(col).withFormat(data);
+                String text = fields.get(col).text(data);
                 writer.write(escape(text));
                 if (col < size - 1) {
                     writer.write(COMMA);

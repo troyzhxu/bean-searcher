@@ -5,10 +5,11 @@ import cn.zhxu.bs.util.MapBuilder;
 import cn.zhxu.bs.util.MapUtils;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.time.Duration;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -34,8 +35,8 @@ public class DefaultBeanExporter implements BeanExporter {
     // 导出+等待中的总线程数
     private final AtomicInteger threads = new AtomicInteger();
 
+    private ExportFieldResolver fieldResolver = new DefaultExportFieldResolver();
     private FileWriter.Factory fileWriterFactory;
-    private ExprComputer exprComputer;
     private FileNamer fileNamer = FileNamer.SELF;
 
     public DefaultBeanExporter(BeanSearcher beanSearcher) {
@@ -108,7 +109,7 @@ public class DefaultBeanExporter implements BeanExporter {
         // 此处不必过于追求完美的并发控制，虽然在高并发下有可能多于 maxThreads 个线程进入此处，但概率极小且危害不大
         try {
             threads.incrementAndGet();
-            List<ExportField> fields = resolveExportFields(beanClass);
+            List<ExportField> fields = fieldResolver.resolve(beanClass);
             writer.writeStart(fields);
             while (exportingThreads.get() >= maxExportingThreads) {
                 // 进入等待状态，等钱前面导出的人结束
@@ -129,31 +130,6 @@ public class DefaultBeanExporter implements BeanExporter {
         } finally {
             threads.decrementAndGet();
         }
-    }
-
-    protected List<ExportField> resolveExportFields(Class<?> clazz) {
-        List<ExportField> exportFields = new ArrayList<>();
-        Set<String> names = new HashSet<>();
-        while (clazz != Object.class) {
-            for (Field field : clazz.getDeclaredFields()) {
-                int modifiers = field.getModifiers();
-                String name = field.getName();
-                if (field.isSynthetic() || Modifier.isStatic(modifiers)
-                        || Modifier.isTransient(modifiers)
-                        || names.contains(name)) {
-                    continue;
-                }
-                Export prop = field.getAnnotation(Export.class);
-                if (prop != null) {
-                    field.setAccessible(true);
-                    exportFields.add(new ExportField(exprComputer, field, prop));
-                    names.add(name);
-                }
-            }
-            clazz = clazz.getSuperclass();
-        }
-        exportFields.sort(Comparator.comparingInt(ExportField::idx));
-        return exportFields;
     }
 
     protected <T> void doLoadDataAndExport(FileWriter writer, List<ExportField> fields,
@@ -216,20 +192,20 @@ public class DefaultBeanExporter implements BeanExporter {
         return threads;
     }
 
+    public ExportFieldResolver getFieldResolver() {
+        return fieldResolver;
+    }
+
+    public void setFieldResolver(ExportFieldResolver fieldResolver) {
+        this.fieldResolver = Objects.requireNonNull(fieldResolver);
+    }
+
     public FileWriter.Factory getFileWriterFactory() {
         return fileWriterFactory;
     }
 
     public void setFileWriterFactory(FileWriter.Factory fileWriterFactory) {
         this.fileWriterFactory = fileWriterFactory;
-    }
-
-    public ExprComputer getExprComputer() {
-        return exprComputer;
-    }
-
-    public void setExprComputer(ExprComputer exprComputer) {
-        this.exprComputer = exprComputer;
     }
 
     public FileNamer getFileNamer() {

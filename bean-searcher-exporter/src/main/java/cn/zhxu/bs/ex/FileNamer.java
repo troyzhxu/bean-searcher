@@ -2,7 +2,7 @@ package cn.zhxu.bs.ex;
 
 /**
  * 文件命名接口
- * @author Troy.Zhou @ 2025-08-28
+ * @author Troy.Zhou @ 2025-08-29
  * @since v4.5.0
  */
 public interface FileNamer {

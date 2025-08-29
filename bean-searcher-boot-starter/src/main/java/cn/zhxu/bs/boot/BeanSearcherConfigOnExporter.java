@@ -47,6 +47,12 @@ public class BeanSearcherConfigOnExporter {
         };
     }
 
+    @Bean
+    @ConditionalOnMissingBean(ExportFieldResolver.class)
+    public ExportFieldResolver exportFieldResolver(ExprComputer exprComputer) {
+        return new DefaultExportFieldResolver(exprComputer);
+    }
+
     @Configuration
     @ConditionalOnClass(RequestContextHolder.class)
     public static class WebMvcConfiguration {
@@ -101,8 +107,9 @@ public class BeanSearcherConfigOnExporter {
 
     @Bean
     @ConditionalOnMissingBean(BeanExporter.class)
-    public BeanExporter beanExporter(BeanSearcher beanSearcher, ObjectProvider<FileWriter.Factory> fileWriterFactory,
-                                     ExprComputer exprComputer, ObjectProvider<FileNamer> fileNamer,
+    public BeanExporter beanExporter(BeanSearcher beanSearcher, ExportFieldResolver fieldResolver,
+                                     ObjectProvider<FileWriter.Factory> fileWriterFactory,
+                                     ObjectProvider<FileNamer> fileNamer,
                                      BeanSearcherExProps props) {
         DefaultBeanExporter beanExporter = new DefaultBeanExporter(
                 beanSearcher,
@@ -111,9 +118,9 @@ public class BeanSearcherConfigOnExporter {
                 props.getMaxExportingThreads(),
                 props.getMaxThreads()
         );
+        beanExporter.setFieldResolver(fieldResolver);
         BeanSearcherAutoConfiguration.ifAvailable(fileWriterFactory, beanExporter::setFileWriterFactory);
         BeanSearcherAutoConfiguration.ifAvailable(fileNamer, beanExporter::setFileNamer);
-        beanExporter.setExprComputer(exprComputer);
         return beanExporter;
     }
 

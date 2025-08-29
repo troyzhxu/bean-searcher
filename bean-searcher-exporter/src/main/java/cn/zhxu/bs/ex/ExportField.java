@@ -8,32 +8,37 @@ import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
 import java.util.Date;
-import java.util.Objects;
 
-
+/**
+ * 导出字段
+ * @author Troy.Zhou @ 2025-08-28
+ * @since v4.5.0
+ */
 public class ExportField {
 
     private final ExprComputer computer;
     private final Field field;
-    private final Export export;
+    private final String exName;
+    private final int exIdx;
+    private final String expr;
+    private final String format;
 
-    public ExportField(ExprComputer computer, Field field, Export export) {
+    public ExportField(ExprComputer computer, Field field, String exName, int exIdx, String expr, String format) {
         this.computer = computer;
-        this.field = Objects.requireNonNull(field);
-        this.export = Objects.requireNonNull(export);
+        this.field = field;
+        this.exName = exName;
+        this.exIdx = exIdx;
+        this.expr = expr;
+        this.format = format;
     }
 
-    public int idx() {
-        return export.idx();
-    }
-
-    public String name() {
-        return export.name();
-    }
-
-    public String withFormat(Object obj) {
-        Object value = convert(reflect(obj), obj);
-        String format = export.format();
+    /**
+     * 获取该字段根据表达式转换并且格式化后的文本
+     * @param obj 对象
+     * @return 字段文本
+     */
+    public String text(Object obj) {
+        Object value = compute(obj, value(obj));
         if (StringUtils.isBlank(format)) {
             return value == null ? "" : value.toString();
         }
@@ -49,7 +54,12 @@ public class ExportField {
         return String.format(format, value);
     }
 
-    private Object reflect(Object obj) {
+    /**
+     * 获取字段原始值
+     * @param obj 对象
+     * @return 字段值
+     */
+    public Object value(Object obj) {
         try {
             return field.get(obj);
         } catch (IllegalAccessException e) {
@@ -57,8 +67,13 @@ public class ExportField {
         }
     }
 
-    private Object convert(Object value, Object obj) {
-        String expr = export.expr();
+    /**
+     * 根据表达式计算字段值
+     * @param obj 对象
+     * @param value 值
+     * @return 计算结果
+     */
+    public Object compute(Object obj, Object value) {
         if (computer == null || StringUtils.isBlank(expr)) {
             return value;
         }
@@ -67,6 +82,30 @@ public class ExportField {
         } catch (Exception e) {
             throw new IllegalStateException("Can not compute the expr [" + expr + "]", e);
         }
+    }
+
+    public ExprComputer getComputer() {
+        return computer;
+    }
+
+    public Field getField() {
+        return field;
+    }
+
+    public int getExIdx() {
+        return exIdx;
+    }
+
+    public String getExName() {
+        return exName;
+    }
+
+    public String getExpr() {
+        return expr;
+    }
+
+    public String getFormat() {
+        return format;
     }
 
 }
