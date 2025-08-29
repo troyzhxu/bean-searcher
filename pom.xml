@@ -22,11 +22,13 @@
 	</modules>
 
 	<properties>
-		<java.version>1.8</java.version>
+		<java.version>17</java.version>
 		<junit.version>5.11.4</junit.version>
 		<slf4j.version>2.0.17</slf4j.version>
 		<xjsonkit.version>1.5.1</xjsonkit.version>
-		<spring.boot.version>2.7.18</spring.boot.version>
+		<spring.boot.version>3.3.13</spring.boot.version>
+        <spring.version>6.1.21</spring.version>
+        <servlet.version>6.1.0</servlet.version>
 		<solon.version>2.9.4</solon.version>
 		<oracle.version>23.5.0.24.07</oracle.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -125,7 +127,7 @@
 						<id>default-compile</id>
 						<configuration>
 							<jdkToolchain>
-								<version>8</version>
+								<version>${java.version}</version>
 							</jdkToolchain>
 						</configuration>
 					</execution>
@@ -143,7 +145,7 @@
 				</executions>
 				<configuration>
 					<jdkToolchain>
-						<version>[1.8,17)</version>
+						<version>[17,21]</version>
 					</jdkToolchain>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
