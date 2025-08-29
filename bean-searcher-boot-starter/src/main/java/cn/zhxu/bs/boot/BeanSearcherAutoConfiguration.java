@@ -39,9 +39,10 @@ import java.util.function.Consumer;
 @Import({
         BeanSearcherConvertors.class,
         BeanSearcherParamFilters.class,
-        BeanSearcherConfigOnLabel.class,
         BeanSearcherConfigOnJsonKit.class,
-        BeanSearcherConfigOnOracle.class
+        BeanSearcherConfigOnOracle.class,
+        BeanSearcherConfigOnLabel.class,
+        BeanSearcherConfigOnExporter.class
 })
 public class BeanSearcherAutoConfiguration {
 
