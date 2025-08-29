@@ -118,7 +118,7 @@ public class DefaultBeanExporter implements BeanExporter {
             try {
                 // 进入导出状态，最多 maxExportingThreads 个人同时导出
                 exportingThreads.incrementAndGet();
-                doLoadDataAndExport(
+                loadDataAndExportToWriter(
                         writer, fields, beanClass,
                         paraMap != null ? paraMap : new HashMap<>(),
                         batchSize
@@ -132,9 +132,9 @@ public class DefaultBeanExporter implements BeanExporter {
         }
     }
 
-    protected <T> void doLoadDataAndExport(FileWriter writer, List<ExportField> fields,
-                                           Class<T> beanClass, Map<String, Object> paraMap,
-                                           int batchSize) throws IOException {
+    protected <T> void loadDataAndExportToWriter(FileWriter writer, List<ExportField> fields,
+                                                 Class<T> beanClass, Map<String, Object> paraMap,
+                                                 int batchSize) throws IOException {
         MapBuilder builder = MapUtils.builder(paraMap);
         int pageNum = 0;
         do {
@@ -149,7 +149,7 @@ public class DefaultBeanExporter implements BeanExporter {
             } else {
                 pageNum = -1;
             }
-        } while (pageNum >= 0);
+        } while (pageNum > 0);
     }
 
     private void tryDelay(Duration delay) {
