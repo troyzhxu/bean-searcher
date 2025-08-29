@@ -70,11 +70,23 @@ public class CsvFileWriter implements FileWriter {
         writer.flush();
     }
 
+    /**
+     * 追加内容
+     * @param content 内容
+     * @throws IOException IO 异常
+     */
+    public void writeAndFlush(String content) throws IOException {
+        if (content != null) {
+            writer.write(content);
+        }
+        writer.flush();
+    }
+
     @Override
     public void writeStop(List<FieldProp> fieldProps) { }
 
     @Override
-    public void writeTooManyRequests() {
+    public void writeTooManyRequests() throws IOException {
         throw new ExportException.TooManyRequests("Too many requests.");
     }
 
