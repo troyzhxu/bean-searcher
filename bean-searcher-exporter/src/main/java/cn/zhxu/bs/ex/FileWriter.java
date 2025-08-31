@@ -36,7 +36,7 @@ public interface FileWriter {
      * 很多人同时导出时调用，告诉调用者请稍后再试
      * @throws IOException 抛出 IOException
      */
-    void writeTooManyRequests() throws IOException;
+    void onTooManyRequests() throws IOException;
 
     /**
      * 文件输出工厂接口

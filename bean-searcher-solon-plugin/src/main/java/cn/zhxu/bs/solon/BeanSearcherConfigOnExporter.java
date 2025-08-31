@@ -93,7 +93,7 @@ public class BeanSearcherConfigOnExporter {
                     super.writeStart(fields);
                 }
                 @Override
-                public void writeTooManyRequests() throws IOException {
+                public void onTooManyRequests() throws IOException {
                     context.status(429);
                     context.contentType("application/text");
                     context.headerAdd("Transfer-Encoding", "no-cache");

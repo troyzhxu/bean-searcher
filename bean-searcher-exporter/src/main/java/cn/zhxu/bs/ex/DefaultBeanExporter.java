@@ -109,7 +109,7 @@ public class DefaultBeanExporter implements BeanExporter {
             throw new ExportException("The batchSize must be greater than 0.");
         }
         if (threads.get() >= maxThreads) {
-            writer.writeTooManyRequests();
+            writer.onTooManyRequests();
             return;
         }
         // 此处不必过于追求完美的并发控制，虽然在高并发下有可能多于 maxThreads 个线程进入此处，但概率极小且危害不大

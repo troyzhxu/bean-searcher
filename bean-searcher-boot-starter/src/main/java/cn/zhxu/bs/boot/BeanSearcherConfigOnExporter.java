@@ -86,7 +86,7 @@ public class BeanSearcherConfigOnExporter {
                         super.writeStart(fields);
                     }
                     @Override
-                    public void writeTooManyRequests() throws IOException {
+                    public void onTooManyRequests() throws IOException {
                         response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
                         response.setContentType("application/text");
                         response.setHeader(HttpHeaders.CACHE_CONTROL, "no-cache");

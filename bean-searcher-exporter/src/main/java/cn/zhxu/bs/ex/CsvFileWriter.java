@@ -86,7 +86,7 @@ public class CsvFileWriter implements FileWriter {
     public void writeStop(List<ExportField> fields) { }
 
     @Override
-    public void writeTooManyRequests() throws IOException {
+    public void onTooManyRequests() throws IOException {
         throw new ExportException.TooManyRequests("Too many requests.");
     }
 
