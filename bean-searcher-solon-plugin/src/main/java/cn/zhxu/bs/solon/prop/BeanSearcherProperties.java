@@ -24,6 +24,11 @@ public class BeanSearcherProperties {
     private final BeanSearcherFieldConvertor fieldConvertor = new BeanSearcherFieldConvertor();
 
     /**
+     * 文件导出相关配置
+     */
+    private final BeanSearcherExProps exporter = new BeanSearcherExProps();
+
+    /**
      * 是否使用 {@link MapSearcher } 检索器，默认为 true
      */
     private boolean useMapSearcher = true;
@@ -44,6 +49,10 @@ public class BeanSearcherProperties {
 
     public BeanSearcherFieldConvertor getFieldConvertor() {
         return fieldConvertor;
+    }
+
+    public BeanSearcherExProps getExporter() {
+        return exporter;
     }
 
     public boolean isUseMapSearcher() {

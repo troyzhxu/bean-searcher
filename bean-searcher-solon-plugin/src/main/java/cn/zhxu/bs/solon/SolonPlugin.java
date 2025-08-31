@@ -20,6 +20,7 @@ public class SolonPlugin implements Plugin {
 
         //再构建托管对象
         context.beanMake(BeanSearcherConfiguration.class);
+        context.beanMake(BeanSearcherConfigOnExporter.class);
 
     }
 

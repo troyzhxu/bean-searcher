@@ -29,7 +29,7 @@
 		<spring.boot.version>3.3.13</spring.boot.version>
         <spring.version>6.1.21</spring.version>
         <servlet.version>6.1.0</servlet.version>
-		<solon.version>3.5.0</solon.version>
+		<solon.version>3.5.1</solon.version>
 		<oracle.version>23.9.0.25.07</oracle.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>

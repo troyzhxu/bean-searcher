@@ -26,11 +26,23 @@
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
+        <dependency>
+            <groupId>cn.zhxu</groupId>
+            <artifactId>bean-searcher-exporter</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
 		<dependency>
 			<groupId>org.noear</groupId>
-			<artifactId>solon.data</artifactId>
+			<artifactId>solon-data</artifactId>
 			<version>${solon.version}</version>
 		</dependency>
+        <dependency>
+            <groupId>org.noear</groupId>
+            <artifactId>solon-expression</artifactId>
+            <version>${solon.version}</version>
+            <scope>provided</scope>
+        </dependency>
 		<dependency>
 			<groupId>cn.zhxu</groupId>
 			<artifactId>xjsonkit-api</artifactId>
