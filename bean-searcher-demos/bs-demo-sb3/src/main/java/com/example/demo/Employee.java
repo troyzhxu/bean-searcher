@@ -40,7 +40,8 @@ public class Employee {
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm", timezone = "GMT+8")
 	private LocalDateTime entryDate;
 
-    @Export(name = "领导", expr = "#v.leader")
+    // 测试转换表达式
+    @Export(name = "领导_员工年龄", expr = "@.leader + '_' + age")
 	@DbField(mapTo = "d", type = DbType.JSON)
 	private DeptAttr attrs;
 
