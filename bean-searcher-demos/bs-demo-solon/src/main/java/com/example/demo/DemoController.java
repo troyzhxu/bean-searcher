@@ -2,6 +2,7 @@ package com.example.demo;
 
 import cn.zhxu.bs.BeanSearcher;
 import cn.zhxu.bs.SearchResult;
+import cn.zhxu.bs.ex.BeanExporter;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Inject;
 import org.noear.solon.annotation.Mapping;
@@ -10,6 +11,7 @@ import org.noear.solon.data.annotation.Tran;
 import org.noear.wood.DbContext;
 import org.noear.wood.annotation.Db;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 @Controller
@@ -20,6 +22,9 @@ public class DemoController {
 
     @Inject
     private BeanSearcher beanSearcher;
+
+    @Inject
+    private BeanExporter beanExporter;
 
     @Mapping("/")
     public ModelAndView index() {
@@ -39,6 +44,12 @@ public class DemoController {
     public SearchResult<Employee> employees() {
         // 分页查询员工信息，并对年龄进行统计
         return beanSearcher.search(Employee.class, Employee::getAge);
+    }
+
+    @Mapping("/employees.cvs")
+    public void exportEmployees() throws IOException {
+        // 分页查询员工信息，并对年龄进行统计
+        beanExporter.export("员工资料", Employee.class, 1);
     }
 
     /**

@@ -81,6 +81,32 @@ new Vue({
             this.params.page = 0;
             this.loadData();
         },
+        handleExport() {
+            var queryString = this.objectToQueryString(this.params);
+            location.href = '/employees.cvs?' + queryString;
+        },
+        objectToQueryString(params) {
+          // 检查参数是否为有效对象
+          if (!params || typeof params !== 'object' || Array.isArray(params)) {
+            return '';
+          }
+          // 遍历对象的键值对，进行编码并拼接
+          const queryParts = [];
+          for (const key in params) {
+            // 只处理对象自身的可枚举属性
+            if (Object.prototype.hasOwnProperty.call(params, key)) {
+              const value = params[key];
+              // 跳过值为undefined的属性
+              if (value === undefined || value == null) continue;
+              // 对键和值进行URL编码
+              const encodedKey = encodeURIComponent(key);
+              const encodedValue = encodeURIComponent(value);
+              queryParts.push(`${encodedKey}=${encodedValue}`);
+            }
+          }
+          // 拼接所有部分，返回完整的queryString
+          return queryParts.join('&');
+        },
         sortChange(obj) {
             this.params.sort = obj.prop;
             if (obj.order === 'descending') {
