@@ -1,13 +1,14 @@
 package cn.zhxu.bs.boot;
 
 import cn.zhxu.bs.BeanSearcher;
-import cn.zhxu.bs.boot.prop.*;
+import cn.zhxu.bs.boot.prop.BeanSearcherExProps;
+import cn.zhxu.bs.boot.prop.BeanSearcherParams;
 import cn.zhxu.bs.ex.*;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,7 +32,6 @@ import java.util.List;
 
 @Configuration
 @ConditionalOnClass(BeanExporter.class)
-@ConditionalOnBean(BeanSearcher.class)
 @EnableConfigurationProperties(BeanSearcherExProps.class)
 public class BeanSearcherConfigOnExporter {
 
@@ -109,7 +109,9 @@ public class BeanSearcherConfigOnExporter {
     }
 
     @Bean
+//  @ConditionalOnBean(BeanSearcher.class)  这里不能使用这个条件，否则该 Bean 会注册不了，这可能是 SpringBoot 的 BUG
     @ConditionalOnMissingBean(BeanExporter.class)
+    @ConditionalOnProperty(name = "bean-searcher.use-bean-searcher", havingValue = "true", matchIfMissing = true)
     public BeanExporter beanExporter(BeanSearcher beanSearcher, ExportFieldResolver fieldResolver,
                                      ObjectProvider<FileWriter.Factory> fileWriterFactory,
                                      ObjectProvider<FileNamer> fileNamer,
