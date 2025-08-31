@@ -22,6 +22,8 @@ dependencies {
     implementation("org.noear:solon-view-thymeleaf")
     implementation("org.noear:solon-logging-logback")
 
+    implementation 'org.noear:solon-expression'
+
     implementation "org.noear:wood-solon-plugin"
 
     implementation "cn.zhxu:bean-searcher-solon-plugin:4.5.0"

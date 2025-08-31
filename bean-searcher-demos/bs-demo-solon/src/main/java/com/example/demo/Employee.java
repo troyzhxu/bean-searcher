@@ -30,7 +30,8 @@ public class Employee {
 
     private Gender gender;
 
-    @Export(name = "性别")
+    // 测试转换表达式
+    @Export(name = "性别", expr = "gender + '_' + @")
     @LabelFor("gender")
     private String genderName;
 
