@@ -2,12 +2,11 @@ package com.example.demo;
 
 import cn.zhxu.bs.BeanSearcher;
 import cn.zhxu.bs.SearchResult;
+import cn.zhxu.bs.ex.BeanExporter;
 import cn.zhxu.bs.util.MapUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.Map;
 
 @RestController
@@ -15,9 +14,11 @@ import java.util.Map;
 public class EmployeeController {
 
 	private final BeanSearcher beanSearcher;
+    private final BeanExporter beanExporter;
 
-    public EmployeeController(BeanSearcher beanSearcher) {
+    public EmployeeController(BeanSearcher beanSearcher, BeanExporter beanExporter) {
         this.beanSearcher = beanSearcher;
+        this.beanExporter = beanExporter;
     }
 
     /**
@@ -29,6 +30,11 @@ public class EmployeeController {
 		return beanSearcher.search(Employee.class, params, Employee::getAge);
 	}
 
+    @GetMapping("/file.cvs")
+    public void cvsFile(@RequestParam Map<String, Object> params) throws IOException {
+        // 导出数据文件，将 batchSize 调为 1，batchDelay 配置为 0.5s, 测试其是否可以边查询边下载
+        beanExporter.export("员工资料", Employee.class, params);
+    }
 
 	// 以上代码等效于：
 	@GetMapping("/index1")

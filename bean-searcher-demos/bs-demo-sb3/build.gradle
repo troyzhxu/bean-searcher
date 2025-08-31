@@ -1,7 +1,7 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.2.5'
-	id 'io.spring.dependency-management' version '1.1.4'
+	id 'org.springframework.boot' version '3.3.13'
+	id 'io.spring.dependency-management' version '1.1.7'
 }
 
 group = 'com.example'
@@ -21,6 +21,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
 	implementation 'cn.zhxu:bean-searcher-boot-starter:4.5.0'
+    implementation 'cn.zhxu:bean-searcher-exporter:4.5.0'
 	implementation 'cn.zhxu:xjsonkit-jackson:1.4.3'
 
 	runtimeOnly 'com.h2database:h2'
