@@ -11,7 +11,7 @@ import java.lang.reflect.Field;
  */
 public class ExportField {
 
-    private final ExprComputer computer;
+    private final Expresser expresser;
     private final Formatter formatter;
     private final Field field;
     private final String exName;
@@ -19,10 +19,10 @@ public class ExportField {
     private final String expr;
     private final String format;
 
-    public ExportField(ExprComputer computer, Formatter formatter, Field field,
+    public ExportField(Expresser expresser, Formatter formatter, Field field,
                        String exName, int exIdx,
                        String expr, String format) {
-        this.computer = computer;
+        this.expresser = expresser;
         this.formatter = formatter;
         this.field = field;
         this.exName = exName;
@@ -64,18 +64,22 @@ public class ExportField {
      * @return 计算结果
      */
     public Object compute(Object obj, Object value) {
-        if (computer == null || StringUtils.isBlank(expr)) {
+        if (expresser == null || StringUtils.isBlank(expr)) {
             return value;
         }
         try {
-            return computer.compute(expr, obj, value);
+            return expresser.compute(expr, obj, value);
         } catch (Exception e) {
             throw new IllegalStateException("Can not compute the expr [" + expr + "]", e);
         }
     }
 
-    public ExprComputer getComputer() {
-        return computer;
+    public Expresser getExpresser() {
+        return expresser;
+    }
+
+    public Formatter getFormatter() {
+        return formatter;
     }
 
     public Field getField() {

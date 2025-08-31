@@ -20,6 +20,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Configuration
 @Condition(onClass = BeanExporter.class, onBean = BeanSearcher.class)
@@ -30,47 +31,62 @@ public class BeanSearcherConfigOnExporter {
     BeanSearcherProperties props;
 
     @Bean
-    @Condition(onMissingBean = ExprComputer.class, onClass = SnEL.class)
-    public ExprComputer exprComputer() {
+    @Condition(onMissingBean = Expresser.class, onClass = SnEL.class)
+    public Expresser exportExpresser() {
+        String valueKey = "_" + System.currentTimeMillis();
         return (expr, obj, value) -> {
-            Map<String, Object> context = new HashMap<>();
-            List<Field> fields = getALlFields(obj.getClass());
-            for (Field field : fields) {
-                try {
-                    context.put(field.getName(), field.get(obj));
-                } catch (IllegalAccessException e) {
-                    throw new ExportException("Can not reflect the value of " + field.getName() + " on " + obj.getClass().getName(), e);
+            Map<Object, Field> fieldMap = getALlFieldMap(obj.getClass());
+            String newExpr = expr.replaceAll(Expresser.VALUE_REF, valueKey);
+            return SnEL.eval(newExpr, key -> {
+                if (valueKey.equals(key)) {
+                    return value;
                 }
-            }
-            context.put("#v", value);
-            return SnEL.eval(expr, context);
+                Field field = fieldMap.get(key);
+                if (field == null) {
+                    throw new ExportException("Error @Export.expr [" + expr + "] There is no field named '" + key + "' on " + obj.getClass().getName());
+                }
+                try {
+                    return field.get(obj);
+                } catch (IllegalAccessException e) {
+                    throw new ExportException("Can not reflect the value of " + key + " on " + obj.getClass().getName(), e);
+                }
+            }, true);
         };
     }
 
-    static List<Field> getALlFields(Class<?> clazz) {
-        List<Field> fields = new ArrayList<>();
-        Set<String> names = new HashSet<>();
+    static final Map<Class<?>, Map<Object, Field>> fieldMapCache = new ConcurrentHashMap<>();
+
+    static Map<Object, Field> getALlFieldMap(Class<?> clazz) {
+        Map<Object, Field> fields = fieldMapCache.get(clazz);
+        if (fields != null) {
+            return fields;
+        }
+        fields = new HashMap<>();
         while (clazz != Object.class) {
             for (Field field : clazz.getDeclaredFields()) {
                 int modifiers = field.getModifiers();
                 String name = field.getName();
                 if (field.isSynthetic() || Modifier.isStatic(modifiers)
                         || Modifier.isTransient(modifiers)
-                        || names.contains(name)) {
+                        || fields.containsKey(name)) {
                     continue;
                 }
                 field.setAccessible(true);
-                fields.add(field);
-                names.add(name);
+                fields.put(name, field);
             }
             clazz = clazz.getSuperclass();
         }
+        fieldMapCache.put(clazz, fields);
         return fields;
+    }
+
+    public static void clearFieldMapCache() {
+        fieldMapCache.clear();
     }
 
     @Bean
     @Condition(onMissingBean = ExportFieldResolver.class)
-    public ExportFieldResolver exportFieldResolver(@Inject(required = false) ExprComputer exprComputer,
+    public ExportFieldResolver exportFieldResolver(@Inject(required = false) Expresser exprComputer,
                                                    @Inject(required = false) Formatter formatter) {
         if (formatter != null) {
             return new DefaultExportFieldResolver(exprComputer, formatter);

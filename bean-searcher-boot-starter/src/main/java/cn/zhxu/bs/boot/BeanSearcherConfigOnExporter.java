@@ -36,19 +36,21 @@ import java.util.List;
 public class BeanSearcherConfigOnExporter {
 
     @Bean
-    @ConditionalOnMissingBean(ExprComputer.class)
-    public ExprComputer exprComputer() {
+    @ConditionalOnMissingBean(Expresser.class)
+    public Expresser exportExpresser() {
         ExpressionParser expressionParser = new SpelExpressionParser();
+        String valueKey = "#_" + System.currentTimeMillis();
         return (expr, obj, value) -> {
             EvaluationContext context = new StandardEvaluationContext(obj);
-            context.setVariable("v", value);
-            return expressionParser.parseExpression(expr).getValue(context);
+            context.setVariable(valueKey, value);
+            String newExpr = valueKey.replaceAll(Expresser.VALUE_REF, valueKey);
+            return expressionParser.parseExpression(newExpr).getValue(context);
         };
     }
 
     @Bean
     @ConditionalOnMissingBean(ExportFieldResolver.class)
-    public ExportFieldResolver exportFieldResolver(ExprComputer exprComputer, ObjectProvider<Formatter> formatter) {
+    public ExportFieldResolver exportFieldResolver(Expresser exprComputer, ObjectProvider<Formatter> formatter) {
         var f = formatter.getIfAvailable();
         if (f != null) {
             return new DefaultExportFieldResolver(exprComputer, f);

@@ -11,19 +11,19 @@ import java.util.*;
  */
 public class DefaultExportFieldResolver implements ExportFieldResolver {
 
-    private final ExprComputer exprComputer;
+    private final Expresser expresser;
     private final Formatter formatter;
 
     public DefaultExportFieldResolver() {
         this(null, Formatter.DEFAULT);
     }
 
-    public DefaultExportFieldResolver(ExprComputer exprComputer) {
-        this(exprComputer, Formatter.DEFAULT);
+    public DefaultExportFieldResolver(Expresser expresser) {
+        this(expresser, Formatter.DEFAULT);
     }
 
-    public DefaultExportFieldResolver(ExprComputer exprComputer, Formatter formatter) {
-        this.exprComputer = exprComputer;
+    public DefaultExportFieldResolver(Expresser expresser, Formatter formatter) {
+        this.expresser = expresser;
         this.formatter = formatter;
     }
 
@@ -59,7 +59,7 @@ public class DefaultExportFieldResolver implements ExportFieldResolver {
             return null;
         }
         return new ExportField(
-                exprComputer, formatter, field,
+                expresser, formatter, field,
                 export.name(),
                 export.idx(),
                 export.expr(),
@@ -67,8 +67,8 @@ public class DefaultExportFieldResolver implements ExportFieldResolver {
         );
     }
 
-    public ExprComputer getExprComputer() {
-        return exprComputer;
+    public Expresser getExpresser() {
+        return expresser;
     }
 
     public Formatter getFormatter() {
