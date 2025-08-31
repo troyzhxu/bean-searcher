@@ -48,7 +48,7 @@ public class DemoController {
 
     @Mapping("/employees.cvs")
     public void exportEmployees() throws IOException {
-        // 分页查询员工信息，并对年龄进行统计
+        // 导出数据文件，将 batchSize 调为 1，batchDelay 配置为 0.5s, 测试其是否可以边查询边下载
         beanExporter.export("员工资料", Employee.class, 1);
     }
 
