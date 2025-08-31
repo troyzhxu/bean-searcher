@@ -43,7 +43,7 @@ public class BeanSearcherConfigOnExporter {
         return (expr, obj, value) -> {
             EvaluationContext context = new StandardEvaluationContext(obj);
             context.setVariable(valueKey, value);
-            String newExpr = valueKey.replaceAll(Expresser.VALUE_REF, valueKey);
+            String newExpr = expr.replaceAll(Expresser.VALUE_REF, valueKey);
             return expressionParser.parseExpression(newExpr).getValue(context);
         };
     }
