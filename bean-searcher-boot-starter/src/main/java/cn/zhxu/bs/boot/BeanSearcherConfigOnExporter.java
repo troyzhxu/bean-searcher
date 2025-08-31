@@ -13,6 +13,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.expression.EvaluationContext;
+import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
@@ -29,6 +30,8 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Configuration
 @ConditionalOnClass(BeanExporter.class)
@@ -39,12 +42,14 @@ public class BeanSearcherConfigOnExporter {
     @ConditionalOnMissingBean(Expresser.class)
     public Expresser exportExpresser() {
         ExpressionParser expressionParser = new SpelExpressionParser();
+        Map<String, Expression> expressionMap = new ConcurrentHashMap<>();
         String valueKey = "#_" + System.currentTimeMillis();
         return (expr, obj, value) -> {
-            EvaluationContext context = new StandardEvaluationContext(obj);
-            context.setVariable(valueKey, value);
             String newExpr = expr.replaceAll(Expresser.VALUE_REF, valueKey);
-            return expressionParser.parseExpression(newExpr).getValue(context);
+            Expression expression = expressionMap.computeIfAbsent(newExpr, expressionParser::parseExpression);
+            EvaluationContext context = new StandardEvaluationContext(obj);
+            context.setVariable(valueKey.substring(1), value);
+            return expression.getValue(context);
         };
     }
 
