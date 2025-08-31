@@ -22,6 +22,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Configuration
+@Condition(onClass = BeanExporter.class, onBean = BeanSearcher.class)
 public class BeanSearcherConfigOnExporter {
 
     //放到这儿，减少注入处理代码
@@ -69,7 +70,8 @@ public class BeanSearcherConfigOnExporter {
 
     @Bean
     @Condition(onMissingBean = ExportFieldResolver.class)
-    public ExportFieldResolver exportFieldResolver(ExprComputer exprComputer, @Inject(required = false) Formatter formatter) {
+    public ExportFieldResolver exportFieldResolver(@Inject(required = false) ExprComputer exprComputer,
+                                                   @Inject(required = false) Formatter formatter) {
         if (formatter != null) {
             return new DefaultExportFieldResolver(exprComputer, formatter);
         }
@@ -113,7 +115,7 @@ public class BeanSearcherConfigOnExporter {
     }
 
     @Bean
-    @Condition(onClass = BeanExporter.class, onBean = BeanSearcher.class, onMissingBean = BeanExporter.class)
+    @Condition(onMissingBean = BeanExporter.class)
     public BeanExporter beanExporter(BeanSearcher beanSearcher, ExportFieldResolver fieldResolver,
                                      @Inject(required = false) FileWriter.Factory fileWriterFactory,
                                      @Inject(required = false) FileNamer fileNamer) {

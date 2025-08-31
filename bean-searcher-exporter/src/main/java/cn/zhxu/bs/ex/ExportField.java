@@ -38,7 +38,7 @@ public class ExportField {
      */
     public String text(Object obj) {
         Object value = compute(obj, value(obj));
-        if (StringUtils.isBlank(format)) {
+        if (StringUtils.isBlank(format) || formatter == null) {
             return value == null ? "" : value.toString();
         }
         return formatter.format(format, value);
