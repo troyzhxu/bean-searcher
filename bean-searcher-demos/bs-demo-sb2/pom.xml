@@ -5,11 +5,11 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.8</version>
+		<version>2.7.18</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>cn.zhxu</groupId>
-	<artifactId>bs-demo-jdkmods</artifactId>
+	<artifactId>bs-demo-springboot</artifactId>
 	<name>demo</name>
 	<description>Demo project for Bean Searcher</description>
 
@@ -24,38 +24,32 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>cn.zhxu</groupId>
 			<artifactId>bean-searcher-boot-starter</artifactId>
-			<version>4.5.0</version>
+			<version>4.4.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>cn.zhxu</groupId>
+			<artifactId>bean-searcher-label</artifactId>
+			<version>4.4.2</version>
 		</dependency>
 
 		<dependency>
 			<groupId>cn.zhxu</groupId>
 			<artifactId>xjsonkit-jackson</artifactId>
-			<version>1.4.3</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+			<version>1.5.0</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<scope>runtime</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
 		</dependency>
 
 	</dependencies>
@@ -70,8 +64,8 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<source>9</source>
-					<target>9</target>
+					<source>8</source>
+					<target>8</target>
 				</configuration>
 			</plugin>
 		</plugins>
