@@ -21,6 +21,8 @@ public class DefaultBeanExporter implements BeanExporter {
 
     // 数据检索器，用于从数据库中加载数据
     private final BeanSearcher beanSearcher;
+    // 数据加载起始页码，默认 0
+    private final int startPage;
     // 每批次查询的条数，默认 1000
     private final int defaultBatchSize;
     // 每批次查询后的延迟时间，默认 100毫秒，用于降低数据库压力
@@ -44,11 +46,12 @@ public class DefaultBeanExporter implements BeanExporter {
     }
 
     public DefaultBeanExporter(BeanSearcher beanSearcher, int maxExportingThreads, int maxThreads) {
-        this(beanSearcher, 1000, Duration.ofMillis(100), maxExportingThreads, maxThreads);
+        this(beanSearcher, 0, 1000, Duration.ofMillis(100), maxExportingThreads, maxThreads);
     }
 
-    public DefaultBeanExporter(BeanSearcher beanSearcher, int defaultBatchSize, Duration batchDelay, int maxExportingThreads, int maxThreads) {
+    public DefaultBeanExporter(BeanSearcher beanSearcher, int startPage, int defaultBatchSize, Duration batchDelay, int maxExportingThreads, int maxThreads) {
         this.beanSearcher = Objects.requireNonNull(beanSearcher);
+        this.startPage = startPage;
         this.defaultBatchSize = defaultBatchSize;
         this.batchDelay = Objects.requireNonNull(batchDelay);
         this.maxExportingThreads = maxExportingThreads;
@@ -102,6 +105,9 @@ public class DefaultBeanExporter implements BeanExporter {
         if (writer == null) {
             throw new ExportException("You must set a fileWriter before exporting.");
         }
+        if (batchSize < 1) {
+            throw new ExportException("The batchSize must be greater than 0.");
+        }
         if (threads.get() >= maxThreads) {
             writer.writeTooManyRequests();
             return;
@@ -136,20 +142,16 @@ public class DefaultBeanExporter implements BeanExporter {
                                                  Class<T> beanClass, Map<String, Object> paraMap,
                                                  int batchSize) throws IOException {
         MapBuilder builder = MapUtils.builder(paraMap);
-        int pageNum = 0;
-        do {
-            List<T> list = beanSearcher.searchList(
-                    beanClass,
-                    builder.page(pageNum, batchSize).build()
-            );
+        int pageNum = startPage;
+        while (true) {
+            List<T> list = beanSearcher.searchList(beanClass, builder.page(pageNum, batchSize).build());
             writer.writeAndFlush(fields, list);
-            if (list.size() >= batchSize) {
-                tryDelay(batchDelay);
-                pageNum++;
-            } else {
-                pageNum = -1;
+            if (list.size() < batchSize) {
+                break;
             }
-        } while (pageNum > 0);
+            tryDelay(batchDelay);
+            pageNum++;
+        }
     }
 
     private void tryDelay(Duration delay) {
@@ -166,6 +168,10 @@ public class DefaultBeanExporter implements BeanExporter {
 
     public BeanSearcher getBeanSearcher() {
         return beanSearcher;
+    }
+
+    public int getStartPage() {
+        return startPage;
     }
 
     public int getDefaultBatchSize() {

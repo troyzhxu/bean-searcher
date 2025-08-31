@@ -122,6 +122,7 @@ public class BeanSearcherConfigOnExporter {
         BeanSearcherExProps conf = props.getExporter();
         DefaultBeanExporter beanExporter = new DefaultBeanExporter(
                 beanSearcher,
+                props.getParams().getPagination().getStart(),
                 conf.getBatchSize(),
                 conf.getBatchDelay(),
                 conf.getMaxExportingThreads(),

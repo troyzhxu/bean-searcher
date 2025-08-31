@@ -113,9 +113,10 @@ public class BeanSearcherConfigOnExporter {
     public BeanExporter beanExporter(BeanSearcher beanSearcher, ExportFieldResolver fieldResolver,
                                      ObjectProvider<FileWriter.Factory> fileWriterFactory,
                                      ObjectProvider<FileNamer> fileNamer,
-                                     BeanSearcherExProps props) {
+                                     BeanSearcherExProps props, BeanSearcherParams params) {
         DefaultBeanExporter beanExporter = new DefaultBeanExporter(
                 beanSearcher,
+                params.getPagination().getStart(),
                 props.getBatchSize(),
                 props.getBatchDelay(),
                 props.getMaxExportingThreads(),
