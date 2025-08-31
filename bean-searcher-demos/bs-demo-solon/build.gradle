@@ -16,19 +16,21 @@ description = "demo"
 
 
 dependencies {
-    implementation platform("org.noear:solon-parent:2.9.4")
+    implementation platform("org.noear:solon-parent:3.5.1")
 
     implementation("org.noear:solon-web")
     implementation("org.noear:solon-view-thymeleaf")
+    implementation("org.noear:solon-logging-logback")
+
     implementation "org.noear:wood-solon-plugin"
 
     implementation "cn.zhxu:bean-searcher-solon-plugin:4.5.0"
     implementation "cn.zhxu:bean-searcher-label:4.5.0"
+
     // 若想使用 JSON 字段转对象的功能，可以添加此依赖
     implementation "cn.zhxu:xjsonkit-snack3:1.5.1"
 
     implementation "com.zaxxer:HikariCP:4.0.3"
-
     runtimeOnly "com.h2database:h2:2.2.224"
 
     testImplementation("org.noear:solon-test")
