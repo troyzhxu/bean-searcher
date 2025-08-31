@@ -50,12 +50,12 @@ public class BeanSearcherConfigOnExporter {
 
     @Bean
     @ConditionalOnMissingBean(ExportFieldResolver.class)
-    public ExportFieldResolver exportFieldResolver(Expresser exprComputer, ObjectProvider<Formatter> formatter) {
+    public ExportFieldResolver exportFieldResolver(Expresser expresser, ObjectProvider<Formatter> formatter) {
         var f = formatter.getIfAvailable();
         if (f != null) {
-            return new DefaultExportFieldResolver(exprComputer, f);
+            return new DefaultExportFieldResolver(expresser, f);
         }
-        return new DefaultExportFieldResolver(exprComputer);
+        return new DefaultExportFieldResolver(expresser);
     }
 
     @Configuration

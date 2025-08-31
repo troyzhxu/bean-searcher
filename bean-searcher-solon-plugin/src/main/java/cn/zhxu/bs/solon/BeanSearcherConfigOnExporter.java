@@ -86,12 +86,12 @@ public class BeanSearcherConfigOnExporter {
 
     @Bean
     @Condition(onMissingBean = ExportFieldResolver.class)
-    public ExportFieldResolver exportFieldResolver(@Inject(required = false) Expresser exprComputer,
+    public ExportFieldResolver exportFieldResolver(@Inject(required = false) Expresser expresser,
                                                    @Inject(required = false) Formatter formatter) {
         if (formatter != null) {
-            return new DefaultExportFieldResolver(exprComputer, formatter);
+            return new DefaultExportFieldResolver(expresser, formatter);
         }
-        return new DefaultExportFieldResolver(exprComputer);
+        return new DefaultExportFieldResolver(expresser);
     }
 
     @Bean
