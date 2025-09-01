@@ -45,8 +45,10 @@ public class BeanSearcherConfigOnExporter {
         Map<String, Expression> expressionMap = new ConcurrentHashMap<>();
         String valueKey = "#_" + System.currentTimeMillis();
         return (expr, obj, value) -> {
-            String newExpr = expr.replaceAll(Expresser.VALUE_REF, valueKey);
-            Expression expression = expressionMap.computeIfAbsent(newExpr, expressionParser::parseExpression);
+            Expression expression = expressionMap.computeIfAbsent(expr, e -> {
+                String newExpr = e.replaceAll(Expresser.VALUE_REF, valueKey);
+                return expressionParser.parseExpression(newExpr);
+            });
             EvaluationContext context = new StandardEvaluationContext(obj);
             context.setVariable(valueKey.substring(1), value);
             return expression.getValue(context);
