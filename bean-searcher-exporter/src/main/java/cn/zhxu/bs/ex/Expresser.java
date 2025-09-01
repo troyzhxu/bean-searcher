@@ -19,6 +19,6 @@ public interface Expresser {
      * @param value 字段的值，在表达式中使用 @ 符引用
      * @return 计算结果
      */
-    Object compute(String expr, Object obj, Object value);
+    Object evaluate(String expr, Object obj, Object value);
 
 }

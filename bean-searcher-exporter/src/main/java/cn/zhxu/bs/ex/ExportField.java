@@ -37,7 +37,7 @@ public class ExportField {
      * @return 字段文本
      */
     public String text(Object obj) {
-        Object value = compute(obj, value(obj));
+        Object value = evaluate(obj, value(obj));
         if (StringUtils.isBlank(format) || formatter == null) {
             return value == null ? "" : value.toString();
         }
@@ -63,12 +63,12 @@ public class ExportField {
      * @param value 值
      * @return 计算结果
      */
-    public Object compute(Object obj, Object value) {
+    public Object evaluate(Object obj, Object value) {
         if (expresser == null || StringUtils.isBlank(expr)) {
             return value;
         }
         try {
-            return expresser.compute(expr, obj, value);
+            return expresser.evaluate(expr, obj, value);
         } catch (Exception e) {
             throw new IllegalStateException("Can not compute the expr [" + expr + "]", e);
         }
