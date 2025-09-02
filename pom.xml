@@ -9,7 +9,7 @@
 
 	<groupId>cn.zhxu</groupId>
 	<artifactId>bean-searcher-parent</artifactId>
-	<version>4.5.0</version>
+	<version>4.5.0.jdk8</version>
 
 	<packaging>pom</packaging>
 
@@ -22,13 +22,13 @@
 	</modules>
 
 	<properties>
-		<java.version>17</java.version>
+		<java.version>1.8</java.version>
 		<junit.version>5.11.4</junit.version>
 		<slf4j.version>2.0.17</slf4j.version>
 		<xjsonkit.version>1.6.0</xjsonkit.version>
-		<spring.boot.version>3.3.13</spring.boot.version>
-        <spring.version>6.1.21</spring.version>
-        <servlet.version>6.1.0</servlet.version>
+		<spring.boot.version>2.7.18</spring.boot.version>
+        <spring.version>5.3.39</spring.version>
+        <servlet.version>4.0.4</servlet.version>
 		<solon.version>3.5.1</solon.version>
 		<oracle.version>23.9.0.25.07</oracle.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -40,7 +40,7 @@
 			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
 		</license>
 	</licenses>
-	
+
 	<developers>
 		<developer>
 			<name>zhouxu</name>
@@ -54,7 +54,7 @@
 		<connection>scm:git:https://github.com/troyzhxu/bean-searcher.git</connection>
 		<developerConnection>scm:git:https://github.com/troyzhxu/bean-searcher.git</developerConnection>
 		<url>https://github.com/troyzhxu/bean-searcher</url>
-		<tag>v4.5.0</tag>
+		<tag>v4.5.0.jdk8</tag>
 	</scm>
 
 	<dependencies>
@@ -145,7 +145,7 @@
 				</executions>
 				<configuration>
 					<jdkToolchain>
-						<version>[17,21]</version>
+						<version>[1.8,17]</version>
 					</jdkToolchain>
                     <source>${java.version}</source>
                     <target>${java.version}</target>

@@ -102,7 +102,7 @@ public class BeanSearcherConfigOnExporter {
             return new CsvFileWriter(context.outputStream()) {
                 @Override
                 public void writeStart(List<ExportField> fields) throws IOException {
-                    String encodedName = URLEncoder.encode(CsvFileWriter.withFileExt(filename), StandardCharsets.UTF_8);
+                    String encodedName = URLEncoder.encode(CsvFileWriter.withFileExt(filename), StandardCharsets.UTF_8.name());
                     context.contentType("application/octet-stream");
                     context.headerAdd("Content-Disposition", "attachment; filename=" + encodedName);
                     context.headerAdd("Transfer-Encoding", "chunked");

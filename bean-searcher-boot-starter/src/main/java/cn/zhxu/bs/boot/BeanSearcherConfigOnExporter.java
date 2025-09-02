@@ -4,7 +4,6 @@ import cn.zhxu.bs.BeanSearcher;
 import cn.zhxu.bs.boot.prop.BeanSearcherExProps;
 import cn.zhxu.bs.boot.prop.BeanSearcherParams;
 import cn.zhxu.bs.ex.*;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -24,6 +23,7 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -58,7 +58,7 @@ public class BeanSearcherConfigOnExporter {
     @Bean
     @ConditionalOnMissingBean(ExportFieldResolver.class)
     public ExportFieldResolver exportFieldResolver(Expresser expresser, ObjectProvider<Formatter> formatter) {
-        var f = formatter.getIfAvailable();
+        Formatter f = formatter.getIfAvailable();
         if (f != null) {
             return new DefaultExportFieldResolver(expresser, f);
         }
@@ -88,7 +88,7 @@ public class BeanSearcherConfigOnExporter {
                 return new CsvFileWriter(response.getOutputStream()) {
                     @Override
                     public void writeStart(List<ExportField> fields) throws IOException {
-                        String encodedName = URLEncoder.encode(CsvFileWriter.withFileExt(filename), StandardCharsets.UTF_8);
+                        String encodedName = URLEncoder.encode(CsvFileWriter.withFileExt(filename), StandardCharsets.UTF_8.name());
                         response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
                         response.addHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + encodedName);
                         response.addHeader(HttpHeaders.TRANSFER_ENCODING, "chunked");
