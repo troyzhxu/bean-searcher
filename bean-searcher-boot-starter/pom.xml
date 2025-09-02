@@ -69,7 +69,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.oracle.database.jdbc</groupId>
-			<artifactId>ojdbc8</artifactId>
+			<artifactId>ojdbc17</artifactId>
 			<version>${oracle.version}</version>
 			<scope>provided</scope>
 		</dependency>

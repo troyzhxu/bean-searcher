@@ -58,7 +58,7 @@ public class BeanSearcherConfigOnExporter {
     @Bean
     @ConditionalOnMissingBean(ExportFieldResolver.class)
     public ExportFieldResolver exportFieldResolver(Expresser expresser, ObjectProvider<Formatter> formatter) {
-        var f = formatter.getIfAvailable();
+        Formatter f = formatter.getIfAvailable();
         if (f != null) {
             return new DefaultExportFieldResolver(expresser, f);
         }
