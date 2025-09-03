@@ -227,7 +227,7 @@ public class DefaultBeanExporter implements BeanExporter {
     }
 
     public void setDelayPolicy(DelayPolicy delayPolicy) {
-        this.delayPolicy = delayPolicy;
+        this.delayPolicy = Objects.requireNonNull(delayPolicy);
     }
 
 }
