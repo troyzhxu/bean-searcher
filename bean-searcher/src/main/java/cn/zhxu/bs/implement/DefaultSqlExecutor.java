@@ -195,6 +195,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
 
     protected Result executeQuery(Connection connection, String sql, List<Object> params,
                                   BeanMeta<?> beanMeta) throws SQLException {
+        boolean exception = false;
         long t0 = System.currentTimeMillis();
         PreparedStatement statement = null;
         try {
@@ -212,15 +213,23 @@ public class DefaultSqlExecutor implements SqlExecutor {
             return new Result(statement, resultSet);
         } catch (SQLException e) {
             closeQuietly(statement);
+            exception = true;
             throw e;
         } finally {
             long cost = System.currentTimeMillis() - t0;
-            afterExecute(beanMeta, sql, params, cost);
+            afterExecute(beanMeta, sql, params, cost, exception);
         }
     }
 
+    @Deprecated
     protected void afterExecute(BeanMeta<?> beanMeta, String sql, List<Object> params, long timeCost) {
-        if (timeCost >= slowSqlThreshold) {
+        afterExecute(beanMeta, sql, params, timeCost, false);
+    }
+
+    protected void afterExecute(BeanMeta<?> beanMeta, String sql, List<Object> params, long timeCost, boolean exception) {
+        if (exception) {
+            log.error("bean-searcher [{}ms] exception sql: [{}] params: {}", timeCost, sql, params);
+        } else if (timeCost >= slowSqlThreshold) {
             Class<?> beanClass = beanMeta.getBeanClass();
             SlowListener listener = slowListener;
             if (listener != null) {
