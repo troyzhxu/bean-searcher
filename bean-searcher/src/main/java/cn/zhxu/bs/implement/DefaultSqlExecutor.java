@@ -195,9 +195,10 @@ public class DefaultSqlExecutor implements SqlExecutor {
 
     protected Result executeQuery(Connection connection, String sql, List<Object> params,
                                   BeanMeta<?> beanMeta) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(sql);
         long t0 = System.currentTimeMillis();
+        PreparedStatement statement = null;
         try {
+            statement = connection.prepareStatement(sql);
             int size = params.size();
             for (int i = 0; i < size; i++) {
                 statement.setObject(i + 1, params.get(i));
