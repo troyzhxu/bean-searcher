@@ -25,6 +25,21 @@ export default defineConfig({
           }
         ]
       },
+      {
+        text: '生态',
+        items: [
+          {
+            text: 'Bean Searcher Label',
+            link: '/zoo/label/info',
+            activeMatch: '/zoo/'
+          },
+          {
+            text: 'Bean Searcher Exporter',
+            link: '/zoo/exporter/info',
+            activeMatch: '/zoo/'
+          }
+        ]
+      },
       { text: '💖赞助', link: '/support' },
       {
         text: '推荐',
@@ -115,7 +130,32 @@ export default defineConfig({
             ]
           }
         ]
-      }
+      },
+      '/zoo/': {
+        base: '/zoo', 
+        items: [
+          {
+            text: 'Bean Searcher Label',
+            base: '/zoo/label',
+            collapsed: false,
+            items: [
+              { text: '介绍', link: '/info' },
+              { text: 'Bean Searcher', link: '/bean-searcher' },
+              { text: 'What\'s New?', link: '/versions' },
+            ]
+          },
+          {
+            text: 'Bean Searcher Exporter',
+            base: '/zoo/exporter',
+            collapsed: false,
+            items: [
+              { text: '介绍', link: '/info' },
+              { text: '集成', link: '/integration' },
+              { text: '使用', link: '/use' },
+            ]
+          },
+        ]
+      },
     },
 
     outline: {
