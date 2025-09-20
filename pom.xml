@@ -9,7 +9,7 @@
 
 	<groupId>cn.zhxu</groupId>
 	<artifactId>bean-searcher-parent</artifactId>
-	<version>4.4.2</version>
+	<version>4.4.3</version>
 
 	<packaging>pom</packaging>
 
@@ -51,7 +51,7 @@
 		<connection>scm:git:https://github.com/troyzhxu/bean-searcher.git</connection>
 		<developerConnection>scm:git:https://github.com/troyzhxu/bean-searcher.git</developerConnection>
 		<url>https://github.com/troyzhxu/bean-searcher</url>
-		<tag>v4.4.2</tag>
+		<tag>v4.4.3</tag>
 	</scm>
 
 	<dependencies>
