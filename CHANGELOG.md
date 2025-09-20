@@ -1,3 +1,16 @@
+# v4.5.2 @ 2025-09-20
+
+## 🌻 Better
+
+* 优化 `EnumFieldConvertor`：以支持 short 与 byte 向枚举转换。此前只支持 String 与 int 类型。
+
+# v4.5.1 @ 2025-09-20
+
+## 🌻 Better
+
+* 优化 `DefaultSqlExecutor`：如果 SQL 执行报错，则 SQL 日志级别从 `DEBUG` 提升为 `ERROR`
+* 优化 `DefaultSqlExecutor`：如果 JDBC 在 `prepareStatement` 阶段报错，也打印出报错的 SQL
+
 # v4.5.0 @ 2025-06-26
 
 ## ✨ Features
@@ -6,6 +19,14 @@
 * 接口 `PageExtractor` 接口中新增 `extract` 方法，支持传入 `BeanMeta` 参数
 * 参数构建器新增 `groupRoot(String groupSeparator)` 方法，可将前端传来的普通参数组添加到根组内
 * 参数构建器新增 `groupRoot()` 方法，使用默认的组分割符，将前端传来的普通参数组添加到根组内
+
+# v4.4.3 @ 2025-09-20
+
+## 🌻 Better
+
+* 优化 `EnumFieldConvertor`：以支持 short 与 byte 向枚举转换。此前只支持 String 与 int 类型。
+* 优化 `DefaultSqlExecutor`：如果 SQL 执行报错，则 SQL 日志级别从 `DEBUG` 提升为 `ERROR`
+* 优化 `DefaultSqlExecutor`：如果 JDBC 在 `prepareStatement` 阶段报错，也打印出报错的 SQL
 
 # v4.4.2 @ 2025-04-28
 

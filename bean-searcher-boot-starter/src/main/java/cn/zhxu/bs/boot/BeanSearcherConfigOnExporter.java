@@ -124,6 +124,7 @@ public class BeanSearcherConfigOnExporter {
     public BeanExporter beanExporter(BeanSearcher beanSearcher, ExportFieldResolver fieldResolver,
                                      ObjectProvider<FileWriter.Factory> fileWriterFactory,
                                      ObjectProvider<FileNamer> fileNamer,
+                                     ObjectProvider<DelayPolicy> delayPolicy,
                                      BeanSearcherExProps props, BeanSearcherParams params) {
         DefaultBeanExporter beanExporter = new DefaultBeanExporter(
                 beanSearcher,
@@ -136,6 +137,7 @@ public class BeanSearcherConfigOnExporter {
         beanExporter.setFieldResolver(fieldResolver);
         BeanSearcherAutoConfiguration.ifAvailable(fileWriterFactory, beanExporter::setFileWriterFactory);
         BeanSearcherAutoConfiguration.ifAvailable(fileNamer, beanExporter::setFileNamer);
+        BeanSearcherAutoConfiguration.ifAvailable(delayPolicy, beanExporter::setDelayPolicy);
         return beanExporter;
     }
 

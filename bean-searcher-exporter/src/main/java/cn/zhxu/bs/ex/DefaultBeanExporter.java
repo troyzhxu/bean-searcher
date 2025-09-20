@@ -40,6 +40,7 @@ public class DefaultBeanExporter implements BeanExporter {
     private ExportFieldResolver fieldResolver = new DefaultExportFieldResolver();
     private FileWriter.Factory fileWriterFactory;
     private FileNamer fileNamer = FileNamer.SELF;
+    private DelayPolicy delayPolicy = new DelayPolicy.RandomInflate();
 
     public DefaultBeanExporter(BeanSearcher beanSearcher) {
         this(beanSearcher, 10, 30);
@@ -119,7 +120,7 @@ public class DefaultBeanExporter implements BeanExporter {
             writer.writeStart(fields);
             while (exportingThreads.get() >= maxExportingThreads) {
                 // 进入等待状态，等钱前面导出的人结束
-                tryDelay(Duration.ofMillis(10));
+                tryDelay(10);
             }
             try {
                 // 进入导出状态，最多 maxExportingThreads 个人同时导出
@@ -149,13 +150,12 @@ public class DefaultBeanExporter implements BeanExporter {
             if (list.size() < batchSize) {
                 break;
             }
-            tryDelay(batchDelay);
+            tryDelay(delayPolicy.batchDelay((int) batchDelay.toMillis(), exportingThreads.get(), maxExportingThreads));
             pageNum++;
         }
     }
 
-    private void tryDelay(Duration delay) {
-        long millis = delay.toMillis();
+    private void tryDelay(long millis) {
         if (millis == 0) {
             return;
         }
@@ -220,6 +220,14 @@ public class DefaultBeanExporter implements BeanExporter {
 
     public void setFileNamer(FileNamer fileNamer) {
         this.fileNamer = Objects.requireNonNull(fileNamer);
+    }
+
+    public DelayPolicy getDelayPolicy() {
+        return delayPolicy;
+    }
+
+    public void setDelayPolicy(DelayPolicy delayPolicy) {
+        this.delayPolicy = Objects.requireNonNull(delayPolicy);
     }
 
 }

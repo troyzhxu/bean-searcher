@@ -134,7 +134,8 @@ public class BeanSearcherConfigOnExporter {
     @Condition(onMissingBean = BeanExporter.class)
     public BeanExporter beanExporter(BeanSearcher beanSearcher, ExportFieldResolver fieldResolver,
                                      @Inject(required = false) FileWriter.Factory fileWriterFactory,
-                                     @Inject(required = false) FileNamer fileNamer) {
+                                     @Inject(required = false) FileNamer fileNamer,
+                                     @Inject(required = false) DelayPolicy delayPolicy) {
         BeanSearcherExProps conf = props.getExporter();
         DefaultBeanExporter beanExporter = new DefaultBeanExporter(
                 beanSearcher,
@@ -150,6 +151,9 @@ public class BeanSearcherConfigOnExporter {
         }
         if (fileNamer != null) {
             beanExporter.setFileNamer(fileNamer);
+        }
+        if (delayPolicy != null) {
+            beanExporter.setDelayPolicy(delayPolicy);
         }
         return beanExporter;
     }
