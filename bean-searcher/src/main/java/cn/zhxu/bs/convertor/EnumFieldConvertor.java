@@ -29,7 +29,9 @@ public class EnumFieldConvertor implements FieldConvertor.BFieldConvertor {
 
     @Override
     public boolean supports(FieldMeta meta, Class<?> valueType) {
-        if (valueType == String.class || valueType == int.class || valueType == Integer.class) {
+        if (valueType == String.class || valueType == int.class || valueType == Integer.class
+                || valueType == short.class || valueType == Short.class
+                || valueType == byte.class || valueType == Byte.class) {
             return Enum.class.isAssignableFrom(meta.getType());
         }
         return false;
@@ -42,6 +44,12 @@ public class EnumFieldConvertor implements FieldConvertor.BFieldConvertor {
         }
         if (value instanceof Integer) {
             return doConvert(meta.getType(), (Integer) value);
+        }
+        if (value instanceof Short) {
+            return doConvert(meta.getType(), (Short) value);
+        }
+        if (value instanceof Byte) {
+            return doConvert(meta.getType(), ((Byte) value));
         }
         throw new IllegalStateException("The supports(FieldMeta, Class<?>) method must be called first and return true before convert(FieldMeta, Object) method can be called");
     }
