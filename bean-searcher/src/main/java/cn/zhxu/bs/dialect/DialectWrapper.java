@@ -3,6 +3,8 @@ package cn.zhxu.bs.dialect;
 import cn.zhxu.bs.SqlWrapper;
 import cn.zhxu.bs.param.Paging;
 
+import java.util.Objects;
+
 public class DialectWrapper implements DialectSensor {
 
     private Dialect dialect = new MySqlDialect();
@@ -11,7 +13,7 @@ public class DialectWrapper implements DialectSensor {
     }
 
     public DialectWrapper(Dialect dialect) {
-        this.dialect = dialect;
+        this.dialect = Objects.requireNonNull(dialect);
     }
 
     /**
@@ -50,9 +52,18 @@ public class DialectWrapper implements DialectSensor {
         return dialect.allowHavingAlias();
     }
 
+    /**
+     * 当不支持布尔值时，框架将自动把布尔参数转换为 0 / 1 的整数值
+     * @return 是否允许条件参数中出现布尔值
+     * @since v4.6.0
+     */
+    public boolean allowBoolParams() {
+        return dialect.allowBoolParams();
+    }
+
     @Override
     public void setDialect(Dialect dialect) {
-        this.dialect = dialect;
+        this.dialect = Objects.requireNonNull(dialect);
     }
 
     public Dialect getDialect() {

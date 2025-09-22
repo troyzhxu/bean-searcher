@@ -24,17 +24,17 @@ public class SearchSql<T> {
      * 查询数据列表的SQL
      * */
     private String listSqlString;
-    
+
     /**
      * 查询聚族信息的SQL
      * */
     private String clusterSqlString;
-    
+
     /**
      * 查询数据列表的参数
      * */
     private final List<Object> listSqlParams = new ArrayList<>();
-    
+
     /**
      * 聚族查询的参数
      * */
@@ -44,7 +44,7 @@ public class SearchSql<T> {
      * 总条数别名
      */
     private String countAlias;
-    
+
     /**
      * 求和字段别名
      */
@@ -54,7 +54,7 @@ public class SearchSql<T> {
      * 是否应该查询聚合信息
      * */
     private boolean shouldQueryCluster;
-    
+
     /**
      * 是否应该查询数据列表
      * */
@@ -129,7 +129,7 @@ public class SearchSql<T> {
     public void addSummaryAlias(String alias) {
         summaryAliases.add(alias);
     }
-    
+
     public List<String> getSummaryAliases() {
         return summaryAliases;
     }
@@ -149,5 +149,5 @@ public class SearchSql<T> {
     public void setShouldQueryList(boolean shouldQueryList) {
         this.shouldQueryList = shouldQueryList;
     }
-    
+
 }

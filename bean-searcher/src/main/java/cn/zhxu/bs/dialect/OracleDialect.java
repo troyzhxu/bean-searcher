@@ -14,4 +14,9 @@ public class OracleDialect extends SqlPagination implements Dialect {
         return forPaginate(OFFSET_FETCH, fieldSelectSql, fromWhereSql, paging);
     }
 
+    @Override
+    public boolean allowBoolParams() {
+        return false;
+    }
+
 }

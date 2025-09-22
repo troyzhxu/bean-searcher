@@ -33,6 +33,10 @@ public interface Dialect {
      * @since v3.7.0
      */
     default boolean hasILike() {
+        // MySql: false
+        // PostgreSql: true
+        // SqlServer: false
+        // Oracle: false
         return false;
     }
 
@@ -45,7 +49,22 @@ public interface Dialect {
         // PostgreSql: false
         // SqlServer: false
         // Oracle: false
+        // DaMeng: false
         return false;
+    }
+
+    /**
+     * 当不支持布尔值时，框架将自动把布尔参数转换为 0 / 1 的整数值
+     * @return 是否允许条件参数中出现布尔值
+     * @since v4.6.0
+     */
+    default boolean allowBoolParams() {
+        // MySql: true
+        // PostgreSql: true
+        // SqlServer: false
+        // Oracle: false
+        // DaMeng: false
+        return true;
     }
 
 }
