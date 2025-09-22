@@ -137,6 +137,12 @@ public class BeanSearcherFieldConvertor {
      */
     private String listItemSeparator = ",";
 
+    /**
+     * 是否启用 {@link StringFieldConvertor }，默认为 true
+     * @since v4.6.0
+     */
+    private boolean useString = true;
+
     public boolean isUseNumber() {
         return useNumber;
     }
@@ -287,6 +293,14 @@ public class BeanSearcherFieldConvertor {
 
     public void setListItemSeparator(String listItemSeparator) {
         this.listItemSeparator = listItemSeparator;
+    }
+
+    public boolean isUseString() {
+        return useString;
+    }
+
+    public void setUseString(boolean useString) {
+        this.useString = useString;
     }
 
 }

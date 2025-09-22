@@ -154,6 +154,13 @@ public class BeanSearcherConvertors {
     }
 
     @Bean
+    @ConditionalOnProperty(name = "bean-searcher.field-convertor.use-string", havingValue = "true", matchIfMissing = true)
+    @ConditionalOnMissingBean(StringFieldConvertor.class)
+    public StringFieldConvertor stringFieldConvertor() {
+        return new StringFieldConvertor();
+    }
+
+    @Bean
     @ConditionalOnProperty(name = "bean-searcher.field-convertor.use-b2-m", havingValue = "true")
     @ConditionalOnMissingBean(B2MFieldConvertor.class)
     public B2MFieldConvertor b2mFieldConvertor(ObjectProvider<List<FieldConvertor.BFieldConvertor>> convertors) {
