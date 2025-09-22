@@ -99,6 +99,8 @@ public class BeanSearcherConfiguration {
                 return new PostgreSqlDialect();
             case SqlServer:
                 return new SqlServerDialect();
+            case DaMeng:
+                return new DaMengDialect();
         }
         throw new IllegalConfigException("Invalid config: [bean-searcher.sql." + propKey + ": " + dialectType + "]. " +
                 "Please see https://bs.zhxu.cn/guide/latest/advance.html#sql-%E6%96%B9%E8%A8%80%EF%BC%88dialect%EF%BC%89 for help.");
