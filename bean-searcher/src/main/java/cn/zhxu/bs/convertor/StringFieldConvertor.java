@@ -17,7 +17,7 @@ public class StringFieldConvertor implements FieldConvertor.BFieldConvertor {
     @Override
     public boolean supports(FieldMeta meta, Class<?> valueType) {
         if (meta.getType() == String.class) {
-            return valueType == Clob.class || valueType == Boolean.class || Number.class.isAssignableFrom(valueType);
+            return Clob.class.isAssignableFrom(valueType) || Number.class.isAssignableFrom(valueType) || valueType == Boolean.class;
         }
         return false;
     }
