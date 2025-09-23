@@ -113,6 +113,12 @@ public class BeanSearcherConfiguration {
     }
 
     @Bean
+    @Condition(onMissingBean = DialectSqlInterceptor.class)
+    public DialectSqlInterceptor dialectSqlInterceptor(Dialect dialect) {
+        return new DialectSqlInterceptor(dialect);
+    }
+
+    @Bean
     @Condition(onMissingBean = GroupResolver.class)
     public GroupResolver groupResolver(@Inject(required = false) ExprParser.Factory parserFactory) {
         DefaultGroupResolver groupResolver = new DefaultGroupResolver();

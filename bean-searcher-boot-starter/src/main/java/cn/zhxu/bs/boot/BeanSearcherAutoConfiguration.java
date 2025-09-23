@@ -129,6 +129,12 @@ public class BeanSearcherAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(DialectSqlInterceptor.class)
+    public DialectSqlInterceptor dialectSqlInterceptor(Dialect dialect) {
+        return new DialectSqlInterceptor(dialect);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(FieldOpPool.class)
     public FieldOpPool fieldOpPool(Dialect dialect, ObjectProvider<List<FieldOp>> fieldOps) {
         FieldOpPool pool = FieldOpPool.DEFAULT;
