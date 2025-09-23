@@ -10,7 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 方言 SQL 拦截器
+ * 方言 SQL 拦截器，在拦截器链中必须放在 {@link DynamicDialectSupport } 之后
  * @author Troy.Zhou
  * @since v4.6.0
  * */

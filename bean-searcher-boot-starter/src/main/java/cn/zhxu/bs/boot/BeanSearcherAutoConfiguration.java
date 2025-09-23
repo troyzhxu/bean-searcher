@@ -23,6 +23,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 
 import javax.sql.DataSource;
 import java.util.ArrayList;
@@ -122,6 +124,7 @@ public class BeanSearcherAutoConfiguration {
     }
 
     @Bean
+    @Order(Ordered.LOWEST_PRECEDENCE / 2)
     @ConditionalOnProperty(name = "bean-searcher.sql.dialect-dynamic", havingValue = "true")
     @ConditionalOnMissingBean(DynamicDialectSupport.class)
     public DynamicDialectSupport dynamicDialectSupport() {
@@ -129,6 +132,7 @@ public class BeanSearcherAutoConfiguration {
     }
 
     @Bean
+    @Order(Ordered.LOWEST_PRECEDENCE / 3)
     @ConditionalOnMissingBean(DialectSqlInterceptor.class)
     public DialectSqlInterceptor dialectSqlInterceptor(Dialect dialect) {
         return new DialectSqlInterceptor(dialect);
