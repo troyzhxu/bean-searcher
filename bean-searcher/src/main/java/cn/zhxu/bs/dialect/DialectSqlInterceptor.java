@@ -38,10 +38,12 @@ public class DialectSqlInterceptor extends DialectWrapper implements SqlIntercep
     }
 
     protected String processDialect(String sql, List<Object> params) {
-        // 其它方言处理
+        // TODO: 处理其它方言特性
+
         if (allowBoolParams()) {
             return sql;
         }
+        // 处理 true/false 字面量
         Matcher matcher = BOOL_PATTERN.matcher(sql);
         // 存储所有匹配到的结果
         StringBuilder newSql = new StringBuilder();
@@ -53,6 +55,10 @@ public class DialectSqlInterceptor extends DialectWrapper implements SqlIntercep
             // true 替换为 1，false 替换为 0
             newSql.append(it.startsWith("t") || it.startsWith("T") ? 1 : 0);
             lastIndex = start + it.length();
+        }
+        if (lastIndex == 0) {
+            // 没有匹配到，返回原 SQL
+            return sql;
         }
         return newSql.toString();
     }
