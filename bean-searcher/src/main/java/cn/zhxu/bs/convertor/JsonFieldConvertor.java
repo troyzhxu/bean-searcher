@@ -11,9 +11,10 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
+import java.sql.Clob;
 
 /**
- * [Json 字符串 to 对象] 字段转换器
+ * [Json 字符串 | byte[] | Clob to 对象] 字段转换器，v4.6.0 新增对 Clob 类型值转换
  * 与 {@link DefaultBeanReflector } 配合使用
  * @author Troy.Zhou @ 2021-11-01
  * @since v4.0.0
@@ -68,6 +69,10 @@ public class JsonFieldConvertor implements FieldConvertor.BFieldConvertor {
         // 某些 DB（例如：H2）的 JSON 字段，返回的是 byte[] 类型，这里做个兼容
         if (value instanceof byte[]) {
             return new String((byte[]) value, StandardCharsets.UTF_8);
+        }
+        // 某些 DB 的 TEXT 字段，返回的是 Clob 类型，这里做下兼容
+        if (value instanceof Clob) {
+            return StringFieldConvertor.fromClob((Clob) value);
         }
         // 还有些 DB 的 JSON 字段，返回的不是 byte[] 也不是 String, 当通过 toString 方法就可以得到它的 JSON 文本
         return value.toString();

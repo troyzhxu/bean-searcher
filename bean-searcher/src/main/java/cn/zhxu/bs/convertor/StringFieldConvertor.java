@@ -25,14 +25,17 @@ public class StringFieldConvertor implements FieldConvertor.BFieldConvertor {
     @Override
     public Object convert(FieldMeta meta, Object value) {
         if (value instanceof Clob) {
-            Clob clob = (Clob) value;
-            try {
-                return clob.getSubString(1, (int) clob.length());
-            } catch (SQLException e) {
-                throw new SearchException("can not get string from Clob object: " + e.getMessage(), e);
-            }
+            return fromClob((Clob) value);
         }
         return value.toString();
+    }
+
+    public static String fromClob(Clob clob) {
+        try {
+            return clob.getSubString(1, (int) clob.length());
+        } catch (SQLException e) {
+            throw new SearchException("can not get string from Clob object: " + e.getMessage(), e);
+        }
     }
 
 }
