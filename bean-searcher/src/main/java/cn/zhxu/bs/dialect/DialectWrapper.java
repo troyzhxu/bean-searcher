@@ -45,7 +45,7 @@ public class DialectWrapper implements DialectSensor {
     }
 
     /**
-     * @return 是否允许在 having 语句中使用别名
+     * @return 是否允许在 groupBy 与 having 语句中使用别名
      * @since v4.3.0
      */
     public boolean allowHavingAlias() {
