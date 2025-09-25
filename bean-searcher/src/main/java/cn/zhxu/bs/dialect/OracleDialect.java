@@ -15,7 +15,7 @@ public class OracleDialect extends SqlPagination implements Dialect {
     }
 
     @Override
-    public boolean allowBoolParams() {
+    public boolean allowBoolLiterals() {
         return false;
     }
 

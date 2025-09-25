@@ -73,8 +73,8 @@ public class DynamicDialect implements Dialect {
     }
 
     @Override
-    public boolean allowBoolParams() {
-        return lookup().allowBoolParams();
+    public boolean allowBoolLiterals() {
+        return lookup().allowBoolLiterals();
     }
 
     public String getDefaultKey() {

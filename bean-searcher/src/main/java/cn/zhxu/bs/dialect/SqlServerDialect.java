@@ -17,7 +17,7 @@ public class SqlServerDialect extends SqlPagination implements Dialect {
     }
 
     @Override
-    public boolean allowBoolParams() {
+    public boolean allowBoolLiterals() {
         return false;
     }
 

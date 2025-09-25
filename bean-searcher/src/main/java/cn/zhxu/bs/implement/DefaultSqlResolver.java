@@ -83,21 +83,21 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
                 searchSql.addListSqlParams(listSql.getParas());
             }
         }
-        if (!allowBoolParams()) {
-            convertBoolToInt(searchSql.getClusterSqlParams());
-            convertBoolToInt(searchSql.getListSqlParams());
-        }
+//        if (!allowBoolParams()) {
+//            convertBoolToInt(searchSql.getClusterSqlParams());
+//            convertBoolToInt(searchSql.getListSqlParams());
+//        }
         return searchSql;
     }
 
-    private void convertBoolToInt(List<Object> params) {
-        for (int i = 0; i < params.size(); i++) {
-            Object param = params.get(i);
-            if (param instanceof Boolean) {
-                params.set(i, ((Boolean) param) ? 1 : 0);
-            }
-        }
-    }
+//    private void convertBoolToInt(List<Object> params) {
+//        for (int i = 0; i < params.size(); i++) {
+//            Object param = params.get(i);
+//            if (param instanceof Boolean) {
+//                params.set(i, ((Boolean) param) ? 1 : 0);
+//            }
+//        }
+//    }
 
     protected <T> SqlWrapper<Object> buildFieldSelectSql(BeanMeta<T> beanMeta, List<String> fetchFields, Map<String, Object> paraMap) {
         SqlWrapper<Object> sqlWrapper = new SqlWrapper<>();

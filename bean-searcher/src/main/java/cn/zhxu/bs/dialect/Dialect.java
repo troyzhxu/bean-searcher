@@ -54,11 +54,11 @@ public interface Dialect {
     }
 
     /**
-     * 当不支持布尔值时，框架将自动把布尔参数转换为 0 / 1 的整数值
-     * @return 是否允许条件参数中出现布尔值
+     * 当不支持布尔字面量时，框架将自动把它转换为 0 / 1 的整数值
+     * @return 是否允许条件参数中出现布尔字面量
      * @since v4.6.0
      */
-    default boolean allowBoolParams() {
+    default boolean allowBoolLiterals() {
         // MySql: true
         // PostgreSql: true
         // SqlServer: false

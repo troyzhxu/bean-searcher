@@ -40,7 +40,7 @@ public class DialectSqlInterceptor extends DialectWrapper implements SqlIntercep
     protected String processDialect(String sql, List<Object> params) {
         // TODO: 处理其它方言特性
 
-        if (allowBoolParams()) {
+        if (allowBoolLiterals()) {
             return sql;
         }
         // 处理 true/false 字面量
