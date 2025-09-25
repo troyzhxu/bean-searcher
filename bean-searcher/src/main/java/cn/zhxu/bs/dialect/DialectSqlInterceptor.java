@@ -4,7 +4,6 @@ import cn.zhxu.bs.SearchSql;
 import cn.zhxu.bs.SqlInterceptor;
 import cn.zhxu.bs.param.FetchType;
 
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,8 +15,11 @@ import java.util.regex.Pattern;
  * */
 public class DialectSqlInterceptor extends DialectWrapper implements SqlInterceptor {
 
-    // 正则表达式：匹配true和false字面量，前后可以是空格、等于号、逗号，圆括号，或者位于文本开头与结尾
-    static final Pattern BOOL_PATTERN = Pattern.compile("(?<=^|[ ,=<>()])(true|false)(?=$|[ ,=<>()])", Pattern.CASE_INSENSITIVE);
+    // 正则表达式：匹配true和false字面量，前后可以是空格、等于号、逗号，圆括号，或者位于文本中间与结尾
+    static final Pattern BOOL_PATTERN = Pattern.compile(
+            "[=<>]\\s*(true|false)(\\s|\\)|$)|(\\s|\\()(true|false)\\s*[=<>!]",
+            Pattern.CASE_INSENSITIVE
+    );
 
     public DialectSqlInterceptor() {
     }
@@ -29,17 +31,15 @@ public class DialectSqlInterceptor extends DialectWrapper implements SqlIntercep
     @Override
     public <T> SearchSql<T> intercept(SearchSql<T> searchSql, Map<String, Object> paraMap, FetchType fetchType) {
         if (searchSql.isShouldQueryList()) {
-            searchSql.setListSqlString(processDialect(searchSql.getListSqlString(), searchSql.getListSqlParams()));
+            searchSql.setListSqlString(processDialect(searchSql.getListSqlString()));
         }
         if (searchSql.isShouldQueryCluster()) {
-            searchSql.setClusterSqlString(processDialect(searchSql.getClusterSqlString(), searchSql.getClusterSqlParams()));
+            searchSql.setClusterSqlString(processDialect(searchSql.getClusterSqlString()));
         }
         return searchSql;
     }
 
-    protected String processDialect(String sql, List<Object> params) {
-        // TODO: 处理其它方言特性
-
+    protected String processDialect(String sql) {
         if (allowBoolLiterals()) {
             return sql;
         }
@@ -52,14 +52,25 @@ public class DialectSqlInterceptor extends DialectWrapper implements SqlIntercep
             int start = matcher.start();
             newSql.append(sql, lastIndex, start);
             String it = matcher.group();
-            // true 替换为 1，false 替换为 0
-            newSql.append(it.startsWith("t") || it.startsWith("T") ? 1 : 0);
+
+            boolean isTrue = it.contains("t") || it.contains("T");
+            int lateralEnd = it.indexOf('e');
+            if (lateralEnd < 0) {
+                lateralEnd = it.indexOf('E');
+            }
+            int lateralStart = lateralEnd - (isTrue ? 3 : 4);
+
+            newSql.append(it, 0, lateralStart)
+                    .append(isTrue ? 1 : 0)
+                    .append(it, lateralEnd + 1, it.length());
+
             lastIndex = start + it.length();
         }
         if (lastIndex == 0) {
             // 没有匹配到，返回原 SQL
             return sql;
         }
+        newSql.append(sql, lastIndex, sql.length());
         return newSql.toString();
     }
 
