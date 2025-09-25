@@ -29,7 +29,7 @@ public class AlwaysFalse implements FieldOp {
 
     @Override
     public List<Object> operate(StringBuilder sqlBuilder, OpPara opPara) {
-        sqlBuilder.append("0");
+        sqlBuilder.append("1=0");
         return Collections.emptyList();
     }
 
