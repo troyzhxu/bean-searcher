@@ -128,7 +128,7 @@ public class BaseSearcher implements Searcher {
             return emptyResult(beanMeta, fetchType);
         }
         SearchSql<T> searchSql = sqlResolver.resolve(beanMeta, searchParam);
-        SqlResult<T> sqlResult = sqlExecutor.execute(intercept(searchSql, paraMap, fetchType));
+        SqlResult<T> sqlResult = sqlExecutor.execute(intercept(searchSql, fetchType));
         sqlResult.setPageSize(searchParam.getPageSize());
         return sqlResult;
     }
@@ -141,7 +141,8 @@ public class BaseSearcher implements Searcher {
         return new SqlResult<>(searchSql, SqlResult.ResultSet.EMPTY, SqlResult.ResultSet.EMPTY);
     }
 
-    protected <T> SearchSql<T> intercept(SearchSql<T> searchSql, Map<String, Object> paraMap, FetchType fetchType) {
+    protected <T> SearchSql<T> intercept(SearchSql<T> searchSql, FetchType fetchType) {
+        Map<String, Object> paraMap = searchSql.getSearchParam().getParaMap();
         for (SqlInterceptor interceptor : interceptors) {
             searchSql = interceptor.intercept(searchSql, paraMap, fetchType);
         }
