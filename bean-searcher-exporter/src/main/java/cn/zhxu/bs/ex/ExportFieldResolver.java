@@ -11,9 +11,15 @@ public interface ExportFieldResolver {
 
     /**
      * 解析导出字段
-     * @param clazz 数据实体类
+     * @param beanClass 数据实体类
      * @return 导出字段列表
      */
-    List<ExportField> resolve(Class<?> clazz);
+    List<ExportField> resolve(Class<?> beanClass);
+
+    /**
+     * 清除缓存
+     * @since v4.8.0
+     */
+    void clearCache();
 
 }

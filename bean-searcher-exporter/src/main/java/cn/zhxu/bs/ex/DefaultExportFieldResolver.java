@@ -3,6 +3,7 @@ package cn.zhxu.bs.ex;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 默认的导出字段解析器
@@ -11,6 +12,7 @@ import java.util.*;
  */
 public class DefaultExportFieldResolver implements ExportFieldResolver {
 
+    private final Map<Class<?>, List<ExportField>> cache = new ConcurrentHashMap<>();
     private final Expresser expresser;
     private final Formatter formatter;
 
@@ -28,7 +30,29 @@ public class DefaultExportFieldResolver implements ExportFieldResolver {
     }
 
     @Override
-    public List<ExportField> resolve(Class<?> clazz) {
+    public List<ExportField> resolve(Class<?> beanClass) {
+        List<ExportField> exportFields = cache.get(beanClass);
+        if (exportFields != null) {
+            return exportFields;
+        }
+        synchronized (cache) {
+            List<ExportField> fields = cache.get(beanClass);
+            if (fields == null) {
+                fields = resolveFields(beanClass);
+                cache.put(beanClass, fields);
+            }
+            return fields;
+        }
+    }
+
+    @Override
+    public void clearCache() {
+        synchronized (cache) {
+            cache.clear();
+        }
+    }
+
+    public List<ExportField> resolveFields(Class<?> clazz) {
         List<ExportField> exFields = new ArrayList<>();
         Set<String> names = new HashSet<>();
         while (clazz != Object.class) {
