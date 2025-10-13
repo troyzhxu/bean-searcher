@@ -87,7 +87,8 @@ public class DefaultExportFieldResolver implements ExportFieldResolver {
                 export.name(),
                 export.idx(),
                 export.expr(),
-                export.format()
+                export.format(),
+                export.onlyIf()
         );
     }
 
