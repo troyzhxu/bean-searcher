@@ -12,7 +12,7 @@ export default defineConfig({
     nav: [
       { text: 'Guide', link: '/en/guide/info/bean-searcher', activeMatch: '/guide/' },
       {
-        text: 'v4.8.0',
+        text: 'v4.8.1',
         items: [
           {
             text: 'Changelog',
