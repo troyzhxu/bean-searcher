@@ -16,7 +16,10 @@ public class DefaultSnippetResolver implements SnippetResolver {
 
     private String paramPrefix = ":";
 
-    private String[] paramEndFlags = new String[] { " ", "\t", "\n", "\r", "+", "-", "*", "/", "=", "!", ">", "<", ",", ")", "'", "%", "." };
+    private String[] paramEndFlags = new String[] {
+            " ", "\t", "\n", "\r", "+", "-", "*", "/", "=", "!", ">", "<",
+            ",", "(", ")", "'", "%", ".", "|", "\\", "&", "^", "?", ";"
+    };
 
     private final char[] quotations = new char[] { '\'', '"' };
 
@@ -60,7 +63,12 @@ public class DefaultSnippetResolver implements SnippetResolver {
             // 判断嵌入参数是否不在引号内部，并且不是以 :name: 的形式
             if (quotationCount1 % 2 == 0 && !endWithPrefix) {
                 param.setJdbcPara(true);
+                int len = fragment.length();
                 fragment = fragment.replaceFirst(sqlName, "?");
+                if (fragment.length() > len) {
+                    // 替换之后反而变长，说明 sqlName 解析有问题
+                    throw new SearchException("Can not resolve sql fragment: \"" + fragment + "\", It might be due to an incorrect configuration of paramEndFlags.");
+                }
                 // sqlSnippet 长度变短，寻找下标也该相应提前
                 nIdx = nIdx - sqlName.length() + 1;
             }
