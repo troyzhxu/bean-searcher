@@ -51,7 +51,7 @@ public class OrBuilder extends Builder<OrBuilder> {
      *     .build();
      * // 生成条件：(age = 20) or (name like '张%' and name like '三%')
      * }</pre>
-     * @param condition 或条件构建器
+     * @param condition 且条件构建器
      * @return MapBuilder
      * @since v4.3.0
      */
