@@ -15,10 +15,32 @@
 
 ## ✨ Features
 
-* 注解 `@SearchBean` 新增 `maxSize` 与 `maxOffset` 属性，可以为单个检索类设置独风控值，覆盖全局配置
-* 接口 `PageExtractor` 接口中新增 `extract` 方法，支持传入 `BeanMeta` 参数
-* 参数构建器新增 `groupRoot(String groupSeparator)` 方法，可将前端传来的普通参数组添加到根组内
-* 参数构建器新增 `groupRoot()` 方法，使用默认的组分割符，将前端传来的普通参数组添加到根组内
+* Bean Searcher
+  - 注解 `@SearchBean` 新增 `maxSize` 与 `maxOffset` 属性，可以为单个检索类设置独风控值，覆盖全局配置
+  - 接口 `PageExtractor` 接口中新增 `extract` 方法，支持传入 `BeanMeta` 参数
+  - 参数构建器新增 `groupRoot(String groupSeparator)` 方法，可将前端传来的普通参数组添加到根组内
+  - 参数构建器新增 `groupRoot()` 方法，使用默认的组分割符，将前端传来的普通参数组添加到根组内
+* Bean Searcher Exporter（**首发**：数据文件导出模块）
+  - 新增 `Export` 注解，用于标记需要导出的字段（支持表达式转换值）
+  - 新增 `BeanExporter` 导出器，让数据导出与查询同样简单（支持**分页实时**导出，前端**立即响应**，且内置**并发控制**）
+  - 新增 `FileWriter` 接口，用于扩展导出文件类型，默认实现 `CsvFileWriter` 可导出 CSV 文件
+  - 可自定义导出文件名装饰器 `FileNamer`
+  - 可自定义数据批次加载延迟策略 `DelayPolicy`，默认采用随机放大延时策略 `DelayPolicy.RandomInflate`
+  - 等等..
+* Bean Searcher Boot Starter
+  - 新增 `bean-searcher.exporter.batch-size` 配置项：指定数据导出时默认每批次查询的条数, 默认为 `1000`
+  - 新增 `bean-searcher.exporter.batch-delay` 配置项：每批次查询后的初始延迟时间，默认 100毫秒，用于降低数据库压力, 默认为 `100ms`
+  - 新增 `bean-searcher.exporter.max-exporting-threads` 配置项：最大同时导出的并发数，当同时导出操作的人达到这个值（默认 `10`）后，新导出的人会处于等待状态
+  - 新增 `bean-searcher.exporter.max-threads` 配置项：最大线程数，当同时导出操作的人太多（默认 `30`），将不再接受新的导出（新导出的人会收到稍后操作的提示，或抛出异常，具体行为可由 `FileWriter` 决定）
+  - 新增 `bean-searcher.exporter.timestamp-filename` 配置项：导出的文件名是否自动拼上当前时间戳，默认 `true`
+  - 新增 `bean-searcher.exporter.too-many-requests-message` 配置项：导出人数太多时返回的提示信息，默认是 "大人请息怒，当前导出数据的人实在太多了，请稍后再试一下子哈！"
+* Bean Searcher Solon Plugin
+  - 新增 `bean-searcher.exporter.batch-size` 配置项：指定数据导出时默认每批次查询的条数, 默认为 `1000`
+  - 新增 `bean-searcher.exporter.batch-delay` 配置项：每批次查询后的初始延迟时间，默认 100毫秒，用于降低数据库压力, 默认为 `100ms`
+  - 新增 `bean-searcher.exporter.max-exporting-threads` 配置项：最大同时导出的并发数，当同时导出操作的人达到这个值（默认 `10`）后，新导出的人会处于等待状态
+  - 新增 `bean-searcher.exporter.max-threads` 配置项：最大线程数，当同时导出操作的人太多（默认 `30`），将不再接受新的导出（新导出的人会收到稍后操作的提示，或抛出异常，具体行为可由 `FileWriter` 决定）
+  - 新增 `bean-searcher.exporter.timestamp-filename` 配置项：导出的文件名是否自动拼上当前时间戳，默认 `true`
+  - 新增 `bean-searcher.exporter.too-many-requests-message` 配置项：导出人数太多时返回的提示信息，默认是 "大人请息怒，当前导出数据的人实在太多了，请稍后再试一下子哈！"
 
 # v4.4.3 @ 2025-09-20
 
