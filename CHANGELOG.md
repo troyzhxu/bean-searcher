@@ -1,8 +1,31 @@
+# v4.6.0 @ 2025-09-25
+
+## ✨ Features
+
+* Bean Searcher
+  - 方言 `Dialect` 接口新增 `allowBoolLiterals(): boolean` 方法定义，用于指示数据库是否支持布尔字面量
+  - 新增 `DialectSqlInterceptor` 组件，用于当数据库不支持布尔字面量时，将用户 SQL 中的布尔字面量自动转换为 `1` 和 `0`
+  - 新增 `DaMengDialect` 方言实现，用于兼容达梦数据库
+  - 新增 `StringFieldConvertor`, 可将 JDBC 返回的 `Clob`、`Number`、`Boolean` 与 `Date` 类型的值转换为 `String`（可兼容达梦数据库对 `TEXT` 类型字段返回 `Clob` 的情况）
+
+* Bean Searcher Boot Starter
+  - 新增 `bean-searcher.field-convertor.use-string` 配置项，可是否启动 `StringFieldConvertor`, 默认为 `true`
+
+* Bean Searcher Solon Plugin
+  - 新增 `bean-searcher.field-convertor.use-string` 配置项，可是否启动 `StringFieldConvertor`, 默认为 `true`
+
+* JDK 版本要求：JDK 17+
+
+## 同时发布 v4.6.0.jdk8 版本
+
 # v4.5.2 @ 2025-09-20
 
 ## 🌻 Better
 
 * 优化 `EnumFieldConvertor`：以支持 short 与 byte 向枚举转换。此前只支持 String 与 int 类型。
+* JDK 版本要求：JDK 17+
+
+## 同时发布 v4.5.2.jdk8 版本
 
 # v4.5.1 @ 2025-09-20
 
@@ -10,6 +33,7 @@
 
 * 优化 `DefaultSqlExecutor`：如果 SQL 执行报错，则 SQL 日志级别从 `DEBUG` 提升为 `ERROR`
 * 优化 `DefaultSqlExecutor`：如果 JDBC 在 `prepareStatement` 阶段报错，也打印出报错的 SQL
+* JDK 版本要求：JDK 17+
 
 # v4.5.0 @ 2025-06-26
 
@@ -19,6 +43,9 @@
 * 接口 `PageExtractor` 接口中新增 `extract` 方法，支持传入 `BeanMeta` 参数
 * 参数构建器新增 `groupRoot(String groupSeparator)` 方法，可将前端传来的普通参数组添加到根组内
 * 参数构建器新增 `groupRoot()` 方法，使用默认的组分割符，将前端传来的普通参数组添加到根组内
+* JDK 版本要求：JDK 17+
+
+## 同时发布 v4.5.0.jdk8 版本
 
 # v4.4.3 @ 2025-09-20
 
