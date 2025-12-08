@@ -10,12 +10,13 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.sql.Clob;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * [字符串 to List] 字段转换器
+ * [String | Clob to List] 字段转换器，v4.6.0 新增对 Clob 类型值转换
  * 与 {@link DefaultBeanReflector } 配合使用
  * @author Troy.Zhou @ 2021-11-01
  * @since v4.0.0
@@ -37,7 +38,7 @@ public class ListFieldConvertor implements FieldConvertor.BFieldConvertor {
 
     @Override
     public boolean supports(FieldMeta meta, Class<?> valueType) {
-        if (valueType == String.class) {
+        if (valueType == String.class || Clob.class.isAssignableFrom(valueType)) {
             return meta.getType() == List.class && meta.getDbType() == DbType.UNKNOWN;
         }
         return false;
@@ -45,7 +46,9 @@ public class ListFieldConvertor implements FieldConvertor.BFieldConvertor {
 
     @Override
     public Object convert(FieldMeta meta, Object value) {
-        String strValue = (String) value;
+        String strValue = value instanceof Clob
+                ? StringFieldConvertor.fromClob((Clob) value)
+                : (String) value;
         if (StringUtils.isBlank(strValue)) {
             return Collections.emptyList();
         }

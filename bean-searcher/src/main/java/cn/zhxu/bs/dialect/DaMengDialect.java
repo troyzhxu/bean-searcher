@@ -4,14 +4,15 @@ import cn.zhxu.bs.SqlWrapper;
 import cn.zhxu.bs.param.Paging;
 
 /**
- * Oracle 12c+ (2013年6月发布) 方言实现
+ * 达梦数据库 方言实现
  * @author Troy.Zhou
+ * @since v4.6.0
  * */
-public class OracleDialect extends SqlPagination implements Dialect {
+public class DaMengDialect extends SqlPagination implements Dialect {
 
     @Override
     public SqlWrapper<Object> forPaginate(String fieldSelectSql, String fromWhereSql, Paging paging) {
-        return forPaginate(OFFSET_FETCH, fieldSelectSql, fromWhereSql, paging);
+        return forPaginate(OFFSET_LIMIT, fieldSelectSql, fromWhereSql, paging);
     }
 
     @Override

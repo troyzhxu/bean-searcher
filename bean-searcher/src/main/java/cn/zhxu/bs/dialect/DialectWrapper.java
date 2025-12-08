@@ -3,6 +3,8 @@ package cn.zhxu.bs.dialect;
 import cn.zhxu.bs.SqlWrapper;
 import cn.zhxu.bs.param.Paging;
 
+import java.util.Objects;
+
 public class DialectWrapper implements DialectSensor {
 
     private Dialect dialect = new MySqlDialect();
@@ -11,7 +13,7 @@ public class DialectWrapper implements DialectSensor {
     }
 
     public DialectWrapper(Dialect dialect) {
-        this.dialect = dialect;
+        this.dialect = Objects.requireNonNull(dialect);
     }
 
     /**
@@ -43,16 +45,25 @@ public class DialectWrapper implements DialectSensor {
     }
 
     /**
-     * @return 是否允许在 having 语句中使用别名
+     * @return 是否允许在 groupBy 与 having 语句中使用别名
      * @since v4.3.0
      */
     public boolean allowHavingAlias() {
         return dialect.allowHavingAlias();
     }
 
+    /**
+     * 当不支持布尔字面量时，框架将自动把它转换为 0 / 1 的整数值
+     * @return 是否允许条件参数中出现布尔字面量
+     * @since v4.6.0
+     */
+    public boolean allowBoolLiterals() {
+        return dialect.allowBoolLiterals();
+    }
+
     @Override
     public void setDialect(Dialect dialect) {
-        this.dialect = dialect;
+        this.dialect = Objects.requireNonNull(dialect);
     }
 
     public Dialect getDialect() {

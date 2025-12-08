@@ -23,6 +23,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 
 import javax.sql.DataSource;
 import java.util.ArrayList;
@@ -114,16 +116,26 @@ public class BeanSearcherAutoConfiguration {
                 return new PostgreSqlDialect();
             case SqlServer:
                 return new SqlServerDialect();
+            case DaMeng:
+                return new DaMengDialect();
         }
         throw new IllegalConfigException("Invalid config: [bean-searcher.sql." + propKey + ": " + dialectType + "]. " +
                 "Please see https://bs.zhxu.cn/guide/latest/advance.html#sql-%E6%96%B9%E8%A8%80%EF%BC%88dialect%EF%BC%89 for help.");
     }
 
     @Bean
+    @Order(Ordered.LOWEST_PRECEDENCE / 2)
     @ConditionalOnProperty(name = "bean-searcher.sql.dialect-dynamic", havingValue = "true")
     @ConditionalOnMissingBean(DynamicDialectSupport.class)
     public DynamicDialectSupport dynamicDialectSupport() {
         return new DynamicDialectSupport();
+    }
+
+    @Bean
+    @Order(Ordered.LOWEST_PRECEDENCE / 3)
+    @ConditionalOnMissingBean(DialectSqlInterceptor.class)
+    public DialectSqlInterceptor dialectSqlInterceptor(Dialect dialect) {
+        return new DialectSqlInterceptor(dialect);
     }
 
     @Bean

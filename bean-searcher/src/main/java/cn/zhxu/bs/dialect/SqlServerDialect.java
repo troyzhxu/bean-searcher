@@ -16,4 +16,9 @@ public class SqlServerDialect extends SqlPagination implements Dialect {
         return forPaginate(OFFSET_FETCH, fieldSelectSql, fromWhereSql, paging);
     }
 
+    @Override
+    public boolean allowBoolLiterals() {
+        return false;
+    }
+
 }

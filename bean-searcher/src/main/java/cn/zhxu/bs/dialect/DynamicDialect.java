@@ -72,6 +72,11 @@ public class DynamicDialect implements Dialect {
         return lookup().allowHavingAlias();
     }
 
+    @Override
+    public boolean allowBoolLiterals() {
+        return lookup().allowBoolLiterals();
+    }
+
     public String getDefaultKey() {
         return defaultKey;
     }

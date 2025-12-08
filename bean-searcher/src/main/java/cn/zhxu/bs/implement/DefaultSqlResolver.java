@@ -3,7 +3,6 @@ package cn.zhxu.bs.implement;
 import cn.zhxu.bs.*;
 import cn.zhxu.bs.dialect.Dialect;
 import cn.zhxu.bs.dialect.DialectWrapper;
-import cn.zhxu.bs.dialect.MySqlDialect;
 import cn.zhxu.bs.group.Group;
 import cn.zhxu.bs.group.GroupPair;
 import cn.zhxu.bs.param.FetchType;
@@ -229,7 +228,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
                             String field = name != null ? name : param.getName();
                             FieldMeta meta = beanMeta.requireFieldMeta(field);
                             SqlSnippet sql = meta.getFieldSql();
-                            // where 中不能使用别名，having 中 MySQL 可以使用别名，PgSQL 中不可以，下个版本改为使用方言判断
+                            // where 中不能使用别名，having 中只有 MySQL 中可以使用别名
                             // 如果是 group by having 且 Select 列表中 存在该字段，并且 allowHavingAlias（例如：MySQL），则使用该字段的别名
                             if (isHaving && fetchFields.contains(field) && allowHavingAlias()) {
                                 sql = new SqlSnippet(meta.getDbAlias());

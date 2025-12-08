@@ -23,7 +23,11 @@ public class BeanSearcherSql {
          * alias for PostgreSQL
          */
         PgSQL,
-        SqlServer
+        SqlServer,
+        /**
+         * 达梦数据库
+         */
+        DaMeng,
     }
 
     /**
