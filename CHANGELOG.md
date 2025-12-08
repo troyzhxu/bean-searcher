@@ -1,3 +1,32 @@
+# v4.8.2 @ 2025-11-18
+
+## 🐛 Bug Fixes（Bean Searcher Exporter）
+
+* 优化 `ExportField` 组件：当字段值为 `null` 时，返回空字符串 `""`，不调用格式化器 
+
+## 同时发布 v4.8.2.jdk8 版本
+
+# v4.8.1 @ 2025-10-28
+
+## 🌻 Better（Bean Searcher）
+
+* 优化 `DefaultSnippetResolver` 组件
+  - 优化异常处理机制：当遇到不能处理的未知 SQL 语法时，抛出异常告诉用户哪段 SQL 不能解析
+  - 兼容 PgSQL 的 `||` 字符串连接符
+
+# v4.8.0 @ 2025-10-13
+
+## ✨ Features（Bean Searcher Exporter）
+
+* 注解 `Export` 新增 `onlyIf` 属性，用于定义字段导出条件，支持表达式语法
+  - 支持使用参数名引用检索参数（paraMap）中的值
+  - 在 Spring 环境下支持 SpEL 表达式语法
+  - 在 Solon 环境下支持 SnEL 表达式语法
+* 组件 `ExportFieldResolver` 添加导出字段解析缓存机制
+  - 引入 `ConcurrentHashMap` 缓存导出字段解析结果，提高性能
+  - 新增 `clearCache` 方法可用于手动清理缓存
+* JDK 版本要求：JDK 17+
+
 # v4.7.1 @ 2025-10-11
 
 ## ✨ Features
