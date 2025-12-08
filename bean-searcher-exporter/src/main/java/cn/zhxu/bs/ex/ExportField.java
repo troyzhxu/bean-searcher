@@ -40,7 +40,7 @@ public class ExportField {
      * @return 字段文本
      */
     public String text(Object obj) {
-        var value = evaluate(obj, value(obj));
+        Object value = evaluate(obj, value(obj));
         if (value == null) return "";
         if (StringUtils.isBlank(format) || formatter == null) {
             return value.toString();
