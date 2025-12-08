@@ -124,13 +124,14 @@ public class DefaultBeanSearcher extends BaseSearcher implements BeanSearcher {
             SearchResult<T> result = new SearchResult<>(totalCount, sqlResult.getPageSize(), summaries);
             BeanMeta<T> beanMeta = searchSql.getBeanMeta();
             SqlResult.ResultSet listResult = sqlResult.getListResult();
+            Map<String, Object> newParams = searchSql.getSearchParam().getParaMap();
             if (listResult != null) {
                 List<FieldMeta> fieldMetas = searchSql.getFetchFields().stream()
                         .map(beanMeta::requireFieldMeta)
                         .collect(Collectors.toList());
-                collectList(result.getDataList(), listResult, beanMeta, fieldMetas, paraMap);
+                collectList(result.getDataList(), listResult, beanMeta, fieldMetas, newParams);
             }
-            return doFilter(result, beanMeta, paraMap, fetchType);
+            return doFilter(result, beanMeta, newParams, fetchType);
         } catch (SQLException e) {
             throw new SearchException("A exception occurred when collecting sql result!", e);
         }

@@ -1,3 +1,27 @@
+# v4.7.1 @ 2025-11-11
+
+## ✨ Features
+
+* 优化 `ParamAware`、`ResultFilter` 与 `SqlInterceptor` 的 `paraMap` 参数值：使用经过 `ParamFilter` 处理后的非空值
+* JDK 版本要求：JDK 17+
+
+## 同时发布 v4.7.1.jdk8 版本
+
+# v4.7.0 @ 2025-11-11
+
+## ✨ Features
+
+* Bean Searcher Exporter 的 `BeanExporter` 组件新增支持 `Function<List<T>, List<T>> mapper` 参数的系列导出方法，支持在写入导出文件之前，对查询出的整体数据做二次加工
+  - `export(String name, Class<T> beanClass, Function<List<T>, List<T>> mapper)`
+  - `export(String name, Class<T> beanClass, int batchSize, Function<List<T>, List<T>> mapper)`
+  - `export(String name, Class<T> beanClass, Map<String, Object> paraMap, Function<List<T>, List<T>> mapper)`
+  - `export(String name, Class<T> beanClass, Map<String, Object> paraMap, int batchSize, Function<List<T>, List<T>> mapper)`
+  - `export(FileWriter writer, Class<T> beanClass, Function<List<T>, List<T>> mapper)`
+  - `export(FileWriter writer, Class<T> beanClass, int batchSize, Function<List<T>, List<T>> mapper)`
+  - `export(FileWriter writer, Class<T> beanClass, Map<String, Object> paraMap, Function<List<T>, List<T>> mapper)`
+  - `export(FileWriter writer, Class<T> beanClass, Map<String, Object> paraMap, int batchSize, Function<List<T>, List<T>> mapper)`
+* JDK 版本要求：JDK 17+
+
 # v4.6.0 @ 2025-09-25
 
 ## ✨ Features
@@ -35,16 +59,6 @@
 * 优化 `DefaultSqlExecutor`：如果 JDBC 在 `prepareStatement` 阶段报错，也打印出报错的 SQL
 * JDK 版本要求：JDK 17+
 
-# v4.5.0 @ 2025-06-26
-
-## ✨ Features
-
-* 注解 `@SearchBean` 新增 `maxSize` 与 `maxOffset` 属性，可以为单个检索类设置独风控值，覆盖全局配置
-* 接口 `PageExtractor` 接口中新增 `extract` 方法，支持传入 `BeanMeta` 参数
-* 参数构建器新增 `groupRoot(String groupSeparator)` 方法，可将前端传来的普通参数组添加到根组内
-* 参数构建器新增 `groupRoot()` 方法，使用默认的组分割符，将前端传来的普通参数组添加到根组内
-* JDK 版本要求：JDK 17+
-
 ## 同时发布 v4.5.0.jdk8 版本
 
 # v4.4.3 @ 2025-09-20
@@ -54,6 +68,40 @@
 * 优化 `EnumFieldConvertor`：以支持 short 与 byte 向枚举转换。此前只支持 String 与 int 类型。
 * 优化 `DefaultSqlExecutor`：如果 SQL 执行报错，则 SQL 日志级别从 `DEBUG` 提升为 `ERROR`
 * 优化 `DefaultSqlExecutor`：如果 JDBC 在 `prepareStatement` 阶段报错，也打印出报错的 SQL
+
+# v4.5.0 @ 2025-06-26
+
+## ✨ Features
+
+* Bean Searcher
+  - 注解 `@SearchBean` 新增 `maxSize` 与 `maxOffset` 属性，可以为单个检索类设置独风控值，覆盖全局配置
+  - 接口 `PageExtractor` 接口中新增 `extract` 方法，支持传入 `BeanMeta` 参数
+  - 参数构建器新增 `groupRoot(String groupSeparator)` 方法，可将前端传来的普通参数组添加到根组内
+  - 参数构建器新增 `groupRoot()` 方法，使用默认的组分割符，将前端传来的普通参数组添加到根组内
+* Bean Searcher Exporter（**首发**：数据文件导出模块）
+  - 新增 `Export` 注解，用于标记需要导出的字段（支持表达式转换值）
+  - 新增 `BeanExporter` 导出器，让数据导出与查询同样简单（支持**分页实时**导出，前端**立即响应**，且内置**并发控制**）
+  - 新增 `FileWriter` 接口，用于扩展导出文件类型，默认实现 `CsvFileWriter` 可导出 CSV 文件
+  - 可自定义导出文件名装饰器 `FileNamer`
+  - 可自定义数据批次加载延迟策略 `DelayPolicy`，默认采用随机放大延时策略 `DelayPolicy.RandomInflate`
+  - 等等..
+* Bean Searcher Boot Starter
+  - 新增 `bean-searcher.exporter.batch-size` 配置项：指定数据导出时默认每批次查询的条数, 默认为 `1000`
+  - 新增 `bean-searcher.exporter.batch-delay` 配置项：每批次查询后的初始延迟时间，默认 100毫秒，用于降低数据库压力, 默认为 `100ms`
+  - 新增 `bean-searcher.exporter.max-exporting-threads` 配置项：最大同时导出的并发数，当同时导出操作的人达到这个值（默认 `10`）后，新导出的人会处于等待状态
+  - 新增 `bean-searcher.exporter.max-threads` 配置项：最大线程数，当同时导出操作的人太多（默认 `30`），将不再接受新的导出（新导出的人会收到稍后操作的提示，或抛出异常，具体行为可由 `FileWriter` 决定）
+  - 新增 `bean-searcher.exporter.timestamp-filename` 配置项：导出的文件名是否自动拼上当前时间戳，默认 `true`
+  - 新增 `bean-searcher.exporter.too-many-requests-message` 配置项：导出人数太多时返回的提示信息，默认是 "大人请息怒，当前导出数据的人实在太多了，请稍后再试一下子哈！"
+* Bean Searcher Solon Plugin
+  - 新增 `bean-searcher.exporter.batch-size` 配置项：指定数据导出时默认每批次查询的条数, 默认为 `1000`
+  - 新增 `bean-searcher.exporter.batch-delay` 配置项：每批次查询后的初始延迟时间，默认 100毫秒，用于降低数据库压力, 默认为 `100ms`
+  - 新增 `bean-searcher.exporter.max-exporting-threads` 配置项：最大同时导出的并发数，当同时导出操作的人达到这个值（默认 `10`）后，新导出的人会处于等待状态
+  - 新增 `bean-searcher.exporter.max-threads` 配置项：最大线程数，当同时导出操作的人太多（默认 `30`），将不再接受新的导出（新导出的人会收到稍后操作的提示，或抛出异常，具体行为可由 `FileWriter` 决定）
+  - 新增 `bean-searcher.exporter.timestamp-filename` 配置项：导出的文件名是否自动拼上当前时间戳，默认 `true`
+  - 新增 `bean-searcher.exporter.too-many-requests-message` 配置项：导出人数太多时返回的提示信息，默认是 "大人请息怒，当前导出数据的人实在太多了，请稍后再试一下子哈！"
+* JDK 版本要求：JDK 17+
+
+## 同时发布 v4.5.0.jdk8 版本
 
 # v4.4.2 @ 2025-04-28
 

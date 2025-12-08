@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 
 /**
  * Bean 导出器（导出成 CSV 文件）
@@ -61,21 +62,41 @@ public class DefaultBeanExporter implements BeanExporter {
 
     @Override
     public <T> void export(String name, Class<T> beanClass) throws IOException {
-        export(name, beanClass, null, defaultBatchSize);
+        export(name, beanClass, null, defaultBatchSize, null);
     }
 
     @Override
     public <T> void export(String name, Class<T> beanClass, int batchSize) throws IOException {
-        export(name, beanClass, null, batchSize);
+        export(name, beanClass, null, batchSize, null);
     }
 
     @Override
     public <T> void export(String name, Class<T> beanClass, Map<String, Object> paraMap) throws IOException {
-        export(name, beanClass, paraMap, defaultBatchSize);
+        export(name, beanClass, paraMap, defaultBatchSize, null);
     }
 
     @Override
     public <T> void export(String name, Class<T> beanClass, Map<String, Object> paraMap, int batchSize) throws IOException {
+        export(name, beanClass, paraMap, batchSize, null);
+    }
+
+    @Override
+    public <T> void export(String name, Class<T> beanClass, Function<List<T>, List<T>> mapper) throws IOException {
+        export(name, beanClass, null, defaultBatchSize, mapper);
+    }
+
+    @Override
+    public <T> void export(String name, Class<T> beanClass, int batchSize, Function<List<T>, List<T>> mapper) throws IOException {
+        export(name, beanClass, null, batchSize, mapper);
+    }
+
+    @Override
+    public <T> void export(String name, Class<T> beanClass, Map<String, Object> paraMap, Function<List<T>, List<T>> mapper) throws IOException {
+        export(name, beanClass, paraMap, defaultBatchSize, mapper);
+    }
+
+    @Override
+    public <T> void export(String name, Class<T> beanClass, Map<String, Object> paraMap, int batchSize, Function<List<T>, List<T>> mapper) throws IOException {
         if (name == null) {
             throw new ExportException("You must set a name before exporting.");
         }
@@ -83,26 +104,46 @@ public class DefaultBeanExporter implements BeanExporter {
         if (factory == null) {
             throw new ExportException("You must set a fileWriterFactory before exporting.");
         }
-        export(factory.create(fileNamer.filename(name)), beanClass, paraMap, batchSize);
+        export(factory.create(fileNamer.filename(name)), beanClass, paraMap, batchSize, mapper);
     }
 
     @Override
     public <T> void export(FileWriter writer, Class<T> beanClass) throws IOException {
-        export(writer, beanClass, null, defaultBatchSize);
+        export(writer, beanClass, null, defaultBatchSize, null);
     }
 
     @Override
     public <T> void export(FileWriter writer, Class<T> beanClass, int batchSize) throws IOException {
-        export(writer, beanClass, null, batchSize);
+        export(writer, beanClass, null, batchSize, null);
     }
 
     @Override
     public <T> void export(FileWriter writer, Class<T> beanClass, Map<String, Object> paraMap) throws IOException {
-        export(writer, beanClass, paraMap, defaultBatchSize);
+        export(writer, beanClass, paraMap, defaultBatchSize, null);
     }
 
     @Override
     public <T> void export(FileWriter writer, Class<T> beanClass, Map<String, Object> paraMap, int batchSize) throws IOException {
+        export(writer, beanClass, paraMap, batchSize, null);
+    }
+
+    @Override
+    public <T> void export(FileWriter writer, Class<T> beanClass, Function<List<T>, List<T>> mapper) throws IOException {
+        export(writer, beanClass, null, defaultBatchSize, mapper);
+    }
+
+    @Override
+    public <T> void export(FileWriter writer, Class<T> beanClass, int batchSize, Function<List<T>, List<T>> mapper) throws IOException {
+        export(writer, beanClass, null, batchSize, mapper);
+    }
+
+    @Override
+    public <T> void export(FileWriter writer, Class<T> beanClass, Map<String, Object> paraMap, Function<List<T>, List<T>> mapper) throws IOException {
+        export(writer, beanClass, paraMap, defaultBatchSize, mapper);
+    }
+
+    @Override
+    public <T> void export(FileWriter writer, Class<T> beanClass, Map<String, Object> paraMap, int batchSize, Function<List<T>, List<T>> mapper) throws IOException {
         if (writer == null) {
             throw new ExportException("You must set a fileWriter before exporting.");
         }
@@ -128,7 +169,7 @@ public class DefaultBeanExporter implements BeanExporter {
                 loadDataAndExportToWriter(
                         writer, fields, beanClass,
                         paraMap != null ? paraMap : new HashMap<>(),
-                        batchSize
+                        batchSize, mapper
                 );
                 writer.writeStop(fields);
             } finally {
@@ -139,14 +180,14 @@ public class DefaultBeanExporter implements BeanExporter {
         }
     }
 
-    protected <T> void loadDataAndExportToWriter(FileWriter writer, List<ExportField> fields,
-                                                 Class<T> beanClass, Map<String, Object> paraMap,
-                                                 int batchSize) throws IOException {
+    protected <T> void loadDataAndExportToWriter(FileWriter writer, List<ExportField> fields, Class<T> beanClass,
+                                                 Map<String, Object> paraMap, int batchSize,
+                                                 Function<List<T>, List<T>> mapper) throws IOException {
         MapBuilder builder = MapUtils.builder(paraMap);
         int pageNum = startPage;
         while (true) {
             List<T> list = beanSearcher.searchList(beanClass, builder.page(pageNum, batchSize).build());
-            writer.writeAndFlush(fields, list);
+            writer.writeAndFlush(fields, mapper != null ? mapper.apply(list) : list);
             if (list.size() < batchSize) {
                 break;
             }
