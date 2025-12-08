@@ -1,3 +1,27 @@
+# v4.7.1 @ 2025-11-11
+
+## ✨ Features
+
+* 优化 `ParamAware`、`ResultFilter` 与 `SqlInterceptor` 的 `paraMap` 参数值：使用经过 `ParamFilter` 处理后的非空值
+* JDK 版本要求：JDK 17+
+
+## 同时发布 v4.7.1.jdk8 版本
+
+# v4.7.0 @ 2025-11-11
+
+## ✨ Features
+
+* Bean Searcher Exporter 的 `BeanExporter` 组件新增支持 `Function<List<T>, List<T>> mapper` 参数的系列导出方法，支持在写入导出文件之前，对查询出的整体数据做二次加工
+  - `export(String name, Class<T> beanClass, Function<List<T>, List<T>> mapper)`
+  - `export(String name, Class<T> beanClass, int batchSize, Function<List<T>, List<T>> mapper)`
+  - `export(String name, Class<T> beanClass, Map<String, Object> paraMap, Function<List<T>, List<T>> mapper)`
+  - `export(String name, Class<T> beanClass, Map<String, Object> paraMap, int batchSize, Function<List<T>, List<T>> mapper)`
+  - `export(FileWriter writer, Class<T> beanClass, Function<List<T>, List<T>> mapper)`
+  - `export(FileWriter writer, Class<T> beanClass, int batchSize, Function<List<T>, List<T>> mapper)`
+  - `export(FileWriter writer, Class<T> beanClass, Map<String, Object> paraMap, Function<List<T>, List<T>> mapper)`
+  - `export(FileWriter writer, Class<T> beanClass, Map<String, Object> paraMap, int batchSize, Function<List<T>, List<T>> mapper)`
+* JDK 版本要求：JDK 17+
+
 # v4.6.0 @ 2025-09-25
 
 ## ✨ Features
