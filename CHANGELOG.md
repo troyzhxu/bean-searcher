@@ -3,6 +3,7 @@
 ## 🌻 Better
 
 * 优化 `EnumFieldConvertor`：以支持 short 与 byte 向枚举转换。此前只支持 String 与 int 类型。
+* JDK 版本要求：JDK 17+
 
 # v4.5.1 @ 2025-09-20
 
@@ -10,6 +11,9 @@
 
 * 优化 `DefaultSqlExecutor`：如果 SQL 执行报错，则 SQL 日志级别从 `DEBUG` 提升为 `ERROR`
 * 优化 `DefaultSqlExecutor`：如果 JDBC 在 `prepareStatement` 阶段报错，也打印出报错的 SQL
+* JDK 版本要求：JDK 17+
+
+## 同时发布 v4.5.0.jdk8 版本
 
 # v4.5.0 @ 2025-06-26
 
@@ -41,6 +45,9 @@
   - 新增 `bean-searcher.exporter.max-threads` 配置项：最大线程数，当同时导出操作的人太多（默认 `30`），将不再接受新的导出（新导出的人会收到稍后操作的提示，或抛出异常，具体行为可由 `FileWriter` 决定）
   - 新增 `bean-searcher.exporter.timestamp-filename` 配置项：导出的文件名是否自动拼上当前时间戳，默认 `true`
   - 新增 `bean-searcher.exporter.too-many-requests-message` 配置项：导出人数太多时返回的提示信息，默认是 "大人请息怒，当前导出数据的人实在太多了，请稍后再试一下子哈！"
+* JDK 版本要求：JDK 17+
+
+## 同时发布 v4.5.0.jdk8 版本
 
 # v4.4.3 @ 2025-09-20
 
