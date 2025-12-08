@@ -39,4 +39,13 @@ public @interface Export {
      */
     String format() default "";
 
+    /**
+     * 字段导出条件，可以使用参数名引用检索参数（paraMap）中的值
+     * 在 Spring 环境下支持 SpEL 表达式语法 <br>
+     * 在 Solon 环境下支持 SnEL 表达式语法 <br>
+     * @return 仅当条件满足时才导出，默认为 true
+     * @since v4.8.0
+     */
+    String onlyIf() default "";
+
 }

@@ -3,6 +3,7 @@ package cn.zhxu.bs.ex;
 import cn.zhxu.bs.util.StringUtils;
 
 import java.lang.reflect.Field;
+import java.util.Map;
 
 /**
  * 导出字段
@@ -18,10 +19,11 @@ public class ExportField {
     private final int exIdx;
     private final String expr;
     private final String format;
+    private final String onlyIf;
 
-    public ExportField(Expresser expresser, Formatter formatter, Field field,
-                       String exName, int exIdx,
-                       String expr, String format) {
+    public ExportField(Expresser expresser, Formatter formatter,
+                       Field field, String exName, int exIdx,
+                       String expr, String format, String onlyIf) {
         this.expresser = expresser;
         this.formatter = formatter;
         this.field = field;
@@ -29,6 +31,7 @@ public class ExportField {
         this.exIdx = exIdx;
         this.expr = expr;
         this.format = format;
+        this.onlyIf = onlyIf;
     }
 
     /**
@@ -37,9 +40,10 @@ public class ExportField {
      * @return 字段文本
      */
     public String text(Object obj) {
-        Object value = evaluate(obj, value(obj));
+        var value = evaluate(obj, value(obj));
+        if (value == null) return "";
         if (StringUtils.isBlank(format) || formatter == null) {
-            return value == null ? "" : value.toString();
+            return value.toString();
         }
         return formatter.format(format, value);
     }
@@ -71,6 +75,27 @@ public class ExportField {
             return expresser.evaluate(expr, obj, value);
         } catch (Exception e) {
             throw new IllegalStateException("Can not compute the expr [" + expr + "]", e);
+        }
+    }
+
+    public boolean onlyIf(Map<String, Object> paraMap) {
+        if (expresser == null || StringUtils.isBlank(onlyIf)) {
+            return true;
+        }
+        try {
+            Object res = expresser.evaluate(onlyIf, paraMap, null);
+            if (res instanceof Boolean) {
+                return (Boolean) res;
+            }
+            if (res instanceof Number) {
+                return ((Number) res).intValue() != 0;
+            }
+            if (res instanceof String) {
+                return StringUtils.isNotBlank((String) res);
+            }
+            return res != null;
+        } catch (Exception e) {
+            throw new IllegalStateException("Can not compute the onlyIf [" + onlyIf + "]", e);
         }
     }
 

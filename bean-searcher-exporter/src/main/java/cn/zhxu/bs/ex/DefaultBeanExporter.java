@@ -157,7 +157,10 @@ public class DefaultBeanExporter implements BeanExporter {
         // 此处不必过于追求完美的并发控制，虽然在高并发下有可能多于 maxThreads 个线程进入此处，但概率极小且危害不大
         try {
             threads.incrementAndGet();
-            List<ExportField> fields = fieldResolver.resolve(beanClass);
+            List<ExportField> fields = fieldResolver.resolve(beanClass)
+                    .stream()
+                    .filter(field -> field.onlyIf(paraMap))
+                    .toList();
             writer.writeStart(fields);
             while (exportingThreads.get() >= maxExportingThreads) {
                 // 进入等待状态，等钱前面导出的人结束
