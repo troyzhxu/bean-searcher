@@ -140,8 +140,6 @@ export default defineConfig({
             collapsed: false,
             items: [
               { text: '介绍', link: '/info' },
-              { text: 'Bean Searcher', link: '/bean-searcher' },
-              { text: 'What\'s New?', link: '/versions' },
             ]
           },
           {
@@ -150,8 +148,6 @@ export default defineConfig({
             collapsed: false,
             items: [
               { text: '介绍', link: '/info' },
-              { text: '集成', link: '/integration' },
-              { text: '使用', link: '/use' },
             ]
           },
         ]
