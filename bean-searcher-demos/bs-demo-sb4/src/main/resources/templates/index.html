@@ -1,0 +1,128 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Bean Searcher 演示程序：列表检索</title>
+    <link rel="stylesheet" href="../static/element-ui@2.15.14.css">
+    <link rel="stylesheet" href="../static/index.css">
+</head>
+<body>
+<div id="app">
+    <h3 style="padding-left:300px">Bean Searcher 演示程序：列表检索</h3>
+    <hr/>
+    <div class="filter-container" style="width: 700px">
+        <el-row>
+            <el-col :span="5">姓名</el-col>
+            <el-col :span="5">
+                <el-select v-model="params['name-op']" style="width: 95%" size="small">
+                    <el-option v-for="item in nameOps" :key="item.key" :label="item.label" :value="item.key" :disabled="item.disabled" />
+                </el-select>
+            </el-col>
+            <el-col :span="7">
+                <el-input v-model="params.name" style="width: 95%" size="small" clearable></el-input>
+            </el-col>
+            <el-col :span="7">
+                <el-checkbox v-model="params['name-ic']">忽略大小写</el-checkbox>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="5">年龄</el-col>
+            <el-col :span="5">
+                <el-select v-model="params['age-op']" style="width: 95%" size="small">
+                    <el-option v-for="item in numOps" :key="item.key" :label="item.label" :value="item.key" />
+                </el-select>
+            </el-col>
+            <el-col :span="7">
+                <el-input v-model.number="params['age-0']" style="width: 95%" size="small" clearable></el-input>
+            </el-col>
+            <el-col v-show="params['age-op'] === 'bt'" :span="7">
+                <el-input v-model.number="params['age-1']" style="width: 95%" size="small" clearable></el-input>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="5">部门</el-col>
+            <el-col :span="5">
+                <el-select v-model="params['department-op']" style="width: 95%" size="small">
+                    <el-option v-for="item in strOps" :key="item.key" :label="item.label" :value="item.key" />
+                </el-select>
+            </el-col>
+            <el-col :span="7">
+                <el-input v-model="params.department" style="width: 95%" size="small" clearable></el-input>
+            </el-col>
+            <el-col :span="7">
+                <el-checkbox v-model="params['department-ic']">忽略大小写</el-checkbox>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="5">入职时间</el-col>
+            <el-col :span="5">
+                <el-select v-model="params['entryDate-op']" style="width: 95%" size="small">
+                    <el-option v-for="item in timeOps" :key="item.key" :label="item.label" :value="item.key" />
+                </el-select>
+            </el-col>
+            <el-col :span="7">
+                <el-date-picker v-model="params['entryDate-0']" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 95%" size="small" clearable></el-date-picker>
+            </el-col>
+            <el-col v-show="params['entryDate-op'] === 'bt'" :span="7">
+                <el-date-picker v-model="params['entryDate-1']" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 95%" size="small" clearable></el-date-picker>
+            </el-col>
+        </el-row>
+
+        <el-button type="primary" icon="el-icon-search" size="small" @click="handleFilter">检索</el-button>
+        <el-button icon="el-icon-download" size="small" @click="handleExport">导出</el-button>
+    </div>
+
+    <el-input :value="sumAge" size="small" style="width: 200px;" readonly>
+        <template slot="prepend">总年龄：</template>
+    </el-input>
+    <el-input :value="sumAge / total" size="small" style="width: 200px;" readonly>
+        <template slot="prepend">平均年龄：</template>
+    </el-input>
+
+    <el-table class="data-table"
+              v-loading="loading"
+              :data="list"
+              border
+              highlight-current-row
+              @sort-change="sortChange"
+              style="width: 700px">
+        <el-table-column sortable="custom" label="ID" prop="id" min-width="45px;"></el-table-column>
+        <el-table-column sortable="custom" label="姓名" prop="name" min-width="80px;"></el-table-column>
+        <el-table-column sortable="custom" label="年龄" prop="age"  min-width="60px;"></el-table-column>
+        <el-table-column sortable="custom" label="部门" prop="department"  min-width="90px;"></el-table-column>
+        <el-table-column sortable="custom" label="入职时间" prop="entryDate" min-width="120px;"></el-table-column>
+    </el-table>
+    <el-pagination
+            :current-page.sync="params.page"
+            :page-size.sync="params.size"
+            layout="total, sizes, prev, pager, next, jumper"
+            :page-sizes="[5, 10, 15]"
+            :total="total"
+            @size-change="loadData"
+            @current-change="loadData"
+    >
+    </el-pagination>
+    <hr style="margin-top: 20px;"/>
+    <div class="commons">
+        <div class="title">
+            此例后端仅写了
+            <span class="bold">一个实体类（<code>com.example.sbean.Employee</code>）</span> 与
+            <span class="bold">Controller</span>（<code>com.example.controller.EmployeeController</code>）
+            <span class="bold">中的一句代码</span>（29 行的 <code>/employee/index</code> 接口），
+            便实现了本页面所展示的：
+        </div>
+        <div class="item">1、各种复杂条件组合过滤</div>
+        <div class="item">2、年龄统计（支持多字段统计）</div>
+        <div class="item">3、任意字段后端排序（点击表头）</div>
+        <div class="item">4、分页查询功能</div>
+        <div class="item">5、总条数统计</div>
+        <div class="title">这些功能！</div>
+    </div>
+</div>
+<script src="../static/vue@2.6.14.js"></script>
+<script src="../static/element-ui@2.15.14.js"></script>
+<script src="../static/jquery@3.6.0.js"></script>
+<script src="../static/index.js"></script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+.data-table {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.filter-container {
+    margin: 20px 0;
+    border-bottom: 1px solid #aba9a9;
+    padding-bottom: 20px;
+}
+.filter-container .el-row {
+    margin-bottom: 8px;
+}
+.commons {
+    color: red;
+    position: fixed;
+    top: 200px;
+    left: 750px;
+}
+
+.commons .title {
+    margin-bottom: 20px;
+}
+
+.commons .item {
+    padding-left: 50px;
+    margin-bottom: 10px;
+}
+
+.bold {
+    font-weight: bold;
+    font-size: large;
+}

@@ -58,7 +58,7 @@
 * Bean Searcher
   - 方言 `Dialect` 接口新增 `allowBoolLiterals(): boolean` 方法定义，用于指示数据库是否支持布尔字面量
   - 新增 `DialectSqlInterceptor` 组件，用于当数据库不支持布尔字面量时，将用户 SQL 中的布尔字面量自动转换为 `1` 和 `0`
-  - 新增 `DaMengDialect` 方言实现，用于兼容达梦数据库
+  - 新增 `DaMengDialect` 方言实现，用于兼容 **达梦** 数据库
   - 新增 `StringFieldConvertor`, 可将 JDBC 返回的 `Clob`、`Number`、`Boolean` 与 `Date` 类型的值转换为 `String`（可兼容达梦数据库对 `TEXT` 类型字段返回 `Clob` 的情况）
 
 * Bean Searcher Boot Starter

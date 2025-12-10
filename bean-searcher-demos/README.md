@@ -1,5 +1,8 @@
 # Bean Searcher 在各框架内的使用案例
 
+* [SpringBoot 4.x 案例](./bs-demo-sb4)
+  - 使用 H2 数据库，无需任何配置即可启动体验
+  - JDK 21+
 * [SpringBoot 3.x 案例](./bs-demo-sb3)
   - 使用 H2 数据库，无需任何配置即可启动体验
   - JDK 17+

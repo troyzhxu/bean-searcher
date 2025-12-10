@@ -17,7 +17,7 @@
 
 ```bash
 > git clone https://github.com/troyzhxu/bean-searcher.git
-> cd bean-searcher/bean-searcher-demos/bs-demo-sb3
+> cd bean-searcher/bean-searcher-demos/bs-demo-sb4
 > ./gradlew bootRun
 ```
 
