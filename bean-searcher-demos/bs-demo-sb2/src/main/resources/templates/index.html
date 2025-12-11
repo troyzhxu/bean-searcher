@@ -4,7 +4,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>Bean Searcher 演示程序：列表检索</title>
-    <link rel="stylesheet" href="http://unpkg.zhimg.com/element-ui@2.9.1/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="../static/element-ui@2.15.14.css">
     <link rel="stylesheet" href="../static/index.css">
 </head>
 <body>
@@ -70,6 +70,7 @@
         </el-row>
 
         <el-button type="primary" icon="el-icon-search" size="small" @click="handleFilter">检索</el-button>
+        <el-button icon="el-icon-download" size="small" @click="handleExport">导出</el-button>
     </div>
 
     <el-input :value="sumAge" size="small" style="width: 200px;" readonly>
@@ -120,7 +121,7 @@
     </div>
 </div>
 <script src="../static/vue@2.6.14.js"></script>
-<script src="../static/element-ui@2.15.8.js"></script>
+<script src="../static/element-ui@2.15.14.js"></script>
 <script src="../static/jquery@3.6.0.js"></script>
 <script src="../static/index.js"></script>
 </body>
