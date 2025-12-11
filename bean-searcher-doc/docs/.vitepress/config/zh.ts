@@ -35,8 +35,8 @@ export default defineConfig({
           },
           {
             text: '数据导出',
-            link: '/zoo/exporter/info',
-            activeMatch: '/zoo/exporter'
+            link: '/zoo/ex/info',
+            activeMatch: '/zoo/ex'
           }
         ]
       },
@@ -142,16 +142,20 @@ export default defineConfig({
             items: [
               { text: '介绍', link: '/info' },
               { text: '标签注解', link: '/anno' },
-              { text: '标签加载器', link: '/anno' },
-              { text: '用法示例', link: '/anno' },
+              { text: '标签加载器', link: '/load' },
+              { text: '用法示例', link: '/demo' },
             ]
           },
           {
             text: '数据导出',
-            base: '/zoo/exporter',
+            base: '/zoo/ex',
             collapsed: false,
             items: [
               { text: '介绍', link: '/info' },
+              { text: '文件导出器', link: '/exporter' },
+              { text: '导出注解', link: '/anno' },
+              { text: '文件写出', link: '/fwriter' },
+              { text: '并发控制', link: '/control' },
             ]
           },
         ]
