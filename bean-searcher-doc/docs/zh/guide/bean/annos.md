@@ -19,7 +19,7 @@ SearchBean 是任何可以与 Bean Searcher 配合使用以执行数据库搜索
 tables | String | `""` | 数据库表和别名 | 1.0
 dataSource | String | `""` | 数据源标识符 | 3.0
 where | String | `""` | 静态 WHERE 条件 | 3.8
-fields | @DbField[] | `""` | 附近属性，用于动态条件 | 4.1
+fields | @DbField[] | `""` | [附加属性](/guide/bean/fields.html#附加属性-since-v4-1-0)，用于动态条件 | 4.1
 groupBy | String | `""` | GROUP BY 子句 | 1.0
 having | String | `""` | 分组查询的 HAVING 子句 | 3.8
 orderBy | String | `""` | 默认 ORDER BY 子句 | 3.6
