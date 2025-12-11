@@ -78,6 +78,7 @@ export default defineConfig({
             collapsed: false,
             items: [
               { text: '概念', link: '/info' },
+              { text: '核心注解', link: '/annotations' },
               { text: '多表关联', link: '/multitable' },
               { text: '其它形式', link: '/otherform' },
               { text: '条件属性', link: '/fields' },

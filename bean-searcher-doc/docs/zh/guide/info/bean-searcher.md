@@ -63,20 +63,48 @@ CRUD | Only R | CRUD | CRUD
 
 ## DEMO 快速体验
 
-仓库地址: [https://github.com/troyzhxu/bean-searcher/tree/master/bean-searcher-demos/bs-demo-springboot](https://github.com/troyzhxu/bean-searcher/tree/master/bean-searcher-demos/bs-demo-springboot)
+三步急速体验
 
 ### 第一步：克隆
 
-```bash
-> git clone https://github.com/troyzhxu/bean-searcher.git
+::: code-group
+```bash [Gitee]
+git clone https://gitee.com/troyzhxu/bean-searcher.git
 ```
+```bash [Github]
+git clone https://github.com/troyzhxu/bean-searcher.git
+```
+:::
 
 ### 第二步：运行
 
-```bash
-> cd bean-searcher/bean-searcher-demos/bs-demo-springboot
-> mvn spring-boot:run
+::: code-group
+```bash [SpringBoot4]
+# 此 demo 基于 JDK 21+
+cd bean-searcher/bean-searcher-demos/bs-demo-sb4
+./gradlew bootRun
 ```
+```bash [SpringBoot3]
+# 此 demo 基于 JDK 17+
+cd bean-searcher/bean-searcher-demos/bs-demo-sb3
+./gradlew bootRun
+```
+```bash [SpringBoot2]
+# 此 demo 基于 JDK 8+
+cd bean-searcher/bean-searcher-demos/bs-demo-sb2
+mvn spring-boot:run
+```
+```bash [Solon]
+# 此 demo 基于 JDK 8+
+cd bean-searcher/bean-searcher-demos/bs-demo-solon
+# IDEA 中打开运行
+```
+```bash [Grails]
+# 此 demo 基于 JDK 8+
+cd bean-searcher/bean-searcher-demos/bs-demo-grails
+grails run-app
+```
+:::
 
 ### 第三步：效果
 
