@@ -118,6 +118,7 @@ public @interface SearchBean {
 
     /**
      * @return 单条 SQL 执行超时时间，单位：秒，0 表示永远不超时
+     * @since v4.0.0
      */
     int timeout() default 0;
 
