@@ -29,14 +29,14 @@ export default defineConfig({
         text: '生态',
         items: [
           {
-            text: 'Bean Searcher Label',
+            text: '标签系统',
             link: '/zoo/label/info',
-            activeMatch: '/zoo/'
+            activeMatch: '/zoo/label'
           },
           {
-            text: 'Bean Searcher Exporter',
+            text: '数据导出',
             link: '/zoo/exporter/info',
-            activeMatch: '/zoo/'
+            activeMatch: '/zoo/exporter'
           }
         ]
       },
@@ -78,7 +78,7 @@ export default defineConfig({
             collapsed: false,
             items: [
               { text: '概念', link: '/info' },
-              { text: '核心注解', link: '/annotations' },
+              { text: '核心注解', link: '/annos' },
               { text: '多表关联', link: '/multitable' },
               { text: '其它形式', link: '/otherform' },
               { text: '条件属性', link: '/fields' },
@@ -136,15 +136,18 @@ export default defineConfig({
         base: '/zoo', 
         items: [
           {
-            text: 'Bean Searcher Label',
+            text: '标签系统',
             base: '/zoo/label',
             collapsed: false,
             items: [
               { text: '介绍', link: '/info' },
+              { text: '标签注解', link: '/anno' },
+              { text: '标签加载器', link: '/anno' },
+              { text: '用法示例', link: '/anno' },
             ]
           },
           {
-            text: 'Bean Searcher Exporter',
+            text: '数据导出',
             base: '/zoo/exporter',
             collapsed: false,
             items: [

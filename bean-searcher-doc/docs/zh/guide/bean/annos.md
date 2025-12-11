@@ -27,8 +27,8 @@ autoMapTo | String | `""` | 字段映射的默认表 | 3.0
 distinct | boolean | `false` | 是否对结果集启用 DISTINCT | 1.0
 inheritType | InheritType | `DEFAULT` | 领域继承策略 | 3.2
 ignoreFields | String[] | `{}` | 要从映射中排除的字段 | 3.4
-sortType | SortType | `DEFAULT` | 参数排序约束 | 3.6
-timeout | int | `0` | SQL 执行超时时间（秒） | 4.0
+sortType | SortType | `DEFAULT` | 参数排序约束，[参考](/guide/bean/otherform.html#排序约束-since-v3-6-0) | 3.6
+timeout | int | `0` | SQL 执行最大时间（秒），0 表示不限制 | 4.0
 maxSize | int | `0` | 单页最大条数，0 表示使用 [全局配置值](/guide/advance/safe.html#风控配置项) | 4.5
 maxOffset | long | `0` | 最大分页深度，0 表示使用 [全局配置值](/guide/advance/safe.html#风控配置项) | 4.5
 
