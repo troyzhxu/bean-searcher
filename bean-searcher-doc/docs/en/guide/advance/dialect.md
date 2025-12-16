@@ -10,6 +10,8 @@ Bean Searcher comes with four built-in Dialect implementations:
 * [`OracleDialect`](https://github.com/troyzhxu/bean-searcher/blob/dev/bean-searcher/src/main/java/cn/zhxu/bs/dialect/OracleDialect.java) - Suitable for databases similar to Oracle 12c (released in June 2013) and above.
 * [`PostgreSqlDialect`](https://github.com/troyzhxu/bean-searcher/blob/dev/bean-searcher/src/main/java/cn/zhxu/bs/dialect/PostgreSqlDialect.java) - Suitable for PostgreSQL-like databases (**since v3.6.0**).
 * [`SqlServerDialect`](https://github.com/troyzhxu/bean-searcher/blob/dev/bean-searcher/src/main/java/cn/zhxu/bs/dialect/SqlServerDialect.java) - Suitable for databases similar to SQL Server (v2012+) (**since v3.7.0**).
+* [`DaMengDialect`](https://github.com/troyzhxu/bean-searcher/blob/dev/bean-searcher/src/main/java/cn/zhxu/bs/dialect/DaMengDialect.java) - Suitable for databases similar to DaMeng database (**since v4.6.0**).
+
 * For other databases, you can customize a Dialect. You can [refer to the implementation of MySqlDialect](https://github.com/troyzhxu/bean-searcher/blob/dev/bean-searcher/src/main/java/cn/zhxu/bs/dialect/MySqlDialect.java).
 
 ::: tip The dialect in Bean Searcher is very simple

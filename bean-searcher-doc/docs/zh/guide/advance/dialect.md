@@ -10,6 +10,7 @@ Bean Searcher 自带四种 Dialect 实现：
 * [`OracleDialect`](https://github.com/troyzhxu/bean-searcher/blob/dev/bean-searcher/src/main/java/cn/zhxu/bs/dialect/OracleDialect.java) - 可用于 类 Oracle 12c（2013年6月发布）及以上版本 的数据库
 * [`PostgreSqlDialect`](https://github.com/troyzhxu/bean-searcher/blob/dev/bean-searcher/src/main/java/cn/zhxu/bs/dialect/PostgreSqlDialect.java) - 可用于 类 PostgreSqlDialect 的数据库（**since v3.6.0**）
 * [`SqlServerDialect`](https://github.com/troyzhxu/bean-searcher/blob/dev/bean-searcher/src/main/java/cn/zhxu/bs/dialect/SqlServerDialect.java) - 可用于 类 SqlServer (v2012+) 的数据库（**since v3.7.0**）
+* [`DaMengDialect`](https://github.com/troyzhxu/bean-searcher/blob/dev/bean-searcher/src/main/java/cn/zhxu/bs/dialect/DaMengDialect.java) - 可用于 类 达梦 的数据库 (**since v4.6.0**).
 * 其它数据库可自定义 Dialect，可 [参考 MySqlDialect 的实现](https://github.com/troyzhxu/bean-searcher/blob/dev/bean-searcher/src/main/java/cn/zhxu/bs/dialect/MySqlDialect.java)
 
 ::: tip Bean Searcher 中的方言很简单
