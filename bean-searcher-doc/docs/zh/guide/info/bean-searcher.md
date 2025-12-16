@@ -110,6 +110,6 @@ grails run-app
 
 访问 `http://localhost:8080/` 既可查看运行效果。
 
-此例的更多信息，可参阅：[DEMO 详细介绍](https://github.com/troyzhxu/bean-searcher/tree/master/bean-searcher-demos/bs-demo-springboot)。
+此例的更多信息，可参阅：[DEMO 详细介绍](https://github.com/troyzhxu/bean-searcher/blob/main/bean-searcher-demos/bs-demo-sb4/README.md)。
 
-[更多 DEMO](https://github.com/troyzhxu/bean-searcher/tree/master/bean-searcher-demos)
+[更多 DEMO](https://github.com/troyzhxu/bean-searcher/blob/main/bean-searcher-demos)
