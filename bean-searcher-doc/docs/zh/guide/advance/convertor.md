@@ -640,6 +640,71 @@ public class TagConvertor implements ListFieldConvertor.Convertor<Tag> {
 }
 ```
 
+### StringFieldConvertor
+
+> since v4.6.0
+
+> 只对 `BeanSearcher` 检索器有效
+
+该转换器支持 `java.sql.Clob`、`Number`、`Boolean`、`Date`、`LocalDate`、`LocalDateTime` 向 `String` 转换：
+
+#### 配置方法
+
+* SpringBoot / Grails 项目
+
+建议使用 `bean-searcher-boot-starter` **v4.6.0+** 的依赖，**无需任何配置**，自动生效。
+
+如需 **关闭** 该转换器，可在 `application.properties` 中配置：
+
+```properties
+bean-searcher.field-convertor.use-string = false
+```
+
+* Others
+
+```java
+DefaultBeanReflector beanReflector = new DefaultBeanReflector();
+beanReflector.addConvertor(new StringFieldConvertor());           // 添加转换器
+// 构建 Bean 检索器
+BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
+        // 省略其它属性的配置
+        .beanReflector(beanReflector)
+        .build();
+```
+
+### OracleTimestampFieldConvertor
+
+> since v4.4.0
+
+> 只对 `BeanSearcher` 检索器有效（用于兼容 Oracle 驱动返回的 TIMESTAMP 类型）
+
+该转换器支持 `oracle.sql.TIMESTAMP` 向 `Instant`、`java.util.Date`、`java.sql.Timestamp`、`LocalDate`、`LocalDateTime` 转换。
+
+#### 配置方法
+
+* SpringBoot / Grails 项目
+
+建议使用 `bean-searcher-boot-starter` **v4.4.0+** 的依赖，**无需任何配置**，自动生效。
+
+如需 **关闭** 该转换器，可在 `application.properties` 中配置：
+
+```properties
+# 若未使用 Oracle 驱动，将之关闭可获得更好的性能
+bean-searcher.field-convertor.use-oracle-timestamp = false
+```
+
+* Others
+
+```java
+DefaultBeanReflector beanReflector = new DefaultBeanReflector();
+beanReflector.addConvertor(new OracleTimestampFieldConvertor());    // 添加转换器
+// 构建 Bean 检索器
+BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
+        // 省略其它属性的配置
+        .beanReflector(beanReflector)
+        .build();
+```
+
 ### B2MFieldConvertor
 
 > since v3.6.0
@@ -690,31 +755,27 @@ MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
 
 ## 参数转换器
 
-待完善...
+
 
 ## 自定义转换器
 
 若以上自带的转换器都无法满足您的需求，您可以通过自定义转换器来实现您的特殊需求。自定义转换器只需要实现以下接口即可：
 
-* `BFieldConvertor`（实现则支持 `BeanSearcher` 检索器）
-* `MFieldConvertor`（实现则支持 `MapSearcher` 检索器）
+* `BFieldConvertor`（支持 `BeanSearcher` 检索器）
+* `MFieldConvertor`（支持 `MapSearcher` 检索器）
+* `ParamConvertor`（参数转换器）
 
-这俩接口都只需实现两个方法：
+这仨接口都只需实现两个方法：
 
 * `boolean supports(FieldMeta meta, Class<?> valueType)` - 判断该转换器支持的实体类属性类型与数据库值的类型
 * `Object convert(FieldMeta meta, Object value)` - 转换操作，将 value 值转换为 meta 指定的字段类型值
 
-具体编码可参考自带的转换器的源码实现：
+具体编码可参考框架源码中的转换器：
 
-* [`BoolFieldConvertor` 的源码](https://github.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/implement/BoolFieldConvertor.java)
-* [`DateFieldConvertor` 的源码](https://github.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/implement/DateFieldConvertor.java)
-* [`DateFormatFieldConvertor` 的源码](https://github.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/implement/DateFormatFieldConvertor.java)
-* [`EnumFieldConvertor` 的源码](https://github.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/implement/EnumFieldConvertor.java)
-* [`NumberFieldConvertor` 的源码](https://github.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/implement/NumberFieldConvertor.java)
-* [`StrNumFieldConvertor` 的源码](https://github.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/implement/StrNumFieldConvertor.java)
-* [`TimeFieldConvertor` 的源码](https://github.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/implement/TimeFieldConvertor.java)
+* Github: https://github.com/troyzhxu/bean-searcher/tree/main/bean-searcher/src/main/java/cn/zhxu/bs/convertor
+* Gitee: https://github.com/troyzhxu/bean-searcher/tree/main/bean-searcher/src/main/java/cn/zhxu/bs/convertor
 
-### 配置方法
+### 字段转换器 
 
 * SpringBoot / Grails 项目
 
@@ -736,5 +797,30 @@ beanReflector.addConvertor(new MyFieldConvertor());           // 添加转换器
 BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
         // 省略其它属性的配置
         .beanReflector(beanReflector)
+        .build();
+```
+
+### 参数转换器 
+
+* SpringBoot / Grails 项目
+
+建议使用 `bean-searcher-boot-starter` 依赖，自定义好转换器后，只需将之声明为 Spring 的 Bean 即可：
+
+```java
+@Bean
+public MyParamConvertor myParamConvertor() {
+    return new MyParamConvertor();
+}
+```
+
+* Others
+
+```java
+DefaultParamResolver paramResolver = new DefaultParamResolver();
+beanReflector.addConvertor(new MyParamConvertor());           // 添加转换器
+// 构建 Bean 检索器
+BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
+        // 省略其它属性的配置
+        .paramResolver(paramResolver)
         .build();
 ```
