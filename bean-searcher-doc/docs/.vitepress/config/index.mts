@@ -46,4 +46,18 @@ export default defineConfig({
     'zh/:rest*': ':rest*'
   },
 
+  markdown: {
+    config(md) {
+      // 保存默认的图片渲染规则
+      const defaultRender = md.renderer.rules.image
+      // 重写规则
+      md.renderer.rules.image = (tokens, idx, options, env, self) => {
+        // 调用默认规则，生成原始的<img>标签 HTML 字符串
+        const defaultResult = defaultRender?.(tokens, idx, options, env, self)
+        // 用自定义组件包裹默认结果
+        return `<ImagePreview>${defaultResult}</ImagePreview>`
+      }
+    },
+  },
+
 })
