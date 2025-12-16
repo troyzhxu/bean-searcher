@@ -147,7 +147,7 @@ bean-searcher.params.filter.use-index-value = true
 
 ### 自定义参数过滤器
 
-你还可自定义任何参数过滤规则，在 SpringBoot / SpringMVC / Grails 项目中，只需要配置一个 Bean（以 SpringBoot 为例）：
+你还可自定义任何参数过滤规则，在 SpringBoot / Solon / Grails 项目中，只需要配置一个 Bean（以 SpringBoot 为例）：
 
 ```java
 @Bean

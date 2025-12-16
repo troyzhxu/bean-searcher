@@ -33,25 +33,6 @@ public NumberFieldConvertor numberFieldConvertor() {
 }
 ```
 
-* SpringMVC 项目
-
-需要在配置 Bean 的 xml 文件中添加如下配置：
-
-```xml
-<bean id="beanReflector" class="cn.zhxu.bs.implement.DefaultBeanReflector">
-    <property name="convertors">
-        <list>
-            <bean class="cn.zhxu.bs.convertor.NumberFieldConvertor" />
-            <!-- 省略其它自段转换器的配置 -->
-        <list>
-    </property>
-</bean>
-<bean id="beanSearcher" class="cn.zhxu.bs.implement.DefaultBeanSearcher">
-    <!-- 省略其它属性的配置 -->
-    <property name="beanReflector" ref="beanReflector">
-</bean>
-```
-
 * Others
 
 ```java
@@ -91,25 +72,6 @@ public StrNumFieldConvertor strNumFieldConvertor() {
 }
 ```
 
-* SpringMVC 项目
-
-需要在配置 Bean 的 xml 文件中添加如下配置：
-
-```xml
-<bean id="beanReflector" class="cn.zhxu.bs.implement.DefaultBeanReflector">
-    <property name="convertors">
-        <list>
-            <bean class="cn.zhxu.bs.convertor.StrNumFieldConvertor" />
-            <!-- 省略其它自段转换器的配置 -->
-        <list>
-    </property>
-</bean>
-<bean id="beanSearcher" class="cn.zhxu.bs.implement.DefaultBeanSearcher">
-    <!-- 省略其它属性的配置 -->
-    <property name="beanReflector" ref="beanReflector">
-</bean>
-```
-
 * Others
 
 ```java
@@ -142,25 +104,6 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 
 ```properties
 bean-searcher.field-convertor.use-bool-num = false
-```
-
-* SpringMVC 项目
-
-需要在配置 Bean 的 xml 文件中添加如下配置：
-
-```xml
-<bean id="beanReflector" class="cn.zhxu.bs.implement.DefaultBeanReflector">
-    <property name="convertors">
-        <list>
-            <bean class="cn.zhxu.bs.convertor.BoolNumFieldConvertor" />
-            <!-- 省略其它自段转换器的配置 -->
-        <list>
-    </property>
-</bean>
-<bean id="beanSearcher" class="cn.zhxu.bs.implement.DefaultBeanSearcher">
-    <!-- 省略其它属性的配置 -->
-    <property name="beanReflector" ref="beanReflector">
-</bean>
 ```
 
 * Others
@@ -208,25 +151,6 @@ bean-searcher.field-convertor.use-bool = false
 public BoolFieldConvertor boolFieldConvertor() {
     return new BoolFieldConvertor();
 }
-```
-
-* SpringMVC 项目
-
-需要在配置 Bean 的 xml 文件中添加如下配置：
-
-```xml
-<bean id="beanReflector" class="cn.zhxu.bs.implement.DefaultBeanReflector">
-    <property name="convertors">
-        <list>
-            <bean class="cn.zhxu.bs.convertor.BoolFieldConvertor" />
-            <!-- 省略其它自段转换器的配置 -->
-        <list>
-    </property>
-</bean>
-<bean id="beanSearcher" class="cn.zhxu.bs.implement.DefaultBeanSearcher">
-    <!-- 省略其它属性的配置 -->
-    <property name="beanReflector" ref="beanReflector">
-</bean>
 ```
 
 * Others
@@ -278,25 +202,6 @@ bean-searcher.field-convertor.use-date = false
 public DateFieldConvertor dateFieldConvertor() {
     return new DateFieldConvertor();
 }
-```
-
-* SpringMVC 项目
-
-需要在配置 Bean 的 xml 文件中添加如下配置：
-
-```xml
-<bean id="beanReflector" class="cn.zhxu.bs.implement.DefaultBeanReflector">
-    <property name="convertors">
-        <list>
-            <bean class="cn.zhxu.bs.convertor.DateFieldConvertor" />
-            <!-- 省略其它自段转换器的配置 -->
-        <list>
-    </property>
-</bean>
-<bean id="beanSearcher" class="cn.zhxu.bs.implement.DefaultBeanSearcher">
-    <!-- 省略其它属性的配置 -->
-    <property name="beanReflector" ref="beanReflector">
-</bean>
 ```
 
 * Others
@@ -412,24 +317,6 @@ public DateFormatFieldConvertor dateFormatFieldConvertor() {
 }
 ```
 
-* SpringMVC 项目
-
-需要在配置 Bean 的 xml 文件中添加如下配置：
-
-```xml
-<bean id="mapSearcher" class="cn.zhxu.bs.implement.DefaultMapSearcher">
-    <!-- 省略其它属性的配置 -->
-    <property name="convertors">
-        <list>
-            <bean class="cn.zhxu.bs.convertor.DateFormatFieldConvertor" />
-            <!-- 省略其它自段转换器的配置 -->
-        <list>
-    </property>
-</bean>
-```
-
-使用 xml 注册的方式，不太方便在 Bean 初始化时调用其 `setFormat(String scope, String format)` 方法，我们可以在项目启动监听里拿到 `DateFormatFieldConvertor` 类型的 Bean 再调用它的 `setFormat` 方法设置格式。
-
 * Others
 
 ```java
@@ -479,28 +366,6 @@ bean-searcher.field-convertor.enum-fail-on-error = true # 遇到非法值无法�
 bean-searcher.field-convertor.enum-ignore-case = false  # 字符串值转换为枚举时是否忽略大小写，默认 false（since v3.7.0）
 ```
 
-* SpringMVC 项目
-
-需要在配置 Bean 的 xml 文件中添加如下配置：
-
-```xml
-<bean id="beanReflector" class="cn.zhxu.bs.implement.DefaultBeanReflector">
-    <property name="convertors">
-        <list>
-            <bean class="cn.zhxu.bs.convertor.EnumFieldConvertor">
-                <property name="failOnError" value="true">  <!-- 遇到非法值无法转换时是否报错（since v3.7.0） -->
-                <property name="ignoreCase" value="false">  <!-- 字符串值转换为枚举时是否忽略大小写（since v3.7.0） -->
-            </bean>
-            <!-- 省略其它自段转换器的配置 -->
-        <list>
-    </property>
-</bean>
-<bean id="beanSearcher" class="cn.zhxu.bs.implement.DefaultBeanSearcher">
-    <!-- 省略其它属性的配置 -->
-    <property name="beanReflector" ref="beanReflector">
-</bean>
-```
-
 * Others
 
 ```java
@@ -531,25 +396,6 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 
 ```properties
 bean-searcher.field-convertor.use-time = false
-```
-
-* SpringMVC 项目
-
-需要在配置 Bean 的 xml 文件中添加如下配置：
-
-```xml
-<bean id="beanReflector" class="cn.zhxu.bs.implement.DefaultBeanReflector">
-    <property name="convertors">
-        <list>
-            <bean class="cn.zhxu.bs.convertor.TimeFieldConvertor" />
-            <!-- 省略其它自段转换器的配置 -->
-        <list>
-    </property>
-</bean>
-<bean id="beanSearcher" class="cn.zhxu.bs.implement.DefaultBeanSearcher">
-    <!-- 省略其它属性的配置 -->
-    <property name="beanReflector" ref="beanReflector">
-</bean>
 ```
 
 * Others
@@ -627,25 +473,6 @@ bean-searcher.field-convertor.use-json = false
 bean-searcher.field-convertor.json-fail-on-error = false
 ```
 
-* SpringMVC 项目
-
-需要在配置 Bean 的 xml 文件中添加如下配置：
-
-```xml
-<bean id="beanReflector" class="cn.zhxu.bs.implement.DefaultBeanReflector">
-    <property name="convertors">
-        <list>
-            <bean class="cn.zhxu.bs.convertor.JsonFieldConvertor" />
-            <!-- 省略其它自段转换器的配置 -->
-        <list>
-    </property>
-</bean>
-<bean id="beanSearcher" class="cn.zhxu.bs.implement.DefaultBeanSearcher">
-    <!-- 省略其它属性的配置 -->
-    <property name="beanReflector" ref="beanReflector">
-</bean>
-```
-
 * Others
 
 ```java
@@ -718,25 +545,6 @@ bean-searcher.field-convertor.use-list = false
 ```properties
 # List 字符串各项分隔符，默认为一个英文逗号
 bean-searcher.field-convertor.list-item-separator = ,
-```
-
-* SpringMVC 项目
-
-需要在配置 Bean 的 xml 文件中添加如下配置：
-
-```xml
-<bean id="beanReflector" class="cn.zhxu.bs.implement.DefaultBeanReflector">
-    <property name="convertors">
-        <list>
-            <bean class="cn.zhxu.bs.convertor.ListFieldConvertor" />
-            <!-- 省略其它自段转换器的配置 -->
-        <list>
-    </property>
-</bean>
-<bean id="beanSearcher" class="cn.zhxu.bs.implement.DefaultBeanSearcher">
-    <!-- 省略其它属性的配置 -->
-    <property name="beanReflector" ref="beanReflector">
-</bean>
 ```
 
 * Others
@@ -862,34 +670,6 @@ public class TagConvertor implements ListFieldConvertor.Convertor<Tag> {
 bean-searcher.field-convertor.use-b2-m = true
 ```
 
-* SpringMVC 项目
-
-需要在配置 Bean 的 xml 文件中添加如下配置：
-
-```xml
-<bean id="mapSearcher" class="cn.zhxu.bs.implement.DefaultMapSearcher">
-    <!-- 省略其它属性的配置 -->
-    <property name="convertors">
-        <list>
-            <bean class="cn.zhxu.bs.convertor.B2MFieldConvertor">
-                <constructor-arg>
-                    <list>
-                        <bean class="cn.zhxu.bs.convertor.NumberFieldConvertor" />
-                        <bean class="cn.zhxu.bs.convertor.StrNumFieldConvertor" />
-                        <bean class="cn.zhxu.bs.convertor.BoolNumFieldConvertor" />
-                        <bean class="cn.zhxu.bs.convertor.BoolFieldConvertor" />
-                        <bean class="cn.zhxu.bs.convertor.DateFieldConvertor" />
-                        <bean class="cn.zhxu.bs.convertor.EnumFieldConvertor" />
-                        <bean class="cn.zhxu.bs.convertor.TimeFieldConvertor" />
-                    <list>
-                </constructor-arg>
-            </bean>
-            <!-- 省略其它自段转换器的配置 -->
-        <list>
-    </property>
-</bean>
-```
-
 * Others
 
 ```java
@@ -945,25 +725,6 @@ MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
 public MyFieldConvertor myFieldConvertor() {
     return new MyFieldConvertor();
 }
-```
-
-* SpringMVC 项目
-
-需要在配置 Bean 的 xml 文件中添加如下配置：
-
-```xml
-<bean id="beanReflector" class="cn.zhxu.bs.implement.DefaultBeanReflector">
-    <property name="convertors">
-        <list>
-            <bean class="com.example.MyFieldConvertor" />
-            <!-- 省略其它自段转换器的配置 -->
-        <list>
-    </property>
-</bean>
-<bean id="beanSearcher" class="cn.zhxu.bs.implement.DefaultBeanSearcher">
-    <!-- 省略其它属性的配置 -->
-    <property name="beanReflector" ref="beanReflector">
-</bean>
 ```
 
 * Others

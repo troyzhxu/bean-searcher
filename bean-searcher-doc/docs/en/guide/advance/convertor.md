@@ -33,25 +33,6 @@ public NumberFieldConvertor numberFieldConvertor() {
 }
 ```
 
-* SpringMVC projects
-
-You need to add the following configuration to the xml file for configuring Beans:
-
-```xml
-<bean id="beanReflector" class="cn.zhxu.bs.implement.DefaultBeanReflector">
-    <property name="convertors">
-        <list>
-            <bean class="cn.zhxu.bs.convertor.NumberFieldConvertor" />
-            <!-- Omit the configuration of other field converters -->
-        <list>
-    </property>
-</bean>
-<bean id="beanSearcher" class="cn.zhxu.bs.implement.DefaultBeanSearcher">
-    <!-- Omit the configuration of other attributes -->
-    <property name="beanReflector" ref="beanReflector">
-</bean>
-```
-
 * Others
 
 ```java
@@ -91,25 +72,6 @@ public StrNumFieldConvertor strNumFieldConvertor() {
 }
 ```
 
-* SpringMVC projects
-
-You need to add the following configuration to the xml file for configuring Beans:
-
-```xml
-<bean id="beanReflector" class="cn.zhxu.bs.implement.DefaultBeanReflector">
-    <property name="convertors">
-        <list>
-            <bean class="cn.zhxu.bs.convertor.StrNumFieldConvertor" />
-            <!-- Omit the configuration of other field converters -->
-        <list>
-    </property>
-</bean>
-<bean id="beanSearcher" class="cn.zhxu.bs.implement.DefaultBeanSearcher">
-    <!-- Omit the configuration of other attributes -->
-    <property name="beanReflector" ref="beanReflector">
-</bean>
-```
-
 * Others
 
 ```java
@@ -142,25 +104,6 @@ If you need to **disable** this converter, you can configure it in `application.
 
 ```properties
 bean-searcher.field-convertor.use-bool-num = false
-```
-
-* SpringMVC projects
-
-You need to add the following configuration to the xml file for configuring Beans:
-
-```xml
-<bean id="beanReflector" class="cn.zhxu.bs.implement.DefaultBeanReflector">
-    <property name="convertors">
-        <list>
-            <bean class="cn.zhxu.bs.convertor.BoolNumFieldConvertor" />
-            <!-- Omit the configuration of other field converters -->
-        <list>
-    </property>
-</bean>
-<bean id="beanSearcher" class="cn.zhxu.bs.implement.DefaultBeanSearcher">
-    <!-- Omit the configuration of other attributes -->
-    <property name="beanReflector" ref="beanReflector">
-</bean>
 ```
 
 * Others
@@ -208,25 +151,6 @@ If you use the `bean-searcher-boot-starter` dependency of version **v3.0.x**, yo
 public BoolFieldConvertor boolFieldConvertor() {
     return new BoolFieldConvertor();
 }
-```
-
-* SpringMVC projects
-
-You need to add the following configuration to the xml file for configuring Beans:
-
-```xml
-<bean id="beanReflector" class="cn.zhxu.bs.implement.DefaultBeanReflector">
-    <property name="convertors">
-        <list>
-            <bean class="cn.zhxu.bs.convertor.BoolFieldConvertor" />
-            <!-- Omit the configuration of other field converters -->
-        <list>
-    </property>
-</bean>
-<bean id="beanSearcher" class="cn.zhxu.bs.implement.DefaultBeanSearcher">
-    <!-- Omit the configuration of other attributes -->
-    <property name="beanReflector" ref="beanReflector">
-</bean>
 ```
 
 * Others
@@ -278,25 +202,6 @@ If you use the `bean-searcher-boot-starter` dependency of version **v3.0.x**, yo
 public DateFieldConvertor dateFieldConvertor() {
     return new DateFieldConvertor();
 }
-```
-
-* SpringMVC projects
-
-You need to add the following configuration to the xml file for configuring Beans:
-
-```xml
-<bean id="beanReflector" class="cn.zhxu.bs.implement.DefaultBeanReflector">
-    <property name="convertors">
-        <list>
-            <bean class="cn.zhxu.bs.convertor.DateFieldConvertor" />
-            <!-- Omit the configuration of other field converters -->
-        <list>
-    </property>
-</bean>
-<bean id="beanSearcher" class="cn.zhxu.bs.implement.DefaultBeanSearcher">
-    <!-- Omit the configuration of other attributes -->
-    <property name="beanReflector" ref="beanReflector">
-</bean>
 ```
 
 * Others
@@ -412,24 +317,6 @@ public DateFormatFieldConvertor dateFormatFieldConvertor() {
 }
 ```
 
-* SpringMVC Projects
-
-You need to add the following configuration to the xml file for configuring Beans:
-
-```xml
-<bean id="mapSearcher" class="cn.zhxu.bs.implement.DefaultMapSearcher">
-    <!-- Omit the configuration of other attributes. -->
-    <property name="convertors">
-        <list>
-            <bean class="cn.zhxu.bs.convertor.DateFormatFieldConvertor" />
-            <!-- Omit the configuration of other field converters. -->
-        <list>
-    </property>
-</bean>
-```
-
-Using the xml registration method, it is not convenient to call the `setFormat(String scope, String format)` method during Bean initialization. We can get the Bean of type `DateFormatFieldConvertor` in the project startup listener and then call its `setFormat` method to set the format.
-
 * Others
 
 ```java
@@ -479,28 +366,6 @@ bean-searcher.field-convertor.enum-fail-on-error = true # Whether to report an e
 bean-searcher.field-convertor.enum-ignore-case = false  # Whether to ignore case when converting a string value to an enumeration, default is false (since v3.7.0).
 ```
 
-* SpringMVC Projects
-
-You need to add the following configuration to the xml file for configuring Beans:
-
-```xml
-<bean id="beanReflector" class="cn.zhxu.bs.implement.DefaultBeanReflector">
-    <property name="convertors">
-        <list>
-            <bean class="cn.zhxu.bs.convertor.EnumFieldConvertor">
-                <property name="failOnError" value="true">  <!-- Whether to report an error when an illegal value cannot be converted (since v3.7.0). -->
-                <property name="ignoreCase" value="false">  <!-- Whether to ignore case when converting a string value to an enumeration (since v3.7.0). -->
-            </bean>
-            <!-- Omit the configuration of other field converters. -->
-        <list>
-    </property>
-</bean>
-<bean id="beanSearcher" class="cn.zhxu.bs.implement.DefaultBeanSearcher">
-    <!-- Omit the configuration of other attributes. -->
-    <property name="beanReflector" ref="beanReflector">
-</bean>
-```
-
 * Others
 
 ```java
@@ -531,25 +396,6 @@ If you need to **disable** this converter, you can configure it in `application.
 
 ```properties
 bean-searcher.field-convertor.use-time = false
-```
-
-* SpringMVC Projects
-
-You need to add the following configuration to the xml file for configuring Beans:
-
-```xml
-<bean id="beanReflector" class="cn.zhxu.bs.implement.DefaultBeanReflector">
-    <property name="convertors">
-        <list>
-            <bean class="cn.zhxu.bs.convertor.TimeFieldConvertor" />
-            <!-- Omit the configuration of other field converters. -->
-        <list>
-    </property>
-</bean>
-<bean id="beanSearcher" class="cn.zhxu.bs.implement.DefaultBeanSearcher">
-    <!-- Omit the configuration of other attributes. -->
-    <property name="beanReflector" ref="beanReflector">
-</bean>
 ```
 
 * Others
@@ -627,25 +473,6 @@ Other configuration items:
 bean-searcher.field-convertor.json-fail-on-error = false
 ```
 
-* SpringMVC projects
-
-You need to add the following configuration to the XML file for configuring beans:
-
-```xml
-<bean id="beanReflector" class="cn.zhxu.bs.implement.DefaultBeanReflector">
-    <property name="convertors">
-        <list>
-            <bean class="cn.zhxu.bs.convertor.JsonFieldConvertor" />
-            <!-- Omit the configuration of other field converters -->
-        <list>
-    </property>
-</bean>
-<bean id="beanSearcher" class="cn.zhxu.bs.implement.DefaultBeanSearcher">
-    <!-- Omit the configuration of other attributes -->
-    <property name="beanReflector" ref="beanReflector">
-</bean>
-```
-
 * Others
 
 ```java
@@ -718,25 +545,6 @@ Other configuration items:
 ```properties
 # Separator for each item in the List string. The default is a single English comma.
 bean-searcher.field-convertor.list-item-separator = ,
-```
-
-* SpringMVC projects
-
-You need to add the following configuration to the XML file for configuring beans:
-
-```xml
-<bean id="beanReflector" class="cn.zhxu.bs.implement.DefaultBeanReflector">
-    <property name="convertors">
-        <list>
-            <bean class="cn.zhxu.bs.convertor.ListFieldConvertor" />
-            <!-- Omit the configuration of other field converters -->
-        <list>
-    </property>
-</bean>
-<bean id="beanSearcher" class="cn.zhxu.bs.implement.DefaultBeanSearcher">
-    <!-- Omit the configuration of other attributes -->
-    <property name="beanReflector" ref="beanReflector">
-</bean>
 ```
 
 * Others
@@ -862,34 +670,6 @@ When using the `bean-searcher-boot-starter` (v3.6.0+) dependency, you can add th
 bean-searcher.field-convertor.use-b2-m = true
 ```
 
-* SpringMVC projects
-
-You need to add the following configuration to the XML file for configuring beans:
-
-```xml
-<bean id="mapSearcher" class="cn.zhxu.bs.implement.DefaultMapSearcher">
-    <!-- Omit the configuration of other attributes -->
-    <property name="convertors">
-        <list>
-            <bean class="cn.zhxu.bs.convertor.B2MFieldConvertor">
-                <constructor-arg>
-                    <list>
-                        <bean class="cn.zhxu.bs.convertor.NumberFieldConvertor" />
-                        <bean class="cn.zhxu.bs.convertor.StrNumFieldConvertor" />
-                        <bean class="cn.zhxu.bs.convertor.BoolNumFieldConvertor" />
-                        <bean class="cn.zhxu.bs.convertor.BoolFieldConvertor" />
-                        <bean class="cn.zhxu.bs.convertor.DateFieldConvertor" />
-                        <bean class="cn.zhxu.bs.convertor.EnumFieldConvertor" />
-                        <bean class="cn.zhxu.bs.convertor.TimeFieldConvertor" />
-                    <list>
-                </constructor-arg>
-            </bean>
-            <!-- Other field converter configurations are omitted -->
-        <list>
-    </property>
-</bean>
-```
-
 ## Parameter Converter
 
 To be improved...
@@ -927,25 +707,6 @@ It is recommended to use the `bean-searcher-boot-starter` dependency. After cust
 public MyFieldConvertor myFieldConvertor() {
     return new MyFieldConvertor();
 }
-```
-
-* SpringMVC Projects
-
-You need to add the following configuration to the xml file for configuring Beans:
-
-```xml
-<bean id="beanReflector" class="cn.zhxu.bs.implement.DefaultBeanReflector">
-    <property name="convertors">
-        <list>
-            <bean class="com.example.MyFieldConvertor" />
-            <!-- Omit the configuration of other field converters -->
-        <list>
-    </property>
-</bean>
-<bean id="beanSearcher" class="cn.zhxu.bs.implement.DefaultBeanSearcher">
-    <!-- Omit the configuration of other attributes -->
-    <property name="beanReflector" ref="beanReflector">
-</bean>
 ```
 
 * Others
