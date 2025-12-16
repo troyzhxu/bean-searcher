@@ -155,6 +155,8 @@ age = 20
 gexpr = A
 ```
 
+### Frontend Grouping Parameters, Backend Additional Parameters
+
 However, sometimes the group expression `gexpr` needs to be specified by the front-end, and the back-end also needs to inject some parameters that **cannot be ignored**. What should be done in this case? Just inject an additional root group (represented by `$`) parameter:
 
 ```properties
@@ -184,6 +186,24 @@ Map<String, Object> params = MapUtils.builder()
 ```
 
 So, when the back-end needs to manually add search conditions, we recommend using the parameter builder.
+
+### Frontend Regular Parameters, Backend Grouping Additional Parameters
+
+There are also times when the frontend does not use grouping and passes parameters normally, but the backend needs to add additional conditions that are complex and require the use of logical grouping functionality. In this case, because the backend uses grouping while the frontend parameters are not grouped, if not handled specially, the frontend parameters will be forced to **remain outside the groups** and thus be ignored by the searcher.
+
+Therefore, if the backend determines after consideration that **this search api requires frontend parameters**, it can use the parameter builder's `groupRoot()` method to add the frontend's regular parameters to the root group before adding additional grouped conditions. For example:
+
+```java
+Map<String, Object> params = MapUtils.builder(..)
+        // Add the frontend parameters to the root group
+        .groupRoot()
+        // Continue adding additional grouped conditions
+        .or(o -> o
+            .field(User::getAge, 20, 30).op(Between.class)
+            .field(User::getGender, "Male")
+        )
+        .build()
+```
 
 ## Configuration Items
 
