@@ -63,7 +63,7 @@ export default defineConfig({
             items: [
               { text: 'Install', link: '/install' },
               { text: 'Integration', link: '/integration' },
-              { text: 'Searching', link: '/use' },
+              { text: 'Start', link: '/use' },
             ]
           },
           {

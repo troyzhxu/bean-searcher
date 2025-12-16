@@ -4,6 +4,11 @@ Integrating Bean Searcher v3.x is simpler than v2.x (there's no need to configur
 
 Normally, we use Bean Searcher in a backend Java Web project, and it can be used in any Web framework. The following introduces the integration methods in several common Web frameworks:
 
+Integration examples：
+
+* Gitee: https://gitee.com/troyzhxu/bean-searcher/tree/main/bean-searcher-demos
+* Github: https://github.com/troyzhxu/bean-searcher/tree/main/bean-searcher-demos
+
 ## Spring Boot / Grails
 
 Just add the `bean-searcher-boot-starter` dependency, and the integration is complete!
@@ -20,9 +25,6 @@ bean-searcher:
         default-mapping:
             ignore-fields: org_grails_datastore_gorm_GormValidateable__errors
 ```
-
-* [Spring Boot Integration Example](https://gitee.com/troyzhxu/bean-searcher/tree/dev/bean-searcher-demos/bs-demo-springboot)
-* [Grails Integration Example](https://gitee.com/troyzhxu/bean-searcher/tree/dev/bean-searcher-demos/bs-demo-grails)
 
 ## Non-Boot Spring Projects
 
@@ -71,10 +73,6 @@ Just add the `bean-searcher-solon-plugin` dependency, and the integration is com
 ::: tip Tip
 The `bean-searcher-solon-plugin` also provides the same configuration items as the `bean-searcher-boot-starter`.
 :::
-
-* [Solon Integration Example](https://gitee.com/troyzhxu/bean-searcher/tree/dev/bean-searcher-demos/bs-demo-solon)
-
-> Solon Documentation Address: https://solon.noear.org/
 
 ## Others
 

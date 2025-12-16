@@ -66,7 +66,11 @@ private Searcher Searcher;
 
 完整的接口定义，可查阅：[Searcher](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/Searcher.java)、[MapSearcher](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/MapSearcher.java) 与 、[BeanSearcher](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/BeanSearcher.java) 。
 
-## 检索实体类
+## 小试牛刀
+
+下面我们用几行代码来体验一下 Bean Searcher 的检索功能。
+
+### 定义 SearchBean
 
 在 Bean Searcher 的世界里，与数据库有映射关系的实体类称为 SearchBean（一个 SearchBean 可以映射一张表，也可以映射多张表），例如，您的项目中可能已经存在这样的一个实体类了：
 
@@ -85,7 +89,7 @@ public class User {             // 默认映射到 user 表
 
 在注解缺省的情况下，Bean Searcher 认为它是一个单表实体类（即只映射到数据库中的一张表，联表实体类 的例子 请参考 [实体类 > 多表关联](/guide/bean/multitable) 章节。
 
-## 开始检索
+### 定义检索 Api
 
 有了实体类后，接下来我们便用 `MapSearcher` 的 `search(Class<T> beanClass, Map<String, Object> params): SearchResult<Map<String, Object>>` 方法来体验一下如何 **只用一行代码** 实现一个检索接口，代码如下：
 
@@ -129,6 +133,8 @@ public class UserController {
 
 }
 ```
+
+## 开始检索
 
 上面的代码，实现了一个 `/user/index` 接口，它的方法体里真的只有一行代码，但这个接口能支持哪些请求参数呢？不同的请求参数又能输出怎样的结果呢，接下来让我们来简单列举一下：
 
