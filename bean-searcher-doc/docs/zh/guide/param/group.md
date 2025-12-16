@@ -195,7 +195,7 @@ Map<String, Object> params = MapUtils.builder(..)
 
 ```java
 Map<String, Object> params = MapUtils.builder(..)
-        // 将前端的参数添加到根组中
+        // 将前端的参数添加到根组中, since v4.5.0
         .groupRoot()
         // 继续添加额外的分组条件
         .or(o -> o

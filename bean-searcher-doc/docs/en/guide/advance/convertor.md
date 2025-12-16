@@ -1,20 +1,38 @@
-# Field and Parameter Converter
+# Field and Param Converter
+
+Bean Searcher performs type conversions at two distinct stages of the search pipeline:
+
+1. **Parameter Conversion** - transforms incoming search parameter values (usually strings) into database-compatible types before SQL execution
+1. **Field Conversion** - transforms database ResultSet values into Java bean property types after query execution
+
+These conversions are essential because:
+
+- HTTP parameters arrive as strings but may need to query numeric, date, or boolean database columns
+- Different databases return different types for the same logical data (e.g., JSON as `String`, `byte[]`, or `Clob`)
+- Java beans may use convenient types (e.g., `List<Integer>`) that don't directly map to database column types
 
 ## Field Converter
 
-The field converter is used to convert the values queried from the database into the values we need. For example, the value queried from the database is an `Integer` type number, while we need a `Long` type value.
+Field Convertors address the impedance mismatch between database column types and Java bean field types. While JDBC provides basic type mapping (e.g., `INT` → `Integer`, `VARCHAR` → `String`), many scenarios require custom conversion logic:
 
-Bean Searcher provides **7** field converters:
+- JSON columns stored as strings/bytes that need deserialization to Java objects
+- CLOB/TEXT fields that need conversion to strings or collections
+- Database-specific type representations (e.g., byte arrays, proprietary types)
+- String representations that encode structured data (comma-separated values)
+
+Field Convertors operate during the `SqlExecutor` phase of the search pipeline, after the database has returned results but before beans are populated with values.
+
+Bean Searcher provides several built-in field convertors that handle common conversion scenarios.
 
 ### NumberFieldConvertor
 
 > since v3.0.0
 
-> Only valid for the `BeanSearcher` retriever
+> Only effective for the `BeanSearcher`
 
 This converter provides mutual conversion between `Integer`, `int`, `Long`, `long`, `Float`, `float`, `Double`, `double`, `Short`, `short`, `Byte`, `byte`, and `BigDecimal` (support for `BigDecimal` starts from v4.0).
 
-#### Configuration Method
+#### Configuration
 
 * SpringBoot / Grails projects
 
@@ -49,11 +67,11 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 
 > since v3.0.0
 
-> Only valid for the `BeanSearcher` retriever
+> Only effective for the `MapSearcher` 
 
 This converter provides type conversion from `String` to `Integer | int | Long | long | Float | float | Double | double | Short | short | Byte | byte`.
 
-#### Configuration Method
+#### Configuration
 
 * SpringBoot / Grails projects
 
@@ -88,13 +106,13 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 
 > since v3.6.1
 
-> Only valid for the `BeanSearcher` retriever
+> Only effective for the `MapSearcher` 
 
 This converter can convert from `Boolean` type to `Integer | int | Long | long | Short | short | Byte | byte`.
 
 > See: https://github.com/troyzhxu/bean-searcher/issues/33
 
-#### Configuration Method
+#### Configuration
 
 * SpringBoot / Grails projects
 
@@ -122,7 +140,7 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 
 > since v3.0.0
 
-> Only valid for the `BeanSearcher` retriever
+> Only effective for the `MapSearcher` 
 
 This converter provides type conversion from `String | Number` to `Boolean | boolean`. Since `v3.1.4`, `v3.2.3`, and `v3.3.2`, it also supports the conversion from `Boolean -> boolean`.
 
@@ -134,7 +152,7 @@ BoolFieldConvertor convertor = new BoolFieldConvertor();
 convertor.addFalseValues(new String[] { "Nothing" });
 ```
 
-#### Configuration Method
+#### Configuration
 
 * SpringBoot / Grails projects
 
@@ -169,7 +187,7 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 
 > since v3.1.0
 
-> Only valid for the `BeanSearcher` retriever
+> Only effective for the `MapSearcher` 
 
 This converter provides mutual conversion between `Date`, `java.sql.Date`, `java.sql.Timestamp`, `LocalDateTime`, and `LocalDate`. It also supports setting the time zone (if not set, the system default time zone is used). For example:
 
@@ -178,7 +196,7 @@ DateFieldConvertor convertor = new DateFieldConvertor();
 convertor.setZoneId(ZoneId.of("Asia/Shanghai"));
 ```
 
-#### Configuration Method
+#### Configuration
 
 * SpringBoot / Grails projects
 
@@ -220,7 +238,7 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 
 > since v3.1.0
 
-> Only valid for the `MapSearcher` retriever.
+> Only effective for the `MapSearcher` .
 
 This converter can **format field values of types `Date`, `java.sql.Date`, `java.sql.Timestamp`, `LocalDateTime`, `LocalDate`, `LocalTime`, `java.sql.Time` into strings**. It provides a **very powerful** `setFormat(String scope, String format)` method, which supports setting **multiple date formats by scope** (the more precise the scope, the higher the priority of using the format). For example:
 
@@ -255,7 +273,7 @@ convertor.setZoneId(ZoneId.of("Asia/Shanghai"));
 
 When a field of date/time type is formatted, the field in the `Map` object of the retrieval result of the `MapSearcher` retriever will no longer be of date/time type, but a formatted string. The value type has changed.
 
-#### Configuration Methods
+#### Configuration
 
 * SpringBoot / Grails Projects
 
@@ -333,7 +351,7 @@ MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
 
 > since v3.2.0 
 
-> Only valid for the `BeanSearcher` retriever.
+> Only effective for the `MapSearcher` .
 
 This converter provides type conversion in the direction of **`String | Integer | int -> Enum`** (since v3.7.0, it supports converting `Integer | int` to an enumeration, which is converted according to the enumeration sequence number).
 
@@ -354,7 +372,7 @@ public class User {
 }
 ```
 
-#### Configuration Methods
+#### Configuration
 
 * SpringBoot / Grails Projects
 
@@ -382,11 +400,11 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 
 > since v3.5.0
 
-> Only valid for the `BeanSearcher` retriever.
+> Only effective for the `MapSearcher` .
 
 This converter supports the mutual conversion between `java.sql.Time` and `LocalTime`:
 
-#### Configuration Methods
+#### Configuration
 
 * SpringBoot / Grails Projects
 
@@ -414,7 +432,7 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 
 > since v4.0.0
 
-> Only valid for the `BeanSearcher` retriever
+> Only effective for the `MapSearcher` 
 
 This converter supports the conversion from `JSON string` to `POJO` and is used in conjunction with the annotation `@DbField(type = DbType.JSON)` on the field of the SearchBean.
 
@@ -454,7 +472,7 @@ implementation 'cn.zhxu:xjsonkit-snack3:1.5.1'
 
 If your preferred JSON parsing framework is not included, you can also customize the underlying implementation. Refer to: https://gitee.com/troyzhxu/xjsonkit
 
-#### Configuration Methods
+#### Configuration
 
 * SpringBoot / Grails projects
 
@@ -524,11 +542,11 @@ public class User {
 
 > since v4.0.0
 
-> Only valid for the `BeanSearcher` retriever
+> Only effective for the `MapSearcher` 
 
 This converter supports the conversion from `string value` to `List` and can be used to handle lightweight one-to-many relationships.
 
-#### Configuration Methods
+#### Configuration
 
 * SpringBoot / Grails projects
 
@@ -640,13 +658,78 @@ public class TagConvertor implements ListFieldConvertor.Convertor<Tag> {
 }
 ```
 
+### StringFieldConvertor
+
+> since v4.6.0
+
+> Only effective for `BeanSearcher` searcher
+
+This converter supports conversion from `java.sql.Clob`, `Number`, `Boolean`, `Date`, `LocalDate`, and `LocalDateTime` to `String`.
+
+#### Configuration
+
+* SpringBoot / Grails projects
+
+It is recommended to use the `bean-searcher-boot-starter` dependency **v4.6.0+**, which automatically takes effect **without any configuration**.
+
+To **disable** this converter, configure in `application.properties`:
+
+```properties
+bean-searcher.field-convertor.use-string = false
+```
+
+* Others
+
+```java
+DefaultBeanReflector beanReflector = new DefaultBeanReflector();
+beanReflector.addConvertor(new StringFieldConvertor());           // Add converter
+// Build Bean searcher
+BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
+        // Omit configuration of other properties
+        .beanReflector(beanReflector)
+        .build();
+```
+
+### OracleTimestampFieldConvertor
+
+> since v4.4.0
+
+> Only effective for `BeanSearcher` (used for compatibility with the TIMESTAMP type returned by the Oracle driver)
+
+This converter supports conversion from `oracle.sql.TIMESTAMP` to `Instant`, `java.util.Date`, `java.sql.Timestamp`, `LocalDate`, and `LocalDateTime`.
+
+#### Configuration
+
+* SpringBoot / Grails projects
+
+It is recommended to use the `bean-searcher-boot-starter` dependency **v4.4.0+** , which automatically takes effect **without any configuration**.
+
+To **disable** this converter, configure in `application.properties`:
+
+```properties
+# If the Oracle driver is not used, disabling it can achieve better performance
+bean-searcher.field-convertor.use-oracle-timestamp = false
+```
+
+* Others
+
+```java
+DefaultBeanReflector beanReflector = new DefaultBeanReflector();
+beanReflector.addConvertor(new OracleTimestampFieldConvertor());    // Add converter
+// Build Bean searcher
+BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
+        // Omit configuration of other properties
+        .beanReflector(beanReflector)
+        .build();
+```
+
 ### B2MFieldConvertor
 
 > since v3.6.0
 
-> Only valid for the `MapSearcher` retriever
+> Only effective for the `MapSearcher` 
 
-This converter can combine the `BFieldConvertor`, which is only valid for the `BeanSearcher` retriever, into an `MFieldConvertor`, so that it also works for the `MapSearcher`.
+This converter can combine the `BFieldConvertor`, which is Only effective for the `MapSearcher` , into an `MFieldConvertor`, so that it also works for the `MapSearcher`.
 
 #### Enable Effect
 
@@ -660,7 +743,7 @@ When the [DateFormatFieldConvertor](/en/guide/advance/convertor#dateformatfieldc
 
 For performance reasons, this converter is **not enabled by default**. Users can decide whether to enable it according to their own business needs.
 
-#### Configuration Methods
+#### Configuration
 
 * SpringBoot / Grails projects
 
@@ -670,16 +753,143 @@ When using the `bean-searcher-boot-starter` (v3.6.0+) dependency, you can add th
 bean-searcher.field-convertor.use-b2-m = true
 ```
 
-## Parameter Converter
+## Param Converter
 
-To be improved...
+Param Convertors transform incoming search parameter values from their input format (typically strings from HTTP requests) into database-compatible Java types before SQL execution. They are a critical component in the parameter processing pipeline, ensuring type safety between user input and database queries.
+
+Parameter Convertors operate during the parameter resolution phase, after parameter filters have normalized input but before SQL generation. They bridge the gap between loosely-typed HTTP parameters and strongly-typed database columns.
+
+Bean Searcher provides six built-in Parameter Convertors, each handling specific type conversions:
+
+### BoolParamConvertor
+
+> since v3.8.0
+
+Converts boolean values for fields with `DbType.BOOL`.
+
+#### Supported Input Types
+
+- `String` → interpreted as true/false
+- `Number` → `0` is false, non-zero is true
+
+#### String-to-Boolean Mapping
+
+The convertor uses a configurable array of false values:
+
+```java
+private String[] falseValues = new String[] { "0", "OFF", "FALSE", "N", "NO", "F" };
+```
+
+Any string **not** matching these values (case-insensitive) is treated as `true`, Blank strings return `null` 
+
+### NumberParamConvertor
+
+> since v3.8.0
+
+Converts numeric values for fields with numeric `DbType` (BYTE, SHORT, INT, LONG, FLOAT, DOUBLE, DECIMAL).
+
+#### Conversion Logic
+
+For **String** inputs:
+
+- Blank strings return `null`
+- Uses `Byte.parseByte()`, `Integer.parseInt()`, `Long.parseLong()`, etc.
+- Throws `IllegalParamException` on parse failure
+
+For **Number** inputs:
+
+- Uses `Number.byteValue()`, `intValue()`, `longValue()`, etc.
+- Handles `BigDecimal` conversion from both integral and floating-point types
+
+### DateParamConvertor
+
+> since v3.8.0
+
+Converts date values for fields with `DbType.DATE`.
+
+#### Supported Conversions
+
+| Input Type       | Example                     | Output                         |
+| ---------------- | --------------------------- | ------------------------------ |
+| `String`         | `"2023-01-15"`              | `java.sql.Date` or `LocalDate` |
+| `java.util.Date` | Any Date instance           | `java.sql.Date` or `LocalDate` |
+| `LocalDate`      | `LocalDate.of(2023, 1, 15)` | `java.sql.Date` or `LocalDate` |
+| `LocalDateTime`  | `LocalDateTime.now()`       | `java.sql.Date` or `LocalDate` |
+
+#### Key Features
+
+- Accepts both `/` and `-` as date separators
+- Uses regex pattern `[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}` to extract dates from strings
+- Configurable target: `SQL_DATE` (default) or `LOCAL_DATE`
+- Converts `LocalDateTime` by extracting the date component
+
+### DateTimeParamConvertor
+
+> since v3.8.0
+
+Converts date-time values for fields with `DbType.DATETIME`.
+
+#### Key Features:
+
+- Parses multiple datetime string formats: `yyyy-MM-dd HH:mm:ss.SSS`, `yyyy-MM-dd HH:mm:ss`, `yyyy-MM-dd HH:mm`, `yyyy-MM-dd`
+- Accepts both `/` and `-` as date separators
+- Handles numeric strings as epoch milliseconds
+- Configurable target type: `SQL_TIMESTAMP` (default) or `LOCAL_DATE_TIME`
+- Timezone-aware conversion via configurable `TimeZone`/`ZoneId`
+
+### TimeParamConvertor
+
+> since v3.8.0
+
+Converts time values for fields with `DbType.TIME`.
+
+#### Supported String Formats:
+
+- `HH:mm:ss` (e.g., `"14:30:00"`)
+- `HH:mm` (e.g., `"14:30"` → seconds default to `00`)
+
+#### Supported Types:
+
+- `String` → `java.sql.Time` or `LocalTime`
+- `LocalTime` → `java.sql.Time` or `LocalTime`
+- `java.sql.Time` → `LocalTime` (when target is `LOCAL_TIME`)
+
+### EnumParamConvertor
+
+> since v4.2.1
+
+Converts enum values for fields where the Java type is an Enum subclass.
+
+#### Conversion Rules:
+
+| Input                 | DbType   | Output             | Logic                              |
+| --------------------- | -------- | ------------------ | ---------------------------------- |
+| `String: "ACTIVE"`    | `INT`    | `Integer: 0`       | Matches enum name, returns ordinal |
+| `String: "0"`         | `INT`    | `Integer: 0`       | Numeric string parsed as ordinal   |
+| `Enum: Status.ACTIVE` | `INT`    | `Integer: 0`       | Returns enum ordinal               |
+| `Enum: Status.ACTIVE` | `STRING` | `String: "ACTIVE"` | Returns enum name                  |
+
+#### Key Implementation Details:
+
+The `supports()` method checks:
+
+1. Target type is assignable from `Enum.class`
+1. DbType is either `INT` or `STRING`
+1. Value type is either `String` or the target enum type
+
+The `convert()` method handles string inputs by:
+
+1. Attempting case-insensitive enum name match 
+1. Falling back to parsing as numeric ordinal
+1. Throwing `IllegalParamException` if both fail
 
 ## Custom Converter
 
 If none of the built-in converters above can meet your requirements, you can implement your special needs through a custom converter. A custom converter only needs to implement the following interfaces:
 
-* `BFieldConvertor` (Implementing this interface supports the `BeanSearcher` retriever)
-* `MFieldConvertor` (Implementing this interface supports the `MapSearcher` retriever)
+* `BFieldConvertor` (Converter for jdbc result values to field values in SearchBean queried by BeanSearcher)
+* `MFieldConvertor` (Converter for jdbc result values to values in Map queried by MapSearcher)
+* `ParamConvertor` (Converter for api parameters to jdbc parameters)
 
 Both of these interfaces only require implementing two methods:
 
@@ -688,24 +898,19 @@ Both of these interfaces only require implementing two methods:
 
 For specific coding, you can refer to the source code implementations of the built-in converters:
 
-* [Source code of `BoolFieldConvertor`](https://github.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/implement/BoolFieldConvertor.java)
-* [Source code of `DateFieldConvertor`](https://github.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/implement/DateFieldConvertor.java)
-* [Source code of `DateFormatFieldConvertor`](https://github.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/implement/DateFormatFieldConvertor.java)
-* [Source code of `EnumFieldConvertor`](https://github.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/implement/EnumFieldConvertor.java)
-* [Source code of `NumberFieldConvertor`](https://github.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/implement/NumberFieldConvertor.java)
-* [Source code of `StrNumFieldConvertor`](https://github.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/implement/StrNumFieldConvertor.java)
-* [Source code of `TimeFieldConvertor`](https://github.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/implement/TimeFieldConvertor.java)
+* Github: https://github.com/troyzhxu/bean-searcher/tree/main/bean-searcher/src/main/java/cn/zhxu/bs/convertor
+* Gitee: https://github.com/troyzhxu/bean-searcher/tree/main/bean-searcher/src/main/java/cn/zhxu/bs/convertor
 
-### Configuration Methods
+### BFieldConverter
 
-* SpringBoot / Grails Projects
+* SpringBoot / Grails projects
 
-It is recommended to use the `bean-searcher-boot-starter` dependency. After customizing the converter, you only need to declare it as a Spring Bean:
+It is recommended to use the `bean-searcher-boot-starter` dependency. After customizing your converter, simply declare it as a Spring Bean:
 
 ```java
 @Bean
-public MyFieldConvertor myFieldConvertor() {
-    return new MyFieldConvertor();
+public MyBFieldConvertor myBFieldConvertor() {
+    return new MyBFieldConvertor();
 }
 ```
 
@@ -713,10 +918,58 @@ public MyFieldConvertor myFieldConvertor() {
 
 ```java
 DefaultBeanReflector beanReflector = new DefaultBeanReflector();
-beanReflector.addConvertor(new MyFieldConvertor());           // Add the converter
-// Build the Bean retriever
+beanReflector.addConvertor(new MyBFieldConvertor());           // Add converter
+// Build BeanSearcher
 BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
-        // Omit the configuration of other attributes
+        // Omit configuration of other properties
         .beanReflector(beanReflector)
+        .build();
+```
+
+### MFieldConverter
+
+* SpringBoot / Grails projects
+
+It is recommended to use the `bean-searcher-boot-starter` dependency. After customizing your converter, simply declare it as a Spring Bean:
+
+```java
+@Bean
+public MyMFieldConvertor myMFieldConvertor() {
+    return new MyMFieldConvertor();
+}
+```
+
+* Others
+
+```java    
+// Build MapSearcher
+MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
+        // Omit configuration of other properties
+        .addFieldConvertor(new MyMFieldConvertor())    // Add converter
+        .build();
+```
+
+### ParamConverter
+
+* SpringBoot / Grails projects
+
+It is recommended to use the `bean-searcher-boot-starter` dependency. After customizing your converter, simply declare it as a Spring Bean:
+
+```java
+@Bean
+public MyParamConvertor myParamConvertor() {
+    return new MyParamConvertor();
+}
+```
+
+* Others
+
+```java
+DefaultParamResolver paramResolver = new DefaultParamResolver();
+paramResolver.addConvertor(new MyParamConvertor());           // Add converter
+// Build BeanSearcher or MapSearcher
+BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
+        // Omit configuration of other properties
+        .paramResolver(paramResolver)
         .build();
 ```

@@ -1,6 +1,6 @@
-# Parameter and Result Filters
+# Param and Result Filters
 
-## Parameter Filters
+## Param Filters
 
 ### SizeLimitParamFilter
 

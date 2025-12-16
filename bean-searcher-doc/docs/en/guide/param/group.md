@@ -195,7 +195,7 @@ Therefore, if the backend determines after consideration that **this search api 
 
 ```java
 Map<String, Object> params = MapUtils.builder(..)
-        // Add the frontend parameters to the root group
+        // Add the frontend parameters to the root group, since v4.5.0
         .groupRoot()
         // Continue adding additional grouped conditions
         .or(o -> o

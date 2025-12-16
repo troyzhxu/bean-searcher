@@ -104,8 +104,8 @@ export default defineConfig({
             collapsed: false,
             items: [
               { text: 'Constraints and Risk Control', link: '/safe' },
-              { text: 'Parameter and Result Filter', link: '/filter' },
-              { text: 'Field and Parameter Converter', link: '/convertor' },
+              { text: 'Param and Result Filter', link: '/filter' },
+              { text: 'Field and Param Converter', link: '/convertor' },
               { text: 'Field Operator', link: '/fieldop' },
               { text: 'SQL Interceptor', link: '/interceptor' },
               { text: 'SQL Dialect', link: '/dialect' },
