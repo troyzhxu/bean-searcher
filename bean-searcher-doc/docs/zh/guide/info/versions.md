@@ -99,6 +99,7 @@
 ### v4.4 的新特性（v4.4.3）
 
 * Bean Searcher
+  - 新增 `OracleTimestampFieldConvertor`: 用于兼容 `Oracle` 驱动返回的 `TIMESTAMP` 类型字段
   - 新增 `IndexArrayParamFilter`: 支持解析形如 `key[0]=v1 & key[1]=v2` 的参数
   - 增强 `SuffixOpParamFilter`: 使支持将 是否忽略大小写 也合并到一个参数中，例如：`name-ct-ic=xxx`
   - 增强 `MetaResolver`: 新增 `clearCache()` 方法，用于手动清除 `BeanMeta` 缓存
@@ -119,9 +120,11 @@
   - 优化 `LabelLoader` 接口的调用，确保 `load(key, ids)` 方法中的 `ids` 参数有值（since v4.4.1）
   - 优化 `@LabelFor` 注解，支持指向父类和子类中的字段（since v4.4.1）
 * Bean Searcher Boot Starter
+  - 新增配置项 `bean-searcher.params.filter.use-oracle-timestamp` 用于控制是否启用 `OracleTimestampFieldConvertor`，默认 `true`
   - 新增配置项 `bean-searcher.params.filter.use-index-array` 用于控制是否启用 `IndexArrayParamFilter`，默认 `false`
   - 新增 Bean Searcher Label 的自动化配置
 * Bean Searcher Solon Plugin
+  - 新增配置项 `bean-searcher.params.filter.use-oracle-timestamp` 用于控制是否启用 `OracleTimestampFieldConvertor`，默认 `true`
   - 新增配置项 `bean-searcher.params.filter.use-index-array` 用于控制是否启用 `IndexArrayParamFilter`，默认 `false`
   - 新增 Bean Searcher Label 的自动化配置
 

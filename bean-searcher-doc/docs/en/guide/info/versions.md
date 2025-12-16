@@ -97,6 +97,7 @@ Starting from version `v4.5`, default support is for `JDK17+`. To maintain compa
 ### New Features in v4.4 (v4.4.3)
 
 * Bean Searcher
+  - Add `OracleTimestampFieldConvertor`: for compatibility with the `TIMESTAMP` type fields returned by the `Oracle` driver.
   - Added `IndexArrayParamFilter`: Supports parsing parameters in the form `key[0]=v1 & key[1]=v2`.
   - Enhanced `SuffixOpParamFilter`: Supports merging case-insensitive checks into a single parameter, e.g., `name-ct-ic=xxx`.
   - Enhanced `MetaResolver`: Added `clearCache()` method to manually clear the `BeanMeta` cache.
@@ -117,9 +118,11 @@ Starting from version `v4.5`, default support is for `JDK17+`. To maintain compa
   - Optimized `LabelLoader` interface to ensure the `ids` parameter in `load(key, ids)` is non-empty (since v4.4.1).
   - Enhanced `@LabelFor` to support fields in parent and child classes (since v4.4.1).
 * Bean Searcher Boot Starter
+  - Added configuration `bean-searcher.params.filter.use-oracle-timestamp` to enable `OracleTimestampFieldConvertor` (default: `true`).
   - Added configuration `bean-searcher.params.filter.use-index-array` to enable `IndexArrayParamFilter` (default: `false`).
   - Added automated configuration for Bean Searcher Label.
 * Bean Searcher Solon Plugin
+  - Added configuration `bean-searcher.params.filter.use-oracle-timestamp` to enable `OracleTimestampFieldConvertor` (default: `true`).
   - Added configuration `bean-searcher.params.filter.use-index-array` to enable `IndexArrayParamFilter` (default: `false`).
   - Added automated configuration for Bean Searcher Label.
 
