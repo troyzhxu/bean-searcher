@@ -16,9 +16,10 @@ public class DefaultSnippetResolver implements SnippetResolver {
 
     private String paramPrefix = ":";
 
+    // TODO: 下个 feature 版本考虑按 非标识符（非数字、非字母、非下划线）来判断结尾
     private String[] paramEndFlags = new String[] {
             " ", "\t", "\n", "\r", "+", "-", "*", "/", "=", "!", ">", "<",
-            ",", "(", ")", "'", "%", ".", "|", "\\", "&", "^", "?", ";"
+            ",", "(", ")", "'", "%", ".", "|", "\\", "&", "^", "?", ";", "[", "]"
     };
 
     private final char[] quotations = new char[] { '\'', '"' };
