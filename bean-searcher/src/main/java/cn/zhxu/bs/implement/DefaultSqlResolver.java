@@ -316,6 +316,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
             String orderBySql = dbFieldSql.getSql();
             if (StringUtils.isNotBlank(orderBySql)) {
                 builder.append(" order by ").append(orderBySql);
+                if (paging != null) paging.setOrdering(true);
                 SqlWrapper<Object> sqlWrapper = forPaginate(fieldSelectSql, builder.toString(), paging);
                 SqlWrapper<Object> listSql = new SqlWrapper<>(sqlWrapper.getSql());
                 listSql.addParas(dbFieldSql.getParas());
@@ -323,6 +324,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
                 return listSql;
             }
         }
+        if (paging != null) paging.setOrdering(count > 0);
         return forPaginate(fieldSelectSql, builder.toString(), paging);
     }
 
