@@ -2,8 +2,6 @@ package cn.zhxu.bs.dialect;
 
 import cn.zhxu.bs.SqlWrapper;
 import cn.zhxu.bs.param.Paging;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * SqlServer (v2012+) 方言实现
@@ -11,8 +9,6 @@ import org.slf4j.LoggerFactory;
  * @since v3.7.0
  * */
 public class SqlServerDialect extends SqlPagination implements Dialect {
-
-    final static Logger log = LoggerFactory.getLogger(SqlServerDialect.class);
 
     @Override
     public SqlWrapper<Object> forPaginate(String fieldSelectSql, String fromWhereSql, Paging paging) {
@@ -27,8 +23,8 @@ public class SqlServerDialect extends SqlPagination implements Dialect {
                     fieldSelectSql.substring(6) +
                     fromWhereSql);
         }
-        log.warn("Your SQL statement uses pagination but does not specify a sorting field, which may cause it to fail in SQL Server!");
-        return forPaginate(OFFSET_FETCH, fieldSelectSql, fromWhereSql, paging);
+        // 分页达到第二页，但没有指定排序字段，自动追加一个占位符排序，使其符合 SqlServer 的 SQL 语法
+        return forPaginate(" order by null" + OFFSET_FETCH, fieldSelectSql, fromWhereSql, paging);
     }
 
     @Override
