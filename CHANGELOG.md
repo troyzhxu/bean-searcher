@@ -1,3 +1,11 @@
+# v4.8.3 @ 2025-11-18
+
+## 🐛 Bug Fixes
+
+* 修复 `SqlServerDialect` 在用户未指定排序字段时的分页查询的生成的 SQL 不符合 SQL Server 语法要求的问题：
+  - 第一页分页查询使用 `SELECT TOP` 语法
+  - 其它页查询自动添加 `ORDER BY (SELECT NULL)` 使 SQL 符合 `SQL Server` 语法
+
 # v4.8.2 @ 2025-11-18
 
 ## 🐛 Bug Fixes（Bean Searcher Exporter）
