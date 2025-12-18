@@ -38,7 +38,7 @@ public class SqlServerDialectTestCase {
     @Test
     public void test_04() {
         SqlWrapper<Object> wrapper = dialect.forPaginate("select id, name", " from user where id > 1", new Paging(15, 30));
-        Assertions.assertEquals("select id, name from user where id > 1 order by null offset ? rows fetch next ? rows only", wrapper.getSql());
+        Assertions.assertEquals("select id, name from user where id > 1 order by (select null) offset ? rows fetch next ? rows only", wrapper.getSql());
         List<Object> paras = wrapper.getParas();
         Assertions.assertEquals(2, paras.size());
         Assertions.assertEquals(30L, paras.get(0));

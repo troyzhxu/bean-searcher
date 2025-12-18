@@ -24,7 +24,7 @@ public class SqlServerDialect extends SqlPagination implements Dialect {
                     fromWhereSql);
         }
         // 分页达到第二页，但没有指定排序字段，自动追加一个占位符排序，使其符合 SqlServer 的 SQL 语法
-        return forPaginate(" order by null" + OFFSET_FETCH, fieldSelectSql, fromWhereSql, paging);
+        return forPaginate(" order by (select null)" + OFFSET_FETCH, fieldSelectSql, fromWhereSql, paging);
     }
 
     @Override
