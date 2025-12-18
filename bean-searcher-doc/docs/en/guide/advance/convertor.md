@@ -2,25 +2,25 @@
 
 Bean Searcher performs type conversions at two distinct stages of the search pipeline:
 
-1. **Parameter Conversion** - transforms incoming search parameter values (usually strings) into database-compatible types before SQL execution
-1. **Field Conversion** - transforms database ResultSet values into Java bean property types after query execution
+1. **Parameter Conversion** - transforms incoming search parameter values (usually strings) into database-compatible types before SQL execution
+1. **Field Conversion** - transforms database ResultSet values into Java bean property types after query execution
 
 These conversions are essential because:
 
 - HTTP parameters arrive as strings but may need to query numeric, date, or boolean database columns
-- Different databases return different types for the same logical data (e.g., JSON as `String`, `byte[]`, or `Clob`)
-- Java beans may use convenient types (e.g., `List<Integer>`) that don't directly map to database column types
+- Different databases return different types for the same logical data (e.g., JSON as `String`, `byte[]`, or `Clob`)
+- Java beans may use convenient types (e.g., `List<Integer>`) that don't directly map to database column types
 
 ## Field Converter
 
-Field Convertors address the impedance mismatch between database column types and Java bean field types. While JDBC provides basic type mapping (e.g., `INT` → `Integer`, `VARCHAR` → `String`), many scenarios require custom conversion logic:
+Field Convertors address the impedance mismatch between database column types and Java bean field types. While JDBC provides basic type mapping (e.g., `INT` → `Integer`, `VARCHAR` → `String`), many scenarios require custom conversion logic:
 
 - JSON columns stored as strings/bytes that need deserialization to Java objects
 - CLOB/TEXT fields that need conversion to strings or collections
 - Database-specific type representations (e.g., byte arrays, proprietary types)
 - String representations that encode structured data (comma-separated values)
 
-Field Convertors operate during the `SqlExecutor` phase of the search pipeline, after the database has returned results but before beans are populated with values.
+Field Convertors operate during the `SqlExecutor` phase of the search pipeline, after the database has returned results but before beans are populated with values.
 
 Bean Searcher provides several built-in field convertors that handle common conversion scenarios.
 
@@ -694,20 +694,17 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 
 > since v4.4.0
 
-> Only effective for `BeanSearcher` (used for compatibility with the TIMESTAMP type returned by the Oracle driver)
+> Only effective for `BeanSearcher` (used for compatibility with the TIMESTAMP type returned by the Oracle driver)
 
-This converter supports conversion from `oracle.sql.TIMESTAMP` to `Instant`, `java.util.Date`, `java.sql.Timestamp`, `LocalDate`, and `LocalDateTime`.
+This converter supports conversion from `oracle.sql.TIMESTAMP` to `Instant`, `java.util.Date`, `java.sql.Timestamp`, `LocalDate`, and `LocalDateTime`.
 
 #### Configuration
 
 * SpringBoot / Grails projects
 
-It is recommended to use the `bean-searcher-boot-starter` dependency **v4.4.0+** , which automatically takes effect **without any configuration**.
-
-To **disable** this converter, configure in `application.properties`:
+When the Oracle JDBC driver exists in the `classpath`, this converter takes effect automatically **without any configuration**. To **disable** this converter, you can configure it in `application.properties` as follows:
 
 ```properties
-# If the Oracle driver is not used, disabling it can achieve better performance
 bean-searcher.field-convertor.use-oracle-timestamp = false
 ```
 
@@ -765,94 +762,94 @@ Bean Searcher provides six built-in Parameter Convertors, each handling specific
 
 > since v3.8.0
 
-Converts boolean values for fields with `DbType.BOOL`.
+Converts boolean values for fields with `DbType.BOOL`.
 
 #### Supported Input Types
 
-- `String` → interpreted as true/false
-- `Number` → `0` is false, non-zero is true
+- `String` → interpreted as true/false
+- `Number` → `0` is false, non-zero is true
 
 #### String-to-Boolean Mapping
 
 The convertor uses a configurable array of false values:
 
 ```java
-private String[] falseValues = new String[] { "0", "OFF", "FALSE", "N", "NO", "F" };
+private String[] falseValues = new String[] { "0", "OFF", "FALSE", "N", "NO", "F" };
 ```
 
-Any string **not** matching these values (case-insensitive) is treated as `true`, Blank strings return `null` 
+Any string **not** matching these values (case-insensitive) is treated as `true`, Blank strings return `null` 
 
 ### NumberParamConvertor
 
 > since v3.8.0
 
-Converts numeric values for fields with numeric `DbType` (BYTE, SHORT, INT, LONG, FLOAT, DOUBLE, DECIMAL).
+Converts numeric values for fields with numeric `DbType` (BYTE, SHORT, INT, LONG, FLOAT, DOUBLE, DECIMAL).
 
 #### Conversion Logic
 
-For **String** inputs:
+For **String** inputs:
 
-- Blank strings return `null`
-- Uses `Byte.parseByte()`, `Integer.parseInt()`, `Long.parseLong()`, etc.
-- Throws `IllegalParamException` on parse failure
+- Blank strings return `null`
+- Uses `Byte.parseByte()`, `Integer.parseInt()`, `Long.parseLong()`, etc.
+- Throws `IllegalParamException` on parse failure
 
-For **Number** inputs:
+For **Number** inputs:
 
-- Uses `Number.byteValue()`, `intValue()`, `longValue()`, etc.
-- Handles `BigDecimal` conversion from both integral and floating-point types
+- Uses `Number.byteValue()`, `intValue()`, `longValue()`, etc.
+- Handles `BigDecimal` conversion from both integral and floating-point types
 
 ### DateParamConvertor
 
 > since v3.8.0
 
-Converts date values for fields with `DbType.DATE`.
+Converts date values for fields with `DbType.DATE`.
 
 #### Supported Conversions
 
 | Input Type       | Example                     | Output                         |
 | ---------------- | --------------------------- | ------------------------------ |
-| `String`         | `"2023-01-15"`              | `java.sql.Date` or `LocalDate` |
-| `java.util.Date` | Any Date instance           | `java.sql.Date` or `LocalDate` |
-| `LocalDate`      | `LocalDate.of(2023, 1, 15)` | `java.sql.Date` or `LocalDate` |
-| `LocalDateTime`  | `LocalDateTime.now()`       | `java.sql.Date` or `LocalDate` |
+| `String`         | `"2023-01-15"`              | `java.sql.Date` or `LocalDate` |
+| `java.util.Date` | Any Date instance           | `java.sql.Date` or `LocalDate` |
+| `LocalDate`      | `LocalDate.of(2023, 1, 15)` | `java.sql.Date` or `LocalDate` |
+| `LocalDateTime`  | `LocalDateTime.now()`       | `java.sql.Date` or `LocalDate` |
 
 #### Key Features
 
-- Accepts both `/` and `-` as date separators
-- Uses regex pattern `[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}` to extract dates from strings
-- Configurable target: `SQL_DATE` (default) or `LOCAL_DATE`
-- Converts `LocalDateTime` by extracting the date component
+- Accepts both `/` and `-` as date separators
+- Uses regex pattern `[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}` to extract dates from strings
+- Configurable target: `SQL_DATE` (default) or `LOCAL_DATE`
+- Converts `LocalDateTime` by extracting the date component
 
 ### DateTimeParamConvertor
 
 > since v3.8.0
 
-Converts date-time values for fields with `DbType.DATETIME`.
+Converts date-time values for fields with `DbType.DATETIME`.
 
 #### Key Features:
 
-- Parses multiple datetime string formats: `yyyy-MM-dd HH:mm:ss.SSS`, `yyyy-MM-dd HH:mm:ss`, `yyyy-MM-dd HH:mm`, `yyyy-MM-dd`
-- Accepts both `/` and `-` as date separators
+- Parses multiple datetime string formats: `yyyy-MM-dd HH:mm:ss.SSS`, `yyyy-MM-dd HH:mm:ss`, `yyyy-MM-dd HH:mm`, `yyyy-MM-dd`
+- Accepts both `/` and `-` as date separators
 - Handles numeric strings as epoch milliseconds
-- Configurable target type: `SQL_TIMESTAMP` (default) or `LOCAL_DATE_TIME`
-- Timezone-aware conversion via configurable `TimeZone`/`ZoneId`
+- Configurable target type: `SQL_TIMESTAMP` (default) or `LOCAL_DATE_TIME`
+- Timezone-aware conversion via configurable `TimeZone`/`ZoneId`
 
 ### TimeParamConvertor
 
 > since v3.8.0
 
-Converts time values for fields with `DbType.TIME`.
+Converts time values for fields with `DbType.TIME`.
 
 #### Supported String Formats:
 
-- `HH:mm:ss` (e.g., `"14:30:00"`)
-- `HH:mm` (e.g., `"14:30"` → seconds default to `00`)
+- `HH:mm:ss` (e.g., `"14:30:00"`)
+- `HH:mm` (e.g., `"14:30"` → seconds default to `00`)
 
 #### Supported Types:
 
-- `String` → `java.sql.Time` or `LocalTime`
-- `LocalTime` → `java.sql.Time` or `LocalTime`
-- `java.sql.Time` → `LocalTime` (when target is `LOCAL_TIME`)
+- `String` → `java.sql.Time` or `LocalTime`
+- `LocalTime` → `java.sql.Time` or `LocalTime`
+- `java.sql.Time` → `LocalTime` (when target is `LOCAL_TIME`)
 
 ### EnumParamConvertor
 
@@ -871,17 +868,17 @@ Converts enum values for fields where the Java type is an Enum subclass.
 
 #### Key Implementation Details:
 
-The `supports()` method checks:
+The `supports()` method checks:
 
-1. Target type is assignable from `Enum.class`
-1. DbType is either `INT` or `STRING`
-1. Value type is either `String` or the target enum type
+1. Target type is assignable from `Enum.class`
+1. DbType is either `INT` or `STRING`
+1. Value type is either `String` or the target enum type
 
-The `convert()` method handles string inputs by:
+The `convert()` method handles string inputs by:
 
-1. Attempting case-insensitive enum name match 
+1. Attempting case-insensitive enum name match 
 1. Falling back to parsing as numeric ordinal
-1. Throwing `IllegalParamException` if both fail
+1. Throwing `IllegalParamException` if both fail
 
 ## Custom Converter
 
@@ -953,7 +950,7 @@ MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
 
 * SpringBoot / Grails projects
 
-It is recommended to use the `bean-searcher-boot-starter` dependency. After customizing your converter, simply declare it as a Spring Bean:
+It is recommended to use the `bean-searcher-boot-starter` dependency. After customizing your converter, simply declare it as a Spring Bean:
 
 ```java
 @Bean
