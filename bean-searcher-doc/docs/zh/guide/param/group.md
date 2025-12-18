@@ -155,6 +155,8 @@ age = 20
 gexpr = A
 ```
 
+### 前端分组传参，后端额外加参
+
 但有时候组表达式 `gexpr` 是需要前端指定的，同时后端也需要注入一些参数，并且 **不能被忽略**，这时该怎么办呢？此时只需多注入一个根组（用 `$` 表示）参数即可：
 
 ```properties
@@ -169,7 +171,7 @@ $.age = 20
 为了让某个字段参数不能被忽略，我们必须向检索参数中注入两个参数（如上面的 `age` 与 `$.age`），这略显麻烦。为此，`v3.8.0` 同时增强了参数构建器，使其 `field(..)` 方法在 **未显示指定组** 之前，都会自动添加对应的根参数。例如：
 
 ```java
-Map<String, Object> params = MapUtils.builder()
+Map<String, Object> params = MapUtils.builder(..)
         // 未显示指定组 之前调用 field 方法
         .field(User::getAge, 20) 
         // 等效于下面的两行代码：
@@ -184,6 +186,24 @@ Map<String, Object> params = MapUtils.builder()
 ```
 
 所以当后端需要手动添加检索条件时，我们推荐您使用参数构建器。
+
+### 前端常规传参，后端分组加参
+
+还有的时候，前端未分组，是正常传参的，而后端需要额外添加的条件比较复杂，需要使用逻辑分组功能。此时，由于后端使用了分组，而前端的参数未分组，如果不特殊处理，就会造成了前端的参数被迫 **遗留在组外**，从而会被检索器忽略。
+
+因此，如果后端经过考虑之后，确定 **这个检索接口是需要前端传参的**，则可以在分组添加额外条件之前，先使用参数构建器的 `groupRoot()` 方法将前端的普通参数添加到根组中。例如：
+
+```java
+Map<String, Object> params = MapUtils.builder(..)
+        // 将前端的参数添加到根组中, since v4.5.0
+        .groupRoot()
+        // 继续添加额外的分组条件
+        .or(o -> o
+            .field(User::getAge, 20, 30).op(Between.class)
+            .field(User::getGender, "Male")
+        )
+        .build()
+```
 
 ## 配置项
 

@@ -9,7 +9,7 @@
 
 	<groupId>cn.zhxu</groupId>
 	<artifactId>bean-searcher-parent</artifactId>
-	<version>4.8.2.jdk8</version>
+	<version>4.8.3.jdk8</version>
 
 	<packaging>pom</packaging>
 
@@ -29,7 +29,7 @@
 		<spring.boot.version>2.7.18</spring.boot.version>
         <spring.version>5.3.39</spring.version>
         <servlet.version>4.0.4</servlet.version>
-		<solon.version>3.5.1</solon.version>
+		<solon.version>3.7.3</solon.version>
 		<oracle.version>23.9.0.25.07</oracle.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -54,7 +54,7 @@
 		<connection>scm:git:https://github.com/troyzhxu/bean-searcher.git</connection>
 		<developerConnection>scm:git:https://github.com/troyzhxu/bean-searcher.git</developerConnection>
 		<url>https://github.com/troyzhxu/bean-searcher</url>
-		<tag>v4.8.2.jdk8</tag>
+		<tag>v4.8.3.jdk8</tag>
 	</scm>
 
 	<dependencies>

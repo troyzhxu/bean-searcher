@@ -57,25 +57,53 @@ If a database has a unique pagination syntax, you only need to customize a diale
 
 ## DEMO Quick Experience
 
-Repository address: [https://github.com/troyzhxu/bean-searcher/tree/master/bean-searcher-demos/bs-demo-springboot](https://github.com/troyzhxu/bean-searcher/tree/master/bean-searcher-demos/bs-demo-springboot)
+Experience in three quick steps
 
 ### Step 1: Clone
 
-```bash
-> git clone https://github.com/troyzhxu/bean-searcher.git
+::: code-group
+```bash [Gitee]
+git clone https://gitee.com/troyzhxu/bean-searcher.git
 ```
+```bash [Github]
+git clone https://github.com/troyzhxu/bean-searcher.git
+```
+:::
 
 ### Step 2: Run
 
-```bash
-> cd bean-searcher/bean-searcher-demos/bs-demo-springboot
-> mvn spring-boot:run
+::: code-group
+```bash [SpringBoot4]
+# This demo is based on JDK 21+
+cd bean-searcher/bean-searcher-demos/bs-demo-sb4
+./gradlew bootRun
 ```
+```bash [SpringBoot3]
+# This demo is based on JDK 17+
+cd bean-searcher/bean-searcher-demos/bs-demo-sb3
+./gradlew bootRun
+```
+```bash [SpringBoot2]
+# This demo is based on JDK 8+
+cd bean-searcher/bean-searcher-demos/bs-demo-sb2
+mvn spring-boot:run
+```
+```bash [Solon]
+# This demo is based on JDK 8+
+cd bean-searcher/bean-searcher-demos/bs-demo-solon
+# IDEA 中打开运行
+```
+```bash [Grails]
+# This demo is based on JDK 8+
+cd bean-searcher/bean-searcher-demos/bs-demo-grails
+grails run-app
+```
+:::
 
-### Step 3: Effect
+### Step 3: Result
 
 Access `http://localhost:8080/` to view the running effect.
 
-For more information about this example, refer to [DEMO Detailed Introduction](https://github.com/troyzhxu/bean-searcher/tree/master/bean-searcher-demos/bs-demo-springboot).
+For more information about this example, refer to [DEMO Detailed Introduction](https://github.com/troyzhxu/bean-searcher/blob/main/bean-searcher-demos/bs-demo-sb4/README.md).
 
-[More DEMOs](https://github.com/troyzhxu/bean-searcher/tree/master/bean-searcher-demos)
+[More DEMOs](https://github.com/troyzhxu/bean-searcher/blob/main/bean-searcher-demos)

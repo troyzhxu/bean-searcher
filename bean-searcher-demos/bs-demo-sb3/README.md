@@ -18,7 +18,7 @@
 ```bash
 > git clone https://github.com/troyzhxu/bean-searcher.git
 > cd bean-searcher/bean-searcher-demos/bs-demo-sb3
-> mvn spring-boot:run
+> ./gradlew bootRun
 ```
 
 ### 运行效果

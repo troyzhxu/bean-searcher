@@ -29,14 +29,14 @@ export default defineConfig({
         text: '生态',
         items: [
           {
-            text: 'Bean Searcher Label',
+            text: '标签系统',
             link: '/zoo/label/info',
-            activeMatch: '/zoo/'
+            activeMatch: '/zoo/label'
           },
           {
-            text: 'Bean Searcher Exporter',
-            link: '/zoo/exporter/info',
-            activeMatch: '/zoo/'
+            text: '数据导出',
+            link: '/zoo/ex/info',
+            activeMatch: '/zoo/ex'
           }
         ]
       },
@@ -78,6 +78,7 @@ export default defineConfig({
             collapsed: false,
             items: [
               { text: '概念', link: '/info' },
+              { text: '核心注解', link: '/annos' },
               { text: '多表关联', link: '/multitable' },
               { text: '其它形式', link: '/otherform' },
               { text: '条件属性', link: '/fields' },
@@ -135,23 +136,26 @@ export default defineConfig({
         base: '/zoo', 
         items: [
           {
-            text: 'Bean Searcher Label',
+            text: '标签系统',
             base: '/zoo/label',
             collapsed: false,
             items: [
               { text: '介绍', link: '/info' },
-              { text: 'Bean Searcher', link: '/bean-searcher' },
-              { text: 'What\'s New?', link: '/versions' },
+              { text: '标签注解', link: '/anno' },
+              { text: '标签加载器', link: '/load' },
+              { text: '用法示例', link: '/demo' },
             ]
           },
           {
-            text: 'Bean Searcher Exporter',
-            base: '/zoo/exporter',
+            text: '数据导出',
+            base: '/zoo/ex',
             collapsed: false,
             items: [
               { text: '介绍', link: '/info' },
-              { text: '集成', link: '/integration' },
-              { text: '使用', link: '/use' },
+              { text: '文件导出器', link: '/exporter' },
+              { text: '导出注解', link: '/anno' },
+              { text: '文件写出', link: '/fwriter' },
+              { text: '并发控制', link: '/control' },
             ]
           },
         ]

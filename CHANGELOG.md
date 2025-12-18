@@ -1,3 +1,23 @@
+# v4.8.3 @ 2025-12-18
+
+## ✨ Features
+
+* 嵌入参数结束标志支持方括号检测
+
+## 🌻 Better
+
+- 将 Spring Boot 从 `3.3.13` 升级到 `3.5.8`
+- 将 Spring Framework 从 `6.1.21` 升级到 `6.2.15`
+- 将 Solon 从 `3.5.1` 升级到 `3.7.3`
+
+## 🐛 Bug Fixes
+
+* 修复 `SqlServerDialect` 在用户未指定排序字段时的分页查询的生成的 SQL 不符合 SQL Server 语法要求的问题：
+  - 第一页分页查询使用 `SELECT TOP` 语法
+  - 其它页查询自动添加 `ORDER BY (SELECT NULL)` 使 SQL 符合 `SQL Server` 语法
+
+## 同时发布 v4.8.3.jdk8 版本
+
 # v4.8.2 @ 2025-11-18
 
 ## 🐛 Bug Fixes（Bean Searcher Exporter）
@@ -58,7 +78,7 @@
 * Bean Searcher
   - 方言 `Dialect` 接口新增 `allowBoolLiterals(): boolean` 方法定义，用于指示数据库是否支持布尔字面量
   - 新增 `DialectSqlInterceptor` 组件，用于当数据库不支持布尔字面量时，将用户 SQL 中的布尔字面量自动转换为 `1` 和 `0`
-  - 新增 `DaMengDialect` 方言实现，用于兼容达梦数据库
+  - 新增 `DaMengDialect` 方言实现，用于兼容 **达梦** 数据库
   - 新增 `StringFieldConvertor`, 可将 JDBC 返回的 `Clob`、`Number`、`Boolean` 与 `Date` 类型的值转换为 `String`（可兼容达梦数据库对 `TEXT` 类型字段返回 `Clob` 的情况）
 
 * Bean Searcher Boot Starter
@@ -75,7 +95,7 @@
 
 ## 🌻 Better
 
-* 优化 `EnumFieldConvertor`：以支持 short 与 byte 向枚举转换。此前只支持 String 与 int 类型。
+* 优化 `EnumFieldConvertor`：以支持 `short` 与 `byte` 向枚举转换。此前只支持 `String` 与 `int` 类型。
 * JDK 版本要求：JDK 17+
 
 ## 同时发布 v4.5.2.jdk8 版本
@@ -88,13 +108,11 @@
 * 优化 `DefaultSqlExecutor`：如果 JDBC 在 `prepareStatement` 阶段报错，也打印出报错的 SQL
 * JDK 版本要求：JDK 17+
 
-## 同时发布 v4.5.0.jdk8 版本
-
 # v4.4.3 @ 2025-09-20
 
 ## 🌻 Better
 
-* 优化 `EnumFieldConvertor`：以支持 short 与 byte 向枚举转换。此前只支持 String 与 int 类型。
+* 优化 `EnumFieldConvertor`：以支持 `short` 与 `byte` 向枚举转换。此前只支持 `String` 与 `int` 类型。
 * 优化 `DefaultSqlExecutor`：如果 SQL 执行报错，则 SQL 日志级别从 `DEBUG` 提升为 `ERROR`
 * 优化 `DefaultSqlExecutor`：如果 JDBC 在 `prepareStatement` 阶段报错，也打印出报错的 SQL
 

@@ -18,7 +18,7 @@ hero:
 features:
   - icon: 😱
     title: Amazing development efficiency
-    details: Tiansheng supports joint tables, free of DTO/VO conversion, and a line of code can easily achieve advanced queries, greatly improving research and development efficiency.
+    details: Natively supports joint tables, free of DTO/VO conversion, and a line of code can easily achieve advanced queries, greatly improving research and development efficiency.
   - icon: 🚀
     title: Superb runtime performance
     details: Compared with traditional ORMs such as MyBatis and Hibernate, it has several times the Java layer runtime performance improvement.

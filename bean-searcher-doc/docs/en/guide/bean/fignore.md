@@ -1,10 +1,10 @@
-# Attribute Ignoring
+# Field Ignore
 
-There are four ways in Bean Searcher to ignore a certain attribute in an entity class.
+There are four ways in Bean Searcher to ignore a certain field in an entity class.
 
 ## Modifiers static and transient
 
-Attributes modified by the keywords `static` or `transient` will be automatically ignored. For example:
+Fields modified by the keywords `static` or `transient` will be automatically ignored. For example:
 
 ```java
 public class Address {
@@ -42,9 +42,9 @@ public class User extends BaseEntity {
 * Reason 2: Sometimes the attribute to be ignored is in the parent class, but this attribute cannot be ignored in other child entity classes.
 :::
 
-## Global attribute ignoring
+## Global fields ignoring
 
-Since v3.4.0, Bean Searcher has supported globally ignoring certain attributes that are not annotated with `@DbField`.
+Since v3.4.0, Bean Searcher has supported globally ignoring certain fields that are not annotated with `@DbField`.
 
 ### SpringBoot / Grails
 

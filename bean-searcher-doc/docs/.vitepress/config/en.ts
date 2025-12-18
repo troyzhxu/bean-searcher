@@ -24,6 +24,21 @@ export default defineConfig({
           }
         ]
       },
+      {
+        text: 'Ecosystem',
+        items: [
+          {
+            text: 'Label',
+            link: '/en/zoo/label/info',
+            activeMatch: '/en/zoo/label'
+          },
+          {
+            text: 'Exporter',
+            link: '/en/zoo/ex/info',
+            activeMatch: '/en/zoo/ex'
+          }
+        ]
+      },
       { text: 'Blog', link: 'https://juejin.cn/column/7028509095564935199' },
     ],
 
@@ -48,7 +63,7 @@ export default defineConfig({
             items: [
               { text: 'Install', link: '/install' },
               { text: 'Integration', link: '/integration' },
-              { text: 'Searching', link: '/use' },
+              { text: 'Start', link: '/use' },
             ]
           },
           {
@@ -57,6 +72,7 @@ export default defineConfig({
             collapsed: false,
             items: [
               { text: 'Conception', link: '/info' },
+              { text: 'Core Annotations', link: '/annos' },
               { text: 'Multi-table Join', link: '/multitable' },
               { text: 'Other Forms', link: '/otherform' },
               { text: 'Conditional Fields', link: '/fields' },
@@ -88,8 +104,8 @@ export default defineConfig({
             collapsed: false,
             items: [
               { text: 'Constraints and Risk Control', link: '/safe' },
-              { text: 'Parameter and Result Filter', link: '/filter' },
-              { text: 'Field and Parameter Converter', link: '/convertor' },
+              { text: 'Param and Result Filter', link: '/filter' },
+              { text: 'Field and Param Converter', link: '/convertor' },
               { text: 'Field Operator', link: '/fieldop' },
               { text: 'SQL Interceptor', link: '/interceptor' },
               { text: 'SQL Dialect', link: '/dialect' },
@@ -109,7 +125,35 @@ export default defineConfig({
             ]
           }
         ]
-      }
+      },
+      '/en/zoo/': {
+        base: '/en/zoo', 
+        items: [
+          {
+            text: '标签系统',
+            base: '/en/zoo/label',
+            collapsed: false,
+            items: [
+              { text: '介绍', link: '/info' },
+              { text: '标签注解', link: '/anno' },
+              { text: '标签加载器', link: '/load' },
+              { text: '用法示例', link: '/demo' },
+            ]
+          },
+          {
+            text: '数据导出',
+            base: '/en/zoo/ex',
+            collapsed: false,
+            items: [
+              { text: '介绍', link: '/info' },
+              { text: '文件导出器', link: '/exporter' },
+              { text: '导出注解', link: '/anno' },
+              { text: '文件写出', link: '/fwriter' },
+              { text: '并发控制', link: '/control' },
+            ]
+          },
+        ]
+      },
     },
 
     editLink: {

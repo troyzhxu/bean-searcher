@@ -3,7 +3,12 @@
 
 集成 v3.x 的 Bean Searcher 比 v2.x 更加简单（不再需要配置 SearchBean 所在包名路径）。
 
-通常情况下，我们都是在一个后端的 Java Web 项目中使用 Bean Searcher，它可以在任意的 Web 框架中使用，以下介绍在常见的几种 Web 框架的集成方法：
+通常情况下，我们都是在一个后端的 Java Web 项目中使用 Bean Searcher，它可以在任意的 Web 框架中使用，以下介绍在常见的几种 Web 框架的集成方法。
+
+集成案例：
+
+* Gitee: https://gitee.com/troyzhxu/bean-searcher/tree/main/bean-searcher-demos
+* Github: https://github.com/troyzhxu/bean-searcher/tree/main/bean-searcher-demos
 
 ## Spring Boot / Grails
 
@@ -21,9 +26,6 @@ bean-searcher:
         default-mapping:
             ignore-fields: org_grails_datastore_gorm_GormValidateable__errors
 ```
-
-* [SpringBoot 集成案例](https://gitee.com/troyzhxu/bean-searcher/tree/dev/bean-searcher-demos/bs-demo-springboot)
-* [Grails 集成案例](https://gitee.com/troyzhxu/bean-searcher/tree/dev/bean-searcher-demos/bs-demo-grails)
 
 ## 非 Boot 的 Spring 项目
 
@@ -72,10 +74,6 @@ mapSearcher(DefaultMapSearcher) {
 ::: tip 提示
 `bean-searcher-solon-plugin` 也提供了与 `bean-searcher-boot-starter` 一样的配置项。
 :::
-
-* [Solon 集成案例](https://gitee.com/troyzhxu/bean-searcher/tree/dev/bean-searcher-demos/bs-demo-solon)
-
-> Solon 文档地址：https://solon.noear.org/
 
 ## Others
 

@@ -1,4 +1,4 @@
-# Usage
+# Start
 
 If you're not sure where Bean Searcher is suitable for use, please first read the [Introduction > Bean Searcher](/en/guide/info/bean-searcher) section.
 
@@ -66,9 +66,14 @@ After obtaining the searcher, let's take a look at the methods provided by both 
 
 For the complete interface definitions, please refer to: [Searcher](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/Searcher.java), [MapSearcher](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/MapSearcher.java), and [BeanSearcher](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/BeanSearcher.java).
 
-## Search Entity Classes
 
-In the world of Bean Searcher, entity classes that have a mapping relationship with the database are called SearchBeans (a SearchBean can map to one table or multiple tables). For example, you may already have an entity class like this in your project:
+## A Quick Try
+
+Let's experience Bean Searcher's retrieval functionality with just a few lines of code.
+
+### Define a SearchBean
+
+In the world of Bean Searcher, entity classes that have a mapping relationship with the database are called SearchBeans (a SearchBean can map to a single table or multiple tables). For example, your project might already have an entity class like this:
 
 ```java
 public class User {             // By default, it maps to the user table.
@@ -85,9 +90,9 @@ Compared to v2.x, the entity classes in Bean Searcher v3.x can omit annotations 
 
 In the absence of annotations, Bean Searcher considers it a single-table entity class (i.e., it only maps to one table in the database. For an example of a multi-table entity class, please refer to the [Entity Classes > Multi-table Association](/en/guide/bean/multitable) section).
 
-## Start Searching
+### Define a Search Api
 
-After having the entity class, let's use the `search(Class<T> beanClass, Map<String, Object> params): SearchResult<Map<String, Object>>` method of `MapSearcher` to experience how to implement a search interface with **just one line of code**. The code is as follows:
+With the entity class in place, we can now use the `search(Class<T> beanClass, Map<String, Object> params): SearchResult<Map<String, Object>>` method of `MapSearcher` to experience how to implement a search api with **just one line of code**. The code is as follows:
 
 ```java
 @RestController
@@ -111,7 +116,7 @@ The `MapUtils` mentioned above is a utility class provided by Bean Searcher. `Ma
 Of course, you don't have to get the parameters directly from the `request`. It's just that the code looks more concise this way.
 :::
 
-You can also configure [Automatic Request Parameter Reception](/en/guide/usage/others#Automatic Request Parameter Reception), and then your code can be further simplified:
+You can also configure [Automatic Request Parameter Reception](/en/guide/usage/others.html#automatically-receive-request-parameters), and then your code can be further simplified:
 
 ```java
 @RestController
@@ -129,6 +134,8 @@ public class UserController {
 
 }
 ```
+
+## Start Searching
 
 The above code implements a `/user/index` interface. There's really only one line of code in its method body. But what request parameters can this interface support? And what results can different request parameters produce? Let's briefly list them below:
 

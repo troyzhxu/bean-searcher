@@ -7,6 +7,7 @@ https://bs.zhxu.cn/guide/start/install.html
 https://bs.zhxu.cn/guide/start/integration.html
 https://bs.zhxu.cn/guide/start/use.html
 https://bs.zhxu.cn/guide/bean/info.html
+https://bs.zhxu.cn/guide/bean/annos.html
 https://bs.zhxu.cn/guide/bean/multitable.html
 https://bs.zhxu.cn/guide/bean/otherform.html
 https://bs.zhxu.cn/guide/bean/fields.html
@@ -35,6 +36,15 @@ https://bs.zhxu.cn/guide/usage/rpc.html
 https://bs.zhxu.cn/guide/usage/tables.html
 https://bs.zhxu.cn/guide/usage/datascope.html
 https://bs.zhxu.cn/guide/usage/others.html
+https://bs.zhxu.cn/zoo/label/info.html
+https://bs.zhxu.cn/zoo/label/anno.html
+https://bs.zhxu.cn/zoo/label/load.html
+https://bs.zhxu.cn/zoo/label/demo.html
+https://bs.zhxu.cn/zoo/ex/info.html
+https://bs.zhxu.cn/zoo/ex/exporter.html
+https://bs.zhxu.cn/zoo/ex/anno.html
+https://bs.zhxu.cn/zoo/ex/fwriter.html
+https://bs.zhxu.cn/zoo/ex/control.html
 https://bs.zhxu.cn/en/
 https://bs.zhxu.cn/en/index.html
 https://bs.zhxu.cn/en/guide/info/why.html
@@ -44,6 +54,7 @@ https://bs.zhxu.cn/en/guide/start/install.html
 https://bs.zhxu.cn/en/guide/start/integration.html
 https://bs.zhxu.cn/en/guide/start/use.html
 https://bs.zhxu.cn/en/guide/bean/info.html
+https://bs.zhxu.cn/en/guide/bean/annos.html
 https://bs.zhxu.cn/en/guide/bean/multitable.html
 https://bs.zhxu.cn/en/guide/bean/otherform.html
 https://bs.zhxu.cn/en/guide/bean/fields.html
@@ -72,3 +83,12 @@ https://bs.zhxu.cn/en/guide/usage/rpc.html
 https://bs.zhxu.cn/en/guide/usage/tables.html
 https://bs.zhxu.cn/en/guide/usage/datascope.html
 https://bs.zhxu.cn/en/guide/usage/others.html
+https://bs.zhxu.cn/en/zoo/label/info.html
+https://bs.zhxu.cn/en/zoo/label/anno.html
+https://bs.zhxu.cn/en/zoo/label/load.html
+https://bs.zhxu.cn/en/zoo/label/demo.html
+https://bs.zhxu.cn/en/zoo/ex/info.html
+https://bs.zhxu.cn/en/zoo/ex/exporter.html
+https://bs.zhxu.cn/en/zoo/ex/anno.html
+https://bs.zhxu.cn/en/zoo/ex/fwriter.html
+https://bs.zhxu.cn/en/zoo/ex/control.html

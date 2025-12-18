@@ -26,9 +26,9 @@ dependencies {
 
     implementation "org.noear:wood-solon-plugin"
 
-    implementation "cn.zhxu:bean-searcher-solon-plugin:4.8.2.jdk8"
-    implementation "cn.zhxu:bean-searcher-label:4.8.2.jdk8"
-    implementation "cn.zhxu:bean-searcher-exporter:4.8.2.jdk8"
+    implementation "cn.zhxu:bean-searcher-solon-plugin:4.8.3.jdk8"
+    implementation "cn.zhxu:bean-searcher-label:4.8.3.jdk8"
+    implementation "cn.zhxu:bean-searcher-exporter:4.8.3.jdk8"
 
     // 若想使用 JSON 字段转对象的功能，可以添加此依赖
     implementation "cn.zhxu:xjsonkit-snack3:1.5.1"

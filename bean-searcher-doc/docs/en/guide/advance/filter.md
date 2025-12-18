@@ -1,6 +1,6 @@
-# Parameter and Result Filters
+# Param and Result Filters
 
-## Parameter Filters
+## Param Filters
 
 ### SizeLimitParamFilter
 
@@ -147,7 +147,7 @@ The priority of newly injected parameter filters is determined by the injection 
 
 ### Custom Parameter Filter
 
-You can also customize any parameter filtering rules. In SpringBoot / SpringMVC / Grails projects, you only need to configure a Bean (taking SpringBoot as an example):
+You can also customize any parameter filtering rules. In SpringBoot / Solon / Grails projects, you only need to configure a Bean (taking SpringBoot as an example):
 
 ```java
 @Bean
