@@ -6,6 +6,12 @@
   - 第一页分页查询使用 `SELECT TOP` 语法
   - 其它页查询自动添加 `ORDER BY (SELECT NULL)` 使 SQL 符合 `SQL Server` 语法
 
+## 🌻 Better
+
+- 将 Spring Boot 从 `3.3.13` 升级到 `3.5.8`
+- 将 Spring Framework 从 `6.1.21` 升级到 `6.2.15`
+- 将 Solon 从 `3.5.1` 升级到 `3.7.3`
+
 ## 同时发布 v4.8.3.jdk8 版本
 
 # v4.8.2 @ 2025-11-18
