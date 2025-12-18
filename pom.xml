@@ -9,7 +9,7 @@
 
 	<groupId>cn.zhxu</groupId>
 	<artifactId>bean-searcher-parent</artifactId>
-	<version>4.8.2</version>
+	<version>4.8.3</version>
 
 	<packaging>pom</packaging>
 

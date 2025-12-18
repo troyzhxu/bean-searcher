@@ -1,16 +1,20 @@
 # v4.8.3 @ 2025-12-18
 
-## 🐛 Bug Fixes
+## ✨ Features
 
-* 修复 `SqlServerDialect` 在用户未指定排序字段时的分页查询的生成的 SQL 不符合 SQL Server 语法要求的问题：
-  - 第一页分页查询使用 `SELECT TOP` 语法
-  - 其它页查询自动添加 `ORDER BY (SELECT NULL)` 使 SQL 符合 `SQL Server` 语法
+* 嵌入参数结束标志支持方括号检测
 
 ## 🌻 Better
 
 - 将 Spring Boot 从 `3.3.13` 升级到 `3.5.8`
 - 将 Spring Framework 从 `6.1.21` 升级到 `6.2.15`
 - 将 Solon 从 `3.5.1` 升级到 `3.7.3`
+
+## 🐛 Bug Fixes
+
+* 修复 `SqlServerDialect` 在用户未指定排序字段时的分页查询的生成的 SQL 不符合 SQL Server 语法要求的问题：
+  - 第一页分页查询使用 `SELECT TOP` 语法
+  - 其它页查询自动添加 `ORDER BY (SELECT NULL)` 使 SQL 符合 `SQL Server` 语法
 
 ## 同时发布 v4.8.3.jdk8 版本
 
