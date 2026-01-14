@@ -1,3 +1,11 @@
+# v4.8.4 @ 2026-01-14
+
+## 🐛 Bug Fixes
+
+* 修复 `MapBuilder` 的 `groupRoot()` 方法会报 `ConcurrentModificationException` 的问题 
+
+## 同时发布 v4.8.4.jdk8 版本
+
 # v4.8.3 @ 2025-12-18
 
 ## ✨ Features
