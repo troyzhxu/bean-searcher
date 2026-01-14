@@ -11,39 +11,39 @@ Bean Searcher 自 `v4.5.0` 起默认基于 **JDK 17** 构建，若需兼容 **JD
 ::: code-group
 ```groovy [SpringBoot 4.x]
 // 直接使用此依赖，即可使用 Bean Searcher 的数据检索功能
-implementation 'cn.zhxu:bean-searcher-boot-starter:4.8.2'
+implementation 'cn.zhxu:bean-searcher-boot-starter:4.8.3'
 // 如果希望使用字段标签（字典翻译）的功能
-implementation 'cn.zhxu:bean-searcher-label:4.8.2'
+implementation 'cn.zhxu:bean-searcher-label:4.8.3'
 // 如果希望使用数据导出的功能（可作为 EasyExcel 的替代方案） -->
 // 非常轻量，不依赖 POI, 用法更简单
-implementation 'cn.zhxu:bean-searcher-exporter:4.8.2'
+implementation 'cn.zhxu:bean-searcher-exporter:4.8.3'
 ```
 ```groovy [Grails 7.x]
 // 直接使用此依赖，即可使用 Bean Searcher 的数据检索功能
-implementation 'cn.zhxu:bean-searcher-boot-starter:4.8.2'
+implementation 'cn.zhxu:bean-searcher-boot-starter:4.8.3'
 // 如果希望使用字段标签（字典翻译）的功能
-implementation 'cn.zhxu:bean-searcher-label:4.8.2'
+implementation 'cn.zhxu:bean-searcher-label:4.8.3'
 // 如果希望使用数据导出的功能（可作为 EasyExcel 的替代方案） -->
 // 非常轻量，不依赖 POI, 用法更简单
-implementation 'cn.zhxu:bean-searcher-exporter:4.8.2'
+implementation 'cn.zhxu:bean-searcher-exporter:4.8.3'
 ```
 ```groovy [Solon]
 // Solon 项目直接使用此依赖（功能同 bean-searcher-boot-starter）
-implementation 'cn.zhxu:bean-searcher-solon-plugin:4.8.2'
+implementation 'cn.zhxu:bean-searcher-solon-plugin:4.8.3'
 // 如果希望使用字段标签（字典翻译）的功能
-implementation 'cn.zhxu:bean-searcher-label:4.8.2'
+implementation 'cn.zhxu:bean-searcher-label:4.8.3'
 // 如果希望使用数据导出的功能（可作为 EasyExcel 的替代方案） -->
 // 非常轻量，不依赖 POI, 用法更简单
-implementation 'cn.zhxu:bean-searcher-exporter:4.8.2'
+implementation 'cn.zhxu:bean-searcher-exporter:4.8.3'
 ```
 ```groovy [Others]
 // Bean Searcher 核心依赖，任何框架都可使用该依赖，需要手动配置
-implementation 'cn.zhxu:bean-searcher:4.8.2'
+implementation 'cn.zhxu:bean-searcher:4.8.3'
 // 如果希望使用字段标签（字典翻译）的功能，需要手动配置
-implementation 'cn.zhxu:bean-searcher-label:4.8.2'
+implementation 'cn.zhxu:bean-searcher-label:4.8.3'
 // 如果希望使用数据导出的功能（可作为 EasyExcel 的替代方案），需要手动配置 -->
 // 非常轻量，不依赖 POI, 用法更简单
-implementation 'cn.zhxu:bean-searcher-exporter:4.8.2'
+implementation 'cn.zhxu:bean-searcher-exporter:4.8.3'
 ```
 :::
 
@@ -52,39 +52,39 @@ implementation 'cn.zhxu:bean-searcher-exporter:4.8.2'
 ::: code-group
 ```groovy [SpringBoot 3.x]
 // 直接使用此依赖，即可使用 Bean Searcher 的数据检索功能
-implementation 'cn.zhxu:bean-searcher-boot-starter:4.8.2'
+implementation 'cn.zhxu:bean-searcher-boot-starter:4.8.3'
 // 如果希望使用字段标签（字典翻译）的功能
-implementation 'cn.zhxu:bean-searcher-label:4.8.2'
+implementation 'cn.zhxu:bean-searcher-label:4.8.3'
 // 如果希望使用数据导出的功能（可作为 EasyExcel 的替代方案） -->
 // 非常轻量，不依赖 POI, 用法更简单
-implementation 'cn.zhxu:bean-searcher-exporter:4.8.2'
+implementation 'cn.zhxu:bean-searcher-exporter:4.8.3'
 ```
 ```groovy [Grails 7.x]
 // 直接使用此依赖，即可使用 Bean Searcher 的数据检索功能
-implementation 'cn.zhxu:bean-searcher-boot-starter:4.8.2'
+implementation 'cn.zhxu:bean-searcher-boot-starter:4.8.3'
 // 如果希望使用字段标签（字典翻译）的功能
-implementation 'cn.zhxu:bean-searcher-label:4.8.2'
+implementation 'cn.zhxu:bean-searcher-label:4.8.3'
 // 如果希望使用数据导出的功能（可作为 EasyExcel 的替代方案） -->
 // 非常轻量，不依赖 POI, 用法更简单
-implementation 'cn.zhxu:bean-searcher-exporter:4.8.2'
+implementation 'cn.zhxu:bean-searcher-exporter:4.8.3'
 ```
 ```groovy [Solon]
 // Solon 项目直接使用此依赖（功能同 bean-searcher-boot-starter）
-implementation 'cn.zhxu:bean-searcher-solon-plugin:4.8.2'
+implementation 'cn.zhxu:bean-searcher-solon-plugin:4.8.3'
 // 如果希望使用字段标签（字典翻译）的功能
-implementation 'cn.zhxu:bean-searcher-label:4.8.2'
+implementation 'cn.zhxu:bean-searcher-label:4.8.3'
 // 如果希望使用数据导出的功能（可作为 EasyExcel 的替代方案） -->
 // 非常轻量，不依赖 POI, 用法更简单
-implementation 'cn.zhxu:bean-searcher-exporter:4.8.2'
+implementation 'cn.zhxu:bean-searcher-exporter:4.8.3'
 ```
 ```groovy [Others]
 // Bean Searcher 核心依赖，任何框架都可使用该依赖，需要手动配置
-implementation 'cn.zhxu:bean-searcher:4.8.2'
+implementation 'cn.zhxu:bean-searcher:4.8.3'
 // 如果希望使用字段标签（字典翻译）的功能，需要手动配置
-implementation 'cn.zhxu:bean-searcher-label:4.8.2'
+implementation 'cn.zhxu:bean-searcher-label:4.8.3'
 // 如果希望使用数据导出的功能（可作为 EasyExcel 的替代方案），需要手动配置 -->
 // 非常轻量，不依赖 POI, 用法更简单
-implementation 'cn.zhxu:bean-searcher-exporter:4.8.2'
+implementation 'cn.zhxu:bean-searcher-exporter:4.8.3'
 ```
 :::
 
@@ -93,39 +93,39 @@ implementation 'cn.zhxu:bean-searcher-exporter:4.8.2'
 ::: code-group
 ```groovy [SpringBoot 1.4 ~ 2.x]
 // 直接使用此依赖，即可使用 Bean Searcher 的数据检索功能
-implementation 'cn.zhxu:bean-searcher-boot-starter:4.8.2.jdk8'
+implementation 'cn.zhxu:bean-searcher-boot-starter:4.8.3.jdk8'
 // 如果希望使用字段标签（字典翻译）的功能
-implementation 'cn.zhxu:bean-searcher-label:4.8.2.jdk8'
+implementation 'cn.zhxu:bean-searcher-label:4.8.3.jdk8'
 // 如果希望使用数据导出的功能（可作为 EasyExcel 的替代方案） -->
 // 非常轻量，不依赖 POI, 用法更简单
-implementation 'cn.zhxu:bean-searcher-exporter:4.8.2.jdk8'
+implementation 'cn.zhxu:bean-searcher-exporter:4.8.3.jdk8'
 ```
 ```groovy [Grails 3.x ~ 6.x]
 // 直接使用此依赖，即可使用 Bean Searcher 的数据检索功能
-implementation 'cn.zhxu:bean-searcher-boot-starter:4.8.2.jdk8'
+implementation 'cn.zhxu:bean-searcher-boot-starter:4.8.3.jdk8'
 // 如果希望使用字段标签（字典翻译）的功能
-implementation 'cn.zhxu:bean-searcher-label:4.8.2.jdk8'
+implementation 'cn.zhxu:bean-searcher-label:4.8.3.jdk8'
 // 如果希望使用数据导出的功能（可作为 EasyExcel 的替代方案） -->
 // 非常轻量，不依赖 POI, 用法更简单
-implementation 'cn.zhxu:bean-searcher-exporter:4.8.2.jdk8'
+implementation 'cn.zhxu:bean-searcher-exporter:4.8.3.jdk8'
 ```
 ```groovy [Solon]
 // Solon 项目直接使用此依赖（功能同 bean-searcher-boot-starter）
-implementation 'cn.zhxu:bean-searcher-solon-plugin:4.8.2.jdk8'
+implementation 'cn.zhxu:bean-searcher-solon-plugin:4.8.3.jdk8'
 // 如果希望使用字段标签（字典翻译）的功能
-implementation 'cn.zhxu:bean-searcher-label:4.8.2.jdk8'
+implementation 'cn.zhxu:bean-searcher-label:4.8.3.jdk8'
 // 如果希望使用数据导出的功能（可作为 EasyExcel 的替代方案） -->
 // 非常轻量，不依赖 POI, 用法更简单
-implementation 'cn.zhxu:bean-searcher-exporter:4.8.2.jdk8'
+implementation 'cn.zhxu:bean-searcher-exporter:4.8.3.jdk8'
 ```
 ```groovy [Others]
 // Bean Searcher 核心依赖，任何框架都可使用该依赖，需要手动配置
-implementation 'cn.zhxu:bean-searcher:4.8.2.jdk8'
+implementation 'cn.zhxu:bean-searcher:4.8.3.jdk8'
 // 如果希望使用字段标签（字典翻译）的功能，需要手动配置
-implementation 'cn.zhxu:bean-searcher-label:4.8.2.jdk8'
+implementation 'cn.zhxu:bean-searcher-label:4.8.3.jdk8'
 // 如果希望使用数据导出的功能（可作为 EasyExcel 的替代方案），需要手动配置 -->
 // 非常轻量，不依赖 POI, 用法更简单
-implementation 'cn.zhxu:bean-searcher-exporter:4.8.2.jdk8'
+implementation 'cn.zhxu:bean-searcher-exporter:4.8.3.jdk8'
 ```
 :::
 
@@ -141,20 +141,20 @@ implementation 'cn.zhxu:bean-searcher-exporter:4.8.2.jdk8'
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-boot-starter</artifactId>
-    <version>4.8.2</version>
+    <version>4.8.3</version>
 </dependency>
 <!-- 如果希望使用字段标签（字典翻译）的功能 -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-label</artifactId>
-    <version>4.8.2</version>
+    <version>4.8.3</version>
 </dependency>
 <!-- 如果希望使用数据导出的功能（可作为 EasyExcel 的替代方案） -->
 <!-- 非常轻量，不依赖 POI, 用法更简单 -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-exporter</artifactId>
-    <version>4.8.2</version>
+    <version>4.8.3</version>
 </dependency>
 ```
 ```xml [Grails 7.x]
@@ -162,20 +162,20 @@ implementation 'cn.zhxu:bean-searcher-exporter:4.8.2.jdk8'
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-boot-starter</artifactId>
-    <version>4.8.2</version>
+    <version>4.8.3</version>
 </dependency>
 <!-- 如果希望使用字段标签（字典翻译）的功能 -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-label</artifactId>
-    <version>4.8.2</version>
+    <version>4.8.3</version>
 </dependency>
 <!-- 如果希望使用数据导出的功能（可作为 EasyExcel 的替代方案） -->
 <!-- 非常轻量，不依赖 POI, 用法更简单 -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-exporter</artifactId>
-    <version>4.8.2</version>
+    <version>4.8.3</version>
 </dependency>
 ```
 ```xml [Solon]
@@ -183,20 +183,20 @@ implementation 'cn.zhxu:bean-searcher-exporter:4.8.2.jdk8'
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-solon-plugin</artifactId>
-    <version>4.8.2</version>
+    <version>4.8.3</version>
 </dependency>
 <!-- 如果希望使用字段标签（字典翻译）的功能 -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-label</artifactId>
-    <version>4.8.2</version>
+    <version>4.8.3</version>
 </dependency>
 <!-- 如果希望使用数据导出的功能（可作为 EasyExcel 的替代方案） -->
 <!-- 非常轻量，不依赖 POI, 用法更简单 -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-exporter</artifactId>
-    <version>4.8.2</version>
+    <version>4.8.3</version>
 </dependency>
 ```
 ```xml [Others]
@@ -204,20 +204,20 @@ implementation 'cn.zhxu:bean-searcher-exporter:4.8.2.jdk8'
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher</artifactId>
-    <version>4.8.2</version>
+    <version>4.8.3</version>
 </dependency>
 <!-- 如果希望使用字段标签（字典翻译）的功能，需要手动配置 -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-label</artifactId>
-    <version>4.8.2</version>
+    <version>4.8.3</version>
 </dependency>
 <!-- 如果希望使用数据导出的功能（可作为 EasyExcel 的替代方案），需要手动配置 -->
 <!-- 非常轻量，不依赖 POI, 用法更简单 -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-exporter</artifactId>
-    <version>4.8.2</version>
+    <version>4.8.3</version>
 </dependency>
 ```
 :::
@@ -230,20 +230,20 @@ implementation 'cn.zhxu:bean-searcher-exporter:4.8.2.jdk8'
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-boot-starter</artifactId>
-    <version>4.8.2</version>
+    <version>4.8.3</version>
 </dependency>
 <!-- 如果希望使用字段标签（字典翻译）的功能 -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-label</artifactId>
-    <version>4.8.2</version>
+    <version>4.8.3</version>
 </dependency>
 <!-- 如果希望使用数据导出的功能（可作为 EasyExcel 的替代方案） -->
 <!-- 非常轻量，不依赖 POI, 用法更简单 -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-exporter</artifactId>
-    <version>4.8.2</version>
+    <version>4.8.3</version>
 </dependency>
 ```
 ```xml [Grails 7.x]
@@ -251,20 +251,20 @@ implementation 'cn.zhxu:bean-searcher-exporter:4.8.2.jdk8'
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-boot-starter</artifactId>
-    <version>4.8.2</version>
+    <version>4.8.3</version>
 </dependency>
 <!-- 如果希望使用字段标签（字典翻译）的功能 -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-label</artifactId>
-    <version>4.8.2</version>
+    <version>4.8.3</version>
 </dependency>
 <!-- 如果希望使用数据导出的功能（可作为 EasyExcel 的替代方案） -->
 <!-- 非常轻量，不依赖 POI, 用法更简单 -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-exporter</artifactId>
-    <version>4.8.2</version>
+    <version>4.8.3</version>
 </dependency>
 ```
 ```xml [Solon]
@@ -272,20 +272,20 @@ implementation 'cn.zhxu:bean-searcher-exporter:4.8.2.jdk8'
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-solon-plugin</artifactId>
-    <version>4.8.2</version>
+    <version>4.8.3</version>
 </dependency>
 <!-- 如果希望使用字段标签（字典翻译）的功能 -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-label</artifactId>
-    <version>4.8.2</version>
+    <version>4.8.3</version>
 </dependency>
 <!-- 如果希望使用数据导出的功能（可作为 EasyExcel 的替代方案） -->
 <!-- 非常轻量，不依赖 POI, 用法更简单 -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-exporter</artifactId>
-    <version>4.8.2</version>
+    <version>4.8.3</version>
 </dependency>
 ```
 ```xml [Others]
@@ -293,20 +293,20 @@ implementation 'cn.zhxu:bean-searcher-exporter:4.8.2.jdk8'
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher</artifactId>
-    <version>4.8.2</version>
+    <version>4.8.3</version>
 </dependency>
 <!-- 如果希望使用字段标签（字典翻译）的功能，需要手动配置 -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-label</artifactId>
-    <version>4.8.2</version>
+    <version>4.8.3</version>
 </dependency>
 <!-- 如果希望使用数据导出的功能（可作为 EasyExcel 的替代方案），需要手动配置 -->
 <!-- 非常轻量，不依赖 POI, 用法更简单 -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-exporter</artifactId>
-    <version>4.8.2</version>
+    <version>4.8.3</version>
 </dependency>
 ```
 :::
@@ -319,20 +319,20 @@ implementation 'cn.zhxu:bean-searcher-exporter:4.8.2.jdk8'
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-boot-starter</artifactId>
-    <version>4.8.2.jdk8</version>
+    <version>4.8.3.jdk8</version>
 </dependency>
 <!-- 如果希望使用字段标签（字典翻译）的功能 -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-label</artifactId>
-    <version>4.8.2.jdk8</version>
+    <version>4.8.3.jdk8</version>
 </dependency>
 <!-- 如果希望使用数据导出的功能（可作为 EasyExcel 的替代方案） -->
 <!-- 非常轻量，不依赖 POI, 用法更简单 -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-exporter</artifactId>
-    <version>4.8.2.jdk8</version>
+    <version>4.8.3.jdk8</version>
 </dependency>
 ```
 ```xml [Grails 3.x ~ 6.x]
@@ -340,20 +340,20 @@ implementation 'cn.zhxu:bean-searcher-exporter:4.8.2.jdk8'
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-boot-starter</artifactId>
-    <version>4.8.2.jdk8</version>
+    <version>4.8.3.jdk8</version>
 </dependency>
 <!-- 如果希望使用字段标签（字典翻译）的功能 -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-label</artifactId>
-    <version>4.8.2.jdk8</version>
+    <version>4.8.3.jdk8</version>
 </dependency>
 <!-- 如果希望使用数据导出的功能（可作为 EasyExcel 的替代方案） -->
 <!-- 非常轻量，不依赖 POI, 用法更简单 -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-exporter</artifactId>
-    <version>4.8.2.jdk8</version>
+    <version>4.8.3.jdk8</version>
 </dependency>
 ```
 ```xml [Solon]
@@ -361,20 +361,20 @@ implementation 'cn.zhxu:bean-searcher-exporter:4.8.2.jdk8'
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-solon-plugin</artifactId>
-    <version>4.8.2.jdk8</version>
+    <version>4.8.3.jdk8</version>
 </dependency>
 <!-- 如果希望使用字段标签（字典翻译）的功能 -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-label</artifactId>
-    <version>4.8.2.jdk8</version>
+    <version>4.8.3.jdk8</version>
 </dependency>
 <!-- 如果希望使用数据导出的功能（可作为 EasyExcel 的替代方案） -->
 <!-- 非常轻量，不依赖 POI, 用法更简单 -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-exporter</artifactId>
-    <version>4.8.2.jdk8</version>
+    <version>4.8.3.jdk8</version>
 </dependency>
 ```
 ```xml [Others]
@@ -382,20 +382,20 @@ implementation 'cn.zhxu:bean-searcher-exporter:4.8.2.jdk8'
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher</artifactId>
-    <version>4.8.2.jdk8</version>
+    <version>4.8.3.jdk8</version>
 </dependency>
 <!-- 如果希望使用字段标签（字典翻译）的功能，需要手动配置 -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-label</artifactId>
-    <version>4.8.2.jdk8</version>
+    <version>4.8.3.jdk8</version>
 </dependency>
 <!-- 如果希望使用数据导出的功能（可作为 EasyExcel 的替代方案），需要手动配置 -->
 <!-- 非常轻量，不依赖 POI, 用法更简单 -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-exporter</artifactId>
-    <version>4.8.2.jdk8</version>
+    <version>4.8.3.jdk8</version>
 </dependency>
 ```
 :::

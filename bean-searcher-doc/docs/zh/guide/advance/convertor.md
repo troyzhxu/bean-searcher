@@ -702,12 +702,9 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 
 * SpringBoot / Grails 项目
 
-建议使用 `bean-searcher-boot-starter` **v4.4.0+** 的依赖，**无需任何配置**，自动生效。
-
-如需 **关闭** 该转换器，可在 `application.properties` 中配置：
+当 `classpath` 下存在 Orcale 的 `JDBC` 驱动时，该转换器 **无需任何配置**，自动生效。 如需 **关闭** 该转换器，可在 `application.properties` 中配置：
 
 ```properties
-# 若未使用 Oracle 驱动，将之关闭可获得更好的性能
 bean-searcher.field-convertor.use-oracle-timestamp = false
 ```
 

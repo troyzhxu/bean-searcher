@@ -23,8 +23,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-webmvc'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
-	implementation 'cn.zhxu:bean-searcher-boot-starter:4.8.2'
-	implementation 'cn.zhxu:bean-searcher-exporter:4.8.2'
+	implementation 'cn.zhxu:bean-searcher-boot-starter:4.8.3'
+	implementation 'cn.zhxu:bean-searcher-exporter:4.8.3'
 	implementation 'cn.zhxu:xjsonkit-jackson:1.6.0'
 
 	runtimeOnly 'com.h2database:h2'
