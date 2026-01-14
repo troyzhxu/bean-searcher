@@ -139,7 +139,9 @@ public class MapBuilder extends Builder<MapBuilder> {
      * @return MapBuilder
      */
     public MapBuilder groupRoot(String groupSeparator) {
-        for (String key : map.keySet()) {
+        //  since v4.8.4, 参考: https://gitee.com/troyzhxu/bean-searcher/issues/IDJXGT
+        var keys = map.keySet().stream().toList();
+        for (String key : keys) {
             if (key == null || ORDER_BY.equals(key) || PAGING.equals(key)
                     || ONLY_SELECT.equals(key) || SELECT_EXCLUDE.equals(key) || GROUP_EXPR.equals(key)
                     || key.contains(FIELD_PARAM) || key.contains(groupSeparator)) {

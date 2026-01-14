@@ -374,4 +374,22 @@ public class MapBuilderTestCase {
         System.out.println("\ttest_rpc_field_03 ok!");
     }
 
+    @Test
+    public void test_groupRoot() {
+        Map<String, Object> map = MapUtils.builder()
+                .put("k1", "v1")
+                .put("k2", "v2")
+                .put("k3", "v3")
+                .groupRoot()
+                .build();
+        Assertions.assertEquals(6, map.size());
+        Assertions.assertEquals("v1", map.get("k1"));
+        Assertions.assertEquals("v2", map.get("k2"));
+        Assertions.assertEquals("v3", map.get("k3"));
+        Assertions.assertEquals("v1", map.get("$.k1"));
+        Assertions.assertEquals("v2", map.get("$.k2"));
+        Assertions.assertEquals("v3", map.get("$.k3"));
+        System.out.println("\ttest_groupRoot ok!");
+    }
+
 }
