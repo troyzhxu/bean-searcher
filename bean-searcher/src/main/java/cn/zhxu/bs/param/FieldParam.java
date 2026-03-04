@@ -99,6 +99,11 @@ public class FieldParam {
         return values.stream().map(Value::getValue).toArray();
     }
 
+    public List<Value> valueList() {
+        return values;
+    }
+
+    @Deprecated
     public List<Value> getValueList() {
         return values;
     }

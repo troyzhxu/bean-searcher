@@ -243,13 +243,13 @@ public class DefaultParamResolver implements ParamResolver {
             if (param == null) {
                 return new FieldParam(field, operator);
             }
-            return new FieldParam(field, operator, param.getValueList(), param.isIgnoreCase());
+            return new FieldParam(field, operator, param.valueList(), param.isIgnoreCase());
         }
         if ((indices == null || indices.isEmpty()) && param == null) {
             return null;
         }
         List<FieldParam.Value> values = param != null
-                ? new ArrayList<>(param.getValueList())
+                ? new ArrayList<>(param.valueList())
                 : new ArrayList<>();
         if (values.isEmpty() && indices != null) {
             for (int index : indices) {

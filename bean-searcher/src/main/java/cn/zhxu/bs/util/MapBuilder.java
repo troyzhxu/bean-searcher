@@ -405,7 +405,7 @@ public class MapBuilder extends Builder<MapBuilder> {
         if (param.isIgnoreCase()) {
             map.put(prefix + names.ic(), true);
         }
-        for (FieldParam.Value v : param.getValueList()) {
+        for (FieldParam.Value v : param.valueList()) {
             map.put(prefix + v.getIndex(), v.getValue());
         }
     }
