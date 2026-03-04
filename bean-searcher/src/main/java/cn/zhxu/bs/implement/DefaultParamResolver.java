@@ -248,7 +248,9 @@ public class DefaultParamResolver implements ParamResolver {
         if ((indices == null || indices.isEmpty()) && param == null) {
             return null;
         }
-        List<FieldParam.Value> values = param != null ? param.getValueList() : new ArrayList<>();
+        List<FieldParam.Value> values = param != null
+                ? new ArrayList<>(param.getValueList())
+                : new ArrayList<>();
         if (values.isEmpty() && indices != null) {
             for (int index : indices) {
                 Object value = paraMap.get1(field + configuration.separator() + index);
