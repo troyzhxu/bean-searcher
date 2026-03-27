@@ -64,6 +64,23 @@ public class OrderController {
 在 SpringBoot 项目中，框架自动配置的 `FileWriter.Factory` 会读取当前请求上下文中的 `HttpServletResponse`，自动设置响应头（`Content-Disposition`、`Content-Type` 等），无需手动操作响应对象。
 :::
 
+::: warning 导出前须放开风控限制
+Bean Searcher 默认限制单次最多查询 **100** 条（`maxAllowedSize`）且最大偏移量为 **20000**（`maxAllowedOffset`）。导出时每批需查询 `batchSize`（默认 1000）条，数据量大时翻页 offset 也会超限。
+
+因此，**导出用的 SearchBean 必须配置 `maxSize` 与 `maxOffset`**：
+
+```java
+@SearchBean(
+    tables = "order",
+    maxSize = 2000,             // 须 >= batchSize
+    maxOffset = Long.MAX_VALUE  // 允许全量导出
+)
+public class OrderExportVO { ... }
+```
+
+详见[导出注解 → 风控配置](/zoo/ex/anno#风控配置)章节。
+:::
+
 ### 使用 FileWriter（自定义输出目标）
 
 若不希望直接输出到 HTTP 响应，或需要输出到文件系统、对象存储等其它目标，可以直接传入 `FileWriter` 实例：

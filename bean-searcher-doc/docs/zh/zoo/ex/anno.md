@@ -129,10 +129,45 @@ private String remark;
 
 当 `onlyIf` 不配置（或为空字符串）时，默认始终导出该字段。
 
+### 风控配置
+
+Bean Searcher 内置了**分页风控**机制，默认：
+
+- 单次最大查询条数（`maxAllowedSize`）为 **100**
+- 最大偏移量（`maxAllowedOffset`）为 **20000**
+
+而 `BeanExporter` 导出时每批会查询 `batchSize`（默认 **1000**）条数据，随着数据量增大，偏移量也会超过 20000。因此，**导出用的 SearchBean 必须通过 `@SearchBean` 的 `maxSize` 与 `maxOffset` 属性放开风控限制**，否则会抛出 `IllegalParamException`。
+
+```java{1}
+@SearchBean(
+    tables = "order",
+    maxSize = 2000,          // 放开单批查询条数限制（须 >= batchSize）
+    maxOffset = Long.MAX_VALUE  // 放开分页深度限制（允许导出全量数据）
+)
+public class OrderExportVO {
+    // ...
+}
+```
+
+::: tip 为什么需要 maxOffset？
+`BeanExporter` 通过不断翻页（`page(0, size)` → `page(1, size)` → ...）拉取全量数据。
+若不设置 `maxOffset`，当数据量超过 `maxAllowedOffset`（默认 20000）条时，翻页的 offset 会超出限制而报错。
+:::
+
+::: warning 独立 SearchBean
+建议为导出场景单独定义一个 SearchBean（如 `OrderExportVO`），而不是与检索接口共用，因为导出 Bean 需要放开风控，不适合暴露给普通检索接口。
+:::
+
 ### 完整示例
 
 ```java
-@SearchBean(tables = "order o, user u", where = "o.buyer_id = u.id", autoMapTo = "o")
+@SearchBean(
+    tables = "order o, user u",
+    where = "o.buyer_id = u.id",
+    autoMapTo = "o",
+    maxSize = 2000,             // 放开单批查询条数限制
+    maxOffset = Long.MAX_VALUE  // 放开分页深度限制
+)
 public class OrderExportVO {
 
     @Export(name = "订单编号", idx = 1)

@@ -61,6 +61,23 @@ public class OrderController {
 The auto-configured `FileWriter.Factory` in SpringBoot reads the current `HttpServletResponse` from `RequestContextHolder`, sets `Content-Disposition`, `Content-Type`, and other headers automatically. You do not need to touch the response object.
 :::
 
+::: warning Relax the Rate-Limit Before Exporting
+Bean Searcher's default pagination guard allows at most **100** records per query (`maxAllowedSize`) and a maximum offset of **20000** (`maxAllowedOffset`). Because `BeanExporter` fetches data in batches of `batchSize` (default 1000), these defaults will cause an `IllegalParamException` during export.
+
+Always add `maxSize` and `maxOffset` to the export SearchBean:
+
+```java
+@SearchBean(
+    tables = "order",
+    maxSize = 2000,             // must be >= batchSize
+    maxOffset = Long.MAX_VALUE  // allow full-table export
+)
+public class OrderExportVO { ... }
+```
+
+See [Export Annotation → Rate-Limit Configuration](/zoo/ex/anno#rate-limit-configuration) for details.
+:::
+
 ### Using FileWriter (Custom Output Target)
 
 To write to a local file, object storage, or any other target instead of the HTTP response, pass a `FileWriter` directly:

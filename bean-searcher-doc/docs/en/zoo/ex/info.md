@@ -38,7 +38,11 @@ implementation 'cn.zhxu:bean-searcher-exporter:4.8.5'
 Add `@Export` to every field you want to include in the export file:
 
 ```java
-@SearchBean(tables = "order")
+@SearchBean(
+    tables = "order",
+    maxSize = 2000,             // must be >= batchSize (default 1000)
+    maxOffset = Long.MAX_VALUE  // allow full-table export
+)
 public class OrderExportVO {
 
     @Export(name = "Order No.", idx = 1)

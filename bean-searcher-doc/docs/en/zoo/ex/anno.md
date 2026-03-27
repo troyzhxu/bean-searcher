@@ -128,10 +128,45 @@ private String remark;
 
 When `onlyIf` is empty (the default), the field is always exported.
 
+### Rate-Limit Configuration
+
+Bean Searcher has a built-in **pagination guard** that defaults to:
+
+- Maximum records per query (`maxAllowedSize`): **100**
+- Maximum allowed offset (`maxAllowedOffset`): **20000**
+
+Because `BeanExporter` queries data in batches of `batchSize` (default **1000**) and the offset grows as pagination advances, **a SearchBean used for export must relax these limits via `@SearchBean`'s `maxSize` and `maxOffset` attributes**, otherwise Bean Searcher will throw an `IllegalParamException`.
+
+```java{1}
+@SearchBean(
+    tables = "order",
+    maxSize = 2000,             // must be >= batchSize
+    maxOffset = Long.MAX_VALUE  // allow full-table export
+)
+public class OrderExportVO {
+    // ...
+}
+```
+
+::: tip Why is maxOffset needed?
+`BeanExporter` pages through data by incrementing the page number (`page(0, size)` → `page(1, size)` → ...).  
+Without a higher `maxOffset`, once the accumulated offset exceeds 20,000 rows Bean Searcher will reject the request.
+:::
+
+::: warning Use a Dedicated Export SearchBean
+Define a separate SearchBean for export (e.g. `OrderExportVO`) rather than sharing one with your normal search API. The relaxed limits are appropriate for controlled server-side exports but should not be exposed to ordinary user-driven searches.
+:::
+
 ### Complete Example
 
 ```java
-@SearchBean(tables = "order o, user u", where = "o.buyer_id = u.id", autoMapTo = "o")
+@SearchBean(
+    tables = "order o, user u",
+    where = "o.buyer_id = u.id",
+    autoMapTo = "o",
+    maxSize = 2000,             // relax per-batch query limit
+    maxOffset = Long.MAX_VALUE  // relax pagination-depth limit
+)
 public class OrderExportVO {
 
     @Export(name = "Order No.", idx = 1)

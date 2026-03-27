@@ -38,7 +38,11 @@ implementation 'cn.zhxu:bean-searcher-exporter:4.8.5'
 只需在需要导出的字段上添加 `@Export` 注解：
 
 ```java
-@SearchBean(tables = "order")
+@SearchBean(
+    tables = "order",
+    maxSize = 2000,             // 放开单批查询条数限制（须 >= batchSize，默认 1000）
+    maxOffset = Long.MAX_VALUE  // 放开分页深度限制，允许导出全量数据
+)
 public class OrderExportVO {
 
     @Export(name = "订单编号", idx = 1)
