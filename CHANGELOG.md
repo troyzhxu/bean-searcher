@@ -1,3 +1,19 @@
+# v4.8.5 @ 2026-03-27
+
+## 🌻 Better
+
+* 优化 `FieldParam`，使其支持多线程只读共享使用
+  - `values` 字段改为 `final`，在构造时完成排序（由原来的 `getValues()` 调用时排序改为构造时排序）
+  - 返回的 `values` 列表为只读列表，可安全地在多线程环境中共享同一 `FieldParam` 实例
+* 新增 `FieldParam.valueList()` 方法，替代 `getValueList()`（后者标记为 `@Deprecated`）
+
+## 🌻 Deps
+
+* 将 Spring Boot 版本从 `3.5.8` 升级到 `3.5.9`
+* 将 Solon 版本从 `3.7.3` 升级到 `3.8.3`
+
+## 同时发布 v4.8.5.jdk8 版本
+
 # v4.8.4 @ 2026-01-14
 
 ## 🐛 Bug Fixes

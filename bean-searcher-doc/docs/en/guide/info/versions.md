@@ -4,13 +4,16 @@ For detailed version information, please refer to [Github](https://github.com/tr
 
 ## V4 Version
 
-### New Features in v4.8 (v4.8.4)
+### New Features in v4.8 (v4.8.5)
 
 ::: warning Note
-Starting from version `v4.5`, default support is for `JDK17+`. To maintain compatibility with `JDK 8 ~ 16`, you can use the compatibility version with the `.jdk8` suffix, for example: `v4.8.4.jdk8`.
+Starting from version `v4.5`, default support is for `JDK17+`. To maintain compatibility with `JDK 8 ~ 16`, you can use the compatibility version with the `.jdk8` suffix, for example: `v4.8.5.jdk8`.
 :::
 
 * Bean Searcher
+  - Optimized `FieldParam` to support read-only sharing in multi-threaded environments (since v4.8.5)
+    - The `values` field is now `final` and sorted at construction time; the returned `values` list is read-only, allowing safe sharing of the same `FieldParam` instance across threads.
+    - Added the `valueList()` method; `getValueList()` is now marked as `@Deprecated`.
   - Optimized exception handling mechanism: when encountering unknown SQL syntax that cannot be processed, an exception is thrown to inform the user which part of the SQL cannot be parsed (since v4.8.1)
   - Compatible with PgSQL's `||` string concatenation operator (since v4.8.1)
   - Embedded parameter end flag supports square bracket detection (since v4.8.3)
