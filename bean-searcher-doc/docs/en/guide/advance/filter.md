@@ -126,7 +126,7 @@ If you want to enable this filter, you need to add the following configuration:
 
 ```properties
 # Whether to enable this filter, default is false
-bean-searcher.params.filter.use-index-value = true
+bean-searcher.params.filter.use-index-array = true
 ```
 
 > The original parameter syntax is still supported after enabling.

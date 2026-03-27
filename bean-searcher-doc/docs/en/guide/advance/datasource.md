@@ -107,7 +107,7 @@ public NamedDataSource userNamedDataSource(AbstractRoutingDataSource routingData
 @Bean
 public NamedDataSource orderNamedDataSource(AbstractRoutingDataSource routingDataSource) {
     // Directly retrieve the target data source from the DynamicRoutingDataSource.
-    DataSource dataSource = routingDataSource.getResolvedDataSources().getDataSource("orderDs");
+    DataSource dataSource = routingDataSource.getResolvedDataSources().get("orderDs");
     // Named data source: cn.zhxu.bs.boot.NamedDataSource (Key step: Wrap it with a named data source shell).
     return new NamedDataSource("orderDs", dataSource);
 }
@@ -150,4 +150,27 @@ private Map<Object, Object> getAllDataSources() {
     // Put all data sources into the dataSources map.
     return dataSources;
 }
+```
+
+## Spring Transaction Support (since v4.3.2)
+
+By default, Bean Searcher uses `DefaultSqlExecutor` to execute SQL. It acquires an independent connection from the connection pool each time and is **unaware** of Spring's `@Transactional` transaction context.
+
+If you want Bean Searcher to **participate in the current transaction** inside a `@Transactional` method, you can use `SpringSqlExecutor`.
+
+In `bean-searcher-boot-starter` `v4.3.2+`, this is already the **default behavior**: `SpringSqlExecutor` replaces the original `DefaultSqlExecutor` and automatically obtains connections via `DataSourceUtils.getConnection(dataSource)`. If there is a Spring transaction on the current thread, it reuses the transaction connection; otherwise it fetches a regular connection from the pool.
+
+::: tip No Extra Configuration Needed
+As long as you use `bean-searcher-boot-starter` v4.3.2+, Spring transaction awareness works out of the box with no additional configuration.
+:::
+
+In non-Spring-Boot projects, you can enable this support manually:
+
+```java
+DataSource dataSource = ...; // your data source
+// Replace the default DefaultSqlExecutor with SpringSqlExecutor
+SpringSqlExecutor sqlExecutor = new SpringSqlExecutor(dataSource);
+MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
+        .sqlExecutor(sqlExecutor)
+        .build();
 ```

@@ -45,7 +45,7 @@ public class User extends BaseEntity {
 
 ## 表继承
 
-有时候 `@SearchBean` 注解内写入的内容太多，子类能否复用呢？也是可以的，例如：
+如果 `@SearchBean` 注解里的内容比较多，子类想复用该怎么做？也很简单，例如：
 
 ```java
 @SearchBean(tables="user u, role r", where="u.role_id = r.id", autoMapTo="u")
@@ -92,7 +92,7 @@ public class UserDetail extends User {
 }
 ```
 
-其中 `InheritType` 是一个枚举类型，共有一下一些值：
+其中 `InheritType` 是一个枚举类型，共有以下一些值：
 
 * `DEFAULT` - 使用默认配置
 * `NONE` - 不继承
@@ -102,7 +102,7 @@ public class UserDetail extends User {
 
 ## 配置默认值
 
-你也可以使用全局配置来修改默认的继承类型。
+如果项目中大多数实体类都需要某种特定的继承方式，可以通过全局配置来修改默认值，避免逐一声明。
 
 ### SpringBoot / Grails（since v3.6.0）
 
@@ -112,28 +112,11 @@ public class UserDetail extends User {
 -|-|-|-
 `bean-searcher.sql.default-mapping.inherit-type` | 默认继承类型 | `ALL`、`TABLE`、`FIELD`、`NONE` | `ALL`
 
-### 非 Boot 的 Spring 项目
-
-```xml
-<bean id="dbMapping" class="cn.zhxu.bs.implement.DefaultDbMapping">
-    <property name="defaultInheritType" /> 
-        <util:constant static-field="cn.zhxu.bs.bean.InheritType.ALL"/>
-    </property>
-</bean>
-<bean id="metaResolver" class="cn.zhxu.bs.implement.DefaultMetaResolver">
-    <property name="dbMapping" ref="dbMapping" />
-</bean>
-<bean id="mapSearcher" class="cn.zhxu.bs.implement.DefaultMapSearcher">
-    <!-- 省略其它属性配置，BeanSearcher 检索器也同此配置 -->
-    <property name="metaResolver" ref="metaResolver" />
-</bean>
-```
-
 ### 其它框架
 
 ```java
 DefaultDbMapping dbMapping = new DefaultDbMapping();
-dbMapping.setDefaultInheritType(InheritType.ALL);               // 这里配置需要默认继承类型
+dbMapping.setDefaultInheritType(InheritType.ALL);               // 这里配置默认继承类型
 MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
         // 省略其它配置
         .metaResolver(new DefaultMetaResolver(dbMapping))       // BeanSearcher 检索器也同此配置

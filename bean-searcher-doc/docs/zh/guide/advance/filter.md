@@ -6,7 +6,7 @@
 
 > since v3.8.1，默认启用
 
-风控过滤器，用于控制检索参数的数量，默认启用。它有以下配置项：
+风控过滤器，用于限制检索参数的数量，防止异常大量参数攻击，默认启用。它有以下配置项：
 
 ```properties
 # 是否启用该过滤器，默认为 true
@@ -126,7 +126,7 @@ GET /user/list ? age[0]=20 & age[1]=30 & age-op=bt
 
 ```properties
 # 是否启用该过滤器，默认为 false
-bean-searcher.params.filter.use-index-value = true
+bean-searcher.params.filter.use-index-array = true
 ```
 
 > 启用之后原来的参数语法仍然支持。
@@ -224,7 +224,7 @@ public interface ResultFilter {
 
 ```java
 @Bean
-public ResultFilter myFitstResultFilter() {
+public ResultFilter myFirstResultFilter() {
     return new MyFirstResultFilter();
 }
 
@@ -234,25 +234,11 @@ public ResultFilter mySecondResultFilter() {
 }
 ```
 
-### 配置（非 Boot 的 Spring 项目）
-
-```xml
-<bean id="mapSearcher" class="cn.zhxu.bs.implement.DefaultMapSearcher">
-    <!-- 省略其它属性配置，BeanSearcher 检索器也同此配置 -->
-    <property name="resultFilters">
-        <list>
-            <bean class="com.example.FitstResultFilter" />
-            <bean class="com.example.SecondResultFilter" />
-        </list>
-    </property>
-</bean>
-```
-
 ### 配置（Others）
 
 ```java
 MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
-        .addResultFilter(new FitstResultFilter());      // since v3.6.1
+        .addResultFilter(new FirstResultFilter());      // since v3.6.1
         .addResultFilter(new SecondResultFilter());     // since v3.6.1
         // 省略其它属性配置，BeanSearcher 检索器也同此配置
         .build();

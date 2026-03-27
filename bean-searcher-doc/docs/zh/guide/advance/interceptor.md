@@ -1,6 +1,6 @@
 # SQL 拦截器
 
-Bean Searcher 支持配置 多个 SQL 拦截器 来自定义修改 SQL 的生成规则。
+Bean Searcher 支持配置多个 SQL 拦截器，用于在 SQL 执行前对其进行自定义修改。
 
 ## SqlInterceptor
 
@@ -25,7 +25,7 @@ public interface SqlInterceptor {
 }
 ```
 
-在 SQL 拦截器中，我们可以对 `SearchSql` 进行修改，来实现我们自定义的逻辑。
+在 SQL 拦截器中，可以对 `SearchSql` 对象进行任意修改，从而实现自定义的 SQL 逻辑。
 
 * 案例：[使用 SQL 拦截器 实现 多字段排序](https://github.com/troyzhxu/bean-searcher/issues/9)（自 `v3.4.0` 起，框架已内置 [多字段排序](/guide/param/sort#多字段排序-since-v3-4) 功能）。
 
@@ -35,8 +35,8 @@ public interface SqlInterceptor {
 
 ```java
 @Bean
-public SqlInterceptor myFitstSqlInterceptor() {
-    return new MyFitstSqlInterceptor();
+public SqlInterceptor myFirstSqlInterceptor() {
+    return new MyFirstSqlInterceptor();
 }
 
 @Bean
@@ -45,26 +45,12 @@ public SqlInterceptor mySecondSqlInterceptor() {
 }
 ```
 
-## 配置（非 Boot 的 Spring 项目）
-
-```xml
-<bean id="mapSearcher" class="cn.zhxu.bs.implement.DefaultMapSearcher">
-    <!-- 省略其它属性配置，BeanSearcher 检索器也同此配置 -->
-    <property name="interceptors">
-        <list>
-            <bean class="com.example.MyFitstSqlInterceptor" />
-            <bean class="com.example.MySecondSqlInterceptor" />
-        </list>
-    </property>
-</bean>
-```
-
 ## 配置（Others）
 
 ```java
 MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
         // 省略其它属性配置，BeanSearcher 检索器也同此配置
-        .addInterceptor(new MyFitstSqlInterceptor())
+        .addInterceptor(new MyFirstSqlInterceptor())
         .addInterceptor(new MySecondSqlInterceptor())
         .build();
 ```

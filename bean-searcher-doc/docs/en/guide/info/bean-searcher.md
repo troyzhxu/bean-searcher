@@ -46,12 +46,13 @@ Every framework has its own usage scenarios. Of course, Bean Searcher is no exce
 
 ### Which databases are supported
 
-As long as a database supports normal SQL syntax, it is supported. In addition, Bean Searcher has four built-in dialect implementations:
+As long as a database supports normal SQL syntax, it is supported. In addition, Bean Searcher has five built-in dialect implementations:
 
 * Databases with the same pagination syntax as MySQL are supported by default.
 * For databases with the same pagination syntax as PostgreSQL, select the PostgreSQL dialect.
 * For databases with the same pagination syntax as Oracle, select the Oracle dialect.
 * For databases with the same pagination syntax as SqlServer (v2012+), select the SqlServer dialect.
+* For databases with the same pagination syntax as DaMeng, select the DaMeng dialect (**since v4.6.0**).
 
 If a database has a unique pagination syntax, you only need to customize a dialect by implementing two methods. Refer to the [Advanced > SQL Dialect](/en/guide/advance/dialect) section.
 

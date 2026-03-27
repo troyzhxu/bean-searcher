@@ -12,7 +12,7 @@ export default defineConfig({
     nav: [
       { text: 'Guide', link: '/en/guide/info/bean-searcher', activeMatch: '/guide/' },
       {
-        text: 'v4.8.4',
+        text: 'v4.8.5',
         items: [
           {
             text: 'Changelog',
@@ -130,26 +130,26 @@ export default defineConfig({
         base: '/en/zoo', 
         items: [
           {
-            text: '标签系统',
+            text: 'Label System',
             base: '/en/zoo/label',
             collapsed: false,
             items: [
-              { text: '介绍', link: '/info' },
-              { text: '标签注解', link: '/anno' },
-              { text: '标签加载器', link: '/load' },
-              { text: '用法示例', link: '/demo' },
+              { text: 'Introduction', link: '/info' },
+              { text: 'Label Annotation', link: '/anno' },
+              { text: 'Label Loader', link: '/load' },
+              { text: 'Usage Examples', link: '/demo' },
             ]
           },
           {
-            text: '数据导出',
+            text: 'Data Export',
             base: '/en/zoo/ex',
             collapsed: false,
             items: [
-              { text: '介绍', link: '/info' },
-              { text: '文件导出器', link: '/exporter' },
-              { text: '导出注解', link: '/anno' },
-              { text: '文件写出', link: '/fwriter' },
-              { text: '并发控制', link: '/control' },
+              { text: 'Introduction', link: '/info' },
+              { text: 'File Exporter', link: '/exporter' },
+              { text: 'Export Annotation', link: '/anno' },
+              { text: 'File Writing', link: '/fwriter' },
+              { text: 'Concurrency Control', link: '/control' },
             ]
           },
         ]

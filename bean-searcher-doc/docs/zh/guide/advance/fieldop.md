@@ -84,29 +84,6 @@ public FieldOpPool myFieldOpPool() {
 
 > 如果你只是想添加一个自己的运算符，系统内置的运算符也想用，则看上一章节就可以了。
 
-### 非 Boot 的 Spring 项目
-
-```xml
-<bean id="fieldOpPool" class="cn.zhxu.bs.FieldOpPool">
-    <property name="fieldOps">
-        <list>
-            <bean class="com.demo.MyOp1">
-            <bean class="com.demo.MyOp2">
-            <bean class="com.demo.MyOp3">
-            <!-- 需要使用的自定义运算符都放在这里，也可以添加 Bean Searcher 自带的运算符 -->
-            <bean class="cn.zhxu.bs.operator.Equal">
-        </list>
-    </property>
-</bean>
-<bean id="paramResolver" class="cn.zhxu.bs.implement.DefaultParamResolver">
-    <property name="fieldOpPool" ref="fieldOpPool" />
-</bean>
-<bean id="mapSearcher" class="cn.zhxu.bs.implement.DefaultMapSearcher">
-    <!-- 省略其它属性配置，BeanSearcher 检索器也同此配置 -->
-    <property name="paramResolver" ref="paramResolver" />
-</bean>
-```
-
 ### 其它项目
 
 ```java

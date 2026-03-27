@@ -10,22 +10,7 @@
 
 配置键名 | 含义 | 类型 | 默认值
 -|-|-|-
-`bean-searcher.sql.slow-sql-threshol` | 慢 SQL 阈值（单位：毫秒） | `int` | `500`
-
-### 非 Boot 的 Spring 配置方法（使用 `bean-searcher` 依赖）
-
-```xml
-<bean id="sqlExecutor" class="cn.zhxu.bs.implement.DefaultSqlExecutor">
-    <property name="dataSource" ref="dataSource" />
-    <!-- 配置慢 SQL 阈值 -->
-    <property name="slowSqlThreshold" value="500" />
-</bean>
-<!-- 声明 MapSearcher 检索器，它查询的结果是 Map 对象 -->
-<bean id="mapSearcher" class="cn.zhxu.bs.implement.DefaultMapSearcher">
-    <!-- 省略其它属性配置，BeanSearcher 检索器也同此配置 -->
-    <property name="sqlExecutor" ref="sqlExecutor" />
-</bean>
-```
+`bean-searcher.sql.slow-sql-threshold` | 慢 SQL 阈值（单位：毫秒） | `int` | `500`
 
 ### Others
 
@@ -69,24 +54,6 @@ public SqlExecutor.SlowListener slowSqlListener() {
         // TODO: 监听处理
     }
 }
-```
-
-### 非 Boot 的 Spring 项目
-
-```xml
-<bean id="sqlExecutor" class="cn.zhxu.bs.implement.DefaultSqlExecutor">
-    <property name="dataSource" ref="dataSource" />
-    <!-- 配置 慢 SQL 监听器 -->
-    <property name="slowListener">
-        <!-- 自定义 MySlowSqlListener 实现 SqlExecutor.SlowListener 接口 -->
-        <bean class="com.example.MySlowSqlListener" />
-    </property>
-</bean>
-<!-- 声明 MapSearcher 检索器，它查询的结果是 Map 对象 -->
-<bean id="mapSearcher" class="cn.zhxu.bs.implement.DefaultMapSearcher">
-    <!-- 省略其它属性配置，BeanSearcher 检索器也同此配置 -->
-    <property name="sqlExecutor" ref="sqlExecutor" />
-</bean>
 ```
 
 ### Others

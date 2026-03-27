@@ -25,7 +25,7 @@ public class FieldParam {
     private Object operator;
 
     /**
-     * 参数值
+     * 参数值（v4.8.5 改进为 排好序的只读 List）
      */
     private final List<Value> values;
 
@@ -75,18 +75,19 @@ public class FieldParam {
     }
 
     public FieldParam(String name, FieldOp operator) {
-        this(name, operator, Collections.emptyList(), false);
+        this(name, operator, null, false);
     }
 
     public FieldParam(String name, List<Value> values) {
-        this.name = name;
-        this.values = values;
+        this(name, null, values, false);
     }
 
     public FieldParam(String name, FieldOp operator, List<Value> values, boolean ignoreCase) {
         this.name = name;
         this.operator = operator;
-        this.values = values;
+        this.values = values != null
+                ? values.stream().sorted(Comparator.comparingInt(v -> v.index)).toList()
+                : Collections.emptyList();
         this.ignoreCase = ignoreCase;
     }
 
@@ -95,14 +96,14 @@ public class FieldParam {
     }
 
     public Object[] getValues() {
-        values.sort(Comparator.comparingInt(v -> v.index));
-        Object[] objects = new Object[values.size()];
-        for (int i = 0; i < values.size(); i++) {
-            objects[i] = values.get(i).value;
-        }
-        return objects;
+        return values.stream().map(Value::getValue).toArray();
     }
 
+    public List<Value> valueList() {
+        return values;
+    }
+
+    @Deprecated
     public List<Value> getValueList() {
         return values;
     }

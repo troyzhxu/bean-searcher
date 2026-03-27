@@ -1,6 +1,6 @@
 # 其它形式
 
-除了上述的多表关联外，Bean Searcher 还支持很多复杂的 SQL 形式：
+除了多表关联，Bean Searcher 还支持多种复杂的 SQL 构造形式：
 
 ## Select 子查询
 
@@ -75,7 +75,7 @@ public class CourseScore {
 }
 ```
 
-如果有固定的 `having` 条件，可以写在这里：
+若有固定的 `having` 条件，也可以直接声明在注解中：
 
 ```java
 @SearchBean(
@@ -112,7 +112,7 @@ public class UseData {
 
 ## 默认排序（since v3.6.0）
 
-自 v2.6.0 起，可以在实体类中声明 **默认** 的排序规则，例如：
+自 v3.6.0 起，可以在实体类中声明 **默认** 的排序规则，例如：
 
 ```java
 @SearchBean(orderBy = "age desc, height asc")
@@ -161,28 +161,11 @@ public class User {
 -|-|-|-
 `bean-searcher.sql.default-mapping.sort-type` | 默认排序约束 | `ALLOW_PARAM`、`ONLY_ENTITY` | `ALLOW_PARAM`
 
-### 非 Boot 的 Spring 项目
-
-```xml
-<bean id="dbMapping" class="cn.zhxu.bs.implement.DefaultDbMapping">
-    <property name="defaultSortType" /> 
-        <util:constant static-field="cn.zhxu.bs.bean.SortType.ONLY_ENTITY"/>
-    </property>
-</bean>
-<bean id="metaResolver" class="cn.zhxu.bs.implement.DefaultMetaResolver">
-    <property name="dbMapping" ref="dbMapping" />
-</bean>
-<bean id="mapSearcher" class="cn.zhxu.bs.implement.DefaultMapSearcher">
-    <!-- 省略其它属性配置，BeanSearcher 检索器也同此配置 -->
-    <property name="metaResolver" ref="metaResolver" />
-</bean>
-```
-
 ### 其它框架
 
 ```java
 DefaultDbMapping dbMapping = new DefaultDbMapping();
-dbMapping.setDefaultSortType(SortType.ONLY_ENTITY);               // 这里配置需要默认继承类型
+dbMapping.setDefaultSortType(SortType.ONLY_ENTITY);               // 这里配置默认排序约束类型
 MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
         // 省略其它配置
         .metaResolver(new DefaultMetaResolver(dbMapping))       // BeanSearcher 检索器也同此配置

@@ -1,28 +1,28 @@
 # 字段与参数转换器
 
-Bean Searcher 在搜索管道的两个不同阶段执行类型转换：
+Bean Searcher 在查询的两个不同阶段做类型转换：
 
-1. **参数转换** - 在执行 SQL 之前，将传入的搜索参数值（通常是字符串）转换为数据库兼容的类型
-1. **字段转换** - 在查询执行之后，将数据库 ResultSet 的值转换为 Java bean 属性类型
+1. **参数转换** - 执行 SQL 之前，将检索参数（通常是字符串）转换为数据库可以接受的类型
+2. **字段转换** - 查询完成之后，将数据库 ResultSet 中的值转换为 Java Bean 的字段类型
 
-这些转换之所以必要，是因为：
+之所以需要这两类转换，是因为：
 
-- HTTP 参数以字符串形式到达，但可能需要查询数字、日期或布尔类型的数据库列
-- 不同的数据库对相同逻辑数据返回不同的类型（例如，JSON 可能作为 `String`、`byte[]` 或 `Clob` 返回）
-- Java bean 可能使用方便的、不能直接映射到数据库列类型的类型（例如 `List<Integer>`）
+- 前端传来的 HTTP 参数都是字符串，但数据库列可能是数字、日期或布尔类型
+- 不同数据库对同一逻辑类型的返回值可能不同（例如 JSON 字段可能返回 `String`、`byte[]` 或 `Clob`）
+- Java Bean 中定义的字段类型（例如 `List<Integer>`）无法直接与数据库列类型对应
 
 ## 字段转换器
 
-字段转换器用于解决数据库列类型与 Java Bean 字段类型之间的阻抗不匹配问题。虽然 JDBC 提供了基本的类型映射（例如，`INT` → `Integer`，`VARCHAR` → `String`），但许多场景需要自定义的转换逻辑：
+字段转换器负责弥合数据库列类型与 Java Bean 字段类型之间的差异。尽管 JDBC 已经处理了一些基础映射（例如 `INT` → `Integer`，`VARCHAR` → `String`），但仍有许多场景需要自定义转换：
 
-- 存储为字符串/字节的 JSON 列，需要反序列化为 Java 对象
-- 需要转换为字符串或集合的 CLOB/TEXT 字段
-- 数据库特定的类型表示（例如，字节数组、专有类型）
-- 编码了结构化数据的字符串表示（例如，逗号分隔的值）
+- JSON 字段存储为字符串或字节，需要反序列化为 Java 对象
+- CLOB/TEXT 字段需要转换为字符串或集合
+- 数据库特有的类型（例如 Oracle 的 `TIMESTAMP`）
+- 用字符串编码的结构化数据（例如逗号分隔值）
 
-字段转换器在搜索管道的 `SqlExecutor` 阶段运行，即在数据库返回结果之后，但在用值填充 Bean 之前。
+字段转换器运行在 `SqlExecutor` 完成查询之后、结果填充到 Bean 之前。
 
-Bean Searcher 提供了多个内置的字段转换器来处理常见的转换场景。
+Bean Searcher 内置了多个字段转换器来覆盖常见场景。
 
 ### NumberFieldConvertor
 
@@ -487,7 +487,7 @@ bean-searcher.field-convertor.use-json = false
 其它配置项：
 
 ```properties
-# JSON 转换失败时，是否抛出异常，默认 fasle，只打印警告日志
+# JSON 转换失败时，是否抛出异常，默认 false，只打印警告日志
 bean-searcher.field-convertor.json-fail-on-error = false
 ```
 
@@ -744,7 +744,7 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 
 * SpringBoot / Grails 项目
 
-使用 `bean-searcher-boot-starter`（v3.6.0+）依赖时，可在 `application.properties` 中添加一下配置即可启用：
+使用 `bean-searcher-boot-starter`（v3.6.0+）依赖时，可在 `application.properties` 中添加以下配置即可启用：
 
 ```properties
 bean-searcher.field-convertor.use-b2-m = true
@@ -770,133 +770,134 @@ MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
 
 ## 参数转换器
 
-参数转换器将传入的搜索参数值从输入格式（通常来自HTTP请求的字符串）在执行SQL之前转换为数据库兼容的Java类型。它们是参数处理管道中的关键组件，确保了用户输入和数据库查询之间的类型安全。
+Bean Searcher 在 SQL 执行之前，还会对检索参数做类型转换——将前端传来的字符串参数转换为数据库可以直接使用的 Java 类型。
 
-参数转换器在参数解析阶段运行，发生在参数过滤器标准化输入之后、SQL生成之前。它们弥合了弱类型的HTTP参数和强类型的数据库列之间的差距。
-
-Bean Searcher提供了六个内置的参数转换器，每个都处理特定的类型转换：
+参数转换器运行在参数过滤器之后、SQL 生成之前。Bean Searcher 内置了六个参数转换器，分别处理不同类型的转换场景：
 
 ### BoolParamConvertor
 
 > 自 v3.8.0 起
 
-为 `DbType.BOOL` 类型的字段转换布尔值。
+用于将 `DbType.BOOL` 类型字段的检索参数转换为布尔值：
 
-#### 支持的输入类型
+- **字符串输入**：将 `"0"、"OFF"、"FALSE"、"N"、"NO"、"F"`（不区分大小写）视为 `false`，其余为 `true`；空字符串返回 `null`
+- **数字输入**：`0` 为 `false`，非零为 `true`
 
-- `String` → 解释为 true/false
-- `Number` → `0` 为 false，非零为 true
-
-#### 字符串到布尔值的映射
-
-转换器使用可配置的 false 值数组：
+默认的 false 值列表可以自定义：
 
 ```java
-private String[] falseValues = new String[] { "0", "OFF", "FALSE", "N", "NO", "F" };
+BoolParamConvertor convertor = new BoolParamConvertor();
+convertor.setFalseValues(new String[] { "0", "OFF", "FALSE", "N", "NO", "F", "否" });
 ```
-
-任何**不**匹配这些值（不区分大小写）的字符串都被视为 `true`。空白字符串返回 `null`。
 
 ### NumberParamConvertor
 
 > 自 v3.8.0 起
 
-为具有数字 `DbType`（BYTE、SHORT、INT、LONG、FLOAT、DOUBLE、DECIMAL）的字段转换数字值。
+用于将数字类型字段（`DbType` 为 `BYTE`、`SHORT`、`INT`、`LONG`、`FLOAT`、`DOUBLE`、`DECIMAL`）的检索参数转换为对应的 Java 数字类型：
 
-#### 转换逻辑
-
-对于**字符串**输入：
-
-- 空白字符串返回 `null`
-- 使用 `Byte.parseByte()`, `Integer.parseInt()`, `Long.parseLong()` 等方法
-- 解析失败时抛出 `IllegalParamException`
-
-对于**数字**输入：
-
-- 使用 `Number.byteValue()`, `intValue()`, `longValue()` 等方法
-- 处理来自整数和浮点类型的 `BigDecimal` 转换
+- 字符串输入：空串返回 `null`，否则用对应的 `parse*` 方法解析，解析失败则抛出 `IllegalParamException`
+- 数字输入：调用 `byteValue()`、`intValue()`、`longValue()` 等方法，支持 `BigDecimal` 与整型/浮点型之间的互转
 
 ### DateParamConvertor
 
 > 自 v3.8.0 起
 
-为 `DbType.DATE` 类型的字段转换日期值。
+用于将 `DbType.DATE` 类型字段的检索参数转换为日期类型。支持的输入：`String`、`java.util.Date`（及其子类）、`LocalDate`、`LocalDateTime`。
 
-#### 支持的转换
+- 字符串格式支持 `-` 与 `/` 作为日期分隔符，例如 `2024-01-15` 或 `2024/1/15`
+- 默认输出类型为 `java.sql.Date`，也可以配置为 `LocalDate`
 
-| 输入类型             | 示例                          | 输出                            |
-| ---------------- | --------------------------- | ----------------------------- |
-| `String`         | `"2023-01-15"`              | `java.sql.Date` 或 `LocalDate` |
-| `java.util.Date` | 任何 Date 实例                  | `java.sql.Date` 或 `LocalDate` |
-| `LocalDate`      | `LocalDate.of(2023, 1, 15)` | `java.sql.Date` 或 `LocalDate` |
-| `LocalDateTime`  | `LocalDateTime.now()`       | `java.sql.Date` 或 `LocalDate` |
+#### 配置目标类型（since v4.2.3）
 
-#### 主要特性
+SpringBoot / Grails 项目中，通过配置项指定输出的日期类型：
 
-- 接受 `/` 和 `-` 作为日期分隔符
-- 使用正则表达式模式 `[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}` 从字符串中提取日期
-- 可配置目标类型：`SQL_DATE`（默认）或 `LOCAL_DATE`
-- 通过提取日期部分来转换 `LocalDateTime`
+```properties
+# 可选值：SQL_DATE（默认）、LOCAL_DATE
+bean-searcher.params.convertor.date-target = SQL_DATE
+```
+
+其它项目中，可以在构建时直接传入：
+
+```java
+// 指定输出为 LocalDate 类型
+DefaultParamResolver paramResolver = new DefaultParamResolver();
+paramResolver.addConvertor(new DateParamConvertor(DateParamConvertor.Target.LOCAL_DATE));
+```
 
 ### DateTimeParamConvertor
 
 > 自 v3.8.0 起
 
-为 `DbType.DATETIME` 类型的字段转换日期时间值。
+用于将 `DbType.DATETIME` 类型字段的检索参数转换为日期时间类型。
 
-#### 主要特性：
+- 支持字符串格式：`yyyy-MM-dd HH:mm:ss.SSS`、`yyyy-MM-dd HH:mm:ss`、`yyyy-MM-dd HH:mm`、`yyyy-MM-dd`，以及它们的 `/` 与 `-` 日期分隔符变体（since v4.3.5）
+- 支持将纯数字字符串（时间戳毫秒数）转换为日期时间（since v4.3.2）
+- 默认输出类型为 `java.sql.Timestamp`，也可以配置为 `LocalDateTime`
+- 支持配置时区（since v4.3.2）
 
-- 解析多种日期时间字符串格式：`yyyy-MM-dd HH:mm:ss.SSS`, `yyyy-MM-dd HH:mm:ss`, `yyyy-MM-dd HH:mm`, `yyyy-MM-dd`
-- 接受 `/` 和 `-` 作为日期分隔符
-- 将数字字符串作为纪元毫秒数处理
-- 可配置目标类型：`SQL_TIMESTAMP`（默认）或 `LOCAL_DATE_TIME`
-- 通过可配置的 `TimeZone`/`ZoneId` 进行时区感知的转换
+#### 配置目标类型与时区（since v4.2.3 / v4.3.2）
+
+SpringBoot / Grails 项目中：
+
+```properties
+# 输出类型：SQL_TIMESTAMP（默认）、LOCAL_DATE_TIME
+bean-searcher.params.convertor.date-time-target = SQL_TIMESTAMP
+# 时区 ID（默认使用系统时区）
+bean-searcher.params.convertor.zone-id = Asia/Shanghai
+```
+
+其它项目中：
+
+```java
+DateTimeParamConvertor convertor = new DateTimeParamConvertor(DateTimeParamConvertor.Target.LOCAL_DATE_TIME);
+convertor.setZoneId(ZoneId.of("Asia/Shanghai"));
+DefaultParamResolver paramResolver = new DefaultParamResolver();
+paramResolver.addConvertor(convertor);
+```
 
 ### TimeParamConvertor
 
 > 自 v3.8.0 起
 
-为 `DbType.TIME` 类型的字段转换时间值。
+用于将 `DbType.TIME` 类型字段的检索参数转换为时间类型。
 
-#### 支持的字符串格式：
+- 支持字符串格式：`HH:mm:ss`（如 `"14:30:00"`）和 `HH:mm`（如 `"14:30"`，秒数默认为 `00`）
+- 支持 `String`、`LocalTime`、`java.sql.Time` 类型的输入
+- 默认输出类型为 `java.sql.Time`，也可以配置为 `LocalTime`
 
-- `HH:mm:ss`（例如，`"14:30:00"`）
-- `HH:mm`（例如，`"14:30"` → 秒数默认为 `00`）
+#### 配置目标类型（since v4.2.3）
 
-#### 支持的类型：
+SpringBoot / Grails 项目中：
 
-- `String` → `java.sql.Time` 或 `LocalTime`
-- `LocalTime` → `java.sql.Time` 或 `LocalTime`
-- `java.sql.Time` → `LocalTime`（当目标为 `LOCAL_TIME` 时）
+```properties
+# 可选值：SQL_TIME（默认）、LOCAL_TIME
+bean-searcher.params.convertor.time-target = SQL_TIME
+```
+
+其它项目中：
+
+```java
+DefaultParamResolver paramResolver = new DefaultParamResolver();
+paramResolver.addConvertor(new TimeParamConvertor(TimeParamConvertor.Target.LOCAL_TIME));
+```
 
 ### EnumParamConvertor
 
 > 自 v4.2.1 起
 
-为 Java 类型是 Enum 子类的字段转换枚举值。
+用于将枚举类型字段的检索参数转换为数据库可接受的值（序数整数或枚举名字符串）。
 
-#### 转换规则：
+当字段的 Java 类型是枚举，前端传来的参数是字符串时，这个转换器会自动处理，无需在 Controller 里手动转换：
 
-| 输入                    | DbType   | 输出                 | 逻辑           |
-| --------------------- | -------- | ------------------ | ------------ |
-| `String: "ACTIVE"`    | `INT`    | `Integer: 0`       | 匹配枚举名称，返回其序数 |
-| `String: "0"`         | `INT`    | `Integer: 0`       | 将数字字符串解析为序数  |
-| `Enum: Status.ACTIVE` | `INT`    | `Integer: 0`       | 返回枚举的序数      |
-| `Enum: Status.ACTIVE` | `STRING` | `String: "ACTIVE"` | 返回枚举的名称      |
+| 输入参数值 | 字段 DbType | 输出 | 说明 |
+|-|-|-|-|
+| `"ACTIVE"` | `INT` | `0` | 枚举名匹配，返回序数 |
+| `"0"` | `INT` | `0` | 数字字符串解析为序数 |
+| `Status.ACTIVE`（枚举对象）| `INT` | `0` | 直接返回枚举序数 |
+| `Status.ACTIVE`（枚举对象）| `STRING` | `"ACTIVE"` | 直接返回枚举名 |
 
-#### 关键实现细节：
-
-`supports()` 方法检查：
-
-1. 目标类型可赋值给 `Enum.class`
-1. DbType 是 `INT` 或 `STRING`
-1. 值的类型是 `String` 或目标枚举类型
-
-`convert()` 方法通过以下方式处理字符串输入：
-
-1. 尝试进行不区分大小写的枚举名称匹配
-1. 回退到将其作为数字序数解析
-1. 如果两者都失败，则抛出 `IllegalParamException`
+字符串转换时优先按枚举名匹配（不区分大小写），匹配不到则尝试解析为数字序数，两者都失败则抛出 `IllegalParamException`。
 
 ## 自定义转换器
 
@@ -914,7 +915,7 @@ private String[] falseValues = new String[] { "0", "OFF", "FALSE", "N", "NO", "F
 具体编码可参考框架源码中的转换器：
 
 * Github: https://github.com/troyzhxu/bean-searcher/tree/main/bean-searcher/src/main/java/cn/zhxu/bs/convertor
-* Gitee: https://github.com/troyzhxu/bean-searcher/tree/main/bean-searcher/src/main/java/cn/zhxu/bs/convertor
+* Gitee: https://gitee.com/troyzhxu/bean-searcher/tree/main/bean-searcher/src/main/java/cn/zhxu/bs/convertor
 
 ### BFieldConverter 
 
@@ -943,7 +944,7 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 
 ### MFieldConverter
 
-* SpringBoot / Grails projects
+* SpringBoot / Grails 项目
 
 建议使用 `bean-searcher-boot-starter` 依赖，自定义好转换器后，只需将之声明为 Spring 的 Bean 即可：
 

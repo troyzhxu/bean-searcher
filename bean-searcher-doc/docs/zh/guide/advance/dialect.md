@@ -4,18 +4,18 @@ Bean Searcher 可以为我们自动生成完整的 SQL 语句，但对应不同�
 
 ## 方言实现
 
-Bean Searcher 自带四种 Dialect 实现：
+Bean Searcher 自带五种 Dialect 实现：
 
 * [`MySqlDialect`](https://github.com/troyzhxu/bean-searcher/blob/dev/bean-searcher/src/main/java/cn/zhxu/bs/dialect/MySqlDialect.java) - **默认方言**，可用于 类 MySql 的数据库
 * [`OracleDialect`](https://github.com/troyzhxu/bean-searcher/blob/dev/bean-searcher/src/main/java/cn/zhxu/bs/dialect/OracleDialect.java) - 可用于 类 Oracle 12c（2013年6月发布）及以上版本 的数据库
-* [`PostgreSqlDialect`](https://github.com/troyzhxu/bean-searcher/blob/dev/bean-searcher/src/main/java/cn/zhxu/bs/dialect/PostgreSqlDialect.java) - 可用于 类 PostgreSqlDialect 的数据库（**since v3.6.0**）
+* [`PostgreSqlDialect`](https://github.com/troyzhxu/bean-searcher/blob/dev/bean-searcher/src/main/java/cn/zhxu/bs/dialect/PostgreSqlDialect.java) - 可用于 类 PostgreSQL 的数据库（**since v3.6.0**）
 * [`SqlServerDialect`](https://github.com/troyzhxu/bean-searcher/blob/dev/bean-searcher/src/main/java/cn/zhxu/bs/dialect/SqlServerDialect.java) - 可用于 类 SqlServer (v2012+) 的数据库（**since v3.7.0**）
 * [`DaMengDialect`](https://github.com/troyzhxu/bean-searcher/blob/dev/bean-searcher/src/main/java/cn/zhxu/bs/dialect/DaMengDialect.java) - 可用于 类 达梦 的数据库 (**since v4.6.0**).
 * 其它数据库可自定义 Dialect，可 [参考 MySqlDialect 的实现](https://github.com/troyzhxu/bean-searcher/blob/dev/bean-searcher/src/main/java/cn/zhxu/bs/dialect/MySqlDialect.java)
 
-::: tip Bean Searcher 中的方言很简单
-* 自 **v3.3.0** 起，它被简化，只需实现 **两个** 方法即可；
-* 自 **v3.7.0** 起，再被简化，只需实现 **一个** 方法即可。
+::: tip Bean Searcher 的方言非常轻量
+* 自 **v3.3.0** 起，实现一个方言只需重写 **两个** 方法；
+* 自 **v3.7.0** 起，进一步简化为只需重写 **一个** 方法。
 :::
 
 ## 配置方法
@@ -28,7 +28,7 @@ Bean Searcher 自带四种 Dialect 实现：
 
 配置键名 | 含义 | 可选值 | 默认值
 -|-|-|-
-`bean-searcher.sql.dialect` | SQL 方言 | `MySQL`、`Oracle`、`PostgreSQL`、`SqlServer` | `MySQL`
+`bean-searcher.sql.dialect` | SQL 方言 | `MySQL`、`Oracle`、`PostgreSQL`、`SqlServer`、`DaMeng` | `MySQL`
 
 自定义的方言，只需将之注册为 Bean 即可：
 
@@ -37,29 +37,6 @@ Bean Searcher 自带四种 Dialect 实现：
 public Dialect myDialect() {
     return new MyDialect();
 }
-```
-
-### 非 Boot 的 Spring 项目
-
-```xml
-<!-- 定义 Oracle 方言 -->
-<bean id="dialect" class="cn.zhxu.bs.dialect.MyDialect" />
-
-<!-- v3.3 起需要配置运算符池 -->
-<bean id="fieldOpPool" class="cn.zhxu.bs.FieldOpPool" 
-    p:dialect-ref="dialect" />
-
-<bean id="paramResolver" class="cn.zhxu.bs.implement.DefaultParamResolver" 
-    p:fieldOpPool-ref="fieldOpPool" />
-
-<bean id="sqlResolver" class="cn.zhxu.bs.implement.DefaultSqlResolver" 
-    p:dialect-ref="dialect" />
-
-<bean id="mapSearcher" class="cn.zhxu.bs.implement.DefaultMapSearcher">
-    <!-- 省略其它属性配置，BeanSearcher 检索器也同此配置 -->
-    <property name="paramResolver" ref="paramResolver" />
-    <property name="sqlResolver" ref="sqlResolver" />
-</bean>
 ```
 
 ### Others
@@ -119,3 +96,29 @@ public DataSourceDialect shopDialect() {
     return new DataSourceDialect("shop", new MyDialect());
 }
 ```
+
+## 布尔字面量转换（since v4.6.0）
+
+部分数据库（如 Oracle、达梦）不支持 SQL 中的布尔字面量 `true` / `false`，如果用户在 `@DbField` 的 `condition` 属性或 SQL 拦截器中手写了含 `true`/`false` 的条件，在这些数据库上会直接报错。
+
+`DialectSqlInterceptor` 可以自动检测当前方言是否支持布尔字面量，并在不支持时将 SQL 中的 `true` 替换为 `1`、`false` 替换为 `0`。
+
+### SpringBoot / Grails / Solon
+
+使用 `bean-searcher-boot-starter` 或 `bean-searcher-solon-plugin` 时，`DialectSqlInterceptor` 已被**自动注册**，无需手动配置，开箱即用。
+
+### 其它框架
+
+非 Boot/Solon 环境下，需手动将其加入拦截器链：
+
+```java
+DialectSqlInterceptor dialectSqlInterceptor = new DialectSqlInterceptor(dialect);
+MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
+        // 省略其它配置
+        .addInterceptor(dialectSqlInterceptor)
+        .build();
+```
+
+::: tip 注意顺序
+若同时启用了动态方言（`DynamicDialectSupport`），`DialectSqlInterceptor` 必须排在 `DynamicDialectSupport` **之后**，才能正确获取到当前请求对应的方言。
+:::

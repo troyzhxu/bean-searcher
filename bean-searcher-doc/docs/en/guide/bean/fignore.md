@@ -24,6 +24,21 @@ Since v3.0.0, Bean Searcher has added the `@DbIgnore` annotation. We can directl
 This annotation cannot be used on the same attribute as the `@DbField` annotation.
 :::
 
+### Composite Annotations (since v4.4.0)
+
+Since `v4.4.0`, `@DbIgnore` can itself be placed on other custom annotations. This makes those annotations also trigger Bean Searcher field ignoring — a convenient way to reuse existing annotations.
+
+For example, if your project already uses a custom `@JsonIgnore` annotation to exclude certain fields from JSON serialization, you can make Bean Searcher honor it as well, without modifying each field:
+
+```java
+@DbIgnore
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface JsonIgnore {}
+```
+
+Now any field annotated with `@JsonIgnore` will be automatically ignored by Bean Searcher, just as if it were annotated with `@DbIgnore` directly.
+
 ## @SearchBean.ignoreFields to ignore multiple fields
 
 Since v3.4.0, Bean Searcher has added the `ignoreFields` parameter to the `@SearchBean` annotation. We can set its value to ignore multiple attributes in this entity class.

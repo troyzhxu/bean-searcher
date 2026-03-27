@@ -1,9 +1,7 @@
 
 # 集成
 
-集成 v3.x 的 Bean Searcher 比 v2.x 更加简单（不再需要配置 SearchBean 所在包名路径）。
-
-通常情况下，我们都是在一个后端的 Java Web 项目中使用 Bean Searcher，它可以在任意的 Web 框架中使用，以下介绍在常见的几种 Web 框架的集成方法。
+Bean Searcher 可以在任意 Java Web 框架中使用，以下介绍几种常见框架的集成方式。
 
 集成案例：
 
@@ -29,21 +27,9 @@ bean-searcher:
 
 ## 非 Boot 的 Spring 项目
 
-在传统的 Spring MVC 项目中需要添加 `bean-searcher` 核心依赖，然后在项目的 xml 文件内配置如下：
+在传统的 Spring MVC 项目中，使用 `bean-searcher` 核心依赖，参考下方 [Others](#others) 章节用 `SearcherBuilder` 手动构建检索器，然后将其声明为 Spring Bean 即可。
 
-```xml
-<bean id="sqlExecutor" 
-        class="cn.zhxu.bs.implement.DefaultSqlExecutor" 
-        p:dataSource-ref="dataSource" />
-<!-- 声明 BeanSearcher 检索器，它查询的结果是 SearchBean 泛型对象 -->
-<bean id="beanSearcher" 
-        class="cn.zhxu.bs.implement.DefaultBeanSearcher"
-        p:sqlExecutor-ref="sqlExecutor" />
-<!-- 声明 MapSearcher 检索器，它查询的结果是 Map 对象 -->
-<bean id="mapSearcher" 
-        class="cn.zhxu.bs.implement.DefaultMapSearcher"
-        p:sqlExecutor-ref="sqlExecutor" />
-```
+
 
 ## Grails (只使用 bean-searcher 依赖)
 

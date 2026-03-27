@@ -2,14 +2,14 @@
 
 > since v3.5
 
-在默认情况下，如果检索时带有 **多个** 字段参数，则这些参数之间都是 **并且** 的关系。那如何来表达 **或者**，以及 **且或** 之间更复杂的 **逻辑组合** 呢？
+默认情况下，多个字段参数之间是**并且**的关系。如果需要表达**或者**，乃至**且或混合**的复杂逻辑，该怎么办呢？
 
 ![](/group_requirement.png)
 
-终于，在 `v3.5.0` 里，Bean Searcher 为大家带来了 逻辑分组 的功能，它的主要思想如下：
+从 `v3.5.0` 起，Bean Searcher 引入了**逻辑分组**功能，核心思路如下：
 
-* 用 **组名** 以 **前缀** 的形式为 字段参数 分组（组名与字段参数之间默认用 `.` 作为分割符，组名可由字母与数字组成）
-* 用一个新的参数 **逻辑表达式** 来表示 各组之间的 逻辑关系（默认的参数名为 `gexpr`，是 `Group Expression` 的简写）
+* 用**组名**作为**前缀**为字段参数分组（组名与字段参数之间默认用 `.` 分隔，组名可由字母与数字组成）
+* 用一个新参数**逻辑表达式**来描述各组之间的逻辑关系（默认参数名为 `gexpr`，即 `Group Expression` 的缩写）
 
 ## 用法举例
 
@@ -44,7 +44,7 @@ gexpr = (A|B)&C
 ```
 
 ::: tip 注意
-由于 `&` 与 `|` 是特殊字符，所以在 RUL 中，参数 `gexpr` 的值需要 **URLEncode** 编码一下。
+由于 `&` 与 `|` 是特殊字符，所以在 URL 中，参数 `gexpr` 的值需要 **URLEncode** 编码一下。
 :::
 
 ### 使用 参数构建器
@@ -60,7 +60,7 @@ Map<String, Object> params = MapUtils.builder()
         .field(User::getName, "Alice")
         .field(User::getGender, "Female")
         .group("C")             // C 组开始
-        .field(User::getAge, "20").op(GreateEqual.class)
+        .field(User::getAge, "20").op(GreaterEqual.class)
         .groupExpr("(A|B)&C")   // 组间逻辑关系（组表达式）
         .build();
 ```
@@ -79,7 +79,7 @@ Map<String, Object> params = MapUtils.builder()
                 .field(User::getGender, "Female")
             )
         )
-        .field(User::getAge, "20").op(GreateEqual.class)
+        .field(User::getAge, "20").op(GreaterEqual.class)
         .build();
 // 无需再调用 groupExpr(..) 方法，and(..) 与 or(..) 方法将自动生成组名与组表达式
 ```
@@ -90,7 +90,7 @@ Map<String, Object> params = MapUtils.builder()
 
 ## 逻辑表达式
 
-上文已经看到，逻辑表达式是由 **组名**、**逻辑符**（或 `|`、且 `&`）与 **小括号** 组成的 用于表示 字段参数组 之间的逻辑关系的 一个式子。
+逻辑表达式由**组名**、**逻辑符**（或 `|`、且 `&`）与**小括号**组成，用来描述各字段参数组之间的逻辑关系。
 
 它可以很简单，也可以嵌套多层，例如：
 
@@ -116,7 +116,7 @@ Map<String, Object> params = MapUtils.builder()
 
 ### 智能化简
 
-Bean Searcher 还内置一个优化器，当你的逻辑表达式写的冗余复杂时，它会自动将其优化为最简形式，从而简化最终生成的 SQL 语句。
+Bean Searcher 内置了一个表达式优化器，会自动将冗余复杂的逻辑表达式化简为最简形式，从而生成更简洁的 SQL 语句。
 
 例如：
 
@@ -207,7 +207,7 @@ Map<String, Object> params = MapUtils.builder(..)
 
 ## 配置项
 
-使用 `bean-searcher-boot-starter` 依赖时，我们可以使用它提供了以下的配置键 来对进行自定义：
+使用 `bean-searcher-boot-starter` 依赖时，可通过以下配置键进行自定义：
 
 配置键名 | 含义 | 可选值 | 默认值
 -|-|-|-

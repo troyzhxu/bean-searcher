@@ -24,6 +24,31 @@ Bean Searcher 自 v3.0.0 新增了 `@DbIgnore` 注解，我们可以直接用它
 该注解不可以与  `@DbField` 注解使用在同一个属性上。
 :::
 
+### 组合注解（since v4.4.0）
+
+自 `v4.4.0` 起，`@DbIgnore` 支持被标注到其它自定义注解上，使该自定义注解也具备 `@DbIgnore` 的功能。
+
+**典型场景：**项目中已使用了 Jackson 的 `@JsonIgnore` 注解来忽略 JSON 序列化字段，同时也希望这些字段在 Bean Searcher 中被自动忽略，而无需同时标注两个注解。可这样定义自定义 `@JsonIgnore`：
+
+```java
+@DbIgnore
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.FIELD})
+public @interface JsonIgnore {
+}
+```
+
+之后，任何标注了 `@JsonIgnore` 的字段，Bean Searcher 也会自动将其忽略：
+
+```java
+public class User {
+    private Long id;
+    private String name;
+    @JsonIgnore         // 同时具有 @DbIgnore 的效果，Bean Searcher 会忽略此字段
+    private String password;
+}
+```
+
 ## @SearchBean.ignoreFields 忽略多个字段
 
 Bean Searcher 自 v3.4.0 为注解 `@SearchBean` 新增了 `ignoreFields` 参数，我们可以设定它的值来忽略这个实体类中的多个属性。
@@ -54,32 +79,11 @@ Bean Searcher 自 v3.4.0 开始支持全局属性忽略某些未被 `@DbField` �
 -|-|-|-
 `bean-searcher.sql.default-mapping.ignore-fields` | 需要全局忽略的属性名（可指定多个） | `字符串数组` | `null`
 
-### 非 Boot 的 Spring 项目
-
-```xml
-<bean id="dbMapping" class="cn.zhxu.bs.implement.DefaultDbMapping">
-    <property name="ignoreFields"> 
-        <!-- 这里配置需要全局忽略的属性名 -->
-        <array>
-            <value>field1</value>
-            <value>field2</value>
-        </array>
-    </property>
-</bean>
-<bean id="metaResolver" class="cn.zhxu.bs.implement.DefaultMetaResolver">
-    <property name="dbMapping" ref="dbMapping" />
-</bean>
-<bean id="mapSearcher" class="cn.zhxu.bs.implement.DefaultMapSearcher">
-    <!-- 省略其它属性配置，BeanSearcher 检索器也同此配置 -->
-    <property name="metaResolver" ref="metaResolver" />
-</bean>
-```
-
 ### 其它框架
 
 ```java
 DefaultDbMapping dbMapping = new DefaultDbMapping();
-dbMapping.setIgnoreFields(new String[] { "field1", "field2" }); // 这里配置需要全局忽略的属性名
+dbMapping.setIgnoreFields(new String[] { "field1", "field2" }); // 配置全局忽略的属性名
 MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
         // 省略其它配置
         .metaResolver(new DefaultMetaResolver(dbMapping))       // BeanSearcher 检索器也同此配置

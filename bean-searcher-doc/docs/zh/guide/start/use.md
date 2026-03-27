@@ -1,10 +1,10 @@
 # 使用
 
-如果您还不了解  Bean Searcher 适合在在哪些场景使用的话，请先阅读 [介绍 > Bean Searcher](/guide/info/bean-searcher) 章节。
+如果还不清楚 Bean Searcher 适合在哪些场景使用，建议先阅读 [介绍 > Bean Searcher](/guide/info/bean-searcher) 章节。
 
 ## 检索器
 
-当在项目中成功集成后，接下来便可以在我们的业务代码（Controller 或 Service）中拿到检索器实例了。
+当在项目中成功集成后，接下来便可以在业务代码（Controller 或 Service）中直接使用检索器了。
 
 Spring 或 Grails 项目都可以直接注入（Grails 项目中不需要使用 `@Autowired` 注解）：
 
@@ -24,17 +24,17 @@ private BeanSearcher beanSearcher;
 其它项目，可以把在项目启动时构建出来的检索器直接传进来，或使用自己的注入方式进行注入。
 
 ::: warning 注意
-如果你的 Spring 容器中同时有 `MapSearcher` 与 `BeanSearcher` 两个实例（使用 `bean-searcher-boot-starter` 依赖时默认向 Spring 容器注入添加两个检索器实例），则不能使用如下方式注入：
+如果你的 Spring 容器中同时有 `MapSearcher` 与 `BeanSearcher` 两个实例（使用 `bean-searcher-boot-starter` 时默认会注入这两个实例），则**不能**这样注入：
 ```java
 @Autowired
 private Searcher Searcher;
 ```
-因为有 `MapSearcher` 与 `BeanSearcher` 都是 `Searcher` 的实例，Spring 容器分不清你想要的到底是哪一个。
+因为 `MapSearcher` 与 `BeanSearcher` 都实现了 `Searcher` 接口，Spring 容器不知道该注入哪一个。
 
-当使用 `bean-searcher-boot-starter` 的版本是 `v3.0.5` 或 `v3.1.3+` 时，则不存在此问题，它会默认注入 `MapSearcher` 实例。
+使用 `bean-searcher-boot-starter` 的 `v3.0.5` 或 `v3.1.3+` 时不存在此问题，它会默认注入 `MapSearcher` 实例。
 :::
 
-拿到检索器后，接着我们看一下 `MapSearcher` 与 `BeanSearcher` 检索器都提供了哪些方法：
+拿到检索器后，我们来看看 `MapSearcher` 与 `BeanSearcher` 分别提供了哪些方法：
 
 ### 共同拥有的方法
 
@@ -64,15 +64,15 @@ private Searcher Searcher;
 
 > 以上方法的查询出的单条数据都以泛型 `T` 对象呈现
 
-完整的接口定义，可查阅：[Searcher](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/Searcher.java)、[MapSearcher](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/MapSearcher.java) 与 、[BeanSearcher](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/BeanSearcher.java) 。
+完整的接口定义，可查阅：[Searcher](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/Searcher.java)、[MapSearcher](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/MapSearcher.java) 与 [BeanSearcher](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/BeanSearcher.java) 。
 
 ## 小试牛刀
 
-下面我们用几行代码来体验一下 Bean Searcher 的检索功能。
+下面通过几行代码来体验 Bean Searcher 的检索功能。
 
 ### 定义 SearchBean
 
-在 Bean Searcher 的世界里，与数据库有映射关系的实体类称为 SearchBean（一个 SearchBean 可以映射一张表，也可以映射多张表），例如，您的项目中可能已经存在这样的一个实体类了：
+在 Bean Searcher 的世界里，与数据库有映射关系的实体类称为 SearchBean（一个 SearchBean 可以映射一张表，也可以映射多张表）。例如，你的项目中可能已经存在这样一个实体类了：
 
 ```java
 public class User {             // 默认映射到 user 表
@@ -85,13 +85,11 @@ public class User {             // 默认映射到 user 表
 }
 ```
 
-相比 v2.x, Bean Searcher v3.x 的实体类可以省略注解，也可以自定义识别其它框架的注解。
-
-在注解缺省的情况下，Bean Searcher 认为它是一个单表实体类（即只映射到数据库中的一张表，联表实体类 的例子 请参考 [实体类 > 多表关联](/guide/bean/multitable) 章节。
+自 v3.x 起，实体类可以不写任何注解，Bean Searcher 也可以自动识别。没有注解时，Bean Searcher 默认将其视为单表实体类（如需联表，请参考 [实体类 > 多表关联](/guide/bean/multitable) 章节）。
 
 ### 定义检索 Api
 
-有了实体类后，接下来我们便用 `MapSearcher` 的 `search(Class<T> beanClass, Map<String, Object> params): SearchResult<Map<String, Object>>` 方法来体验一下如何 **只用一行代码** 实现一个检索接口，代码如下：
+有了实体类，接下来用 `MapSearcher.search(..)` 方法来看看如何**只用一行代码**实现一个检索接口：
 
 ```java
 @RestController
@@ -99,7 +97,7 @@ public class User {             // 默认映射到 user 表
 public class UserController {
 
     @Autowired
-    private MapSearcher mapSearcher;              // 注入 BeanSearcher 的检索器
+    private MapSearcher mapSearcher;              // 注入 MapSearcher 检索器
 
     @GetMapping("/index")
     public SearchResult<Map<String, Object>> index(HttpServletRequest request) {
@@ -123,7 +121,7 @@ public class UserController {
 public class UserController {
 
     @Autowired
-    private MapSearcher mapSearcher;              // 注入 BeanSearcher 的检索器
+    private MapSearcher mapSearcher;              // 注入 MapSearcher 检索器
 
     @GetMapping("/index")
     public SearchResult<Map<String, Object>> index() {
@@ -209,7 +207,7 @@ public class UserController {
 ### （7）字段过滤（ [field]-op=ge ）
 
 * GET /user/index? age=20 & age-op=ge
-* 返回结果：结构同 **（1）**（但只返回 age >= 20 的数据，`ge` 是 `GreateEqual` 的缩写）
+* 返回结果：结构同 **（1）**（但只返回 age >= 20 的数据，`ge` 是 `GreaterEqual` 的缩写）
 
 ### （8）字段过滤（ [field]-op=le ）
 
@@ -219,7 +217,7 @@ public class UserController {
 ### （9）字段过滤（ [field]-op=gt ）
 
 * GET /user/index? age=20 & age-op=gt
-* 返回结果：结构同 **（1）**（但只返回 age > 20 的数据，`gt` 是 `GreateThan` 的缩写）
+* 返回结果：结构同 **（1）**（但只返回 age > 20 的数据，`gt` 是 `GreaterThan` 的缩写）
 
 ### （10）字段过滤（ [field]-op=lt ）
 
@@ -283,7 +281,7 @@ public class UserController {
 
 Bean Searcher 还支持 **更多** 的检索方式（甚至可以自定义，参考： [参数 > 字段参数 > 字段运算符](/guide/param/field#字段运算符) 章节），这里就不再列举了。
 
-本例的 `/user/index` 接口里我们只写了一行代码，它便可以支持这么多种的检索方式，你现在体会到了 **一行代码便可实现复杂列表检索** 的含义了吗？有没有觉得你现在写的一行代码可以干过别人的一百行呢？
+本例的 `/user/index` 接口里只写了一行代码，它便可以支持这么多种的检索方式。现在你应该体会到了 **一行代码便可实现复杂列表检索** 的含义了——同样的功能，换成手写 SQL 来实现，恐怕一百行代码都打不住。
 
 ::: tip
 本例所举的是一个简单的单表查询，实际上，无论是单表还是多表，只要在映射在同一个实体类里，就可以支持上文所列的所有检索方式。
@@ -293,7 +291,7 @@ Bean Searcher 还支持 **更多** 的检索方式（甚至可以自定义，参
 
 ## SQL 日志
 
-如果需要查看 Bean Searcher 的 SQL 执行日志，只需在您的日志配置文件中将 `cn.zhxu.bs.implement.DefaultSqlExecutor` 的日志级别调整为 `DEBUG` 即可。
+如需查看 Bean Searcher 的 SQL 执行日志，只需在日志配置文件中将 `cn.zhxu.bs.implement.DefaultSqlExecutor` 的日志级别调为 `DEBUG` 即可。
 
 > 若日志级别配置为 `INFO` 或 `WARN`，则只打印 慢 SQL 日志，配置为 `DEBUG` 则 慢 SQL 与 普通 SQL 都打印。
 
