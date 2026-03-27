@@ -44,7 +44,7 @@ gexpr = (A|B)&C
 ```
 
 ::: tip 注意
-由于 `&` 与 `|` 是特殊字符，所以在 RUL 中，参数 `gexpr` 的值需要 **URLEncode** 编码一下。
+由于 `&` 与 `|` 是特殊字符，所以在 URL 中，参数 `gexpr` 的值需要 **URLEncode** 编码一下。
 :::
 
 ### 使用 参数构建器
@@ -60,7 +60,7 @@ Map<String, Object> params = MapUtils.builder()
         .field(User::getName, "Alice")
         .field(User::getGender, "Female")
         .group("C")             // C 组开始
-        .field(User::getAge, "20").op(GreateEqual.class)
+        .field(User::getAge, "20").op(GreaterEqual.class)
         .groupExpr("(A|B)&C")   // 组间逻辑关系（组表达式）
         .build();
 ```
@@ -79,7 +79,7 @@ Map<String, Object> params = MapUtils.builder()
                 .field(User::getGender, "Female")
             )
         )
-        .field(User::getAge, "20").op(GreateEqual.class)
+        .field(User::getAge, "20").op(GreaterEqual.class)
         .build();
 // 无需再调用 groupExpr(..) 方法，and(..) 与 or(..) 方法将自动生成组名与组表达式
 ```
@@ -207,7 +207,7 @@ Map<String, Object> params = MapUtils.builder(..)
 
 ## 配置项
 
-使用 `bean-searcher-boot-starter` 依赖时，我们可以使用它提供了以下的配置键 来对进行自定义：
+使用 `bean-searcher-boot-starter` 依赖时，可通过以下配置键进行自定义：
 
 配置键名 | 含义 | 可选值 | 默认值
 -|-|-|-

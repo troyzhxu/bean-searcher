@@ -487,7 +487,7 @@ bean-searcher.field-convertor.use-json = false
 其它配置项：
 
 ```properties
-# JSON 转换失败时，是否抛出异常，默认 fasle，只打印警告日志
+# JSON 转换失败时，是否抛出异常，默认 false，只打印警告日志
 bean-searcher.field-convertor.json-fail-on-error = false
 ```
 
@@ -744,7 +744,7 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 
 * SpringBoot / Grails 项目
 
-使用 `bean-searcher-boot-starter`（v3.6.0+）依赖时，可在 `application.properties` 中添加一下配置即可启用：
+使用 `bean-searcher-boot-starter`（v3.6.0+）依赖时，可在 `application.properties` 中添加以下配置即可启用：
 
 ```properties
 bean-searcher.field-convertor.use-b2-m = true
@@ -914,7 +914,7 @@ private String[] falseValues = new String[] { "0", "OFF", "FALSE", "N", "NO", "F
 具体编码可参考框架源码中的转换器：
 
 * Github: https://github.com/troyzhxu/bean-searcher/tree/main/bean-searcher/src/main/java/cn/zhxu/bs/convertor
-* Gitee: https://github.com/troyzhxu/bean-searcher/tree/main/bean-searcher/src/main/java/cn/zhxu/bs/convertor
+* Gitee: https://gitee.com/troyzhxu/bean-searcher/tree/main/bean-searcher/src/main/java/cn/zhxu/bs/convertor
 
 ### BFieldConverter 
 
@@ -943,7 +943,7 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 
 ### MFieldConverter
 
-* SpringBoot / Grails projects
+* SpringBoot / Grails 项目
 
 建议使用 `bean-searcher-boot-starter` 依赖，自定义好转换器后，只需将之声明为 Spring 的 Bean 即可：
 

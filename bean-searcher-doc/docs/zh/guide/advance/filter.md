@@ -224,7 +224,7 @@ public interface ResultFilter {
 
 ```java
 @Bean
-public ResultFilter myFitstResultFilter() {
+public ResultFilter myFirstResultFilter() {
     return new MyFirstResultFilter();
 }
 
@@ -238,7 +238,7 @@ public ResultFilter mySecondResultFilter() {
 
 ```java
 MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
-        .addResultFilter(new FitstResultFilter());      // since v3.6.1
+        .addResultFilter(new FirstResultFilter());      // since v3.6.1
         .addResultFilter(new SecondResultFilter());     // since v3.6.1
         // 省略其它属性配置，BeanSearcher 检索器也同此配置
         .build();

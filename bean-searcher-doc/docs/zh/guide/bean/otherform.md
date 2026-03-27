@@ -112,7 +112,7 @@ public class UseData {
 
 ## 默认排序（since v3.6.0）
 
-自 v2.6.0 起，可以在实体类中声明 **默认** 的排序规则，例如：
+自 v3.6.0 起，可以在实体类中声明 **默认** 的排序规则，例如：
 
 ```java
 @SearchBean(orderBy = "age desc, height asc")
@@ -165,7 +165,7 @@ public class User {
 
 ```java
 DefaultDbMapping dbMapping = new DefaultDbMapping();
-dbMapping.setDefaultSortType(SortType.ONLY_ENTITY);               // 这里配置需要默认继承类型
+dbMapping.setDefaultSortType(SortType.ONLY_ENTITY);               // 这里配置默认排序约束类型
 MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
         // 省略其它配置
         .metaResolver(new DefaultMetaResolver(dbMapping))       // BeanSearcher 检索器也同此配置

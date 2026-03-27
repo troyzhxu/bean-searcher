@@ -35,8 +35,8 @@ public interface SqlInterceptor {
 
 ```java
 @Bean
-public SqlInterceptor myFitstSqlInterceptor() {
-    return new MyFitstSqlInterceptor();
+public SqlInterceptor myFirstSqlInterceptor() {
+    return new MyFirstSqlInterceptor();
 }
 
 @Bean
@@ -50,7 +50,7 @@ public SqlInterceptor mySecondSqlInterceptor() {
 ```java
 MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
         // 省略其它属性配置，BeanSearcher 检索器也同此配置
-        .addInterceptor(new MyFitstSqlInterceptor())
+        .addInterceptor(new MyFirstSqlInterceptor())
         .addInterceptor(new MySecondSqlInterceptor())
         .build();
 ```

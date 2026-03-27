@@ -64,7 +64,7 @@ private Searcher Searcher;
 
 > 以上方法的查询出的单条数据都以泛型 `T` 对象呈现
 
-完整的接口定义，可查阅：[Searcher](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/Searcher.java)、[MapSearcher](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/MapSearcher.java) 与 、[BeanSearcher](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/BeanSearcher.java) 。
+完整的接口定义，可查阅：[Searcher](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/Searcher.java)、[MapSearcher](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/MapSearcher.java) 与 [BeanSearcher](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/BeanSearcher.java) 。
 
 ## 小试牛刀
 
@@ -99,7 +99,7 @@ public class User {             // 默认映射到 user 表
 public class UserController {
 
     @Autowired
-    private MapSearcher mapSearcher;              // 注入 BeanSearcher 的检索器
+    private MapSearcher mapSearcher;              // 注入 MapSearcher 检索器
 
     @GetMapping("/index")
     public SearchResult<Map<String, Object>> index(HttpServletRequest request) {
@@ -123,7 +123,7 @@ public class UserController {
 public class UserController {
 
     @Autowired
-    private MapSearcher mapSearcher;              // 注入 BeanSearcher 的检索器
+    private MapSearcher mapSearcher;              // 注入 MapSearcher 检索器
 
     @GetMapping("/index")
     public SearchResult<Map<String, Object>> index() {
@@ -209,7 +209,7 @@ public class UserController {
 ### （7）字段过滤（ [field]-op=ge ）
 
 * GET /user/index? age=20 & age-op=ge
-* 返回结果：结构同 **（1）**（但只返回 age >= 20 的数据，`ge` 是 `GreateEqual` 的缩写）
+* 返回结果：结构同 **（1）**（但只返回 age >= 20 的数据，`ge` 是 `GreaterEqual` 的缩写）
 
 ### （8）字段过滤（ [field]-op=le ）
 
@@ -219,7 +219,7 @@ public class UserController {
 ### （9）字段过滤（ [field]-op=gt ）
 
 * GET /user/index? age=20 & age-op=gt
-* 返回结果：结构同 **（1）**（但只返回 age > 20 的数据，`gt` 是 `GreateThan` 的缩写）
+* 返回结果：结构同 **（1）**（但只返回 age > 20 的数据，`gt` 是 `GreaterThan` 的缩写）
 
 ### （10）字段过滤（ [field]-op=lt ）
 

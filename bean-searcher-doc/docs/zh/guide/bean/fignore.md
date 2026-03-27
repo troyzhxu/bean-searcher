@@ -58,7 +58,7 @@ Bean Searcher 自 v3.4.0 开始支持全局属性忽略某些未被 `@DbField` �
 
 ```java
 DefaultDbMapping dbMapping = new DefaultDbMapping();
-dbMapping.setIgnoreFields(new String[] { "field1", "field2" }); // 这里配置需要全局忽略的属性名
+dbMapping.setIgnoreFields(new String[] { "field1", "field2" }); // 配置全局忽略的属性名
 MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
         // 省略其它配置
         .metaResolver(new DefaultMetaResolver(dbMapping))       // BeanSearcher 检索器也同此配置

@@ -7,7 +7,7 @@
 配置键名 | 含义 | 可选值 | 默认值
 -|-|-|-
 `bean-searcher.params.sort` | 排序字段参数名 | `字符串` | `sort`
-`bean-searcher.params.order` | 排序方法参数名 | `字符串` | `order`
+`bean-searcher.params.order` | 排序方式参数名 | `字符串` | `order`
 `bean-searcher.params.order-by` | 排序参数名（since v3.4.0） | `字符串` | `orderBy`
 
 ## 单字段排序
@@ -29,7 +29,7 @@ SearchResult<User> result = searcher.search(User.class, params);
 ```java
 Map<String, Object> params = MapUtils.builder()
         .orderBy(User::getAge).asc()                // age 字段 升序
-        .orderBy(User::getTime).desc()              // time 字段 降序（多次调佣 orderBy 方法）
+        .orderBy(User::getTime).desc()              // time 字段 降序（多次调用 orderBy 方法）
         .put("orderBy", "age:asc,time:desc")        // 等效写法      
         .build();
 SearchResult<User> result = searcher.search(User.class, params);

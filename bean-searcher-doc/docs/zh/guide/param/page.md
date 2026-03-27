@@ -60,18 +60,18 @@ SearchResult<User> result = searcher.search(User.class, params);
 
 配置项 起始页码/偏移量（`bean-searcher.params.pagination.start`）默认是 `0`，在 Page 分页机制下，`page` 参数为 0 表示查询第 1 页。当把 起始页码 配置为 `1` 时，则 `page` 参数为 1 才表示查询第 1 页。Offset 分页同理。
 
-::: warning 注意
-* **v3.7.0** 以前 `参数构建工具` 的 `page(long page, int size)` 与 `limit(long offset, int size)` 方法不受该配置影响。
-* **v3.7.0** 及以后版本该配置则对  `参数构建工具`  同样有作用。
-:::
+:::: warning 注意
+* **v3.7.0** 以前 `参数构建器` 的 `page(long page, int size)` 与 `limit(long offset, int size)` 方法不受该配置影响。
+* **v3.7.0** 及以后版本该配置则对  `参数构建器`  同样有作用。
+::::
 
 ## 最大查询条数
 
-配置项 最大查询条数（`bean-searcher.params.pagination.max-allowed-size`）默认是 `100`，它可以风控一些恶意查询：比如黑客想通过一次查询 **1 亿** 条数据从而让我们系统崩溃时，Bean Searcher 会自动把它缩小为 `100`。
+配置项 最大查询条数（`bean-searcher.params.pagination.max-allowed-size`）默认是 `100`，它可以拦截一些恶意查询：比如黑客想通过一次查询 **1 亿** 条数据从而让我们系统崩溃时，Bean Searcher 会自动把它缩小为 `100`。
 
 ## 默认分页大小
 
-配置项 默认分页大小（`bean-searcher.params.pagination.default-size`）默认是 `15`，在用户为添加分页参数时，默认每页查询 15 条数据。
+配置项 默认分页大小（`bean-searcher.params.pagination.default-size`）默认是 `15`，在用户未添加分页参数时，默认每页查询 15 条数据。
 
 ::: tip
 `Searcher` 实例的 `searchAll(...)` 方法不受分页参数影响

@@ -15,7 +15,7 @@ Bean Searcher 是一个轻量级 数据库 条件检索引擎，它的作用是�
 
 ### 与 Hibernate MyBatis 的区别
 
-首先，Bean Searcher 并不是一个完全的 `ORM` 框架，它存在的目的不是为了替换他们，而是为了弥补他们在 `列表检索领域` 的不足。
+首先，Bean Searcher 并不是一个完全的 `ORM` 框架，它存在的目的不是为了替换它们，而是为了弥补它们在 `列表检索领域` 的不足。
 
 下表列举它们之间的具体区别：
 
@@ -32,7 +32,7 @@ CRUD | Only R | CRUD | CRUD
 
 ### 哪些项目可以使用
 
-* Java 项目（当然 Kotlin、gradle 也是可以的）；
+* Java 项目（当然 Kotlin、Groovy 也是可以的）；
 
 * 使用了 关系数据库的项目（如：MySQL、Oracle 等）；
 
@@ -52,18 +52,19 @@ CRUD | Only R | CRUD | CRUD
 
 ### 支持哪些数据库
 
-只要支持正常的 SQL 语法，都是支持的，另外 Bean Searcher 内置了四个方言实现：
+只要支持正常的 SQL 语法，都是支持的，另外 Bean Searcher 内置了五个方言实现：
 
 * 分页语法和 MySQL 一样的数据库，默认支持
-* 分页语法和 PostgreSql 一样的数据库，选用 PostgreSql 方言 即可
+* 分页语法和 PostgreSQL 一样的数据库，选用 PostgreSQL 方言 即可
 * 分页语法和 Oracle 一样的数据库，选用 Oracle 方言 即可
 * 分页语法和 SqlServer (v2012+) 一样的数据库，选用 SqlServer 方言 即可
+* 分页语法和 达梦 一样的数据库，选用 DaMeng 方言 即可
 
 如果分页语法独创的，则只需自定义一个方言，只需实现两个方法，参考：[高级 > SQL 方言](/guide/advance/dialect) 章节。
 
 ## DEMO 快速体验
 
-三步急速体验
+三步快速体验
 
 ### 第一步：克隆
 
@@ -108,7 +109,7 @@ grails run-app
 
 ### 第三步：效果
 
-访问 `http://localhost:8080/` 既可查看运行效果。
+访问 `http://localhost:8080/` 即可查看运行效果。
 
 此例的更多信息，可参阅：[DEMO 详细介绍](https://github.com/troyzhxu/bean-searcher/blob/main/bean-searcher-demos/bs-demo-sb4/README.md)。
 

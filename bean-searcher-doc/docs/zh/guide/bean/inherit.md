@@ -92,7 +92,7 @@ public class UserDetail extends User {
 }
 ```
 
-其中 `InheritType` 是一个枚举类型，共有一下一些值：
+其中 `InheritType` 是一个枚举类型，共有以下一些值：
 
 * `DEFAULT` - 使用默认配置
 * `NONE` - 不继承
@@ -116,7 +116,7 @@ public class UserDetail extends User {
 
 ```java
 DefaultDbMapping dbMapping = new DefaultDbMapping();
-dbMapping.setDefaultInheritType(InheritType.ALL);               // 这里配置需要默认继承类型
+dbMapping.setDefaultInheritType(InheritType.ALL);               // 这里配置默认继承类型
 MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
         // 省略其它配置
         .metaResolver(new DefaultMetaResolver(dbMapping))       // BeanSearcher 检索器也同此配置

@@ -72,7 +72,7 @@
 :::
 
 * Bean Searcher
-  - 注解 `@SearchBean` 新增 `maxSize` 与 `maxOffset` 属性，可以为单个检索类设置独风控值，覆盖全局配置
+  - 注解 `@SearchBean` 新增 `maxSize` 与 `maxOffset` 属性，可以为单个检索类单独设置风控值，覆盖全局配置
   - 接口 `PageExtractor` 接口中新增 `extract` 方法，支持传入 `BeanMeta` 参数
   - 参数构建器新增 `groupRoot(String groupSeparator)` 方法，可将前端传来的普通参数组添加到根组内
   - 参数构建器新增 `groupRoot()` 方法，使用默认的组分割符，将前端传来的普通参数组添加到根组内

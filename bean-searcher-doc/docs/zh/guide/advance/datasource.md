@@ -108,7 +108,7 @@ public NamedDataSource userNamedDataSource(AbstractRoutingDataSource routingData
 @Bean
 public NamedDataSource orderNamedDataSource(AbstractRoutingDataSource routingDataSource) {
     // 直接从 DynamicRoutingDataSource 中取出目标数据源
-    DataSource dataSource = routingDataSource.getResolvedDataSources().getDataSource("orderDs");
+    DataSource dataSource = routingDataSource.getResolvedDataSources().get("orderDs");
     // 具名数据源：cn.zhxu.bs.boot.NamedDataSource （关键步骤：套一个具名数据源的壳）
     return new NamedDataSource("orderDs", dataSource);
 }

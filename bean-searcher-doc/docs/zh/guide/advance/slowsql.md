@@ -10,7 +10,7 @@
 
 配置键名 | 含义 | 类型 | 默认值
 -|-|-|-
-`bean-searcher.sql.slow-sql-threshol` | 慢 SQL 阈值（单位：毫秒） | `int` | `500`
+`bean-searcher.sql.slow-sql-threshold` | 慢 SQL 阈值（单位：毫秒） | `int` | `500`
 
 ### Others
 

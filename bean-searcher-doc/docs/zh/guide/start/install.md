@@ -420,7 +420,7 @@ implementation 'cn.zhxu:bean-searcher-exporter:4.8.5.jdk8'
 
 * 依赖 `bean-searcher-solon-plugin` 支持 `solon v2.2.1+`
 
-#### 4、Grails
+#### 3、Grails
 
 * Grails 项目若使用 `bean-searcher-boot-starter` 依赖，必须使用 `v3.1.4+`、`v3.2.3+` 与 `v3.3.1+` 的版本
 * 即版本在 `v3.1.3-` ∪ `v3.2.0 ~ v3.2.2` ∪ `v3.3.0` 范围内的 `bean-searcher-boot-starter` 都不支持 Grails 项目。
