@@ -820,6 +820,23 @@ Converts date values for fields with `DbType.DATE`.
 - Configurable target: `SQL_DATE` (default) or `LOCAL_DATE`
 - Converts `LocalDateTime` by extracting the date component
 
+#### Configure Target Type (since v4.2.3)
+
+In SpringBoot / Grails projects, specify the output date type via configuration:
+
+```properties
+# Available values: SQL_DATE (default), LOCAL_DATE
+bean-searcher.params.convertor.date-target = SQL_DATE
+```
+
+In other projects, pass it directly when building:
+
+```java
+// Specify output as LocalDate
+DefaultParamResolver paramResolver = new DefaultParamResolver();
+paramResolver.addConvertor(new DateParamConvertor(DateParamConvertor.Target.LOCAL_DATE));
+```
+
 ### DateTimeParamConvertor
 
 > since v3.8.0
@@ -829,10 +846,30 @@ Converts date-time values for fields with `DbType.DATETIME`.
 #### Key Features:
 
 - Parses multiple datetime string formats: `yyyy-MM-dd HH:mm:ss.SSS`, `yyyy-MM-dd HH:mm:ss`, `yyyy-MM-dd HH:mm`, `yyyy-MM-dd`
-- Accepts both `/` and `-` as date separators
-- Handles numeric strings as epoch milliseconds
+- Accepts both `/` and `-` as date separators (since v4.3.5)
+- Handles numeric strings as epoch milliseconds (since v4.3.2)
 - Configurable target type: `SQL_TIMESTAMP` (default) or `LOCAL_DATE_TIME`
-- Timezone-aware conversion via configurable `TimeZone`/`ZoneId`
+- Timezone-aware conversion via configurable `ZoneId` (since v4.3.2)
+
+#### Configure Target Type and Time Zone (since v4.2.3 / v4.3.2)
+
+In SpringBoot / Grails projects:
+
+```properties
+# Output type: SQL_TIMESTAMP (default), LOCAL_DATE_TIME
+bean-searcher.params.convertor.date-time-target = SQL_TIMESTAMP
+# Time zone ID (defaults to system time zone)
+bean-searcher.params.convertor.zone-id = Asia/Shanghai
+```
+
+In other projects:
+
+```java
+DateTimeParamConvertor convertor = new DateTimeParamConvertor(DateTimeParamConvertor.Target.LOCAL_DATE_TIME);
+convertor.setZoneId(ZoneId.of("Asia/Shanghai"));
+DefaultParamResolver paramResolver = new DefaultParamResolver();
+paramResolver.addConvertor(convertor);
+```
 
 ### TimeParamConvertor
 
@@ -850,6 +887,22 @@ Converts time values for fields with `DbType.TIME`.
 - `String` → `java.sql.Time` or `LocalTime`
 - `LocalTime` → `java.sql.Time` or `LocalTime`
 - `java.sql.Time` → `LocalTime` (when target is `LOCAL_TIME`)
+
+#### Configure Target Type (since v4.2.3)
+
+In SpringBoot / Grails projects:
+
+```properties
+# Available values: SQL_TIME (default), LOCAL_TIME
+bean-searcher.params.convertor.time-target = SQL_TIME
+```
+
+In other projects:
+
+```java
+DefaultParamResolver paramResolver = new DefaultParamResolver();
+paramResolver.addConvertor(new TimeParamConvertor(TimeParamConvertor.Target.LOCAL_TIME));
+```
 
 ### EnumParamConvertor
 

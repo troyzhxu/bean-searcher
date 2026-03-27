@@ -4,7 +4,7 @@ Bean Searcher can automatically generate complete SQL statements for us. However
 
 ## Dialect Implementations
 
-Bean Searcher comes with four built-in Dialect implementations:
+Bean Searcher comes with five built-in Dialect implementations:
 
 * [`MySqlDialect`](https://github.com/troyzhxu/bean-searcher/blob/dev/bean-searcher/src/main/java/cn/zhxu/bs/dialect/MySqlDialect.java) - **Default dialect**, suitable for MySQL-like databases.
 * [`OracleDialect`](https://github.com/troyzhxu/bean-searcher/blob/dev/bean-searcher/src/main/java/cn/zhxu/bs/dialect/OracleDialect.java) - Suitable for databases similar to Oracle 12c (released in June 2013) and above.
@@ -29,7 +29,7 @@ When using the `bean-searcher-boot-starter` dependency, if you need to switch th
 
 Configuration Key | Meaning | Available Values | Default Value
 -|-|-|-
-`bean-searcher.sql.dialect` | SQL dialect | `MySQL`, `Oracle`, `PostgreSQL`, `SqlServer` | `MySQL`
+`bean-searcher.sql.dialect` | SQL dialect | `MySQL`, `Oracle`, `PostgreSQL`, `SqlServer`, `DaMeng` | `MySQL`
 
 For a custom dialect, you just need to register it as a Bean:
 
@@ -120,3 +120,29 @@ public DataSourceDialect shopDialect() {
     return new DataSourceDialect("shop", new MyDialect());
 }
 ```
+
+## Boolean Literal Conversion (since v4.6.0)
+
+Some databases (such as Oracle and DaMeng) do not support boolean literals `true` / `false` in SQL. If a user writes conditions containing `true`/`false` in the `condition` attribute of `@DbField` or in a SQL interceptor, those queries will fail on such databases.
+
+`DialectSqlInterceptor` automatically detects whether the current dialect supports boolean literals. When it does not, it replaces `true` with `1` and `false` with `0` in the generated SQL.
+
+### SpringBoot / Grails / Solon
+
+When using `bean-searcher-boot-starter` or `bean-searcher-solon-plugin`, `DialectSqlInterceptor` is **automatically registered** — no manual configuration is needed.
+
+### Other Frameworks
+
+In non-Boot/Solon environments, you need to add it to the interceptor chain manually:
+
+```java
+DialectSqlInterceptor dialectSqlInterceptor = new DialectSqlInterceptor(dialect);
+MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
+        // Omit other configurations
+        .addInterceptor(dialectSqlInterceptor)
+        .build();
+```
+
+::: tip Ordering Note
+If the dynamic dialect (`DynamicDialectSupport`) is also enabled, `DialectSqlInterceptor` must be placed **after** `DynamicDialectSupport` in the interceptor chain to correctly read the dialect for the current request.
+:::
