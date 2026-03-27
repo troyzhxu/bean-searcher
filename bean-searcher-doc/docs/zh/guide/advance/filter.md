@@ -126,7 +126,7 @@ GET /user/list ? age[0]=20 & age[1]=30 & age-op=bt
 
 ```properties
 # 是否启用该过滤器，默认为 false
-bean-searcher.params.filter.use-index-value = true
+bean-searcher.params.filter.use-index-array = true
 ```
 
 > 启用之后原来的参数语法仍然支持。

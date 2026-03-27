@@ -152,3 +152,26 @@ private Map<Object, Object> getAllDataSources() {
     return dataSources;
 }
 ```
+
+## Spring 事务支持（since v4.3.2）
+
+默认情况下，Bean Searcher 使用 `DefaultSqlExecutor` 执行 SQL，它每次都从连接池中独立获取连接，**不感知** Spring 的 `@Transactional` 事务上下文。
+
+如果你希望 Bean Searcher 在 `@Transactional` 方法中也能**参与到当前事务**，可以使用 `SpringSqlExecutor`。
+
+在 `bean-searcher-boot-starter` `v4.3.2+` 中，这已经是**默认行为**：`SpringSqlExecutor` 取代了原来的 `DefaultSqlExecutor`，自动通过 `DataSourceUtils.getConnection(dataSource)` 获取连接——如果当前线程有 Spring 事务，则复用事务连接；否则从连接池获取普通连接。
+
+::: tip 无需额外配置
+只要使用 `bean-searcher-boot-starter` v4.3.2+，Spring 事务感知即开箱即用，无需任何额外配置。
+:::
+
+在非 Spring Boot 项目中，如需手动开启此支持，可以如下配置：
+
+```java
+DataSource dataSource = ...; // 你的数据源
+// 使用 SpringSqlExecutor 替换默认的 DefaultSqlExecutor
+SpringSqlExecutor sqlExecutor = new SpringSqlExecutor(dataSource);
+MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
+        .sqlExecutor(sqlExecutor)
+        .build();
+```

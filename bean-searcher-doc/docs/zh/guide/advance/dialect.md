@@ -28,7 +28,7 @@ Bean Searcher 自带五种 Dialect 实现：
 
 配置键名 | 含义 | 可选值 | 默认值
 -|-|-|-
-`bean-searcher.sql.dialect` | SQL 方言 | `MySQL`、`Oracle`、`PostgreSQL`、`SqlServer` | `MySQL`
+`bean-searcher.sql.dialect` | SQL 方言 | `MySQL`、`Oracle`、`PostgreSQL`、`SqlServer`、`DaMeng` | `MySQL`
 
 自定义的方言，只需将之注册为 Bean 即可：
 
@@ -96,3 +96,29 @@ public DataSourceDialect shopDialect() {
     return new DataSourceDialect("shop", new MyDialect());
 }
 ```
+
+## 布尔字面量转换（since v4.6.0）
+
+部分数据库（如 Oracle、达梦）不支持 SQL 中的布尔字面量 `true` / `false`，如果用户在 `@DbField` 的 `condition` 属性或 SQL 拦截器中手写了含 `true`/`false` 的条件，在这些数据库上会直接报错。
+
+`DialectSqlInterceptor` 可以自动检测当前方言是否支持布尔字面量，并在不支持时将 SQL 中的 `true` 替换为 `1`、`false` 替换为 `0`。
+
+### SpringBoot / Grails / Solon
+
+使用 `bean-searcher-boot-starter` 或 `bean-searcher-solon-plugin` 时，`DialectSqlInterceptor` 已被**自动注册**，无需手动配置，开箱即用。
+
+### 其它框架
+
+非 Boot/Solon 环境下，需手动将其加入拦截器链：
+
+```java
+DialectSqlInterceptor dialectSqlInterceptor = new DialectSqlInterceptor(dialect);
+MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
+        // 省略其它配置
+        .addInterceptor(dialectSqlInterceptor)
+        .build();
+```
+
+::: tip 注意顺序
+若同时启用了动态方言（`DynamicDialectSupport`），`DialectSqlInterceptor` 必须排在 `DynamicDialectSupport` **之后**，才能正确获取到当前请求对应的方言。
+:::

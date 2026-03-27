@@ -778,123 +778,126 @@ Bean Searcher 在 SQL 执行之前，还会对检索参数做类型转换——�
 
 > 自 v3.8.0 起
 
-为 `DbType.BOOL` 类型的字段转换布尔值。
+用于将 `DbType.BOOL` 类型字段的检索参数转换为布尔值：
 
-#### 支持的输入类型
+- **字符串输入**：将 `"0"、"OFF"、"FALSE"、"N"、"NO"、"F"`（不区分大小写）视为 `false`，其余为 `true`；空字符串返回 `null`
+- **数字输入**：`0` 为 `false`，非零为 `true`
 
-- `String` → 解释为 true/false
-- `Number` → `0` 为 false，非零为 true
-
-#### 字符串到布尔值的映射
-
-转换器使用可配置的 false 值数组：
+默认的 false 值列表可以自定义：
 
 ```java
-private String[] falseValues = new String[] { "0", "OFF", "FALSE", "N", "NO", "F" };
+BoolParamConvertor convertor = new BoolParamConvertor();
+convertor.setFalseValues(new String[] { "0", "OFF", "FALSE", "N", "NO", "F", "否" });
 ```
-
-任何**不**匹配这些值（不区分大小写）的字符串都被视为 `true`。空白字符串返回 `null`。
 
 ### NumberParamConvertor
 
 > 自 v3.8.0 起
 
-为具有数字 `DbType`（BYTE、SHORT、INT、LONG、FLOAT、DOUBLE、DECIMAL）的字段转换数字值。
+用于将数字类型字段（`DbType` 为 `BYTE`、`SHORT`、`INT`、`LONG`、`FLOAT`、`DOUBLE`、`DECIMAL`）的检索参数转换为对应的 Java 数字类型：
 
-#### 转换逻辑
-
-**字符串**输入：
-
-- 空字符串返回 `null`
-- 依次调用 `Byte.parseByte()`, `Integer.parseInt()`, `Long.parseLong()` 等方法
-- 解析失败时抛出 `IllegalParamException`
-
-**数字**输入：
-
-- 调用 `Number.byteValue()`, `intValue()`, `longValue()` 等方法
-- 支持 `BigDecimal` 与整型/浮点型之间的转换
+- 字符串输入：空串返回 `null`，否则用对应的 `parse*` 方法解析，解析失败则抛出 `IllegalParamException`
+- 数字输入：调用 `byteValue()`、`intValue()`、`longValue()` 等方法，支持 `BigDecimal` 与整型/浮点型之间的互转
 
 ### DateParamConvertor
 
 > 自 v3.8.0 起
 
-为 `DbType.DATE` 类型的字段转换日期值。
+用于将 `DbType.DATE` 类型字段的检索参数转换为日期类型。支持的输入：`String`、`java.util.Date`（及其子类）、`LocalDate`、`LocalDateTime`。
 
-#### 支持的转换
+- 字符串格式支持 `-` 与 `/` 作为日期分隔符，例如 `2024-01-15` 或 `2024/1/15`
+- 默认输出类型为 `java.sql.Date`，也可以配置为 `LocalDate`
 
-| 输入类型             | 示例                          | 输出                            |
-| ---------------- | --------------------------- | ----------------------------- |
-| `String`         | `"2023-01-15"`              | `java.sql.Date` 或 `LocalDate` |
-| `java.util.Date` | 任何 Date 实例                  | `java.sql.Date` 或 `LocalDate` |
-| `LocalDate`      | `LocalDate.of(2023, 1, 15)` | `java.sql.Date` 或 `LocalDate` |
-| `LocalDateTime`  | `LocalDateTime.now()`       | `java.sql.Date` 或 `LocalDate` |
+#### 配置目标类型（since v4.2.3）
 
-#### 特性说明
+SpringBoot / Grails 项目中，通过配置项指定输出的日期类型：
 
-- 接受 `/` 和 `-` 作为日期分隔符
-- 使用正则表达式模式 `[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}` 从字符串中提取日期
-- 可配置目标类型：`SQL_DATE`（默认）或 `LOCAL_DATE`
-- 通过提取日期部分来转换 `LocalDateTime`
+```properties
+# 可选值：SQL_DATE（默认）、LOCAL_DATE
+bean-searcher.params.convertor.date-target = SQL_DATE
+```
+
+其它项目中，可以在构建时直接传入：
+
+```java
+// 指定输出为 LocalDate 类型
+DefaultParamResolver paramResolver = new DefaultParamResolver();
+paramResolver.addConvertor(new DateParamConvertor(DateParamConvertor.Target.LOCAL_DATE));
+```
 
 ### DateTimeParamConvertor
 
 > 自 v3.8.0 起
 
-为 `DbType.DATETIME` 类型的字段转换日期时间值。
+用于将 `DbType.DATETIME` 类型字段的检索参数转换为日期时间类型。
 
-#### 支持的格式与特性
+- 支持字符串格式：`yyyy-MM-dd HH:mm:ss.SSS`、`yyyy-MM-dd HH:mm:ss`、`yyyy-MM-dd HH:mm`、`yyyy-MM-dd`，以及它们的 `/` 与 `-` 日期分隔符变体（since v4.3.5）
+- 支持将纯数字字符串（时间戳毫秒数）转换为日期时间（since v4.3.2）
+- 默认输出类型为 `java.sql.Timestamp`，也可以配置为 `LocalDateTime`
+- 支持配置时区（since v4.3.2）
 
-- 解析多种日期时间字符串格式：`yyyy-MM-dd HH:mm:ss.SSS`, `yyyy-MM-dd HH:mm:ss`, `yyyy-MM-dd HH:mm`, `yyyy-MM-dd`
-- 接受 `/` 和 `-` 作为日期分隔符
-- 将数字字符串作为纪元毫秒数处理
-- 可配置目标类型：`SQL_TIMESTAMP`（默认）或 `LOCAL_DATE_TIME`
-- 通过可配置的 `TimeZone`/`ZoneId` 进行时区感知的转换
+#### 配置目标类型与时区（since v4.2.3 / v4.3.2）
+
+SpringBoot / Grails 项目中：
+
+```properties
+# 输出类型：SQL_TIMESTAMP（默认）、LOCAL_DATE_TIME
+bean-searcher.params.convertor.date-time-target = SQL_TIMESTAMP
+# 时区 ID（默认使用系统时区）
+bean-searcher.params.convertor.zone-id = Asia/Shanghai
+```
+
+其它项目中：
+
+```java
+DateTimeParamConvertor convertor = new DateTimeParamConvertor(DateTimeParamConvertor.Target.LOCAL_DATE_TIME);
+convertor.setZoneId(ZoneId.of("Asia/Shanghai"));
+DefaultParamResolver paramResolver = new DefaultParamResolver();
+paramResolver.addConvertor(convertor);
+```
 
 ### TimeParamConvertor
 
 > 自 v3.8.0 起
 
-为 `DbType.TIME` 类型的字段转换时间值。
+用于将 `DbType.TIME` 类型字段的检索参数转换为时间类型。
 
-#### 支持的字符串格式
+- 支持字符串格式：`HH:mm:ss`（如 `"14:30:00"`）和 `HH:mm`（如 `"14:30"`，秒数默认为 `00`）
+- 支持 `String`、`LocalTime`、`java.sql.Time` 类型的输入
+- 默认输出类型为 `java.sql.Time`，也可以配置为 `LocalTime`
 
-- `HH:mm:ss`（如 `"14:30:00"`）
-- `HH:mm`（如 `"14:30"`，秒数默认为 `00`）
+#### 配置目标类型（since v4.2.3）
 
-#### 支持的类型
+SpringBoot / Grails 项目中：
 
-- `String` → `java.sql.Time` 或 `LocalTime`
-- `LocalTime` → `java.sql.Time` 或 `LocalTime`
-- `java.sql.Time` → `LocalTime`（当目标为 `LOCAL_TIME` 时）
+```properties
+# 可选值：SQL_TIME（默认）、LOCAL_TIME
+bean-searcher.params.convertor.time-target = SQL_TIME
+```
+
+其它项目中：
+
+```java
+DefaultParamResolver paramResolver = new DefaultParamResolver();
+paramResolver.addConvertor(new TimeParamConvertor(TimeParamConvertor.Target.LOCAL_TIME));
+```
 
 ### EnumParamConvertor
 
 > 自 v4.2.1 起
 
-为 Java 类型是 Enum 子类的字段转换枚举值。
+用于将枚举类型字段的检索参数转换为数据库可接受的值（序数整数或枚举名字符串）。
 
-#### 转换规则：
+当字段的 Java 类型是枚举，前端传来的参数是字符串时，这个转换器会自动处理，无需在 Controller 里手动转换：
 
-| 输入                    | DbType   | 输出                 | 逻辑           |
-| --------------------- | -------- | ------------------ | ------------ |
-| `String: "ACTIVE"`    | `INT`    | `Integer: 0`       | 匹配枚举名称，返回其序数 |
-| `String: "0"`         | `INT`    | `Integer: 0`       | 将数字字符串解析为序数  |
-| `Enum: Status.ACTIVE` | `INT`    | `Integer: 0`       | 返回枚举的序数      |
-| `Enum: Status.ACTIVE` | `STRING` | `String: "ACTIVE"` | 返回枚举的名称      |
+| 输入参数值 | 字段 DbType | 输出 | 说明 |
+|-|-|-|-|
+| `"ACTIVE"` | `INT` | `0` | 枚举名匹配，返回序数 |
+| `"0"` | `INT` | `0` | 数字字符串解析为序数 |
+| `Status.ACTIVE`（枚举对象）| `INT` | `0` | 直接返回枚举序数 |
+| `Status.ACTIVE`（枚举对象）| `STRING` | `"ACTIVE"` | 直接返回枚举名 |
 
-#### 关键实现细节：
-
-`supports()` 方法的判断逻辑：
-
-1. 目标类型是 `Enum` 的子类
-2. DbType 是 `INT` 或 `STRING`
-3. 值的类型是 `String` 或目标枚举类型
-
-`convert()` 方法的字符串处理逻辑：
-
-1. 优先尝试不区分大小写的枚举名称匹配
-2. 匹配失败则尝试将其作为数字序数解析
-3. 两者都失败则抛出 `IllegalParamException`
+字符串转换时优先按枚举名匹配（不区分大小写），匹配不到则尝试解析为数字序数，两者都失败则抛出 `IllegalParamException`。
 
 ## 自定义转换器
 

@@ -97,3 +97,26 @@ Bean Searcher 默认提供了一些风险控制项，并支持配置。
 `bean-searcher.params.pagination.max-allowed-offset` | 最大分页深度 | `正整数` | `20000` | v3.8.1
 `bean-searcher.params.filter.max-para-map-size` | 检索参数最大允许的键值对数 | `正整数` | `150` | v3.8.1
 `bean-searcher.params.group.max-expr-length` | 逻辑分组表达式的最大长度（字符数） | `正整数` | `50` | v3.8.1
+
+### 单实体类级别的风控覆盖（since v4.5.0）
+
+以上全局配置对所有检索实体类生效，但有时候某些特殊场景需要放开或收紧限制——比如数据导出场景需要允许更大的分页条数和更深的翻页偏移。
+
+自 `v4.5.0` 起，可以通过 `@SearchBean` 注解的 `maxSize` 与 `maxOffset` 属性，为单个实体类单独设置风控值，**覆盖全局配置**：
+
+```java
+@SearchBean(
+    tables = "order",
+    maxSize = 2000,             // 单页最多查 2000 条（覆盖全局的 100）
+    maxOffset = Long.MAX_VALUE  // 不限分页深度（覆盖全局的 20000）
+)
+public class OrderExportVO {
+    // ...
+}
+```
+
+::: tip 典型应用场景
+**数据导出**通常需要分批拉取全量数据，每批 `batchSize` 条（默认 1000），随着翻页 offset 也会不断增大，必须放开全局风控限制。建议为导出场景单独定义一个 SearchBean，不要与普通检索接口共用，以免安全漏洞。
+:::
+
+两个属性的默认值均为 `0`，表示使用全局配置值。
