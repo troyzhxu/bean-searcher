@@ -234,20 +234,6 @@ public ResultFilter mySecondResultFilter() {
 }
 ```
 
-### 配置（非 Boot 的 Spring 项目）
-
-```xml
-<bean id="mapSearcher" class="cn.zhxu.bs.implement.DefaultMapSearcher">
-    <!-- 省略其它属性配置，BeanSearcher 检索器也同此配置 -->
-    <property name="resultFilters">
-        <list>
-            <bean class="com.example.FitstResultFilter" />
-            <bean class="com.example.SecondResultFilter" />
-        </list>
-    </property>
-</bean>
-```
-
 ### 配置（Others）
 
 ```java

@@ -161,23 +161,6 @@ public class User {
 -|-|-|-
 `bean-searcher.sql.default-mapping.sort-type` | 默认排序约束 | `ALLOW_PARAM`、`ONLY_ENTITY` | `ALLOW_PARAM`
 
-### 非 Boot 的 Spring 项目
-
-```xml
-<bean id="dbMapping" class="cn.zhxu.bs.implement.DefaultDbMapping">
-    <property name="defaultSortType" /> 
-        <util:constant static-field="cn.zhxu.bs.bean.SortType.ONLY_ENTITY"/>
-    </property>
-</bean>
-<bean id="metaResolver" class="cn.zhxu.bs.implement.DefaultMetaResolver">
-    <property name="dbMapping" ref="dbMapping" />
-</bean>
-<bean id="mapSearcher" class="cn.zhxu.bs.implement.DefaultMapSearcher">
-    <!-- 省略其它属性配置，BeanSearcher 检索器也同此配置 -->
-    <property name="metaResolver" ref="metaResolver" />
-</bean>
-```
-
 ### 其它框架
 
 ```java

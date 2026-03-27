@@ -29,21 +29,9 @@ bean-searcher:
 
 ## 非 Boot 的 Spring 项目
 
-在传统的 Spring MVC 项目中需要添加 `bean-searcher` 核心依赖，然后在项目的 xml 文件内配置如下：
+在传统的 Spring MVC 项目中，使用 `bean-searcher` 核心依赖，参考下方 [Others](#others) 章节用 `SearcherBuilder` 手动构建检索器，然后将其声明为 Spring Bean 即可。
 
-```xml
-<bean id="sqlExecutor" 
-        class="cn.zhxu.bs.implement.DefaultSqlExecutor" 
-        p:dataSource-ref="dataSource" />
-<!-- 声明 BeanSearcher 检索器，它查询的结果是 SearchBean 泛型对象 -->
-<bean id="beanSearcher" 
-        class="cn.zhxu.bs.implement.DefaultBeanSearcher"
-        p:sqlExecutor-ref="sqlExecutor" />
-<!-- 声明 MapSearcher 检索器，它查询的结果是 Map 对象 -->
-<bean id="mapSearcher" 
-        class="cn.zhxu.bs.implement.DefaultMapSearcher"
-        p:sqlExecutor-ref="sqlExecutor" />
-```
+
 
 ## Grails (只使用 bean-searcher 依赖)
 

@@ -112,23 +112,6 @@ public class UserDetail extends User {
 -|-|-|-
 `bean-searcher.sql.default-mapping.inherit-type` | 默认继承类型 | `ALL`、`TABLE`、`FIELD`、`NONE` | `ALL`
 
-### 非 Boot 的 Spring 项目
-
-```xml
-<bean id="dbMapping" class="cn.zhxu.bs.implement.DefaultDbMapping">
-    <property name="defaultInheritType" /> 
-        <util:constant static-field="cn.zhxu.bs.bean.InheritType.ALL"/>
-    </property>
-</bean>
-<bean id="metaResolver" class="cn.zhxu.bs.implement.DefaultMetaResolver">
-    <property name="dbMapping" ref="dbMapping" />
-</bean>
-<bean id="mapSearcher" class="cn.zhxu.bs.implement.DefaultMapSearcher">
-    <!-- 省略其它属性配置，BeanSearcher 检索器也同此配置 -->
-    <property name="metaResolver" ref="metaResolver" />
-</bean>
-```
-
 ### 其它框架
 
 ```java

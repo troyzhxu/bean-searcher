@@ -54,27 +54,6 @@ Bean Searcher 自 v3.4.0 开始支持全局属性忽略某些未被 `@DbField` �
 -|-|-|-
 `bean-searcher.sql.default-mapping.ignore-fields` | 需要全局忽略的属性名（可指定多个） | `字符串数组` | `null`
 
-### 非 Boot 的 Spring 项目
-
-```xml
-<bean id="dbMapping" class="cn.zhxu.bs.implement.DefaultDbMapping">
-    <property name="ignoreFields"> 
-        <!-- 这里配置需要全局忽略的属性名 -->
-        <array>
-            <value>field1</value>
-            <value>field2</value>
-        </array>
-    </property>
-</bean>
-<bean id="metaResolver" class="cn.zhxu.bs.implement.DefaultMetaResolver">
-    <property name="dbMapping" ref="dbMapping" />
-</bean>
-<bean id="mapSearcher" class="cn.zhxu.bs.implement.DefaultMapSearcher">
-    <!-- 省略其它属性配置，BeanSearcher 检索器也同此配置 -->
-    <property name="metaResolver" ref="metaResolver" />
-</bean>
-```
-
 ### 其它框架
 
 ```java

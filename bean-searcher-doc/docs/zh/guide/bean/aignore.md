@@ -25,23 +25,6 @@ Bean Searcher 自 v3.0 起开始支持注解省略。
 例如冗余后缀配置为 VO,DTO 时，则对于名为 `UserVO`, `UserDTO` 的实体类, 在自动映射表名是，会自动将 VO，DTO 后缀给去掉。
 :::
 
-### 非 Boot 的 Spring 项目
-
-```xml
-<bean id="dbMapping" class="cn.zhxu.bs.implement.DefaultDbMapping">
-    <property name="tablePrefix" value="t_" />      <!-- 表名前缀 -->
-    <property name="underlineCase" value="true" />  <!-- 是否驼峰转小写下划线 -->
-    <property name="upperCase" value="false" />     <!-- 是否大写 -->
-</bean>
-<bean id="metaResolver" class="cn.zhxu.bs.implement.DefaultMetaResolver">
-    <property name="dbMapping" ref="dbMapping" />
-</bean>
-<bean id="mapSearcher" class="cn.zhxu.bs.implement.DefaultMapSearcher">
-    <!-- 省略其它属性配置，BeanSearcher 检索器也同此配置 -->
-    <property name="metaResolver" ref="metaResolver" />
-</bean>
-```
-
 ### 其它框架
 
 ```java

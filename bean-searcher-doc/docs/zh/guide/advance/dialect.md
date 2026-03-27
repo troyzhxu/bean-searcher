@@ -39,29 +39,6 @@ public Dialect myDialect() {
 }
 ```
 
-### 非 Boot 的 Spring 项目
-
-```xml
-<!-- 定义 Oracle 方言 -->
-<bean id="dialect" class="cn.zhxu.bs.dialect.MyDialect" />
-
-<!-- v3.3 起需要配置运算符池 -->
-<bean id="fieldOpPool" class="cn.zhxu.bs.FieldOpPool" 
-    p:dialect-ref="dialect" />
-
-<bean id="paramResolver" class="cn.zhxu.bs.implement.DefaultParamResolver" 
-    p:fieldOpPool-ref="fieldOpPool" />
-
-<bean id="sqlResolver" class="cn.zhxu.bs.implement.DefaultSqlResolver" 
-    p:dialect-ref="dialect" />
-
-<bean id="mapSearcher" class="cn.zhxu.bs.implement.DefaultMapSearcher">
-    <!-- 省略其它属性配置，BeanSearcher 检索器也同此配置 -->
-    <property name="paramResolver" ref="paramResolver" />
-    <property name="sqlResolver" ref="sqlResolver" />
-</bean>
-```
-
 ### Others
 
 ```java

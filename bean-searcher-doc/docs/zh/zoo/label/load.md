@@ -220,19 +220,6 @@ public LabelResultFilter labelResultFilter() {
 
 与 SpringBoot 相同，将 `LabelLoader` 声明为 Bean 即可自动注入。
 
-### 非 Boot 的 Spring 项目
-
-```xml
-<bean id="labelResultFilter" class="cn.zhxu.bs.label.LabelResultFilter">
-    <constructor-arg>
-        <list>
-            <bean class="com.example.BuyerLabelLoader" />
-            <bean class="com.example.DictLabelLoader" />
-        </list>
-    </constructor-arg>
-</bean>
-```
-
 ### Others（手动配置）
 
 ```java
