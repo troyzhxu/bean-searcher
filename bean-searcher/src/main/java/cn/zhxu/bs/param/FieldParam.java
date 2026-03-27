@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * 字段参数
@@ -86,7 +87,7 @@ public class FieldParam {
         this.name = name;
         this.operator = operator;
         this.values = values != null
-                ? values.stream().sorted(Comparator.comparingInt(v -> v.index)).toList()
+                ? values.stream().sorted(Comparator.comparingInt(v -> v.index)).collect(Collectors.toList())
                 : Collections.emptyList();
         this.ignoreCase = ignoreCase;
     }
