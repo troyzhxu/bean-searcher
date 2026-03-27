@@ -1,57 +1,133 @@
-# 介绍（since v4.4）
+# Introduction (since v4.4)
 
-## 概述
+## Overview
 
-### 版本说明
+### Version Note
 
-从 v4.4 起，Bean Searcher 提供了 Bean Searcher Label 组件。它可以将 SearchBean 中的某个字段标记为另一个字段的标签，并自动为这个标签字段赋值（另一种说法成为 字典翻译）。
+Starting from v4.4, Bean Searcher provides the Bean Searcher Label component. It allows you to mark a field in a SearchBean as the **label** (translation) of another field and automatically fills in the label value — also known as **dictionary translation**.
 
-### 标签系统
+### Label System
 
-标签系统是一个结果增强组件，它可以根据 ID 值或其他字段数据，自动为 SearchBean 中的指定字段填充易于理解的标签。该系统无需复杂的 SQL 连接或手动后处理，即可自动解析外键关系、枚举转换和其他 ID 到标签的映射关系。
+The label system is a **result-enhancement component**. It automatically fills specified fields in a SearchBean with human-readable labels based on ID values, enum values, or other field data. This system resolves foreign-key lookups, enum conversions, and other ID-to-label mappings without complex SQL JOINs or manual post-processing.
 
-## 使用场景
+## Use Cases
 
-虽然 Bean Searcher 支持联表查询，并且对于 `id` 取 `name` 这件事非常熟练，例如：
+Bean Searcher already handles cross-table lookups elegantly via JOIN queries, for example:
 
 ```java{10}
 @SearchBean(
     tables = "order o, user u",
-    where = "o.buyer_id = u.id",  // 关联关系
+    where = "o.buyer_id = u.id",
     autoMapTo = "o"
 )
 public class OrderVO {
-    private long id;            // 订单ID
-    private long buyerId;       // 买家ID
+    private long id;
+    private long buyerId;
     @DbField("u.name")
-    private String buyerName;   // 买家名   u.name
-    // 省略 Getter Setter
+    private String buyerName;   // fetched from user table via JOIN
+    // getters / setters omitted
 }
 ```
 
-但是，仍然存在某些直接用联表查询无法解决，或可以优化的场景，例如：
+However, there are scenarios where direct JOINs are not feasible or can be further optimized:
 
-### 微服务场景下的跨库关联
+### Cross-Database Lookup in Microservices
 
-微服务场景下，所需关联的数据表不在在此应用（服务）中（例如上例中的 order 与 user 表在两个不同的库中），就无法直接像上例那样直接联表了。此时，如果使用 Bean Searcher Label，则可以轻松解决。
+In a microservices architecture, the `order` table and `user` table may reside in different databases, making a direct JOIN impossible. Bean Searcher Label solves this gracefully:
 
 ```java{5}
 @SearchBean(tables = "order")
 public class OrderVO {
     private long id;
-    private long buyerId;       // 买家ID
-    @LaberFor("buyerId")        // 标记为 buyerId 字段的 Label
-    private String buyerName;   // 买家名
-    // 省略 Getter Setter
+    private long buyerId;
+    @LabelFor("buyerId")        // mark buyerName as the label of buyerId
+    private String buyerName;   // automatically filled by the label system
+    // getters / setters omitted
 }
 ```
 
-当然，这还需要全局配置一个 `LabelLoader`, 下文介绍。
+You also need to register a `LabelLoader` — see the [Label Loader](/zoo/label/load) chapter.
 
-### 字典表优化
+### Dictionary Table Optimization
 
-所需关联的表是一种字典表，数据量不大，完全可以直接加载到内存中，无需每次查询都联表
+If the reference table is a small dictionary table, caching it in memory and using the label system avoids repeated JOINs on every query.
 
-### 枚举字段
+### Enum Fields
 
-SearchBean 中有一个枚举字段，但如果前端还需要后端将这个枚举转换为字符串，也可以使用此功能。
+When a SearchBean contains an enum field and the front end needs a human-readable string representation, the label system provides a clean solution.
+
+## Quick Start
+
+### Step 1: Add the Dependency
+
+Add `bean-searcher-label` alongside your existing `bean-searcher-boot-starter` (or `bean-searcher-solon-plugin`):
+
+::: code-group
+```groovy [Gradle]
+implementation 'cn.zhxu:bean-searcher-label:4.8.5'
+```
+```xml [Maven]
+<dependency>
+    <groupId>cn.zhxu</groupId>
+    <artifactId>bean-searcher-label</artifactId>
+    <version>4.8.5</version>
+</dependency>
+```
+:::
+
+### Step 2: Annotate Fields with @LabelFor
+
+```java
+@SearchBean(tables = "order")
+public class OrderVO {
+    private long id;
+    private long buyerId;
+
+    @LabelFor("buyerId")        // declare buyerName as the label of buyerId
+    private String buyerName;   // filled automatically by the label system
+
+    // getters / setters omitted
+}
+```
+
+### Step 3: Implement and Register a LabelLoader
+
+```java
+@Component
+public class UserLabelLoader implements LabelLoader<Long> {
+
+    @Autowired
+    private UserService userService;
+
+    @Override
+    public boolean supports(String key) {
+        return "buyerName".equals(key);
+    }
+
+    @Override
+    public List<Label<Long>> load(String key, List<Long> ids) {
+        return userService.findAllById(ids).stream()
+                .map(u -> new Label<>(u.getId(), u.getName()))
+                .collect(Collectors.toList());
+    }
+}
+```
+
+In SpringBoot / Solon projects, declaring the `LabelLoader` as a Bean is all you need — the framework **collects and injects them automatically**.
+
+### Step 4: Query as Usual
+
+```java
+// No extra steps needed — buyerName is automatically populated in the results
+SearchResult<OrderVO> result = beanSearcher.search(OrderVO.class, paraMap);
+```
+
+## Component Overview
+
+| Component | Description |
+|-----------|-------------|
+| [`@LabelFor`](/zoo/label/anno) | Annotation to mark a field as the label of another field |
+| [`LabelLoader`](/zoo/label/load) | Interface for batch-loading label texts |
+| [`EnumLabelLoader`](/zoo/label/load#enumlabelloader) | Built-in loader for enum fields |
+| [`LabelResultFilter`](/zoo/label/load#labelresultfilter) | Core filter that drives the label system |
+| [`Label`](/zoo/label/load) | DTO containing an `id` and its corresponding `label` text |
