@@ -1,9 +1,7 @@
 
 # 集成
 
-集成 v3.x 的 Bean Searcher 比 v2.x 更加简单（不再需要配置 SearchBean 所在包名路径）。
-
-通常情况下，我们都是在一个后端的 Java Web 项目中使用 Bean Searcher，它可以在任意的 Web 框架中使用，以下介绍在常见的几种 Web 框架的集成方法。
+Bean Searcher 可以在任意 Java Web 框架中使用，以下介绍几种常见框架的集成方式。
 
 集成案例：
 

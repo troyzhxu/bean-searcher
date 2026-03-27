@@ -1,28 +1,28 @@
 # 字段与参数转换器
 
-Bean Searcher 在搜索管道的两个不同阶段执行类型转换：
+Bean Searcher 在查询的两个不同阶段做类型转换：
 
-1. **参数转换** - 在执行 SQL 之前，将传入的搜索参数值（通常是字符串）转换为数据库兼容的类型
-1. **字段转换** - 在查询执行之后，将数据库 ResultSet 的值转换为 Java bean 属性类型
+1. **参数转换** - 执行 SQL 之前，将检索参数（通常是字符串）转换为数据库可以接受的类型
+2. **字段转换** - 查询完成之后，将数据库 ResultSet 中的值转换为 Java Bean 的字段类型
 
-这些转换之所以必要，是因为：
+之所以需要这两类转换，是因为：
 
-- HTTP 参数以字符串形式到达，但可能需要查询数字、日期或布尔类型的数据库列
-- 不同的数据库对相同逻辑数据返回不同的类型（例如，JSON 可能作为 `String`、`byte[]` 或 `Clob` 返回）
-- Java bean 可能使用方便的、不能直接映射到数据库列类型的类型（例如 `List<Integer>`）
+- 前端传来的 HTTP 参数都是字符串，但数据库列可能是数字、日期或布尔类型
+- 不同数据库对同一逻辑类型的返回值可能不同（例如 JSON 字段可能返回 `String`、`byte[]` 或 `Clob`）
+- Java Bean 中定义的字段类型（例如 `List<Integer>`）无法直接与数据库列类型对应
 
 ## 字段转换器
 
-字段转换器用于解决数据库列类型与 Java Bean 字段类型之间的阻抗不匹配问题。虽然 JDBC 提供了基本的类型映射（例如，`INT` → `Integer`，`VARCHAR` → `String`），但许多场景需要自定义的转换逻辑：
+字段转换器负责弥合数据库列类型与 Java Bean 字段类型之间的差异。尽管 JDBC 已经处理了一些基础映射（例如 `INT` → `Integer`，`VARCHAR` → `String`），但仍有许多场景需要自定义转换：
 
-- 存储为字符串/字节的 JSON 列，需要反序列化为 Java 对象
-- 需要转换为字符串或集合的 CLOB/TEXT 字段
-- 数据库特定的类型表示（例如，字节数组、专有类型）
-- 编码了结构化数据的字符串表示（例如，逗号分隔的值）
+- JSON 字段存储为字符串或字节，需要反序列化为 Java 对象
+- CLOB/TEXT 字段需要转换为字符串或集合
+- 数据库特有的类型（例如 Oracle 的 `TIMESTAMP`）
+- 用字符串编码的结构化数据（例如逗号分隔值）
 
-字段转换器在搜索管道的 `SqlExecutor` 阶段运行，即在数据库返回结果之后，但在用值填充 Bean 之前。
+字段转换器运行在 `SqlExecutor` 完成查询之后、结果填充到 Bean 之前。
 
-Bean Searcher 提供了多个内置的字段转换器来处理常见的转换场景。
+Bean Searcher 内置了多个字段转换器来覆盖常见场景。
 
 ### NumberFieldConvertor
 
@@ -770,22 +770,20 @@ MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
 
 ## 参数转换器
 
-参数转换器将传入的搜索参数值从输入格式（通常来自HTTP请求的字符串）在执行SQL之前转换为数据库兼容的Java类型。它们是参数处理管道中的关键组件，确保了用户输入和数据库查询之间的类型安全。
+Bean Searcher 在 SQL 执行之前，还会对检索参数做类型转换——将前端传来的字符串参数转换为数据库可以直接使用的 Java 类型。
 
-参数转换器在参数解析阶段运行，发生在参数过滤器标准化输入之后、SQL生成之前。它们弥合了弱类型的HTTP参数和强类型的数据库列之间的差距。
-
-Bean Searcher提供了六个内置的参数转换器，每个都处理特定的类型转换：
+参数转换器运行在参数过滤器之后、SQL 生成之前。Bean Searcher 内置了六个参数转换器，分别处理不同类型的转换场景：
 
 ### BoolParamConvertor
 
 > 自 v3.8.0 起
 
-为 `DbType.BOOL` 类型的字段转换布尔值。
+为 `DbType.BOOL` 类型的字段转换布尔值。
 
 #### 支持的输入类型
 
-- `String` → 解释为 true/false
-- `Number` → `0` 为 false，非零为 true
+- `String` → 解释为 true/false
+- `Number` → `0` 为 false，非零为 true
 
 #### 字符串到布尔值的映射
 
@@ -795,79 +793,79 @@ Bean Searcher提供了六个内置的参数转换器，每个都处理特定的�
 private String[] falseValues = new String[] { "0", "OFF", "FALSE", "N", "NO", "F" };
 ```
 
-任何**不**匹配这些值（不区分大小写）的字符串都被视为 `true`。空白字符串返回 `null`。
+任何**不**匹配这些值（不区分大小写）的字符串都被视为 `true`。空白字符串返回 `null`。
 
 ### NumberParamConvertor
 
 > 自 v3.8.0 起
 
-为具有数字 `DbType`（BYTE、SHORT、INT、LONG、FLOAT、DOUBLE、DECIMAL）的字段转换数字值。
+为具有数字 `DbType`（BYTE、SHORT、INT、LONG、FLOAT、DOUBLE、DECIMAL）的字段转换数字值。
 
 #### 转换逻辑
 
-对于**字符串**输入：
+**字符串**输入：
 
-- 空白字符串返回 `null`
-- 使用 `Byte.parseByte()`, `Integer.parseInt()`, `Long.parseLong()` 等方法
-- 解析失败时抛出 `IllegalParamException`
+- 空字符串返回 `null`
+- 依次调用 `Byte.parseByte()`, `Integer.parseInt()`, `Long.parseLong()` 等方法
+- 解析失败时抛出 `IllegalParamException`
 
-对于**数字**输入：
+**数字**输入：
 
-- 使用 `Number.byteValue()`, `intValue()`, `longValue()` 等方法
-- 处理来自整数和浮点类型的 `BigDecimal` 转换
+- 调用 `Number.byteValue()`, `intValue()`, `longValue()` 等方法
+- 支持 `BigDecimal` 与整型/浮点型之间的转换
 
 ### DateParamConvertor
 
 > 自 v3.8.0 起
 
-为 `DbType.DATE` 类型的字段转换日期值。
+为 `DbType.DATE` 类型的字段转换日期值。
 
 #### 支持的转换
 
 | 输入类型             | 示例                          | 输出                            |
 | ---------------- | --------------------------- | ----------------------------- |
-| `String`         | `"2023-01-15"`              | `java.sql.Date` 或 `LocalDate` |
-| `java.util.Date` | 任何 Date 实例                  | `java.sql.Date` 或 `LocalDate` |
-| `LocalDate`      | `LocalDate.of(2023, 1, 15)` | `java.sql.Date` 或 `LocalDate` |
-| `LocalDateTime`  | `LocalDateTime.now()`       | `java.sql.Date` 或 `LocalDate` |
+| `String`         | `"2023-01-15"`              | `java.sql.Date` 或 `LocalDate` |
+| `java.util.Date` | 任何 Date 实例                  | `java.sql.Date` 或 `LocalDate` |
+| `LocalDate`      | `LocalDate.of(2023, 1, 15)` | `java.sql.Date` 或 `LocalDate` |
+| `LocalDateTime`  | `LocalDateTime.now()`       | `java.sql.Date` 或 `LocalDate` |
 
-#### 主要特性
+#### 特性说明
 
-- 接受 `/` 和 `-` 作为日期分隔符
-- 使用正则表达式模式 `[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}` 从字符串中提取日期
-- 可配置目标类型：`SQL_DATE`（默认）或 `LOCAL_DATE`
-- 通过提取日期部分来转换 `LocalDateTime`
+- 接受 `/` 和 `-` 作为日期分隔符
+- 使用正则表达式模式 `[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}` 从字符串中提取日期
+- 可配置目标类型：`SQL_DATE`（默认）或 `LOCAL_DATE`
+- 通过提取日期部分来转换 `LocalDateTime`
 
 ### DateTimeParamConvertor
 
 > 自 v3.8.0 起
 
-为 `DbType.DATETIME` 类型的字段转换日期时间值。
+为 `DbType.DATETIME` 类型的字段转换日期时间值。
 
-#### 主要特性：
+#### 支持的格式与特性
 
-- 解析多种日期时间字符串格式：`yyyy-MM-dd HH:mm:ss.SSS`, `yyyy-MM-dd HH:mm:ss`, `yyyy-MM-dd HH:mm`, `yyyy-MM-dd`
-- 接受 `/` 和 `-` 作为日期分隔符
+- 解析多种日期时间字符串格式：`yyyy-MM-dd HH:mm:ss.SSS`, `yyyy-MM-dd HH:mm:ss`, `yyyy-MM-dd HH:mm`, `yyyy-MM-dd`
+- 接受 `/` 和 `-` 作为日期分隔符
 - 将数字字符串作为纪元毫秒数处理
-- 可配置目标类型：`SQL_TIMESTAMP`（默认）或 `LOCAL_DATE_TIME`
-- 通过可配置的 `TimeZone`/`ZoneId` 进行时区感知的转换
+- 可配置目标类型：`SQL_TIMESTAMP`（默认）或 `LOCAL_DATE_TIME`
+- 通过可配置的 `TimeZone`/`ZoneId` 进行时区感知的转换
 
 ### TimeParamConvertor
 
 > 自 v3.8.0 起
 
-为 `DbType.TIME` 类型的字段转换时间值。
+为 `DbType.TIME` 类型的字段转换时间值。
 
-#### 支持的字符串格式：
+#### 支持的字符串格式
 
-- `HH:mm:ss`（例如，`"14:30:00"`）
-- `HH:mm`（例如，`"14:30"` → 秒数默认为 `00`）
+- `HH:mm:ss`（如 `"14:30:00"`）
+- `HH:mm`（如 `"14:30"`，秒数默认为 `00`）
 
-#### 支持的类型：
+#### 支持的类型
 
-- `String` → `java.sql.Time` 或 `LocalTime`
-- `LocalTime` → `java.sql.Time` 或 `LocalTime`
-- `java.sql.Time` → `LocalTime`（当目标为 `LOCAL_TIME` 时）
+- `String` → `java.sql.Time` 或 `LocalTime`
+- `LocalTime` → `java.sql.Time` 或 `LocalTime`
+- `java.sql.Time` → `LocalTime`（当目标为 `LOCAL_TIME` 时）
 
 ### EnumParamConvertor
 
@@ -886,17 +884,17 @@ private String[] falseValues = new String[] { "0", "OFF", "FALSE", "N", "NO", "F
 
 #### 关键实现细节：
 
-`supports()` 方法检查：
+`supports()` 方法的判断逻辑：
 
-1. 目标类型可赋值给 `Enum.class`
-1. DbType 是 `INT` 或 `STRING`
-1. 值的类型是 `String` 或目标枚举类型
+1. 目标类型是 `Enum` 的子类
+2. DbType 是 `INT` 或 `STRING`
+3. 值的类型是 `String` 或目标枚举类型
 
-`convert()` 方法通过以下方式处理字符串输入：
+`convert()` 方法的字符串处理逻辑：
 
-1. 尝试进行不区分大小写的枚举名称匹配
-1. 回退到将其作为数字序数解析
-1. 如果两者都失败，则抛出 `IllegalParamException`
+1. 优先尝试不区分大小写的枚举名称匹配
+2. 匹配失败则尝试将其作为数字序数解析
+3. 两者都失败则抛出 `IllegalParamException`
 
 ## 自定义转换器
 

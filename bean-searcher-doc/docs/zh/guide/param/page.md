@@ -1,6 +1,6 @@
 # 分页参数
 
-Bean Searcher 提供了两种分页：**Page 分页** 与 **Offset 分页**。
+Bean Searcher 支持两种分页方式：**Page 分页**（按页码）与 **Offset 分页**（按偏移量）。
 
 ## 可配置项
 

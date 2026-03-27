@@ -45,7 +45,7 @@ public class User extends BaseEntity {
 
 ## 表继承
 
-有时候 `@SearchBean` 注解内写入的内容太多，子类能否复用呢？也是可以的，例如：
+如果 `@SearchBean` 注解里的内容比较多，子类想复用该怎么做？也很简单，例如：
 
 ```java
 @SearchBean(tables="user u, role r", where="u.role_id = r.id", autoMapTo="u")
@@ -102,7 +102,7 @@ public class UserDetail extends User {
 
 ## 配置默认值
 
-你也可以使用全局配置来修改默认的继承类型。
+如果项目中大多数实体类都需要某种特定的继承方式，可以通过全局配置来修改默认值，避免逐一声明。
 
 ### SpringBoot / Grails（since v3.6.0）
 

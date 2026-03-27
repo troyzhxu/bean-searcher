@@ -1,6 +1,6 @@
 # 其它形式
 
-除了上述的多表关联外，Bean Searcher 还支持很多复杂的 SQL 形式：
+除了多表关联，Bean Searcher 还支持多种复杂的 SQL 构造形式：
 
 ## Select 子查询
 
@@ -75,7 +75,7 @@ public class CourseScore {
 }
 ```
 
-如果有固定的 `having` 条件，可以写在这里：
+若有固定的 `having` 条件，也可以直接声明在注解中：
 
 ```java
 @SearchBean(

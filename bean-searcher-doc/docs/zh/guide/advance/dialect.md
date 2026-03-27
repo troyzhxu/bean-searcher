@@ -13,9 +13,9 @@ Bean Searcher 自带五种 Dialect 实现：
 * [`DaMengDialect`](https://github.com/troyzhxu/bean-searcher/blob/dev/bean-searcher/src/main/java/cn/zhxu/bs/dialect/DaMengDialect.java) - 可用于 类 达梦 的数据库 (**since v4.6.0**).
 * 其它数据库可自定义 Dialect，可 [参考 MySqlDialect 的实现](https://github.com/troyzhxu/bean-searcher/blob/dev/bean-searcher/src/main/java/cn/zhxu/bs/dialect/MySqlDialect.java)
 
-::: tip Bean Searcher 中的方言很简单
-* 自 **v3.3.0** 起，它被简化，只需实现 **两个** 方法即可；
-* 自 **v3.7.0** 起，再被简化，只需实现 **一个** 方法即可。
+::: tip Bean Searcher 的方言非常轻量
+* 自 **v3.3.0** 起，实现一个方言只需重写 **两个** 方法；
+* 自 **v3.7.0** 起，进一步简化为只需重写 **一个** 方法。
 :::
 
 ## 配置方法
