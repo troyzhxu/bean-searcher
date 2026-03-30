@@ -8,7 +8,7 @@ import java.lang.annotation.*;
  * @since v4.5.0
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.FIELD})
+@Target({ElementType.FIELD, ElementType.RECORD_COMPONENT})
 @Inherited
 public @interface Export {
 

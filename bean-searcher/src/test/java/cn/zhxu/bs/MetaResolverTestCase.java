@@ -763,4 +763,124 @@ public class MetaResolverTestCase {
         Assertions.assertTrue(joinParaNames.contains("scoreTable"));
     }
 
+    // -----------------------------------------------------------------------
+    // record 类相关测试
+    // -----------------------------------------------------------------------
+
+    /** 最基础的 record：自动推断表名与列名 */
+    public record UserRecord01(long id, String name, boolean enable) {}
+
+    @Test
+    public void test_r01() {
+        BeanMeta<UserRecord01> beanMeta = metaResolver.resolve(UserRecord01.class);
+        Assertions.assertTrue(beanMeta.isRecord());
+        Assertions.assertEquals("user_record01", beanMeta.getTableSnippet().getSql());
+        Assertions.assertEquals(3, beanMeta.getFieldCount());
+
+        // 验证每个字段的 recordIndex 与组件声明顺序一致
+        FieldMeta idMeta = beanMeta.requireFieldMeta("id");
+        Assertions.assertEquals(0, idMeta.getRecordIndex());
+        Assertions.assertSame(long.class, idMeta.getType());
+
+        FieldMeta nameMeta = beanMeta.requireFieldMeta("name");
+        Assertions.assertEquals(1, nameMeta.getRecordIndex());
+        Assertions.assertSame(String.class, nameMeta.getType());
+
+        FieldMeta enableMeta = beanMeta.requireFieldMeta("enable");
+        Assertions.assertEquals(2, enableMeta.getRecordIndex());
+        Assertions.assertSame(boolean.class, enableMeta.getType());
+
+        assertAlias(beanMeta.getFieldMetas());
+        System.out.println("\ttest_r01 ok!");
+    }
+
+    /** record 上使用 @DbField 指定列名与别名 */
+    public record UserRecord02(
+            @DbField("u_id") long id,
+            @DbField(alias = "c_name") String name
+    ) {}
+
+    @Test
+    public void test_r02() {
+        BeanMeta<UserRecord02> beanMeta = metaResolver.resolve(UserRecord02.class);
+        Assertions.assertTrue(beanMeta.isRecord());
+        Assertions.assertEquals(2, beanMeta.getFieldCount());
+
+        FieldMeta idMeta = beanMeta.requireFieldMeta("id");
+        Assertions.assertEquals("u_id", idMeta.getFieldSql().getSql());
+        Assertions.assertEquals(0, idMeta.getRecordIndex());
+
+        FieldMeta nameMeta = beanMeta.requireFieldMeta("name");
+        Assertions.assertEquals("c_name", nameMeta.getDbAlias());
+        Assertions.assertEquals(1, nameMeta.getRecordIndex());
+
+        assertAlias(beanMeta.getFieldMetas());
+        System.out.println("\ttest_r02 ok!");
+    }
+
+    /** record 上使用 @DbIgnore 排除组件 */
+    public record UserRecord03(long id, @DbIgnore String memo, String name) {}
+
+    @Test
+    public void test_r03() {
+        BeanMeta<UserRecord03> beanMeta = metaResolver.resolve(UserRecord03.class);
+        Assertions.assertTrue(beanMeta.isRecord());
+        Assertions.assertEquals(2, beanMeta.getFieldCount());
+
+        Assertions.assertNotNull(beanMeta.getFieldMeta("id"));
+        Assertions.assertNull(beanMeta.getFieldMeta("memo"));
+        Assertions.assertNotNull(beanMeta.getFieldMeta("name"));
+
+        // id 索引=0，memo 被忽略，name 在 canonical constructor 中索引=2
+        Assertions.assertEquals(0, beanMeta.requireFieldMeta("id").getRecordIndex());
+        Assertions.assertEquals(2, beanMeta.requireFieldMeta("name").getRecordIndex());
+
+        System.out.println("\ttest_r03 ok!");
+    }
+
+    /** record 上使用 @SearchBean 指定表名 & autoMapTo */
+    @SearchBean(tables = "user u, role r", where = "u.role_id = r.id", autoMapTo = "u")
+    public record UserRecord04(
+            long id,
+            String name,
+            @DbField("r.name") String roleName
+    ) {}
+
+    @Test
+    public void test_r04() {
+        BeanMeta<UserRecord04> beanMeta = metaResolver.resolve(UserRecord04.class);
+        Assertions.assertTrue(beanMeta.isRecord());
+        Assertions.assertEquals("user u, role r", beanMeta.getTableSnippet().getSql());
+        Assertions.assertEquals("u.role_id = r.id", beanMeta.getWhere());
+        Assertions.assertEquals(3, beanMeta.getFieldCount());
+
+        Assertions.assertEquals("u.id",   beanMeta.requireFieldMeta("id").getFieldSql().getSql());
+        Assertions.assertEquals("u.name", beanMeta.requireFieldMeta("name").getFieldSql().getSql());
+        Assertions.assertEquals("r.name", beanMeta.requireFieldMeta("roleName").getFieldSql().getSql());
+
+        // recordIndex 按组件声明顺序
+        Assertions.assertEquals(0, beanMeta.requireFieldMeta("id").getRecordIndex());
+        Assertions.assertEquals(1, beanMeta.requireFieldMeta("name").getRecordIndex());
+        Assertions.assertEquals(2, beanMeta.requireFieldMeta("roleName").getRecordIndex());
+
+        assertAlias(beanMeta.getFieldMetas());
+        System.out.println("\ttest_r04 ok!");
+    }
+
+    /** 普通 class 的 isRecord() 必须返回 false，recordIndex 必须为 -1 */
+    public static class PlainUser05 {
+        private long id;
+        private String name;
+    }
+
+    @Test
+    public void test_r05() {
+        BeanMeta<PlainUser05> beanMeta = metaResolver.resolve(PlainUser05.class);
+        Assertions.assertFalse(beanMeta.isRecord());
+        for (FieldMeta meta : beanMeta.getFieldMetas()) {
+            Assertions.assertEquals(-1, meta.getRecordIndex());
+        }
+        System.out.println("\ttest_r05 ok!");
+    }
+
 }

@@ -1,4 +1,18 @@
+# v5.0.0 @ 2026-03-30
+
+> ⚠️ **重要变更**：自 v5.0.0 起，不再支持 JDK 8 ~ 16，最低运行环境要求为 **JDK 17**。
+
+## 🌻 Better
+
+* 支持将 Java `record` 类作为 SearchBean 使用
+  - `@SearchBean`、`@DbField`、`@DbIgnore` 等注解均可用于 `record` 类及其组件
+  - 内部通过 canonical constructor 完成 record 实例化，无需无参构造器
+  - `BeanMeta` 新增 `isRecord()` 方法
+  - `FieldMeta` 新增 `getRecordIndex()` 方法，返回字段在 canonical constructor 中的参数索引
+* `bean-searcher-exporter`：`@Export` 注解支持标注在 `record` 组件上，`DefaultExportFieldResolver` 支持解析 record 类的导出字段
+
 # v4.8.5 @ 2026-03-27
+
 
 ## 🌻 Better
 

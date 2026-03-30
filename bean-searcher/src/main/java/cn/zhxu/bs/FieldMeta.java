@@ -58,8 +58,14 @@ public class FieldMeta {
      */
     private final Cluster cluster;
 
+    /**
+     * 该字段在 record canonical constructor 中的参数索引，非 record 字段为 -1
+     * @since v4.9.0
+     */
+    private final int recordIndex;
+
     public FieldMeta(BeanMeta<?> beanMeta, String name, Field field, SqlSnippet fieldSql, String dbAlias, boolean conditional,
-                     Class<? extends FieldOp>[] onlyOn, DbType dbType, Cluster cluster) {
+                     Class<? extends FieldOp>[] onlyOn, DbType dbType, Cluster cluster, int recordIndex) {
         this.beanMeta = beanMeta;
         this.name = name;
         this.field = field;
@@ -69,6 +75,7 @@ public class FieldMeta {
         this.onlyOn = onlyOn;
         this.dbType = dbType;
         this.cluster = cluster;
+        this.recordIndex = recordIndex;
     }
 
     public BeanMeta<?> getBeanMeta() {
@@ -113,6 +120,14 @@ public class FieldMeta {
 
     public Cluster getCluster() {
         return cluster;
+    }
+
+    /**
+     * @return 该字段在 record canonical constructor 中的参数索引，非 record 字段为 -1
+     * @since v4.9.0
+     */
+    public int getRecordIndex() {
+        return recordIndex;
     }
 
 }

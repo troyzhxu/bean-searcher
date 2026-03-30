@@ -87,10 +87,16 @@ public class BeanMeta<T> {
      */
     private final long maxOffset;
 
+    /**
+     * 是否是 record 类
+     * @since v4.9.0
+     */
+    private final boolean record;
+
     public BeanMeta(Class<T> beanClass, String dataSource, SqlSnippet tableSnippet,
                     SqlSnippet whereSnippet, SqlSnippet groupBySnippet, SqlSnippet havingSnippet,
                     SqlSnippet orderBySnippet, boolean sortable, boolean distinct,
-                    int timeout, int maxSize, long maxOffset) {
+                    int timeout, int maxSize, long maxOffset, boolean record) {
         this.beanClass = beanClass;
         this.dataSource = dataSource;
         this.tableSnippet = tableSnippet;
@@ -103,6 +109,7 @@ public class BeanMeta<T> {
         this.timeout = timeout;
         this.maxSize = maxSize;
         this.maxOffset = maxOffset;
+        this.record = record;
     }
 
     public void addFieldMeta(FieldMeta meta) {
@@ -240,6 +247,14 @@ public class BeanMeta<T> {
 
     public long getMaxOffset() {
         return maxOffset;
+    }
+
+    /**
+     * @return 是否是 record 类
+     * @since v4.9.0
+     */
+    public boolean isRecord() {
+        return record;
     }
 
 }

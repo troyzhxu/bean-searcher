@@ -10,5 +10,5 @@ import java.lang.annotation.*;
  * @since v3.0.0
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.FIELD, ElementType.TYPE})
+@Target({ElementType.FIELD, ElementType.RECORD_COMPONENT, ElementType.TYPE})
 public @interface DbIgnore { }

@@ -38,7 +38,7 @@ public class DateTimeParamConvertorTestCase {
     }
 
     void assertSupports(DbType dbType, boolean supports) {
-        FieldMeta meta = new FieldMeta(null,  null, null, null, null, false, null, dbType, Cluster.AUTO);
+        FieldMeta meta = new FieldMeta(null,  null, null, null, null, false, null, dbType, Cluster.AUTO, -1);
         Assertions.assertEquals(supports, convertor.supports(meta, Date.class));
         Assertions.assertEquals(supports, convertor.supports(meta, LocalDate.class));
         Assertions.assertEquals(supports, convertor.supports(meta, LocalDateTime.class));
@@ -98,7 +98,7 @@ public class DateTimeParamConvertorTestCase {
     }
 
     private void assertConvert(Object value, int hour, int minutes, int seconds, int mills) {
-        FieldMeta meta = new FieldMeta(null, null,null, null, null, false, null, DbType.DATETIME, Cluster.AUTO);
+        FieldMeta meta = new FieldMeta(null, null,null, null, null, false, null, DbType.DATETIME, Cluster.AUTO, -1);
         Object date = convertor.convert(meta, value);
         Assertions.assertInstanceOf(Timestamp.class, date);
         Calendar calendar = Calendar.getInstance();

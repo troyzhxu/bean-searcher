@@ -37,7 +37,7 @@ public class NumberParamConvertorTestCase {
 
     void assertSupports(DbType dbType, boolean supports) throws NoSuchFieldException {
         FieldMeta meta = new FieldMeta(null, null, TestBean.class.getDeclaredField("id"),
-                null, null, false, null, dbType, Cluster.AUTO);
+                null, null, false, null, dbType, Cluster.AUTO, -1);
         Assertions.assertEquals(supports, convertor.supports(meta, String.class));
         Assertions.assertEquals(supports, convertor.supports(meta, Byte.class));
         Assertions.assertEquals(supports, convertor.supports(meta, Short.class));
@@ -72,7 +72,7 @@ public class NumberParamConvertorTestCase {
     }
 
     private void assertConvert(DbType dbType, Object value) {
-        FieldMeta meta = new FieldMeta(null, null, null, null, null, false, null, dbType, Cluster.AUTO);
+        FieldMeta meta = new FieldMeta(null, null, null, null, null, false, null, dbType, Cluster.AUTO, -1);
         Object num = convertor.convert(meta, value);
         Assertions.assertTrue(dbType.getType().isInstance(num));
         String numStr = num.toString();

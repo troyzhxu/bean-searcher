@@ -30,7 +30,7 @@ public class BoolParamConvertorTestCase {
     }
 
     void assertSupports(DbType dbType, boolean supports) {
-        final FieldMeta meta = new FieldMeta(null, null,null, null, null, false, null, dbType, Cluster.AUTO);
+        final FieldMeta meta = new FieldMeta(null, null,null, null, null, false, null, dbType, Cluster.AUTO, -1);
         Assertions.assertEquals(supports, convertor.supports(meta, Byte.class));
         Assertions.assertEquals(supports, convertor.supports(meta, Short.class));
         Assertions.assertEquals(supports, convertor.supports(meta, Integer.class));
@@ -40,7 +40,7 @@ public class BoolParamConvertorTestCase {
 
     @Test
     public void test_convert() {
-        FieldMeta meta = new FieldMeta(null, null,null, null, null, false, null, DbType.BOOL, Cluster.AUTO);
+        FieldMeta meta = new FieldMeta(null, null,null, null, null, false, null, DbType.BOOL, Cluster.AUTO, -1);
         Assertions.assertEquals(true, convertor.convert(meta, 1));
         Assertions.assertEquals(true, convertor.convert(meta, true));
         Assertions.assertEquals(true, convertor.convert(meta, "true"));

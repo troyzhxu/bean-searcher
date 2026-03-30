@@ -17,7 +17,7 @@ import java.lang.annotation.Target;
  * @since v1.0.0
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.FIELD})
+@Target({ElementType.FIELD, ElementType.RECORD_COMPONENT})
 public @interface DbField {
 
     /**

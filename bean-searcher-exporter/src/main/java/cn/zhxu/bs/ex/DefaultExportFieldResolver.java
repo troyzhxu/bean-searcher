@@ -2,6 +2,7 @@ package cn.zhxu.bs.ex;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.RecordComponent;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -54,24 +55,50 @@ public class DefaultExportFieldResolver implements ExportFieldResolver {
 
     public List<ExportField> resolveFields(Class<?> clazz) {
         List<ExportField> exFields = new ArrayList<>();
-        Set<String> names = new HashSet<>();
-        while (clazz != Object.class) {
-            for (Field field : clazz.getDeclaredFields()) {
-                int modifiers = field.getModifiers();
-                String name = field.getName();
-                if (field.isSynthetic() || Modifier.isStatic(modifiers)
-                        || Modifier.isTransient(modifiers)
-                        || names.contains(name)) {
+        if (clazz.isRecord()) {
+            // record 类：按 canonical constructor 参数顺序遍历组件
+            for (RecordComponent component : clazz.getRecordComponents()) {
+                Field field;
+                try {
+                    field = clazz.getDeclaredField(component.getName());
+                } catch (NoSuchFieldException e) {
                     continue;
                 }
-                ExportField exField = toExportField(field);
-                if (exField != null) {
+                // 优先取 RecordComponent 上的注解，降级到 Field 上
+                Export export = component.getAnnotation(Export.class);
+                if (export == null) {
+                    export = field.getAnnotation(Export.class);
+                }
+                if (export != null) {
                     field.setAccessible(true);
-                    exFields.add(exField);
-                    names.add(name);
+                    exFields.add(new ExportField(
+                            expresser, formatter, field,
+                            export.name(), export.idx(),
+                            export.expr(), export.format(), export.onlyIf()
+                    ));
                 }
             }
-            clazz = clazz.getSuperclass();
+        } else {
+            // 普通类：遍历继承链（遇到 Object 或 Record 停止）
+            Set<String> names = new HashSet<>();
+            while (clazz != Object.class && clazz != Record.class) {
+                for (Field field : clazz.getDeclaredFields()) {
+                    int modifiers = field.getModifiers();
+                    String name = field.getName();
+                    if (field.isSynthetic() || Modifier.isStatic(modifiers)
+                            || Modifier.isTransient(modifiers)
+                            || names.contains(name)) {
+                        continue;
+                    }
+                    ExportField exField = toExportField(field);
+                    if (exField != null) {
+                        field.setAccessible(true);
+                        exFields.add(exField);
+                        names.add(name);
+                    }
+                }
+                clazz = clazz.getSuperclass();
+            }
         }
         exFields.sort(Comparator.comparingInt(ExportField::getExIdx));
         return exFields;
