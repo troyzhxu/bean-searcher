@@ -1,5 +1,9 @@
 # v4.8.6 @ 2026-04-08
 
+## 🌻 Better
+
+* 优化 `NumberParamConvertor` 中的异常信息，使用完整字段名提供更准确的错误提示
+
 ## 🐛 Bug Fixes
 
 * 修复检索参数异常时会抛出 `NPE` 的问题：
