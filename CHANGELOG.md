@@ -1,3 +1,16 @@
+# v4.8.6 @ 2026-04-08
+
+## 🐛 Bug Fixes
+
+* 修复检索参数异常时会抛出 `NPE` 的问题：
+
+```
+java.lang.NullPointerException: Cannot invoke "cn.zhxu.bs.SearchParam.getParaMap()" because the return value of "cn.zhxu.bs.SearchSql.getSearchParam()" is null
+	at cn.zhxu.bs.implement.DefaultBeanSearcher.search(DefaultBeanSearcher.java:127)
+```
+
+## 同时发布 v4.8.6.jdk8 版本
+
 # v4.8.5 @ 2026-03-27
 
 ## 🌻 Better
