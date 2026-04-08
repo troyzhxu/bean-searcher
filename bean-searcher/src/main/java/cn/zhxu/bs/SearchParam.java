@@ -7,6 +7,7 @@ import cn.zhxu.bs.param.OrderBy;
 import cn.zhxu.bs.param.Paging;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +35,10 @@ public class SearchParam {
 
     // 分页参数
     private final Paging paging;
+
+    public SearchParam(Map<String, Object> paraMap, FetchType fetchType) {
+        this(paraMap, fetchType, Collections.emptyList(), new Group<>(Group.TYPE_RAW), null);
+    }
 
     public SearchParam(Map<String, Object> paraMap, FetchType fetchType, List<String> fetchFields,
                        Group<List<FieldParam>> paramsGroup, Paging paging) {
