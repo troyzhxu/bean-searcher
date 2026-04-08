@@ -87,6 +87,10 @@ public class FieldMeta {
         return name;
     }
 
+    public String fullName() {
+        return beanMeta.getBeanClass().getName() + "#" + name;
+    }
+
     public Class<?> getType() {
         return field != null ? field.getType() : null;
     }

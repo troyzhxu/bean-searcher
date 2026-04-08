@@ -36,7 +36,7 @@ public class NumberParamConvertor implements FieldConvertor.ParamConvertor {
         try {
             return doConvert(dbType, value);
         } catch (NumberFormatException e) {
-            throw new IllegalParamException("Field type is " + dbType + ", but the param value is: " + value, e);
+            throw new IllegalParamException("The type of " + meta.fullName() + " is " + dbType + ", but the param value is: " + value, e);
         }
     }
 
