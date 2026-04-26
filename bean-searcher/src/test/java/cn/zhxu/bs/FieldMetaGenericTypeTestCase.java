@@ -6,6 +6,7 @@ import cn.zhxu.bs.implement.DefaultMetaResolver;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -190,7 +191,7 @@ public class FieldMetaGenericTypeTestCase {
         Assertions.assertSame(Integer.class, idMeta.getType(),
                 "Pre-condition: id type should be resolved to Integer");
 
-        DefaultBeanReflector reflector = new DefaultBeanReflector(List.of(
+        DefaultBeanReflector reflector = new DefaultBeanReflector(Arrays.asList(
                 new NumberFieldConvertor()
         ));
 
@@ -228,7 +229,7 @@ public class FieldMetaGenericTypeTestCase {
         Assertions.assertSame(Long.class, idMeta.getType(),
                 "Pre-condition: id type should be resolved to Long");
 
-        DefaultBeanReflector reflector = new DefaultBeanReflector(List.of(
+        DefaultBeanReflector reflector = new DefaultBeanReflector(Arrays.asList(
                 new NumberFieldConvertor()
         ));
 

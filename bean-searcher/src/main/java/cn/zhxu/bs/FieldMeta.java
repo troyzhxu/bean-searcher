@@ -133,13 +133,15 @@ public class FieldMeta {
         }
         // 检查字段的泛型类型是否为类型变量
         Type genericType = field.getGenericType();
-        if (!(genericType instanceof TypeVariable<?> typeVar)) {
+        if (!(genericType instanceof TypeVariable<?>)) {
             return field.getType();
         }
+        TypeVariable<?> typeVar = (TypeVariable<?>) genericType;
         // 沿着继承链向上解析：从 beanClass 遍历到 declaringClass
         Map<String, Type> typeMap = new HashMap<>();
         Type current = beanClass;
-        while (current instanceof Class<?> currentClass) {
+        while (current != null) {
+            Class<?> currentClass = (Class<?>) current;
             if (currentClass.equals(declaringClass)) {
                 // 已到达字段声明类，解析 TypeVariable
                 Type resolved = typeVar;
@@ -160,7 +162,8 @@ public class FieldMeta {
                 return field.getType();
             }
             Type superclass = currentClass.getGenericSuperclass();
-            if (superclass instanceof ParameterizedType pt) {
+            if (superclass instanceof ParameterizedType) {
+                ParameterizedType pt = (ParameterizedType) superclass;
                 Class<?> rawClass = (Class<?>) pt.getRawType();
                 TypeVariable<?>[] typeParams = rawClass.getTypeParameters();
                 Type[] actualTypes = pt.getActualTypeArguments();
