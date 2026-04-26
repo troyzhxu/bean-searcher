@@ -7,7 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * 自动检索器 根据 Bean 的 Class 和请求参数，自动检索 Bean
@@ -125,7 +128,7 @@ public class BaseSearcher implements Searcher {
                 throw e;
             }
             log.warn("Empty data will be returned, because of illegal params detected: [{}]", e.getMessage());
-            return emptyResult(beanMeta, fetchType);
+            return emptyResult(beanMeta, paraMap, fetchType);
         }
         SearchSql<T> searchSql = sqlResolver.resolve(beanMeta, searchParam);
         SqlResult<T> sqlResult = sqlExecutor.execute(intercept(searchSql, fetchType));
@@ -133,8 +136,9 @@ public class BaseSearcher implements Searcher {
         return sqlResult;
     }
 
-    private <T> SqlResult<T> emptyResult(BeanMeta<T> beanMeta, FetchType fetchType) {
-        SearchSql<T> searchSql = new SearchSql<>(beanMeta, null);
+    private <T> SqlResult<T> emptyResult(BeanMeta<T> beanMeta, Map<String, Object> paraMap, FetchType fetchType) {
+        SearchParam searchParam = new SearchParam(paraMap, fetchType);
+        SearchSql<T> searchSql = new SearchSql<>(beanMeta, searchParam);
         for (String summaryField : fetchType.getSummaryFields()) {
             searchSql.addSummaryAlias(summaryField);
         }
