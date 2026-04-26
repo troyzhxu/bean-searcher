@@ -22,13 +22,13 @@
 
 ::: code-group
 ```groovy [Gradle]
-implementation 'cn.zhxu:bean-searcher-exporter:4.8.6'
+implementation 'cn.zhxu:bean-searcher-exporter:4.8.7'
 ```
 ```xml [Maven]
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-exporter</artifactId>
-    <version>4.8.6</version>
+    <version>4.8.7</version>
 </dependency>
 ```
 :::
