@@ -2,7 +2,7 @@
 
 ## 🌻 Better
 
-* 字段转换器 `FieldConvertor` 支持对父类中 泛型字段 进行转换，例如：
+* 字段转换器 `FieldConvertor` 支持对父类中 **泛型字段** 进行转换（修复泛型擦除问题），例如：
 
 ```java
 // 父类
@@ -15,7 +15,8 @@ public class Entity extends Base<Long> {
     // ...
 }
 ```
-以前版本 BeanSearcher 也可以对 `Entity` 进行检索，但是如果数据库返回的 `id` 不是 `Long`，也不会对它进行转换。
+> 以前版本的 BeanSearcher 虽然也可以对这样的 `Entity` 进行检索，但如果数据库返回的 `id` 字段不是子类期望的 `Long` 类型，则 BeanSearcher 也不会对它进行转换。
+这虽然在检索阶段不会报错（JDK 泛型擦除），但如果再用某些第三方库（例如 JSON 库）对这种数据进行序列化，就可能会有兼容性问题。
 
 ## 同时发布 v4.8.7.jdk8 版本
 
@@ -27,7 +28,7 @@ public class Entity extends Base<Long> {
 
 ## 🐛 Bug Fixes
 
-* 修复检索参数异常时会抛出 `NPE` 的问题：
+* 修复检索参数不合法时会抛出 `NPE` 的问题：
 
 ```
 java.lang.NullPointerException: Cannot invoke "cn.zhxu.bs.SearchParam.getParaMap()" because the return value of "cn.zhxu.bs.SearchSql.getSearchParam()" is null
