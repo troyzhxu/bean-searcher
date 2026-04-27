@@ -11,6 +11,9 @@
 :::
 
 * Bean Searcher
+  - 字段转换器 `FieldConvertor` 支持对父类中**泛型字段**进行转换，修复了泛型擦除导致类型转换不生效的问题（since v4.8.7），[详见](/guide/bean/inherit.html#泛型字段转换-since-v4-8-7)。
+  - 优化 `NumberParamConvertor` 中的异常信息，使用完整字段名提供更准确的错误提示（since v4.8.6）
+  - 修复检索参数不合法时抛出 `NPE` 的问题（since v4.8.6）
   - 优化 `FieldParam`，使支持多线程只读共享使用（since v4.8.5）
     - `values` 字段改为 `final`，在构造时完成排序，返回的 `values` 列表为只读列表，可安全地在多线程环境中共享同一 `FieldParam` 实例
     - 新增 `valueList()` 方法，`getValueList()` 方法标记为 `@Deprecated`

@@ -139,3 +139,25 @@ MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
         .metaResolver(new DefaultMetaResolver(dbMapping))       // The BeanSearcher retriever has the same configuration
         .build();
 ```
+
+## Generic Field Conversion (since v4.8.7)
+
+When a parent class contains **generic fields**, Bean Searcher can correctly resolve the actual type bound by the subclass and apply the appropriate `FieldConvertor` for type conversion.
+
+For example:
+
+```java
+// Parent class declares a generic ID field
+public class BaseEntity<ID> {
+    private ID id;
+}
+
+// Subclass binds the generic to Long
+public class User extends BaseEntity<Long> {
+    private String username;
+}
+```
+
+Before v4.8.7, if the value returned by the database for the `id` column had a type mismatch with `Long` (e.g., `BigDecimal` returned by JDBC), Bean Searcher would skip type conversion for that field — because after type erasure, the declared type of `id` in the parent class becomes `Object`, which no `FieldConvertor` could match.
+
+Since v4.8.7, Bean Searcher correctly resolves the actual generic binding in the subclass, allowing `FieldConvertor` to kick in and perform the necessary type conversion. This prevents type compatibility issues in downstream operations such as JSON serialization.

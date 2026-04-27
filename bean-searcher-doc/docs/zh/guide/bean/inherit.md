@@ -122,3 +122,25 @@ MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
         .metaResolver(new DefaultMetaResolver(dbMapping))       // BeanSearcher 检索器也同此配置
         .build();
 ```
+
+## 泛型字段转换（since v4.8.7）
+
+当父类中含有**泛型字段**时，Bean Searcher 可以正确识别子类中该字段的实际类型，并使用合适的 `FieldConvertor` 对其进行转换。
+
+例如：
+
+```java
+// 父类定义泛型 ID 字段
+public class BaseEntity<ID> {
+    private ID id;
+}
+
+// 子类指定泛型为 Long
+public class User extends BaseEntity<Long> {
+    private String username;
+}
+```
+
+在 v4.8.7 之前，如果数据库返回的 `id` 值类型与 `Long` 不符（例如返回 `BigDecimal`），Bean Searcher 不会对该字段做类型转换——因为泛型擦除后父类中 `id` 的类型为 `Object`，无法匹配到对应的 `FieldConvertor`。
+
+自 v4.8.7 起，Bean Searcher 能够正确解析子类对泛型的实际绑定类型，使 `FieldConvertor` 可以正常介入并完成类型转换，避免后续 JSON 序列化等场景出现类型兼容性问题。

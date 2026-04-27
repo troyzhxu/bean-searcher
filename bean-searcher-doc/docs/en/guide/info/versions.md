@@ -11,6 +11,9 @@ Starting from version `v4.5`, default support is for `JDK17+`. To maintain compa
 :::
 
 * Bean Searcher
+  - `FieldConvertor` now supports type conversion for **generic fields** declared in parent classes, fixing the issue where type conversion did not take effect due to type erasure (since v4.8.7)，[reference](/en/guide/bean/inherit.html#generic-field-conversion-since-v4-8-7).
+  - Optimized exception messages in `NumberParamConvertor` to use fully-qualified field names for more accurate error reporting (since v4.8.6)
+  - Fixed a `NullPointerException` thrown when a retrieval parameter was invalid (since v4.8.6)
   - Optimized `FieldParam` to support read-only sharing in multi-threaded environments (since v4.8.5)
     - The `values` field is now `final` and sorted at construction time; the returned `values` list is read-only, allowing safe sharing of the same `FieldParam` instance across threads.
     - Added the `valueList()` method; `getValueList()` is now marked as `@Deprecated`.
