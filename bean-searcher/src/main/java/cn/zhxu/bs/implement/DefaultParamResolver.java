@@ -26,7 +26,7 @@ import static cn.zhxu.bs.group.ExprParser.*;
  */
 public class DefaultParamResolver implements ParamResolver {
 
-    public static final Pattern INDEX_PATTERN = Pattern.compile("\\d+");
+    public static final Pattern INDEX_PATTERN = Pattern.compile("\\d{1,4}");
 
     /**
      * 分页参数提取器

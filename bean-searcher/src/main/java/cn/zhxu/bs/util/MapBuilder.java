@@ -20,7 +20,7 @@ public class MapBuilder extends Builder<MapBuilder> {
     public static final String ORDER_BY = OrderBy.class.getName();
     public static final String PAGING = Paging.class.getName();
     // 因为存在非开放的自定义 SQL 运算符，所有这里加一个 UUID，杜绝前端 SQL 注入的可能
-    public static final String FIELD_PARAM = FieldParam.class.getName() + UUID.randomUUID();
+    public static final String FIELD_PARAM = FieldParam.class.getName() + UUID.randomUUID().toString().replace("-", "");
     public static final String ONLY_SELECT = SearchParam.class.getName() + ".ONLY_SELECT";
     public static final String SELECT_EXCLUDE = SearchParam.class.getName() + ".SELECT_EXCLUDE";
     public static final String GROUP_EXPR = SearchParam.class.getName() + ".GROUP_EXPR";
