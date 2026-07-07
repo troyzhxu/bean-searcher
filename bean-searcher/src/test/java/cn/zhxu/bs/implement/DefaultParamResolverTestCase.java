@@ -9,6 +9,7 @@ import cn.zhxu.bs.operator.InList;
 import cn.zhxu.bs.param.FetchType;
 import cn.zhxu.bs.param.FieldParam;
 import cn.zhxu.bs.util.MapUtils;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -72,5 +73,28 @@ public class DefaultParamResolverTestCase {
         System.out.println("\ttest_02 ok!");
     }
 
+    @Test
+    public void test_03() {
+        // UUID 末尾段为纯数字时，INDEX_PATTERN 不应匹配（修复 ARRAY_KEYS 导致的 NumberFormatException）
+        Assertions.assertFalse(DefaultParamResolver.INDEX_PATTERN.matcher("776540978273").matches());
+        // 正常字段索引仍应匹配
+        Assertions.assertTrue(DefaultParamResolver.INDEX_PATTERN.matcher("0").matches());
+        Assertions.assertTrue(DefaultParamResolver.INDEX_PATTERN.matcher("1").matches());
+        Assertions.assertTrue(DefaultParamResolver.INDEX_PATTERN.matcher("10").matches());
+        Assertions.assertTrue(DefaultParamResolver.INDEX_PATTERN.matcher("9999").matches());
+        // 5 位数字也不匹配（超过索引上限，且 UUID 末尾段 12 位直接排除）
+        Assertions.assertFalse(DefaultParamResolver.INDEX_PATTERN.matcher("12345").matches());
+        System.out.println("\ttest_03 ok!");
+    }
 
+    @Test
+    public void test_04() {
+        // 端到端：模拟 MapUtils.flat() 触发 ARRAY_KEYS，UUID 末尾段为纯数字时不应崩溃
+        var requestMap = new HashMap<String, String[]>();
+        requestMap.put("age", new String[] {"1", "2"});
+        var params = MapUtils.flatBuilder(requestMap).build();
+        SearchParam searchParam = resolver.resolve(metaResolver.resolve(User.class), new FetchType(FetchType.DEFAULT), params);
+        System.out.println(searchParam);
+        System.out.println("\ttest_04 ok!");
+    }
 }

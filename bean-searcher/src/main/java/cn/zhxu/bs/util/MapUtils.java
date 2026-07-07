@@ -8,7 +8,7 @@ import java.util.Map.Entry;
 
 public class MapUtils {
 
-    public static final String ARRAY_KEYS = "ARRAY_KEYS." + UUID.randomUUID();
+    public static final String ARRAY_KEYS = "ARRAY_KEYS." + UUID.randomUUID().toString().replace("-", "");
 
     /**
      * 将一个 value 为数组的 Map 对象，拉平为 value 为单值的 Map 对象
