@@ -31,13 +31,13 @@
 		<dependency>
 			<groupId>cn.zhxu</groupId>
 			<artifactId>bean-searcher-boot-starter</artifactId>
-			<version>4.8.7.jdk8</version>
+			<version>4.8.8.jdk8</version>
 		</dependency>
 
 		<dependency>
 			<groupId>cn.zhxu</groupId>
 			<artifactId>bean-searcher-label</artifactId>
-			<version>4.8.7.jdk8</version>
+			<version>4.8.8.jdk8</version>
 		</dependency>
 
 		<dependency>

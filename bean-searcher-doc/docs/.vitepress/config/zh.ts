@@ -13,7 +13,7 @@ export default defineConfig({
     nav: [
       { text: '指南', link: '/guide/info/bean-searcher', activeMatch: '/guide/' },
       {
-        text: 'v4.8.7',
+        text: 'v4.8.8',
         items: [
           {
             text: '更新日志',
