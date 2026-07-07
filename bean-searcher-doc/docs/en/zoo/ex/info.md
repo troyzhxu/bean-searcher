@@ -22,13 +22,13 @@ Add `bean-searcher-exporter` alongside your existing `bean-searcher-boot-starter
 
 ::: code-group
 ```groovy [Gradle]
-implementation 'cn.zhxu:bean-searcher-exporter:4.8.8'
+implementation 'cn.zhxu:bean-searcher-exporter:4.8.9'
 ```
 ```xml [Maven]
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-exporter</artifactId>
-    <version>4.8.8</version>
+    <version>4.8.9</version>
 </dependency>
 ```
 :::
