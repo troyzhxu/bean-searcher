@@ -11,6 +11,17 @@
     - `FieldMeta` 新增 `getRecordIndex()` 方法，返回字段在 canonical constructor 中的参数索引
 * `bean-searcher-exporter`：`@Export` 注解支持标注在 `record` 组件上，`DefaultExportFieldResolver` 支持解析 record 类的导出字段
 
+# v4.8.9 @ 2026-07-07
+
+## 🐛 Bug Fixes
+
+* 修复 `MapUtils.flat()` 配合多值参数使用时，`ARRAY_KEYS` 的 UUID 末尾段若为纯数字，会导致 `DefaultParamResolver.extractFieldParams()` 中 `Integer.parseInt` 抛出 `NumberFormatException` 的问题
+    - 根因：`INDEX_PATTERN` 原为 `\d+`（无长度限制），UUID 末尾 12 位纯数字被匹配后传入 `Integer.parseInt`，超出 `Integer.MAX_VALUE` 导致异常
+    - 修复 1：将 `INDEX_PATTERN` 改为 `\d{1,4}`，限制索引后缀最多 4 位数字（最大 9999）
+    - 修复 2：移除 `ARRAY_KEYS` 与 `FIELD_PARAM` 中 UUID 的分隔符 `-`，从根源上避免 UUID 与检索参数分隔符的意外交互
+
+## 同时发布 v4.8.9.jdk8 版本
+
 # v4.8.7 @ 2026-04-26
 
 ## 🌻 Better

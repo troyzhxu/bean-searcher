@@ -64,13 +64,13 @@ Add `bean-searcher-label` alongside your existing `bean-searcher-boot-starter` (
 
 ::: code-group
 ```groovy [Gradle]
-implementation 'cn.zhxu:bean-searcher-label:4.8.7'
+implementation 'cn.zhxu:bean-searcher-label:4.8.9'
 ```
 ```xml [Maven]
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-label</artifactId>
-    <version>4.8.7</version>
+    <version>4.8.9</version>
 </dependency>
 ```
 :::
