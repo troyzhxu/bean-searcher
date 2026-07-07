@@ -90,9 +90,9 @@ public class DefaultParamResolverTestCase {
     @Test
     public void test_04() {
         // 端到端：模拟 MapUtils.flat() 触发 ARRAY_KEYS，UUID 末尾段为纯数字时不应崩溃
-        var requestMap = new HashMap<String, String[]>();
+        Map<String, String[]> requestMap = new HashMap<>();
         requestMap.put("age", new String[] {"1", "2"});
-        var params = MapUtils.flatBuilder(requestMap).build();
+        Map<String, Object> params = MapUtils.flatBuilder(requestMap).build();
         SearchParam searchParam = resolver.resolve(metaResolver.resolve(User.class), new FetchType(FetchType.DEFAULT), params);
         System.out.println(searchParam);
         System.out.println("\ttest_04 ok!");
