@@ -15,10 +15,12 @@
 
 ## 🐛 Bug Fixes
 
-* 修复 `MapUtils.flat()` 配合多值参数使用时，`ARRAY_KEYS` 的 UUID 末尾段若为纯数字，会导致 `DefaultParamResolver.extractFieldParams()` 中 `Integer.parseInt` 抛出 `NumberFormatException` 的问题
-    - 根因：`INDEX_PATTERN` 原为 `\d+`（无长度限制），UUID 末尾 12 位纯数字被匹配后传入 `Integer.parseInt`，超出 `Integer.MAX_VALUE` 导致异常
-    - 修复 1：将 `INDEX_PATTERN` 改为 `\d{1,4}`，限制索引后缀最多 4 位数字（最大 9999）
-    - 修复 2：移除 `ARRAY_KEYS` 与 `FIELD_PARAM` 中 UUID 的分隔符 `-`，从根源上避免 UUID 与检索参数分隔符的意外交互
+* 修复 `MapUtils.flat()` 配合 **同键多值** 参数使用时，`ARRAY_KEYS` 的 UUID 末尾段若为纯数字，会导致 `DefaultParamResolver.extractFieldParams()` 中 `Integer.parseInt` 抛出 `NumberFormatException` 的问题
+  - 根因：`INDEX_PATTERN` 原为 `\d+`（无长度限制），UUID 末尾 12 位纯数字被匹配后传入 `Integer.parseInt`，超出 `Integer.MAX_VALUE` 导致异常
+  - 修复 1：将 `INDEX_PATTERN` 改为 `\d{1,4}`，限制索引后缀最多 4 位数字（最大 9999）
+  - 修复 2：移除 `ARRAY_KEYS` 与 `FIELD_PARAM` 中 UUID 的分隔符 `-`，从根源上避免 UUID 与检索参数分隔符的意外交互
+
+> 该 BUG 只在前端使用 **同键多值** 参数的情况下放生（例如：GET /query?status=1&status=2），且触发概率为 0.36%，即项目重启 1000次，平均有 3 ~ 4 次会触发该 BUG，如果不幸触发该 BUG 又来不及升级，再次重启即可规避。
 
 ## 同时发布 v4.8.9.jdk8 版本
 

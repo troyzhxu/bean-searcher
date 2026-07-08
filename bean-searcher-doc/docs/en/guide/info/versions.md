@@ -11,7 +11,7 @@ Starting from version `v4.5`, default support is for `JDK17+`. To maintain compa
 :::
 
 * Bean Searcher
-  - Fixed a `NumberFormatException` thrown by `Integer.parseInt` in `DefaultParamResolver.extractFieldParams()` when the last segment of the `ARRAY_KEYS` UUID happened to be all digits, triggered when using `MapUtils.flat()` with multi-value parameters (since v4.8.9)
+  - Fixed a `NumberFormatException` thrown by `Integer.parseInt` when the last segment of the `ARRAY_KEYS` UUID happened to be all digits, triggered by `MapUtils.flat()` with **duplicate-key multi-value** parameters (e.g., `?status=1&status=2`). The bug has a ~0.36% probability and can be worked around by restarting (since v4.8.9)
   - `FieldConvertor` now supports type conversion for **generic fields** declared in parent classes, fixing the issue where type conversion did not take effect due to type erasure (since v4.8.7)，[reference](/en/guide/bean/inherit.html#generic-field-conversion-since-v4-8-7).
   - Optimized exception messages in `NumberParamConvertor` to use fully-qualified field names for more accurate error reporting (since v4.8.6)
   - Fixed a `NullPointerException` thrown when a retrieval parameter was invalid (since v4.8.6)

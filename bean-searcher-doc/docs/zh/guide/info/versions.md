@@ -11,7 +11,7 @@
 :::
 
 * Bean Searcher
-  - 修复 `MapUtils.flat()` 配合多值参数使用时，`ARRAY_KEYS` 的 UUID 末尾段若为纯数字，会导致 `Integer.parseInt` 抛出 `NumberFormatException` 的问题（since v4.8.9）
+  - 修复 `MapUtils.flat()` 配合**同键多值**参数使用时，`ARRAY_KEYS` 的 UUID 末尾段若为纯数字，会导致 `Integer.parseInt` 抛出 `NumberFormatException` 的问题。该 BUG 触发概率约 0.36%，重启即可规避（since v4.8.9）
   - 字段转换器 `FieldConvertor` 支持对父类中**泛型字段**进行转换，修复了泛型擦除导致类型转换不生效的问题（since v4.8.7），[详见](/guide/bean/inherit.html#泛型字段转换-since-v4-8-7)。
   - 优化 `NumberParamConvertor` 中的异常信息，使用完整字段名提供更准确的错误提示（since v4.8.6）
   - 修复检索参数不合法时抛出 `NPE` 的问题（since v4.8.6）
