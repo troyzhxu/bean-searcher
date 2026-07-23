@@ -23,7 +23,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Configuration
-@Condition(onClass = BeanExporter.class, onBean = BeanSearcher.class)
+@Condition(onClass = BeanExporter.class)
 public class BeanSearcherConfigOnExporter {
 
     //放到这儿，减少注入处理代码
@@ -131,7 +131,9 @@ public class BeanSearcherConfigOnExporter {
     }
 
     @Bean
-    @Condition(onMissingBean = BeanExporter.class)
+    // 这里不能使用 onBean = BeanSearcher.class，否则该 Bean 会注册不了（beanMake 时序问题）
+    @Condition(onMissingBean = BeanExporter.class,
+            onProperty = "${bean-searcher.use-bean-searcher:true}=true")
     public BeanExporter beanExporter(BeanSearcher beanSearcher, ExportFieldResolver fieldResolver,
                                      @Inject(required = false) FileWriter.Factory fileWriterFactory,
                                      @Inject(required = false) FileNamer fileNamer,
