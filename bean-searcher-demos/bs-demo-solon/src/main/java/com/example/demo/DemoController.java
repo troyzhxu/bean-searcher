@@ -7,7 +7,7 @@ import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Inject;
 import org.noear.solon.annotation.Mapping;
 import org.noear.solon.core.handle.ModelAndView;
-import org.noear.solon.data.annotation.Tran;
+import org.noear.solon.data.annotation.Transaction;
 import org.noear.wood.DbContext;
 import org.noear.wood.annotation.Db;
 
@@ -55,7 +55,7 @@ public class DemoController {
     /**
      * 事务测试
      */
-    @Tran
+    @Transaction
     @Mapping("/create")
     public Employee create(int id, String name) throws SQLException {
         // 使用其它 ORM 插入数据
