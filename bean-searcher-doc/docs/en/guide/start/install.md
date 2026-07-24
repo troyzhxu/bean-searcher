@@ -424,3 +424,7 @@ To build a project using Maven, add the following dependencies:
 
 * If a Grails project uses the `bean-searcher-boot-starter` dependency, it must use versions `v3.1.4+`, `v3.2.3+`, and `v3.3.1+`.
 * In other words, `bean-searcher-boot-starter` versions within the range `v3.1.3-` ∪ `v3.2.0 ~ v3.2.2` ∪ `v3.3.0` do not support Grails projects.
+
+::: tip Next Step
+Dependencies ready? Jump to [Quick Start](/en/guide/start/quick) and write your first search API.
+:::

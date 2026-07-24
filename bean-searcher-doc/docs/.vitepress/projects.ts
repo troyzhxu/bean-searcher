@@ -20,11 +20,6 @@ export const projects = [
     image: '/liteflow.png'
   },
   {
-    text: 'Easy-Trans 一个注解搞定数据翻译，减少30%SQL代码量！',
-    link: 'http://easy-trans.fhs-opensource.top/',
-    image: 'https://oss.dev33.cn/sa-token/link/easy_trans.png'
-   },
-  {
     text: 'Forest - 声明式与编程式双修，让天下没有难以发送的 HTTP 请求!',
     link: 'https://forest.dtflyx.com/',
     image: '/forest-logo.png'

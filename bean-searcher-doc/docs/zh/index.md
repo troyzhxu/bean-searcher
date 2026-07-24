@@ -13,7 +13,7 @@ hero:
       link: /guide/info/why
     - theme: alt
       text: 起步 →
-      link: /guide/start/install
+      link: /guide/start/quick
 
 features:
   - icon: 😱

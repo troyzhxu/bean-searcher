@@ -67,6 +67,7 @@ export default defineConfig({
             base: '/guide/start',
             collapsed: false,
             items: [
+              { text: '快速入门', link: '/quick' },
               { text: '安装', link: '/install' },
               { text: '集成', link: '/integration' },
               { text: '使用', link: '/use' },
