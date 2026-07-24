@@ -1,57 +1,85 @@
 # Bean Searcher SpringBoot 2 后端服务
 
-### 介绍
+[Bean Searcher](https://gitee.com/troyzhxu/bean-searcher) 演示项目的后端 API 服务，提供员工列表的检索与导出能力。前端已分离至 [`../frontend-vue`](../frontend-vue)。
 
-本项目是 [Bean Searcher](https://gitee.com/troyzhxu/bean-searcher) 的 Spring Boot 2 后端示例服务，演示在 Web 工程中如何使用 Bean Searcher 简化列表检索的开发。
+### 技术栈
 
-本工程为纯后端 API 服务，前端代码已分离至 `../frontend-vue` 目录，前后端独立部署。
+- Web 框架：SpringBoot 2.7
+- 数据库：H2（内存数据库，无需安装配置）
+- ORM：bean-searcher 4.8.11.jdk8（JDK 8 兼容版）
+- JDK：8+
 
-### 软件架构
-
-- Web 框架：Spring Boot 2
-- 数据库：H2（无需安装配置）
-- 数据库访问：spring-jdbc、bean-searcher
-
-### API 接口
-
-##### 员工检索接口
-
-```
-GET /employee/index
-```
-
-组合检索、排序、分页与统计均在同一个接口内完成。检索参数由 `config` 包下的 `AutoLoadParamFilter` 自动加载，无需在控制器中逐个声明。
-
-### 配置说明
-
-`config` 包下还提供了：
-
-- `AutoLoadParamFilter` —— 自动加载检索参数过滤器
-- `SlowSqlListener` —— 慢 SQL 监听器
-
-### 运行方式
-
-##### 环境要求
-
-- JDK 8+
-
-##### 启动后端
+### 快速开始
 
 ```bash
+cd backend-springboot2
 mvn spring-boot:run
 ```
 
-##### 启动前端
+启动后监听 `http://localhost:8080`，数据库自动建表并初始化种子数据。
 
-前端项目位于 `../frontend-vue`，进入该目录后执行：
+### API 接口
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| GET | `/user/index` | 分页检索员工（多条件过滤、排序、年龄统计） |
+| GET | `/user/export` | 导出 CSV 文件 |
+
+检索参数由 `ReqParamFilter` 自动从请求中加载，无需在 Controller 里逐个声�� `@RequestParam`。
+
+### 前端对接
 
 ```bash
+cd ../frontend-vue
 npm run dev
 ```
 
-前端默认运行在 7300 端口，通过 `.env` 中的 `VITE_API_BASE` 配置后端 API 地址（默认 `http://localhost:8080`）。
+前端运行在 `http://localhost:7300`，通过 `.env` 中的 `VITE_API_BASE=http://localhost:8080` 连接本服务。
 
-### 总结
+### 代码分析
 
-- [Bean Searcher](https://gitee.com/troyzhxu/bean-searcher) 的目标不是替代某个 ORM 框架，而是弥补现有 ORM 框架在复杂列表检索中的不便，实际项目中配合使用效果更佳。
-- 本例只是 Bean Searcher 在联表检索中的一个简单演示，更多用法请参阅：[https://bs.zhxu.cn](https://bs.zhxu.cn)
+检索接口的核心代码仅需 **一行**：
+
+```java
+@RestController
+@RequestMapping("/user")
+@AllArgsConstructor
+public class UserController {
+
+    private final BeanSearcher beanSearcher;
+    private final BeanExporter beanExporter;
+
+    @GetMapping("/index")
+    public SearchResult<User> index() {
+        // 组合检索、排序、分页 和 统计 都在这一句代码中实现
+        return beanSearcher.search(User.class, User::getAge);
+    }
+
+    @GetMapping("/export")
+    public void export() throws IOException {
+        beanExporter.export("员工资料", User.class);
+    }
+}
+```
+
+检索实体类 `User` 通过注解声明多表映射：
+
+```java
+@SearchBean(tables = "users u, dept d", where = "u.dept_id = d.id", autoMapTo = "u")
+public class User {
+    private long id;
+    private String name;
+    private int age;
+    @DbField("d.name")
+    @Export(name = "部门")
+    private String department;
+    @Export(name = "入职时间", format = "yyyy-MM-dd HH:mm")
+    private LocalDateTime entryDate;
+    // ...
+}
+```
+
+### 更多信息
+
+- [Bean Searcher 文档](https://bs.zhxu.cn)
+- [更多 Demo](../)

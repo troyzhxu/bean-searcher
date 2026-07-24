@@ -309,9 +309,7 @@ logging:
 logging.level.cn.zhxu.bs: DEBUG
 ```
 
-* 示例3：SpringBoot 项目的日志配置，可参考 [logback-spring.xml](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher-demos/bs-demo-springboot/src/main/resources/logback-spring.xml)
-
-* 示例4：Grails 项目的日志配置，可参考 [logback.groovy](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher-demos/grails-demo/grails-app/conf/logback.groovy)
+* 示例3：SpringBoot 项目的日志配置，可参考 [logback-spring.xml](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher-demos/backend-springboot3/src/main/resources/logback-spring.xml)
 
 输出级别配置好后，SQL 日志的效果如下：
 

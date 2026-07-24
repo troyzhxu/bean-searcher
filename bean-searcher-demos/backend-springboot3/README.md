@@ -1,116 +1,85 @@
 # Bean Searcher SpringBoot 3 后端服务
 
-### 介绍
+[Bean Searcher](https://gitee.com/troyzhxu/bean-searcher) 演示项目的后端 API 服务，提供员工列表的检索与导出能力。前端已分离至 [`../frontend-vue`](../frontend-vue)。
 
-本项目是 [Bean Searcher](https://gitee.com/troyzhxu/bean-searcher) 的 SpringBoot 3 后端示例服务，演示在 Web 工程中如何使用 Bean Searcher 提升列表检索的开发效率。
+### 技术栈
 
-本项目为纯后端 API 服务，前端已分离至 `../frontend-vue` 目录。
+- Web 框架：SpringBoot 3.5
+- 数据库：H2（内存数据库，无需安装配置）
+- ORM：bean-searcher 4.8.11
+- JDK：17+
 
-### 软件架构
+### 快速开始
 
-- Web 框架：SpringBoot 3
-- 数据库：H2（无需安装配置）
-- 数据库访问：spring-jdbc、bean-searcher
+```bash
+cd backend-springboot3
+./gradlew bootRun
+```
+
+启动后监听 `http://localhost:8080`，数据库自动建表并初始化种子数据。
 
 ### API 接口
 
 | 方法 | 路径 | 说明 |
-| --- | --- | --- |
-| GET | `/employee/index` | 员工列表检索接口（组合检索、排序、分页、统计） |
-| GET | `/employee/file.cvs` | 员工数据导出接口 |
-| GET | `/employee/index1` | 员工检索接口（显式参数写法示例） |
+|------|------|------|
+| GET | `/user/index` | 分页检索员工（多条件过滤、排序、年龄统计） |
+| GET | `/user/export` | 导出 CSV 文件 |
 
-### 运行
+检索参数由 `ReqParamFilter` 自动从请求中加载，无需在 Controller 里逐个声明 `@RequestParam`。
 
-环境要求：JDK 17+
-
-```bash
-> git clone https://github.com/troyzhxu/bean-searcher.git
-> cd bean-searcher/bean-searcher-demos/backend-springboot3
-> ./gradlew bootRun
-```
-
-启动后，后端服务运行在 `http://localhost:8080`。
-
-### 前端
-
-前端项目位于 `../frontend-vue`，运行方式：
+### 前端对接
 
 ```bash
-> cd ../frontend-vue
-> npm run dev
+cd ../frontend-vue
+npm run dev
 ```
 
-前端开发服务运行在端口 `7300`，通过 `.env` 中的 `VITE_API_BASE` 配置后端 API 地址（默认 `http://localhost:8080`）。
+前端运行在 `http://localhost:7300`，通过 `.env` 中的 `VITE_API_BASE=http://localhost:8080` 连接本服务。
 
 ### 代码分析
 
-##### 控制层代码
-
-Bean Searcher 可以用一句代码实现 **组合检索**、**排序**、**分页** 和 **统计** 功能：
+检索接口的核心代码仅需 **一行**：
 
 ```java
 @RestController
-public class DemoController {
+@RequestMapping("/user")
+@AllArgsConstructor
+public class UserController {
 
-    @Autowired
-    private Searcher searcher;
+    private final BeanSearcher beanSearcher;
+    private final BeanExporter beanExporter;
 
-    /**
-     * 列表检索接口
-     */
-    @GetMapping("/employee/index")
-    public Object index(HttpServletRequest request) {
-        // 组合检索、排序、分页 和 统计 都在这一句代码中实现了
-        return searcher.search(Employee.class,              // 指定实体类
-                MapUtils.flat(request.getParameterMap()),   // 收集页面请求参数
-                new String[] { "age" });                    // 统计字段：年龄
+    @GetMapping("/index")
+    public SearchResult<User> index() {
+        // 组合检索、排序、分页 和 统计 都在这一句代码中实现
+        return beanSearcher.search(User.class, User::getAge);
     }
 
+    @GetMapping("/export")
+    public void export() throws IOException {
+        beanExporter.export("员工资料", User.class);
+    }
 }
 ```
 
-检索条件、检索方式、排序、分页都交给 Bean Searcher 自动处理。
-
-##### 检索实体类
-
-Employee 类用来告诉 bean-searcher 如何与数据库字段映射：
+检索实体类 `User` 通过注解声明多表映射：
 
 ```java
-@SearchBean(
-    tables = "employee e, department d",  // 员工表 与 部门表
-    joinCond = "e.department_id = d.id"   // 连接条件
-)
-public class Employee {
-
-    @DbField("e.id")
-    private Long id;
-
-    @DbField("e.name")
+@SearchBean(tables = "users u, dept d", where = "u.dept_id = d.id", autoMapTo = "u")
+public class User {
+    private long id;
     private String name;
-
-    @DbField("e.age")
-    private Integer age;
-
+    private int age;
     @DbField("d.name")
+    @Export(name = "部门")
     private String department;
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
-    @DbField("e.entry_date")
-    private Date entryDate;
-
-    // Getter and Setter ...
+    @Export(name = "入职时间", format = "yyyy-MM-dd HH:mm")
+    private LocalDateTime entryDate;
+    // ...
 }
 ```
 
-### 总结
+### 更多信息
 
-- [Bean Searcher](https://gitee.com/troyzhxu/bean-searcher) 设计的目标并不是替代某个 ORM 框架，它只是为了弥补现有 ORM 框架在复杂列表检索中的不便，实际项目中配合使用效果更好。
-- 本例只是 Bean Searcher 在联表检索中的一个简单演示，更多用法请参阅：[https://bs.zhxu.cn](https://bs.zhxu.cn)
-
-### 参与贡献
-
-1. Fork 本仓库
-2. 新建 Feat_xxx 分支
-3. 提交代码
-4. 新建 Pull Request
+- [Bean Searcher 文档](https://bs.zhxu.cn)
+- [更多 Demo](../)

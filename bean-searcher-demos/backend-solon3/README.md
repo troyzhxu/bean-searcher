@@ -1,66 +1,84 @@
-# Bean Searcher Solon 后端服务
+# Bean Searcher Solon 3 后端服务
 
-### 介绍
+[Bean Searcher](https://gitee.com/troyzhxu/bean-searcher) 演示项目的后端 API 服务，提供员工列表的检索与导出能力。前端已分离至 [`../frontend-vue`](../frontend-vue)。
 
-本项目是 [Bean Searcher](https://gitee.com/troyzhxu/bean-searcher) 在 Solon Web 工程中的后端服务案例，演示在列表检索场景中 Bean Searcher 是如何提升开发效率的。
+### 技术栈
 
-前端页面已分离到独立的工程 [`../frontend-vue`](../frontend-vue)。
+- Web 框架：Solon 3.9
+- 数据库：H2（内存数据库，无需安装配置）
+- ORM：bean-searcher 4.8.11.jdk8 + wood
+- JDK：8+
 
-### 软件架构
+### 快速开始
 
-- Web 框架：Solon 3
-- 数据库：H2（无需安装配置）
-- 数据库访问：wood、bean-searcher
+在 IDEA 中打开 `backend-solon3` 目录，运行 `App.java` 主类即可。
 
-### 运行后端
-
-```bash
-> git clone https://github.com/troyzhxu/bean-searcher.git
-> cd bean-searcher/bean-searcher-demos/backend-solon3
-> IDEA 打开运行
-```
-
-后端启动后，默认监听 `http://localhost:8080`。
-
-### 运行前端
-
-```bash
-> cd bean-searcher/bean-searcher-demos/frontend-vue
-> npm install
-> npm run dev
-```
-
-前端开发服务器启动在 `http://localhost:7300`，通过 `.env` 中的 `VITE_API_BASE` 配置后端 API 地址（默认 `http://localhost:8080`）。
+启动后监听 `http://localhost:8080`，数据库自动建表并初始化种子数据。
 
 ### API 接口
 
 | 方法 | 路径 | 说明 |
 |------|------|------|
-| GET | `/employees` | 分页检索员工数据（含年龄统计） |
-| GET | `/employees.cvs` | 导出 CSV 文件 |
+| GET | `/user/index` | 分页检索员工（多条件过滤、排序、年龄统计） |
+| GET | `/user/export` | 导出 CSV 文件 |
+
+检索参数由 `ReqParamFilter` 自动从请求中加载，无需在 Controller 里逐个声明参数。
+
+### 前端对接
+
+```bash
+cd ../frontend-vue
+npm run dev
+```
+
+前端运行在 `http://localhost:7300`，通过 `.env` 中的 `VITE_API_BASE=http://localhost:8080` 连接本服务。
 
 ### 代码分析
 
-有同学看到这会想，若要实现可以按照各种条件 **组合检索**、**排序**、**分页** 和 **统计** 的功能，那后端的代码量至少也得上百行吧。Bean Searcher 告诉你，不用，关键代码，就一句：
+检索接口的核心代码仅需 **一行**：
 
 ```java
 @Controller
-public class DemoController {
+@Mapping("/user")
+public class UserController {
 
     @Inject
     private BeanSearcher beanSearcher;
 
-    @Mapping("/employees")
-    public SearchResult<Employee> employees() {
-        // 分页查询员工信息，并对年龄进行统计
-        return beanSearcher.search(Employee.class, Employee::getAge);
+    @Inject
+    private BeanExporter beanExporter;
+
+    @Mapping("/index")
+    public SearchResult<User> index() {
+        // 组合检索、排序、分页 和 统计 都在这一句代码中实现
+        return beanSearcher.search(User.class, User::getAge);
     }
 
+    @Mapping("/export")
+    public void export() throws IOException {
+        beanExporter.export("员工资料", User.class);
+    }
 }
 ```
 
-### 总结
+检索实体类 `User` 通过注解声明多表映射：
 
-- [Bean Searcher](https://gitee.com/troyzhxu/bean-searcher) 设计的目标并不是替代某个 ORM 框架，它只是为了弥补现有 ORM 框架在复杂列表检索中的不便，实际项目中，配合使用它们，效果或会更好。
-- 本例只是 Bean Searcher 在联表检索中的一个简单的演示，更多用法，请参阅：[https://bs.zhxu.cn](https://bs.zhxu.cn)
-- 看完这些，大家有没有觉得 Bean Searcher 正好可以帮到你呢？如果是，就点个 Star 吧 ^_^
+```java
+@SearchBean(tables = "users u, dept d", where = "u.dept_id = d.id", autoMapTo = "u")
+public class User {
+    private long id;
+    private String name;
+    private int age;
+    @DbField("d.name")
+    @Export(name = "部门")
+    private String department;
+    @Export(name = "入职时间", format = "yyyy-MM-dd HH:mm")
+    private LocalDateTime entryDate;
+    // ...
+}
+```
+
+### 更多信息
+
+- [Bean Searcher 文档](https://bs.zhxu.cn)
+- [更多 Demo](../)
