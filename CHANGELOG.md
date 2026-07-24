@@ -1,4 +1,4 @@
-# v5.0.0 @ 2026-03-30
+# v5.0.0 @ Next
 
 > ⚠️ **重要变更**：自 v5.0.0 起，不再支持 JDK 8 ~ 16，最低运行环境要求为 **JDK 17**。
 
@@ -10,6 +10,13 @@
     - `BeanMeta` 新增 `isRecord()` 方法
     - `FieldMeta` 新增 `getRecordIndex()` 方法，返回字段在 canonical constructor 中的参数索引
 * `bean-searcher-exporter`：`@Export` 注解支持标注在 `record` 组件上，`DefaultExportFieldResolver` 支持解析 record 类的导出字段
+
+# v4.8.11 @ 2026-07-24
+
+## 🐛 Bug Fixes
+* 优化对 Solon 框架的兼容性，使 `bean-searcher-solon-plugin` 支持 `bean-searcher-exporter` 的自动装配
+
+## 同时发布 v4.8.11.jdk8 版本
 
 # v4.8.9 @ 2026-07-07
 

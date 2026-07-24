@@ -64,7 +64,9 @@ CRUD | Only R | CRUD | CRUD
 
 ## DEMO 快速体验
 
-三步快速体验
+> 🚀 **在线体验**：[https://demo-bs.zhxu.cn/](https://demo-bs.zhxu.cn/) — 无需部署，即刻体验！
+
+三步本地运行：
 
 ### 第一步：克隆
 
@@ -77,40 +79,45 @@ git clone https://github.com/troyzhxu/bean-searcher.git
 ```
 :::
 
-### 第二步：运行
+### 第二步：启动后端（任选一个）
 
 ::: code-group
 ```bash [SpringBoot4]
-# 此 demo 基于 JDK 21+
-cd bean-searcher/bean-searcher-demos/bs-demo-sb4
+# JDK 21+
+cd bean-searcher/bean-searcher-demos/backend-springboot4
 ./gradlew bootRun
 ```
 ```bash [SpringBoot3]
-# 此 demo 基于 JDK 17+
-cd bean-searcher/bean-searcher-demos/bs-demo-sb3
+# JDK 17+
+cd bean-searcher/bean-searcher-demos/backend-springboot3
 ./gradlew bootRun
 ```
 ```bash [SpringBoot2]
-# 此 demo 基于 JDK 8+
-cd bean-searcher/bean-searcher-demos/bs-demo-sb2
+# JDK 8+
+cd bean-searcher/bean-searcher-demos/backend-springboot2
 mvn spring-boot:run
 ```
-```bash [Solon]
-# 此 demo 基于 JDK 8+
-cd bean-searcher/bean-searcher-demos/bs-demo-solon
+```bash [Solon4]
+# JDK 17+
+cd bean-searcher/bean-searcher-demos/backend-solon4
 # IDEA 中打开运行
 ```
-```bash [Grails]
-# 此 demo 基于 JDK 8+
-cd bean-searcher/bean-searcher-demos/bs-demo-grails
-grails run-app
+```bash [Solon3]
+# JDK 8+
+cd bean-searcher/bean-searcher-demos/backend-solon3
+# IDEA 中打开运行
 ```
 :::
 
-### 第三步：效果
+### 第三步：启动前端 & 查看效果
 
-访问 `http://localhost:8080/` 即可查看运行效果。
+```bash
+cd bean-searcher/bean-searcher-demos/frontend-vue
+npm install && npm run dev
+```
 
-此例的更多信息，可参阅：[DEMO 详细介绍](https://github.com/troyzhxu/bean-searcher/blob/main/bean-searcher-demos/bs-demo-sb4/README.md)。
+访问 `http://localhost:7300` 即可查看运行效果。
 
-[更多 DEMO](https://github.com/troyzhxu/bean-searcher/blob/main/bean-searcher-demos)
+> 此 Demo 采用前后端分离架构，一个统一前端 + 多个后端服务，API 接口完全一致，前端可无缝切换对接。所有后端均使用 H2 内存数据库，无需任何配置，开箱即用。
+
+[更多 DEMO](https://github.com/troyzhxu/bean-searcher/tree/main/bean-searcher-demos)

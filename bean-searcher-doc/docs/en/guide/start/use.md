@@ -312,9 +312,7 @@ logging:
 logging.level.cn.zhxu.bs: DEBUG
 ```
 
-* Example 3: The log configuration of the SpringBoot project can refer to [logback-spring.xml](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher-demos/bs-demo-springboot/src/main/resources/logback-spring.xml).
-
-* Example 4: The log configuration of the Grails project can refer to [logback.groovy](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher-demos/grails-demo/grails-app/conf/logback.groovy).
+* Example 3: The log configuration of the SpringBoot project can refer to [logback-spring.xml](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher-demos/backend-springboot3/src/main/resources/logback-spring.xml).
 
 After the output level is configured, the effect of the SQL log is as follows:
 
