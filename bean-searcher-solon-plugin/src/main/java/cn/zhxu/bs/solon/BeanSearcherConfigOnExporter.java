@@ -105,7 +105,6 @@ public class BeanSearcherConfigOnExporter {
                     String encodedName = URLEncoder.encode(CsvFileWriter.withFileExt(filename), StandardCharsets.UTF_8);
                     context.contentType("application/octet-stream");
                     context.headerAdd("Content-Disposition", "attachment; filename=" + encodedName);
-                    context.headerAdd("Transfer-Encoding", "chunked");
                     super.writeStart(fields);
                 }
                 @Override
