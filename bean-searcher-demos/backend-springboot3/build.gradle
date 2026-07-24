@@ -19,9 +19,9 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
-	implementation 'cn.zhxu:bean-searcher-boot-starter:4.8.11'
-	implementation 'cn.zhxu:bean-searcher-label:4.8.11'
-    implementation 'cn.zhxu:bean-searcher-exporter:4.8.11'
+	implementation 'cn.zhxu:bean-searcher-boot-starter:4.8.12'
+	implementation 'cn.zhxu:bean-searcher-label:4.8.12'
+    implementation 'cn.zhxu:bean-searcher-exporter:4.8.12'
 
 	runtimeOnly 'com.h2database:h2'
 

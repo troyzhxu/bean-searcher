@@ -6,7 +6,7 @@
 
 - Web 框架：Solon 3.9
 - 数据库：H2（内存数据库，无需安装配置）
-- ORM：bean-searcher 4.8.11.jdk8 + wood
+- ORM：bean-searcher 4.8.12.jdk8 + wood
 - JDK：8+
 
 ### 快速开始

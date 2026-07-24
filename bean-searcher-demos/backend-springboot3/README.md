@@ -6,7 +6,7 @@
 
 - Web 框架：SpringBoot 3.5
 - 数据库：H2（内存数据库，无需安装配置）
-- ORM：bean-searcher 4.8.11
+- ORM：bean-searcher 4.8.12
 - JDK：17+
 
 ### 快速开始

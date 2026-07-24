@@ -4,10 +4,10 @@ For detailed version information, please refer to [Github](https://github.com/tr
 
 ## V4 Version
 
-### New Features in v4.8 (v4.8.11)
+### New Features in v4.8 (v4.8.12)
 
 ::: warning Note
-Starting from version `v4.5`, default support is for `JDK17+`. To maintain compatibility with `JDK 8 ~ 16`, you can use the compatibility version with the `.jdk8` suffix, for example: `v4.8.11.jdk8`.
+Starting from version `v4.5`, default support is for `JDK17+`. To maintain compatibility with `JDK 8 ~ 16`, you can use the compatibility version with the `.jdk8` suffix, for example: `v4.8.12.jdk8`.
 :::
 
 * Bean Searcher
