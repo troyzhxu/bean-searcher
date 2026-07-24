@@ -5,7 +5,6 @@ db:
   username: sa
   password: 123456
 
-# 分页起始页为 0（默认）
 bean-searcher:
   exporter:
     batch-delay: PT0.5S
