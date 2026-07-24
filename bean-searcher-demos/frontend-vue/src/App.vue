@@ -26,7 +26,8 @@
       />
     </div>
 
-    <FooterBanner />
+    <ShowcaseBanner />
+    <SourceBanner />
     <RepoBanner />
   </div>
 </template>
@@ -40,7 +41,8 @@ import HeroBanner from '@/components/HeroBanner.vue'
 import FilterCard from '@/components/FilterCard.vue'
 import StatsCards from '@/components/StatsCards.vue'
 import DataTable from '@/components/DataTable.vue'
-import FooterBanner from '@/components/FooterBanner.vue'
+import ShowcaseBanner from '@/components/ShowcaseBanner.vue'
+import SourceBanner from '@/components/SourceBanner.vue'
 import RepoBanner from '@/components/RepoBanner.vue'
 
 const list = ref<User[]>([])
