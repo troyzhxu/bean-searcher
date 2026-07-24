@@ -1,3 +1,10 @@
+# v4.8.11 @ 2026-07-24
+
+## 🐛 Bug Fixes
+* 优化对 Solon 框架的兼容性，使 `bean-searcher-solon-plugin` 支持 `bean-searcher-exporter` 的自动装配
+
+## 同时发布 v4.8.11.jdk8 版本
+
 # v4.8.9 @ 2026-07-07
 
 ## 🐛 Bug Fixes
