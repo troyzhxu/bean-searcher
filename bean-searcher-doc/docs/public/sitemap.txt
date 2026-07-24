@@ -4,6 +4,7 @@ https://bs.zhxu.cn/guide/info/why.html
 https://bs.zhxu.cn/guide/info/bean-searcher.html
 https://bs.zhxu.cn/guide/info/versions.html
 https://bs.zhxu.cn/guide/start/install.html
+https://bs.zhxu.cn/guide/start/quick.html
 https://bs.zhxu.cn/guide/start/integration.html
 https://bs.zhxu.cn/guide/start/use.html
 https://bs.zhxu.cn/guide/bean/info.html
@@ -51,6 +52,7 @@ https://bs.zhxu.cn/en/guide/info/why.html
 https://bs.zhxu.cn/en/guide/info/bean-searcher.html
 https://bs.zhxu.cn/en/guide/info/versions.html
 https://bs.zhxu.cn/en/guide/start/install.html
+https://bs.zhxu.cn/en/guide/start/quick.html
 https://bs.zhxu.cn/en/guide/start/integration.html
 https://bs.zhxu.cn/en/guide/start/use.html
 https://bs.zhxu.cn/en/guide/bean/info.html

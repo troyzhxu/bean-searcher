@@ -9,11 +9,14 @@ hero:
   image: /logo.png
   actions:
     - theme: brand
-      text: WHY BEAN-SEARCHER
+      text: 🚀 Live Demo
+      link: https://demo-bs.zhxu.cn/
+    - theme: alt
+      text: WHY?
       link: /en/guide/info/why
     - theme: alt
       text: Start →
-      link: /en/guide/start/install
+      link: /en/guide/start/quick
 
 features:
   - icon: 😱

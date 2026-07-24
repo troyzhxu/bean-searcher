@@ -90,8 +90,7 @@ public class BeanSearcherConfigOnExporter {
                     public void writeStart(List<ExportField> fields) throws IOException {
                         String encodedName = URLEncoder.encode(CsvFileWriter.withFileExt(filename), StandardCharsets.UTF_8.name());
                         response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
-                        response.addHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + encodedName);
-                        response.addHeader(HttpHeaders.TRANSFER_ENCODING, "chunked");
+                        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + encodedName);
                         super.writeStart(fields);
                     }
                     @Override

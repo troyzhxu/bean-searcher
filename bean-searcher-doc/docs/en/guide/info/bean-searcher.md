@@ -58,7 +58,9 @@ If a database has a unique pagination syntax, you only need to customize a diale
 
 ## DEMO Quick Experience
 
-Experience in three quick steps
+> 🚀 **Try it online**: [https://demo-bs.zhxu.cn/](https://demo-bs.zhxu.cn/) — no deployment needed!
+
+Run locally in three steps:
 
 ### Step 1: Clone
 
@@ -71,40 +73,45 @@ git clone https://github.com/troyzhxu/bean-searcher.git
 ```
 :::
 
-### Step 2: Run
+### Step 2: Start a Backend (choose one)
 
 ::: code-group
 ```bash [SpringBoot4]
-# This demo is based on JDK 21+
-cd bean-searcher/bean-searcher-demos/bs-demo-sb4
+# JDK 21+
+cd bean-searcher/bean-searcher-demos/backend-springboot4
 ./gradlew bootRun
 ```
 ```bash [SpringBoot3]
-# This demo is based on JDK 17+
-cd bean-searcher/bean-searcher-demos/bs-demo-sb3
+# JDK 17+
+cd bean-searcher/bean-searcher-demos/backend-springboot3
 ./gradlew bootRun
 ```
 ```bash [SpringBoot2]
-# This demo is based on JDK 8+
-cd bean-searcher/bean-searcher-demos/bs-demo-sb2
+# JDK 8+
+cd bean-searcher/bean-searcher-demos/backend-springboot2
 mvn spring-boot:run
 ```
-```bash [Solon]
-# This demo is based on JDK 8+
-cd bean-searcher/bean-searcher-demos/bs-demo-solon
-# IDEA 中打开运行
+```bash [Solon4]
+# JDK 17+
+cd bean-searcher/bean-searcher-demos/backend-solon4
+# Open and run with IDEA
 ```
-```bash [Grails]
-# This demo is based on JDK 8+
-cd bean-searcher/bean-searcher-demos/bs-demo-grails
-grails run-app
+```bash [Solon3]
+# JDK 8+
+cd bean-searcher/bean-searcher-demos/backend-solon3
+# Open and run with IDEA
 ```
 :::
 
-### Step 3: Result
+### Step 3: Start Frontend & See Result
 
-Access `http://localhost:8080/` to view the running effect.
+```bash
+cd bean-searcher/bean-searcher-demos/frontend-vue
+npm install && npm run dev
+```
 
-For more information about this example, refer to [DEMO Detailed Introduction](https://github.com/troyzhxu/bean-searcher/blob/main/bean-searcher-demos/bs-demo-sb4/README.md).
+Open `http://localhost:7300` to view the demo.
 
-[More DEMOs](https://github.com/troyzhxu/bean-searcher/blob/main/bean-searcher-demos)
+> This demo follows a frontend-backend separated architecture: one unified frontend + multiple backend services with fully consistent APIs. All backends use H2 in-memory database, zero configuration required.
+
+[More DEMOs](https://github.com/troyzhxu/bean-searcher/tree/main/bean-searcher-demos)

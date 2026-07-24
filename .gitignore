@@ -6,3 +6,5 @@
 /.project
 *.iml
 /.workbuddy
+dist
+node_modules
