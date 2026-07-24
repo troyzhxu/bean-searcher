@@ -1,5 +1,5 @@
 <template>
-  <div class="employee-search">
+  <div class="user-search">
     <HeroBanner />
 
     <div class="container">
@@ -32,16 +32,16 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
-import type { Employee } from '@/types/employee'
-import { defaultSearchParams } from '@/types/employee'
-import { searchEmployees, getExportUrl } from '@/api/employee'
+import type { User } from '@/types/user'
+import { defaultSearchParams } from '@/types/user'
+import { searchUsers, getExportUrl } from '@/api/user'
 import HeroBanner from '@/components/HeroBanner.vue'
 import FilterCard from '@/components/FilterCard.vue'
 import StatsCards from '@/components/StatsCards.vue'
 import DataTable from '@/components/DataTable.vue'
 import FooterBanner from '@/components/FooterBanner.vue'
 
-const list = ref<Employee[]>([])
+const list = ref<User[]>([])
 const total = ref(0)
 const sumAge = ref(0)
 const loading = ref(false)
@@ -51,7 +51,7 @@ const params = reactive(defaultSearchParams())
 async function loadData() {
   loading.value = true
   try {
-    const data = await searchEmployees(params)
+    const data = await searchUsers(params)
     list.value = data.dataList
     total.value = data.totalCount
     sumAge.value = data.summaries?.[0] ?? 0
@@ -91,7 +91,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.employee-search {
+.user-search {
   min-height: 100vh;
 }
 

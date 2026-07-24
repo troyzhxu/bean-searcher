@@ -13,7 +13,7 @@
             <span class="code-file">DemoController.java</span>
           </div>
           <span class="code-comment">// 后端只要一行代码</span>
-          <pre><code><span class="tk-var">beanSearcher</span><span class="tk-punct">.search(Employee.</span><span class="tk-keyword">class</span><span class="tk-punct">, Employee::getAge);</span></code></pre>
+          <pre><code><span class="tk-var">beanSearcher</span><span class="tk-punct">.search(User.</span><span class="tk-keyword">class</span><span class="tk-punct">, User::getAge);</span></code></pre>
         </div>
         <div class="footer-arrow">→</div>
         <div class="footer-features">
@@ -164,7 +164,7 @@
 
 /* Java 语法高亮 */
 .tk-var     { color: #f48fb1; }   /* 变量名（beanSearcher） */
-.tk-class   { color: #5fb3d1; }   /* 类名（Employee） */
+.tk-class   { color: #5fb3d1; }   /* 类名（User） */
 .tk-keyword { color: #ffab74; }   /* 关键字（class） */
 .tk-punct   { color: rgba(255, 255, 255, 0.8); }  /* 标点符号 */
 

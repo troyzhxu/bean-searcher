@@ -51,12 +51,13 @@
           <a-select v-model:value="localParams['entryDate-op']" class="ctl">
             <a-select-option v-for="o in timeOps" :key="o.key" :value="o.key">{{ o.label }}</a-select-option>
           </a-select>
-          <input type="date" v-model="localParams['entryDate-0']" class="date-input" />
-          <input
+          <a-date-picker v-model:value="localParams['entryDate-0']" value-format="YYYY-MM-DD" class="ctl" placeholder="开始日期" />
+          <a-date-picker
             v-if="localParams['entryDate-op'] === 'bt'"
-            type="date"
-            v-model="localParams['entryDate-1']"
-            class="date-input"
+            v-model:value="localParams['entryDate-1']"
+            value-format="YYYY-MM-DD"
+            class="ctl"
+            placeholder="结束日期"
           />
         </div>
       </div>
@@ -71,11 +72,11 @@
 
 <script setup lang="ts">
 import { ref, reactive, watch } from 'vue'
-import type { EmployeeSearchParams } from '@/types/employee'
-import { nameOps, strOps, numOps, timeOps } from '@/types/employee'
+import type { UserSearchParams } from '@/types/user'
+import { nameOps, strOps, numOps, timeOps } from '@/types/user'
 
 const props = defineProps<{
-  params: EmployeeSearchParams
+  params: UserSearchParams
 }>()
 
 defineEmits<{
@@ -84,7 +85,7 @@ defineEmits<{
 }>()
 
 const open = ref(true)
-const localParams = reactive<EmployeeSearchParams>({ ...props.params })
+const localParams = reactive<UserSearchParams>({ ...props.params })
 
 watch(() => props.params, (val) => Object.assign(localParams, val), { deep: true })
 watch(localParams, (val) => Object.assign(props.params, val), { deep: true })
@@ -130,13 +131,13 @@ function toggleOpen() {
   min-height: 32px;
 }
 
-/* 第二行年龄：两个固定宽度的 input-number */
+/* 第二行年龄：与默认行保持同样的自适应宽度 */
 .filter-row:has(.ant-input-number) {
-  grid-template-columns: 72px 130px 110px 110px;
+  grid-template-columns: 72px 130px 1fr 1fr;
 }
 
 /* 第四行入职日期：两个 1fr 让日期自适应填满右侧 */
-.filter-row:has(.date-input) {
+.filter-row:has(.ant-picker) {
   grid-template-columns: 72px 130px 1fr 1fr;
 }
 
@@ -166,10 +167,9 @@ function toggleOpen() {
   font-size: 14px;
 }
 
-/* 让 a-select 占满网格单元（虽然外层 .ctl 已经是块级） */
-.ctl {
-  width: 100%;
-}
+/* 让 a-select / a-input-number 占满网格单元 */
+.ctl { width: 100%; }
+.ctl :deep(.ant-input-number) { width: 100%; }
 
 /* checkbox 在网格中垂直居中 */
 .ctl-check {
@@ -180,24 +180,14 @@ function toggleOpen() {
   color: var(--text-secondary);
 }
 
-/* ===== 原生日期输入：与 Ant 控件高度对齐 ===== */
-.date-input {
+/* ===== a-date-picker：与 .ctl 一致的高度和边框 ===== */
+.ctl.ant-picker {
   height: 32px;
-  width: 100%;
   padding: 0 11px;
-  border: 1px solid #d9d9d9;
   border-radius: 6px;
-  font-size: 14px;
-  font-family: inherit;
-  outline: none;
-  background: #fff;
-  color: var(--text);
-  transition: border-color 0.2s, box-shadow 0.2s;
 }
-.date-input:hover { border-color: #5b5af7; }
-.date-input:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 2px var(--primary-bg);
+.ctl.ant-picker :deep(.ant-picker-input > input) {
+  font-size: 14px;
 }
 
 /* ===== 底部按钮 ===== */
@@ -215,7 +205,7 @@ function toggleOpen() {
   .filter-body { padding: 16px; }
   .filter-row,
   .filter-row:has(.ant-input-number),
-  .filter-row:has(.date-input) {
+  .filter-row:has(.ant-picker) {
     grid-template-columns: 60px 120px 1fr 1fr;
     gap: 8px;
   }
@@ -230,7 +220,7 @@ function toggleOpen() {
   .filter-body { padding: 12px 14px; }
   .filter-row,
   .filter-row:has(.ant-input-number),
-  .filter-row:has(.date-input) {
+  .filter-row:has(.ant-picker) {
     grid-template-columns: 1fr;
     gap: 6px;
   }

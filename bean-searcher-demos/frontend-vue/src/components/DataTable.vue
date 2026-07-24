@@ -12,7 +12,7 @@
         :data-source="data"
         :loading="loading"
         :pagination="paginationConfig"
-        :row-key="(r: Employee) => r.id"
+        :row-key="(r: User) => r.id"
         size="middle"
         @change="handleChange"
       >
@@ -31,10 +31,10 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { Employee } from '@/types/employee'
+import type { User } from '@/types/user'
 
 const props = defineProps<{
-  data: Employee[]
+  data: User[]
   loading: boolean
   total: number
   page: number

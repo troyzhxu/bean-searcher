@@ -1,5 +1,5 @@
-/** 员工实体 */
-export interface Employee {
+/** 用户实体 */
+export interface User {
   id: number
   name: string
   age: number
@@ -9,7 +9,7 @@ export interface Employee {
 }
 
 /** Bean Searcher 检索参数 */
-export interface EmployeeSearchParams {
+export interface UserSearchParams {
   name: string | null
   'name-op': string
   'name-ic': boolean
@@ -30,7 +30,7 @@ export interface EmployeeSearchParams {
 
 /** 检索 API 响应 */
 export interface SearchResponse {
-  dataList: Employee[]
+  dataList: User[]
   totalCount: number
   summaries: number[]
 }
@@ -42,7 +42,7 @@ export interface OperatorOption {
 }
 
 /** 默认检索参数 */
-export function defaultSearchParams(): EmployeeSearchParams {
+export function defaultSearchParams(): UserSearchParams {
   return {
     name: null,
     'name-op': 'in',

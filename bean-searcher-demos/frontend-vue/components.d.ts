@@ -13,6 +13,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     AButton: typeof import('ant-design-vue/es')['Button']
     ACheckbox: typeof import('ant-design-vue/es')['Checkbox']
+    ADatePicker: typeof import('ant-design-vue/es/date-picker/dayjs')['default']
     AInput: typeof import('ant-design-vue/es')['Input']
     AInputNumber: typeof import('ant-design-vue/es')['InputNumber']
     ASelect: typeof import('ant-design-vue/es')['Select']
