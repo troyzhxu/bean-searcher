@@ -12,7 +12,7 @@
 English | [中文](./README.zh-CN.md)
 
 * Documentation：https://bs.zhxu.cn
-* **阿里云最低 1 折**：https://www.aliyun.com/minisite/goods?userCode=zugtbi5w
+* 🚀 **Online Demo**：https://demo-bs.zhxu.cn/
 * JueJin blogs：
   - [Writing code like this is 100 times more efficient than using MyBatis directly!](https://juejin.cn/post/7027733039299952676)
   - [What's the difference between Bean Searcher and MyBatis Plus?](https://juejin.cn/post/7092411551507808264)

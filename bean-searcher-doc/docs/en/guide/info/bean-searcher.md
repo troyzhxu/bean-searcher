@@ -58,7 +58,9 @@ If a database has a unique pagination syntax, you only need to customize a diale
 
 ## DEMO Quick Experience
 
-Experience in three quick steps
+> 🚀 **Try it online**: [https://demo-bs.zhxu.cn/](https://demo-bs.zhxu.cn/) — no deployment needed!
+
+Run locally in three steps:
 
 ### Step 1: Clone
 

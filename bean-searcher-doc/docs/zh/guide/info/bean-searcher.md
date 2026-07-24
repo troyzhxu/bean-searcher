@@ -64,7 +64,9 @@ CRUD | Only R | CRUD | CRUD
 
 ## DEMO 快速体验
 
-三步快速体验
+> 🚀 **在线体验**：[https://demo-bs.zhxu.cn/](https://demo-bs.zhxu.cn/) — 无需部署，即刻体验！
+
+三步本地运行：
 
 ### 第一步：克隆
 
