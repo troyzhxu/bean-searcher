@@ -10,7 +10,7 @@
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-boot-starter</artifactId>
-    <version>4.8.9</version>
+    <version>4.8.11</version>
 </dependency>
 ```
 
