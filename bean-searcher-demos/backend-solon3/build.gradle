@@ -1,0 +1,70 @@
+plugins {
+    id "java"
+    id "maven-publish"
+}
+
+repositories {
+    mavenLocal()
+    maven { url 'https://maven.aliyun.com/repository/central' }
+    maven { url 'https://mirrors.cloud.tencent.com/nexus/repository/maven-public/' }
+    mavenCentral()
+}
+
+group = "com.example"
+version = "1.0"
+description = "demo"
+
+
+dependencies {
+    implementation platform("org.noear:solon-parent:3.9.4")
+
+    implementation("org.noear:solon-web")
+    implementation("org.noear:solon-logging-logback")
+
+    implementation 'org.noear:solon-expression'
+
+    implementation "org.noear:wood-solon-plugin"
+
+    implementation "cn.zhxu:bean-searcher-solon-plugin:4.8.10.jdk8"
+    implementation "cn.zhxu:bean-searcher-label:4.8.10.jdk8"
+    implementation "cn.zhxu:bean-searcher-exporter:4.8.10.jdk8"
+
+    // 若想使用 JSON 字段转对象的功能，可以添加此依赖
+    implementation "cn.zhxu:xjsonkit-snack3:1.6.0"
+
+    implementation "com.zaxxer:HikariCP:4.0.3"
+    runtimeOnly "com.h2database:h2:2.2.224"
+
+    compileOnly("org.projectlombok:lombok:1.18.42")
+    annotationProcessor("org.projectlombok:lombok:1.18.42")
+
+    testImplementation("org.noear:solon-test")
+}
+
+
+compileJava {
+    options.encoding = "UTF-8"
+    options.compilerArgs << "-parameters"
+}
+
+jar {
+    manifest {
+        attributes "Main-Class": "com.example.demo.App"
+    }
+
+    dependsOn(configurations.runtimeClasspath)
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from(configurations.runtimeClasspath.collect {
+        if (it.isDirectory()) it else zipTree(it)
+    }){
+        exclude 'META-INF/MANIFEST.MF'
+        exclude 'META-INF/*.SF'
+        exclude 'META-INF/*.DSA'
+        exclude 'META-INF/*.RSA'
+    }
+
+    def sourcesMain = sourceSets.main
+    sourcesMain.allSource.forEach { println("add from sources: ${it.name}") }
+    from(sourcesMain.output)
+}
