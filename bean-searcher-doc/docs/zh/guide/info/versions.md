@@ -31,6 +31,8 @@
     - 引入 `ConcurrentHashMap` 缓存导出字段解析结果，提高性能
     - 新增 `clearCache` 方法可用于手动清理缓存
   - 优化 `ExportField` 组件：当字段值为 `null` 时，返回空字符串 `""`，不调用格式化器（since v4.8.2）
+* Bean Searcher Solon Plugin
+  - 优化对 Solon 框架的兼容性，使 `bean-searcher-solon-plugin` 支持 `bean-searcher-exporter` 的自动装配（since v4.8.11）
 
 ### v4.7 的新特性（v4.7.1）
 

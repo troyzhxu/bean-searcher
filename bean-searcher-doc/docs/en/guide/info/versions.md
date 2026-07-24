@@ -31,6 +31,8 @@ Starting from version `v4.5`, default support is for `JDK17+`. To maintain compa
     - Introduced `ConcurrentHashMap` to cache export field resolution results, improving performance.
     - Added the `clearCache` method for manual cache clearing.
   - Optimized the `ExportField` component: when a field value is `null`, returns an empty string `""` and does not invoke the formatter (since v4.8.2).
+* Bean Searcher Solon Plugin
+  - Optimized Solon framework compatibility: `bean-searcher-solon-plugin` now supports auto-assembly of `bean-searcher-exporter` (since v4.8.11)
 
 ### New Features in v4.7 (v4.7.1)
 
