@@ -4,7 +4,7 @@
     <div class="hero-content">
       <h1>🔍 高级列表检索演示</h1>
       <p>一行代码，实现复杂条件组合过滤、排序、分页与统计</p>
-      <span class="hero-badge">Bean Searcher v4.x</span>
+      <a href="https://bs.zhxu.cn/" target="_blank" class="hero-badge">Bean Searcher - ReadOnly ORM</a>
     </div>
   </div>
 </template>
@@ -42,7 +42,14 @@
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.5px;
-  margin-top: 16px;
+  margin-top: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: box-shadow .3s, transform .3s;
+}
+.hero-badge:hover {
+  box-shadow: 0 4px 16px rgba(91,90,247,.25);
+  transform: translateY(-1px);
 }
 
 .hero h1 {

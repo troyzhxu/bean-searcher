@@ -24,6 +24,7 @@ declare module 'vue' {
     FilterCard: typeof import('./src/components/FilterCard.vue')['default']
     FooterBanner: typeof import('./src/components/FooterBanner.vue')['default']
     HeroBanner: typeof import('./src/components/HeroBanner.vue')['default']
+    RepoBanner: typeof import('./src/components/RepoBanner.vue')['default']
     StatsCards: typeof import('./src/components/StatsCards.vue')['default']
   }
 }

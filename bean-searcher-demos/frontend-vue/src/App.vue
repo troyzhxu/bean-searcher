@@ -27,6 +27,7 @@
     </div>
 
     <FooterBanner />
+    <RepoBanner />
   </div>
 </template>
 
@@ -40,6 +41,7 @@ import FilterCard from '@/components/FilterCard.vue'
 import StatsCards from '@/components/StatsCards.vue'
 import DataTable from '@/components/DataTable.vue'
 import FooterBanner from '@/components/FooterBanner.vue'
+import RepoBanner from '@/components/RepoBanner.vue'
 
 const list = ref<User[]>([])
 const total = ref(0)
