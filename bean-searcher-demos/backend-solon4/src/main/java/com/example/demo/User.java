@@ -6,7 +6,7 @@ import cn.zhxu.bs.ex.Export;
 import cn.zhxu.bs.label.LabelFor;
 import lombok.Getter;
 import lombok.Setter;
-import org.noear.snack.annotation.ONodeAttr;
+import org.noear.snack4.annotation.ONodeAttr;
 
 import java.time.LocalDateTime;
 
