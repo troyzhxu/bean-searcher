@@ -29,6 +29,7 @@
   <!-- 指南入口页 - 高优先级 -->
   <url><loc>https://bs.zhxu.cn/guide/info/why.html</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
   <url><loc>https://bs.zhxu.cn/guide/info/bean-searcher.html</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/guide/info/demo.html</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
   <url><loc>https://bs.zhxu.cn/guide/info/versions.html</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
 
   <!-- 快速上手 - 高优先级 -->
@@ -94,6 +95,7 @@
 
   <url><loc>https://bs.zhxu.cn/en/guide/info/why.html</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
   <url><loc>https://bs.zhxu.cn/en/guide/info/bean-searcher.html</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/guide/info/demo.html</loc><priority>0.7</priority><changefreq>monthly</changefreq></url>
   <url><loc>https://bs.zhxu.cn/en/guide/info/versions.html</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
 
   <url><loc>https://bs.zhxu.cn/en/guide/start/quick.html</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
