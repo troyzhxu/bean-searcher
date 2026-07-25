@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+    xmlns:xhtml="http://www.w3.org/1999/xhtml"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+    http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+
+  <!-- ================================================ -->
+  <!--  Bean Searcher 文档站 Sitemap                     -->
+  <!--  https://bs.zhxu.cn/                              -->
+  <!-- ================================================ -->
+
+  <!-- 首页 - 最高优先级 -->
+  <url>
+    <loc>https://bs.zhxu.cn/</loc>
+    <priority>1.0</priority>
+    <changefreq>weekly</changefreq>
+    <lastmod>2026-07-25</lastmod>
+  </url>
+  <url>
+    <loc>https://bs.zhxu.cn/index.html</loc>
+    <priority>0.9</priority>
+    <changefreq>weekly</changefreq>
+    <lastmod>2026-07-25</lastmod>
+  </url>
+
+  <!-- ==================== 中文文档 ==================== -->
+
+  <!-- 指南入口页 - 高优先级 -->
+  <url><loc>https://bs.zhxu.cn/guide/info/why.html</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/guide/info/bean-searcher.html</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/guide/info/versions.html</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+
+  <!-- 快速上手 - 高优先级 -->
+  <url><loc>https://bs.zhxu.cn/guide/start/quick.html</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/guide/start/install.html</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/guide/start/integration.html</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/guide/start/use.html</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+
+  <!-- 检索实体 -->
+  <url><loc>https://bs.zhxu.cn/guide/bean/info.html</loc><priority>0.7</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/guide/bean/annos.html</loc><priority>0.7</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/guide/bean/multitable.html</loc><priority>0.7</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/guide/bean/otherform.html</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/guide/bean/fields.html</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/guide/bean/params.html</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/guide/bean/aignore.html</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/guide/bean/inherit.html</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/guide/bean/fignore.html</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/guide/bean/optional.html</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
+
+  <!-- 检索参数 -->
+  <url><loc>https://bs.zhxu.cn/guide/param/info.html</loc><priority>0.7</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/guide/param/page.html</loc><priority>0.7</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/guide/param/sort.html</loc><priority>0.7</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/guide/param/field.html</loc><priority>0.7</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/guide/param/sql.html</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/guide/param/group.html</loc><priority>0.7</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/guide/param/select.html</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/guide/param/embed.html</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+
+  <!-- 高级用法 -->
+  <url><loc>https://bs.zhxu.cn/guide/advance/safe.html</loc><priority>0.7</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/guide/advance/filter.html</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/guide/advance/convertor.html</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/guide/advance/fieldop.html</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/guide/advance/interceptor.html</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/guide/advance/dialect.html</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/guide/advance/slowsql.html</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/guide/advance/datasource.html</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
+
+  <!-- 使用场景 -->
+  <url><loc>https://bs.zhxu.cn/guide/usage/rpc.html</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/guide/usage/tables.html</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/guide/usage/datascope.html</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/guide/usage/others.html</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
+
+  <!-- 生态: 标签系统 -->
+  <url><loc>https://bs.zhxu.cn/zoo/label/info.html</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/zoo/label/anno.html</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/zoo/label/load.html</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/zoo/label/demo.html</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
+
+  <!-- 生态: 数据导出 -->
+  <url><loc>https://bs.zhxu.cn/zoo/ex/info.html</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/zoo/ex/exporter.html</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/zoo/ex/anno.html</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/zoo/ex/fwriter.html</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/zoo/ex/control.html</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
+
+  <!-- ==================== 英文文档 ==================== -->
+  <url><loc>https://bs.zhxu.cn/en/</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/index.html</loc><priority>0.7</priority><changefreq>weekly</changefreq></url>
+
+  <url><loc>https://bs.zhxu.cn/en/guide/info/why.html</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/guide/info/bean-searcher.html</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/guide/info/versions.html</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
+
+  <url><loc>https://bs.zhxu.cn/en/guide/start/quick.html</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/guide/start/install.html</loc><priority>0.7</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/guide/start/integration.html</loc><priority>0.7</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/guide/start/use.html</loc><priority>0.7</priority><changefreq>monthly</changefreq></url>
+
+  <url><loc>https://bs.zhxu.cn/en/guide/bean/info.html</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/guide/bean/annos.html</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/guide/bean/multitable.html</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/guide/bean/otherform.html</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/guide/bean/fields.html</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/guide/bean/params.html</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/guide/bean/aignore.html</loc><priority>0.4</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/guide/bean/inherit.html</loc><priority>0.4</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/guide/bean/fignore.html</loc><priority>0.4</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/guide/bean/optional.html</loc><priority>0.4</priority><changefreq>monthly</changefreq></url>
+
+  <url><loc>https://bs.zhxu.cn/en/guide/param/info.html</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/guide/param/page.html</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/guide/param/sort.html</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/guide/param/field.html</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/guide/param/sql.html</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/guide/param/group.html</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/guide/param/select.html</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/guide/param/embed.html</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
+
+  <url><loc>https://bs.zhxu.cn/en/guide/advance/safe.html</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/guide/advance/filter.html</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/guide/advance/convertor.html</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/guide/advance/fieldop.html</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/guide/advance/interceptor.html</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/guide/advance/dialect.html</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/guide/advance/slowsql.html</loc><priority>0.4</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/guide/advance/datasource.html</loc><priority>0.4</priority><changefreq>monthly</changefreq></url>
+
+  <url><loc>https://bs.zhxu.cn/en/guide/usage/rpc.html</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/guide/usage/tables.html</loc><priority>0.4</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/guide/usage/datascope.html</loc><priority>0.4</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/guide/usage/others.html</loc><priority>0.4</priority><changefreq>monthly</changefreq></url>
+
+  <url><loc>https://bs.zhxu.cn/en/zoo/label/info.html</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/zoo/label/anno.html</loc><priority>0.4</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/zoo/label/load.html</loc><priority>0.4</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/zoo/label/demo.html</loc><priority>0.4</priority><changefreq>monthly</changefreq></url>
+
+  <url><loc>https://bs.zhxu.cn/en/zoo/ex/info.html</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/zoo/ex/exporter.html</loc><priority>0.4</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/zoo/ex/anno.html</loc><priority>0.4</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/zoo/ex/fwriter.html</loc><priority>0.4</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://bs.zhxu.cn/en/zoo/ex/control.html</loc><priority>0.4</priority><changefreq>monthly</changefreq></url>
+
+</urlset>

@@ -1,4 +1,19 @@
 ---
+title: Bean Searcher - Read-Only ORM for Advanced Queries | One-Line Complex Search
+description: Bean Searcher is a read-only ORM focused on advanced queries. Natively supports join tables, eliminates DTO/VO conversion, enabling complex list retrieval with just one line of code.
+head:
+  - - meta
+    - name: keywords
+      content: Bean Searcher,Java ORM,read-only ORM,advanced query,dynamic query,declarative search,Spring Boot,list query,pagination,join table,MyBatis alternative
+  - - meta
+    - property: og:type
+      content: website
+  - - meta
+    - property: og:title
+      content: Bean Searcher - Read-Only ORM for Advanced Queries
+  - - meta
+    - property: og:description
+      content: Natively supports join tables, eliminates DTO/VO conversion, enabling complex list retrieval with just one line of code.
 # https://vitepress.dev/reference/default-theme-home-page
 layout: home
 

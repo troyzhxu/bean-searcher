@@ -1,3 +1,14 @@
+---
+title: Bean Searcher Quick Start | Get Started in 5 Minutes
+description: Write your first search API in 5 minutes. Add dependencies, create an entity class, inject BeanSearcher, and implement complex list retrieval with pagination, filtering, sorting, and statistics — all in one line of code.
+head:
+  - - meta
+    - property: og:title
+      content: Bean Searcher Quick Start - 5 Minutes
+  - - meta
+    - property: og:description
+      content: Write your first complex list retrieval API from scratch in 5 minutes.
+---
 # Quick Start
 
 Get your first search API running in **5 minutes** — no deep reading required.

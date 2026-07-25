@@ -35,10 +35,57 @@ onMounted(() => {
     baiduTongji();
     loadXsWidget();
   }
+  // JSON-LD 结构化数据
+  injectJsonLd();
   console.log("\n%c Bean Searcher %c 你点 STAR 了没有 😎 ? \n", "color: #fff; background: #f1404b; padding:5px 0;", "background: #111; padding:5px 0; color: #fff");
   console.log('👉 https://github.com/troyzhxu/bean-searcher')
   console.log('👉 https://gitee.com/troyzhxu/bean-searcher')
 })
+
+function injectJsonLd() {
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Bean Searcher 文档",
+    "url": "https://bs.zhxu.cn",
+    "description": "专注高级查询的只读 ORM，天生支持联表，免 DTO/VO 转换",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://bs.zhxu.cn/?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+
+  const softwareSchema = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Bean Searcher",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Cross-platform",
+    "description": "专注高级查询的只读 ORM，天生支持联表，免 DTO/VO 转换，使一行代码实现复杂列表检索成为可能",
+    "url": "https://github.com/troyzhxu/bean-searcher",
+    "author": {
+      "@type": "Person",
+      "name": "周旭"
+    }
+  }
+
+  const orgSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Bean Searcher",
+    "url": "https://bs.zhxu.cn",
+    "logo": "https://bs.zhxu.cn/logo.png"
+  }
+
+  const schemas = [websiteSchema, softwareSchema, orgSchema]
+  schemas.forEach(schema => {
+    const script = document.createElement('script')
+    script.type = 'application/ld+json'
+    script.textContent = JSON.stringify(schema)
+    document.head.appendChild(script)
+  })
+}
 
 function checkEnvAndSSL() {
   const path = location.href;

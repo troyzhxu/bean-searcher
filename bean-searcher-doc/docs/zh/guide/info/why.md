@@ -1,3 +1,14 @@
+---
+title: 为什么选择 Bean Searcher？ | Bean Searcher 文档
+description: 了解 Bean Searcher 如何解决传统 Java 列表检索开发的痛点：消灭模板代码、提升开发效率、内置安全风控。比 MyBatis/Hibernate 更适合复杂查询场景。
+head:
+  - - meta
+    - property: og:title
+      content: 为什么选择 Bean Searcher？
+  - - meta
+    - property: og:description
+      content: 消灭模板代码，一行代码实现复杂列表检索。
+---
 # 为什么用
 
 ![需求图](/requirement.png)

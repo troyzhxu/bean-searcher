@@ -1,3 +1,14 @@
+---
+title: Bean Searcher Overview | Lightweight Database Search Engine for Java
+description: Bean Searcher is a lightweight database search engine designed to eliminate boilerplate code for list queries. Supports Spring Boot and Solon. One line of code for complex list retrieval.
+head:
+  - - meta
+    - property: og:title
+      content: Bean Searcher - Lightweight Database Search Engine
+  - - meta
+    - property: og:description
+      content: Eliminate boilerplate code for backend list queries. One line for complex retrieval.
+---
 
 # Bean Searcher
 

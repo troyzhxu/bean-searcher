@@ -6,6 +6,14 @@ export default defineConfig({
 
   description: "A read-only ORM focused on advanced queries, inherently supporting join tables and eliminating the need for DTO/VO conversion, making it possible to achieve complex list retrieval with just one line of code!",
 
+  head: [
+    ['meta', { property: 'og:locale', content: 'en_US' }],
+    ['meta', { property: 'og:title', content: 'Bean Searcher - Read-Only ORM for Advanced Queries' }],
+    ['meta', { property: 'og:description', content: 'A read-only ORM focused on advanced queries, inherently supporting join tables and eliminating the need for DTO/VO conversion.' }],
+    ['meta', { name: 'twitter:title', content: 'Bean Searcher - Read-Only ORM for Advanced Queries' }],
+    ['meta', { name: 'twitter:description', content: 'A read-only ORM focused on advanced queries, inherently supporting join tables and eliminating the need for DTO/VO conversion.' }],
+  ],
+
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
 

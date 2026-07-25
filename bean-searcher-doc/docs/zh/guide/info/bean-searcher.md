@@ -1,3 +1,14 @@
+---
+title: Bean Searcher 介绍 | 轻量级数据库条件检索引擎
+description: Bean Searcher 是一个轻量级数据库条件检索引擎，专为减少后端列表查询的模板代码而生。支持 Spring Boot / Solon，一行代码完成复杂列表检索。
+head:
+  - - meta
+    - property: og:title
+      content: Bean Searcher - 轻量级数据库条件检索引擎
+  - - meta
+    - property: og:description
+      content: 专为减少后端列表查询模板代码而生，一行代码完成复杂列表检索。
+---
 
 # Bean Searcher
 

@@ -1,4 +1,19 @@
 ---
+title: Bean Searcher - 专注高级查询的只读 ORM | 一行代码实现复杂列表检索
+description: Bean Searcher 是一个专注高级查询的只读 ORM，天生支持联表，免 DTO/VO 转换，使一行代码实现复杂列表检索成为可能。比 MyBatis 更高效，比 JPA 更灵活。
+head:
+  - - meta
+    - name: keywords
+      content: Bean Searcher,Java ORM,只读ORM,高级查询,动态查询,声明式检索,Spring Boot,列表查询,分页查询,多表联查,MyBatis替代
+  - - meta
+    - property: og:type
+      content: website
+  - - meta
+    - property: og:title
+      content: Bean Searcher - 专注高级查询的只读 ORM
+  - - meta
+    - property: og:description
+      content: 天生支持联表，免 DTO/VO 转换，一行代码轻松实现高级查询。
 # https://vitepress.dev/reference/default-theme-home-page
 layout: home
 

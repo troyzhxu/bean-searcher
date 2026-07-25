@@ -7,6 +7,14 @@ export default defineConfig({
 
   description: "专注高级查询的只读 ORM，天生支持联表，免 DTO/VO 转换，使一行代码实现复杂列表检索成为可能！",
 
+  head: [
+    ['meta', { property: 'og:locale', content: 'zh_CN' }],
+    ['meta', { property: 'og:title', content: 'Bean Searcher - 专注高级查询的只读 ORM' }],
+    ['meta', { property: 'og:description', content: '专注高级查询的只读 ORM，天生支持联表，免 DTO/VO 转换，使一行代码实现复杂列表检索成为可能！' }],
+    ['meta', { name: 'twitter:title', content: 'Bean Searcher - 专注高级查询的只读 ORM' }],
+    ['meta', { name: 'twitter:description', content: '专注高级查询的只读 ORM，天生支持联表，免 DTO/VO 转换，使一行代码实现复杂列表检索成为可能！' }],
+  ],
+
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
 

@@ -4,7 +4,7 @@
     <div class="hero-content">
       <h1>🔍 高级列表检索演示</h1>
       <p>一行代码，实现复杂条件组合过滤、排序、分页与统计</p>
-      <a href="https://bs.zhxu.cn/" target="_blank" class="hero-badge">Bean Searcher - ReadOnly ORM</a>
+      <a href="https://bs.zhxu.cn/" target="_blank" rel="noopener noreferrer" class="hero-badge">Bean Searcher - ReadOnly ORM</a>
     </div>
   </div>
 </template>

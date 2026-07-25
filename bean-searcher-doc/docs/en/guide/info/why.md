@@ -1,3 +1,14 @@
+---
+title: Why Bean Searcher? | Bean Searcher Documentation
+description: "Discover how Bean Searcher solves the pain points of traditional Java list retrieval: eliminates boilerplate code, boosts productivity, and includes built-in security controls."
+head:
+  - - meta
+    - property: og:title
+      content: Why Choose Bean Searcher?
+  - - meta
+    - property: og:description
+      content: Eliminate boilerplate code — complex list retrieval with one line of code.
+---
 # Why Use It
 
 ![需求图](/requirement.png)
