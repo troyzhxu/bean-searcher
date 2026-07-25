@@ -8,7 +8,7 @@ const OG_IMAGE = `${SITE_URL}/logo.png`
 export default defineConfig({
 
   title: "Bean Searcher",
-  description: "Bean Searcher - 专注高级查询的只读 ORM，天生支持联表，免 DTO/VO 转换，一行代码实现复杂列表检索",
+  description: "Java 声明式检索框架 — 实体定义检索边界，参数驱动查询逻辑。一行代码搞定复杂列表检索。",
   lang: 'zh-CN',
 
   cleanUrls: true,
@@ -17,7 +17,7 @@ export default defineConfig({
     ['link', { rel: 'icon', href: '/logo.png' }],
     ['meta', { name: 'robots', content: 'index, follow' }],
     ['meta', { name: 'author', content: '周旭 (troyzhxu)' }],
-    ['meta', { name: 'keywords', content: 'Bean Searcher,Java ORM,只读ORM,高级查询,动态查询,声明式检索,Spring Boot,列表查询,分页查询,多表联查,字段参数,Java框架' }],
+    ['meta', { name: 'keywords', content: 'Bean Searcher,只读ORM,Java声明式检索,声明式检索框架,参数驱动查询,高级查询,动态查询,Spring Boot,列表查询,分页查询,多表联查,检索框架,GraphQL' }],
 
     // Open Graph
     ['meta', { property: 'og:type', content: 'website' }],

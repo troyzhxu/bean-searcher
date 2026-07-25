@@ -9,11 +9,11 @@
         </div>
       </template> -->
       <template #sidebar-nav-before>
-        <div class="aliyun-ad">
+       <!--  <div class="aliyun-ad">
           <a href="https://www.aliyun.com/minisite/goods?userCode=zugtbi5w" target="_blank" >
           🧧 阿里云低至 1 折 🧧
           </a>
-        </div>
+        </div> -->
       </template>
       <template #home-hero-after>
         <HomeSponsors style="text-align: center" />

@@ -1,26 +1,26 @@
 ---
-title: Bean Searcher - Read-Only ORM for Advanced Queries | One-Line Complex Search
-description: Bean Searcher is a read-only ORM focused on advanced queries. Natively supports join tables, eliminates DTO/VO conversion, enabling complex list retrieval with just one line of code.
+title: Bean Searcher - Java Declarative Search Framework | One-Line Complex List Queries
+description: "Bean Searcher is the GraphQL of list retrieval: entity defines search boundaries, parameters drive query logic. Zero-annotation search for single tables, one line of code for endless query combinations."
 head:
   - - meta
     - name: keywords
-      content: Bean Searcher,Java ORM,read-only ORM,advanced query,dynamic query,declarative search,Spring Boot,list query,pagination,join table,MyBatis alternative
+      content: Bean Searcher,read-only ORM,Java declarative search,declarative search framework,parameter-driven query,advanced query,dynamic query,Spring Boot,list query,pagination,join table,GraphQL
   - - meta
     - property: og:type
       content: website
   - - meta
     - property: og:title
-      content: Bean Searcher - Read-Only ORM for Advanced Queries
+      content: Bean Searcher - Java Declarative Search Framework
   - - meta
     - property: og:description
-      content: Natively supports join tables, eliminates DTO/VO conversion, enabling complex list retrieval with just one line of code.
+      content: The GraphQL of list retrieval — entity defines boundaries, parameters drive queries. One line of code.
 # https://vitepress.dev/reference/default-theme-home-page
 layout: home
 
 hero:
   name: Bean Searcher
-  text: Read-only ORM focused on advanced queries
-  tagline: Enable "advanced" queries for your application with one line of code!
+  text: Java Declarative Search Framework
+  tagline: The GraphQL of list retrieval — entities define search boundaries, parameters drive queries, one line of code
   image: /logo.png
   actions:
     - theme: brand
@@ -35,18 +35,26 @@ hero:
 
 features:
   - icon: 😱
-    title: Amazing development efficiency
-    details: Natively supports joint tables, free of DTO/VO conversion, and a line of code can easily achieve advanced queries, greatly improving research and development efficiency.
+    title: Amazing Development Efficiency
+    details: Single-table entities searchable with zero annotations. Multi-table? Just declare relationships. Say goodbye to endless if-else condition stitching — pagination, filtering, sorting, and stats, all in one line.
+  - icon: 🎯
+    title: Client-Driven Queries
+    details: "One endpoint on the backend, full control on the frontend: which fields to return, which operators to filter by, what to sort on. Like GraphQL for APIs, this is declarative search for list queries."
+  - icon: 🧩
+    title: Native Multi-Table Joins
+    details: Entity classes declare relationships; the framework generates join SQL automatically. Single-table and multi-table queries share the same API — no hand-written JOINs needed.
+  - icon: 🔌
+    title: Zero Intrusion, Peaceful Coexistence
+    details: Won't replace your existing ORM, won't change your architecture. Works alongside MyBatis/JPA — they handle CRUD, Bean Searcher handles list queries. Harmony.
   - icon: 🚀
-    title: Superb runtime performance
-    details: Compared with traditional ORMs such as MyBatis and Hibernate, it has several times the Java layer runtime performance improvement.
+    title: Peerless Runtime Performance
+    details: Generates SQL directly — no ORM wrapper overhead in the Java layer. Won't slow down your database. The fastest any ORM can be is just as fast as Bean Searcher.
   - icon: 🛡︎
-    title: Building security services
-    details: Built-in anti-injection, anti-large page, anti-deep retriving and other security mechanisms, enabled by default, to eliminate unconscious security risks.
+    title: Secure by Default
+    details: SQL injection prevention, oversized pagination blocking, deep-offset throttling — all enabled out of the box. Zero security code needed. Ship with confidence.
 ---
-
-<div style="text-align: center; font-size: 20px; margin-top:60px">It's not a repetitive wheel</div>
-<div style="text-align: center; font-size: 20px; margin-top:10px">because there has never been a complex retrieval interface that simply has a single line of code.</div>
+<div style="text-align: center; font-size: 20px; margin-top:60px">GraphQL for REST APIs</div>
+<div style="text-align: center; font-size: 20px; margin-top:10px">No special protocol. No changing your HTTP habits. One line of code, free combination of any field's filtering, sorting, pagination, and statistics.</div>
 
 <br>
 

@@ -5,14 +5,14 @@ export default defineConfig({
 
   lang: 'zh-CN',
 
-  description: "专注高级查询的只读 ORM，天生支持联表，免 DTO/VO 转换，使一行代码实现复杂列表检索成为可能！",
+  description: "Java 声明式检索框架 — 实体定义检索边界，参数驱动查询逻辑。一行代码搞定复杂列表检索。",
 
   head: [
     ['meta', { property: 'og:locale', content: 'zh_CN' }],
-    ['meta', { property: 'og:title', content: 'Bean Searcher - 专注高级查询的只读 ORM' }],
-    ['meta', { property: 'og:description', content: '专注高级查询的只读 ORM，天生支持联表，免 DTO/VO 转换，使一行代码实现复杂列表检索成为可能！' }],
-    ['meta', { name: 'twitter:title', content: 'Bean Searcher - 专注高级查询的只读 ORM' }],
-    ['meta', { name: 'twitter:description', content: '专注高级查询的只读 ORM，天生支持联表，免 DTO/VO 转换，使一行代码实现复杂列表检索成为可能！' }],
+    ['meta', { property: 'og:title', content: 'Bean Searcher - Java 声明式检索框架' }],
+    ['meta', { property: 'og:description', content: '实体定义检索边界，参数驱动查询逻辑。一行代码搞定千变万化的列表请求。' }],
+    ['meta', { name: 'twitter:title', content: 'Bean Searcher - Java 声明式检索框架' }],
+    ['meta', { name: 'twitter:description', content: '实体定义检索边界，参数驱动查询逻辑。一行代码搞定千变万化的列表请求。' }],
   ],
 
   themeConfig: {
@@ -67,6 +67,7 @@ export default defineConfig({
             items: [
               { text: '为什么用', link: '/why' },
               { text: 'Bean Searcher', link: '/bean-searcher' },
+              { text: 'DEMO 极速体验', link: '/demo' },
               { text: 'What\'s New?', link: '/versions' },
             ]
           },
