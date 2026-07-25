@@ -16,26 +16,23 @@
 * 掘金博客：
   - [这样写代码，比直接使用 MyBatis 效率提高了 100 倍！](https://juejin.cn/post/7027733039299952676)
   - [最近火起的 Bean Searcher 与 MyBatis Plus 倒底有啥区别？](https://juejin.cn/post/7092411551507808264)
-* 框架目的：只一行代码实现：
-  - **多表联查**
-  - **分页搜索**
-  - **任意字段组合过滤**
-  - **任意字段排序**
-  - **多字段统计**
-  - **直接得到 VO**
-* 设计思想：[Bean Searcher 的设计思想](https://bs.zhxu.cn/guide/latest/introduction.html#%E8%AE%BE%E8%AE%A1%E5%93%B2%E5%AD%A6)
+
+> **Bean Searcher 是列表检索领域的 GraphQL** — 实体定义检索边界，参数驱动查询逻辑。不改变 HTTP 协议习惯，一个依赖即用。
+> 
+> 单表实体零注解即可搜，一行代码搞定多表联查、分页、筛选、排序、统计。
+
 * 架构图：
 
 ![](./assets/architecture.jpg)
 
 * 更新日志：[CHANGELOG](./CHANGELOG.md)
-* 性能如何：[直接说一骑绝尘你可能觉得是 Tree New Bee, 还是看报告好了](./performance/README.md)
-* Gitee 企业版：https://gitee.com/enterprises?invite_code=Z2l0ZWUtMTM5MzQxMg%3D%3D
+* 性能：[看报告](./performance/README.md)
 
 ### ✨ 特性
 
 * 支持 **实体多表映射**
 * 支持 **动态字段运算符**
+* 支持 **客户端驱动查询**（前端控制返回字段、筛选条件、排序规则）
 * 支持 **分组聚合 查询**
 * 支持 **Select | Where | From 子查询**
 * 支持 **实体类嵌入参数**
@@ -47,23 +44,20 @@
 * 支持 **字段运算符 扩展**
 * 等等
 
-### ⁉️为什么用
+### ⁉️ 为什么用
 
-#### 这绝不是一个重复的轮子
+#### 声明式检索 vs 命令式编码
 
-虽然 **增删改** 是 hibernate 和 mybatis、data-jdbc 等等 ORM 的强项，但查询，特别是有 **多条件**、**联表**、**分页**、**排序** 的复杂的列表查询，却一直是它们的弱项。
+MyBatis / Hibernate 擅长增删改，但面对**多条件、联表、排序、分页**的列表检索时，往往需要大量 if-else 条件拼接、VO 转换代码。
 
-传统的 ORM 很难用较少的代码实现一个复杂的列表检索，但 Bean Searcher 却在这方面下足了功夫，这些复杂的查询，几乎只用一行代码便可以解决。
+Bean Searcher 用**声明式检索**解决了这个问题：
+* **实体即声明** — SearchBean 定义"能搜什么"，无需注解也可搜
+* **参数即查询** — 前端传参控制"搜什么"，后端一个接口应对千变万化
+* **零协议负担** — 工作在标准 HTTP 参数上，不需要专用协议
 
-* 例如，这样的一个典型的需求：
+就像 GraphQL 让客户端在一次请求中自由指定要什么字段，Bean Searcher 让客户端自由指定筛选、排序、分页、统计 — 无需专用 schema，一行代码搞定。
 
-![](./assets/case.png)
-
-后端需要写一个检索接口，而如果用传统的 ORM 来写，代码之复杂是可以想象的。
-
-而 Bean Searcher 却可以：
-
-### 💥 只一行代码实现以上功能
+### 💥 一行代码实现
 
 首先，你有一个实体类：
 
@@ -91,12 +85,12 @@ public class User {
 public class UserController {
 
     @Autowired
-    private BeanSearcher beanSearcher;              // 注入 BeanSearcher 的检索器
+    private BeanSearcher beanSearcher;              // 注入 Bean Searcher 的检索器
 
     @GetMapping("/index")
     public SearchResult<User> index(HttpServletRequest request) {
         // 这里只写一行代码
-        return beanSearcher.search(User.class, MapUtils.flat(request.getParameterMap()), new String[]{ "age" });
+        return beanSearcher.search(User.class, MapUtils.flat(request.getParameterMap()), User::getAge);
     }
 	
 }
@@ -118,65 +112,21 @@ public class UserController {
   ```json
   {
     "dataList": [
-      {
-        "id": 1,
-        "username": "Jack",
-        "status": 1,
-        "level": 1,
-        "age": 25,
-        "gender": "Male",
-        "joinDate": "2021-10-01"
-      },
+      { "id": 1, "username": "Jack", "status": 1, "age": 25, "gender": "Male", "joinDate": "2021-10-01" },
       ...     // 默认返回 15 条数据
     ],
     "totalCount": 100,
-    "summaries": [
-      2500    // age 字段统计
-    ]
+    "summaries": [ 2500 ]    // age 字段统计
   }
   ```
 
-* `GET: /user/index? page=1 & size=10`
-
-  指定分页参数
-
-* `GET: /user/index? status=1`
-
-  返回 `status = 1` 的用户
-
-* `GET: /user/index? name=Jac & name-op=sw`
-
-  返回 `name` 已 `Jac` 开头的用户
-
-* `GET: /user/index? name=Jack & name-ic=true`
-
-  返回 `name = Jack`（忽略大小写）的用户
-
-* `GET: /user/index? sort=age & order=desc`
-
-  按字段 `age` 降序查询
-
-* `GET: /user/index? onlySelect=username,age`
-
-  只检索 `username` 与 `age` 两个字段:
-  ```json
-  {
-    "dataList": [
-      {
-        "username": "Jack",
-        "age": 25
-      },
-      ...
-    ],
-    "totalCount": 100,
-    "summaries": [
-      2500
-    ]
-  }
-  ```
-* `GET: /user/index? selectExclude=joinDate`
-
-  检索时排除 `joinDate` 字段
+* `GET: /user/index? page=1 & size=10` — 指定分页参数
+* `GET: /user/index? status=1` — 返回 `status = 1` 的用户
+* `GET: /user/index? name=Jac & name-op=sw` — 返回 `name` 以 `Jac` 开头的用户
+* `GET: /user/index? name=Jack & name-ic=true` — 返回 `name = Jack`（忽略大小写）的用户
+* `GET: /user/index? sort=age & order=desc` — 按字段 `age` 降序查询
+* `GET: /user/index? onlySelect=username,age` — 只检索 `username` 与 `age` 两个字段
+* `GET: /user/index? selectExclude=joinDate` — 检索时排除 `joinDate` 字段
 
 ### ✨ 参数构建器
 
@@ -192,10 +142,7 @@ Map<String, Object> params = MapUtils.builder()
 List<User> users = beanSearcher.searchList(User.class, params);
 ```
 
-**DEMO 快速体验**：
-
-* [v4.x - demos](./bean-searcher-demos)
-* [v3.x - demos](https://gitee.com/troyzhxu/bean-searcher/tree/v3.8/bean-searcher-demos)
+**DEMO 快速体验**：🖥 [在线 Demo](https://demo-bs.zhxu.cn/) ｜ 💻 [本地运行](./bean-searcher-demos)
 
 ### 🚀 快速开发
 
@@ -211,7 +158,7 @@ List<User> users = beanSearcher.searchList(User.class, params);
 #### Spring Boot 项目，添加依赖即集成完毕：
 
 ```groovy
-implementation "cn.zhxu:bean-searcher-boot-stater:${latestVersion}"
+implementation "cn.zhxu:bean-searcher-boot-starter:${latestVersion}"
 ```
 
 接着便可在 `Controller` 或 `Service` 里注入检索器：
@@ -239,15 +186,9 @@ implementation "cn.zhxu:bean-searcher-solon-plugin:${latestVersion}"
 接着便可在 `Controller` 或 `Service` 里注入检索器：
 
 ```groovy
-/**
- * Inject a MapSearcher, which retrieved data is Map objects
- */
 @Inject
 private MapSearcher mapSearcher;
 
-/**
- * Inject a BeanSearcher, which retrieved data is generic objects
- */
 @Inject
 private BeanSearcher beanSearcher;
 ```
@@ -293,15 +234,6 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 
 参阅：https://bs.zhxu.cn/
 
-文档已完善！
-
-### 📅 开发计划
-
-* v4.2: 动态方言 ✅
-* v4.3: 参数构建器支持 and 与 or 便捷方法 ✅
-* v4.4: 条件模板
-* v4.5: 内嵌对象/列表
-
 ### 🤝 友情接链
 
 [**[ Sa-Token ]** 一个轻量级 Java 权限认证框架，让鉴权变得简单、优雅！](https://github.com/dromara/Sa-Token)
@@ -323,4 +255,3 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 2.  新建 Feat_xxx 分支（新功能基于 dev 分支，bugfix 基于特定版本的分支）
 3.  提交代码
 4.  新建 Pull Request
-
