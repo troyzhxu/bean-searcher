@@ -1,8 +1,10 @@
 <p align="center">
   <a href="https://bs.zhxu.cn/" target="_blank">
-    <img width="128" src="./assets/logo.png" alt="logo">
+    <img width="128" src="./assets/logo.png" alt="logo" />
   </a>
 </p>
+<h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">Bean Searcher</h1>
+<h4 align="center">✨ Declarative list retrieval — one line of code for pagination, filtering, sorting, and stats</h4>
 <p align="center">
   <a href="https://gitee.com/troyzhxu/bean-searcher/stargazers"><img src="https://gitee.com/troyzhxu/bean-searcher/badge/star.svg?theme=gvp"></a>
   <a href="https://gitee.com/troyzhxu/bean-searcher/members"><img src="https://gitee.com/troyzhxu/bean-searcher/badge/fork.svg?theme=gvp"></a>
@@ -10,14 +12,14 @@
   <a href="https://github.com/troyzhxu/bean-searcher/network/members"><img src="https://img.shields.io/github/forks/troyzhxu/bean-searcher?style=flat-square&logo=GitHub"></a>
   <a href="https://gitee.com/troyzhxu/bean-searcher/blob/master/LICENSE"><img src="https://img.shields.io/hexpm/l/plug.svg" alt="License"></a>
 </p>
+<!-- <p align="center">学习测试请拉取 main 分支，dev 是在开发分支 (在根目录执行 `git checkout main`)</p> -->
+<p align="center"><a href="https://bs.zhxu.cn" target="_blank">Docs：https://bs.zhxu.cn</a></p>
+
+---
 
 English | [中文](./README.zh-CN.md)
 
-* Documentation: https://bs.zhxu.cn
 * 🚀 **Online Demo**: https://demo-bs.zhxu.cn/
-* JueJin blogs:
-  - [Writing code like this is 100 times more efficient than using MyBatis directly!](https://juejin.cn/post/7027733039299952676)
-  - [What's the difference between Bean Searcher and MyBatis Plus?](https://juejin.cn/post/7092411551507808264)
 
 > **Bean Searcher is the GraphQL of list retrieval** — entities define search boundaries, parameters drive query logic. No special protocol required, just add one dependency.
 >
@@ -221,7 +223,9 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 
 You can customize and extend any component in Bean Searcher.
 
-For example:
+<details>
+<summary><b>Available extension points</b> (click to expand)</summary>
+
 * Customizing [`FieldOp`](/bean-searcher/src/main/java/cn/zhxu/bs/FieldOp.java) to support other field operators
 * Customizing [`DbMapping`](/bean-searcher/src/main/java/cn/zhxu/bs/DbMapping.java) to support other ORM annotations
 * Customizing [`ParamResolver`](/bean-searcher/src/main/java/cn/zhxu/bs/ParamResolver.java) to support JSON query params
@@ -229,16 +233,14 @@ For example:
 * Customizing [`Dialect`](/bean-searcher/src/main/java/cn/zhxu/bs/dialect/Dialect.java) to support more databases
 * and so on
 
+</details>
+
 ### 🏗 Architecture
 
 ![](./assets/architecture.jpg)
 
 * [Changelog](./CHANGELOG.md)
 * [Performance report](./performance/README.md)
-
-### 📚 Detailed documentation
-
-Reference: https://bs.zhxu.cn
 
 ### 🤝 Friendship links
 

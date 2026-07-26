@@ -3,6 +3,8 @@
     <img width="128" src="./assets/logo.png" alt="logo">
   </a>
 </p>
+<h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">Bean Searcher</h1>
+<h4 align="center">✨ 声明式列表检索 — 一行代码完成多条件筛选、分页、排序、统计</h4>
 <p align="center">
   <a href="https://gitee.com/troyzhxu/bean-searcher/stargazers"><img src="https://gitee.com/troyzhxu/bean-searcher/badge/star.svg?theme=gvp"></a>
   <a href="https://gitee.com/troyzhxu/bean-searcher/members"><img src="https://gitee.com/troyzhxu/bean-searcher/badge/fork.svg?theme=gvp"></a>
@@ -10,14 +12,14 @@
   <a href="https://github.com/troyzhxu/bean-searcher/network/members"><img src="https://img.shields.io/github/forks/troyzhxu/bean-searcher?style=flat-square&logo=GitHub"></a>
   <a href="https://gitee.com/troyzhxu/bean-searcher/blob/master/LICENSE"><img src="https://img.shields.io/hexpm/l/plug.svg" alt="License"></a>
 </p>
+<!-- <p align="center">学习测试请拉取 main 分支，dev 是在开发分支 (在根目录执行 `git checkout main`)</p> -->
+<p align="center"><a href="https://bs.zhxu.cn" target="_blank">文档：https://bs.zhxu.cn</a></p>
+
+---
 
 中文 | [English](./README.md)
 
-* 文档：https://bs.zhxu.cn/
 * 🚀 **在线 Demo**：https://demo-bs.zhxu.cn/
-* 掘金博客：
-  - [这样写代码，比直接使用 MyBatis 效率提高了 100 倍！](https://juejin.cn/post/7027733039299952676)
-  - [最近火起的 Bean Searcher 与 MyBatis Plus 倒底有啥区别？](https://juejin.cn/post/7092411551507808264)
 
 > **Bean Searcher 是列表检索领域的 GraphQL** — 实体定义检索边界，参数驱动查询逻辑。不改变 HTTP 协议习惯，一个依赖即用。
 > 
@@ -36,7 +38,7 @@
 > ```groovy
 > implementation "cn.zhxu:bean-searcher-boot-starter:${latestVersion}"
 > ```
-> 已有实体零注解即可搜，一个依赖，注入即用。
+> 已有实体开箱即用，一个依赖，注入即用。
 
 ### ⁉️ 为什么用
 
@@ -234,7 +236,9 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 
 面向接口设计，用户可自定义扩展 Bean Searcher 中的任何组件！
 
-比如你可以：
+<details>
+<summary><b>可扩展的组件</b>（点击展开）</summary>
+
 * 自定义 [`FieldOp`](/bean-searcher/src/main/java/cn/zhxu/bs/FieldOp.java) 来支持更多的字段运算符
 * 自定义 [`FieldConvertor`](/bean-searcher/src/main/java/cn/zhxu/bs/FieldConvertor.java) 来支持任意的 特殊字段类型
 * 自定义 [`DbMapping`](/bean-searcher/src/main/java/cn/zhxu/bs/DbMapping.java) 来实现自定义注解，或让 Bean Searcher 识别其它 ORM 的注解
@@ -242,16 +246,14 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 * 自定义 [`Dialect`](/bean-searcher/src/main/java/cn/zhxu/bs/dialect/Dialect.java) 来支持更多的数据库
 * 等等..
 
+</details>
+
 ### 🏗 架构设计
 
 ![](./assets/architecture.jpg)
 
 * [更新日志](./CHANGELOG.md)
 * [性能报告](./performance/README.md)
-
-### 📚 详细文档
-
-参阅：https://bs.zhxu.cn/
 
 ### 🤝 友情接链
 
@@ -261,7 +263,6 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 - [**[ hrun4j ]**](https://github.com/lematechvip/hrun4j)： 接口自动化测试解决方案 --工具选得好，下班回家早；测试用得对，半夜安心睡
 - [**[ JsonKit ]**](https://gitee.com/troyzhxu/xjsonkit)： 超轻量级 JSON 门面工具，用法简单，不依赖具体实现，让业务代码与 Jackson、Gson、Fastjson 等解耦！
 - [**[ Free UI ]**](https://gitee.com/phoeon/free-ui)： 基于 Vue3 + TypeScript，一个非常轻量炫酷的 UI 组件库 ！
-
 
 ### ❤️ 参与贡献
 
