@@ -23,28 +23,20 @@
 > 
 > 单表实体零注解即可搜，一行代码搞定多表联查、分页、筛选、排序、统计。
 
-* 架构图：
+### 🎯 核心能力
 
-![](./assets/architecture.jpg)
+| 痛点场景 | 传统做法 | Bean Searcher |
+|---|---|---|
+| **多条件列表检索** | if-else 拼 SQL / Specification | 一行代码，参数驱动 |
+| **多表联查** | 手写 JOIN / XML 映射 | 注解声明，自动生成 SQL |
+| **前端动态筛选** | 后端加字段、改接口 | 后端零改动，前端自由组合 |
+| **零侵入集成** | Spring Data REST：需暴露 Repository / 改造 URL 结构 | 一个依赖，注入 `BeanSearcher`，不改现有代码 |
 
-* 更新日志：[CHANGELOG](./CHANGELOG.md)
-* 性能：[看报告](./performance/README.md)
-
-### ✨ 特性
-
-* 支持 **实体多表映射**
-* 支持 **动态字段运算符**
-* 支持 **客户端驱动查询**（前端控制返回字段、筛选条件、排序规则）
-* 支持 **分组聚合 查询**
-* 支持 **Select | Where | From 子查询**
-* 支持 **实体类嵌入参数**
-* 支持 **字段转换器**
-* 支持 **Sql 拦截器**
-* 支持 **数据库 Dialect 扩展**
-* 支持 **多数据源 与 动态数据源**
-* 支持 **注解缺省 与 自定义**
-* 支持 **字段运算符 扩展**
-* 等等
+> **一分钟上手：**
+> ```groovy
+> implementation "cn.zhxu:bean-searcher-boot-starter:${latestVersion}"
+> ```
+> 已有实体零注解即可搜，一个依赖，注入即用。
 
 ### ⁉️ 为什么用
 
@@ -59,9 +51,11 @@ Bean Searcher 用**声明式检索**解决了这个问题：
 
 就像 GraphQL 让客户端在一次请求中自由指定要什么字段，Bean Searcher 让客户端自由指定筛选、排序、分页、统计 — 无需专用 schema，一行代码搞定。
 
+> 详见 [📊 对比](#-对比) 章节，Demo 项目中提供了 MyBatis 和 Spring Data JPA 的对比实现，代码级对照，一目了然。
+
 ### 💥 一行代码实现
 
-首先，你有一个实体类：
+从你已有的 实体/VO 类出发，注解可选（单表零注解，联表只需加几个）：
 
 ```java
 @SearchBean(tables="user u, role r", joinCond="u.role_id = r.id", autoMapTo="u")
@@ -130,7 +124,32 @@ public class UserController {
 * `GET: /user/index? onlySelect=username,age` — 只检索 `username` 与 `age` 两个字段
 * `GET: /user/index? selectExclude=joinDate` — 检索时排除 `joinDate` 字段
 
+### 📊 对比
+
+Demo 项目中提供了用 MyBatis 和 Spring Data JPA 实现的**相同 API** — 相同表结构、相同数据、相同响应 — 方便你直观对比：
+
+| 维度 | Bean Searcher | MyBatis | Spring Data JPA |
+|---|---|---|---|
+| **Controller 代码** | **1 行** | ~280 行 | ~280 行 |
+| **额外文件** | 0 | 1 Mapper + 1 XML | 2 实体 + 1 Repository |
+| **SQL 生成** | 声明式注解 | 手写 XML | Criteria API |
+| **源码** | [backend-springboot4](./bean-searcher-demos/backend-springboot4) | [backend-vs-mybatis](./bean-searcher-demos/backend-vs-mybatis) | [backend-vs-jpa](./bean-searcher-demos/backend-vs-jpa) |
+
+Bean Searcher 版本：
+
+```java
+return beanSearcher.search(User.class, User::getAge);
+```
+
+MyBatis / JPA 版本则需要手写参数解析、动态条件拼接、三次查询（列表 / 总数 / 统计）、分页、排序、CSV 流式导出 — 而 Bean Searcher 一行代码全部搞定。
+
+### 🖥 Demo 快速体验
+
+🖥 [在线 Demo](https://demo-bs.zhxu.cn/) ｜ 💻 [本地运行](./bean-searcher-demos) — 含 Bean Searcher、MyBatis、JPA 三种对比实现
+
 ### ✨ 参数构建器
+
+除了 HTTP 参数，还可以用类型安全的 Builder API 在代码中构建检索参数：
 
 ```java
 Map<String, Object> params = MapUtils.builder()
@@ -143,15 +162,6 @@ Map<String, Object> params = MapUtils.builder()
         .build();
 List<User> users = beanSearcher.searchList(User.class, params);
 ```
-
-**DEMO 快速体验**：🖥 [在线 Demo](https://demo-bs.zhxu.cn/) ｜ 💻 [本地运行](./bean-searcher-demos)
-
-### 🚀 快速开发
-
-使用 Bean Searcher 可以极大地节省后端的复杂列表检索接口的开发时间！
-
-* 普通的复杂列表查询只需一行代码
-* 单表检索可复用原有 `Domain`，无需定义 `SearchBean`
 
 ### 🌱 集成简单
 
@@ -232,6 +242,13 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 * 自定义 [`Dialect`](/bean-searcher/src/main/java/cn/zhxu/bs/dialect/Dialect.java) 来支持更多的数据库
 * 等等..
 
+### 🏗 架构设计
+
+![](./assets/architecture.jpg)
+
+* [更新日志](./CHANGELOG.md)
+* [性能报告](./performance/README.md)
+
 ### 📚 详细文档
 
 参阅：https://bs.zhxu.cn/
@@ -239,15 +256,10 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 ### 🤝 友情接链
 
 - [**[ Sa-Token ]**](https://github.com/dromara/Sa-Token)： 一个轻量级 Java 权限认证框架，让鉴权变得简单、优雅！
-
 - [**[ Fluent MyBatis ]**](https://gitee.com/fluent-mybatis/fluent-mybatis)： MyBatis 语法增强框架, 综合了 MyBatisPlus, DynamicSql,Jpa 等框架的特性和优点，利用注解处理器生成代码
-
 - [**[ OkHttps ]**](https://gitee.com/troyzhxu/okhttps)： 轻量却强大的 HTTP 客户端，前后端通用，支持 WebSocket 与 Stomp 协议
-
-- [**[ hrun4j ]**](https://github.com/lematechvip/hrun4j)： 接口自动化测试解决方案 --工具选得好，下班回家早；测试用得对，半夜安心睡 
-
+- [**[ hrun4j ]**](https://github.com/lematechvip/hrun4j)： 接口自动化测试解决方案 --工具选得好，下班回家早；测试用得对，半夜安心睡
 - [**[ JsonKit ]**](https://gitee.com/troyzhxu/xjsonkit)： 超轻量级 JSON 门面工具，用法简单，不依赖具体实现，让业务代码与 Jackson、Gson、Fastjson 等解耦！
-
 - [**[ Free UI ]**](https://gitee.com/phoeon/free-ui)： 基于 Vue3 + TypeScript，一个非常轻量炫酷的 UI 组件库 ！
 
 

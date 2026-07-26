@@ -23,28 +23,20 @@ English | [中文](./README.zh-CN.md)
 >
 > Single-table entities are searchable with zero annotations. Multi-table joins, pagination, filtering, sorting, and stats — all in one line of code.
 
-* Architecture:
+### 🎯 Core Capabilities
 
-![](./assets/architecture.jpg)
+| Pain point | Traditional approach | Bean Searcher |
+|---|---|---|
+| **Multi-condition list queries** | if-else SQL concatenation / Specification | One line, parameter-driven |
+| **Multi-table joins** | Manual JOIN / XML mapping | Annotation-declared, auto-generated SQL |
+| **Frontend dynamic filtering** | Add fields, change backend APIs | Zero backend changes, frontend freely combines |
+| **Non-invasive integration** | Spring Data REST: expose repositories, restructure URLs | One dependency, inject `BeanSearcher`, existing code untouched |
 
-* Changelog: [CHANGELOG](./CHANGELOG.md)
-* Performance: [see the report](./performance/README.md)
-
-### ✨ Features
-
-* Support **one entity mapping to multi tables**
-* Support **dynamic field operator**
-* Support **client-driven queries** (frontend controls return fields, filter conditions, sort rules)
-* Support **group and aggregation query**
-* Support **Select | Where | From subquery**
-* Support **embedded params in entity**
-* Support **field converters**
-* Support **sql interceptors**
-* Support **sql dialect extension**
-* Support **multi datasource and dynamic datasource**
-* Support **annotation omitting and customizing**
-* Support **field operator extension**
-* and so on
+> **Get started in one minute:**
+> ```groovy
+> implementation "cn.zhxu:bean-searcher-boot-starter:${latestVersion}"
+> ```
+> Single-table search works out-of-the-box with zero annotations on your existing entity.
 
 ### ⁉️ WHY
 
@@ -59,9 +51,11 @@ Bean Searcher solves this with **declarative search**:
 
 Just as GraphQL lets clients freely specify which fields to return in one request, Bean Searcher lets clients freely specify filter conditions, sort order, pagination, and stats — without a dedicated schema, all in one line of code.
 
+> See [📊 Comparison](#-comparison) for concrete code-to-code comparison with MyBatis and Spring Data JPA implementations in the demo project.
+
 ### 💥 Achieved with one line of code
 
-First, you have an Entity class:
+Start with your existing domain/VO class — annotations are optional (zero-annotation for single-table, add a few for joins):
 
 ```java
 @SearchBean(tables="user u, role r", joinCond="u.role_id = r.id", autoMapTo="u")
@@ -117,7 +111,32 @@ For example, this API can be requested as follows:
 * `GET: /user/index? onlySelect=username,age` — return `username` and `age` only
 * `GET: /user/index? selectExclude=joinDate` — exclude `joinDate` field
 
+### 📊 Comparison
+
+The demo project includes implementations of the **same API** using MyBatis and Spring Data JPA — same tables, same data, same response — so you can compare side-by-side:
+
+| Aspect | Bean Searcher | MyBatis | Spring Data JPA |
+|---|---|---|---|
+| **Controller code** | **1 line** | ~280 lines | ~280 lines |
+| **Extra files** | 0 | 1 Mapper + 1 XML | 2 Entities + 1 Repository |
+| **SQL generation** | Declarative annotations | Manual XML | Criteria API |
+| **Source** | [backend-springboot4](./bean-searcher-demos/backend-springboot4) | [backend-vs-mybatis](./bean-searcher-demos/backend-vs-mybatis) | [backend-vs-jpa](./bean-searcher-demos/backend-vs-jpa) |
+
+The Bean Searcher version:
+
+```java
+return beanSearcher.search(User.class, User::getAge);
+```
+
+The MyBatis / JPA versions need handwritten parameter parsing, dynamic condition assembly, three separate queries (list / count / sum), pagination, sorting, and CSV streaming — all handled by this one line in Bean Searcher.
+
+### 🖥 Demos
+
+🖥 [Online Demo](https://demo-bs.zhxu.cn/) ｜ 💻 [Run Locally](./bean-searcher-demos) — Bean Searcher, MyBatis, and JPA comparison implementations
+
 ### ✨ Parameter builder
+
+For programmatic query building (not just HTTP parameters), use the type-safe builder API:
 
 ```java
 Map<String, Object> params = MapUtils.builder()
@@ -130,18 +149,6 @@ Map<String, Object> params = MapUtils.builder()
         .build();
 List<User> users = beanSearcher.searchList(User.class, params);
 ```
-
-**Demos**: 🖥 [Online Demo](https://demo-bs.zhxu.cn/) ｜ 💻 [Run Locally](./bean-searcher-demos)
-
-* [v4.x - demos](./bean-searcher-demos)
-* [v3.x - demos](https://gitee.com/troyzhxu/bean-searcher/tree/v3.8/bean-searcher-demos)
-
-### 🚀 Rapid development
-
-Using Bean Searcher can greatly save the development time of complex list retrieval APIs!
-
-* An ordinary complex list query requires only one line of code
-* Single-table retrieval can reuse the original `domain`, without defining a new `Entity`
 
 ### 🌱 Easy integration
 
@@ -222,6 +229,13 @@ For example:
 * Customizing [`Dialect`](/bean-searcher/src/main/java/cn/zhxu/bs/dialect/Dialect.java) to support more databases
 * and so on
 
+### 🏗 Architecture
+
+![](./assets/architecture.jpg)
+
+* [Changelog](./CHANGELOG.md)
+* [Performance report](./performance/README.md)
+
 ### 📚 Detailed documentation
 
 Reference: https://bs.zhxu.cn
@@ -229,15 +243,10 @@ Reference: https://bs.zhxu.cn
 ### 🤝 Friendship links
 
 - [**[ Sa-Token ]**](https://github.com/dromara/Sa-Token): A lightweight Java permission authentication framework that makes authorization simple and elegant!
-
 - [**[ Fluent MyBatis ]**](https://gitee.com/fluent-mybatis/fluent-mybatis): MyBatis syntax enhancement framework, combining features and advantages of MyBatisPlus, DynamicSql, Jpa etc., generating code with annotation processors
-
 - [**[ OkHttps ]**](https://gitee.com/troyzhxu/okhttps): Lightweight yet powerful HTTP client, universal for front-end and back-end, supporting WebSocket and Stomp protocols
-
 - [**[ hrun4j ]**](https://github.com/lematechvip/hrun4j): API automation testing solution
-
 - [**[ JsonKit ]**](https://gitee.com/troyzhxu/xjsonkit): Ultra-lightweight JSON facade, simple to use, independent of specific implementation, decoupling business code from Jackson, Gson, Fastjson etc.!
-
 - [**[ Free UI ]**](https://gitee.com/phoeon/free-ui): Based on Vue3 + TypeScript, a very lightweight and cool UI component library!
 
 ### ❤️ How to contribute
