@@ -1,10 +1,10 @@
 ---
 title: Bean Searcher - Java Declarative Search Framework | One-Line Complex List Queries
-description: "Bean Searcher is the GraphQL of list retrieval: entity defines search boundaries, parameters drive query logic. Zero-annotation search for single tables, one line of code for endless query combinations."
+description: "Bean Searcher is the GraphQL of REST APIs: entities define search boundaries, parameters drive queries — one line of code for complex list queries."
 head:
   - - meta
     - name: keywords
-      content: Bean Searcher,read-only ORM,Java declarative search,declarative search framework,parameter-driven query,advanced query,dynamic query,Spring Boot,list query,pagination,join table,GraphQL
+      content: Bean Searcher,read-only ORM,Java declarative search,declarative search framework,parameter-driven query,advanced query,dynamic query,Spring Boot,list query,pagination,join table,GraphQL,Rest GraphQL
   - - meta
     - property: og:type
       content: website
@@ -20,7 +20,7 @@ layout: home
 hero:
   name: Bean Searcher
   text: Java Declarative Search Framework
-  tagline: The GraphQL of list retrieval — entities define search boundaries, parameters drive queries, one line of code
+  tagline: The GraphQL of REST APIs — entities define search boundaries, parameters drive queries, one line of code for endless query combinations
   image: /logo.png
   actions:
     - theme: brand

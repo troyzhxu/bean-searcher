@@ -4,7 +4,7 @@ description: Bean Searcher 是列表检索领域的 GraphQL — 实体定义检�
 head:
   - - meta
     - name: keywords
-      content: Bean Searcher,只读ORM,Java声明式检索,声明式检索框架,参数驱动查询,高级查询,动态查询,Spring Boot,列表查询,分页查询,多表联查,检索框架,GraphQL
+      content: Bean Searcher,只读ORM,Java声明式检索,声明式检索框架,参数驱动查询,高级查询,动态查询,Spring Boot,列表查询,分页查询,多表联查,检索框架,GraphQL，REST版的GraphQL
   - - meta
     - property: og:type
       content: website
@@ -20,7 +20,7 @@ layout: home
 hero:
   name: Bean Searcher
   text: Java 声明式检索框架
-  tagline: REST 版的 GraphQL — 实体定义边界，参数驱动查询，一行代码搞定！
+  tagline: REST 版的 GraphQL — 实体定义边界，参数驱动查询，一行代码搞定复杂查询！
   image: /logo.png
   actions:
     - theme: brand
