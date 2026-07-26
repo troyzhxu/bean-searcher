@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.UserMapper">
+
+    <!-- 复用的查询列：关联 users 与 dept。gender 由 GenderTypeHandler 映射为枚举，
+         genderName 在 User.getGenderName() 中由枚举 label 派生，无需 SQL 计算 -->
+    <sql id="columns">
+        u.id,
+        u.name,
+        u.age,
+        u.gender,
+        d.name AS department,
+        u.entry_date AS entryDate
+    </sql>
+
+    <!-- 复用的 FROM + 动态 WHERE：复刻 Bean Searcher 参数语义 -->
+    <sql id="fromWhere">
+        FROM users u
+        LEFT JOIN dept d ON u.dept_id = d.id
+        <where>
+            <!-- 姓名：name-op = eq / in(默认,包含) / sw(开头) / ew(结尾)；name-ic 忽略大小写 -->
+            <if test="name != null and name != ''">
+                AND
+                <choose>
+                    <when test="nameOp == 'eq'">
+                        <choose>
+                            <when test="nameIc">LOWER(u.name) = LOWER(#{name})</when>
+                            <otherwise>u.name = #{name}</otherwise>
+                        </choose>
+                    </when>
+                    <when test="nameOp == 'sw'">
+                        <choose>
+                            <when test="nameIc">LOWER(u.name) LIKE LOWER(CONCAT(#{name}, '%'))</when>
+                            <otherwise>u.name LIKE CONCAT(#{name}, '%')</otherwise>
+                        </choose>
+                    </when>
+                    <when test="nameOp == 'ew'">
+                        <choose>
+                            <when test="nameIc">LOWER(u.name) LIKE LOWER(CONCAT('%', #{name}))</when>
+                            <otherwise>u.name LIKE CONCAT('%', #{name})</otherwise>
+                        </choose>
+                    </when>
+                    <otherwise>
+                        <choose>
+                            <when test="nameIc">LOWER(u.name) LIKE LOWER(CONCAT('%', #{name}, '%'))</when>
+                            <otherwise>u.name LIKE CONCAT('%', #{name}, '%')</otherwise>
+                        </choose>
+                    </otherwise>
+                </choose>
+            </if>
+
+            <!-- 年龄：age-op = eq / gt / lt / ge / le / bt(区间) -->
+            <if test="age0 != null">
+                AND
+                <choose>
+                    <when test="ageOp == 'gt'">u.age &gt; #{age0}</when>
+                    <when test="ageOp == 'lt'">u.age &lt; #{age0}</when>
+                    <when test="ageOp == 'ge'">u.age &gt;= #{age0}</when>
+                    <when test="ageOp == 'le'">u.age &lt;= #{age0}</when>
+                    <when test="ageOp == 'bt'">
+                        <choose>
+                            <when test="age1 != null">u.age BETWEEN #{age0} AND #{age1}</when>
+                            <otherwise>u.age &gt;= #{age0}</otherwise>
+                        </choose>
+                    </when>
+                    <otherwise>u.age = #{age0}</otherwise>
+                </choose>
+            </if>
+
+            <!-- 部门：department-op 同姓名；department-ic 忽略大小写 -->
+            <if test="department != null and department != ''">
+                AND
+                <choose>
+                    <when test="departmentOp == 'eq'">
+                        <choose>
+                            <when test="departmentIc">LOWER(d.name) = LOWER(#{department})</when>
+                            <otherwise>d.name = #{department}</otherwise>
+                        </choose>
+                    </when>
+                    <when test="departmentOp == 'sw'">
+                        <choose>
+                            <when test="departmentIc">LOWER(d.name) LIKE LOWER(CONCAT(#{department}, '%'))</when>
+                            <otherwise>d.name LIKE CONCAT(#{department}, '%')</otherwise>
+                        </choose>
+                    </when>
+                    <when test="departmentOp == 'ew'">
+                        <choose>
+                            <when test="departmentIc">LOWER(d.name) LIKE LOWER(CONCAT('%', #{department}))</when>
+                            <otherwise>d.name LIKE CONCAT('%', #{department})</otherwise>
+                        </choose>
+                    </when>
+                    <otherwise>
+                        <choose>
+                            <when test="departmentIc">LOWER(d.name) LIKE LOWER(CONCAT('%', #{department}, '%'))</when>
+                            <otherwise>d.name LIKE CONCAT('%', #{department}, '%')</otherwise>
+                        </choose>
+                    </otherwise>
+                </choose>
+            </if>
+
+            <!-- 入职日期：entryDate-op = bt / gt / lt / ge / le；H2 下用 TIMESTAMP 转型比较 -->
+            <if test="entryDate0 != null and entryDate0 != ''">
+                AND
+                <choose>
+                    <when test="entryDateOp == 'gt'">u.entry_date &gt; TIMESTAMP #{entryDate0}</when>
+                    <when test="entryDateOp == 'lt'">u.entry_date &lt; TIMESTAMP #{entryDate0}</when>
+                    <when test="entryDateOp == 'ge'">u.entry_date &gt;= TIMESTAMP #{entryDate0}</when>
+                    <when test="entryDateOp == 'le'">u.entry_date &lt;= TIMESTAMP #{entryDate0}</when>
+                    <when test="entryDateOp == 'bt'">
+                        <choose>
+                            <when test="entryDate1 != null and entryDate1 != ''">u.entry_date BETWEEN TIMESTAMP #{entryDate0} AND TIMESTAMP #{entryDate1}</when>
+                            <otherwise>u.entry_date &gt;= TIMESTAMP #{entryDate0}</otherwise>
+                        </choose>
+                    </when>
+                    <otherwise>u.entry_date &gt;= TIMESTAMP #{entryDate0}</otherwise>
+                </choose>
+            </if>
+        </where>
+    </sql>
+
+    <!-- 排序：sort 字段名需映射到物理列（department 用 d.name，entryDate 用 u.entry_date） -->
+    <sql id="orderBy">
+        <if test="sort != null and sort != ''">
+            ORDER BY
+            <choose>
+                <when test="sort == 'id'">u.id</when>
+                <when test="sort == 'name'">u.name</when>
+                <when test="sort == 'age'">u.age</when>
+                <when test="sort == 'gender'">u.gender</when>
+                <when test="sort == 'department'">d.name</when>
+                <when test="sort == 'entryDate'">u.entry_date</when>
+                <otherwise>u.id</otherwise>
+            </choose>
+            <choose>
+                <when test="order == 'desc'">DESC</when>
+                <otherwise>ASC</otherwise>
+            </choose>
+        </if>
+    </sql>
+
+    <select id="search" resultType="com.example.User">
+        SELECT
+        <include refid="columns"/>
+        <include refid="fromWhere"/>
+        <include refid="orderBy"/>
+        <if test="offset != null">LIMIT #{size} OFFSET #{offset}</if>
+    </select>
+
+    <select id="count" resultType="long">
+        SELECT COUNT(*)
+        <include refid="fromWhere"/>
+    </select>
+
+    <select id="sumAge" resultType="int">
+        SELECT COALESCE(SUM(u.age), 0)
+        <include refid="fromWhere"/>
+    </select>
+
+</mapper>
