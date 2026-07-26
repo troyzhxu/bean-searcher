@@ -228,18 +228,17 @@ Reference: https://bs.zhxu.cn
 
 ### 🤝 Friendship links
 
-[**[ Sa-Token ]** A lightweight Java permission authentication framework that makes authorization simple and elegant!](https://github.com/dromara/Sa-Token)
+- [**[ Sa-Token ]**](https://github.com/dromara/Sa-Token): A lightweight Java permission authentication framework that makes authorization simple and elegant!
 
-[**[ Fluent MyBatis ]** MyBatis syntax enhancement framework, combining features and advantages of MyBatisPlus, DynamicSql, Jpa etc., generating code with annotation processors](https://gitee.com/fluent-mybatis/fluent-mybatis)
+- [**[ Fluent MyBatis ]**](https://gitee.com/fluent-mybatis/fluent-mybatis): MyBatis syntax enhancement framework, combining features and advantages of MyBatisPlus, DynamicSql, Jpa etc., generating code with annotation processors
 
-[**[ OkHttps ]** Lightweight yet powerful HTTP client, universal for front-end and back-end, supporting WebSocket and Stomp protocols](https://gitee.com/troyzhxu/okhttps)
+- [**[ OkHttps ]**](https://gitee.com/troyzhxu/okhttps): Lightweight yet powerful HTTP client, universal for front-end and back-end, supporting WebSocket and Stomp protocols
 
-[**[ hrun4j ]** API automation testing solution](https://github.com/lematechvip/hrun4j)
+- [**[ hrun4j ]**](https://github.com/lematechvip/hrun4j): API automation testing solution
 
-[**[ JsonKit ]** Ultra-lightweight JSON facade, simple to use, independent of specific implementation, decoupling business code from Jackson, Gson, Fastjson etc.!](https://gitee.com/troyzhxu/xjsonkit)
+- [**[ JsonKit ]**](https://gitee.com/troyzhxu/xjsonkit): Ultra-lightweight JSON facade, simple to use, independent of specific implementation, decoupling business code from Jackson, Gson, Fastjson etc.!
 
-[**[ Free UI ]** Based on Vue3 + TypeScript, a very lightweight and cool UI component library!](https://gitee.com/phoeon/free-ui)
-
+- [**[ Free UI ]**](https://gitee.com/phoeon/free-ui): Based on Vue3 + TypeScript, a very lightweight and cool UI component library!
 
 ### ❤️ How to contribute
 

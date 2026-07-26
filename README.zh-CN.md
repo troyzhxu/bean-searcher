@@ -238,17 +238,17 @@ BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
 
 ### 🤝 友情接链
 
-[**[ Sa-Token ]** 一个轻量级 Java 权限认证框架，让鉴权变得简单、优雅！](https://github.com/dromara/Sa-Token)
+- [**[ Sa-Token ]**](https://github.com/dromara/Sa-Token)： 一个轻量级 Java 权限认证框架，让鉴权变得简单、优雅！
 
-[**[ Fluent MyBatis ]** MyBatis 语法增强框架, 综合了 MyBatisPlus, DynamicSql,Jpa 等框架的特性和优点，利用注解处理器生成代码](https://gitee.com/fluent-mybatis/fluent-mybatis)
+- [**[ Fluent MyBatis ]**](https://gitee.com/fluent-mybatis/fluent-mybatis)： MyBatis 语法增强框架, 综合了 MyBatisPlus, DynamicSql,Jpa 等框架的特性和优点，利用注解处理器生成代码
 
-[**[ OkHttps ]** 轻量却强大的 HTTP 客户端，前后端通用，支持 WebSocket 与 Stomp 协议](https://gitee.com/troyzhxu/okhttps)
+- [**[ OkHttps ]**](https://gitee.com/troyzhxu/okhttps)： 轻量却强大的 HTTP 客户端，前后端通用，支持 WebSocket 与 Stomp 协议
 
-[**[ hrun4j ]** 接口自动化测试解决方案 --工具选得好，下班回家早；测试用得对，半夜安心睡 ](https://github.com/lematechvip/hrun4j)
+- [**[ hrun4j ]**](https://github.com/lematechvip/hrun4j)： 接口自动化测试解决方案 --工具选得好，下班回家早；测试用得对，半夜安心睡 
 
-[**[ JsonKit ]** 超轻量级 JSON 门面工具，用法简单，不依赖具体实现，让业务代码与 Jackson、Gson、Fastjson 等解耦！](https://gitee.com/troyzhxu/xjsonkit)
+- [**[ JsonKit ]**](https://gitee.com/troyzhxu/xjsonkit)： 超轻量级 JSON 门面工具，用法简单，不依赖具体实现，让业务代码与 Jackson、Gson、Fastjson 等解耦！
 
-[**[ Free UI ]** 基于 Vue3 + TypeScript，一个非常轻量炫酷的 UI 组件库 ！](https://gitee.com/phoeon/free-ui)
+- [**[ Free UI ]**](https://gitee.com/phoeon/free-ui)： 基于 Vue3 + TypeScript，一个非常轻量炫酷的 UI 组件库 ！
 
 
 ### ❤️ 参与贡献
