@@ -30,7 +30,6 @@
 
 <script setup>
 import { onMounted, ref } from 'vue'
-import axios from 'axios'
 
 const props = defineProps({
   home: {
@@ -42,9 +41,9 @@ const props = defineProps({
 const donateList = ref([]);
 
 onMounted(() => {
-  axios.get('https://sponsors.oss-cn-hangzhou.aliyuncs.com/donate-list.json')
-    .then(res => {
-      const list = res.data;
+  fetch('https://sponsors.oss-cn-hangzhou.aliyuncs.com/donate-list.json')
+    .then(res => res.json())
+    .then(list => {
       list.sort((a, b) => {
         return weight(b) - weight(a);   // 按权重降序排列
       });

@@ -14,7 +14,6 @@
 
 <script setup>
 import { onMounted, ref } from 'vue'
-import axios from 'axios'
 
 defineProps({
   showTitle: { type: Boolean, default: true },
@@ -23,9 +22,9 @@ defineProps({
 const sponsors = ref([]);
 
 onMounted(() => {
-  axios.get('https://sponsors.oss-cn-hangzhou.aliyuncs.com/sponsors.json')
-    .then(res => {
-      const list = res.data;
+  fetch('https://sponsors.oss-cn-hangzhou.aliyuncs.com/sponsors.json')
+    .then(res => res.json())
+    .then(list => {
       list.sort((a, b) => {
         return weight(b) - weight(a);   // 按权重降序排列
       });
