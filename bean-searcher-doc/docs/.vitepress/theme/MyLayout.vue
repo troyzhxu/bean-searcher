@@ -23,7 +23,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 
 import { onMounted, ref, watch } from "vue"
 import DefaultTheme from 'vitepress/theme'
@@ -34,14 +34,17 @@ const route = useRoute()
 
 const LOCALE_STORAGE_KEY = 'bs-locale'
 
-// SPA 导航时持久化语言偏好（手动切换语言后刷新不丢失）
+// 记录上一次 SPA 导航时的语言，用于检测"用户是否手动点了语言切换按钮"
+let prevLocale: string | null = null
+
+// 仅在跨语言 SPA 跳转时更新 localStorage（点击导航栏语言切换按钮）
 watch(() => route.path, (path) => {
   try {
-    if (path.startsWith('/en/')) {
-      localStorage.setItem(LOCALE_STORAGE_KEY, 'en')
-    } else {
-      localStorage.setItem(LOCALE_STORAGE_KEY, 'zh')
+    const newLocale = path.startsWith('/en/') ? 'en' : 'zh'
+    if (prevLocale && prevLocale !== newLocale) {
+      localStorage.setItem(LOCALE_STORAGE_KEY, newLocale)
     }
+    prevLocale = newLocale
   } catch (_) {}
 })
 
@@ -50,6 +53,8 @@ onMounted(() => {
     baiduTongji();
     loadXsWidget();
   }
+  // 初始化 prevLocale（用于 watch 的跨语言检测）
+  prevLocale = window.location.pathname.startsWith('/en/') ? 'en' : 'zh'
   autoRedirectLocale();
   // JSON-LD 结构化数据
   injectJsonLd();
@@ -114,13 +119,13 @@ function checkEnvAndSSL() {
 }
 
 /**
- * 首次访问（localStorage 无记录）时，根据浏览器语言自动重定向到匹配的语言版本。
- * 一旦有历史偏好，不再干预。
+ * 页面首次加载时执行的语言检测与重定向：
+ *   1. localStorage 为空 → 浏览器语言检测，不匹配时跳转，匹配时记录偏好
+ *   2. localStorage 有值且与当前页面语言不同 → 跳转到偏好语言版本
+ *   3. localStorage 有值且匹配 → 不操作
  *
- * 规则：
- *   - 英文浏览器 + 中文页面 → 跳对应英文页面（/xxx → /en/xxx）
- *   - 中文浏览器 + 英文页面 → 跳对应中文页面（/en/xxx → /xxx）
- *   - 语言匹配 → 不跳
+ * 注意：localStorage 仅在用户点击导航栏语言切换按钮时被修改（见上方 watch），
+ * 手动修改地址栏不会更新 localStorage。
  */
 function autoRedirectLocale() {
   const rawPath = window.location.pathname
@@ -128,33 +133,37 @@ function autoRedirectLocale() {
 
   try {
     const saved = localStorage.getItem(LOCALE_STORAGE_KEY)
+    const isEnglishPage = path.startsWith('/en/') || path === '/en'
+    const currentLocale = isEnglishPage ? 'en' : 'zh'
 
     if (!saved) {
+      // 首次访问 — 浏览器语言检测
       const navLang = navigator.language || ''
       const isEnglishBrowser = navLang.startsWith('en')
-      const isEnglishPage = path.startsWith('/en/') || path === '/en'
 
       if (isEnglishBrowser && !isEnglishPage) {
-        // 英文浏览器访问中文页面 → 跳英文
         const enPath = path === '/' || path === '' ? '/en/' : `/en${path}`
         window.location.replace(enPath)
         return
       }
-
       if (!isEnglishBrowser && isEnglishPage) {
-        // 非英文浏览器访问英文页面 → 跳中文
         const zhPath = path.replace(/^\/en/, '') || '/'
         window.location.replace(zhPath)
         return
       }
+      // 语言匹配 → 记录偏好
+      localStorage.setItem(LOCALE_STORAGE_KEY, currentLocale)
+    } else if (saved !== currentLocale) {
+      // 有历史偏好，但当前页面语言不匹配 → 跳转
+      if (saved === 'en') {
+        const enPath = path === '/' || path === '' ? '/en/' : `/en${path}`
+        window.location.replace(enPath)
+      } else {
+        const zhPath = path.replace(/^\/en/, '') || '/'
+        window.location.replace(zhPath)
+      }
     }
-
-    // 记录当前所在语言
-    if (path.startsWith('/en/') || path === '/en') {
-      localStorage.setItem(LOCALE_STORAGE_KEY, 'en')
-    } else {
-      localStorage.setItem(LOCALE_STORAGE_KEY, 'zh')
-    }
+    // saved === currentLocale → 不跳，不写 localStorage（偏好未变）
   } catch (_) {
     // localStorage 不可用时静默忽略
   }
@@ -165,15 +174,15 @@ function baiduTongji() {
   const hm = document.createElement("script");
   hm.src = "https://hm.baidu.com/hm.js?33338f09bb5e0f93efcf6b15508209e6";
   const s = document.getElementsByTagName("script")[0];
-  s.parentNode.insertBefore(hm, s);
+  s.parentNode?.insertBefore(hm, s);
 }
 
 function loadXsWidget() {
-  // 加载西市商品嵌入卡片
+  // 加载时伴作品嵌入卡片
   const hm = document.createElement("script");
   hm.src = "https://10b.zhxu.cn/widget/index.js";
   const s = document.getElementsByTagName("script")[0];
-  s.parentNode.insertBefore(hm, s);
+  s.parentNode?.insertBefore(hm, s);
 }
 
 </script>
