@@ -11,7 +11,7 @@ export default defineConfig({
   description: "Java 声明式检索框架 — 实体定义检索边界，参数驱动查询逻辑。一行代码搞定复杂列表检索。",
   lang: 'zh-CN',
 
-  cleanUrls: true,
+  cleanUrls: false,
 
   head: [
     ['link', { rel: 'icon', href: '/logo.png' }],
@@ -34,9 +34,14 @@ export default defineConfig({
   ],
 
   transformHead: (ctx) => {
-    const canonical = `${SITE_URL}/${ctx.pageData.relativePath.replace(/\.md$/, '').replace(/index$/, '')}`
+    let rel = ctx.pageData.relativePath
+    // 默认语言 zh 的路径前缀要去掉（对应 rewrites: 'zh/:rest*' → ':rest*'）
+    rel = rel.replace(/^zh\//, '')
+    // cleanUrls: false 时需补 .html 后缀；index.html 转为目录路径
+    rel = rel.replace(/\.md$/, '.html').replace(/\/index\.html$/, '/')
+    const canonical = `${SITE_URL}/${rel}`.replace(/\/$/, '') || SITE_URL
     return [
-      ['link', { rel: 'canonical', href: canonical.replace(/\/$/, '') || SITE_URL }],
+      ['link', { rel: 'canonical', href: canonical }],
     ]
   },
 
