@@ -6,7 +6,7 @@ From the previous [Field Parameters](/en/guide/param/field) section, we know tha
 
 ### Operator Constraints
 
-For example, if the field `name` only allows **exact matching** and **post-fuzzy matching**, you can use the following annotation on the SearchBean:
+For example, if the field `name` only allows **exact matching** and **suffix matching**, you can use the following annotation on the SearchBean:
 
 ```java
 public class User {
@@ -19,7 +19,7 @@ public class User {
 }
 ```
 
-As shown above, through the `onlyOn` attribute of the `@DbField` annotation, it is specified that the `name` field can only be used with **exact matching** and **post-fuzzy matching** methods, and other retrieval methods will be directly ignored.
+As shown above, through the `onlyOn` attribute of the `@DbField` annotation, it is specified that the `name` field can only be used with **exact matching** and **suffix matching** methods, and other retrieval methods will be directly ignored.
 
 ::: tip Default Operator
 * If `@DbField.onlyOn` is empty, the **default operator** for this field is **Equal**.

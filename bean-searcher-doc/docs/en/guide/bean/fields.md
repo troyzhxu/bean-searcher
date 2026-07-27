@@ -70,7 +70,7 @@ When `@SearchBean.groupBy` is specified, whether a where condition or a having c
 
 * `Cluster.TRUE` - Indicates that the attribute is an aggregated field, and it only generates having conditions.
 * `Cluster.FALSE` - Indicates that the attribute is a non-aggregated field, and it only generates where conditions.
-* `Cluster.AUTO` - **Default value**, automatically infer whether the field is an aggregated field: **When the conditional attribute is not in the groupBy list and the attribute is also a field in the Java class, it will be automatically inferred as `TRUE`; in other cases, it will be inferred as `FALSE`**.
+* `Cluster.AUTO` - **Default value**, automatically infers whether the field is aggregated: **if the conditional attribute is not in the `groupBy` list and is also a Java class field, it is inferred as `TRUE`; otherwise, it is inferred as `FALSE`**.
 
 #### Examples of field inference
 

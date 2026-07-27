@@ -8,7 +8,7 @@ The parameter filter `ParamFilter` of Bean Searcher is very easy to customize. W
 @Component
 public class MyParamFilter implements ParamFilter {
 
-    // Define a constant as a switch. When enabled, the automatic loading function is cancelled.
+    // Define a constant as a switch. When this key is present in params, automatic parameter loading is disabled.
     public static final String IGNORE_REQUEST_PARAMS = "IGNORE_REQUEST_PARAMS";
 
     @Override

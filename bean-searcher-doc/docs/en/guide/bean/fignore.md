@@ -4,7 +4,7 @@ There are four ways in Bean Searcher to ignore a certain field in an entity clas
 
 ## Modifiers static and transient
 
-Fields modified by the keywords `static` or `transient` will be automatically ignored. For example:
+Fields declared with the `static` or `transient` keywords will be automatically ignored. For example:
 
 ```java
 public class Address {

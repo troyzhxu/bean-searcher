@@ -56,19 +56,19 @@ That's the fundamental reason **one line of code can handle complex list retriev
 
 ## Does the Front-end Need to Pass More Parameters?
 
-Many people who are new to Bean Searcher will, preconceivedly, **misthink** that using Bean Searcher will put pressure on the front end and **require the front end to pass many parameters that it didn't need to pass originally**.
+Many people new to Bean Searcher **mistakenly assume** that using it will put pressure on the front end and **require extra parameters that were never needed before**.
 
 Actually, it's not the case. The **number of parameters** that the front end needs to pass is only related to the **complexity of the product requirements** and has nothing to do with the **backend framework** used.
 
-Some students may ask: I've seen many articles about Bean Searcher that mention parameters like **xxx-op** and **xxx-ic**. There are no such parameters in our system. Do we need to pass them after using Bean Searcher?
+You might wonder: I've seen many articles about Bean Searcher that mention parameters like **xxx-op** and **xxx-ic**. There are no such parameters in our system. Do we need to pass them after using Bean Searcher?
 
-Well, students should note that the content in those articles is about **advanced queries**. The product requires the front end to be able to control whether a certain field is searched by fuzzy matching or exact matching, as shown in the following figure:
+Note that the content in those articles is about **advanced queries**. The product requires the front end to be able to control whether a certain field is searched by fuzzy matching or exact matching, as shown in the following figure:
 
 ![](/requirement_1.png)
 
-What if the front end doesn't have this requirement? For example, for the `username` field, the front end only needs a fuzzy query and doesn't need to ignore case. Do we still need to pass the `username-op` and `username-ic` parameters in the backend?
+But what if the front end doesn't need this? For example, for the `username` field, the front end only needs a fuzzy query and doesn't need to ignore case. Do we still need to pass the `username-op` and `username-ic` parameters in the backend?
 
-**Of course not**. We only need to pass the `username` parameter. So how does the backend express the **fuzzy query** condition? It's very simple. Just add an annotation to the `username` attribute in the SearchBean:
+**Of course not**. You only need to pass the `username` parameter. So how does the backend express the **fuzzy query** condition? It's very simple. Just add an annotation to the `username` attribute in the SearchBean:
 
 ```java
 @DbField(onlyOn = Contain.class)

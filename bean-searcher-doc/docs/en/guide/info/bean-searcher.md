@@ -53,24 +53,24 @@ Field operators | **Dynamic (client-driven)** | Static | Static
 CRUD | Read-only (R) | CRUD | CRUD
 Relationship with ORM | Complementary coexistence | — | —
 
-As can be seen from the above table, Bean Searcher can only perform database queries and does not support create, update, and delete operations. However, its **multi-table mapping mechanism** and **dynamic field operators** can make our code **ten times more efficient**, or even **a hundred times more efficient** when performing complex list retrievals.
+As shown in the table above, Bean Searcher only supports database queries — it does not handle insert, update, or delete operations. However, its **multi-table mapping mechanism** and **dynamic field operators** can make our code **ten times more efficient**, or even **a hundred times more efficient** when performing complex list retrievals.
 
 More importantly, it has no third-party dependencies and can be used in conjunction with **any ORM** in the project.
 
 ## Which projects can use it
 
-* Java projects (of course, Kotlin and Gradle projects are also acceptable);
+* Java projects (Kotlin and Gradle projects are also supported);
 * Projects that use relational databases (e.g., MySQL, Oracle, etc.);
 * It can be integrated with any framework: Spring Boot, Grails, JFinal, etc.
 
 ## When to use it
 
-Every framework has its own usage scenarios. Of course, Bean Searcher is no exception. Its emergence is not to replace traditional ORMs such as MyBatis or Hibernate. Therefore, it is very important to understand which scenarios are suitable for using it.
+Every framework has its use cases, and Bean Searcher is no exception. It is not meant to replace traditional ORMs such as MyBatis or Hibernate. Understanding which scenarios suit it best is essential.
 
-* **It is recommended** to use it in **non-transactional** and **dynamic** retrieval scenarios. For example:
-  In the retrieval scenarios of pages such as [Order Management] and [User Management] in the management background, the retrieval is **non-transactional** and does not insert data into the database. Moreover, the retrieval conditions are **dynamic**. Different user retrieval methods result in different executed SQL statements (e.g., retrieving by `order number` and retrieving by `status` require different SQL statements). In this case, it is recommended to use Bean Searcher for retrieval.
-* **It is not recommended** to use it in **transactional** and **static** query scenarios. For example:
-  In the user registration interface, where it is necessary to first query whether an account already exists, the interface is **transactional** as it needs to insert data into the database. At this time, the query conditions are **static**. Regardless of which account, the same SQL statement is executed (querying by `account name`). In this case, it is not recommended to use Bean Searcher for the query.
+* **Recommended** for **non-transactional** and **dynamic** retrieval scenarios. For example:
+  Take the [Order Management] and [User Management] screens in an admin panel. These retrieval scenarios are **non-transactional** — they only query data, never inserting into the database. The search conditions are **dynamic** — different filters (e.g., by order number vs. by status) produce different SQL statements. This is where Bean Searcher excels.
+* **Not recommended** for **transactional** and **static** query scenarios. For example:
+  In a user registration endpoint, the interface first checks whether an account already exists. This is a **transactional** operation because it inserts data into the database. The query condition is **static** — regardless of the account, the same SQL is executed (filtering by account name). In this case, Bean Searcher is not the right tool.
 
 ## Which databases are supported
 

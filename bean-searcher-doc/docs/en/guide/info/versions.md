@@ -216,7 +216,7 @@ Starting from version `v4.5`, default support is for `JDK17+`. To maintain compa
 
 ## V3 Version
 
-The version is too old, and the author is too lazy to translate it.
+These versions are no longer maintained. Please refer to the [Chinese changelog](https://bs.zhxu.cn/guide/info/versions) for details.
 
 ## V2 Version
 

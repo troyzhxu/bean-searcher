@@ -63,7 +63,7 @@ public DataSourceProperties orderDsProps() {
     return new DataSourceProperties();
 }
 
-// Note: The configuration of the above two Beans is not mandatory!
+// Note: The two Beans above are optional.
 // They are only used to collect the configuration information of the data sources, and the ultimate goal is to construct the following Beans of the NamedDataSource type.
 // If these two Beans affect the normal operation of your system, you can choose to remove them and use other methods to collect the configuration information of the data sources, for example:
 // 1. Use a custom DataSourceProperties class to receive the configuration information.
@@ -115,7 +115,7 @@ public NamedDataSource orderNamedDataSource(AbstractRoutingDataSource routingDat
 
 ## Dynamic Data Sources
 
-The multiple data sources configured above are static for a single SearchBean, that is, the relationship between an entity class and a data source is specified in the annotation. If the project you are developing is in the SAAS mode and requires the same entity class to use different data sources for different Tenants, you can use the dynamic data sources described in this section.
+The multiple data sources configured above are static for a single SearchBean, that is, the relationship between an entity class and a data source is specified in the annotation. If your project uses a SaaS (multi-tenant) architecture and requires the same entity class to use different data sources for different Tenants, you can use the dynamic data sources described in this section.
 
 To use dynamic data sources, first define a `DynamicDatasource`:
 

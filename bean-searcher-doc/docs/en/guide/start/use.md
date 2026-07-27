@@ -1,12 +1,12 @@
 # Start
 
-If you're not sure where Bean Searcher is suitable for use, please first read the [Introduction > Bean Searcher](/en/guide/info/bean-searcher) section.
+If you're unsure where Bean Searcher fits best, please first read the [Introduction > Bean Searcher](/en/guide/info/bean-searcher) section.
 
 ## Searcher
 
 After successfully integrating it into your project, you can then obtain the searcher instance in your business code (Controller or Service).
 
-In Spring or Grails projects, you can directly inject it (in Grails projects, you don't need to use the `@Autowired` annotation):
+In Spring or Grails projects, you can directly inject it (in Grails projects, `@Autowired` is optional):
 
 ```java
 /**
@@ -52,7 +52,7 @@ After obtaining the searcher, let's take a look at the methods provided by both 
 * `searchList(Class<T> beanClass, Map<String, Object> params): List<Map<String, Object>>` **Paginated** query of the data **list** under the specified conditions.
 * `searchAll(Class<T> beanClass, Map<String, Object> params): List<Map<String, Object>>` Query the **entire** data **list** under the specified conditions.
 
-> The single pieces of data retrieved by the above methods are all presented as `Map` objects.
+> Each individual record returned by the above methods is presented as a `Map` object.
 
 ### Methods only available in BeanSearcher
 
@@ -62,12 +62,12 @@ After obtaining the searcher, let's take a look at the methods provided by both 
 * `searchList(Class<T> beanClass, Map<String, Object> params): List<T>` **Paginated** query of the data **list** under the specified conditions.
 * `searchAll(Class<T> beanClass, Map<String, Object> params): List<T>` Query the **entire** data **list** under the specified conditions.
 
-> The single pieces of data retrieved by the above methods are all presented as generic `T` objects.
+> Each individual record returned by the above methods is presented as a generic `T` object.
 
 For the complete interface definitions, please refer to: [Searcher](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/Searcher.java), [MapSearcher](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/MapSearcher.java), and [BeanSearcher](https://gitee.com/troyzhxu/bean-searcher/blob/master/bean-searcher/src/main/java/cn/zhxu/bs/BeanSearcher.java).
 
 
-## A Quick Try
+## Quick Example
 
 Let's experience Bean Searcher's retrieval functionality with just a few lines of code.
 
@@ -100,7 +100,7 @@ With the entity class in place, we can now use the `search(Class<T> beanClass, M
 public class UserController {
 
     @Autowired
-    private MapSearcher mapSearcher;              // Inject the BeanSearcher searcher.
+    private MapSearcher mapSearcher;              // Inject the MapSearcher instance.
 
     @GetMapping("/index")
     public SearchResult<Map<String, Object>> index(HttpServletRequest request) {
@@ -113,7 +113,7 @@ public class UserController {
 
 ::: tip Code Explanation
 The `MapUtils` mentioned above is a utility class provided by Bean Searcher. `MapUtils.flat(request.getParameterMap())` is just used to collect all the request parameters sent from the front end. Then, the rest is all handed over to the `MapSearcher` searcher. <br>
-Of course, you don't have to get the parameters directly from the `request`. It's just that the code looks more concise this way.
+Of course, you don't have to get the parameters directly from the `request`. This approach simply makes the code more concise.
 :::
 
 You can also configure [Automatic Request Parameter Reception](/en/guide/usage/others.html#automatically-receive-request-parameters), and then your code can be further simplified:
@@ -124,7 +124,7 @@ You can also configure [Automatic Request Parameter Reception](/en/guide/usage/o
 public class UserController {
 
     @Autowired
-    private MapSearcher mapSearcher;              // Inject the BeanSearcher searcher.
+    private MapSearcher mapSearcher;              // Inject the MapSearcher instance.
 
     @GetMapping("/index")
     public SearchResult<Map<String, Object>> index() {
@@ -210,7 +210,7 @@ The suffix `-op` of the parameter name `age-op` can be customized and can be com
 ### (7) Field filtering ([field]-op=ge)
 
 * GET /user/index? age=20 & age-op=ge
-* Return result: The structure is the same as **(1)** (but only returns data where age >= 20, `ge` is an abbreviation for `GreateEqual`).
+* Return result: The structure is the same as **(1)** (but only returns data where age >= 20, `ge` is an abbreviation for `GreaterEqual`).
 
 ### (8) Field filtering ([field]-op=le)
 
@@ -220,7 +220,7 @@ The suffix `-op` of the parameter name `age-op` can be customized and can be com
 ### (9) Field filtering ([field]-op=gt)
 
 * GET /user/index? age=20 & age-op=gt
-* Return result: The structure is the same as **(1)** (but only returns data where age > 20, `gt` is an abbreviation for `GreateThan`).
+* Return result: The structure is the same as **(1)** (but only returns data where age > 20, `gt` is an abbreviation for `GreaterThan`).
 
 ### (10) Field Filtering ([field]-op=lt)
 
@@ -284,7 +284,7 @@ The suffix `-ic` in the parameter name `name-ic` can be customized. This paramet
 
 Bean Searcher also supports **more** retrieval methods (and even custom ones. Refer to the [Parameters > Field Parameters > Field Operators](/en/guide/param/field#Field Operators) section). They are not listed here.
 
-In the `/user/index` interface of this example, we only wrote one line of code, and it can support so many retrieval methods. Do you now understand the meaning of "one line of code can implement complex list retrieval"? Do you feel that one line of code you write now can do the work of a hundred lines of others?
+In the `/user/index` interface above, we wrote only one line of code — yet it supports all the retrieval methods listed here. This is the power of Bean Searcher: one line of code replaces what would otherwise require hundreds.
 
 ::: tip
 This example is a simple single-table query. In fact, whether it is a single table or multiple tables, as long as they are mapped to the same entity class, all the retrieval methods listed above can be supported.

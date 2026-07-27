@@ -6,9 +6,9 @@ Bean Searcher has supported annotation omission since version 3.0.
 
 When Bean Searcher cannot find the `@SearchBean` annotation (starting from version 3.2, it will automatically search for the `@SearchBean` annotation in the parent class), or the `tables` attribute is not specified in the `@SearchBean` annotation, it will consider the entity class as a **single-table mapping** entity class. In this case, the table name will follow the automatic mapping rule:
 
-* `Table Name` = `Prefix` + `Convert to lowercase underscore according to configuration (remove redundant suffixes from the class name and convert camel case)`
+* `Table Name` = `Prefix` + `snake_case of class name (with redundant suffixes removed)`
 
-The `Prefix` and `Convert to uppercase according to configuration` are configurable items, which can be configured in the following ways.
+The `Prefix` and `Case conversion` settings are configurable items, which can be configured in the following ways.
 
 ### SpringBoot / Grails
 
@@ -19,7 +19,7 @@ Configuration Key Name | Meaning | Optional Values | Default Value
 `bean-searcher.sql.default-mapping.table-prefix` | Table name prefix | `String` | `null`
 `bean-searcher.sql.default-mapping.underline-case` | Whether to convert table names and field names from camel case to lowercase underscore (since v3.7.0) | `Boolean` | `true`
 `bean-searcher.sql.default-mapping.upper-case` | Whether to convert table names and field names to uppercase | `Boolean` | `false`
-`bean-searcher.sql.default-mapping.redundant-suffixes` | Redundant suffixes of the class name (multiple can be configured) (since v3.3.0) | `Redundant Suffix` | `null`
+`bean-searcher.sql.default-mapping.redundant-suffixes` | Redundant class name suffixes (multiple can be configured) (since v3.3.0) | `Redundant Suffix` | `null`
 
 ::: tip Redundant Suffix
 For example, when the redundant suffixes are configured as VO and DTO, for entity classes named `UserVO` and `UserDTO`, the VO and DTO suffixes will be automatically removed during automatic table name mapping.
@@ -58,7 +58,7 @@ MapSearcher mapSearcher = SearcherBuilder.mapSearcher()
 
 ## Omitting @DbField
 
-When the retrieval entity class meets one of the following four conditions (only one needs to be met):
+When the retrieval entity class meets any of the following conditions:
 
 * The `@SearchBean` annotation is omitted from the entity class.
 * The `tables` attribute is not specified in the `@SearchBean` of the entity class.

@@ -54,7 +54,7 @@ features:
     details: SQL injection prevention, oversized pagination blocking, deep-offset throttling — all enabled out of the box. Zero security code needed. Ship with confidence.
 ---
 <div style="text-align: center; font-size: 20px; margin-top:60px">GraphQL for REST APIs</div>
-<div style="text-align: center; font-size: 20px; margin-top:10px">No special protocol. No changing your HTTP habits. One line of code, free combination of any field's filtering, sorting, pagination, and statistics.</div>
+<div style="text-align: center; font-size: 20px; margin-top:10px">No special protocol. No changing your HTTP habits. One line of code — free combination of any field's filtering, sorting, pagination, and statistics.</div>
 
 <br>
 
