@@ -25,16 +25,32 @@
 
 <script setup>
 
-import { onMounted, ref } from "vue"
+import { onMounted, ref, watch } from "vue"
 import DefaultTheme from 'vitepress/theme'
+import { useRoute } from 'vitepress'
 import HomeSponsors from './HomeSponsors.vue'
 const { Layout } = DefaultTheme
+const route = useRoute()
+
+const LOCALE_STORAGE_KEY = 'bs-locale'
+
+// SPA 导航时持久化语言偏好（手动切换语言后刷新不丢失）
+watch(() => route.path, (path) => {
+  try {
+    if (path.startsWith('/en/')) {
+      localStorage.setItem(LOCALE_STORAGE_KEY, 'en')
+    } else {
+      localStorage.setItem(LOCALE_STORAGE_KEY, 'zh')
+    }
+  } catch (_) {}
+})
 
 onMounted(() => {
   if (checkEnvAndSSL()) {
     baiduTongji();
     loadXsWidget();
   }
+  autoRedirectLocale();
   // JSON-LD 结构化数据
   injectJsonLd();
   console.log("\n%c Bean Searcher %c 你点 STAR 了没有 😎 ? \n", "color: #fff; background: #f1404b; padding:5px 0;", "background: #111; padding:5px 0; color: #fff");
@@ -95,6 +111,53 @@ function checkEnvAndSSL() {
     location.href = 'https' + path.substr(4);
   }
   return isSsl || import.meta.env.DEV;
+}
+
+/**
+ * 首次访问（localStorage 无记录）时，根据浏览器语言自动重定向到匹配的语言版本。
+ * 一旦有历史偏好，不再干预。
+ *
+ * 规则：
+ *   - 英文浏览器 + 中文页面 → 跳对应英文页面（/xxx → /en/xxx）
+ *   - 中文浏览器 + 英文页面 → 跳对应中文页面（/en/xxx → /xxx）
+ *   - 语言匹配 → 不跳
+ */
+function autoRedirectLocale() {
+  const rawPath = window.location.pathname
+  const path = rawPath.replace(/\/index\.html$/, '')
+
+  try {
+    const saved = localStorage.getItem(LOCALE_STORAGE_KEY)
+
+    if (!saved) {
+      const navLang = navigator.language || ''
+      const isEnglishBrowser = navLang.startsWith('en')
+      const isEnglishPage = path.startsWith('/en/') || path === '/en'
+
+      if (isEnglishBrowser && !isEnglishPage) {
+        // 英文浏览器访问中文页面 → 跳英文
+        const enPath = path === '/' || path === '' ? '/en/' : `/en${path}`
+        window.location.replace(enPath)
+        return
+      }
+
+      if (!isEnglishBrowser && isEnglishPage) {
+        // 非英文浏览器访问英文页面 → 跳中文
+        const zhPath = path.replace(/^\/en/, '') || '/'
+        window.location.replace(zhPath)
+        return
+      }
+    }
+
+    // 记录当前所在语言
+    if (path.startsWith('/en/') || path === '/en') {
+      localStorage.setItem(LOCALE_STORAGE_KEY, 'en')
+    } else {
+      localStorage.setItem(LOCALE_STORAGE_KEY, 'zh')
+    }
+  } catch (_) {
+    // localStorage 不可用时静默忽略
+  }
 }
 
 function baiduTongji() {
