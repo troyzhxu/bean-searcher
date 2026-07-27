@@ -3,7 +3,7 @@
     <div class="footer-bg"></div>
     <div class="footer-content">
       <span class="footer-kicker">How It Works</span>
-      <h3 class="footer-headline">后端仅一句代码，功能全部搞定</h3>
+      <h3 class="footer-headline">{{ $t('showcase.headline') }}</h3>
       <div class="footer-showcase">
         <div class="footer-code">
           <div class="code-header">
@@ -12,27 +12,29 @@
             <span class="code-dot green"></span>
             <span class="code-file">DemoController.java</span>
           </div>
-          <span class="code-comment">// 后端只要一行代码</span>
+          <span class="code-comment">{{ $t('showcase.codeComment') }}</span>
           <pre><code><span class="tk-var">beanSearcher</span><span class="tk-punct">.search(User.</span><span class="tk-keyword">class</span><span class="tk-punct">, User::getAge);</span></code></pre>
         </div>
         <div class="footer-arrow">→</div>
         <div class="footer-features">
           <div class="feature-header">
             <span class="feature-dot"></span>
-            <span class="feature-title">这些功能，全部搞定</span>
+            <span class="feature-title">{{ $t('showcase.featureHeader') }}</span>
           </div>
           <ul class="feature-list">
-            <li>🔍 复杂过滤</li>
-            <li>📊 字段统计</li>
-            <li>⬆⬇ 字段排序</li>
-            <li>📄 联表分页</li>
+            <li>🔍 {{ $t('showcase.featureFilter') }}</li>
+            <li>📊 {{ $t('showcase.featureStats') }}</li>
+            <li>⬆⬇ {{ $t('showcase.featureSort') }}</li>
+            <li>📄 {{ $t('showcase.featurePage') }}</li>
           </ul>
         </div>
       </div>
       <p class="footer-tagline">
-        这就是
-        <a href="https://bs.zhxu.cn"><strong>Bean Searcher</strong></a>
-        — 专注高级查询的 <b>只读 ORM</b>，让列表检索从未如此简单。
+        <i18n-t keypath="showcase.tagline" tag="span">
+          <template #link>
+            <a href="https://bs.zhxu.cn"><strong>Bean Searcher</strong></a>
+          </template>
+        </i18n-t>
       </p>
     </div>
   </footer>

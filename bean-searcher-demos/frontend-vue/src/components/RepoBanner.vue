@@ -1,6 +1,6 @@
 <template>
   <div class="repo-banner">
-    <p class="repo-text">开源不易，点个 ⭐ Star 支持一下</p>
+    <p class="repo-text">{{ $t('repo.text') }}</p>
     <div class="repo-links">
       <a href="https://github.com/troyzhxu/bean-searcher" target="_blank" rel="noopener noreferrer" class="repo-icon-link" title="GitHub">
         <svg class="repo-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

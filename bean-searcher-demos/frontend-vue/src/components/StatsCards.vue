@@ -3,21 +3,21 @@
     <div class="stat-card">
       <div class="stat-icon">📊</div>
       <div class="stat-body">
-        <span class="stat-label">总年龄</span>
+        <span class="stat-label">{{ $t('stats.totalAge') }}</span>
         <span class="stat-value">{{ sumAge }}</span>
       </div>
     </div>
     <div class="stat-card">
       <div class="stat-icon">📈</div>
       <div class="stat-body">
-        <span class="stat-label">平均年龄</span>
+        <span class="stat-label">{{ $t('stats.avgAge') }}</span>
         <span class="stat-value">{{ avgAge }}</span>
       </div>
     </div>
     <div class="stat-card">
       <div class="stat-icon">📋</div>
       <div class="stat-body">
-        <span class="stat-label">总条数</span>
+        <span class="stat-label">{{ $t('stats.totalRecords') }}</span>
         <span class="stat-value">{{ total }}</span>
       </div>
     </div>

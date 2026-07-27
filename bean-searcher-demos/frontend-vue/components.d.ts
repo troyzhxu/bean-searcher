@@ -23,6 +23,7 @@ declare module 'vue' {
     DataTable: typeof import('./src/components/DataTable.vue')['default']
     FilterCard: typeof import('./src/components/FilterCard.vue')['default']
     HeroBanner: typeof import('./src/components/HeroBanner.vue')['default']
+    LocaleSwitcher: typeof import('./src/components/LocaleSwitcher.vue')['default']
     RepoBanner: typeof import('./src/components/RepoBanner.vue')['default']
     ShowcaseBanner: typeof import('./src/components/ShowcaseBanner.vue')['default']
     SourceBanner: typeof import('./src/components/SourceBanner.vue')['default']
