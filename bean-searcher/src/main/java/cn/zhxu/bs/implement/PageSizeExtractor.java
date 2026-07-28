@@ -9,7 +9,7 @@ import java.util.Objects;
 public class PageSizeExtractor extends BasePageExtractor {
 
     /**
-     * 偏移条数字段参数名
+     * 分页页码参数名
      */
     private String pageName = "page";
 

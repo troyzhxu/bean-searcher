@@ -47,7 +47,7 @@ public class BaseSearcher implements Searcher {
         try (SqlResult<T> result = doSearch(beanClass, paraMap, new FetchType(FetchType.ONLY_TOTAL))) {
             return getCountFromSqlResult(result);
         } catch (SQLException e) {
-            throw new SearchException("A exception occurred when collecting sql result!", e);
+            throw new SearchException("An exception occurred when collecting sql result!", e);
         }
     }
 
@@ -86,7 +86,8 @@ public class BaseSearcher implements Searcher {
         try (SqlResult<T> result = doSearch(beanClass, paraMap, new FetchType(FetchType.ONLY_SUMMARY, fields))) {
             return getSummaryFromSqlResult(result);
         } catch (SQLException e) {
-            throw new SearchException("A exception occurred when collect sql result!", e);
+            throw new SearchException("An exception occurred when collecting sql result!", e);
+        }
         }
     }
 

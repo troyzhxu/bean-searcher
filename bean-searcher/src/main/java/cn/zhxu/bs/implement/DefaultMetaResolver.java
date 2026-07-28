@@ -102,7 +102,7 @@ public class DefaultMetaResolver implements MetaResolver {
             if (StringUtils.isNotBlank(alias)) {
                 if (aliasChecks.contains(alias)) {
                     throw new SearchException("The alias [" + alias + "] of [" + beanClass.getName()
-                            + "." + wrapper.column.getName() + "] is already exists on other fields.");
+                            + "." + wrapper.column.getName() + "] already exists on other fields.");
                 }
                 aliasChecks.add(alias);
             }

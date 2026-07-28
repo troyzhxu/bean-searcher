@@ -14,7 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 自定义 SQL 运算符，改运算符只能通过参数构建器 {@link MapUtils#builder() } 使用
+ * 自定义 SQL 运算符，该运算符只能通过参数构建器 {@link MapUtils#builder()} 使用
  * @author Troy.Zhou @ 2022-06-27
  * @since v3.8.0
  */

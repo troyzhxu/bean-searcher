@@ -11,7 +11,7 @@ import cn.zhxu.bs.DbMapping;
 public enum InheritType {
 
     /**
-     * 使用全局默认值 {@link DbMapping#inheritType(Class)}  }
+     * 使用全局默认值 {@link DbMapping#inheritType(Class)}
      */
     DEFAULT,
 

@@ -26,7 +26,7 @@ public class SearchSql<T> {
     private String listSqlString;
 
     /**
-     * 查询聚族信息的SQL
+     * 查询聚合信息的 SQL
      * */
     private String clusterSqlString;
 
@@ -36,7 +36,7 @@ public class SearchSql<T> {
     private final List<Object> listSqlParams = new ArrayList<>();
 
     /**
-     * 聚族查询的参数
+     * 聚合查询的参数
      * */
     private final List<Object> clusterSqlParams = new ArrayList<>();
 

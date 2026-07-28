@@ -17,7 +17,7 @@ import java.util.TimeZone;
 import java.util.regex.Pattern;
 
 /**
- * [String | java.util.Date | LocalDate to java.sql.Date] 参数值转换器
+ * [String | java.util.Date | LocalDate | Long to java.sql.Timestamp | LocalDateTime] 参数值转换器
  *
  * @author Troy.Zhou @ 2022-06-14
  * @since v3.8.0

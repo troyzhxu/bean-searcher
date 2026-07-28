@@ -91,7 +91,6 @@ public class BeanSearcherParams {
 
         /**
          * 是否启用 数组参数值，默认为 true，用于配合 {@link MapUtils#flat(Map)} 与 {@link MapUtils#flatBuilder(Map)} 方法，来兼容数组参数值的用法。例如前端传参：age=20 & age=30 & age-op=bt
-         * 例如前端传参：age=20 & age=30 & age-op=bt
          * @see ArrayValueParamFilter
          * @since v4.3.0
          */
@@ -443,7 +442,7 @@ public class BeanSearcherParams {
 
         /**
          * 起始页码 或 起始页偏移，默认为 0，
-         * 注意：该配置对方法 {@link MapBuilder#page(long, int)} } 与 {@link MapBuilder#limit(long, int)} 无效
+         * 注意：该配置对方法 {@link MapBuilder#page(long, int)} 与 {@link MapBuilder#limit(long, int)} 无效
          */
         private int start = 0;
 

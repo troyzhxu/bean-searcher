@@ -36,14 +36,14 @@ public class DefaultBeanReflector implements BeanReflector {
                 value = convert(meta, value);
             } catch (Exception e) {
                 throw new SearchException(
-                        "The type of [" + beanClass + "#" + meta.getName() + "] is mismatch with it's database table field type", e);
+                        "The type of [" + beanClass + "#" + meta.getName() + "] is mismatched with its database table field type", e);
             }
             if (value != null) {
                 try {
                     meta.getField().set(bean, value);
                 } catch (ReflectiveOperationException e) {
                     throw new SearchException(
-                            "A exception occurred when setting value to [" + beanClass.getName() + "#" + meta.getName() + "], please check whether it's setter is correct.", e);
+                            "An exception occurred when setting value to [" + beanClass.getName() + "#" + meta.getName() + "], please check whether it's setter is correct.", e);
                 }
             }
         }

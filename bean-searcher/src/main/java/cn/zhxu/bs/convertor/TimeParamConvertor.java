@@ -15,7 +15,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * [String | java.util.Date | LocalDate to java.sql.Date] 参数值转换器
+ * [String | LocalTime | java.sql.Time to java.sql.Time | LocalTime] 参数值转换器
  *
  * @author Troy.Zhou @ 2022-06-14
  * @since v3.8.0

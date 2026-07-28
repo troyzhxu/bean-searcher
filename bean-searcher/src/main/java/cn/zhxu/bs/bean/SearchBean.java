@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 
 /**
  * 用于注解一个 SearchBean
- * v3.0.0 后该注解可以缺省，缺省时根据 {@link DbMapping } 自动映射数据库表
+ * v3.0.0 后该注解可以缺省，缺省时根据 {@link DbMapping} 自动映射数据库表
  * @author Troy.Zhou @ 2017-03-20
  */
 @Retention(RetentionPolicy.RUNTIME)
@@ -108,9 +108,9 @@ public @interface SearchBean {
 
     /**
      * 排序约束类型：
-     * 为 {@link SortType#ALLOW_PARAM } 时，表示：允许使用 检索参数 重新指定排序字段，
-     * 为 {@link SortType#ONLY_ENTITY } 时，表示：只可以 使用本注解的 {@link #orderBy()} 属性指定排序字段，并会忽略 检索参数中的排序信息
-     * 为 {@link SortType#DEFAULT } 时，表示：根据检索器的实例级配置 {@link DefaultDbMapping#getDefaultSortType()} 来决定 是否允许使用 检索参数 重新指定排序字段
+     * 为 {@link SortType#ALLOW_PARAM} 时，表示：允许使用检索参数重新指定排序字段，
+     * 为 {@link SortType#ONLY_ENTITY} 时，表示：只可以使用本注解的 {@link #orderBy()} 属性指定排序字段，并会忽略检索参数中的排序信息
+     * 为 {@link SortType#DEFAULT} 时，表示：根据检索器的实例级配置 {@link DefaultDbMapping#getDefaultSortType()} 来决定是否允许使用检索参数重新指定排序字段
      * @since v3.6.0
      * @return 排序约束类型
      */

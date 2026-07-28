@@ -50,12 +50,12 @@ public abstract class BasePageExtractor implements PageExtractor {
         int size = paging.getSize();
         int maxSize = getValue(beanMeta, BeanMeta::getMaxSize, maxAllowedSize);
         if (size < 0 || size > maxSize) {
-            throw new IllegalParamException("Invalid page size: " + size + ", it must between 0 and " + maxSize);
+            throw new IllegalParamException("Invalid page size: " + size + ", it must be between 0 and " + maxSize);
         }
         long offset = paging.getOffset();
         long maxOffset = getValue(beanMeta, BeanMeta::getMaxOffset, maxAllowedOffset);
         if (offset < 0 || offset > maxOffset) {
-            throw new IllegalParamException("Invalid page offset: " + offset + ", it must between 0 and " + maxOffset);
+            throw new IllegalParamException("Invalid page offset: " + offset + ", it must be between 0 and " + maxOffset);
         }
         return paging;
     }

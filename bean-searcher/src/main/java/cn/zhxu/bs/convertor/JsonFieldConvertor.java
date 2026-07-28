@@ -14,7 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.sql.Clob;
 
 /**
- * [Json 字符串 | byte[] | Clob to 对象] 字段转换器，v4.6.0 新增对 Clob 类型值转换
+ * [JSON 字符串 | byte[] | Clob to 对象] 字段转换器，v4.6.0 新增对 Clob 类型值转换
  * 与 {@link DefaultBeanReflector } 配合使用
  * @author Troy.Zhou @ 2021-11-01
  * @since v4.0.0

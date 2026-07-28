@@ -65,7 +65,7 @@ public class DefaultSqlResolver extends DialectWrapper implements SqlResolver {
             String clusterSql = buildClusterSql(beanMeta, clusterSelectSql.getSql(), fieldSelectSql, fromWhereSql);
             searchSql.setClusterSqlString(clusterSql);
             searchSql.addClusterSqlParams(clusterSelectSql.getParas());
-            // 只有在 DistinctOrGroupBy 条件下，聚族查询 SQL 里才会出现 字段查询 语句，才需要将 字段内嵌参数放到 聚族参数里
+            // 只有在 DistinctOrGroupBy 条件下，聚合查询 SQL 里才会出现 字段查询 语句，才需要将 字段内嵌参数放到 聚合参数里
             if (beanMeta.isDistinctOrGroupBy()) {
                 searchSql.addClusterSqlParams(fieldSelectSqlWrapper.getParas());
             }

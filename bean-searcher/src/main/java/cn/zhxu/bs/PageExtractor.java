@@ -24,7 +24,7 @@ public interface PageExtractor {
      * @param paraMap 检索参数
      * @return 分页信息
      * @throws IllegalParamException 抛出非法参数异常后将终止 SQL 查询
-     * @since 4.5.0
+     * @since v4.5.0
      */
     Paging extract(BeanMeta<?> beanMeta, Map<String, Object> paraMap) throws IllegalParamException;
 
