@@ -16,7 +16,7 @@
         </div> -->
       </template>
       <template #home-hero-after>
-        <HomeSponsors style="text-align: center" />
+        <!-- <HomeSponsors style="text-align: center" /> -->
       </template>
     </Layout>
     <div class="tb-widget" data-10bWorkId="1" data-theme="light"></div>

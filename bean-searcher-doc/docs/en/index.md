@@ -80,9 +80,14 @@ public class UserController {
 <img src="/wx_discuss.png" width = "700" style="margin: 1rem auto" />
 
 <div style="text-align: center; margin-top:1rem; color: gray">Advertisers refuse to join the group</div>
+<br>
+<br>
 
 <script setup>
+import HomeSponsors from '../.vitepress/theme/HomeSponsors.vue'
 import OtherProjects from '../.vitepress/theme/OtherProjects.vue'
 </script>
+
+<HomeSponsors style="text-align: center" />
 
 <OtherProjects />
