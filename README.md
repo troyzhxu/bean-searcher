@@ -11,6 +11,7 @@
   <a href="https://github.com/troyzhxu/bean-searcher/stargazers"><img src="https://img.shields.io/github/stars/troyzhxu/bean-searcher?style=flat-square&logo=GitHub"></a>
   <a href="https://github.com/troyzhxu/bean-searcher/network/members"><img src="https://img.shields.io/github/forks/troyzhxu/bean-searcher?style=flat-square&logo=GitHub"></a>
   <a href="https://gitee.com/troyzhxu/bean-searcher/blob/master/LICENSE"><img src="https://img.shields.io/hexpm/l/plug.svg" alt="License"></a>
+  <a href="https://ko-fi.com/troyzhxu"><img src="https://img.shields.io/badge/Ko--fi-Sponsor%20me-ff5f5f?style=flat-square&logo=ko-fi&logoColor=white" alt="Sponsor on Ko-fi"></a>
 </p>
 <!-- <p align="center">学习测试请拉取 main 分支，dev 是在开发分支 (在根目录执行 `git checkout main`)</p> -->
 <p align="center"><a href="https://bs.zhxu.cn" target="_blank">Docs：https://bs.zhxu.cn</a></p>
