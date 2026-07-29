@@ -4,7 +4,7 @@
   </a>
 </p>
 <h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">Bean Searcher</h1>
-<h4 align="center">✨ Declarative list retrieval — one line of code for pagination, filtering, sorting, and stats</h4>
+<h4 align="center">✨ A read-only ORM for complex queries in Java ✨</h4>
 <p align="center">
   <a href="https://gitee.com/troyzhxu/bean-searcher/stargazers"><img src="https://gitee.com/troyzhxu/bean-searcher/badge/star.svg?theme=gvp"></a>
   <a href="https://gitee.com/troyzhxu/bean-searcher/members"><img src="https://gitee.com/troyzhxu/bean-searcher/badge/fork.svg?theme=gvp"></a>

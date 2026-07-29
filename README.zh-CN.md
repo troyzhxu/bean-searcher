@@ -4,7 +4,7 @@
   </a>
 </p>
 <h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">Bean Searcher</h1>
-<h4 align="center">✨ 声明式列表检索 — 一行代码完成多条件筛选、分页、排序、统计</h4>
+<h4 align="center">✨ 专注 Java 复杂检索的轻量级只读 ORM 框架 ✨</h4>
 <p align="center">
   <a href="https://gitee.com/troyzhxu/bean-searcher/stargazers"><img src="https://gitee.com/troyzhxu/bean-searcher/badge/star.svg?theme=gvp"></a>
   <a href="https://gitee.com/troyzhxu/bean-searcher/members"><img src="https://gitee.com/troyzhxu/bean-searcher/badge/fork.svg?theme=gvp"></a>
