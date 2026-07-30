@@ -88,7 +88,6 @@ public class BaseSearcher implements Searcher {
         } catch (SQLException e) {
             throw new SearchException("An exception occurred when collecting sql result!", e);
         }
-        }
     }
 
     @Override
