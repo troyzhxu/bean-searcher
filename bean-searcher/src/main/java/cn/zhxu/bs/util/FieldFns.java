@@ -35,14 +35,10 @@ public class FieldFns {
         }
         try {
             Method wrMethod = fieldFn.getClass().getDeclaredMethod("writeReplace");
-            boolean isInaccessible = !wrMethod.isAccessible();
-            if (isInaccessible) {
+            if (!wrMethod.canAccess(fieldFn)) {
                 wrMethod.setAccessible(true);
             }
             SerializedLambda sLambda = (SerializedLambda) wrMethod.invoke(fieldFn);
-            if (isInaccessible) {
-                wrMethod.setAccessible(false);
-            }
             String methodName = sLambda.getImplMethodName();
             if (methodName.startsWith("get") && methodName.length() > 3) {
                 name = StringUtils.firstCharToLoweCase(methodName.substring(3));
