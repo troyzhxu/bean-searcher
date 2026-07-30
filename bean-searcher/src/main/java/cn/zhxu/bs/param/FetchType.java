@@ -50,7 +50,7 @@ public class FetchType {
      *   @see #LIST_ALL
      *   @see #ONLY_TOTAL
      *   @see #ONLY_SUMMARY
-     **/
+     */
     private final int type;
 
     /**

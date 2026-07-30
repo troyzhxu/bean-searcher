@@ -56,7 +56,7 @@ public NumberFieldConvertor numberFieldConvertor() {
 ```java
 DefaultBeanReflector beanReflector = new DefaultBeanReflector();
 beanReflector.addConvertor(new NumberFieldConvertor());         // Add the converter
-// Build the Bean retriever
+// Build the BeanSearcher
 BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
         // Omit the configuration of other attributes
         .beanReflector(beanReflector)
@@ -95,7 +95,7 @@ public StrNumFieldConvertor strNumFieldConvertor() {
 ```java
 DefaultBeanReflector beanReflector = new DefaultBeanReflector();
 beanReflector.addConvertor(new StrNumFieldConvertor());         // Add the converter
-// Build the Bean retriever
+// Build the Bean searcher
 BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
         // Omit the configuration of other attributes
         .beanReflector(beanReflector)
@@ -129,7 +129,7 @@ bean-searcher.field-convertor.use-bool-num = false
 ```java
 DefaultBeanReflector beanReflector = new DefaultBeanReflector();
 beanReflector.addConvertor(new BoolNumFieldConvertor());           // Add the converter
-// Build the Bean retriever
+// Build the Bean searcher
 BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
         // Omit the configuration of other attributes
         .beanReflector(beanReflector)
@@ -176,7 +176,7 @@ public BoolFieldConvertor boolFieldConvertor() {
 ```java
 DefaultBeanReflector beanReflector = new DefaultBeanReflector();
 beanReflector.addConvertor(new BoolFieldConvertor());           // Add the converter
-// Build the Bean retriever
+// Build the Bean searcher
 BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
         // Omit the configuration of other attributes
         .beanReflector(beanReflector)
@@ -227,7 +227,7 @@ public DateFieldConvertor dateFieldConvertor() {
 ```java
 DefaultBeanReflector beanReflector = new DefaultBeanReflector();
 beanReflector.addConvertor(new DateFieldConvertor());           // Add the converter
-// Build the Bean retriever
+// Build the Bean searcher
 BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
         // Omit the configuration of other attributes
         .beanReflector(beanReflector)
@@ -389,7 +389,7 @@ bean-searcher.field-convertor.enum-ignore-case = false  # Whether to ignore case
 ```java
 DefaultBeanReflector beanReflector = new DefaultBeanReflector();
 beanReflector.addConvertor(new EnumFieldConvertor());           // Add the converter.
-// Build the Bean retriever.
+// Build the Bean searcher.
 BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
         // Omit the configuration of other attributes.
         .beanReflector(beanReflector)
@@ -421,7 +421,7 @@ bean-searcher.field-convertor.use-time = false
 ```java
 DefaultBeanReflector beanReflector = new DefaultBeanReflector();
 beanReflector.addConvertor(new TimeFieldConvertor());           // Add the converter.
-// Build the Bean retriever.
+// Build the Bean searcher.
 BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
         // Omit the configuration of other attributes.
         .beanReflector(beanReflector)
@@ -496,7 +496,7 @@ bean-searcher.field-convertor.json-fail-on-error = false
 ```java
 DefaultBeanReflector beanReflector = new DefaultBeanReflector();
 beanReflector.addConvertor(new JsonFieldConvertor());           // Add the converter
-// Build the Bean retriever
+// Build the Bean searcher
 BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
         // Omit the configuration of other attributes
         .beanReflector(beanReflector)
@@ -570,7 +570,7 @@ bean-searcher.field-convertor.list-item-separator = ,
 ```java
 DefaultBeanReflector beanReflector = new DefaultBeanReflector();
 beanReflector.addConvertor(new ListFieldConvertor());           // Add the converter
-// Build the Bean retriever
+// Build the Bean searcher
 BeanSearcher beanSearcher = SearcherBuilder.beanSearcher()
         // Omit the configuration of other attributes
         .beanReflector(beanReflector)

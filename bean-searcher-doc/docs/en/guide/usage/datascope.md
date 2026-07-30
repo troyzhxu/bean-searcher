@@ -1,12 +1,12 @@
 # Data Permissions
 
-The so - called data permissions refer to a mechanism where different users obtain different data sets when querying data through the same interface or method according to their respective data permission configuration information.
+Data permissions are a mechanism where different users see different data sets when querying through the same interface, based on their configured permission rules.
 
-Although the definition of data permissions is clear, its specific rules (ways of playing, variations) are diverse. Different project teams may adopt different data permission rules, and Bean Searcher supports customizing such rules. The following will take a specific rule as an example to illustrate how to implement data permissions in Bean Searcher.
+Although the definition is straightforward, the specific rules and implementations vary widely across projects. Different project teams may adopt different data permission rules, and Bean Searcher supports customizing such rules. The following will take a specific rule as an example to illustrate how to implement data permissions in Bean Searcher.
 
 ## Rule Example
 
-Assume that each business table requiring data permissions (such as the order table `order`) has fields `owner_id` (owner ID) and `dept_id` (affiliated department ID). Each owner uniquely belongs to a certain department, and departments have a tree - like hierarchical structure.
+Assume that each business table requiring data permissions (such as the order table `order`) has fields `owner_id` (owner ID) and `dept_id` (affiliated department ID). Each owner uniquely belongs to a certain department, and departments form a tree-like hierarchy.
 
 ### Key Data Tables
 
@@ -71,11 +71,11 @@ public class OrderVO {
 }
 ```
 
-Here is a trick: use a placeholder (`<ds>`) to mark where the data permission condition needs to be inserted. In this way, our custom code does not need to introduce a third - party framework to parse SQL syntax, so our code can be simpler.
+A useful technique: use a placeholder (`<ds>`) to mark where the data permission condition needs to be inserted. In this way, our custom code does not need to introduce a third - party framework to parse SQL syntax, so our code can be simpler.
 
 ### Data Permission Interceptor
 
-Next, a custom data permission interceptor can be created:
+Next, create a custom data permission interceptor:
 
 ```java
 @Component

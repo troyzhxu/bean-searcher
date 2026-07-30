@@ -139,7 +139,7 @@ public interface MapSearcher extends Searcher {
     <T> List<Map<String, Object>> searchAll(Class<T> beanClass);
 
     /**
-     * 回满足条件的所有数据（不支持分页偏移）
+     * 返回满足条件的所有数据（不支持分页偏移）
      * @param <T> bean 类型
      * @param beanClass 要检索的 bean 类型
      * @param paraMap 检索参数（包括排序分页参数）

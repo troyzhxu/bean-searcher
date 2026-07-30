@@ -5,7 +5,6 @@
     "preview": "vitepress preview docs"
   },
   "devDependencies": {
-    "vitepress": "^1.6.3",
-    "axios": "^1.8.2"
+    "vitepress": "^1.6.3"
   }
 }

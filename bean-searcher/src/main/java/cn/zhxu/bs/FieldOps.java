@@ -3,7 +3,7 @@ package cn.zhxu.bs;
 import cn.zhxu.bs.operator.*;
 
 /**
- * 过滤运算符
+ * 字段运算符
  *
  * @author Troy.Zhou @ 2017-03-20
  */
@@ -78,7 +78,7 @@ public class FieldOps {
     public static final EndWith EndWith = new EndWith();
 
     /**
-     * like {v1} or like {v1}
+     * like {v1} or like {v2}
      */
     public static final OrLike OrLike = new OrLike();
 
@@ -119,7 +119,7 @@ public class FieldOps {
 
     /**
      * 恒假运算符
-     * always true
+     * always false
      * @since v4.3
      */
     public static final AlwaysFalse AlwaysFalse = new AlwaysFalse();

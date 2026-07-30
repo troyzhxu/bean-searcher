@@ -17,7 +17,7 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * JDBC Sql 执行器
+ * JDBC SQL 执行器
  * @author Troy.Zhou
  * @since 1.1.1
  */
@@ -72,7 +72,7 @@ public class DefaultSqlExecutor implements SqlExecutor {
         } catch (SQLException e) {
             // 如果有异常，则立马关闭，否则与 SqlResult 一起关闭
             closeConnection(connection, beanMeta);
-            throw new SearchException("A exception occurred when executing sql.", e);
+            throw new SearchException("An exception occurred when executing sql.", e);
         }
     }
 
@@ -84,13 +84,13 @@ public class DefaultSqlExecutor implements SqlExecutor {
         String name = beanMeta.getDataSource();
         if (StringUtils.isBlank(name)) {
             if (dataSource == null) {
-                throw new SearchException("There's no a default dataSource for " + beanMeta.getBeanClass());
+                throw new SearchException("There is no default dataSource for " + beanMeta.getBeanClass());
             }
             return dataSource;
         }
         DataSource dataSource = dataSourceMap.get(name);
         if (dataSource == null) {
-            throw new SearchException("There's no a dataSource named " + name + " for " + beanMeta.getBeanClass());
+            throw new SearchException("There is no dataSource named " + name + " for " + beanMeta.getBeanClass());
         }
         return dataSource;
     }

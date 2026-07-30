@@ -34,7 +34,7 @@ public interface DelayPolicy {
     }
 
     /**
-     * 获取没批次查询后的延迟时间
+     * 获取每批次查询后的延迟时间
      * @param delayMills 初始延迟时间（毫秒）
      * @param exportingThreads 正在导出的线程数
      * @param maxExportingThreads 正在导出的最大线程数

@@ -11,7 +11,7 @@ import java.util.List;
 import static cn.zhxu.bs.util.ObjectUtils.firstNotNull;
 
 /**
- * 起始运算符
+ * 结尾运算符
  * @author Troy.Zhou @ 2022-01-19
  * @since v3.3.0
  */

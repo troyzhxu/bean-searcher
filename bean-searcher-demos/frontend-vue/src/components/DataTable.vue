@@ -2,8 +2,8 @@
   <section class="card table-card">
     <div class="card-header">
       <span class="card-icon">📄</span>
-      <h2>检索结果</h2>
-      <span class="card-badge" v-if="total > 0">共 {{ total }} 条</span>
+      <h2>{{ $t('table.title') }}</h2>
+      <span class="card-badge" v-if="total > 0">{{ $t('table.totalCount', { total }) }}</span>
     </div>
 
     <div class="table-body">
@@ -31,7 +31,10 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import type { User } from '@/types/user'
+
+const { t } = useI18n()
 
 const props = defineProps<{
   data: User[]
@@ -48,12 +51,12 @@ const emit = defineEmits<{
 }>()
 
 const columns = computed(() => [
-  { title: 'ID', dataIndex: 'id', key: 'id', sorter: true, width: 80, sortOrder: sortOrderFor('id') },
-  { title: '姓名', dataIndex: 'name', key: 'name', sorter: true, sortOrder: sortOrderFor('name') },
-  { title: '年龄', dataIndex: 'age', key: 'age', sorter: true, width: 80, sortOrder: sortOrderFor('age') },
-  { title: '性别', dataIndex: 'gender', key: 'gender', sorter: true, width: 80, sortOrder: sortOrderFor('gender') },
-  { title: '部门', dataIndex: 'department', key: 'department', sorter: true, sortOrder: sortOrderFor('department') },
-  { title: '入职时间', dataIndex: 'entryDate', key: 'entryDate', sorter: true, width: 120, sortOrder: sortOrderFor('entryDate') },
+  { title: t('table.colId'), dataIndex: 'id', key: 'id', sorter: true, width: 80, sortOrder: sortOrderFor('id') },
+  { title: t('table.colName'), dataIndex: 'name', key: 'name', sorter: true, sortOrder: sortOrderFor('name') },
+  { title: t('table.colAge'), dataIndex: 'age', key: 'age', sorter: true, width: 80, sortOrder: sortOrderFor('age') },
+  { title: t('table.colGender'), dataIndex: 'gender', key: 'gender', sorter: true, width: 80, sortOrder: sortOrderFor('gender') },
+  { title: t('table.colDepartment'), dataIndex: 'department', key: 'department', sorter: true, sortOrder: sortOrderFor('department') },
+  { title: t('table.colEntryDate'), dataIndex: 'entryDate', key: 'entryDate', sorter: true, width: 120, sortOrder: sortOrderFor('entryDate') },
 ])
 
 function sortOrderFor(field: string): 'ascend' | 'descend' | null {
@@ -67,7 +70,7 @@ const paginationConfig = computed(() => ({
   total: props.total,
   showSizeChanger: true,
   pageSizeOptions: ['5', '10', '15'],
-  showTotal: (total: number) => `共 ${total} 条`,
+  showTotal: (total: number) => t('table.totalCount', { total }),
   size: 'small' as const,
 }))
 

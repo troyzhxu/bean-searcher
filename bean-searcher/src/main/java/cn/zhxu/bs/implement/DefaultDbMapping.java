@@ -45,7 +45,7 @@ public class DefaultDbMapping implements DbMapping {
     // 默认的排序约束类型
     private SortType defaultSortType = SortType.ALLOW_PARAM;
 
-    // 冗余的后缀（如果类名已这些后缀结尾，将自动去掉这些后缀）（since v3.3.0）
+    // 冗余的后缀（如果类名以这些后缀结尾，将自动去掉这些后缀）（since v3.3.0）
     private String[] redundantSuffixes;
 
     // 全局忽略的实体类属性名（since v3.4.0）
@@ -236,7 +236,7 @@ public class DefaultDbMapping implements DbMapping {
             if (dbField == null) {
                 return null;
             }
-            // 如果该属性同时被 @DbFeild 注解了，则判断 @SearchBean 与 @DbFeild 所在的类层级，子类优先父类
+            // 如果该属性同时被 @DbField 注解了，则判断 @SearchBean 与 @DbField 所在的类层级，子类优先父类
             int res = compareFieldToBeanAnnotation(field, beanClass);
             if (res == 0) {
                 throw new SearchException("[" + beanClass.getName() + ": " + field.getName() + "] is annotated by @DbField and listed by @SearchBean.ignoreFields in same class, which are mutually exclusive.");
@@ -255,7 +255,7 @@ public class DefaultDbMapping implements DbMapping {
                 return withMapTo(fieldSql, mapTo);
             }
         } else if (shouldIgnore(field, ignoreFields)) {
-            // 未加 @DbField 注解时，更据 ignoreFields 判断该字段是否应该被忽略
+            // 未加 @DbField 注解时，根据 ignoreFields 判断该字段是否应该被忽略
             return null;
         }
         if (StringUtils.isNotBlank(mapTo)) {

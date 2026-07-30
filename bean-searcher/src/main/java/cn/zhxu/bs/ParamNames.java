@@ -25,7 +25,7 @@ public class ParamNames<T extends ParamNames<T>> {
     protected String orderBy = "orderBy";
 
     /**
-     * 参数名分割符
+     * 参数名分隔符
      */
     protected String separator = "-";
 
@@ -56,7 +56,7 @@ public class ParamNames<T extends ParamNames<T>> {
     protected String gexpr = "gexpr";
 
     /**
-     * 组分割符
+     * 组分隔符
      */
     protected String groupSeparator = ".";
 

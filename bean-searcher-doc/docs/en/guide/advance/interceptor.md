@@ -27,7 +27,7 @@ public interface SqlInterceptor {
 
 In the SQL interceptor, we can modify `SearchSql` to implement our custom logic.
 
-* Case: [Using SQL Interceptor to Implement Multi-Field Sorting](https://github.com/troyzhxu/bean-searcher/issues/9) (Since `v3.4.0`, the framework has built-in [Multi-Field Sorting](/en/guide/param/sort#Multi-Field Sorting - Since v3.4) functionality).
+* Case: [Using SQL Interceptor to Implement Multi-Field Sorting](https://github.com/troyzhxu/bean-searcher/issues/9) (Since `v3.4.0`, the framework has built-in support for [Multi-Field Sorting](/en/guide/param/sort#Multi-Field Sorting - Since v3.4)).
 
 ## Configuration (SpringBoot / Grails)
 

@@ -28,7 +28,7 @@ public class BeanSearcherExProps {
     private int maxThreads = 30;
 
     /**
-     * 文件名是否包含时间戳，默认是
+     * 文件名是否包含时间戳，默认为 true
      */
     private boolean timestampFilename = true;
 

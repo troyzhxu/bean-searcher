@@ -2,10 +2,48 @@ import { defineConfig } from 'vitepress'
 import en from './en'
 import zh from './zh'
 
+const SITE_URL = 'https://bs.zhxu.cn'
+const OG_IMAGE = `${SITE_URL}/logo.png`
+
 export default defineConfig({
 
   title: "Bean Searcher",
-  head: [['link', { rel: 'icon', href: '/logo.png' }]],
+  description: "Java 声明式检索框架 — 实体定义检索边界，参数驱动查询逻辑。一行代码搞定复杂列表检索。",
+  lang: 'zh-CN',
+
+  cleanUrls: false,
+
+  head: [
+    ['link', { rel: 'icon', href: '/logo.png' }],
+    ['meta', { name: 'robots', content: 'index, follow' }],
+    ['meta', { name: 'author', content: '周旭 (troyzhxu)' }],
+    ['meta', { name: 'keywords', content: 'Bean Searcher,只读ORM,Java声明式检索,声明式检索框架,参数驱动查询,高级查询,动态查询,Spring Boot,列表查询,分页查询,多表联查,检索框架,GraphQL' }],
+
+    // Open Graph
+    ['meta', { property: 'og:type', content: 'website' }],
+    ['meta', { property: 'og:site_name', content: 'Bean Searcher 文档' }],
+    ['meta', { property: 'og:locale', content: 'zh_CN' }],
+    ['meta', { property: 'og:image', content: OG_IMAGE }],
+    ['meta', { property: 'og:image:width', content: '256' }],
+    ['meta', { property: 'og:image:height', content: '256' }],
+
+    // Twitter Card
+    ['meta', { name: 'twitter:card', content: 'summary' }],
+    ['meta', { name: 'twitter:site', content: '@troyzhxu' }],
+    ['meta', { name: 'twitter:image', content: OG_IMAGE }],
+  ],
+
+  transformHead: (ctx) => {
+    let rel = ctx.pageData.relativePath
+    // 默认语言 zh 的路径前缀要去掉（对应 rewrites: 'zh/:rest*' → ':rest*'）
+    rel = rel.replace(/^zh\//, '')
+    // cleanUrls: false 时需补 .html 后缀；index.html 转为目录路径
+    rel = rel.replace(/\.md$/, '.html').replace(/\/index\.html$/, '/')
+    const canonical = `${SITE_URL}/${rel}`.replace(/\/$/, '') || SITE_URL
+    return [
+      ['link', { rel: 'canonical', href: canonical }],
+    ]
+  },
 
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config

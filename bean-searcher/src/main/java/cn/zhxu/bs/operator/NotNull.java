@@ -6,7 +6,7 @@ import cn.zhxu.bs.SqlWrapper;
 import java.util.List;
 
 /**
- * 非 IsNull 运算符
+ * 非空运算符
  * @author Troy.Zhou @ 2022-01-19
  * @since v3.3.0
  */

@@ -46,7 +46,7 @@ public class DefaultSnippetResolver implements SnippetResolver {
             int idx2 = findParamEndIndex(fragment, idx1);
             String sqlName = getSqlName(fragment, idx1, idx2);
             if (StringUtils.isBlank(sqlName) || sqlName.length() < 2) {
-                throw new SearchException("There is a syntax error about embed param: " + fragment);
+                throw new SearchException("There is a syntax error about embedded param: " + fragment);
             }
             SqlSnippet.SqlPara param = newSqlSnippetParam(sqlName);
             boolean endWithPrefix = sqlName.endsWith(paramPrefix);
@@ -58,7 +58,7 @@ public class DefaultSnippetResolver implements SnippetResolver {
             int quotationCount1 = StringUtils.containCount(fragment, 0, idx1, quotations);
             int quotationCount2 = StringUtils.containCount(fragment, Math.max(idx1, idx2), fragment.length(), quotations);
             if ((quotationCount1 + quotationCount2) % 2 != 0) {
-                throw new SearchException("There is a syntax error (quotations mismatch): " + fragment);
+                throw new SearchException("There is a syntax error (quotation mismatch): " + fragment);
             }
             int nIdx = idx1 + sqlName.length();
             // 判断嵌入参数是否不在引号内部，并且不是以 :name: 的形式

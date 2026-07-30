@@ -4,7 +4,7 @@ Integrating Bean Searcher v3.x is simpler than v2.x (there's no need to configur
 
 Normally, we use Bean Searcher in a backend Java Web project, and it can be used in any Web framework. The following introduces the integration methods in several common Web frameworks:
 
-Integration examples：
+Integration examples:
 
 * Gitee: https://gitee.com/troyzhxu/bean-searcher/tree/main/bean-searcher-demos
 * Github: https://github.com/troyzhxu/bean-searcher/tree/main/bean-searcher-demos

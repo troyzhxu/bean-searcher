@@ -2,9 +2,9 @@
   <section class="card filter-card">
     <div class="card-header" @click="toggleOpen" style="cursor: pointer">
       <span class="card-icon">🎯</span>
-      <h2>检索条件</h2>
+      <h2>{{ $t('filter.title') }}</h2>
       <a-button size="small" type="default" @click.stop="toggleOpen">
-        {{ open ? '收起 ▲' : '展开 ▼' }}
+        {{ open ? $t('filter.collapse') : $t('filter.expand') }}
       </a-button>
     </div>
 
@@ -12,68 +12,71 @@
       <div class="filter-grid">
         <!-- 姓名 -->
         <div class="filter-row">
-          <label>姓名</label>
+          <label>{{ $t('filter.name') }}</label>
           <a-select v-model:value="localParams['name-op']" class="ctl">
             <a-select-option v-for="o in nameOps" :key="o.key" :value="o.key">{{ o.label }}</a-select-option>
           </a-select>
-          <a-input v-model:value="localParams.name" placeholder="请输入姓名" class="ctl" />
-          <a-checkbox v-model:checked="localParams['name-ic']" class="ctl-check">忽略大小写</a-checkbox>
+          <a-input v-model:value="localParams.name" :placeholder="$t('filter.namePlaceholder')" class="ctl" />
+          <a-checkbox v-model:checked="localParams['name-ic']" class="ctl-check">{{ $t('filter.ignoreCase') }}</a-checkbox>
         </div>
 
         <!-- 年龄 -->
         <div class="filter-row">
-          <label>年龄</label>
+          <label>{{ $t('filter.age') }}</label>
           <a-select v-model:value="localParams['age-op']" class="ctl">
             <a-select-option v-for="o in numOps" :key="o.key" :value="o.key">{{ o.label }}</a-select-option>
           </a-select>
-          <a-input-number v-model:value="localParams['age-0']" placeholder="值" class="ctl" />
+          <a-input-number v-model:value="localParams['age-0']" :placeholder="$t('filter.agePlaceholder')" class="ctl" />
           <a-input-number
             v-if="localParams['age-op'] === 'bt'"
             v-model:value="localParams['age-1']"
-            placeholder="结束值"
+            :placeholder="$t('filter.ageEndPlaceholder')"
             class="ctl"
           />
         </div>
 
         <!-- 部门 -->
         <div class="filter-row">
-          <label>部门</label>
+          <label>{{ $t('filter.department') }}</label>
           <a-select v-model:value="localParams['department-op']" class="ctl">
             <a-select-option v-for="o in strOps" :key="o.key" :value="o.key">{{ o.label }}</a-select-option>
           </a-select>
-          <a-input v-model:value="localParams.department" placeholder="请输入部门" class="ctl" />
-          <a-checkbox v-model:checked="localParams['department-ic']" class="ctl-check">忽略大小写</a-checkbox>
+          <a-input v-model:value="localParams.department" :placeholder="$t('filter.departmentPlaceholder')" class="ctl" />
+          <a-checkbox v-model:checked="localParams['department-ic']" class="ctl-check">{{ $t('filter.ignoreCase') }}</a-checkbox>
         </div>
 
         <!-- 入职日期 -->
         <div class="filter-row">
-          <label>入职日期</label>
+          <label>{{ $t('filter.entryDate') }}</label>
           <a-select v-model:value="localParams['entryDate-op']" class="ctl">
             <a-select-option v-for="o in timeOps" :key="o.key" :value="o.key">{{ o.label }}</a-select-option>
           </a-select>
-          <a-date-picker v-model:value="localParams['entryDate-0']" value-format="YYYY-MM-DD" class="ctl" placeholder="开始日期" />
+          <a-date-picker v-model:value="localParams['entryDate-0']" value-format="YYYY-MM-DD" class="ctl" :placeholder="$t('filter.startDate')" />
           <a-date-picker
             v-if="localParams['entryDate-op'] === 'bt'"
             v-model:value="localParams['entryDate-1']"
             value-format="YYYY-MM-DD"
             class="ctl"
-            placeholder="结束日期"
+            :placeholder="$t('filter.endDate')"
           />
         </div>
       </div>
 
       <div class="filter-actions">
-        <a-button type="primary" @click="$emit('search')">⚡ 检索</a-button>
-        <a-button @click="$emit('export')">📥 导出 CSV</a-button>
+        <a-button type="primary" @click="$emit('search')">{{ $t('filter.search') }}</a-button>
+        <a-button @click="$emit('export')">{{ $t('filter.export') }}</a-button>
       </div>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, watch } from 'vue'
+import { ref, reactive, watch, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import type { UserSearchParams } from '@/types/user'
-import { nameOps, strOps, numOps, timeOps } from '@/types/user'
+import { nameOpKeys, strOpKeys, numOpKeys, timeOpKeys } from '@/types/user'
+
+const { t } = useI18n()
 
 const props = defineProps<{
   params: UserSearchParams
@@ -93,6 +96,11 @@ watch(localParams, (val) => Object.assign(props.params, val), { deep: true })
 function toggleOpen() {
   open.value = !open.value
 }
+
+const nameOps = computed(() => nameOpKeys.map(key => ({ key, label: t(`op.${key}`) })))
+const strOps = computed(() => strOpKeys.map(key => ({ key, label: t(`op.${key}`) })))
+const numOps = computed(() => numOpKeys.map(key => ({ key, label: t(`op.${key}`) })))
+const timeOps = computed(() => timeOpKeys.map(key => ({ key, label: t(`op.${key}`) })))
 </script>
 
 <style scoped>

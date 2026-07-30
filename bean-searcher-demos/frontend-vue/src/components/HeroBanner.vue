@@ -1,15 +1,17 @@
 <template>
   <div class="hero">
     <div class="hero-bg"></div>
+    <LocaleSwitcher />
     <div class="hero-content">
-      <h1>🔍 高级列表检索演示</h1>
-      <p>一行代码，实现复杂条件组合过滤、排序、分页与统计</p>
-      <a href="https://bs.zhxu.cn/" target="_blank" class="hero-badge">Bean Searcher - ReadOnly ORM</a>
+      <h1>🔍 {{ $t('hero.title') }}</h1>
+      <p>{{ $t('hero.subtitle') }}</p>
+      <a href="https://bs.zhxu.cn/" target="_blank" rel="noopener noreferrer" class="hero-badge">Bean Searcher - ReadOnly ORM</a>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import LocaleSwitcher from '@/components/LocaleSwitcher.vue'
 </script>
 
 <style scoped>

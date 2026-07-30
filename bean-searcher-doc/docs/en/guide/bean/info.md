@@ -1,6 +1,6 @@
 # Concept
 
-The retrieval entity class, which is the class annotated with `@SearchBean`, is also known as **SearchBean**. In [the previous section](/en/guide/start/use), we experienced the single-table retrieval function of Bean Searcher. However, compared with traditional ORMs, it is actually better at handling complex joint-table retrievals and some strange subqueries. At this time, the definition of SearchBean is also very easy.
+A retrieval entity class annotated with `@SearchBean` is called a **SearchBean**. In [the previous section](/en/guide/start/use), we demonstrated single-table retrieval. Compared to traditional ORMs, Bean Searcher excels at complex multi-table joins and non-trivial subqueries. Defining a SearchBean for these scenarios is straightforward.
 
 In addition, Bean Searcher also supports [omitting annotations](/en/guide/bean/aignore). An entity class without any annotations can also be automatically mapped to the database.
 

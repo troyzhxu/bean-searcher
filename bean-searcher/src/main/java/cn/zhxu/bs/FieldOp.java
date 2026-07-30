@@ -16,9 +16,9 @@ public interface FieldOp {
     String name();
 
     /**
-     * 猜测该运算符的名字
-     * @param name 猜测名称
-     * @return 是否正确
+     * 判断该运算符的名字
+     * @param name 待判断的名称
+     * @return 是否匹配
      */
     boolean isNamed(String name);
 

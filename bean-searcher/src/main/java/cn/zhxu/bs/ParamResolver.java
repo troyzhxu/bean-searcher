@@ -11,7 +11,7 @@ import java.util.Map;
 public interface ParamResolver {
 
     /**
-     * @param beanMeta 元数据
+     * @param beanMeta 元信息
      * @param fetchType Fetch 类型
      * @param paraMap 原始检索参数
      * @return SearchParam

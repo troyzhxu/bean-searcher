@@ -4,10 +4,10 @@
 
 ## V4 版本
 
-### v4.8 的新特性（v4.8.11）
+### v4.8 的新特性（v4.8.12）
 
 ::: warning 注意
-自 `v4.5` 版本起，默认支持 `JDK17 +`，如需兼容 `JDK 8 ~ 16`，可以使用带 `.jdk8` 后缀的兼容版本，例如：`v4.8.11.jdk8`。
+自 `v4.5` 版本起，默认支持 `JDK17 +`，如需兼容 `JDK 8 ~ 16`，可以使用带 `.jdk8` 后缀的兼容版本，例如：`v4.8.12.jdk8`。
 :::
 
 * Bean Searcher
@@ -31,8 +31,11 @@
     - 引入 `ConcurrentHashMap` 缓存导出字段解析结果，提高性能
     - 新增 `clearCache` 方法可用于手动清理缓存
   - 优化 `ExportField` 组件：当字段值为 `null` 时，返回空字符串 `""`，不调用格式化器（since v4.8.2）
+* Bean Searcher Boot Starter
+  - 修复 CSV 文件导出的响应头设置：移除不必要的 `Transfer-Encoding: chunked` 头部设置（since v4.8.12）
 * Bean Searcher Solon Plugin
   - 优化对 Solon 框架的兼容性，使 `bean-searcher-solon-plugin` 支持 `bean-searcher-exporter` 的自动装配（since v4.8.11）
+  - 修复 CSV 文件导出的响应头设置：移除不必要的 `Transfer-Encoding: chunked` 头部设置（since v4.8.12）
 
 ### v4.7 的新特性（v4.7.1）
 

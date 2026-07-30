@@ -23,17 +23,17 @@ public enum DbType {
     BYTE(Byte.class),
 
     /**
-     * 短整形
+     * 短整型
      */
     SHORT(Short.class),
 
     /**
-     * 整形字段
+     * 整型字段
      */
     INT(Integer.class),
 
     /**
-     * 长整形字段
+     * 长整型字段
      */
     LONG(Long.class),
 

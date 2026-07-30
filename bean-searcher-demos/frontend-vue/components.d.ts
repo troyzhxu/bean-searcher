@@ -22,9 +22,11 @@ declare module 'vue' {
     ATag: typeof import('ant-design-vue/es')['Tag']
     DataTable: typeof import('./src/components/DataTable.vue')['default']
     FilterCard: typeof import('./src/components/FilterCard.vue')['default']
-    FooterBanner: typeof import('./src/components/FooterBanner.vue')['default']
     HeroBanner: typeof import('./src/components/HeroBanner.vue')['default']
+    LocaleSwitcher: typeof import('./src/components/LocaleSwitcher.vue')['default']
     RepoBanner: typeof import('./src/components/RepoBanner.vue')['default']
+    ShowcaseBanner: typeof import('./src/components/ShowcaseBanner.vue')['default']
+    SourceBanner: typeof import('./src/components/SourceBanner.vue')['default']
     StatsCards: typeof import('./src/components/StatsCards.vue')['default']
   }
 }

@@ -1,3 +1,14 @@
+---
+title: Bean Searcher 快速入门 | 5 分钟上手高级查询
+description: 5 分钟从零写出第一个检索接口。添加依赖、创建实体类、注入 BeanSearcher、一行代码实现分页+过滤+排序+统计的复杂列表检索。
+head:
+  - - meta
+    - property: og:title
+      content: Bean Searcher 快速入门 - 5 分钟上手
+  - - meta
+    - property: og:description
+      content: 从零开始，5 分钟写出第一个复杂列表检索接口。
+---
 # 快速入门
 
 这篇文章带你 **5 分钟**从零写出第一个检索接口。不用读完所有文档，跟着做就行。
@@ -10,7 +21,7 @@
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-boot-starter</artifactId>
-    <version>4.8.11</version>
+    <version>4.8.12</version>
 </dependency>
 ```
 

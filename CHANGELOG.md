@@ -11,6 +11,17 @@
     - `FieldMeta` 新增 `getRecordIndex()` 方法，返回字段在 canonical constructor 中的参数索引
 * `bean-searcher-exporter`：`@Export` 注解支持标注在 `record` 组件上，`DefaultExportFieldResolver` 支持解析 record 类的导出字段
 
+# v4.8.12 @ 2026-07-24
+
+## 🐛 Bug Fixes
+
+* Bean Searcher Boot Starter
+  - 修复 CSV 文件导出的响应头设置: 移除不必要的 `Transfer-Encoding: chunked` 头部设置
+* Bean Searcher Solon Plugin
+  - 修复 CSV 文件导出的响应头设置: 移除不必要的 `Transfer-Encoding: chunked` 头部设置
+
+## 同时发布 v4.8.12.jdk8 版本
+
 # v4.8.11 @ 2026-07-24
 
 ## 🐛 Bug Fixes

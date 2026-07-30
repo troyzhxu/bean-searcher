@@ -87,14 +87,14 @@ public class BeanSearcherSql {
     public static class DefaultMapping {
 
         /**
-         * 是否启动大写映射，启用后，自动映射出的表名与列名都是大写形式，默认为 false，
-         * 注意：使用 {@link SearchBean#tables() } 与 {@link DbField#value() } 显示指定的表名与列表仍保持原有大小写形式
+         * 是否启用大写映射，启用后，自动映射出的表名与列名都是大写形式，默认为 false，
+         * 注意：使用 {@link SearchBean#tables()} 与 {@link DbField#value()} 显式指定的表名与列名仍保持原有大小写形式
          */
         private boolean upperCase = false;
 
         /**
          * 驼峰是否转下划线，启用后，自动映射出的表名与列名都是下划线风格，默认为 true，
-         * 注意：使用 {@link SearchBean#tables() } 与 {@link DbField#value() } 显示指定的表名与列表仍保持原有大小写形式
+         * 注意：使用 {@link SearchBean#tables()} 与 {@link DbField#value()} 显式指定的表名与列名仍保持原有大小写形式
          */
         private boolean underlineCase = true;
 
@@ -109,7 +109,7 @@ public class BeanSearcherSql {
         private String[] redundantSuffixes;
 
         /**
-         * 需要全局忽略的实体类属性名列表，无默认值，注意：如果属性添加的 {@link DbField } 注解，则不受该配置影响
+         * 需要全局忽略的实体类属性名列表，无默认值，注意：如果属性添加了 {@link DbField} 注解，则不受该配置影响
          */
         private String[] ignoreFields;
 

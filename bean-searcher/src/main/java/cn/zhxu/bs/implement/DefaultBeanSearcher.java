@@ -13,7 +13,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- * 自动检索器 根据 SearcherBean 的 Class 和 请求参数，自动检索，数据以 Bean 对象呈现
+ * 自动检索器 根据 SearchBean 的 Class 和 请求参数，自动检索，数据以 Bean 对象呈现
  * @author Troy.Zhou @ 2021-10-29
  * @since v3.0.0
  */
@@ -133,7 +133,7 @@ public class DefaultBeanSearcher extends BaseSearcher implements BeanSearcher {
             }
             return doFilter(result, beanMeta, newParams, fetchType);
         } catch (SQLException e) {
-            throw new SearchException("A exception occurred when collecting sql result!", e);
+            throw new SearchException("An exception occurred when collecting sql result!", e);
         }
     }
 
@@ -145,7 +145,7 @@ public class DefaultBeanSearcher extends BaseSearcher implements BeanSearcher {
                 try {
                     return listResult.get(dbAlias);
                 } catch (SQLException e) {
-                    throw new SearchException("A exception occurred when collecting sql result!", e);
+                    throw new SearchException("An exception occurred when collecting sql result!", e);
                 }
             });
             if (bean instanceof BeanAware) {

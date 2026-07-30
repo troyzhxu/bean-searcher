@@ -4,7 +4,15 @@ export default defineConfig({
 
   lang: 'en-US',
 
-  description: "A read-only ORM focused on advanced queries, inherently supporting join tables and eliminating the need for DTO/VO conversion, making it possible to achieve complex list retrieval with just one line of code!",
+  description: "Java Declarative Search Framework — entities define search boundaries, parameters drive query logic. One line of code for complex list retrieval.",
+
+  head: [
+    ['meta', { property: 'og:locale', content: 'en_US' }],
+    ['meta', { property: 'og:title', content: 'Bean Searcher - Java Declarative Search Framework' }],
+    ['meta', { property: 'og:description', content: 'Entities define search boundaries, parameters drive query logic. One line of code for endless list query combinations.' }],
+    ['meta', { name: 'twitter:title', content: 'Bean Searcher - Java Declarative Search Framework' }],
+    ['meta', { name: 'twitter:description', content: 'Entities define search boundaries, parameters drive query logic. One line of code for endless list query combinations.' }],
+  ],
 
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
@@ -12,7 +20,7 @@ export default defineConfig({
     nav: [
       { text: 'Guide', link: '/en/guide/info/bean-searcher', activeMatch: '/guide/' },
       {
-        text: 'v4.8.11',
+        text: 'v4.8.12',
         items: [
           {
             text: 'Changelog',
@@ -53,6 +61,7 @@ export default defineConfig({
             items: [
               { text: 'Why use it', link: '/why' },
               { text: 'Bean Searcher', link: '/bean-searcher' },
+              { text: 'Quick Demo', link: '/demo' },
               { text: 'What\'s New?', link: '/versions' },
             ]
           },
