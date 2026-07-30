@@ -89,7 +89,7 @@ public class BeanMeta<T> {
 
     /**
      * 是否是 record 类
-     * @since v4.9.0
+     * @since v5.0.0
      */
     private final boolean record;
 
@@ -251,7 +251,7 @@ public class BeanMeta<T> {
 
     /**
      * @return 是否是 record 类
-     * @since v4.9.0
+     * @since v5.0.0
      */
     public boolean isRecord() {
         return record;
