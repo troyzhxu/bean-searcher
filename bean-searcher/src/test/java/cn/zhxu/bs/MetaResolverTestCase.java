@@ -150,7 +150,7 @@ public class MetaResolverTestCase {
             String message = e.getMessage();
             System.out.println(message);
             Assertions.assertTrue(message.startsWith("The alias [bb] of [" + User03.class.getName()));
-            Assertions.assertTrue(message.endsWith("] is already exists on other fields."));
+            Assertions.assertTrue(message.endsWith("] already exists on other fields."));
             Assertions.assertTrue(message.contains("User03.id]") || message.contains("User03.enable]"));
             exception = true;
         }
