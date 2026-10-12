@@ -32,7 +32,7 @@ public class OrderController {
 
     // 方式一：最简用法，使用默认参数
     @GetMapping("/order/export")
-    public void exportOrders(HttpServletResponse response) throws IOException {
+    public void exportOrders() throws IOException {
         beanExporter.export("订单数据", OrderExportVO.class);
     }
 
