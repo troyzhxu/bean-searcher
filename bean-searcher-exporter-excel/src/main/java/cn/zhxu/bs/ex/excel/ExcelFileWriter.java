@@ -3,7 +3,6 @@ package cn.zhxu.bs.ex.excel;
 import cn.zhxu.bs.ex.ExportException;
 import cn.zhxu.bs.ex.ExportField;
 import cn.zhxu.bs.ex.FileWriter;
-import cn.zhxu.bs.ex.Formatter;
 import cn.zhxu.bs.util.StringUtils;
 
 import java.io.BufferedOutputStream;
@@ -50,7 +49,6 @@ public class ExcelFileWriter implements FileWriter {
     private boolean numericCells = true;
 
     private ZipOutputStream zip;
-    private List<ExportField> fields;
     private int rowNum;
 
     public ExcelFileWriter(OutputStream output) {
@@ -83,7 +81,6 @@ public class ExcelFileWriter implements FileWriter {
         if (fields == null || fields.isEmpty()) {
             throw new ExportException("The export fields can not be empty.");
         }
-        this.fields = fields;
         this.rowNum = 0;
 
         zip = new ZipOutputStream(buffer, StandardCharsets.UTF_8);
@@ -104,7 +101,7 @@ public class ExcelFileWriter implements FileWriter {
         }
         write("<sheetFormatPr defaultRowHeight=\"15\"/>");
         write("<sheetData>");
-        writeHeaderRow();
+        writeHeaderRow(fields);
         zip.flush();
         buffer.flush();
     }
@@ -115,7 +112,7 @@ public class ExcelFileWriter implements FileWriter {
             throw new ExportException("You must call writeStart before writeAndFlush.");
         }
         for (Object data : dataList) {
-            writeDataRow(data);
+            writeDataRow(fields, data);
         }
         zip.flush();
         buffer.flush();
@@ -141,8 +138,9 @@ public class ExcelFileWriter implements FileWriter {
 
     /**
      * 写出表头行
+     * @param fields 文件字段列表
      */
-    protected void writeHeaderRow() throws IOException {
+    protected void writeHeaderRow(List<ExportField> fields) throws IOException {
         StringBuilder sb = new StringBuilder(64 + fields.size() * 32);
         int row = ++rowNum;
         String style = headerBold ? " s=\"" + STYLE_HEADER + "\"" : "";
@@ -160,9 +158,10 @@ public class ExcelFileWriter implements FileWriter {
 
     /**
      * 写出一条数据行
+     * @param fields 文件字段列表
      * @param data 数据对象
      */
-    protected void writeDataRow(Object data) throws IOException {
+    protected void writeDataRow(List<ExportField> fields, Object data) throws IOException {
         StringBuilder sb = new StringBuilder(64 + fields.size() * 24);
         int row = ++rowNum;
         sb.append("<row r=\"").append(row).append("\">");
@@ -186,24 +185,24 @@ public class ExcelFileWriter implements FileWriter {
         if (value == null) {
             return;
         }
-        String format = field.getFormat();
-        Formatter formatter = field.getFormatter();
-        boolean formatted = !StringUtils.isBlank(format) && formatter != null;
         String ref = XlsxPart.colName(col) + row;
-        if (numericCells && !formatted && value instanceof Number) {
-            String text = numberText((Number) value);
-            if (text != null) {
-                // 数值单元格：Excel 可直接参与计算
-                sb.append("<c r=\"").append(ref).append("\"><v>").append(text).append("</v></c>");
+        // 只有未配置格式化的字段才写成数值 / 布尔单元格，否则一律按格式化后的文本写出
+        if (field.unformatted()) {
+            if (numericCells && value instanceof Number number) {
+                String text = numberText(number);
+                if (text != null) {
+                    // 数值单元格：Excel 可直接参与计算
+                    sb.append("<c r=\"").append(ref).append("\"><v>").append(text).append("</v></c>");
+                    return;
+                }
+            }
+            if (value instanceof Boolean bool) {
+                sb.append("<c r=\"").append(ref).append("\" t=\"b\"><v>")
+                        .append(bool ? '1' : '0').append("</v></c>");
                 return;
             }
         }
-        if (!formatted && value instanceof Boolean) {
-            sb.append("<c r=\"").append(ref).append("\" t=\"b\"><v>")
-                    .append((Boolean) value ? '1' : '0').append("</v></c>");
-            return;
-        }
-        String text = formatted ? formatter.format(format, value) : textOf(value);
+        String text = field.format(value);
         if (text == null) {
             return;
         }
@@ -212,19 +211,6 @@ public class ExcelFileWriter implements FileWriter {
         }
         sb.append("<c r=\"").append(ref).append("\" t=\"inlineStr\">")
                 .append(textXml(text)).append("</c>");
-    }
-
-    /**
-     * 值转文本（数字优先使用不会出现科学计数法的表示）
-     */
-    private String textOf(Object value) {
-        if (value instanceof Number number) {
-            String text = numberText(number);
-            if (text != null) {
-                return text;
-            }
-        }
-        return value.toString();
     }
 
     /**

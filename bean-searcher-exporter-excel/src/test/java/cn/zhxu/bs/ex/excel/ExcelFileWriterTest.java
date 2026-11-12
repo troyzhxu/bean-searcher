@@ -173,6 +173,32 @@ class ExcelFileWriterTest {
         assertTrue(sheet.contains("<c r=\"C2\"><v>3</v></c>"));
     }
 
+    static class Bonus {
+
+        @Export(name = "奖金", format = "#,##0.00")
+        BigDecimal bonus;
+
+        Bonus(String bonus) {
+            this.bonus = new BigDecimal(bonus);
+        }
+
+    }
+
+    @Test
+    void testFormattedNumberAsText() throws Exception {
+        List<ExportField> fields = new DefaultExportFieldResolver().resolve(Bonus.class);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ExcelFileWriter writer = new ExcelFileWriter(out);
+        writer.writeStart(fields);
+        writer.writeAndFlush(fields, List.of(new Bonus("12500.5")));
+        writer.writeStop(fields);
+
+        String sheet = unzip(out.toByteArray()).get("xl/worksheets/sheet1.xml");
+        // 配置了 format 的数字按格式化后的文本写出，而不是数值单元格
+        assertTrue(sheet.contains("<c r=\"A2\" t=\"inlineStr\"><is><t>12,500.50</t></is></c>"));
+        assertFalse(sheet.contains("<v>12"));
+    }
+
     static int countRows(String sheet) {
         int count = 0;
         int index = sheet.indexOf("<row ");

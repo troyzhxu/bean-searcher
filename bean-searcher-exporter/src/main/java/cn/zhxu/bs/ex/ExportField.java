@@ -40,9 +40,30 @@ public class ExportField {
      * @return 字段文本
      */
     public String text(Object obj) {
-        var value = evaluate(obj, value(obj));
-        if (value == null) return "";
-        if (StringUtils.isBlank(format) || formatter == null) {
+        return format(evaluate(obj, value(obj)));
+    }
+
+    /**
+     * @return 是否不需要格式化
+     * @since v5.0.0
+     */
+    public boolean unformatted() {
+        return StringUtils.isBlank(format) || formatter == null;
+    }
+
+    /**
+     * 对字段值（已按表达式转换）进行格式化，得到最终输出的文本 <br>
+     * 供需要先拿到原始值再决定输出方式的场景使用（如 Excel 导出中数字需写成数值单元格），
+     * 避免重复调用 {@link #value(Object)} 与 {@link #evaluate(Object, Object)}
+     * @param value 字段值（已按表达式转换）
+     * @return 字段文本
+     * @since v5.0.0
+     */
+    public String format(Object value) {
+        if (value == null) {
+            return "";
+        }
+        if (unformatted()) {
             return value.toString();
         }
         return formatter.format(format, value);
