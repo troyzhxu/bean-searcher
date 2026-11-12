@@ -17,6 +17,7 @@
 		<module>bean-searcher</module>
 		<module>bean-searcher-label</module>
         <module>bean-searcher-exporter</module>
+		<module>bean-searcher-exporter-excel</module>
 		<module>bean-searcher-boot-starter</module>
 		<module>bean-searcher-solon-plugin</module>
 	</modules>
@@ -145,7 +146,7 @@
 				</executions>
 				<configuration>
 					<jdkToolchain>
-						<version>[17,21]</version>
+						<version>[17,25]</version>
 					</jdkToolchain>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
