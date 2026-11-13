@@ -11,39 +11,39 @@ To build a project using Gradle, add the following dependencies:
 ::: code-group
 ```groovy [SpringBoot 4.x]
 // Use this dependency directly to utilize Bean Searcher's data retrieval functionality
-implementation 'cn.zhxu:bean-searcher-boot-starter:4.8.12'
+implementation 'cn.zhxu:bean-searcher-boot-starter:5.0.0.M1'
 // If you wish to use the field labeling (dictionary translation) functionality
-implementation 'cn.zhxu:bean-searcher-label:4.8.12'
+implementation 'cn.zhxu:bean-searcher-label:5.0.0.M1'
 // If you wish to use the data export functionality (can serve as an alternative to EasyExcel) -->
 // Very lightweight, does not depend on POI, simpler to use
-implementation 'cn.zhxu:bean-searcher-exporter:4.8.12'
+implementation 'cn.zhxu:bean-searcher-exporter:5.0.0.M1'
 ```
 ```groovy [Grails 7.x]
 // Use this dependency directly to utilize Bean Searcher's data retrieval functionality
-implementation 'cn.zhxu:bean-searcher-boot-starter:4.8.12'
+implementation 'cn.zhxu:bean-searcher-boot-starter:5.0.0.M1'
 // If you wish to use the field labeling (dictionary translation) functionality
-implementation 'cn.zhxu:bean-searcher-label:4.8.12'
+implementation 'cn.zhxu:bean-searcher-label:5.0.0.M1'
 // If you wish to use the data export functionality (can serve as an alternative to EasyExcel) -->
 // Very lightweight, does not depend on POI, simpler to use
-implementation 'cn.zhxu:bean-searcher-exporter:4.8.12'
+implementation 'cn.zhxu:bean-searcher-exporter:5.0.0.M1'
 ```
 ```groovy [Solon]
 // Solon projects can use this dependency directly (same functionality as bean-searcher-boot-starter)
-implementation 'cn.zhxu:bean-searcher-solon-plugin:4.8.12'
+implementation 'cn.zhxu:bean-searcher-solon-plugin:5.0.0.M1'
 // If you wish to use the field labeling (dictionary translation) functionality
-implementation 'cn.zhxu:bean-searcher-label:4.8.12'
+implementation 'cn.zhxu:bean-searcher-label:5.0.0.M1'
 // If you wish to use the data export functionality (can serve as an alternative to EasyExcel) -->
 // Very lightweight, does not depend on POI, simpler to use
-implementation 'cn.zhxu:bean-searcher-exporter:4.8.12'
+implementation 'cn.zhxu:bean-searcher-exporter:5.0.0.M1'
 ```
 ```groovy [Others]
 // Bean Searcher core dependency, any framework can use this dependency, requires manual configuration
-implementation 'cn.zhxu:bean-searcher:4.8.12'
+implementation 'cn.zhxu:bean-searcher:5.0.0.M1'
 // If you wish to use the field labeling (dictionary translation) functionality, requires manual configuration
-implementation 'cn.zhxu:bean-searcher-label:4.8.12'
+implementation 'cn.zhxu:bean-searcher-label:5.0.0.M1'
 // If you wish to use the data export functionality (can serve as an alternative to EasyExcel), requires manual configuration -->
 // Very lightweight, does not depend on POI, simpler to use
-implementation 'cn.zhxu:bean-searcher-exporter:4.8.12'
+implementation 'cn.zhxu:bean-searcher-exporter:5.0.0.M1'
 ```
 :::
 
@@ -52,39 +52,39 @@ implementation 'cn.zhxu:bean-searcher-exporter:4.8.12'
 ::: code-group
 ```groovy [SpringBoot 3.x]
 // Use this dependency directly to utilize Bean Searcher's data retrieval functionality
-implementation 'cn.zhxu:bean-searcher-boot-starter:4.8.12'
+implementation 'cn.zhxu:bean-searcher-boot-starter:5.0.0.M1'
 // If you wish to use the field labeling (dictionary translation) functionality
-implementation 'cn.zhxu:bean-searcher-label:4.8.12'
+implementation 'cn.zhxu:bean-searcher-label:5.0.0.M1'
 // If you wish to use the data export functionality (can serve as an alternative to EasyExcel) -->
 // Very lightweight, does not depend on POI, simpler to use
-implementation 'cn.zhxu:bean-searcher-exporter:4.8.12'
+implementation 'cn.zhxu:bean-searcher-exporter:5.0.0.M1'
 ```
 ```groovy [Grails 7.x]
 // Use this dependency directly to utilize Bean Searcher's data retrieval functionality
-implementation 'cn.zhxu:bean-searcher-boot-starter:4.8.12'
+implementation 'cn.zhxu:bean-searcher-boot-starter:5.0.0.M1'
 // If you wish to use the field labeling (dictionary translation) functionality
-implementation 'cn.zhxu:bean-searcher-label:4.8.12'
+implementation 'cn.zhxu:bean-searcher-label:5.0.0.M1'
 // If you wish to use the data export functionality (can serve as an alternative to EasyExcel) -->
 // Very lightweight, does not depend on POI, simpler to use
-implementation 'cn.zhxu:bean-searcher-exporter:4.8.12'
+implementation 'cn.zhxu:bean-searcher-exporter:5.0.0.M1'
 ```
 ```groovy [Solon]
 // Solon projects can use this dependency directly (same functionality as bean-searcher-boot-starter)
-implementation 'cn.zhxu:bean-searcher-solon-plugin:4.8.12'
+implementation 'cn.zhxu:bean-searcher-solon-plugin:5.0.0.M1'
 // If you wish to use the field labeling (dictionary translation) functionality
-implementation 'cn.zhxu:bean-searcher-label:4.8.12'
+implementation 'cn.zhxu:bean-searcher-label:5.0.0.M1'
 // If you wish to use the data export functionality (can serve as an alternative to EasyExcel) -->
 // Very lightweight, does not depend on POI, simpler to use
-implementation 'cn.zhxu:bean-searcher-exporter:4.8.12'
+implementation 'cn.zhxu:bean-searcher-exporter:5.0.0.M1'
 ```
 ```groovy [Others]
 // Bean Searcher core dependency, any framework can use this dependency, requires manual configuration
-implementation 'cn.zhxu:bean-searcher:4.8.12'
+implementation 'cn.zhxu:bean-searcher:5.0.0.M1'
 // If you wish to use the field labeling (dictionary translation) functionality, requires manual configuration
-implementation 'cn.zhxu:bean-searcher-label:4.8.12'
+implementation 'cn.zhxu:bean-searcher-label:5.0.0.M1'
 // If you wish to use the data export functionality (can serve as an alternative to EasyExcel), requires manual configuration -->
 // Very lightweight, does not depend on POI, simpler to use
-implementation 'cn.zhxu:bean-searcher-exporter:4.8.12'
+implementation 'cn.zhxu:bean-searcher-exporter:5.0.0.M1'
 ```
 :::
 
@@ -141,20 +141,20 @@ To build a project using Maven, add the following dependencies:
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-boot-starter</artifactId>
-    <version>4.8.12</version>
+    <version>5.0.0.M1</version>
 </dependency>
 <!-- If you wish to use the field labeling (dictionary translation) functionality -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-label</artifactId>
-    <version>4.8.12</version>
+    <version>5.0.0.M1</version>
 </dependency>
 <!-- If you wish to use the data export functionality (can serve as an alternative to EasyExcel) -->
 <!-- Very lightweight, does not depend on POI, simpler to use -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-exporter</artifactId>
-    <version>4.8.12</version>
+    <version>5.0.0.M1</version>
 </dependency>
 ```
 ```xml [Grails 7.x]
@@ -162,20 +162,20 @@ To build a project using Maven, add the following dependencies:
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-boot-starter</artifactId>
-    <version>4.8.12</version>
+    <version>5.0.0.M1</version>
 </dependency>
 <!-- If you wish to use the field labeling (dictionary translation) functionality -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-label</artifactId>
-    <version>4.8.12</version>
+    <version>5.0.0.M1</version>
 </dependency>
 <!-- If you wish to use the data export functionality (can serve as an alternative to EasyExcel) -->
 <!-- Very lightweight, does not depend on POI, simpler to use -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-exporter</artifactId>
-    <version>4.8.12</version>
+    <version>5.0.0.M1</version>
 </dependency>
 ```
 ```xml [Solon]
@@ -183,20 +183,20 @@ To build a project using Maven, add the following dependencies:
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-solon-plugin</artifactId>
-    <version>4.8.12</version>
+    <version>5.0.0.M1</version>
 </dependency>
 <!-- If you wish to use the field labeling (dictionary translation) functionality -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-label</artifactId>
-    <version>4.8.12</version>
+    <version>5.0.0.M1</version>
 </dependency>
 <!-- If you wish to use the data export functionality (can serve as an alternative to EasyExcel) -->
 <!-- Very lightweight, does not depend on POI, simpler to use -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-exporter</artifactId>
-    <version>4.8.12</version>
+    <version>5.0.0.M1</version>
 </dependency>
 ```
 ```xml [Others]
@@ -204,20 +204,20 @@ To build a project using Maven, add the following dependencies:
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher</artifactId>
-    <version>4.8.12</version>
+    <version>5.0.0.M1</version>
 </dependency>
 <!-- If you wish to use the field labeling (dictionary translation) functionality, requires manual configuration -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-label</artifactId>
-    <version>4.8.12</version>
+    <version>5.0.0.M1</version>
 </dependency>
 <!-- If you wish to use the data export functionality (can serve as an alternative to EasyExcel), requires manual configuration -->
 <!-- Very lightweight, does not depend on POI, simpler to use -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-exporter</artifactId>
-    <version>4.8.12</version>
+    <version>5.0.0.M1</version>
 </dependency>
 ```
 :::
@@ -230,20 +230,20 @@ To build a project using Maven, add the following dependencies:
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-boot-starter</artifactId>
-    <version>4.8.12</version>
+    <version>5.0.0.M1</version>
 </dependency>
 <!-- If you wish to use the field labeling (dictionary translation) functionality -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-label</artifactId>
-    <version>4.8.12</version>
+    <version>5.0.0.M1</version>
 </dependency>
 <!-- If you wish to use the data export functionality (can serve as an alternative to EasyExcel) -->
 <!-- Very lightweight, does not depend on POI, simpler to use -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-exporter</artifactId>
-    <version>4.8.12</version>
+    <version>5.0.0.M1</version>
 </dependency>
 ```
 ```xml [Grails 7.x]
@@ -251,20 +251,20 @@ To build a project using Maven, add the following dependencies:
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-boot-starter</artifactId>
-    <version>4.8.12</version>
+    <version>5.0.0.M1</version>
 </dependency>
 <!-- If you wish to use the field labeling (dictionary translation) functionality -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-label</artifactId>
-    <version>4.8.12</version>
+    <version>5.0.0.M1</version>
 </dependency>
 <!-- If you wish to use the data export functionality (can serve as an alternative to EasyExcel) -->
 <!-- Very lightweight, does not depend on POI, simpler to use -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-exporter</artifactId>
-    <version>4.8.12</version>
+    <version>5.0.0.M1</version>
 </dependency>
 ```
 ```xml [Solon]
@@ -272,20 +272,20 @@ To build a project using Maven, add the following dependencies:
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-solon-plugin</artifactId>
-    <version>4.8.12</version>
+    <version>5.0.0.M1</version>
 </dependency>
 <!-- If you wish to use the field labeling (dictionary translation) functionality -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-label</artifactId>
-    <version>4.8.12</version>
+    <version>5.0.0.M1</version>
 </dependency>
 <!-- If you wish to use the data export functionality (can serve as an alternative to EasyExcel) -->
 <!-- Very lightweight, does not depend on POI, simpler to use -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-exporter</artifactId>
-    <version>4.8.12</version>
+    <version>5.0.0.M1</version>
 </dependency>
 ```
 ```xml [Others]
@@ -293,20 +293,20 @@ To build a project using Maven, add the following dependencies:
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher</artifactId>
-    <version>4.8.12</version>
+    <version>5.0.0.M1</version>
 </dependency>
 <!-- If you wish to use the field labeling (dictionary translation) functionality, requires manual configuration -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-label</artifactId>
-    <version>4.8.12</version>
+    <version>5.0.0.M1</version>
 </dependency>
 <!-- If you wish to use the data export functionality (can serve as an alternative to EasyExcel), requires manual configuration -->
 <!-- Very lightweight, does not depend on POI, simpler to use -->
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-exporter</artifactId>
-    <version>4.8.12</version>
+    <version>5.0.0.M1</version>
 </dependency>
 ```
 :::

@@ -21,7 +21,7 @@ export default defineConfig({
     nav: [
       { text: '指南', link: '/guide/info/bean-searcher', activeMatch: '/guide/' },
       {
-        text: 'v4.8.12',
+        text: 'v5.0.0.M1',
         items: [
           {
             text: '更新日志',

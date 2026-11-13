@@ -21,7 +21,7 @@ head:
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-boot-starter</artifactId>
-    <version>4.8.12</version>
+    <version>5.0.0.M1</version>
 </dependency>
 ```
 

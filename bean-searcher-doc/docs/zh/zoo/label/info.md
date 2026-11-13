@@ -64,13 +64,13 @@ SearchBean 中有一个枚举字段，需要将枚举值转换为可读文本展
 
 ::: code-group
 ```groovy [Gradle]
-implementation 'cn.zhxu:bean-searcher-label:4.8.12'
+implementation 'cn.zhxu:bean-searcher-label:5.0.0.M1'
 ```
 ```xml [Maven]
 <dependency>
     <groupId>cn.zhxu</groupId>
     <artifactId>bean-searcher-label</artifactId>
-    <version>4.8.12</version>
+    <version>5.0.0.M1</version>
 </dependency>
 ```
 :::
