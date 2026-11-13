@@ -1,4 +1,4 @@
-package cn.zhxu.bs.ex.excel;
+package cn.zhxu.bs.ex;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

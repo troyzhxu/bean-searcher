@@ -1,8 +1,5 @@
-package cn.zhxu.bs.ex.excel;
+package cn.zhxu.bs.ex;
 
-import cn.zhxu.bs.ex.ExportException;
-import cn.zhxu.bs.ex.ExportField;
-import cn.zhxu.bs.ex.FileWriter;
 import cn.zhxu.bs.util.StringUtils;
 
 import java.io.BufferedOutputStream;
