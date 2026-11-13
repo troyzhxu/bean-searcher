@@ -1,15 +1,97 @@
-# v5.0.0 @ Next
+# v5.0.0.M1 @ 2026-11-13
 
 > ⚠️ **重要变更**：自 v5.0.0 起，不再支持 JDK 8 ~ 16，最低运行环境要求为 **JDK 17**。
 
-## 🌻 Better
+## ✨ Features
+
+### Bean Searcher
 
 * 支持将 Java `record` 类作为 SearchBean 使用
     - `@SearchBean`、`@DbField`、`@DbIgnore` 等注解均可用于 `record` 类及其组件
     - 内部通过 canonical constructor 完成 record 实例化，无需无参构造器
     - `BeanMeta` 新增 `isRecord()` 方法
     - `FieldMeta` 新增 `getRecordIndex()` 方法，返回字段在 canonical constructor 中的参数索引
-* `bean-searcher-exporter`：`@Export` 注解支持标注在 `record` 组件上，`DefaultExportFieldResolver` 支持解析 record 类的导出字段
+
+### Bean Searcher Exporter
+
+* 新增 `ExcelFileWriter`：基于 JDK 原生 API 直接输出 xlsx，**不依赖任何第三方库**
+    - 纯流式写出，每批次数据写完立即 flush，内存占用与数据总量无关，可直接边查边写、边写边下载
+    - 表头、列宽、行高、冻结首行、单元格样式均按需输出，只写导出场景所需的最小 OOXML 子集
+    - 数字默认写成数值单元格（在 Excel 中可直接求和排序），可用 `setNumericCells(false)` 改为文本
+    - UTF-8 编码的 `inlineStr` 文本，自动转义 XML 特殊字符并过滤非法控制字符，超长文本按 Excel 上限截断
+* 新增 `@ExcelSheet` 注解，用于声明导出的 Excel 工作表样式（配合 starter 默认的 `FileWriter.Factory`，标注后即导出 xlsx，未标注仍导出 csv）
+    ```java
+    @ExcelSheet(name = "订单表", rowHeight = 24, headerBold = true, freezeHeader = true)
+    public class OrderVO { ... }
+    ```
+    - `name`：工作表名称（自动过滤非法字符并截断到 31 字符）
+    - `rowHeight`：数据行行高，**只作用于数据行**，表头行始终保持默认行高（可通过 `ExcelFileWriter.DEFAULT_ROW_HEIGHT` 调整）
+    - `headerBold`：表头是否加粗
+    - `freezeHeader`：是否冻结表头
+* `@Export` 新增 `width` 属性：指定 Excel 列宽（单位：字符，超出 Excel 上限时按 255 截断）
+* `@Export` 新增 `image` 属性：字段值为网络图片链接时，以 `IMAGE` 公式写入单元格，由 Excel 自行加载图片，**导出过程零下载**
+    ```java
+    @Export(name = "封面", image = true, width = 12)
+    private String coverUrl;
+    ```
+    > `IMAGE` 是 Excel 2022 及之后版本才支持的函数，旧版 Excel / WPS 打开会显示 `#NAME?`；此时该字段的 `format` 不生效
+* `@Export` 注解支持标注在 `record` 组件上，`DefaultExportFieldResolver` 支持解析 `record` 类的导出字段
+* `ExportField` 新增 `unformatted()`、`format(Object)`、`getWidth()`、`isImage()` 方法，供自定义 `FileWriter` 直接取到原始值再决定输出形式
+* `bean-searcher-boot-starter` / `bean-searcher-solon-plugin`：默认的 `FileWriter.Factory` 会按导出类是否标注 `@ExcelSheet` 自动选择 `ExcelFileWriter` 或 `CsvFileWriter`，业务代码无需关心文件格式
+
+#### 使用示例
+
+```java
+// 1. 用 record 声明导出字段与工作表样式（普通类同样适用）
+@ExcelSheet(name = "订单表", rowHeight = 24, freezeHeader = true)
+public record OrderVO(
+        @Export(name = "订单号", idx = 1, width = 22) Long id,
+        @Export(name = "客户", idx = 2, width = 16) String customer,
+        @Export(name = "金额", idx = 3) BigDecimal amount,                  // 数值单元格，Excel 里可直接求和
+        @Export(name = "封面", idx = 4, image = true, width = 12) String cover  // 网络图片，IMAGE 公式加载
+) { }
+
+// 2. 一行导出：标注了 @ExcelSheet 就写 xlsx，未标注则写 csv，其余交给 starter 自动装配
+@GetMapping("/orders/export")
+public void export(HttpServletRequest request) throws IOException {
+    beanExporter.export("订单列表", OrderVO.class, MapUtils.flat(request.getParameterMap()));
+}
+```
+
+> 导出过程与检索共用同一套参数：前端传的分页、排序、过滤条件原样生效，`batchSize` 控制每批查询条数，数据边查边写，不会因为数据量大而撑爆内存。
+
+#### 为什么不用 EasyExcel？
+
+| 维度 | EasyExcel | Bean Searcher Exporter |
+|------|-----------|------------------------|
+| 依赖 | 传递引入 `poi`、`poi-ooxml`、`poi-ooxml-schemas`、`xmlbeans`、`commons-compress`、`ehcache`、`commons-io`、`commons-csv` 一整套 | 仅使用 JDK 原生 `java.util.zip`，**零第三方依赖** |
+| 实时传输 | 底层 SXSSF 先把数据写进内存窗口与磁盘临时文件，`finish()` 时才整体打包输出，导出结束前响应体一个字节都发不出去 | 直接写 `ZipOutputStream`，每批数据写完立即 `flush()`，浏览器**立即可开始接收** |
+| 内存 | XSSF 全量驻留内存；SXSSF 需额外占用磁盘临时文件 | 与数据总量无关，不驻留、不落盘 |
+| 网络图片 | 需先下载成 `byte[]` 再写入单元格，且图片字节由 workbook 持有到文件写完才释放（SXSSF 的刷盘只作用于行数据，不覆盖图片），内存随图片数量线性增长 | `IMAGE` 公式，单元格里只有一段 URL，服务端图片数据占用为 0 |
+| 并发控制 | 没有任何内置保护，限流、排队、降级都要自己写 | 内置两级并发保护（排队等待 + 429 降级）与批次延迟，改配置即可调阈值 |
+| 数据来源 | 只负责"写文件"，数据要自己查询、转换后传入 | 与检索打通，直接传检索参数，内部按 SearchBean 分页查询并流式导出 |
+
+> 并发保护体现在三个层面（配置前缀 `bean-searcher.exporter`）：`max-exporting-threads` 默认 10，限制同时写数据的线程数，超出的自动排队，避免几个大导出同时压垮数据库；`max-threads` 默认 30，限制导出中 + 排队中的总人数，超出的直接返回 HTTP 429 与提示文案，而不是把服务拖死；每批查询后按 `batch-delay`（默认 100ms）配合 `DelayPolicy` 做随机递增延迟，并发越高等待越久。这些在 EasyExcel 里都需要业务侧自己实现。
+
+> 需要说明的是：xlsx 本质是 zip，目录项位于文件末尾，因此任何方案都要求文件下载完成后才能被打开。区别在于**什么时候开始传输**——`ExcelFileWriter` 在第一批数据写完就已经向浏览器推送字节，用户看到的是下载进度立刻开始，而不是长时间空等。
+
+> `IMAGE` 方案也有代价：打开文件的一方（用户电脑）必须能直接访问该链接，私有桶需要签名 URL 或公网可读；并且需要 Excel 2022+ 或较新的 WPS，旧版本会显示 `#NAME?`。如果需要把图片真正嵌进文件（离线可看），仍需自行下载后以二进制写入。
+
+## 🌻 Better
+
+* `ExportField` 的格式化逻辑收敛：`text()` 改为复用 `format(Object)`，Excel 导出中不再对同一字段重复求值与转换
+* 并发导出超限时的提示响应改用标准的 `text/plain;charset=UTF-8`（原为不规范的 `application/text`），并直接写入响应流
+* `FieldFns` 移除对已废弃的 `AccessibleObject.isAccessible()` 的依赖，改用 `canAccess()`
+
+## 🌻 Deps
+
+* `cn.zhxu:xjsonkit` 升级到 2.0.1
+
+## ⚠️ Breaking Changes
+
+* 最低运行环境由 JDK 8 提升到 **JDK 17**，且构建产物以 `--release 17` 编译
+* `FileWriter` 接口的 `writeStart(Class<?>, List<ExportField>)`、`writeStop(Class<?>, List<ExportField>)` 与 `FileWriter.Factory.create(Class<?>, String)` 均新增 `beanClass` 参数，自定义实现需同步适配
+* `ExportField` 的公开构造器新增 `width`、`image` 两个参数
 
 # v4.8.12 @ 2026-07-24
 
