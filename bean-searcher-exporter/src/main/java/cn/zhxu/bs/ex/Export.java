@@ -48,4 +48,18 @@ public @interface Export {
      */
     String onlyIf() default "";
 
+    /**
+     * 列宽，仅对 Excel 导出有效
+     * @return 列宽，单位为字符宽度，默认为 0 表示不指定列宽
+     * @since v5.0.0
+     */
+    int width() default 0;
+
+    /**
+     * 是否图片链接字段，仅对 Excel 导出有效
+     * @return 是否图片链接字段，默认为 false，如果为 true，则将该单元格渲染为图片
+     * @since v5.0.0
+     */
+    boolean image() default false;
+
 }
