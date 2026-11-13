@@ -221,6 +221,11 @@ public class ExcelFileWriter implements FileWriter {
             return;
         }
         String ref = XlsxPart.colName(col) + row;
+        // 图片字段：值即网络图片链接，交给 Excel 的 IMAGE 函数加载，无需下载图片
+        if (field.isImage()) {
+            writeImageCell(sb, ref, value);
+            return;
+        }
         // 只有未配置格式化的字段才写成数值 / 布尔单元格，否则一律按格式化后的文本写出
         if (field.unformatted()) {
             if (numericCells && value instanceof Number number) {
@@ -246,6 +251,25 @@ public class ExcelFileWriter implements FileWriter {
         }
         sb.append("<c r=\"").append(ref).append("\" t=\"inlineStr\">")
                 .append(textXml(text)).append("</c>");
+    }
+
+    /**
+     * 写出图片单元格：字段值是网络图片链接，用 IMAGE 公式让 Excel 自行加载图片<br>
+     * IMAGE 是 Excel 2022 之后新增的函数，在 xlsx 的 xml 中必须写成 {@code _xlfn.IMAGE}，
+     * 否则 Excel 会识别为 #NAME? 错误；另外公式单元格不写缓存值，由 {@code calcPr} 要求 Excel 打开时重算
+     * @param sb 行 xml 缓冲
+     * @param ref 单元格引用
+     * @param value 图片链接
+     */
+    protected void writeImageCell(StringBuilder sb, String ref, Object value) {
+        String url = value.toString().trim();
+        if (url.isEmpty()) {
+            return;
+        }
+        // 链接中的双引号按 Excel 公式规则转义为两个双引号，之后再由 xml 转义
+        url = XlsxPart.escape(url.replace("\"", "\"\""));
+        sb.append("<c r=\"").append(ref).append("\"><f>_xlfn.IMAGE(&quot;")
+                .append(url).append("&quot;)</f></c>");
     }
 
     /**

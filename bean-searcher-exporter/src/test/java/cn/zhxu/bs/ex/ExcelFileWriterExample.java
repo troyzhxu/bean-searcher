@@ -24,7 +24,7 @@ public class ExcelFileWriterExample {
      * 导出对象：用 @Export 标注要导出的字段（name 为列名，idx 为列顺序）<br>
      * 用 @ExcelSheet 指定工作表名与表头样式
      */
-    @ExcelSheet(name = "员工信息", freezeHeader = true)
+    @ExcelSheet(name = "员工信息", freezeHeader = true, rowHeight = 36)
     public static class Employee {
 
         @Export(name = "工号", idx = 1)
@@ -51,8 +51,11 @@ public class ExcelFileWriterExample {
         @Export(name = "备注", idx = 8, width = 40)
         String remark;
 
+        @Export(name = "头像", idx = 9, image = true, width = 10)
+        String avatar;              // 网络图片链接，写成 IMAGE 公式，由 Excel 加载
+
         Employee(String code, String name, String department, BigDecimal salary,
-                 Double score, LocalDate entryDate, Boolean active, String remark) {
+                 Double score, LocalDate entryDate, Boolean active, String remark, String avatar) {
             this.code = code;
             this.name = name;
             this.department = department;
@@ -61,6 +64,7 @@ public class ExcelFileWriterExample {
             this.entryDate = entryDate;
             this.active = active;
             this.remark = remark;
+            this.avatar = avatar;
         }
 
     }
@@ -80,6 +84,7 @@ public class ExcelFileWriterExample {
             ExcelFileWriter writer = new ExcelFileWriter(out);
             // 工作表名、表头加粗、冻结首行、行高均由 Employee 上的 @ExcelSheet 注解指定；
             // 各列列宽由字段上的 @Export(width = N) 指定（未指定的列使用 Excel 默认宽度）；
+            // 头像列标注了 image = true，写出的是 IMAGE 公式，图片由 Excel 打开时自行加载；
             // 数字是否写成数值单元格由开关控制（默认 true，关闭后数字按文本写出）
             // writer.setNumericCells(false);
 
@@ -111,7 +116,9 @@ public class ExcelFileWriterExample {
                     80 + (i * 7) % 20 + 0.5,
                     LocalDate.of(2019, 1, 1).plusMonths(i * 5L),
                     i % 4 != 3,
-                    i % 7 == 0 ? null : "备注-" + i + (i % 5 == 0 ? "，含逗号、\"引号\" 与 <特殊字符>" : "")
+                    i % 7 == 0 ? null : "备注-" + i + (i % 5 == 0 ? "，含逗号、\"引号\" 与 <特殊字符>" : ""),
+                    // 每 6 条留一条空链接，用于观察空值单元格的表现
+                    i % 6 == 0 ? null : "https://picsum.photos/seed/" + (1001 + i) + "/48/48"
             ));
         }
         return list;

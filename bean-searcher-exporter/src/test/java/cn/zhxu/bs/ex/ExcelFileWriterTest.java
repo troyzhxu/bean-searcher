@@ -163,6 +163,26 @@ class ExcelFileWriterTest {
         assertFalse(sheet.contains("<cols>"));
     }
 
+    @Test
+    void testImageCell() throws Exception {
+        Map<String, String> parts = writeXlsx(PicUser.class,
+                new PicUser("张三", "https://img.example.com/a.png?x=1&y=2"),
+                new PicUser("李四", null),
+                new PicUser("王五", "  "));
+
+        String sheet = sheetOf(parts);
+        // 图片链接写成 IMAGE 公式：新函数必须带 _xlfn 前缀，否则 Excel 显示 #NAME?
+        // 链接中的 & 需 xml 转义
+        assertTrue(sheet.contains("<c r=\"B2\"><f>_xlfn.IMAGE(&quot;https://img.example.com/a.png?x=1&amp;y=2&quot;)</f></c>"));
+        // 公式单元格不写缓存值，由 calcPr 要求 Excel 打开时重算
+        assertTrue(workbookOf(parts).contains("<calcPr calcId=\"0\" fullCalcOnLoad=\"1\"/>"));
+        // 空链接不输出单元格
+        assertFalse(sheet.contains("B3"));
+        assertFalse(sheet.contains("B4"));
+        // 非图片字段不受影响，仍按文本写出
+        assertTrue(sheet.contains("<c r=\"A2\" t=\"inlineStr\"><is><t>张三</t></is></c>"));
+    }
+
     // ==================== 工具方法 ====================
 
     @Test
@@ -242,6 +262,24 @@ class ExcelFileWriterTest {
             this.code = code;
             this.name = name;
             this.remark = remark;
+        }
+
+    }
+
+    /**
+     * 图片链接字段：值写成 IMAGE 公式，由 Excel 自行加载图片
+     */
+    static class PicUser {
+
+        @Export(name = "姓名", idx = 1)
+        String name;
+
+        @Export(name = "头像", idx = 2, image = true, width = 12)
+        String avatar;
+
+        PicUser(String name, String avatar) {
+            this.name = name;
+            this.avatar = avatar;
         }
 
     }

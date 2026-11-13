@@ -46,12 +46,14 @@ class XlsxPart {
     }
 
     /**
-     * 输出工作簿部件 xl/workbook.xml（仅一个工作表）
+     * 输出工作簿部件 xl/workbook.xml（仅一个工作表）<br>
+     * 公式单元格（如 IMAGE）不写缓存值，故声明 fullCalcOnLoad，要求 Excel 打开时重算
      */
     static void writeWorkbook(ZipOutputStream zip, String sheetName) throws IOException {
         entry(zip, "xl/workbook.xml", XML_HEAD +
                 "<workbook xmlns=\"" + NS_MAIN + "\" xmlns:r=\"" + NS_REL + "\">" +
                 "<sheets><sheet name=\"" + escape(sheetName) + "\" sheetId=\"1\" r:id=\"rId1\"/></sheets>" +
+                "<calcPr calcId=\"0\" fullCalcOnLoad=\"1\"/>" +
                 "</workbook>");
     }
 

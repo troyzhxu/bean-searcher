@@ -56,7 +56,10 @@ public @interface Export {
     int width() default 0;
 
     /**
-     * 是否图片链接字段，仅对 Excel 导出有效
+     * 是否图片链接字段，仅对 Excel 导出有效 <br>
+     * 开启后该字段的值（网络图片链接，使用 https 协议）将以 IMAGE 公式写入单元格，由 Excel 自行加载图片，
+     * 导出过程不做任何图片下载；此时 {@link #format()} 不生效 <br>
+     * 注意：IMAGE 是 Excel 2022 及之后版本才支持的函数，旧版 WPS 与 Excel 可能显示 #NAME? 错误
      * @return 是否图片链接字段，默认为 false，如果为 true，则将该单元格渲染为图片
      * @since v5.0.0
      */
