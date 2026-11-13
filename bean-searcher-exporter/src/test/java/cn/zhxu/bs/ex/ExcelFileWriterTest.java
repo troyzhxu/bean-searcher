@@ -97,8 +97,9 @@ class ExcelFileWriterTest {
         assertTrue(sheet.contains("s=\"1\""));
         // 默认不冻结首行
         assertFalse(sheet.contains("freeze"));
-        // 默认使用 Excel 行高
-        assertTrue(sheet.contains("<sheetFormatPr defaultRowHeight=\"15\"/>"));
+        // 默认使用 Excel 行高，且行上不带 ht 属性
+        assertTrue(sheet.contains("<sheetFormatPr defaultRowHeight=\"" + ExcelFileWriter.DEFAULT_ROW_HEIGHT + "\"/>"));
+        assertTrue(sheet.contains("<row r=\"1\">"));
     }
 
     @Test
@@ -113,8 +114,12 @@ class ExcelFileWriterTest {
         assertFalse(sheet.contains("s=\"1\""));
         // freezeHeader = true：冻结首行
         assertTrue(sheet.contains("state=\"frozen\""));
-        // rowHeight = 24
+        // rowHeight = 24 只作用于数据行
         assertTrue(sheet.contains("<sheetFormatPr defaultRowHeight=\"24\" customHeight=\"1\"/>"));
+        // 表头行仍保持 Excel 默认行高
+        assertTrue(sheet.contains("<row r=\"1\" ht=\"" + ExcelFileWriter.DEFAULT_ROW_HEIGHT + "\" customHeight=\"1\">"));
+        // 数据行逐行写出行高（Excel 不认 sheetFormatPr 的 defaultRowHeight）
+        assertTrue(sheet.contains("<row r=\"2\" ht=\"24\" customHeight=\"1\">"));
     }
 
     @Test

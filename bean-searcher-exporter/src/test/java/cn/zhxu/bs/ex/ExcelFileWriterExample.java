@@ -24,7 +24,7 @@ public class ExcelFileWriterExample {
      * 导出对象：用 @Export 标注要导出的字段（name 为列名，idx 为列顺序）<br>
      * 用 @ExcelSheet 指定工作表名与表头样式
      */
-    @ExcelSheet(name = "员工信息", freezeHeader = true, rowHeight = 36)
+    @ExcelSheet(name = "员工信息", freezeHeader = true, rowHeight = 50)
     public static class Employee {
 
         @Export(name = "工号", idx = 1)

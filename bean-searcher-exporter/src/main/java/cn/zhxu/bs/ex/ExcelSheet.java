@@ -20,7 +20,8 @@ public @interface ExcelSheet {
     String name() default "数据";
 
     /**
-     * Excel 行高，默认 0 表示不指定行高
+     * Excel 数据行行高（单位：磅），默认 0 表示不指定<br>
+     * 只作用于数据行，表头行始终保持 Excel 的默认行高
      */
     int rowHeight() default 0;
 

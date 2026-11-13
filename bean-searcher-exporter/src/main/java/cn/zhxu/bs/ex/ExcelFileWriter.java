@@ -16,7 +16,7 @@ import java.util.zip.ZipOutputStream;
 /**
  * Excel 文件写入器（基于 JDK 原生 api 直接输出 xlsx，不依赖任何第三方库）<br>
  * 采用流式写出：每批次数据写完立即 flush 到输出流，内存占用与数据总量无关 <br>
- * 工作表名称、表头加粗、冻结首行、行高均由数据类上的 {@link ExcelSheet} 注解指定，
+ * 工作表名称、表头加粗、冻结首行、行高均由数据类上的 {@link ExcelSheet} 注解指定（行高只作用于数据行，表头行保持默认高度），
  * 各列列宽由字段上的 {@link Export#width()} 指定（未指定则该列不输出列宽）<br>
  * 注解在每次 {@link #writeStart} 调用时解析，因此同一个写入器将来可依次写出多个 sheet；<br>
  * 未标注该注解时使用默认样式：工作表名 {@value #DEFAULT_SHEET_NAME}、表头加粗、不冻结、默认行高。<br>
@@ -30,6 +30,8 @@ public class ExcelFileWriter implements FileWriter {
 
     public static final String FILE_EXT = ".xlsx";
     public static final String DEFAULT_SHEET_NAME = "Sheet 1";
+    /** Excel 默认行高（单位：磅），未指定行高时表格使用该值，表头行也固定使用该值 */
+    public static final int DEFAULT_ROW_HEIGHT = 18;
 
     // Excel 单元格最大字符数，超出会被截断（否则文件会损坏）
     private static final int MAX_CELL_LENGTH = 32767;
@@ -58,6 +60,9 @@ public class ExcelFileWriter implements FileWriter {
 
     private ZipOutputStream zip;
     private int rowNum;
+    // 行属性片段（行高），在 writeStart 时预拼好，避免每行重复拼装
+    private String rowAttrs = "";
+    private String headerAttrs = "";
 
     public ExcelFileWriter(OutputStream output) {
         this.output = output;
@@ -85,6 +90,8 @@ public class ExcelFileWriter implements FileWriter {
             throw new ExportException("The export fields can not be empty.");
         }
         this.rowNum = 0;
+        this.rowAttrs = "";
+        this.headerAttrs = "";
 
         // 每个 sheet 的样式完全由 @ExcelSheet 决定，每次 writeStart 独立解析（便于将来一个文件写多个 sheet）
         ExcelSheet sheet = Objects.requireNonNullElse(beanClass.getAnnotation(ExcelSheet.class), DEFAULT_SHEET);
@@ -105,9 +112,16 @@ public class ExcelFileWriter implements FileWriter {
                     "<selection pane=\"bottomLeft\" activeCell=\"A2\" sqref=\"A2\"/>" +
                     "</sheetView></sheetViews>");
         }
-        write(sheet.rowHeight() > 0
-                ? "<sheetFormatPr defaultRowHeight=\"" + sheet.rowHeight() + "\" customHeight=\"1\"/>"
-                : "<sheetFormatPr defaultRowHeight=\"15\"/>");
+        // 行高必须逐行写出 ht，Excel 并不认 sheetFormatPr 里的 defaultRowHeight（只影响新增行）
+        int rowHeight = sheet.rowHeight();
+        if (rowHeight > 0 && rowHeight != DEFAULT_ROW_HEIGHT) {
+            rowAttrs = " ht=\"" + rowHeight + "\" customHeight=\"1\"";
+            // 表头行固定用 Excel 默认行高
+            headerAttrs = " ht=\"" + DEFAULT_ROW_HEIGHT + "\" customHeight=\"1\"";
+        }
+        write(rowHeight > 0
+                ? "<sheetFormatPr defaultRowHeight=\"" + rowHeight + "\" customHeight=\"1\"/>"
+                : "<sheetFormatPr defaultRowHeight=\"" + DEFAULT_ROW_HEIGHT + "\"/>");
         writeCols(fields);
         write("<sheetData>");
         writeHeaderRow(fields, sheet.headerBold());
@@ -171,7 +185,8 @@ public class ExcelFileWriter implements FileWriter {
     }
 
     /**
-     * 写出表头行
+     * 写出表头行<br>
+     * 行高只作用于数据行，因此表头行在这里显式使用 Excel 默认行高
      * @param fields 文件字段列表
      * @param bold 表头是否加粗
      */
@@ -179,7 +194,7 @@ public class ExcelFileWriter implements FileWriter {
         StringBuilder sb = new StringBuilder(64 + fields.size() * 32);
         int row = ++rowNum;
         String style = bold ? " s=\"" + STYLE_HEADER + "\"" : "";
-        sb.append("<row r=\"").append(row).append("\">");
+        sb.append("<row r=\"").append(row).append('"').append(headerAttrs).append('>');
         for (int col = 0; col < fields.size(); col++) {
             String name = fields.get(col).getExName();
             String text = name == null ? "" : name;
@@ -199,7 +214,7 @@ public class ExcelFileWriter implements FileWriter {
     protected void writeDataRow(List<ExportField> fields, Object data) throws IOException {
         StringBuilder sb = new StringBuilder(64 + fields.size() * 24);
         int row = ++rowNum;
-        sb.append("<row r=\"").append(row).append("\">");
+        sb.append("<row r=\"").append(row).append('"').append(rowAttrs).append('>');
         for (int col = 0; col < fields.size(); col++) {
             writeCell(sb, col, row, fields.get(col), data);
         }
