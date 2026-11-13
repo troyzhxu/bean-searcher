@@ -21,8 +21,10 @@ import java.util.List;
 public class ExcelFileWriterExample {
 
     /**
-     * 导出对象：用 @Export 标注要导出的字段（name 为列名，idx 为列顺序）
+     * 导出对象：用 @Export 标注要导出的字段（name 为列名，idx 为列顺序）<br>
+     * 用 @ExcelSheet 指定工作表名与表头样式
      */
+    @ExcelSheet(name = "员工信息", freezeHeader = true)
     public static class Employee {
 
         @Export(name = "工号", idx = 1)
@@ -75,10 +77,9 @@ public class ExcelFileWriterExample {
 
         // 2. 写出文件
         try (OutputStream out = new FileOutputStream(file.toFile())) {
-            ExcelFileWriter writer = new ExcelFileWriter(out, "员工信息");
-            // 三个特性开关（默认都是 true，此处演示关闭后的效果）
-            // writer.setHeaderBold(false);
-            // writer.setFreezeHeader(false);
+            ExcelFileWriter writer = new ExcelFileWriter(out);
+            // 工作表名、表头加粗、冻结首行、行高均由 Employee 上的 @ExcelSheet 注解指定；
+            // 数字是否写成数值单元格由开关控制（默认 true，关闭后数字按文本写出）
             // writer.setNumericCells(false);
 
             writer.writeStart(Employee.class, fields);

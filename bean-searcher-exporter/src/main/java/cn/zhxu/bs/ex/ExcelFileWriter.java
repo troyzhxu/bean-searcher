@@ -5,21 +5,22 @@ import cn.zhxu.bs.util.StringUtils;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.annotation.Annotation;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Objects;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 /**
  * Excel 文件写入器（基于 JDK 原生 api 直接输出 xlsx，不依赖任何第三方库）<br>
  * 采用流式写出：每批次数据写完立即 flush 到输出流，内存占用与数据总量无关 <br>
- * 以下三个特性均可通过属性开关控制（均默认开启，需在 {@link #writeStart} 之前设置）：
- * <ul>
- *     <li>{@link #setHeaderBold}：表头加粗</li>
- *     <li>{@link #setFreezeHeader}：冻结首行</li>
- *     <li>{@link #setNumericCells}：数字以数值单元格写出（可在 Excel 中直接求和排序）</li>
- * </ul>
+ * 工作表名称、表头加粗、冻结首行、行高均由数据类上的 {@link ExcelSheet} 注解指定，
+ * 注解在每次 {@link #writeStart} 调用时解析，因此同一个写入器将来可依次写出多个 sheet；<br>
+ * 未标注该注解时使用默认样式：工作表名 {@value #DEFAULT_SHEET_NAME}、表头加粗、不冻结、默认行高。<br>
+ * 另提供 {@link #setNumericCells} 开关（需在 {@link #writeStart} 之前设置），
+ * 控制数字是否以数值单元格写出（默认开启，可在 Excel 中直接求和排序）。
  *
  * @author Troy.Zhou @ 2026-11-12
  * @since v5.0.0
@@ -34,14 +35,21 @@ public class ExcelFileWriter implements FileWriter {
     // 表头单元格的样式索引（对应 styles.xml 中的第 2 个 cellXf：加粗）
     private static final int STYLE_HEADER = 1;
 
+    /**
+     * 未标注 {@link ExcelSheet} 时的默认表现<br>
+     * 除工作表名外均与注解默认值一致：注解的 name 默认为 {@code "数据"}，此处取 Excel 惯例的 {@value #DEFAULT_SHEET_NAME}
+     */
+    private static final ExcelSheet DEFAULT_SHEET = new ExcelSheet() {
+        @Override public String name() { return DEFAULT_SHEET_NAME; }
+        @Override public int rowHeight() { return 0; }
+        @Override public boolean headerBold() { return true; }
+        @Override public boolean freezeHeader() { return false; }
+        @Override public Class<? extends Annotation> annotationType() { return ExcelSheet.class; }
+    };
+
     private final OutputStream output;
     private final BufferedOutputStream buffer;
 
-    private String sheetName = DEFAULT_SHEET_NAME;
-    // 表头是否加粗
-    private boolean headerBold = true;
-    // 是否冻结首行
-    private boolean freezeHeader = true;
     // 数字是否以数值单元格写出
     private boolean numericCells = true;
 
@@ -51,11 +59,6 @@ public class ExcelFileWriter implements FileWriter {
     public ExcelFileWriter(OutputStream output) {
         this.output = output;
         this.buffer = new BufferedOutputStream(output, 8192);
-    }
-
-    public ExcelFileWriter(OutputStream output, String sheetName) {
-        this(output);
-        setSheetName(sheetName);
     }
 
     /**
@@ -80,25 +83,30 @@ public class ExcelFileWriter implements FileWriter {
         }
         this.rowNum = 0;
 
+        // 每个 sheet 的样式完全由 @ExcelSheet 决定，每次 writeStart 独立解析（便于将来一个文件写多个 sheet）
+        ExcelSheet sheet = Objects.requireNonNullElse(beanClass.getAnnotation(ExcelSheet.class), DEFAULT_SHEET);
+
         zip = new ZipOutputStream(buffer, StandardCharsets.UTF_8);
         XlsxPart.writeContentTypes(zip);
         XlsxPart.writeRootRels(zip);
-        XlsxPart.writeWorkbook(zip, sheetName);
+        XlsxPart.writeWorkbook(zip, sanitizeSheetName(sheet.name()));
         XlsxPart.writeWorkbookRels(zip);
         XlsxPart.writeStyles(zip);
 
         zip.putNextEntry(new ZipEntry("xl/worksheets/sheet1.xml"));
         write(XlsxPart.XML_HEAD);
         write("<worksheet xmlns=\"" + XlsxPart.NS_MAIN + "\">");
-        if (freezeHeader) {
+        if (sheet.freezeHeader()) {
             write("<sheetViews><sheetView tabSelected=\"1\" workbookViewId=\"0\">" +
                     "<pane ySplit=\"1\" topLeftCell=\"A2\" activePane=\"bottomLeft\" state=\"frozen\"/>" +
                     "<selection pane=\"bottomLeft\" activeCell=\"A2\" sqref=\"A2\"/>" +
                     "</sheetView></sheetViews>");
         }
-        write("<sheetFormatPr defaultRowHeight=\"15\"/>");
+        write(sheet.rowHeight() > 0
+                ? "<sheetFormatPr defaultRowHeight=\"" + sheet.rowHeight() + "\" customHeight=\"1\"/>"
+                : "<sheetFormatPr defaultRowHeight=\"15\"/>");
         write("<sheetData>");
-        writeHeaderRow(fields);
+        writeHeaderRow(fields, sheet.headerBold());
         zip.flush();
         buffer.flush();
     }
@@ -136,11 +144,12 @@ public class ExcelFileWriter implements FileWriter {
     /**
      * 写出表头行
      * @param fields 文件字段列表
+     * @param bold 表头是否加粗
      */
-    protected void writeHeaderRow(List<ExportField> fields) throws IOException {
+    protected void writeHeaderRow(List<ExportField> fields, boolean bold) throws IOException {
         StringBuilder sb = new StringBuilder(64 + fields.size() * 32);
         int row = ++rowNum;
-        String style = headerBold ? " s=\"" + STYLE_HEADER + "\"" : "";
+        String style = bold ? " s=\"" + STYLE_HEADER + "\"" : "";
         sb.append("<row r=\"").append(row).append("\">");
         for (int col = 0; col < fields.size(); col++) {
             String name = fields.get(col).getExName();
@@ -239,52 +248,19 @@ public class ExcelFileWriter implements FileWriter {
         zip.write(xml.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String getSheetName() {
-        return sheetName;
-    }
-
-    /**
-     * 设置工作表名称（非法字符会被替换，超长会被截断）
-     * @param sheetName 工作表名称
-     */
-    public void setSheetName(String sheetName) {
-        if (StringUtils.isBlank(sheetName)) {
-            this.sheetName = DEFAULT_SHEET_NAME;
-            return;
-        }
-        String name = sheetName.replaceAll("[:\\\\/?*\\[\\]]", "_");
-        if (name.length() > 31) {
-            name = name.substring(0, 31);
-        }
-        this.sheetName = name;
-    }
-
     public OutputStream getOutput() {
         return output;
     }
 
-    public boolean isHeaderBold() {
-        return headerBold;
-    }
-
     /**
-     * 设置表头是否加粗（默认 true），需在 writeStart 之前调用
-     * @param headerBold 表头是否加粗
+     * 规范化工作表名称：非法字符替换为下划线，超长截断到 31 个字符
      */
-    public void setHeaderBold(boolean headerBold) {
-        this.headerBold = headerBold;
-    }
-
-    public boolean isFreezeHeader() {
-        return freezeHeader;
-    }
-
-    /**
-     * 设置是否冻结首行（默认 true），需在 writeStart 之前调用
-     * @param freezeHeader 是否冻结首行
-     */
-    public void setFreezeHeader(boolean freezeHeader) {
-        this.freezeHeader = freezeHeader;
+    static String sanitizeSheetName(String sheetName) {
+        if (StringUtils.isBlank(sheetName)) {
+            return DEFAULT_SHEET_NAME;
+        }
+        String name = sheetName.replaceAll("[:\\\\/?*\\[\\]]", "_");
+        return name.length() > 31 ? name.substring(0, 31) : name;
     }
 
     public boolean isNumericCells() {

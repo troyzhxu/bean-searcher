@@ -25,6 +25,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -69,6 +70,9 @@ public class BeanSearcherConfigOnExporter {
     @ConditionalOnClass(RequestContextHolder.class)
     public static class WebMvcConfiguration {
 
+        static final String XLSX_CONTENT_TYPE =
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+
         static HttpServletResponse requireResponse() {
             RequestAttributes attributes = RequestContextHolder.currentRequestAttributes();
             if (attributes instanceof ServletRequestAttributes) {
@@ -85,23 +89,54 @@ public class BeanSearcherConfigOnExporter {
         public FileWriter.Factory fileWriterFactory(BeanSearcherExProps props) {
             return (beanClass, filename) -> {
                 HttpServletResponse response = requireResponse();
+                if (beanClass.isAnnotationPresent(ExcelSheet.class)) {
+                    // 标注了 @ExcelSheet：导出为 xlsx，其余属性由 ExcelFileWriter 在 writeStart 内解析
+                    return new ExcelFileWriter(response.getOutputStream()) {
+                        @Override
+                        public void writeStart(Class<?> beanClass, List<ExportField> fields) throws IOException {
+                            prepareDownload(response, ExcelFileWriter.withFileExt(filename), XLSX_CONTENT_TYPE);
+                            super.writeStart(beanClass, fields);
+                        }
+                        @Override
+                        public void onTooManyRequests() throws IOException {
+                            writeTooManyRequests(response, props.getTooManyRequestsMessage());
+                        }
+                    };
+                }
                 return new CsvFileWriter(response.getOutputStream()) {
                     @Override
                     public void writeStart(Class<?> beanClass, List<ExportField> fields) throws IOException {
-                        String encodedName = URLEncoder.encode(CsvFileWriter.withFileExt(filename), StandardCharsets.UTF_8);
-                        response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
-                        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + encodedName);
+                        prepareDownload(response, CsvFileWriter.withFileExt(filename), MediaType.APPLICATION_OCTET_STREAM_VALUE);
                         super.writeStart(beanClass, fields);
                     }
                     @Override
                     public void onTooManyRequests() throws IOException {
-                        response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
-                        response.setContentType("application/text");
-                        response.setHeader(HttpHeaders.CACHE_CONTROL, "no-cache");
-                        writeAndFlush(props.getTooManyRequestsMessage());
+                        writeTooManyRequests(response, props.getTooManyRequestsMessage());
                     }
                 };
             };
+        }
+
+        /**
+         * 设置文件下载所需的响应头
+         */
+        static void prepareDownload(HttpServletResponse response, String filename, String contentType) {
+            response.setContentType(contentType);
+            response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
+                    "attachment; filename=" + URLEncoder.encode(filename, StandardCharsets.UTF_8));
+        }
+
+        /**
+         * 并发导出超限时直接向响应流写提示文本<br>
+         * 该方法在 {@link FileWriter#writeStart} 之前被调用，此时响应流还是干净的
+         */
+        static void writeTooManyRequests(HttpServletResponse response, String message) throws IOException {
+            response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
+            response.setContentType("text/plain;charset=UTF-8");
+            response.setHeader(HttpHeaders.CACHE_CONTROL, "no-cache");
+            OutputStream output = response.getOutputStream();
+            output.write(message == null ? new byte[0] : message.getBytes(StandardCharsets.UTF_8));
+            output.flush();
         }
 
         @Bean

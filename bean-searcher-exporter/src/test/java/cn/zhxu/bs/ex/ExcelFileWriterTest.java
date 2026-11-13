@@ -2,6 +2,7 @@ package cn.zhxu.bs.ex;
 
 import org.junit.jupiter.api.Test;
 
+import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -12,14 +13,150 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * {@link ExcelFileWriter} 单元测试<br>
+ * 所有用例都走真实的写出流程（{@code writeStart → writeAndFlush → writeStop}），
+ * 再把生成的 xlsx 解压成 xml 部件做断言，因此能同时覆盖 zip 结构与单元格内容。
+ *
+ * @author Troy.Zhou @ 2026-11-13
+ * @since v5.0.0
+ */
 class ExcelFileWriterTest {
 
-    static class Order {
+    // ==================== 内容与结构 ====================
+
+    @Test
+    void testWriteExcel() throws Exception {
+        Map<String, String> parts = writeXlsx(PlainOrder.class,
+                new PlainOrder("A001", new BigDecimal("12.50"), 3, "含,逗号"),
+                new PlainOrder("A002", new BigDecimal("100"), 7, "<b>&\"引号\"\u0001控制符"));
+
+        // xlsx 必备部件齐全
+        assertTrue(parts.keySet().containsAll(List.of(
+                "[Content_Types].xml",
+                "_rels/.rels",
+                "xl/workbook.xml",
+                "xl/_rels/workbook.xml.rels",
+                "xl/styles.xml",
+                "xl/worksheets/sheet1.xml")));
+
+        String sheet = sheetOf(parts);
+        // 表头：默认加粗 + inlineStr
+        assertTrue(sheet.contains("<c r=\"A1\" s=\"1\" t=\"inlineStr\"><is><t>订单号</t></is></c>"));
+        // 数字写成数值单元格（可在 Excel 中直接计算）
+        assertTrue(sheet.contains("<c r=\"B2\"><v>12.50</v></c>"));
+        assertTrue(sheet.contains("<c r=\"C3\"><v>7</v></c>"));
+        // 文本单元格与 xml 转义（非法控制字符被丢弃）
+        assertTrue(sheet.contains("<is><t>含,逗号</t></is>"));
+        assertTrue(sheet.contains("&lt;b&gt;&amp;&quot;引号&quot;控制符"));
+        // 不输出列宽定义
+        assertFalse(sheet.contains("<cols>"));
+    }
+
+    @Test
+    void testBatchWrite() throws Exception {
+        List<PlainOrder> orders = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            orders.add(new PlainOrder("C" + i, BigDecimal.ONE, i, "备注" + i));
+        }
+        // 每批 3 条，最后一批只剩 1 条
+        String sheet = sheetOf(writeXlsx(PlainOrder.class, orders, 3, null));
+
+        // 表头 1 行 + 数据 10 行，行号连续
+        assertEquals(11, countRows(sheet));
+        assertTrue(sheet.contains("<c r=\"A11\" t=\"inlineStr\"><is><t>C9</t></is></c>"));
+    }
+
+    @Test
+    void testEmptyData() throws Exception {
+        // 只有表头，没有数据行
+        String sheet = sheetOf(writeXlsx(PlainOrder.class, List.of(), 100, null));
+
+        assertEquals(1, countRows(sheet));
+        // 空数据时 xml 结构仍须完整闭合
+        assertTrue(sheet.endsWith("</sheetData></worksheet>"));
+    }
+
+    // ==================== 样式 ====================
+
+    @Test
+    void testDefaultStyle() throws Exception {
+        // 未标注 @ExcelSheet 的数据类：全部使用默认样式
+        Map<String, String> parts = writeXlsx(PlainOrder.class,
+                new PlainOrder("A001", BigDecimal.ONE, 1, null));
+
+        assertTrue(workbookOf(parts).contains("name=\"" + ExcelFileWriter.DEFAULT_SHEET_NAME + "\""));
+        String sheet = sheetOf(parts);
+        // 默认表头加粗
+        assertTrue(sheet.contains("s=\"1\""));
+        // 默认不冻结首行
+        assertFalse(sheet.contains("freeze"));
+        // 默认使用 Excel 行高
+        assertTrue(sheet.contains("<sheetFormatPr defaultRowHeight=\"15\"/>"));
+    }
+
+    @Test
+    void testAnnotationApplied() throws Exception {
+        // @ExcelSheet 的四个属性都应生效，且不需要任何 setter 参与
+        Map<String, String> parts = writeXlsx(AnnotatedOrder.class,
+                new AnnotatedOrder("A001", new BigDecimal("9.90")));
+
+        assertTrue(workbookOf(parts).contains("name=\"订单表\""));
+        String sheet = sheetOf(parts);
+        // headerBold = false：表头不加粗
+        assertFalse(sheet.contains("s=\"1\""));
+        // freezeHeader = true：冻结首行
+        assertTrue(sheet.contains("state=\"frozen\""));
+        // rowHeight = 24
+        assertTrue(sheet.contains("<sheetFormatPr defaultRowHeight=\"24\" customHeight=\"1\"/>"));
+    }
+
+    @Test
+    void testNumericCellsOff() throws Exception {
+        // 关闭数值单元格后，数字一律按文本写出
+        String sheet = sheetOf(writeXlsx(PlainOrder.class,
+                List.of(new PlainOrder("A001", new BigDecimal("12.50"), 3, null)), 100,
+                writer -> writer.setNumericCells(false)));
+
+        assertTrue(sheet.contains("<c r=\"B2\" t=\"inlineStr\"><is><t>12.50</t></is></c>"));
+        assertTrue(sheet.contains("<c r=\"C2\" t=\"inlineStr\"><is><t>3</t></is></c>"));
+        assertFalse(sheet.contains("<v>"));
+    }
+
+    @Test
+    void testFormattedNumberAsText() throws Exception {
+        // 配置了 format 的字段即使开着 numericCells，也按格式化后的文本写出
+        String sheet = sheetOf(writeXlsx(Bonus.class, new Bonus("12500.5")));
+
+        assertTrue(sheet.contains("<c r=\"A2\" t=\"inlineStr\"><is><t>12,500.50</t></is></c>"));
+        assertFalse(sheet.contains("<v>12"));
+    }
+
+    // ==================== 工具方法 ====================
+
+    @Test
+    void testSheetNameSanitize() {
+        // 非法字符替换为下划线
+        assertEquals("a_b_c_d_e_f_g", ExcelFileWriter.sanitizeSheetName("a/b:c*d?e[f]g"));
+        // 空白名回退到默认名
+        assertEquals(ExcelFileWriter.DEFAULT_SHEET_NAME, ExcelFileWriter.sanitizeSheetName("  "));
+        assertEquals(ExcelFileWriter.DEFAULT_SHEET_NAME, ExcelFileWriter.sanitizeSheetName(null));
+        // 超长名截断到 31 个字符
+        assertEquals(31, ExcelFileWriter.sanitizeSheetName("x".repeat(40)).length());
+    }
+
+    // ==================== 导出数据类 ====================
+
+    /**
+     * 无 {@link ExcelSheet} 注解：用于验证默认样式与单元格内容
+     */
+    static class PlainOrder {
 
         @Export(name = "订单号", idx = 1)
         String code;
@@ -33,7 +170,7 @@ class ExcelFileWriterTest {
         @Export(name = "备注", idx = 4)
         String remark;
 
-        Order(String code, BigDecimal amount, Integer count, String remark) {
+        PlainOrder(String code, BigDecimal amount, Integer count, String remark) {
             this.code = code;
             this.amount = amount;
             this.count = count;
@@ -42,134 +179,28 @@ class ExcelFileWriterTest {
 
     }
 
-    @Test
-    void testWriteExcel() throws Exception {
-        List<ExportField> fields = new DefaultExportFieldResolver().resolve(Order.class);
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        ExcelFileWriter writer = new ExcelFileWriter(out, "订单数据");
-        writer.writeStart(Order.class, fields);
-        writer.writeAndFlush(fields, List.of(
-                new Order("A001", new BigDecimal("12.50"), 3, "含,逗号"),
-                new Order("A002", new BigDecimal("100"), 7, "<b>&\"引号\"\u0001控制符")
-        ));
-        writer.writeStop(Order.class, fields);
+    /**
+     * 全属性标注：用于验证注解对工作表名与表头样式的控制
+     */
+    @ExcelSheet(name = "订单表", headerBold = false, freezeHeader = true, rowHeight = 24)
+    static class AnnotatedOrder {
 
-        Map<String, String> parts = unzip(out.toByteArray());
-        assertTrue(parts.containsKey("[Content_Types].xml"));
-        assertTrue(parts.containsKey("_rels/.rels"));
-        assertTrue(parts.containsKey("xl/workbook.xml"));
-        assertTrue(parts.containsKey("xl/_rels/workbook.xml.rels"));
-        assertTrue(parts.containsKey("xl/styles.xml"));
-        assertTrue(parts.containsKey("xl/worksheets/sheet1.xml"));
+        @Export(name = "订单号", idx = 1)
+        String code;
 
-        String sheet = parts.get("xl/worksheets/sheet1.xml");
-        // 冻结首行
-        assertTrue(sheet.contains("<pane ySplit=\"1\" topLeftCell=\"A2\" activePane=\"bottomLeft\" state=\"frozen\"/>"));
-        // 表头：加粗样式 + inlineStr
-        assertTrue(sheet.contains("<c r=\"A1\" s=\"1\" t=\"inlineStr\"><is><t>订单号</t></is></c>"));
-        // 数字写成数值单元格（可在 Excel 中直接计算）
-        assertTrue(sheet.contains("<c r=\"B2\"><v>12.50</v></c>"));
-        assertTrue(sheet.contains("<c r=\"C3\"><v>7</v></c>"));
-        // 文本单元格与 xml 转义（非法控制字符被丢弃）
-        assertTrue(sheet.contains("<is><t>含,逗号</t></is>"));
-        assertTrue(sheet.contains("&lt;b&gt;&amp;&quot;引号&quot;控制符"));
-        // 不输出列宽定义
-        assertFalse(sheet.contains("<cols>"));
-        // 工作表名称
-        assertTrue(parts.get("xl/workbook.xml").contains("name=\"订单数据\""));
-    }
+        @Export(name = "金额", idx = 2)
+        BigDecimal amount;
 
-    @Test
-    void testBatchWrite() throws Exception {
-        List<ExportField> fields = new DefaultExportFieldResolver().resolve(Order.class);
-        List<Order> orders = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            orders.add(new Order("C" + i, BigDecimal.ONE, i, "备注" + i));
+        AnnotatedOrder(String code, BigDecimal amount) {
+            this.code = code;
+            this.amount = amount;
         }
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        ExcelFileWriter writer = new ExcelFileWriter(out);
-        writer.writeStart(Order.class, fields);
-        for (int i = 0; i < orders.size(); i += 3) {
-            writer.writeAndFlush(fields, orders.subList(i, Math.min(i + 3, orders.size())));
-        }
-        writer.writeStop(Order.class, fields);
 
-        Map<String, String> parts = unzip(out.toByteArray());
-        String sheet = parts.get("xl/worksheets/sheet1.xml");
-        assertEquals(11, countRows(sheet));
-        assertTrue(sheet.contains("<c r=\"A11\" t=\"inlineStr\"><is><t>C9</t></is></c>"));
-        // 默认工作表名
-        assertTrue(parts.get("xl/workbook.xml").contains("name=\"Sheet 1\""));
     }
 
-    @Test
-    void testEmptyData() throws Exception {
-        List<ExportField> fields = new DefaultExportFieldResolver().resolve(Order.class);
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        ExcelFileWriter writer = new ExcelFileWriter(out);
-        writer.writeStart(Order.class, fields);
-        writer.writeAndFlush(fields, List.of());
-        writer.writeStop(Order.class, fields);
-
-        String sheet = unzip(out.toByteArray()).get("xl/worksheets/sheet1.xml");
-        // 只有表头一行，且 xml 结构完整
-        assertEquals(1, countRows(sheet));
-        assertTrue(sheet.endsWith("</sheetData></worksheet>"));
-    }
-
-    @Test
-    void testSheetNameSanitize() {
-        ExcelFileWriter writer = new ExcelFileWriter(new ByteArrayOutputStream(), "a/b:c*d?e[f]g");
-        assertEquals("a_b_c_d_e_f_g", writer.getSheetName());
-        writer.setSheetName("  ");
-        assertEquals("Sheet 1", writer.getSheetName());
-        writer.setSheetName("x".repeat(40));
-        assertEquals(31, writer.getSheetName().length());
-    }
-
-    @Test
-    void testSwitchOff() throws Exception {
-        List<ExportField> fields = new DefaultExportFieldResolver().resolve(Order.class);
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        ExcelFileWriter writer = new ExcelFileWriter(out);
-        writer.setHeaderBold(false);
-        writer.setFreezeHeader(false);
-        writer.setNumericCells(false);
-        writer.writeStart(Order.class, fields);
-        writer.writeAndFlush(fields, List.of(new Order("A001", new BigDecimal("12.50"), 3, "x")));
-        writer.writeStop(Order.class, fields);
-
-        String sheet = unzip(out.toByteArray()).get("xl/worksheets/sheet1.xml");
-        // 表头不加粗
-        assertTrue(sheet.contains("<c r=\"A1\" t=\"inlineStr\"><is><t>订单号</t></is></c>"));
-        assertFalse(sheet.contains("s=\"1\""));
-        // 不冻结首行
-        assertFalse(sheet.contains("freeze"));
-        assertFalse(sheet.contains("<sheetViews>"));
-        // 数字按文本写出
-        assertTrue(sheet.contains("<c r=\"B2\" t=\"inlineStr\"><is><t>12.50</t></is></c>"));
-        assertTrue(sheet.contains("<c r=\"C2\" t=\"inlineStr\"><is><t>3</t></is></c>"));
-        assertFalse(sheet.contains("<v>"));
-    }
-
-    @Test
-    void testSwitchOn() throws Exception {
-        List<ExportField> fields = new DefaultExportFieldResolver().resolve(Order.class);
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        ExcelFileWriter writer = new ExcelFileWriter(out);
-        assertTrue(writer.isHeaderBold());
-        assertTrue(writer.isFreezeHeader());
-        assertTrue(writer.isNumericCells());
-        writer.writeStart(Order.class, fields);
-        writer.writeAndFlush(fields, List.of(new Order("A001", new BigDecimal("12.50"), 3, "x")));
-        writer.writeStop(Order.class, fields);
-
-        String sheet = unzip(out.toByteArray()).get("xl/worksheets/sheet1.xml");
-        assertTrue(sheet.contains("<c r=\"A1\" s=\"1\" t=\"inlineStr\">"));
-        assertTrue(sheet.contains("state=\"frozen\""));
-        assertTrue(sheet.contains("<c r=\"C2\"><v>3</v></c>"));
-    }
-
+    /**
+     * 配置了 format 的数字字段：应写成格式化后的文本
+     */
     static class Bonus {
 
         @Export(name = "奖金", format = "#,##0.00")
@@ -181,19 +212,48 @@ class ExcelFileWriterTest {
 
     }
 
-    @Test
-    void testFormattedNumberAsText() throws Exception {
-        List<ExportField> fields = new DefaultExportFieldResolver().resolve(Bonus.class);
+    // ==================== 辅助方法 ====================
+
+    /**
+     * 走完整的写出流程，返回解压后的 xlsx 部件
+     * @param beanClass 导出数据类
+     * @param rows 待写出的数据
+     * @return 部件名到 xml 内容的映射
+     */
+    static Map<String, String> writeXlsx(Class<?> beanClass, Object... rows) throws Exception {
+        return writeXlsx(beanClass, List.of(rows), Integer.MAX_VALUE, null);
+    }
+
+    /**
+     * 按指定批大小分批写出，返回解压后的 xlsx 部件
+     * @param beanClass 导出数据类
+     * @param rows 待写出的数据
+     * @param batchSize 每批条数
+     * @param config 写出前的写入器配置（可为 null）
+     * @return 部件名到 xml 内容的映射
+     */
+    static Map<String, String> writeXlsx(Class<?> beanClass, List<?> rows, int batchSize,
+                                       Consumer<ExcelFileWriter> config) throws Exception {
+        List<ExportField> fields = new DefaultExportFieldResolver().resolve(beanClass);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         ExcelFileWriter writer = new ExcelFileWriter(out);
-        writer.writeStart(Bonus.class, fields);
-        writer.writeAndFlush(fields, List.of(new Bonus("12500.5")));
-        writer.writeStop(Bonus.class, fields);
+        if (config != null) {
+            config.accept(writer);
+        }
+        writer.writeStart(beanClass, fields);
+        for (int i = 0; i < rows.size(); i += batchSize) {
+            writer.writeAndFlush(fields, rows.subList(i, Math.min(i + batchSize, rows.size())));
+        }
+        writer.writeStop(beanClass, fields);
+        return unzip(out.toByteArray());
+    }
 
-        String sheet = unzip(out.toByteArray()).get("xl/worksheets/sheet1.xml");
-        // 配置了 format 的数字按格式化后的文本写出，而不是数值单元格
-        assertTrue(sheet.contains("<c r=\"A2\" t=\"inlineStr\"><is><t>12,500.50</t></is></c>"));
-        assertFalse(sheet.contains("<v>12"));
+    static String sheetOf(Map<String, String> parts) {
+        return parts.get("xl/worksheets/sheet1.xml");
+    }
+
+    static String workbookOf(Map<String, String> parts) {
+        return parts.get("xl/workbook.xml");
     }
 
     static int countRows(String sheet) {
@@ -213,12 +273,13 @@ class ExcelFileWriterTest {
         Map<String, String> parts = new HashMap<>();
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
+        DocumentBuilder builder = factory.newDocumentBuilder();
         try (ZipInputStream zip = new ZipInputStream(new ByteArrayInputStream(bytes), StandardCharsets.UTF_8)) {
             ZipEntry entry;
             while ((entry = zip.getNextEntry()) != null) {
                 String text = new String(readAll(zip), StandardCharsets.UTF_8);
                 parts.put(entry.getName(), text);
-                factory.newDocumentBuilder().parse(new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8)));
+                builder.parse(new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8)));
             }
         }
         return parts;
@@ -228,7 +289,7 @@ class ExcelFileWriterTest {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         byte[] buffer = new byte[4096];
         int len;
-        while ((len = zip.read(buffer)) > 0) {
+        while ((len = zip.read(buffer)) != -1) {
             out.write(buffer, 0, len);
         }
         return out.toByteArray();

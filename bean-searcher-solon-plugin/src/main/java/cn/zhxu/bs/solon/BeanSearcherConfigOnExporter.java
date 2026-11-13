@@ -13,6 +13,7 @@ import org.noear.solon.core.handle.Context;
 import org.noear.solon.expression.snel.SnEL;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.URLEncoder;
@@ -25,6 +26,9 @@ import java.util.concurrent.ConcurrentHashMap;
 @Configuration
 @Condition(onClass = BeanExporter.class)
 public class BeanSearcherConfigOnExporter {
+
+    static final String XLSX_CONTENT_TYPE =
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
     //放到这儿，减少注入处理代码
     @Inject
@@ -99,24 +103,54 @@ public class BeanSearcherConfigOnExporter {
     public FileWriter.Factory fileWriterFactory() {
         return (beanClass, filename) -> {
             Context context = Context.current();
+            if (beanClass.isAnnotationPresent(ExcelSheet.class)) {
+                // 标注了 @ExcelSheet：导出为 xlsx，其余属性由 ExcelFileWriter 在 writeStart 内解析
+                return new ExcelFileWriter(context.outputStream()) {
+                    @Override
+                    public void writeStart(Class<?> beanClass, List<ExportField> fields) throws IOException {
+                        prepareDownload(context, ExcelFileWriter.withFileExt(filename), XLSX_CONTENT_TYPE);
+                        super.writeStart(beanClass, fields);
+                    }
+                    @Override
+                    public void onTooManyRequests() throws IOException {
+                        writeTooManyRequests(context, props.getExporter().getTooManyRequestsMessage());
+                    }
+                };
+            }
             return new CsvFileWriter(context.outputStream()) {
                 @Override
                 public void writeStart(Class<?> beanClass, List<ExportField> fields) throws IOException {
-                    String encodedName = URLEncoder.encode(CsvFileWriter.withFileExt(filename), StandardCharsets.UTF_8);
-                    context.contentType("application/octet-stream");
-                    context.headerAdd("Content-Disposition", "attachment; filename=" + encodedName);
+                    prepareDownload(context, CsvFileWriter.withFileExt(filename), "application/octet-stream");
                     super.writeStart(beanClass, fields);
                 }
                 @Override
                 public void onTooManyRequests() throws IOException {
-                    context.status(429);
-                    context.contentType("application/text");
-                    context.headerAdd("Transfer-Encoding", "no-cache");
-                    context.headerAdd("Cache-Control", "no-cache");
-                    writeAndFlush(props.getExporter().getTooManyRequestsMessage());
+                    writeTooManyRequests(context, props.getExporter().getTooManyRequestsMessage());
                 }
             };
         };
+    }
+
+    /**
+     * 设置文件下载所需的响应头
+     */
+    static void prepareDownload(Context context, String filename, String contentType) {
+        context.contentType(contentType);
+        context.headerAdd("Content-Disposition",
+                "attachment; filename=" + URLEncoder.encode(filename, StandardCharsets.UTF_8));
+    }
+
+    /**
+     * 并发导出超限时直接向响应流写提示文本<br>
+     * 该方法在 {@link FileWriter#writeStart} 之前被调用，此时响应流还是干净的
+     */
+    static void writeTooManyRequests(Context context, String message) throws IOException {
+        context.status(429);
+        context.contentType("text/plain;charset=UTF-8");
+        context.headerAdd("Cache-Control", "no-cache");
+        OutputStream output = context.outputStream();
+        output.write(message == null ? new byte[0] : message.getBytes(StandardCharsets.UTF_8));
+        output.flush();
     }
 
     @Bean
