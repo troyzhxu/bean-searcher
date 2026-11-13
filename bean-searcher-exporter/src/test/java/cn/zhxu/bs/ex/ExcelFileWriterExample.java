@@ -118,7 +118,7 @@ public class ExcelFileWriterExample {
                     i % 4 != 3,
                     i % 7 == 0 ? null : "备注-" + i + (i % 5 == 0 ? "，含逗号、\"引号\" 与 <特殊字符>" : ""),
                     // 每 6 条留一条空链接，用于观察空值单元格的表现
-                    i % 6 == 0 ? null : "https://picsum.photos/seed/" + (1001 + i) + "/48/48"
+                    i % 6 == 0 ? null : "https://bs.zhxu.cn/logo.png"
             ));
         }
         return list;
