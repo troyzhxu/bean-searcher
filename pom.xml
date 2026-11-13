@@ -23,6 +23,8 @@
 
 	<properties>
 		<java.version>17</java.version>
+		<!-- 用 release 代替 source/target，确保不会误用高于 java.version 的 JDK API -->
+		<maven.compiler.release>${java.version}</maven.compiler.release>
 		<junit.version>5.11.4</junit.version>
 		<slf4j.version>2.0.17</slf4j.version>
 		<xjsonkit.version>2.0.1</xjsonkit.version>
@@ -147,8 +149,7 @@
 					<jdkToolchain>
 						<version>[17,25]</version>
 					</jdkToolchain>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <!-- 编译级别由 maven.compiler.release 统一控制，此处不再单独指定 source/target -->
                     <encoding>${project.build.sourceEncoding}</encoding>
                     <showWarnings>true</showWarnings>
                 </configuration>
