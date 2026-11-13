@@ -138,6 +138,31 @@ class ExcelFileWriterTest {
         assertFalse(sheet.contains("<v>12"));
     }
 
+    @Test
+    void testColumnWidth() throws Exception {
+        String sheet = sheetOf(writeXlsx(WideOrder.class, new WideOrder("A001", "王五", "无")));
+
+        // 只有配置了 width 的列才输出列宽，列号为 1 基；width 超过 Excel 上限（255）时截断
+        assertTrue(sheet.contains("<cols>" +
+                "<col min=\"2\" max=\"2\" width=\"20\" customWidth=\"1\"/>" +
+                "<col min=\"3\" max=\"3\" width=\"255\" customWidth=\"1\"/>" +
+                "</cols>"));
+        // 未配置 width 的第 1 列不输出
+        assertFalse(sheet.contains("min=\"1\""));
+
+        // 节点顺序必须是 sheetFormatPr → cols → sheetData
+        int cols = sheet.indexOf("<cols>");
+        assertTrue(cols > sheet.indexOf("</sheetFormatPr>"));
+        assertTrue(cols < sheet.indexOf("<sheetData>"));
+    }
+
+    @Test
+    void testNoColumnWidth() throws Exception {
+        // 没有任何字段配置 width 时，不应输出 cols 节点
+        String sheet = sheetOf(writeXlsx(PlainOrder.class, new PlainOrder("A001", BigDecimal.ONE, 1, "x")));
+        assertFalse(sheet.contains("<cols>"));
+    }
+
     // ==================== 工具方法 ====================
 
     @Test
@@ -194,6 +219,29 @@ class ExcelFileWriterTest {
         AnnotatedOrder(String code, BigDecimal amount) {
             this.code = code;
             this.amount = amount;
+        }
+
+    }
+
+    /**
+     * 配置了列宽：只有 width > 0 的列才输出 &lt;cols&gt;
+     */
+    static class WideOrder {
+
+        @Export(name = "订单号", idx = 1)
+        String code;
+
+        @Export(name = "姓名", idx = 2, width = 20)
+        String name;
+
+        // 超过 Excel 列宽上限，写出时应截断到 255
+        @Export(name = "备注", idx = 3, width = 1000)
+        String remark;
+
+        WideOrder(String code, String name, String remark) {
+            this.code = code;
+            this.name = name;
+            this.remark = remark;
         }
 
     }

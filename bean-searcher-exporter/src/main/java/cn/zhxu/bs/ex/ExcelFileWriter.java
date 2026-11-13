@@ -17,6 +17,7 @@ import java.util.zip.ZipOutputStream;
  * Excel 文件写入器（基于 JDK 原生 api 直接输出 xlsx，不依赖任何第三方库）<br>
  * 采用流式写出：每批次数据写完立即 flush 到输出流，内存占用与数据总量无关 <br>
  * 工作表名称、表头加粗、冻结首行、行高均由数据类上的 {@link ExcelSheet} 注解指定，
+ * 各列列宽由字段上的 {@link Export#width()} 指定（未指定则该列不输出列宽）<br>
  * 注解在每次 {@link #writeStart} 调用时解析，因此同一个写入器将来可依次写出多个 sheet；<br>
  * 未标注该注解时使用默认样式：工作表名 {@value #DEFAULT_SHEET_NAME}、表头加粗、不冻结、默认行高。<br>
  * 另提供 {@link #setNumericCells} 开关（需在 {@link #writeStart} 之前设置），
@@ -32,6 +33,8 @@ public class ExcelFileWriter implements FileWriter {
 
     // Excel 单元格最大字符数，超出会被截断（否则文件会损坏）
     private static final int MAX_CELL_LENGTH = 32767;
+    // Excel 允许的最大列宽（单位：字符），超出会被 Excel 判为非法值
+    private static final int MAX_COL_WIDTH = 255;
     // 表头单元格的样式索引（对应 styles.xml 中的第 2 个 cellXf：加粗）
     private static final int STYLE_HEADER = 1;
 
@@ -105,6 +108,7 @@ public class ExcelFileWriter implements FileWriter {
         write(sheet.rowHeight() > 0
                 ? "<sheetFormatPr defaultRowHeight=\"" + sheet.rowHeight() + "\" customHeight=\"1\"/>"
                 : "<sheetFormatPr defaultRowHeight=\"15\"/>");
+        writeCols(fields);
         write("<sheetData>");
         writeHeaderRow(fields, sheet.headerBold());
         zip.flush();
@@ -139,6 +143,31 @@ public class ExcelFileWriter implements FileWriter {
     @Override
     public void onTooManyRequests() throws IOException {
         throw new ExportException.TooManyRequests("Too many requests.");
+    }
+
+    /**
+     * 输出列宽定义，仅在至少一个字段配置了 {@link Export#width()} 时输出<br>
+     * 该节点必须位于 sheetFormatPr 之后、sheetData 之前，否则不符合 OOXML 架构
+     * @param fields 文件字段列表
+     */
+    protected void writeCols(List<ExportField> fields) throws IOException {
+        StringBuilder sb = null;
+        for (int i = 0; i < fields.size(); i++) {
+            int width = fields.get(i).getWidth();
+            if (width <= 0) {
+                continue;
+            }
+            if (sb == null) {
+                sb = new StringBuilder(32 + fields.size() * 24).append("<cols>");
+            }
+            int col = i + 1;
+            sb.append("<col min=\"").append(col).append("\" max=\"").append(col)
+                    .append("\" width=\"").append(Math.min(width, MAX_COL_WIDTH))
+                    .append("\" customWidth=\"1\"/>");
+        }
+        if (sb != null) {
+            write(sb.append("</cols>").toString());
+        }
     }
 
     /**

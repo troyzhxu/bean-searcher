@@ -30,10 +30,10 @@ public class ExcelFileWriterExample {
         @Export(name = "工号", idx = 1)
         String code;
 
-        @Export(name = "姓名", idx = 2)
+        @Export(name = "姓名", idx = 2, width = 12)
         String name;
 
-        @Export(name = "部门", idx = 3)
+        @Export(name = "部门", idx = 3, width = 14)
         String department;
 
         @Export(name = "月薪", idx = 4)
@@ -48,7 +48,7 @@ public class ExcelFileWriterExample {
         @Export(name = "在职", idx = 7)
         Boolean active;             // 写成 TRUE / FALSE
 
-        @Export(name = "备注", idx = 8)
+        @Export(name = "备注", idx = 8, width = 40)
         String remark;
 
         Employee(String code, String name, String department, BigDecimal salary,
@@ -79,6 +79,7 @@ public class ExcelFileWriterExample {
         try (OutputStream out = new FileOutputStream(file.toFile())) {
             ExcelFileWriter writer = new ExcelFileWriter(out);
             // 工作表名、表头加粗、冻结首行、行高均由 Employee 上的 @ExcelSheet 注解指定；
+            // 各列列宽由字段上的 @Export(width = N) 指定（未指定的列使用 Excel 默认宽度）；
             // 数字是否写成数值单元格由开关控制（默认 true，关闭后数字按文本写出）
             // writer.setNumericCells(false);
 
