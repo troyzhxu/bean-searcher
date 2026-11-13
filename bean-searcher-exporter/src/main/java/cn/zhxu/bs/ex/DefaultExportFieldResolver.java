@@ -74,7 +74,8 @@ public class DefaultExportFieldResolver implements ExportFieldResolver {
                     exFields.add(new ExportField(
                             expresser, formatter, field,
                             export.name(), export.idx(),
-                            export.expr(), export.format(), export.onlyIf()
+                            export.expr(), export.format(), export.onlyIf(),
+                            export.width(), export.image()
                     ));
                 }
             }
@@ -115,7 +116,9 @@ public class DefaultExportFieldResolver implements ExportFieldResolver {
                 export.idx(),
                 export.expr(),
                 export.format(),
-                export.onlyIf()
+                export.onlyIf(),
+                export.width(),
+                export.image()
         );
     }
 

@@ -20,10 +20,13 @@ public class ExportField {
     private final String expr;
     private final String format;
     private final String onlyIf;
+    private final int width;
+    private final boolean image;
 
     public ExportField(Expresser expresser, Formatter formatter,
                        Field field, String exName, int exIdx,
-                       String expr, String format, String onlyIf) {
+                       String expr, String format, String onlyIf,
+                       int width, boolean image) {
         this.expresser = expresser;
         this.formatter = formatter;
         this.field = field;
@@ -32,6 +35,8 @@ public class ExportField {
         this.expr = expr;
         this.format = format;
         this.onlyIf = onlyIf;
+        this.width = width;
+        this.image = image;
     }
 
     /**
@@ -146,6 +151,22 @@ public class ExportField {
 
     public String getFormat() {
         return format;
+    }
+
+    /**
+     * @return 列宽（仅对 Excel 导出有效），0 表示不指定列宽
+     * @since v5.0.0
+     */
+    public int getWidth() {
+        return width;
+    }
+
+    /**
+     * @return 是否图片链接字段（仅对 Excel 导出有效）
+     * @since v5.0.0
+     */
+    public boolean isImage() {
+        return image;
     }
 
 }
