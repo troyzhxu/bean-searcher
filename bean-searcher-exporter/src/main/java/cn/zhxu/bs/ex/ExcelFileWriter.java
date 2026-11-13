@@ -71,7 +71,7 @@ public class ExcelFileWriter implements FileWriter {
     }
 
     @Override
-    public void writeStart(List<ExportField> fields) throws IOException {
+    public void writeStart(Class<?> beanClass, List<ExportField> fields) throws IOException {
         if (zip != null) {
             throw new ExportException("The writeStart method can only be called once.");
         }
@@ -116,7 +116,7 @@ public class ExcelFileWriter implements FileWriter {
     }
 
     @Override
-    public void writeStop(List<ExportField> fields) throws IOException {
+    public void writeStop(Class<?> beanClass, List<ExportField> fields) throws IOException {
         if (zip == null) {
             return;
         }

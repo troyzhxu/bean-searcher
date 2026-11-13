@@ -12,10 +12,11 @@ public interface FileWriter {
 
     /**
      * 文件输出开始时调用
+     * @param beanClass 导出的数据类
      * @param fields 文件字段列表
      * @throws IOException 抛出 IOException
      */
-    void writeStart(List<ExportField> fields) throws IOException;
+    void writeStart(Class<?> beanClass, List<ExportField> fields) throws IOException;
 
     /**
      * 文件输出时调用
@@ -27,10 +28,11 @@ public interface FileWriter {
 
     /**
      * 文件输出结束时调用
+     * @param beanClass 导出的数据类
      * @param fields 文件字段列表
      * @throws IOException 抛出 IOException
      */
-    void writeStop(List<ExportField> fields) throws IOException;
+    void writeStop(Class<?> beanClass, List<ExportField> fields) throws IOException;
 
     /**
      * 很多人同时导出时调用，告诉调用者请稍后再试
@@ -45,11 +47,12 @@ public interface FileWriter {
 
         /**
          * 创建文件输出对象
+         * @param beanClass 导出的数据类
          * @param filename 文件名
          * @return 文件输出对象
          * @throws IOException 抛出 IOException
          */
-        FileWriter create(String filename) throws IOException;
+        FileWriter create(Class<?> beanClass, String filename) throws IOException;
 
     }
 

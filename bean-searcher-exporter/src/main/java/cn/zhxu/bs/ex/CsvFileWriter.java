@@ -41,7 +41,7 @@ public class CsvFileWriter implements FileWriter {
     }
 
     @Override
-    public void writeStart(List<ExportField> fields) throws IOException {
+    public void writeStart(Class<?> beanClass, List<ExportField> fields) throws IOException {
         int size = fields.size();
         for (int col = 0; col < size; col++) {
             String text = fields.get(col).getExName();
@@ -83,7 +83,7 @@ public class CsvFileWriter implements FileWriter {
     }
 
     @Override
-    public void writeStop(List<ExportField> fields) { }
+    public void writeStop(Class<?> beanClass, List<ExportField> fields) { }
 
     @Override
     public void onTooManyRequests() throws IOException {

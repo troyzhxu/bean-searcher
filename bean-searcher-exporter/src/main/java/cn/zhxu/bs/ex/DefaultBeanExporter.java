@@ -104,7 +104,7 @@ public class DefaultBeanExporter implements BeanExporter {
         if (factory == null) {
             throw new ExportException("You must set a fileWriterFactory before exporting.");
         }
-        export(factory.create(fileNamer.filename(name)), beanClass, paraMap, batchSize, mapper);
+        export(factory.create(beanClass, fileNamer.filename(name)), beanClass, paraMap, batchSize, mapper);
     }
 
     @Override
@@ -161,7 +161,7 @@ public class DefaultBeanExporter implements BeanExporter {
                     .stream()
                     .filter(field -> field.onlyIf(paraMap))
                     .toList();
-            writer.writeStart(fields);
+            writer.writeStart(beanClass, fields);
             while (exportingThreads.get() >= maxExportingThreads) {
                 // 进入等待状态，等钱前面导出的人结束
                 tryDelay(10);
@@ -174,7 +174,7 @@ public class DefaultBeanExporter implements BeanExporter {
                         paraMap != null ? paraMap : new HashMap<>(),
                         batchSize, mapper
                 );
-                writer.writeStop(fields);
+                writer.writeStop(beanClass, fields);
             } finally {
                 exportingThreads.decrementAndGet();
             }

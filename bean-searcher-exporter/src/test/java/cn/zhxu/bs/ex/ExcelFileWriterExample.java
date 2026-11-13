@@ -81,13 +81,13 @@ public class ExcelFileWriterExample {
             // writer.setFreezeHeader(false);
             // writer.setNumericCells(false);
 
-            writer.writeStart(fields);
+            writer.writeStart(Employee.class, fields);
             // 3. 模拟分批次加载数据（每批 10 条），与 DefaultBeanExporter 的分批检索行为一致
             int batchSize = 10;
             for (int i = 0; i < employees.size(); i += batchSize) {
                 writer.writeAndFlush(fields, employees.subList(i, Math.min(i + batchSize, employees.size())));
             }
-            writer.writeStop(fields);
+            writer.writeStop(Employee.class, fields);
         }
 
         System.out.println("已生成 Excel 文件: " + file.toAbsolutePath());

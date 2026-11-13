@@ -47,12 +47,12 @@ class ExcelFileWriterTest {
         List<ExportField> fields = new DefaultExportFieldResolver().resolve(Order.class);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         ExcelFileWriter writer = new ExcelFileWriter(out, "订单数据");
-        writer.writeStart(fields);
+        writer.writeStart(Order.class, fields);
         writer.writeAndFlush(fields, List.of(
                 new Order("A001", new BigDecimal("12.50"), 3, "含,逗号"),
                 new Order("A002", new BigDecimal("100"), 7, "<b>&\"引号\"\u0001控制符")
         ));
-        writer.writeStop(fields);
+        writer.writeStop(Order.class, fields);
 
         Map<String, String> parts = unzip(out.toByteArray());
         assertTrue(parts.containsKey("[Content_Types].xml"));
@@ -88,11 +88,11 @@ class ExcelFileWriterTest {
         }
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         ExcelFileWriter writer = new ExcelFileWriter(out);
-        writer.writeStart(fields);
+        writer.writeStart(Order.class, fields);
         for (int i = 0; i < orders.size(); i += 3) {
             writer.writeAndFlush(fields, orders.subList(i, Math.min(i + 3, orders.size())));
         }
-        writer.writeStop(fields);
+        writer.writeStop(Order.class, fields);
 
         Map<String, String> parts = unzip(out.toByteArray());
         String sheet = parts.get("xl/worksheets/sheet1.xml");
@@ -107,9 +107,9 @@ class ExcelFileWriterTest {
         List<ExportField> fields = new DefaultExportFieldResolver().resolve(Order.class);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         ExcelFileWriter writer = new ExcelFileWriter(out);
-        writer.writeStart(fields);
+        writer.writeStart(Order.class, fields);
         writer.writeAndFlush(fields, List.of());
-        writer.writeStop(fields);
+        writer.writeStop(Order.class, fields);
 
         String sheet = unzip(out.toByteArray()).get("xl/worksheets/sheet1.xml");
         // 只有表头一行，且 xml 结构完整
@@ -135,9 +135,9 @@ class ExcelFileWriterTest {
         writer.setHeaderBold(false);
         writer.setFreezeHeader(false);
         writer.setNumericCells(false);
-        writer.writeStart(fields);
+        writer.writeStart(Order.class, fields);
         writer.writeAndFlush(fields, List.of(new Order("A001", new BigDecimal("12.50"), 3, "x")));
-        writer.writeStop(fields);
+        writer.writeStop(Order.class, fields);
 
         String sheet = unzip(out.toByteArray()).get("xl/worksheets/sheet1.xml");
         // 表头不加粗
@@ -160,9 +160,9 @@ class ExcelFileWriterTest {
         assertTrue(writer.isHeaderBold());
         assertTrue(writer.isFreezeHeader());
         assertTrue(writer.isNumericCells());
-        writer.writeStart(fields);
+        writer.writeStart(Order.class, fields);
         writer.writeAndFlush(fields, List.of(new Order("A001", new BigDecimal("12.50"), 3, "x")));
-        writer.writeStop(fields);
+        writer.writeStop(Order.class, fields);
 
         String sheet = unzip(out.toByteArray()).get("xl/worksheets/sheet1.xml");
         assertTrue(sheet.contains("<c r=\"A1\" s=\"1\" t=\"inlineStr\">"));
@@ -186,9 +186,9 @@ class ExcelFileWriterTest {
         List<ExportField> fields = new DefaultExportFieldResolver().resolve(Bonus.class);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         ExcelFileWriter writer = new ExcelFileWriter(out);
-        writer.writeStart(fields);
+        writer.writeStart(Bonus.class, fields);
         writer.writeAndFlush(fields, List.of(new Bonus("12500.5")));
-        writer.writeStop(fields);
+        writer.writeStop(Bonus.class, fields);
 
         String sheet = unzip(out.toByteArray()).get("xl/worksheets/sheet1.xml");
         // 配置了 format 的数字按格式化后的文本写出，而不是数值单元格

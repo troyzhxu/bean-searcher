@@ -83,15 +83,15 @@ public class BeanSearcherConfigOnExporter {
         @Bean
         @ConditionalOnMissingBean(FileWriter.Factory.class)
         public FileWriter.Factory fileWriterFactory(BeanSearcherExProps props) {
-            return filename -> {
+            return (beanClass, filename) -> {
                 HttpServletResponse response = requireResponse();
                 return new CsvFileWriter(response.getOutputStream()) {
                     @Override
-                    public void writeStart(List<ExportField> fields) throws IOException {
+                    public void writeStart(Class<?> beanClass, List<ExportField> fields) throws IOException {
                         String encodedName = URLEncoder.encode(CsvFileWriter.withFileExt(filename), StandardCharsets.UTF_8);
                         response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
                         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + encodedName);
-                        super.writeStart(fields);
+                        super.writeStart(beanClass, fields);
                     }
                     @Override
                     public void onTooManyRequests() throws IOException {
